@@ -11,4 +11,4 @@
 #         template: default/homepage.html.twig
 #         _locale: '%locale%'
 api_login_check:
-    path: /api/login_check
+    path: /login
