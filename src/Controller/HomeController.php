@@ -12,7 +12,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 class HomeController extends AbstractController
 {
-    #[Route('/home')]
+    #[Route('/api/home')]
     public function index(ManagerRegistry $doctrine): Response
     {
         $users = $doctrine->getRepository(User::class)->findAll();

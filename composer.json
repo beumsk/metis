@@ -36,6 +36,7 @@
         "symfony/intl": "^6.1",
         "symfony/mailer": "^6.1",
         "symfony/monolog-bundle": "^3.7",
+        "symfony/password-hasher": "6.1.*",
         "symfony/polyfill-intl-messageformatter": "^1.12",
         "symfony/runtime": "^6.1",
         "symfony/security-bundle": "^6.1",

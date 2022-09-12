@@ -1,9 +1,4 @@
-security:
-    # a new authentication system is available since Symfony 5.1 to make
-    # Symfony security more extensible and easier to understand
-    # https://symfony.com/doc/current/security.html
-    enable_authenticator_manager: true
-
+security:  
     password_hashers:
         # Our user class and the algorithm we'll use to encode passwords
         # 'auto' means to let Symfony choose the best possible password hasher (Argon2 or Bcrypt)
@@ -21,16 +16,21 @@ security:
         app_user_provider:
             entity:
                 class: App\Entity\User
-                property: username
+                property: email
         # used to reload user from session & other features (e.g. switch_user)
 
     # https://symfony.com/doc/current/security.html#a-authentication-firewalls
     firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
         login: 
+            pattern: ^/login
             stateless: true
             provider: app_user_provider
             json_login:
-                username_path: username
+                username_path: email
+                password_path: password
                 check_path: /login
                 success_handler: lexik_jwt_authentication.handler.authentication_success
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
@@ -38,11 +38,6 @@ security:
             pattern: ^/api
             stateless: true
             jwt: ~
-
-        dev:
-            pattern: ^/(_(profiler|wdt)|css|images|js)/
-            security: false
-
         # main:
         #     # this firewall does not have a 'pattern' option because it applies to all URLs
         #     lazy: true
@@ -51,11 +46,12 @@ security:
     access_control:
         # this is a catch-all for the admin area
         # additional security lives in the controllers
-        - { path: '^/admin', roles: ROLE_ADMIN }
-        - { path: '^/', roles: IS_AUTHENTICATED_FULLY }
+        
+        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api, roles: ROLE_USER }
 
-    # role_hierarchy:
-    #     ROLE_ADMIN: ROLE_USER
+    role_hierarchy:
+        ROLE_ADMIN: ROLE_USER
 
 # when@test:
 #     # this configuration simplifies testing URLs protected by the security mechanism
