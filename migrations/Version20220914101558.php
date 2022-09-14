@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20220909095808 extends AbstractMigration
+final class Version20220914101558 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -20,14 +20,14 @@ final class Version20220909095808 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE symfony_demo_comment ADD CONSTRAINT FK_53AD8F83F675F31B FOREIGN KEY (author_id) REFERENCES user (id)');
-        $this->addSql('ALTER TABLE symfony_demo_post ADD CONSTRAINT FK_58A92E65F675F31B FOREIGN KEY (author_id) REFERENCES user (id)');
+        $this->addSql('ALTER TABLE followup_goals ADD CONSTRAINT FK_BB997A6B61D0310E FOREIGN KEY (pati_id) REFERENCES patients (id)');
+        $this->addSql('CREATE INDEX IDX_BB997A6B61D0310E ON followup_goals (pati_id)');
     }
 
     public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE symfony_demo_comment DROP FOREIGN KEY FK_53AD8F83F675F31B');
-        $this->addSql('ALTER TABLE symfony_demo_post DROP FOREIGN KEY FK_58A92E65F675F31B');
+        $this->addSql('ALTER TABLE followup_goals DROP FOREIGN KEY FK_BB997A6B61D0310E');
+        $this->addSql('DROP INDEX IDX_BB997A6B61D0310E ON followup_goals');
     }
 }
