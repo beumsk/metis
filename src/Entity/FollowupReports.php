@@ -50,6 +50,10 @@ class FollowupReports
     #[ORM\Column(type: Types::TIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $duration = null;
 
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Patients $pati = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -195,6 +199,18 @@ class FollowupReports
     public function setDuration(?\DateTimeInterface $duration): self
     {
         $this->duration = $duration;
+
+        return $this;
+    }
+
+    public function getPati(): ?Patients
+    {
+        return $this->pati;
+    }
+
+    public function setPati(?Patients $pati): self
+    {
+        $this->pati = $pati;
 
         return $this;
     }

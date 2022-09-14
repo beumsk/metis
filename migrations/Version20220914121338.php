@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20220914101558 extends AbstractMigration
+final class Version20220914121338 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -20,14 +20,12 @@ final class Version20220914101558 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE followup_goals ADD CONSTRAINT FK_BB997A6B61D0310E FOREIGN KEY (pati_id) REFERENCES patients (id)');
-        $this->addSql('CREATE INDEX IDX_BB997A6B61D0310E ON followup_goals (pati_id)');
+        $this->addSql('CREATE TABLE medias (id INT AUTO_INCREMENT NOT NULL, comment LONGTEXT NOT NULL, filename LONGTEXT NOT NULL, original_filename LONGTEXT NOT NULL, date DATETIME NOT NULL, is_confidential INT DEFAULT NULL, is_highlight INT DEFAULT NULL, deleted_at DATETIME DEFAULT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
     }
 
     public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE followup_goals DROP FOREIGN KEY FK_BB997A6B61D0310E');
-        $this->addSql('DROP INDEX IDX_BB997A6B61D0310E ON followup_goals');
+        $this->addSql('DROP TABLE medias');
     }
 }

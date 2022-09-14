@@ -55,8 +55,6 @@ class Patients
     #[ORM\Column(length: 50)]
     private ?string $team = null;
 
-
-
     public function getId(): ?int
     {
         return $this->id;

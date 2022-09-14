@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\FollowupGoals;
+use App\Entity\FollowupReports;
+use App\Entity\Medias;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -12,12 +14,24 @@ use Symfony\Component\BrowserKit\Request;
 
 class PatientsController extends AbstractController
 {
-    #[Route('/api/getPatients', name: 'app_patients')]
-    public function index(ManagerRegistry $doctrine): Response
+    #[Route('/api/getGoals', name: 'app_patients')]
+    public function getGoals(ManagerRegistry $doctrine): Response
     {
-        $patients = $doctrine->getRepository(FollowupGoals::class)->findAll();
-        // $goals = $patients->getPati();
+        $goals = $doctrine->getRepository(FollowupGoals::class)->findAll();
+        return $this->json($goals);
+    }
 
-        return $this->json($patients);
+    #[Route('/api/getReports', name: 'app_reports')]
+    public function getReports(ManagerRegistry $doctrine): Response
+    {
+        $reports = $doctrine->getRepository(FollowupReports::class)->findAll();
+        return $this->json($reports);
+    }
+
+    #[Route('/api/getMedias', name: 'app_medias')]
+    public function getMedias(ManagerRegistry $doctrine): Response
+    {
+        $medias = $doctrine->getRepository(Medias::class)->findAll();
+        return $this->json($medias);
     }
 }
