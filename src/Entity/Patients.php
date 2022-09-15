@@ -60,6 +60,13 @@ class Patients
         return $this->id;
     }
 
+    public function setId(?string $id): self
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
     public function getHash(): ?string
     {
         return $this->hash;

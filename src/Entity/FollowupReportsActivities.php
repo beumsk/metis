@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+
 use App\Repository\FollowUpReportsActivitiesRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -19,6 +20,11 @@ class FollowupReportsActivities
 
     #[ORM\Column(nullable: true)]
     private ?int $is_idr_step = null;
+
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?FollowupReports $fore = null;
+
 
     public function getId(): ?int
     {
@@ -45,6 +51,18 @@ class FollowupReportsActivities
     public function setIsIdrStep(?int $is_idr_step): self
     {
         $this->is_idr_step = $is_idr_step;
+
+        return $this;
+    }
+
+    public function getFore(): ?FollowupReports
+    {
+        return $this->fore;
+    }
+
+    public function setFore(?FollowupReports $fore): self
+    {
+        $this->fore = $fore;
 
         return $this;
     }
