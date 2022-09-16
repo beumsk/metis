@@ -3,11 +3,11 @@
 namespace App\Entity;
 
 
-use App\Repository\FollowUpReportsActivitiesRepository;
+use App\Repository\FollowupReportsActivitiesRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: FollowUpReportsActivitiesRepository::class)]
+#[ORM\Entity(repositoryClass: FollowupReportsActivitiesRepository::class)]
 class FollowupReportsActivities
 {
     #[ORM\Id]

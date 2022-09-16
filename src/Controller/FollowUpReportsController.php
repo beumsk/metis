@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\FollowupReports;
+use App\Entity\FollowupReportsActivities;
 use App\Entity\Patients;
 use App\Entity\User;
 use Doctrine\Persistence\ManagerRegistry;
@@ -69,6 +70,36 @@ class FollowUpReportsController extends AbstractController
 
         return new JsonResponse([
             'id' => $report->getId(),
+            'response' => "Sent !"
+        ]);
+    }
+
+    #[Route('/api/setReportActivities', name: 'app_reportActivities')]
+    public function setReportActivities(ManagerRegistry $doctrine, Request $request): JsonResponse
+    {
+        $request = Request::createFromGlobals();
+
+        $description = $request->request->get('description');
+        $followUpReportId = $request->request->get('fore_id');
+
+
+
+        $report = $doctrine->getRepository(FollowupReports::class)->find($followUpReportId);
+
+        // dd($report);
+        $entityManager = $doctrine->getManager();
+
+        $activityReport = new FollowupReportsActivities();
+
+        $activityReport->setDescription($description);
+        $activityReport->setFore($report);
+
+        $entityManager->persist($activityReport);
+        $entityManager->flush();
+
+
+        return new JsonResponse([
+            'id' => $activityReport->getId(),
             'response' => "Sent !"
         ]);
     }

@@ -2,26 +2,26 @@
 
 namespace App\Repository;
 
-use App\Entity\FollowUpReportsActivities;
+use App\Entity\FollowupReportsActivities;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<FollowUpReportsActivities>
+ * @extends ServiceEntityRepository<FollowupReportsActivities>
  *
- * @method FollowUpReportsActivities|null find($id, $lockMode = null, $lockVersion = null)
- * @method FollowUpReportsActivities|null findOneBy(array $criteria, array $orderBy = null)
- * @method FollowUpReportsActivities[]    findAll()
- * @method FollowUpReportsActivities[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method FollowupReportsActivities|null find($id, $lockMode = null, $lockVersion = null)
+ * @method FollowupReportsActivities|null findOneBy(array $criteria, array $orderBy = null)
+ * @method FollowupReportsActivities[]    findAll()
+ * @method FollowupReportsActivities[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class FollowupReportsActivitiesRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, FollowUpReportsActivities::class);
+        parent::__construct($registry, FollowupReportsActivities::class);
     }
 
-    public function add(FollowUpReportsActivities $entity, bool $flush = false): void
+    public function add(FollowupReportsActivities $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);
 
@@ -30,7 +30,7 @@ class FollowupReportsActivitiesRepository extends ServiceEntityRepository
         }
     }
 
-    public function remove(FollowUpReportsActivities $entity, bool $flush = false): void
+    public function remove(FollowupReportsActivities $entity, bool $flush = false): void
     {
         $this->getEntityManager()->remove($entity);
 
@@ -40,7 +40,7 @@ class FollowupReportsActivitiesRepository extends ServiceEntityRepository
     }
 
     //    /**
-    //     * @return FollowUpReportsActivities[] Returns an array of FollowUpReportsActivities objects
+    //     * @return FollowupReportsActivities[] Returns an array of FollowupReportsActivities objects
     //     */
     //    public function findByExampleField($value): array
     //    {
@@ -54,7 +54,7 @@ class FollowupReportsActivitiesRepository extends ServiceEntityRepository
     //        ;
     //    }
 
-    //    public function findOneBySomeField($value): ?FollowUpReportsActivities
+    //    public function findOneBySomeField($value): ?FollowupReportsActivities
     //    {
     //        return $this->createQueryBuilder('f')
     //            ->andWhere('f.exampleField = :val')
