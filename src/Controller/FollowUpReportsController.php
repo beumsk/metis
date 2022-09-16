@@ -29,6 +29,8 @@ class FollowUpReportsController extends AbstractController
     #[Route('/api/getFollowUpReports', name: 'app_report')]
     public function index(ManagerRegistry $doctrine): Response
     {
+
+
         $places = $doctrine->getRepository(FollowupReports::class)->findAll();
         return $this->json($places);
     }

@@ -1,6 +1,8 @@
 // ./assets/js/components/Home.js
 
 import React, { Component } from "react";
+
+import ReactCookie from "react-cookie";
 import {
   Routes,
   Route,
@@ -12,41 +14,48 @@ import {
 import Users from "./component/Users";
 import Posts from "./component/Posts";
 import Home from "./component/Home";
+import { useCookies, CookiesProvider } from "react-cookie";
+import Login from "./component/Login";
 import App from "./app";
-class Index extends Component {
-  render() {
-    return (
-      <div className="App">
-        <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-          <Link className={"navbar-brand"} to={"/"}>
-            Metis
-          </Link>
-          <div className="collapse navbar-collapse" id="navbarText">
-            <ul className="navbar-nav mr-auto">
-              <li className="nav-item">
-                <Link className={"nav-link"} to={"/posts"}>
-                  {" "}
-                  Posts{" "}
-                </Link>
-              </li>
+import axios from "axios";
 
-              <li className="nav-item">
-                <Link className={"nav-link"} to={"/users"}>
-                  {" "}
-                  Users
-                </Link>
-              </li>
-            </ul>
-          </div>
-        </nav>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/posts" element={<Posts />} />
-          <Route path="/users" element={<Users />} />
-        </Routes>
-      </div>
-    );
+const Index = () => {
+  const [cookies, setCookie] = useCookies();
+
+  function getCookie(cname) {
+    let name = cname + "=";
+    let ca = document.cookie.split(";");
+    for (let i = 0; i < ca.length; i++) {
+      let c = ca[i];
+      while (c.charAt(0) == " ") {
+        c = c.substring(1);
+      }
+      if (c.indexOf(name) == 0) {
+        return c.substring(name.length, c.length);
+      }
+    }
+    return "";
   }
-}
+
+  console.log(getCookie("BEARER"));
+  const getCustomersData = () => {
+    axios
+      .get("http://127.0.0.1:8000/api/home")
+      .then((data) => console.log(data.data))
+      .catch((error) => console.log(error));
+  };
+  getCustomersData();
+  console.log(document.cookie);
+  return (
+    <div className="App">
+      {cookies.user && <p>{cookies.user}</p>}
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/posts" element={<Posts />} />
+        <Route path="/users" element={<Users />} />
+      </Routes>
+    </div>
+  );
+};
 
 export default Index;

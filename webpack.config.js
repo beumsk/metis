@@ -4,7 +4,7 @@ var Encore = require("@symfony/webpack-encore");
 if (!Encore.isRuntimeEnvironmentConfigured()) {
   Encore.configureRuntimeEnvironment(process.env.NODE_ENV || "dev");
 }
-
+Encore.enableSassLoader();
 Encore
   // directory where compiled assets will be stored
   .setOutputPath("public/build/")
@@ -41,6 +41,7 @@ Encore
    */
   .cleanupOutputBeforeBuild()
   .enableBuildNotifications()
+
   .enableSourceMaps(!Encore.isProduction())
   // enables hashed filenames (e.g. app.abc123.css)
   .enableVersioning(Encore.isProduction())
