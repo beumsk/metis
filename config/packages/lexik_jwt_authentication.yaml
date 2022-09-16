@@ -6,3 +6,9 @@ lexik_jwt_authentication:
     user_identity_field : email
     encoder:
         signature_algorithm: HS256
+
+    token_extractors:
+            # check token in a cookie
+            cookie:
+                enabled: true
+                name:    BEARER
