@@ -24,13 +24,13 @@ function Login(props) {
   console.log(props);
   const login = () => {
     axios
-      .post("http://127.0.0.1:8000/login", {
+      .post("/login", {
         email: username,
         password: password,
       })
       .then(function (response) {
         console.log(response);
-        window.location.href = "https://127.0.0.1:8000/home";
+        window.location.href = "/home";
       })
       .catch(function (error) {
         console.log(error);

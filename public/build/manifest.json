@@ -2,17 +2,7 @@
   "build/app.css": "/build/app.css",
   "build/app.js": "/build/app.js",
   "build/runtime.js": "/build/runtime.js",
-  "build/vendors-node_modules_axios_index_js-node_modules_core-js_modules_es_array_map_js-node_modules-410588.js": "/build/vendors-node_modules_axios_index_js-node_modules_core-js_modules_es_array_map_js-node_modules-410588.js",
-  "build/vendors-node_modules_axios_index_js-node_modules_core-js_modules_es_array_map_js-node_modules-64ce79.js": "/build/vendors-node_modules_axios_index_js-node_modules_core-js_modules_es_array_map_js-node_modules-64ce79.js",
-  "build/vendors-node_modules_axios_index_js-node_modules_core-js_modules_es_array_from_js-node_module-9d3876.js": "/build/vendors-node_modules_axios_index_js-node_modules_core-js_modules_es_array_from_js-node_module-9d3876.js",
-  "build/vendors-node_modules_react-dom_index_js-node_modules_react-router-dom_dist_index_js.js": "/build/vendors-node_modules_react-dom_index_js-node_modules_react-router-dom_dist_index_js.js",
-  "build/vendors-node_modules_axios_index_js-node_modules_core-js_modules_es_array_from_js-node_module-cab0a7.js": "/build/vendors-node_modules_axios_index_js-node_modules_core-js_modules_es_array_from_js-node_module-cab0a7.js",
-  "build/vendors-node_modules_axios_index_js-node_modules_core-js_modules_es_array_from_js-node_module-169b35.js": "/build/vendors-node_modules_axios_index_js-node_modules_core-js_modules_es_array_from_js-node_module-169b35.js",
-  "build/vendors-node_modules_axios_index_js-node_modules_core-js_modules_es_array_from_js-node_module-abf948.js": "/build/vendors-node_modules_axios_index_js-node_modules_core-js_modules_es_array_from_js-node_module-abf948.js",
-  "build/vendors-node_modules_axios_index_js-node_modules_core-js_modules_es_array_from_js-node_module-2855fa.js": "/build/vendors-node_modules_axios_index_js-node_modules_core-js_modules_es_array_from_js-node_module-2855fa.js",
-  "build/vendors-node_modules_axios_index_js-node_modules_core-js_modules_es_array_from_js-node_module-f9e53e.js": "/build/vendors-node_modules_axios_index_js-node_modules_core-js_modules_es_array_from_js-node_module-f9e53e.js",
-  "build/vendors-node_modules_axios_index_js-node_modules_core-js_modules_es_array_from_js-node_module-f047bd.js": "/build/vendors-node_modules_axios_index_js-node_modules_core-js_modules_es_array_from_js-node_module-f047bd.js",
-  "build/vendors-node_modules_axios_index_js-node_modules_core-js_modules_es_array_from_js-node_module-770fb6.js": "/build/vendors-node_modules_axios_index_js-node_modules_core-js_modules_es_array_from_js-node_module-770fb6.js",
-  "build/vendors-node_modules_react-cookie_es6_CookiesProvider_js-node_modules_react-dom_index_js-node-19624b.js": "/build/vendors-node_modules_react-cookie_es6_CookiesProvider_js-node_modules_react-dom_index_js-node-19624b.js",
-  "build/vendors-node_modules_axios_index_js-node_modules_core-js_modules_es_array_from_js-node_module-e2c7dd.js": "/build/vendors-node_modules_axios_index_js-node_modules_core-js_modules_es_array_from_js-node_module-e2c7dd.js"
+  "build/vendors-node_modules_axios_index_js-node_modules_core-js_modules_es_array_from_js-node_module-e2c7dd.js": "/build/vendors-node_modules_axios_index_js-node_modules_core-js_modules_es_array_from_js-node_module-e2c7dd.js",
+  "build/vendors-node_modules_axios_index_js-node_modules_core-js_modules_es_array_from_js-node_module-91c9b5.js": "/build/vendors-node_modules_axios_index_js-node_modules_core-js_modules_es_array_from_js-node_module-91c9b5.js",
+  "build/vendors-node_modules_axios_index_js-node_modules_core-js_modules_es_array_from_js-node_module-551d27.js": "/build/vendors-node_modules_axios_index_js-node_modules_core-js_modules_es_array_from_js-node_module-551d27.js"
 }

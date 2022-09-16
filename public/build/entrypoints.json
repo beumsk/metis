@@ -3,7 +3,7 @@
     "app": {
       "js": [
         "/build/runtime.js",
-        "/build/vendors-node_modules_axios_index_js-node_modules_core-js_modules_es_array_from_js-node_module-e2c7dd.js",
+        "/build/vendors-node_modules_axios_index_js-node_modules_core-js_modules_es_array_from_js-node_module-551d27.js",
         "/build/app.js"
       ],
       "css": [
