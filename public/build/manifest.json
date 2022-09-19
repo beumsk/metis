@@ -2,11 +2,6 @@
   "build/app.css": "/build/app.css",
   "build/app.js": "/build/app.js",
   "build/runtime.js": "/build/runtime.js",
-  "build/vendors-node_modules_axios_index_js-node_modules_core-js_modules_es_array_from_js-node_module-551d27.js": "/build/vendors-node_modules_axios_index_js-node_modules_core-js_modules_es_array_from_js-node_module-551d27.js",
-  "build/vendors-node_modules_axios_index_js-node_modules_core-js_modules_es_array_from_js-node_module-206c94.js": "/build/vendors-node_modules_axios_index_js-node_modules_core-js_modules_es_array_from_js-node_module-206c94.js",
-  "build/vendors-node_modules_react-dom_index_js-node_modules_react-router-dom_dist_index_js.js": "/build/vendors-node_modules_react-dom_index_js-node_modules_react-router-dom_dist_index_js.js",
   "build/vendors-node_modules_axios_index_js-node_modules_core-js_modules_es_array_from_js-node_module-9d3876.js": "/build/vendors-node_modules_axios_index_js-node_modules_core-js_modules_es_array_from_js-node_module-9d3876.js",
-  "build/vendors-node_modules_axios_index_js-node_modules_core-js_modules_es_array_for-each_js-node_mo-eee3a7.js": "/build/vendors-node_modules_axios_index_js-node_modules_core-js_modules_es_array_for-each_js-node_mo-eee3a7.js",
-  "build/vendors-node_modules_axios_index_js-node_modules_core-js_modules_es_array_filter_js-node_modu-c113a0.js": "/build/vendors-node_modules_axios_index_js-node_modules_core-js_modules_es_array_filter_js-node_modu-c113a0.js",
-  "build/vendors-node_modules_axios_index_js-node_modules_core-js_modules_es_array_for-each_js-node_mo-9d2cff.js": "/build/vendors-node_modules_axios_index_js-node_modules_core-js_modules_es_array_for-each_js-node_mo-9d2cff.js"
+  "build/vendors-node_modules_axios_index_js-node_modules_core-js_modules_es_array_for-each_js-node_mo-eee3a7.js": "/build/vendors-node_modules_axios_index_js-node_modules_core-js_modules_es_array_for-each_js-node_mo-eee3a7.js"
 }

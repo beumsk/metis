@@ -34,7 +34,7 @@ function Login(props) {
       })
       .then(function (response) {
         console.log(response);
-        navigate("/Home");
+        navigate("/index");
       })
       .catch(function (error) {
         console.log(error);

@@ -21,39 +21,15 @@ import axios from "axios";
 import { AuthProvider, RequireAuth } from "./context/auth";
 
 const Index = () => {
-  // const sendGetRequest = async () => {
-  //   try {
-  //     const resp = await axios.get(`/api/getUser`, {
-  //       withCredentials: true,
-  //     });
-  //     console.log(resp.data);
-  //     return resp.data;
-  //   } catch (err) {
-  //     // Handle Error Here
-  //     console.error(err);
-  //   }
-  // };
-
-  // const AuthContext = createContext({
-  //   user: {
-  //     email:
-  //       sendGetRequest() && sendGetRequest().user
-  //         ? sendGetRequest().user.email
-  //         : null,
-  //     password:
-  //       sendGetRequest() && sendGetRequest().password
-  //         ? sendGetRequest().user.password
-  //         : null,
-  //   },
-  // });
-
+  console.log(AuthProvider);
   return (
     <div className="App">
       <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/users" element={<Users />} />
         <Route element={<RequireAuth />}>
-          <Route path="/Home" element={<Home />} />
+          <Route path="/" element={<Login />} />
+          <Route path="/users" element={<Users />} />
+
+          <Route path="/Index" element={<Home />} />
         </Route>
       </Routes>
     </div>
