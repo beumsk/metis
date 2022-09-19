@@ -4,11 +4,12 @@ import { BrowserRouter } from "react-router-dom";
 import "./styles/app.scss";
 import Index from "./index";
 import { CookiesProvider } from "react-cookie";
+import { AuthProvider, RequireAuth } from "./context/auth";
 ReactDOM.render(
-  <BrowserRouter>
-    <CookiesProvider>
+  <AuthProvider>
+    <BrowserRouter>
       <Index />
-    </CookiesProvider>
-  </BrowserRouter>,
+    </BrowserRouter>
+  </AuthProvider>,
   document.getElementById("root")
 );

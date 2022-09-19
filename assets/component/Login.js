@@ -1,28 +1,32 @@
 // ./assets/js/components/Home.js
 
 import React, { Component } from "react";
-import {
-  Routes,
-  Route,
-  Switch,
-  Navigate,
-  Link,
-  withRouter,
-} from "react-router-dom";
-import Users from "./Users.js";
-import Posts from "./Posts";
-import Index from "../index.js";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import axios from "axios";
+import { useAuth } from "../context/auth";
+import { useNavigate } from "react-router-dom";
 
 function Login(props) {
-  const [username, setUsername] = useState(null);
-  const [password, setPassword] = useState(null);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
 
-  console.log(props);
-  const login = () => {
+  const { setUser } = useAuth();
+  const navigate = useNavigate();
+
+  const login = useCallback((e) => {
+    e.preventDefault();
+
+    let user = {
+      email: username,
+      password: password,
+    };
+
+    setUser({ user });
+    setPassword({ password });
+
+    console.log(user);
     axios
       .post("/login", {
         email: username,
@@ -30,12 +34,12 @@ function Login(props) {
       })
       .then(function (response) {
         console.log(response);
-        window.location.href = "/home";
+        navigate("/Home");
       })
       .catch(function (error) {
         console.log(error);
       });
-  };
+  });
 
   return (
     <div className="container-login d-flex" style={{ height: "100vh" }}>
@@ -44,23 +48,25 @@ function Login(props) {
       </div>
       <div className="col-sm-6 d-flex justify-content-center align-items-center">
         <div className="login-box">
-          <Form.Group className="mb-3" controlId="formGroupEmail">
-            <Form.Control
-              type="email"
-              placeholder="Enter email"
-              onChange={(e) => setUsername(e.target.value)}
-            />
-          </Form.Group>
-          <Form.Group className="mb-3" controlId="formGroupPassword">
-            <Form.Control
-              type="password"
-              placeholder="Password"
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </Form.Group>
-          <Button variant="primary" type="submit" onClick={login}>
-            Submit
-          </Button>
+          <form onSubmit={login}>
+            <Form.Group className="mb-3" controlId="formGroupEmail">
+              <Form.Control
+                type="email"
+                placeholder="Enter email"
+                onChange={(e) => setUsername(e.target.value)}
+              />
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="formGroupPassword">
+              <Form.Control
+                type="password"
+                placeholder="Password"
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </Form.Group>
+            <Button variant="primary" type="submit" onClick={login}>
+              Submit
+            </Button>
+          </form>
         </div>
       </div>
     </div>
