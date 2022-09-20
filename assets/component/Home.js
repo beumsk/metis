@@ -1,29 +1,34 @@
-// ./assets/js/components/Home.js
+import React, { useContext, useDebugValue } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import useLogout from "../hooks/useLogout";
 
-import React, { Component, useState } from "react";
-import {
-  Routes,
-  Route,
-  Switch,
-  Navigate,
-  Link,
-  withRouter,
-} from "react-router-dom";
-import Users from "./Users.js";
-import Posts from "./Posts";
-import Index from "../index.js";
+const Home = () => {
+  const navigate = useNavigate();
+  const logout = useLogout();
 
-function Home(props) {
-  const [username, setUsername] = useState(null);
-  const [password, setPassword] = useState(null);
-
-  console.log("home");
+  const signOut = async () => {
+    await logout();
+    navigate("/connect");
+  };
 
   return (
-    <div className="container-login d-flex" style={{ height: "100vh" }}>
-      <p>test</p>
-    </div>
+    <section>
+      <h1>Home</h1>
+      <br />
+      <p>You are logged in!</p>
+      <br />
+      <Link to="/editor">Go to the Editor page</Link>
+      <br />
+      <Link to="/admin">Go to the Admin page</Link>
+      <br />
+      <Link to="/lounge">Go to the Lounge</Link>
+      <br />
+      <Link to="/linkpage">Go to the link page</Link>
+      <div className="flexGrow">
+        <button onClick={signOut}>Sign Out</button>
+      </div>
+    </section>
   );
-}
+};
 
 export default Home;

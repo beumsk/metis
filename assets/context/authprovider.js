@@ -1,16 +1,18 @@
-import React, { createContext, useContext, useState } from "react";
-import { useLocation, Navigate, Outlet } from "react-router-dom";
+import React, { createContext, useState } from "react";
 
-import { AuthContext } from "./user";
+const AuthContext = createContext({});
 
-const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
+export const AuthProvider = ({ children }) => {
+  const [auth, setAuth] = useState({});
+  const [persist, setPersist] = useState(
+    JSON.parse(localStorage.getItem("persist")) || false
+  );
 
   return (
-    <AuthContext.Provider value={{ user, setUser }}>
+    <AuthContext.Provider value={{ auth, setAuth, persist, setPersist }}>
       {children}
     </AuthContext.Provider>
   );
 };
 
-export default AuthProvider;
+export default AuthContext;

@@ -1,76 +1,133 @@
-// ./assets/js/components/Home.js
+import React, { useContext, useDebugValue } from "react";
+import { useRef, useState, useEffect } from "react";
+import useAuth from "../hooks/useAuth";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 
-import React, { Component } from "react";
-import { useState, useCallback } from "react";
-import Form from "react-bootstrap/Form";
-import Button from "react-bootstrap/Button";
 import axios from "axios";
-import { useAuth } from "../context/auth";
-import { useNavigate } from "react-router-dom";
+const LOGIN_URL = "/login";
 
-function Login(props) {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+const Login = () => {
+  const { setAuth, persist, setPersist } = useAuth();
 
-  const { setUser } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/";
 
-  const login = useCallback((e) => {
+  const userRef = useRef();
+  const errRef = useRef();
+
+  const [email, setUser] = useState("");
+  const [password, setPwd] = useState("");
+  const [errMsg, setErrMsg] = useState("");
+  console.log("test");
+  useEffect(() => {
+    userRef.current.focus();
+  }, []);
+
+  useEffect(() => {
+    setErrMsg("");
+  }, [email, password]);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    let user = {
-      email: username,
-      password: password,
-    };
-
-    setUser({ user });
-    setPassword({ password });
-
-    console.log(user);
-    axios
-      .post("/login", {
-        email: username,
-        password: password,
-      })
-      .then(function (response) {
-        console.log(response);
-        navigate("/Home");
-      })
-      .catch(function (error) {
-        console.log(error);
+    try {
+      const response = await axios.post(
+        LOGIN_URL,
+        JSON.stringify({ email, password }),
+        {
+          headers: { "Content-Type": "application/json" },
+          withCredentials: true,
+        }
+      );
+      console.log(response);
+      //console.log(JSON.stringify(response));
+      const accessToken = response.data.token;
+      const roles_used = await axios.get("/api/getUser", {
+        withCredentials: true,
       });
-  });
+
+      const roles = roles_used?.data?.roleNames;
+      console.log(email, password, roles, accessToken);
+
+      if (roles.length > 0) {
+        setAuth({ email, password, roles, accessToken });
+        setUser("");
+        setPwd("");
+        navigate(from, { replace: true });
+      }
+    } catch (err) {
+      if (!err?.response) {
+        setErrMsg("No Server Response");
+      } else if (err.response?.status === 400) {
+        setErrMsg("Missing Username or Password");
+      } else if (err.response?.status === 401) {
+        setErrMsg("Unauthorized");
+      } else {
+        setErrMsg("Login Failed");
+      }
+      errRef.current.focus();
+    }
+  };
+
+  const togglePersist = () => {
+    setPersist((prev) => !prev);
+  };
+
+  useEffect(() => {
+    localStorage.setItem("persist", persist);
+  }, [persist]);
 
   return (
-    <div className="container-login d-flex" style={{ height: "100vh" }}>
-      <div className="col-sm-6 d-flex justify-content-center align-items-center column-title">
-        <h1>Metis</h1>
-      </div>
-      <div className="col-sm-6 d-flex justify-content-center align-items-center">
-        <div className="login-box">
-          <form onSubmit={login}>
-            <Form.Group className="mb-3" controlId="formGroupEmail">
-              <Form.Control
-                type="email"
-                placeholder="Enter email"
-                onChange={(e) => setUsername(e.target.value)}
-              />
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="formGroupPassword">
-              <Form.Control
-                type="password"
-                placeholder="Password"
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </Form.Group>
-            <Button variant="primary" type="submit" onClick={login}>
-              Submit
-            </Button>
-          </form>
+    <section>
+      <p
+        ref={errRef}
+        className={errMsg ? "errmsg" : "offscreen"}
+        aria-live="assertive"
+      >
+        {errMsg}
+      </p>
+      <h1>Sign In</h1>
+      <form onSubmit={handleSubmit}>
+        <label htmlFor="username">Username:</label>
+        <input
+          type="text"
+          id="username"
+          ref={userRef}
+          autoComplete="off"
+          onChange={(e) => setUser(e.target.value)}
+          value={email}
+          required
+        />
+
+        <label htmlFor="password">Password:</label>
+        <input
+          type="password"
+          id="password"
+          onChange={(e) => setPwd(e.target.value)}
+          value={password}
+          required
+        />
+        <button>Sign In</button>
+        <div className="persistCheck">
+          <input
+            type="checkbox"
+            id="persist"
+            onChange={togglePersist}
+            checked={persist}
+          />
+          <label htmlFor="persist">Trust This Device</label>
         </div>
-      </div>
-    </div>
+      </form>
+      <p>
+        Need an Account?
+        <br />
+        <span className="line">
+          <Link to="/register">Sign Up</Link>
+        </span>
+      </p>
+    </section>
   );
-}
+};
 
 export default Login;

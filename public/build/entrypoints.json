@@ -3,11 +3,8 @@
     "app": {
       "js": [
         "/build/runtime.js",
-        "/build/vendors-node_modules_axios_index_js-node_modules_core-js_modules_es_array_from_js-node_module-9d3876.js",
+        "/build/vendors-node_modules_axios_index_js-node_modules_core-js_modules_es_array_filter_js-node_modu-8f4744.js",
         "/build/app.js"
-      ],
-      "css": [
-        "/build/app.css"
       ]
     }
   }
