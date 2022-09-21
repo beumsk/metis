@@ -15,12 +15,10 @@ import { Routes, Route } from "react-router-dom";
 
 const ROLES = {
   User: "ROLE_USER",
-  Editor: 1984,
   Admin: "ROLE_ADMIN",
 };
 
 function App() {
-  console.log("test");
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
@@ -35,19 +33,9 @@ function App() {
             <Route path="/" element={<Home />} />
           </Route>
 
-          {/* <Route element={<RequireAuth allowedRoles={[ROLES.Editor]} />}>
-            <Route path="editor" element={<Editor />} />
-          </Route>
-
           <Route element={<RequireAuth allowedRoles={[ROLES.Admin]} />}>
             <Route path="admin" element={<Admin />} />
           </Route>
-
-          <Route
-            element={<RequireAuth allowedRoles={[ROLES.Editor, ROLES.Admin]} />}
-          > 
-            <Route path="lounge" element={<Lounge />} />
-          </Route>*/}
         </Route>
         <Route path="*" element={<Missing />} />
       </Route>

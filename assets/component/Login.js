@@ -5,7 +5,7 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 
 import axios from "axios";
 const LOGIN_URL = "/login";
-
+console.log("testtest");
 const Login = () => {
   const { setAuth, persist, setPersist } = useAuth();
 
@@ -36,15 +36,21 @@ const Login = () => {
         LOGIN_URL,
         JSON.stringify({ email, password }),
         {
-          headers: { "Content-Type": "application/json" },
-          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+          },
+          // withCredentials: true,
         }
       );
       console.log(response);
       //console.log(JSON.stringify(response));
       const accessToken = response.data.token;
-      const roles_used = await axios.get("/api/getUser", {
+      const token = await axios.get("/api/token/refresh", {
         withCredentials: true,
+      });
+
+      const roles_used = await axios.get("/api/getUser", {
+        headers: { Authorization: `Bearer ${token.data.token}` },
       });
 
       const roles = roles_used?.data?.roleNames;
@@ -119,13 +125,6 @@ const Login = () => {
           <label htmlFor="persist">Trust This Device</label>
         </div>
       </form>
-      <p>
-        Need an Account?
-        <br />
-        <span className="line">
-          <Link to="/register">Sign Up</Link>
-        </span>
-      </p>
     </section>
   );
 };

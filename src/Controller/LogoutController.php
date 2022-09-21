@@ -12,12 +12,23 @@ use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
-class LoginController extends AbstractController
+class LogoutController extends AbstractController
 {
-    #[Route('/api/getUser')]
-    public function index(Request $request, ManagerRegistry $doctrine, EntityManagerInterface $entityManager, TokenStorageInterface $token): Response
+    #[Route('/api/test')]
+    public function Index(Response $response, $jwt)
     {
-        $tokenget = $token->getToken();
-        return $this->json($tokenget);
+        $response->headers->setCookie(
+            new Cookie(
+                "BEARER",
+                '',
+                new \DateTime("+6 hours"),
+                "/",
+                null,
+                false,
+                true,
+                false,
+                'strict'
+            )
+        );
     }
 }

@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Lexik\Bundle\JWTAuthenticationBundle\Events;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\JWTAuthenticatedEvent;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationSuccessEvent;
@@ -25,11 +26,19 @@ class JWTSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            Events::AUTHENTICATION_SUCCESS => 'onAuthenticationSuccess',
+            // Events::AUTHENTICATION_SUCCESS => 'onAuthenticationSuccess',
             Events::JWT_AUTHENTICATED => 'onAuthenticatedAccess',
-            KernelEvents::RESPONSE => 'onAuthenticatedResponse'
+            KernelEvents::RESPONSE => 'onAuthenticatedResponse',
+            Events::JWT_EXPIRED => 'onJwtExpired'
         ];
     }
+
+    #[Route('/api/logout')]
+    public function onJwtExpired(Response $response)
+    {
+        return dd($response);
+    }
+
     public function onAuthenticatedResponse(ResponseEvent $event)
     {
         if ($this->payload && $this->user) {
@@ -48,23 +57,23 @@ class JWTSubscriber implements EventSubscriberInterface
         $this->payload = $event->getPayload();
         $this->user = $event->getToken()->getUser();
     }
-    public function onAuthenticationSuccess(AuthenticationSuccessEvent $event)
-    {
-        $eventData = $event->getData();
-        if (isset($eventData['token'])) {
-            $response = $event->getResponse();
-            $jwt = $eventData['token'];
-            // Set cookie
-            $this->createCookie($response, $jwt);
-        }
-    }
+    // public function onAuthenticationSuccess(AuthenticationSuccessEvent $event)
+    // {
+    //     $eventData = $event->getData();
+    //     if (isset($eventData['token'])) {
+    //         $response = $event->getResponse();
+    //         $jwt = $eventData['token'];
+    //         // Set cookie
+    //         $this->createCookie($response, $jwt);
+    //     }
+    // }
     protected function createCookie(Response $response, $jwt)
     {
         $response->headers->setCookie(
             new Cookie(
                 "BEARER",
                 $jwt,
-                new \DateTime("+1 day"),
+                new \DateTime("+6 hours"),
                 "/",
                 null,
                 false,
