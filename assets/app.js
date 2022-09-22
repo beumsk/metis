@@ -13,6 +13,8 @@ import RequireAuth from "./component/RequireAuth";
 import PersistLogin from "./component/PersistLogin";
 import { Routes, Route } from "react-router-dom";
 
+import "./styles/app.scss";
+
 const ROLES = {
   User: "ROLE_USER",
   Admin: "ROLE_ADMIN",
@@ -22,12 +24,10 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
-        {/* public routes */}
         <Route path="connect" element={<Login />} />
-        {/* <Route path="register" element={<Register />} /> */}
         <Route path="linkpage" element={<LinkPage />} />
         <Route path="unauthorized" element={<Unauthorized />} />
-        {/* we want to protect these routes */}
+
         <Route element={<PersistLogin />}>
           <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
             <Route path="/" element={<Home />} />
@@ -37,6 +37,7 @@ function App() {
             <Route path="admin" element={<Admin />} />
           </Route>
         </Route>
+
         <Route path="*" element={<Missing />} />
       </Route>
     </Routes>

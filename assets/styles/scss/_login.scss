@@ -12,6 +12,16 @@ body{
     font-weight: bold;
 }
 
+.column-title {
+
+}
+
+.persistCheck{
+    input{
+        width: auto!important;
+        margin: 0 1rem 0 0;
+    }
+}
 // @import "../../../node_modules/bootstrap/scss/variables.scss";
 // @import "../../../node_modules/bootstrap/scss/mixins/breakpoints.scss";
 

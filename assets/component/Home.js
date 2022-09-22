@@ -1,7 +1,12 @@
 import React, { useContext, useDebugValue } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import useLogout from "../hooks/useLogout";
-
+import Button from "react-bootstrap/Button";
+import Container from "react-bootstrap/Container";
+import Form from "react-bootstrap/Form";
+import Nav from "react-bootstrap/Nav";
+import Navbar from "react-bootstrap/Navbar";
+import NavDropdown from "react-bootstrap/NavDropdown";
 const Home = () => {
   const navigate = useNavigate();
   const logout = useLogout();
@@ -25,7 +30,9 @@ const Home = () => {
       <br />
       <Link to="/linkpage">Go to the link page</Link> */}
       <div className="flexGrow">
-        <button onClick={signOut}>Sign Out</button>
+        <Button onClick={signOut} variant="outline-success">
+          Search
+        </Button>
       </div>
     </section>
   );

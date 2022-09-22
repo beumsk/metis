@@ -39,11 +39,9 @@ const Login = () => {
           headers: {
             "Content-Type": "application/json",
           },
-          // withCredentials: true,
         }
       );
-      console.log(response);
-      //console.log(JSON.stringify(response));
+
       const accessToken = response.data.token;
       const token = await axios.get("/api/token/refresh", {
         withCredentials: true,
@@ -85,47 +83,52 @@ const Login = () => {
   }, [persist]);
 
   return (
-    <section>
-      <p
-        ref={errRef}
-        className={errMsg ? "errmsg" : "offscreen"}
-        aria-live="assertive"
-      >
-        {errMsg}
-      </p>
-      <h1>Sign In</h1>
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="username">Username:</label>
-        <input
-          type="text"
-          id="username"
-          ref={userRef}
-          autoComplete="off"
-          onChange={(e) => setUser(e.target.value)}
-          value={email}
-          required
-        />
+    <div className="container-login row m-0">
+      <div className="col-sm-6 column-title  d-flex justify-content-center align-items-center">
+        <h1>Métis</h1>
+      </div>
 
-        <label htmlFor="password">Password:</label>
-        <input
-          type="password"
-          id="password"
-          onChange={(e) => setPwd(e.target.value)}
-          value={password}
-          required
-        />
-        <button>Sign In</button>
-        <div className="persistCheck">
+      <div className="col-sm-6 column-content  d-flex justify-content-center align-items-center">
+        <form onSubmit={handleSubmit}>
           <input
-            type="checkbox"
-            id="persist"
-            onChange={togglePersist}
-            checked={persist}
+            type="text"
+            id="username"
+            ref={userRef}
+            placeholder="Tapez votre utilisateur"
+            autoComplete="off"
+            onChange={(e) => setUser(e.target.value)}
+            value={email}
+            required
           />
-          <label htmlFor="persist">Trust This Device</label>
-        </div>
-      </form>
-    </section>
+
+          <input
+            type="password"
+            id="password"
+            placeholder="Tapez votre mot de passe"
+            onChange={(e) => setPwd(e.target.value)}
+            value={password}
+            required
+          />
+          <button>Sign In</button>
+          <div className="persistCheck  d-flex justify-content-start align-items-center mt-4">
+            <input
+              type="checkbox"
+              id="persist"
+              onChange={togglePersist}
+              checked={persist}
+            />
+            <label htmlFor="persist">Trust This Device</label>
+          </div>
+        </form>
+        <p
+          ref={errRef}
+          className={errMsg ? "errmsg" : "offscreen"}
+          aria-live="assertive"
+        >
+          {errMsg}
+        </p>
+      </div>
+    </div>
   );
 };
 

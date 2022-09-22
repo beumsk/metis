@@ -4,6 +4,7 @@ var Encore = require("@symfony/webpack-encore");
 if (!Encore.isRuntimeEnvironmentConfigured()) {
   Encore.configureRuntimeEnvironment(process.env.NODE_ENV || "dev");
 }
+Encore.addStyleEntry("global", "./assets/styles/app.scss");
 Encore.enableSassLoader();
 Encore
   // directory where compiled assets will be stored
@@ -13,7 +14,7 @@ Encore
   .enableReactPreset()
   // only needed for CDN's or sub-directory deploy
   //.setManifestKeyPrefix('build/')
-
+  // .addStyleEntry("some_page", "./assets/styles/some_page.css")
   /*
    * ENTRY CONFIG
    *
