@@ -5,7 +5,7 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 
 import axios from "axios";
 const LOGIN_URL = "/login";
-console.log("testtest");
+
 const Login = () => {
   const { setAuth, persist, setPersist } = useAuth();
 
@@ -19,7 +19,7 @@ const Login = () => {
   const [email, setUser] = useState("");
   const [password, setPwd] = useState("");
   const [errMsg, setErrMsg] = useState("");
-  console.log("test");
+
   useEffect(() => {
     userRef.current.focus();
   }, []);
@@ -52,7 +52,6 @@ const Login = () => {
       });
 
       const roles = roles_used?.data?.roleNames;
-      console.log(email, password, roles, accessToken);
 
       if (roles.length > 0) {
         setAuth({ email, password, roles, accessToken });

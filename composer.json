@@ -19,6 +19,7 @@
         "doctrine/doctrine-bundle": "^2.5",
         "doctrine/doctrine-migrations-bundle": "^3.0",
         "doctrine/orm": "^2.10",
+        "fzaninotto/faker": "^1.5",
         "gesdinet/jwt-refresh-token-bundle": "^1.1",
         "lcobucci/jwt": "4.0.0",
         "league/commonmark": "^2.1",

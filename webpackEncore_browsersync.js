@@ -9,7 +9,7 @@ config.plugins.push(
       files: [
         // watch on changes
         {
-          match: ["public/build/**/*.js"],
+          match: ["public/build/*.js", "public/build/*.css"],
           fn: function (event, file) {
             if (event === "change") {
               const bs = require("browser-sync").get("bs-webpack-plugin");

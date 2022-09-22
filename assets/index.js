@@ -5,7 +5,6 @@ import App from "./app";
 import { AuthProvider } from "./context/AuthProvider";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-console.log(App);
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>

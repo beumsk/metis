@@ -7,6 +7,8 @@ import Form from "react-bootstrap/Form";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
+
+import Form_MeetRapports from "./Form_MeetRapports";
 const Home = () => {
   const navigate = useNavigate();
   const logout = useLogout();
@@ -17,24 +19,23 @@ const Home = () => {
   };
 
   return (
-    <section>
-      <h1>Home</h1>
-      <br />
-      <p>You are logged in!</p>
-      {/* <br />
-      <Link to="/editor">Go to the Editor page</Link>
-      <br />
-      <Link to="/admin">Go to the Admin page</Link>
-      <br />
-      <Link to="/lounge">Go to the Lounge</Link>
-      <br />
-      <Link to="/linkpage">Go to the link page</Link> */}
-      <div className="flexGrow">
-        <Button onClick={signOut} variant="outline-success">
-          Search
-        </Button>
+    <div className="container-home row m-0">
+      <div className="col-sm-6 d-flex align-items-center justify-content-center">
+        <div>
+          {/* <h1>Choissisez ce que vous avez besoin</h1> */}
+          {/* <p>You are logged in!</p> */}
+        </div>
       </div>
-    </section>
+
+      <div className="col-sm-6 d-flex align-items-center justify-content-center">
+        <Form_MeetRapports></Form_MeetRapports>
+      </div>
+      {/* <div className="flexGrow">
+        <Button onClick={signOut} variant="outline-success">
+          Logout
+        </Button>
+      </div> */}
+    </div>
   );
 };
 
