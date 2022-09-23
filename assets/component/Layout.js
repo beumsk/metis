@@ -4,7 +4,6 @@ import Menu from "./Menu";
 const Layout = () => {
   return (
     <main className="App">
-      <Menu />
       <Outlet />
     </main>
   );

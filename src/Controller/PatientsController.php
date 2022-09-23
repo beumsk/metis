@@ -31,9 +31,12 @@ class PatientsController extends AbstractController
     }
 
     #[Route('/api/getPatients', name: 'app_getPatients')]
-    public function getPatients(ManagerRegistry $doctrine): Response
+    public function getPatients(ManagerRegistry $doctrine, Request $request): Response
     {
-        $patients = $doctrine->getRepository(Patients::class)->findAll();
+        $request = Request::createFromGlobals();
+
+        $page = $request->request->get('page');
+        $patients = $doctrine->getRepository(Patients::class)->findByPaquets($page);
         return $this->json($patients);
     }
 

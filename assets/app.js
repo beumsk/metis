@@ -14,7 +14,8 @@ import PersistLogin from "./component/PersistLogin";
 import { Routes, Route } from "react-router-dom";
 
 import Patients from "./component/Patients";
-
+import RepportCalls from "./component/list_reportCalls";
+import RepportGoals from "./component/list_reportGoals";
 import "./styles/app.scss";
 
 const ROLES = {
@@ -32,7 +33,7 @@ function App() {
 
         <Route element={<PersistLogin />}>
           <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
-            <Route path="/" element={<Home />} />
+            <Route path="/" element={<Home />}></Route>
           </Route>
 
           <Route element={<RequireAuth allowedRoles={[ROLES.Admin]} />}>

@@ -17,30 +17,32 @@ const Form_MeetRapports = () => {
   };
 
   return (
-    <Form>
-      <h2>Rapport de rencontre</h2>
-      <Form.Group className="mb-3" controlId="formBasicEmail">
-        <Form.Control type="email" placeholder="Tapez le nom" />
-      </Form.Group>
+    <>
+      <h3>Rapport de rencontre</h3>
+      <Form>
+        <Form.Group className="mb-3" controlId="formBasicEmail">
+          <Form.Control type="email" placeholder="Tapez le nom" />
+        </Form.Group>
 
-      <Form.Group className="mb-3" controlId="formBasicPassword">
-        <Form.Control type="text" placeholder="Tapez le prénom" />
-      </Form.Group>
+        <Form.Group className="mb-3" controlId="formBasicPassword">
+          <Form.Control type="text" placeholder="Tapez le prénom" />
+        </Form.Group>
 
-      <Form.Group className="mb-3" controlId="formBasicPassword">
-        <Form.Control type="text" placeholder="Tapez le surnom" />
-      </Form.Group>
+        <Form.Group className="mb-3" controlId="formBasicPassword">
+          <Form.Control type="text" placeholder="Tapez le surnom" />
+        </Form.Group>
 
-      <Form.Select aria-label="Default select example">
-        <option>Choissisez votre antenne</option>
-        <option value="1">Liège</option>
-        <option value="2">Bruxelles</option>
-      </Form.Select>
+        <Form.Select aria-label="Default select example">
+          <option>Choissisez votre antenne</option>
+          <option value="1">Liège</option>
+          <option value="2">Bruxelles</option>
+        </Form.Select>
 
-      <Button variant="primary" type="submit" className="btn-metis mt-3">
-        Submit
-      </Button>
-    </Form>
+        <Button variant="primary" type="submit" className="btn-metis mt-3">
+          Submit
+        </Button>
+      </Form>
+    </>
   );
 };
 

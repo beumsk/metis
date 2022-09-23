@@ -1,8 +1,8 @@
 {
   "build/app.js": "/build/app.js",
   "build/runtime.js": "/build/runtime.js",
-  "build/vendors-node_modules_mdb-ui-kit_css_mdb_min_css.css": "/build/vendors-node_modules_mdb-ui-kit_css_mdb_min_css.css",
-  "build/vendors-node_modules_axios_index_js-node_modules_core-js_modules_es_array_filter_js-node_modu-5a0131.js": "/build/vendors-node_modules_axios_index_js-node_modules_core-js_modules_es_array_filter_js-node_modu-5a0131.js",
+  "build/vendors-node_modules_fortawesome_react-fontawesome_index_es_js-node_modules_axios_index_js-no-154695.js": "/build/vendors-node_modules_fortawesome_react-fontawesome_index_es_js-node_modules_axios_index_js-no-154695.js",
   "build/assets_styles_app_scss.css": "/build/assets_styles_app_scss.css",
-  "build/vendors-node_modules_axios_index_js-node_modules_core-js_modules_es_array_filter_js-node_modu-982774.js": "/build/vendors-node_modules_axios_index_js-node_modules_core-js_modules_es_array_filter_js-node_modu-982774.js"
+  "build/vendors-node_modules_axios_index_js-node_modules_core-js_modules_es_array_filter_js-node_modu-982774.js": "/build/vendors-node_modules_axios_index_js-node_modules_core-js_modules_es_array_filter_js-node_modu-982774.js",
+  "build/vendors-node_modules_fortawesome_react-fontawesome_index_es_js-node_modules_axios_index_js-no-725f4b.js": "/build/vendors-node_modules_fortawesome_react-fontawesome_index_es_js-node_modules_axios_index_js-no-725f4b.js"
 }

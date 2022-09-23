@@ -3,54 +3,74 @@ import axios from "axios";
 import Table from "react-bootstrap/Table";
 import PersistLogin from "./PersistLogin";
 import useAuth from "../hooks/useAuth";
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUser } from "@fortawesome/free-solid-svg-icons";
+import Menu from "./Menu";
+import Accordion from "react-bootstrap/Accordion";
 function Patients() {
   const [auth, setAuth] = useState(useAuth());
   const [patientsList, setPatientsList] = useState(null);
+  const [lengthList, setLengthList] = useState(10);
+
+  var formData = new FormData();
+  formData.append("page", lengthList.toString());
 
   useEffect(() => {
-    const patients = axios.get("/api/getPatients", {
-      headers: { Authorization: `Bearer ${auth.auth.accessToken}` },
-    });
+    console.log(lengthList);
+    axios({
+      method: "post",
+      url: "/api/getPatients",
+      data: formData,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    })
+      .then(function (response) {
+        //handle success
+        setPatientsList(response);
+        console.log(response);
+      })
+      .catch(function (response) {
+        console.log(response);
+      });
+  }, [lengthList, setLengthList]);
 
-    patients.catch().then((e) => {
-      //   console.log(e);
-      if (patientsList === null) {
-        setPatientsList(e);
-      }
-    });
-    console.log(patientsList);
-    // patients.catch(e => e);
-  });
+  const readMore = () => {
+    setLengthList(lengthList + 10);
+  };
 
   return (
-    <div className="container-patients row m-0">
-      <h1>Patients Page</h1>
+    <>
+      <Menu></Menu>
+      <div className="container container-patients row mx-auto ">
+        <h3>Tous les patients</h3>
 
-      <Table striped>
-        {/* <thead>
-          <tr>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Username</th>
-          </tr>
-        </thead> */}
-        <tbody>
-          {patientsList && patientsList.data && patientsList.data.length > 0 && (
-            <>
-              {patientsList.data.map((patient) => (
-                <tr key={patient.id}>
-                  <td>{patient.firstname}</td>
-                  <td>{patient.lastname}</td>
-                  <td>{patient.story}</td>
-                  <td>{patient.status}</td>
-                </tr>
-              ))}
-            </>
-          )}
-        </tbody>
-      </Table>
-    </div>
+        {patientsList && patientsList.data && patientsList.data.length > 0 && (
+          <>
+            {patientsList.data.map((patient) => (
+              <Accordion className="my-3">
+                <Accordion.Item eventKey={patient.id} key={patient.id}>
+                  <Accordion.Header>
+                    <div className="col-sm-2">
+                      <FontAwesomeIcon icon={faUser} />
+                    </div>
+                    <div className="col-sm-2">{patient.firstname}</div>
+                    <div className="col-sm-3">{patient.lastname}</div>
+                    <div className="col-sm-3">{patient.nicknames}</div>
+                    {/* <div className="col-sm-3">{Date.now()}</div> */}
+                  </Accordion.Header>
+                  <Accordion.Body>{patient.story}</Accordion.Body>
+                </Accordion.Item>
+              </Accordion>
+            ))}
+            <button className="btn-metis" onClick={readMore}>
+              Read More
+            </button>
+          </>
+        )}
+      </div>
+    </>
   );
 }
 
