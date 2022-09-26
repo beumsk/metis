@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\SuggestionsRepository;
+use Doctrine\DBAL\Types\SmallIntType;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -14,20 +15,24 @@ class Suggestions
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?Suggestions $parentSugg = null;
+
+    #[ORM\Column(length: 255, nullable: false)]
     private ?string $value = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $path = null;
 
-    #[ORM\Column(type: Types::TEXT)]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $path_string = null;
 
     #[ORM\Column(nullable: true)]
-    private ?int $require_custom_value = null;
+    private ?bool $require_custom_value = null;
 
     #[ORM\Column(nullable: true)]
-    private ?int $is_locked = null;
+    private ?bool $is_locked = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $attributes = null;
@@ -35,8 +40,9 @@ class Suggestions
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $default_comment = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?int $is_deleted = null;
+    #[ORM\Column(type: Types::SMALLINT, nullable: true)]
+    private ?bool $is_deleted = null;
+
 
     public function getId(): ?int
     {
@@ -79,24 +85,24 @@ class Suggestions
         return $this;
     }
 
-    public function getRequireCustomValue(): ?int
+    public function getRequireCustomValue(): ?bool
     {
         return $this->require_custom_value;
     }
 
-    public function setRequireCustomValue(?int $require_custom_value): self
+    public function setRequireCustomValue(?bool $require_custom_value): self
     {
         $this->require_custom_value = $require_custom_value;
 
         return $this;
     }
 
-    public function getIsLocked(): ?int
+    public function getIsLocked(): ?bool
     {
         return $this->is_locked;
     }
 
-    public function setIsLocked(?int $is_locked): self
+    public function setIsLocked(?bool $is_locked): self
     {
         $this->is_locked = $is_locked;
 
@@ -127,14 +133,26 @@ class Suggestions
         return $this;
     }
 
-    public function getIsDeleted(): ?int
+    public function getIsDeleted(): ?bool
     {
         return $this->is_deleted;
     }
 
-    public function setIsDeleted(?int $is_deleted): self
+    public function setIsDeleted(?bool $is_deleted): self
     {
         $this->is_deleted = $is_deleted;
+
+        return $this;
+    }
+
+    public function getParentSugg(): ?Suggestions
+    {
+        return $this->parentSugg;
+    }
+
+    public function setParentSugg(?Suggestions $parentSugg): self
+    {
+        $this->parentSugg = $parentSugg;
 
         return $this;
     }

@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Medias;
+use App\Entity\Patients;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -39,28 +40,58 @@ class MediasRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return Medias[] Returns an array of Medias objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('m')
-//            ->andWhere('m.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('m.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
 
-//    public function findOneBySomeField($value): ?Medias
-//    {
-//        return $this->createQueryBuilder('m')
-//            ->andWhere('m.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    public function getCurrentProfile(Patients $patient)
+    {
+        // dd($patient);
+        $qb = $this->getEntityManager()->createQueryBuilder();
+
+        $qb->select('m')
+            ->from('App:Medias', 'm')
+            ->join('App:Suggestions', 's')
+            ->where(
+                $qb->expr()->andX(
+                    'm.sugg = s',
+                    's.path_string = :path_string',
+                    'm.pati = :patient'
+                )
+            )
+            ->setMaxResults(1)
+            ->orderBy('m.id', 'desc')
+            ->setParameters(
+                array(
+                    'path_string' => '/patient/media/profile/current',
+                    'patient' => $patient
+                )
+            );
+
+        $query = $qb->getQuery();
+
+        return $query->getOneOrNullResult();
+    }
+
+    //    /**
+    //     * @return Medias[] Returns an array of Medias objects
+    //     */
+    //    public function findByExampleField($value): array
+    //    {
+    //        return $this->createQueryBuilder('m')
+    //            ->andWhere('m.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->orderBy('m.id', 'ASC')
+    //            ->setMaxResults(10)
+    //            ->getQuery()
+    //            ->getResult()
+    //        ;
+    //    }
+
+    //    public function findOneBySomeField($value): ?Medias
+    //    {
+    //        return $this->createQueryBuilder('m')
+    //            ->andWhere('m.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->getQuery()
+    //            ->getOneOrNullResult()
+    //        ;
+    //    }
 }

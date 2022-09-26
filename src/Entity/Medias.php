@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+// use Symfony\Component\Console\Completion\Suggestion;
 
 #[ORM\Entity(repositoryClass: MediasRepository::class)]
 class Medias
@@ -16,14 +17,22 @@ class Medias
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(type: Types::TEXT)]
+
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?Patients $pati = null;
+
+
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?Suggestions $sugg = null;
+
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $comment = null;
 
     #[ORM\Column(type: Types::TEXT)]
     private ?string $filename = null;
-
-    #[ORM\Column(type: Types::TEXT)]
-    private ?string $original_filename = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $date = null;
@@ -37,9 +46,9 @@ class Medias
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $deleted_at = null;
 
-    #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Patients $pati = null;
+    #[ORM\Column(type: Types::TEXT)]
+    private ?string $original_filename = null;
+
 
     public function getId(): ?int
     {
@@ -49,6 +58,18 @@ class Medias
     public function getComment(): ?string
     {
         return $this->comment;
+    }
+
+
+    protected function getUploadDir()
+    {
+        return 'media';
+    }
+
+
+    protected function getUploadRootDir()
+    {
+        return __DIR__ . '/../../../../web/' . $this->getUploadDir();
     }
 
     public function setComment(string $comment): self
@@ -92,6 +113,11 @@ class Medias
         $this->date = $date;
 
         return $this;
+    }
+
+    public function getAbsolutePath()
+    {
+        return null === $this->fileName ? null : $this->getUploadRootDir() . '/' . $this->fileName;
     }
 
     public function getIsConfidential(): ?int
@@ -138,6 +164,18 @@ class Medias
     public function setPati(?Patients $pati): self
     {
         $this->pati = $pati;
+
+        return $this;
+    }
+
+    public function getSugg(): ?Suggestions
+    {
+        return $this->sugg;
+    }
+
+    public function setSugg(?Suggestions $sugg): self
+    {
+        $this->sugg = $sugg;
 
         return $this;
     }

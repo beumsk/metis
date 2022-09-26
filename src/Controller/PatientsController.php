@@ -40,6 +40,16 @@ class PatientsController extends AbstractController
         return $this->json($patients);
     }
 
+    #[Route('/api/getPatient', name: 'app_getPatient')]
+    public function getPatient(ManagerRegistry $doctrine, Request $request): Response
+    {
+        $request = Request::createFromGlobals();
+
+        $id = $request->request->get('id');
+        $patients = $doctrine->getRepository(Patients::class)->find($id);
+        return $this->json($patients);
+    }
+
     #[Route('/api/getMedias', name: 'app_medias')]
     public function getMedias(ManagerRegistry $doctrine): Response
     {

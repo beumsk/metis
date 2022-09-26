@@ -19,7 +19,7 @@ const Menu = () => {
         variant="dark"
       >
         <Container fluid>
-          <Navbar.Brand href="#">
+          <Navbar.Brand href="/">
             <span className="text-uppercase text-white">Métis</span>
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />

@@ -16,6 +16,8 @@ import { Routes, Route } from "react-router-dom";
 import Patients from "./component/Patients";
 import RepportCalls from "./component/list_reportCalls";
 import RepportGoals from "./component/list_reportGoals";
+
+import Patient from "./component/Patient";
 import "./styles/app.scss";
 
 const ROLES = {
@@ -38,6 +40,7 @@ function App() {
 
           <Route element={<RequireAuth allowedRoles={[ROLES.Admin]} />}>
             <Route path="patients" element={<Patients />} />
+            <Route path=":id" element={<Patient />} />
           </Route>
 
           <Route element={<RequireAuth allowedRoles={[ROLES.Admin]} />}>

@@ -14,17 +14,17 @@ class LoadData extends Fixture
     {
         $faker = Faker\Factory::create('fr_FR');
         $auteurs = array();
-        for ($i = 0; $i < 1020; $i++) {
+        for ($i = 0; $i < 200; $i++) {
             $auteurs[$i] = new Patients();
             $auteurs[$i]->setFirstName($faker->lastName);
             $auteurs[$i]->setLastName($faker->firstName);
             $auteurs[$i]->setNicknames($faker->userName);
-            $auteurs[$i]->setBirthdate($faker->dateTime);
+            $auteurs[$i]->setBirthdate($faker->dateTime('Y-m-d'));
             $auteurs[$i]->setStory($faker->text());
-            $auteurs[$i]->setStatus($faker->word);
-            $auteurs[$i]->setBirthLocation($faker->locale);
+            $auteurs[$i]->setStatus("POST-SUIVI");
+            $auteurs[$i]->setBirthLocation("Bruxelles");
             $auteurs[$i]->setFollowUpType("1");
-            $auteurs[$i]->setTeam($faker->word);
+            $auteurs[$i]->setTeam("Soleil");
             $manager->persist($auteurs[$i]);
         }
 

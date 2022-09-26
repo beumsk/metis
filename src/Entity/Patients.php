@@ -25,19 +25,19 @@ class Patients
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $lastname = null;
 
-    #[ORM\Column(type: Types::TEXT)]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $nicknames = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $birthdate = null;
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    private ?\DateTime $birthdate = null;
 
     #[ORM\Column(nullable: true)]
     private ?int $unknown_year = null;
 
-    #[ORM\Column(type: Types::TEXT)]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $birth_location = null;
 
-    #[ORM\Column(type: Types::TEXT)]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $story = null;
 
     #[ORM\Column(length: 25, nullable: true)]
@@ -52,8 +52,21 @@ class Patients
     #[ORM\Column]
     private ?int $follow_up_type = null;
 
-    #[ORM\Column(length: 50)]
+    #[ORM\Column(length: 50, nullable: true)]
     private ?string $team = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $description = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?bool $is_alive = null;
+
+    #[ORM\Column(length: 50, nullable: true)]
+    private ?string $antenna = null;
+
+
+
+
 
     public function getId(): ?int
     {
@@ -115,12 +128,12 @@ class Patients
         return $this;
     }
 
-    public function getBirthdate(): ?\DateTimeInterface
+    public function getBirthdate(): ?\DateTime
     {
         return $this->birthdate;
     }
 
-    public function setBirthdate(?\DateTimeInterface $birthdate): self
+    public function setBirthdate(?\DateTime $birthdate): self
     {
         $this->birthdate = $birthdate;
 
@@ -219,6 +232,42 @@ class Patients
     public function setTeam(string $team): self
     {
         $this->team = $team;
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(string $description): self
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    public function isIsAlive(): ?bool
+    {
+        return $this->is_alive;
+    }
+
+    public function setIsAlive(?bool $is_alive): self
+    {
+        $this->is_alive = $is_alive;
+
+        return $this;
+    }
+
+    public function getAntenna(): ?string
+    {
+        return $this->antenna;
+    }
+
+    public function setAntenna(?string $antenna): self
+    {
+        $this->antenna = $antenna;
 
         return $this;
     }

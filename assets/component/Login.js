@@ -92,6 +92,7 @@ const Login = () => {
           <input
             type="text"
             id="username"
+            // className="my-4"
             ref={userRef}
             placeholder="Tapez votre utilisateur"
             autoComplete="off"
@@ -102,13 +103,14 @@ const Login = () => {
 
           <input
             type="password"
+            className="my-4"
             id="password"
             placeholder="Tapez votre mot de passe"
             onChange={(e) => setPwd(e.target.value)}
             value={password}
             required
           />
-          <button>Sign In</button>
+          <button className="btn-metis">Sign In</button>
           <div className="persistCheck  d-flex justify-content-start align-items-center mt-4">
             <input
               type="checkbox"
