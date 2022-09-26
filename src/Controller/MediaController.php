@@ -61,19 +61,21 @@ class MediaController extends AbstractController
         // return $this->json($patients);
 
         // $image = $media->getAbsolutePath();
-        dd($media);
+        // dd($media);
 
-        // if ($media instanceof Medias) {
-        //     $image = $media->getAbsolutePath();
-        // } else {
-        //     $image = '@IdrSuiviBundle/Resources/public/images/profile_m.png';
-        // }
+        if ($media instanceof Medias) {
+            $image = $media->getAbsolutePath();
+        } else {
+            $image = '@IdrSuiviBundle/Resources/public/images/profile_m.png';
+        }
 
-        // return [
-        //     'image' => $image,
-        //     'width' => "25px",
-        //     'height' => "24px",
-        //     'class' => "test"
-        // ];
+
+
+        return $this->json([
+            'image' => $image,
+            'width' => "25px",
+            'height' => "24px",
+            'class' => "test"
+        ]);
     }
 }

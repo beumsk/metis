@@ -69,7 +69,7 @@ class Medias
 
     protected function getUploadRootDir()
     {
-        return __DIR__ . '/../../../../web/' . $this->getUploadDir();
+        return __DIR__ . '../../assets/img/patients' . $this->getUploadDir();
     }
 
     public function setComment(string $comment): self
@@ -117,7 +117,8 @@ class Medias
 
     public function getAbsolutePath()
     {
-        return null === $this->fileName ? null : $this->getUploadRootDir() . '/' . $this->fileName;
+        // dd($this->filename);
+        return $this->filename === null ? null : $this->getUploadRootDir() . '/' . $this->filename;
     }
 
     public function getIsConfidential(): ?int
