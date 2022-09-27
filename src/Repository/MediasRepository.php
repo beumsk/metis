@@ -17,6 +17,9 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class MediasRepository extends ServiceEntityRepository
 {
+
+    const ALIAS = 'medias';
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Medias::class);
@@ -69,6 +72,26 @@ class MediasRepository extends ServiceEntityRepository
 
         return $query->getOneOrNullResult();
     }
+
+
+    public function getAllProfile()
+    {
+
+        $conn = $this->getEntityManager()->getConnection();
+
+        $sql = '
+        SELECT *
+        FROM metisapp.medias
+        INNER JOIN metisapp.patients ON metisapp.medias.id;
+            ';
+        $stmt = $conn->prepare($sql);
+        $resultSet = $stmt->executeQuery();
+
+        // returns an array of arrays (i.e. a raw data set)
+        return $resultSet->fetchAllAssociative();
+    }
+
+
 
     //    /**
     //     * @return Medias[] Returns an array of Medias objects

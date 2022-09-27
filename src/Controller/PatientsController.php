@@ -50,10 +50,12 @@ class PatientsController extends AbstractController
         return $this->json($patients);
     }
 
-    #[Route('/api/getMedias', name: 'app_medias')]
+    #[Route('/api/getMedias', name: 'app_allMedias')]
     public function getMedias(ManagerRegistry $doctrine): Response
     {
         $medias = $doctrine->getRepository(Medias::class)->findAll();
+        // dd($medias);
+
         return $this->json($medias);
     }
 

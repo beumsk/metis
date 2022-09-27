@@ -2,6 +2,7 @@ import React, { useContext, useDebugValue, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Users from "./Users";
 import Menu from "./Menu";
+import logoPath from "../images/5a94e34b4c36e28de4e704f8c2d1c39a79e91b5d.png";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
@@ -10,15 +11,17 @@ import Tabs from "react-bootstrap/Tabs";
 import Fiche from "./Profile/Fiche";
 const Patient = () => {
   let id = useParams().id;
-
+  let backgroundImage =
+    "../images/5a94e34b4c36e28de4e704f8c2d1c39a79e91b5d.png";
   const [auth, setAuth] = useState(useAuth());
   const [patient, setPatient] = useState(null);
+  const [imgPatient, setImgPatient] = useState(null);
   const [key, setKey] = useState("fiche");
   const [idPatient, setIdPatient] = useState(id);
 
   var formData = new FormData();
-  formData.append("id", id);
-
+  formData.append("id", id.toString());
+  let objPatient = {};
   useEffect(() => {
     axios({
       method: "post",
@@ -31,16 +34,38 @@ const Patient = () => {
     })
       .then(function (response) {
         //handle success
-        setPatient(response.data);
+        objPatient.patient = response.data;
+        // setPatient(response.data);
         console.log(response);
+        setPatient(response.data);
+        axios({
+          method: "post",
+          url: "/api/getMediaForPatient",
+          data: formData,
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${auth.auth.accessToken}`,
+          },
+        })
+          .then(function (response) {
+            //handle success
+            // setPatient(response.data);
+            console.log(response);
+            let backgroundImage = response.image;
+            setImgPatient(response.data);
+            // setPatient(response.data);
+          })
+          .catch(function (response) {
+            console.log(response);
+          });
       })
       .catch(function (response) {
         console.log(response);
       });
   }, [idPatient, setIdPatient]);
 
-  console.log(patient);
-
+  console.log(objPatient, imgPatient);
+  // "../build/images/5a94e34b4c36e28de4e704f8c2d1c39a79e91b5d.png"
   return (
     <>
       <Menu></Menu>
@@ -51,10 +76,23 @@ const Patient = () => {
             <div className="row profile-head">
               <div className="col-sm-2">
                 <div className="profile-img">
-                  <img
-                    src="https://ucreate.ch/wp-content/uploads/2022/02/profil_vide.jpg"
-                    alt=""
-                  />
+                  {imgPatient &&
+                    imgPatient !== null &&
+                    Object.keys(imgPatient).length > 0 && (
+                      <>
+                        <img src={imgPatient.image} />;
+                      </>
+                    )}
+
+                  {imgPatient &&
+                    imgPatient === null &&
+                    Object.keys(imgPatient).length > 0 && (
+                      <>
+                        <img src="https://ucreate.ch/wp-content/uploads/2022/02/profil_vide.jpg" />
+                        ;
+                      </>
+                    )}
+
                   <div className="file btn btn-lg btn-primary">
                     Change Photo
                     <input type="file" name="file" />

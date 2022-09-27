@@ -16,59 +16,19 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 class MediaController extends AbstractController
 {
-    // #[Route('/api/getMediaForPatient', name: 'app_media')]
-    // public function getProfileAction(ManagerRegistry $doctrine, Patients $patient, $width = 165, $height = 165, $class = null)
-    // {
-    //     $request = Request::createFromGlobals();
-
-
-    //     $mediaRepository = $doctrine->getRepository(Medias::class);
-
-    //     $media = $mediaRepository->getCurrentProfile($patient);
-
-
-    //     $image = $media->getAbsolutePath();
-    //     dd($image);
-
-
-
-    //     // if ($media instanceof Medias) {
-    //     //     $image = $media->getAbsolutePath();
-    //     //     dd($image);
-    //     // } else {
-    //     //     $image = '@IdrSuiviBundle/Resources/public/images/profile_m.png';
-    //     // }
-
-    //     // return [
-    //     //     'image' => $image,
-    //     //     'width' => $width,
-    //     //     'height' => $height,
-    //     //     'class' => $class
-    //     // ];
-    // }
+    // getAllPatient
 
     #[Route('/api/getMediaForPatient', name: 'app_media')]
     public function getPatients(ManagerRegistry $doctrine, Request $request): Response
     {
         $request = Request::createFromGlobals();
-
+        $objPatients = new Patients();
+        $id = $request->request->get("id");
         $page = $request->request->get('page');
-        $patient = $doctrine->getRepository(Patients::class)->find(28);
+        $patient = $doctrine->getRepository(Patients::class)->find($id);
         $mediaRepository = $doctrine->getRepository(Medias::class);
-
-
         $media = $mediaRepository->getCurrentProfile($patient);
-        // return $this->json($patients);
-
-        // $image = $media->getAbsolutePath();
-        // dd($media);
-
-        if ($media instanceof Medias) {
-            $image = $media->getAbsolutePath();
-        } else {
-            $image = '@IdrSuiviBundle/Resources/public/images/profile_m.png';
-        }
-
+        $image = $media->getAbsolutePath();
 
 
         return $this->json([

@@ -65,11 +65,13 @@ class Medias
     {
         return 'media';
     }
-
-
+    // C:\projets\metis-app-2022\public\build\images\5a94e34b4c36e28de4e704f8c2d1c39a79e91b5d.bf62d7d5.png
+    // public\build\images\5a94e34b4c36e28de4e704f8c2d1c39a79e91b5d.bf62d7d5.png
+    // https://github.com/shania873/metis/blob/main/public/build/images/5a94e34b4c36e28de4e704f8c2d1c39a79e91b5d.bf62d7d5.png
     protected function getUploadRootDir()
     {
-        return __DIR__ . '../../assets/img/patients' . $this->getUploadDir();
+        return '../build/images';
+        // return 'build/images';
     }
 
     public function setComment(string $comment): self
