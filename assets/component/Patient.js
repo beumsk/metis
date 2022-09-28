@@ -1,5 +1,5 @@
 import React, { useContext, useDebugValue, useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import Users from "./Users";
 import Menu from "./Menu";
 import logoPath from "../images/5a94e34b4c36e28de4e704f8c2d1c39a79e91b5d.png";
@@ -9,6 +9,7 @@ import useAuth from "../hooks/useAuth";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 import Fiche from "./Profile/Fiche";
+
 const Patient = () => {
   let id = useParams().id;
   let backgroundImage =
@@ -18,10 +19,20 @@ const Patient = () => {
   const [imgPatient, setImgPatient] = useState(null);
   const [key, setKey] = useState("fiche");
   const [idPatient, setIdPatient] = useState(id);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [locationWeb, setLocation] = useState(location);
 
   var formData = new FormData();
   formData.append("id", id.toString());
+
   let objPatient = {};
+
+  console.log(idPatient);
+
+  if (!idPatient) {
+  }
+
   useEffect(() => {
     axios({
       method: "post",
@@ -62,7 +73,7 @@ const Patient = () => {
       .catch(function (response) {
         console.log(response);
       });
-  }, [idPatient, setIdPatient]);
+  }, [idPatient]);
 
   console.log(objPatient, imgPatient);
   // "../build/images/5a94e34b4c36e28de4e704f8c2d1c39a79e91b5d.png"

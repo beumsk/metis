@@ -1,7 +1,7 @@
 {
   "build/app.js": "/build/app.js",
   "build/runtime.js": "/build/runtime.js",
-  "build/vendors-node_modules_fortawesome_react-fontawesome_index_es_js-node_modules_axios_index_js-no-90d054.js": "/build/vendors-node_modules_fortawesome_react-fontawesome_index_es_js-node_modules_axios_index_js-no-90d054.js",
+  "build/vendors-node_modules_fortawesome_react-fontawesome_index_es_js-node_modules_axios_index_js-no-b7201a.js": "/build/vendors-node_modules_fortawesome_react-fontawesome_index_es_js-node_modules_axios_index_js-no-b7201a.js",
   "build/assets_styles_app_scss.css": "/build/assets_styles_app_scss.css",
   "build/images/79e91b5d.png": "/build/images/5a94e34b4c36e28de4e704f8c2d1c39a79e91b5d.png",
   "build/images/ecd53d63.png": "/build/images/19f714db1fb23a4899d29c3de1fe6684ecd53d63.png",
@@ -14,5 +14,5 @@
   "build/images/1ba21299.jpeg": "/build/images/c2869f3ff3c87901865be872f28100e31ba21299.jpeg",
   "build/images/d13dfa1d.jpeg": "/build/images/220b71cd3e0d8d00a02dd5d751a8cc15d13dfa1d.jpeg",
   "build/images/menu.svg": "/build/images/menu.svg",
-  "build/vendors-node_modules_fortawesome_react-fontawesome_index_es_js-node_modules_axios_index_js-no-b7201a.js": "/build/vendors-node_modules_fortawesome_react-fontawesome_index_es_js-node_modules_axios_index_js-no-b7201a.js"
+  "build/vendors-node_modules_fortawesome_react-fontawesome_index_es_js-node_modules_axios_index_js-no-90d054.js": "/build/vendors-node_modules_fortawesome_react-fontawesome_index_es_js-node_modules_axios_index_js-no-90d054.js"
 }

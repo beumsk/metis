@@ -6,6 +6,7 @@ import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import useAuth from "../hooks/useAuth";
+import { useNavigate, Link } from "react-router-dom";
 
 const Search = () => {
   let [valueSearch, setSearch] = useState(null);
@@ -19,7 +20,7 @@ const Search = () => {
     setSearch(e.target.value);
     // posts.filter((e) => e.name === valueSearch);
     // console.log(valueSearch);
-    if (valueSearch && valueSearch.length > 1) {
+    if (valueSearch && valueSearch?.length > 1) {
       setOpenResult(true);
       axios({
         method: "post",
@@ -47,23 +48,30 @@ const Search = () => {
     console.log(isOpen);
   };
 
-  const onBlursetValue = (e) => {
-    const currentTarget = e.currentTarget;
-
-    // Check the newly focused element in the next tick of the event loop
-    setTimeout(() => {
-      // Check if the new activeElement is a child of the original container
-      if (!currentTarget.contains(document.activeElement)) {
-        // You can invoke a callback or add custom logic here
-        setOpenResult(false);
-      }
-    }, 0);
+  const onClickIfValue = (e) => {
+    if (resultSearch?.length > 0) {
+      setOpenResult(true);
+    }
   };
-
   // const onBlursetValue = (e) => {
-  //   setOpenResult(false);
-  //   console.log(isOpen);
+  //   const currentTarget = e.currentTarget;
+
+  //   // Check the newly focused element in the next tick of the event loop
+  //   setTimeout(() => {
+  //     // Check if the new activeElement is a child of the original container
+  //     if (!currentTarget.contains(document.activeElement)) {
+  //       // You can invoke a callback or add custom logic here
+  //       setOpenResult(false);
+  //     }
+  //   }, 0);
   // };
+
+  const redirectionToPatient = (id) => {
+    if (id) {
+      console.log(id);
+      return (window.location.href = "/" + id);
+    }
+  };
 
   return (
     <Form className="d-flex">
@@ -71,7 +79,8 @@ const Search = () => {
         type="search"
         placeholder="Search"
         className="me-2"
-        onBlur={onBlursetValue}
+        // onBlur={onBlursetValue}
+        onClick={(e) => onClickIfValue()}
         aria-label="Search"
         onChange={setValue}
       />
@@ -80,8 +89,14 @@ const Search = () => {
         <div className="result-search">
           <ul>
             {resultSearch?.map((result) => (
-              <li key={result.id}>
-                {result.lastname} {result.firstname} {result?.nicknames}
+              <li
+                key={result.id}
+                onClick={(e) => redirectionToPatient(result.id)}
+                className="link-toPatient"
+              >
+                <div>
+                  {result.lastname} {result.firstname} {result?.nicknames}
+                </div>
               </li>
             ))}
           </ul>
