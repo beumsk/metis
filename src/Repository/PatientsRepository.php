@@ -51,6 +51,21 @@ class PatientsRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function findByNameByFirstNameByName(string $search): array
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+
+
+        $qb->select('p.id, p.lastname, p.firstname, p.nicknames as FullName')
+            ->from('App:Patients', 'p')
+            ->andWhere('CONCAT(p.lastname,\' \', p.firstname,\' \', p.nicknames) LIKE :val')
+            ->setParameter('val', '%' . $search . '%')
+            ->orderBy('p.id', 'ASC');
+
+        $query = $qb->getQuery();
+        return $query->getResult();
+    }
+
     //    public function findOneBySomeField($value): ?Patients
     //    {
     //        return $this->createQueryBuilder('p')

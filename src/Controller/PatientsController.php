@@ -30,6 +30,31 @@ class PatientsController extends AbstractController
         return $this->json($reports);
     }
 
+
+
+    #[Route('/api/getSearch', name: 'app_patientsSearch')]
+    public function findMostPopular(ManagerRegistry $doctrine, Request $request): Response
+    {
+        $request = Request::createFromGlobals();
+        $val = $request->query->get('val');
+        // $firstname = $request->query->get('firstname');
+        // $lastname = $request->query->get('lastname');
+        // $nicknames = $request->query->get('nicknames');
+
+        // $research = [
+        //     "firstname" => '%' . $firstname . '%',
+        //     "lastname" => '%' . $lastname . '%',
+        //     "nicknames" => '%' . $nicknames . '%'
+        // ];
+
+        $reports = $doctrine->getRepository(Patients::class)->findByNameByFirstNameByName($val);
+
+        // dd($reports)
+        return $this->json($reports);
+    }
+
+
+
     #[Route('/api/getPatients', name: 'app_getPatients')]
     public function getPatients(ManagerRegistry $doctrine, Request $request): Response
     {
