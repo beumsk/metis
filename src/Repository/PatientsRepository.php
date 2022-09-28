@@ -58,7 +58,7 @@ class PatientsRepository extends ServiceEntityRepository
 
         $qb->select('p.id, p.lastname, p.firstname, p.nicknames as FullName')
             ->from('App:Patients', 'p')
-            ->andWhere('CONCAT(p.lastname,\' \', p.firstname,\' \', p.nicknames) LIKE :val')
+            ->andWhere('CONCAT(p.lastname,\' \', p.firstname,\' \', COALESCE(p.nicknames, p.id)) LIKE :val')
             ->setParameter('val', '%' . $search . '%')
             ->orderBy('p.id', 'ASC');
 
