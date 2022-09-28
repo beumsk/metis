@@ -56,7 +56,7 @@ class PatientsRepository extends ServiceEntityRepository
         $qb = $this->getEntityManager()->createQueryBuilder();
 
 
-        $qb->select('p.id, p.lastname, p.firstname, p.nicknames as FullName')
+        $qb->select('p.id, p.lastname, p.firstname, p.nicknames')
             ->from('App:Patients', 'p')
             ->andWhere('CONCAT(p.lastname,\' \', p.firstname,\' \', COALESCE(p.nicknames, p.id)) LIKE :val')
             ->setParameter('val', '%' . $search . '%')

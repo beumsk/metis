@@ -40,18 +40,17 @@ Encore
     to: "images/[path][name].[ext]",
   })
 
-
-    // if you want to keep using `file-loader`
-    .configureLoaderRule('images', rule => {
-      rule.options.esModule = false;
-  })
+  // if you want to keep using `file-loader`
+  // .configureLoaderRule("images", (rule) => {
+  //   rule.options.esModule = false;
+  // })
 
   // OR if you want to use `url-loader`
-  .configureUrlLoader({
-    images: {
-      esModule: false
-    }
-  });
+  // .configureUrlLoader({
+  //   images: {
+  //     esModule: false,
+  //   },
+  // })
   /*
    * FEATURE CONFIG
    *

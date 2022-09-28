@@ -1,0 +1,19 @@
+.result-search{
+    position: absolute;
+    margin-top: 4rem;
+    height: 50vh;
+    background-color: white;
+    overflow-y: scroll;
+    max-width: 315px;
+    width: 100%;
+    right: 0;
+
+    
+    ul{
+        li{
+            list-style: none;
+        }
+    }
+}
+
+//
