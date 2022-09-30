@@ -51,6 +51,9 @@ class PatientsRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+
+
+
     public function findByNameByFirstNameByName(string $search): array
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
@@ -65,6 +68,34 @@ class PatientsRepository extends ServiceEntityRepository
         $query = $qb->getQuery();
         return $query->getResult();
     }
+
+    public function findLatestSuggestion($patient, $status = "/patient/fiche/statut-du-suivi")
+    {
+
+        $query = 'SELECT 
+                    pi.id, pis.value
+            FROM App:PatientsInformation pi 
+            JOIN pi.sugg pis
+            WHERE pi.pati=:patient AND pi.sugg IN (
+                SELECT s.id FROM App:Suggestions s 
+                JOIN s.parentSugg sp WHERE sp.path_string = :idr_suivi
+            )
+            ORDER BY pi.start DESC';
+
+        $query = $this->getEntityManager()
+            ->createQuery($query)
+            ->setParameters([
+                'idr_suivi' => $status,
+                'patient' => $patient
+            ]);
+
+        try {
+            return $query->getResult();
+        } catch (\Doctrine\ORM\NoResultException $e) {
+            return null;
+        }
+    }
+
 
     //    public function findOneBySomeField($value): ?Patients
     //    {

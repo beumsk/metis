@@ -3,46 +3,67 @@
 namespace App\Entity;
 
 use App\Repository\SuggestionsRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\SmallIntType;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: SuggestionsRepository::class)]
 class Suggestions
 {
+
+    const PATH_CARE = '/patient/suivi/soins';
+    const PATH_ACTIVITY = '/patient/suivi/activites';
+    const PATH_PROGRAM = '/patient/suivi/programme';
+    const PATH_HOME_LOCATION = '/patient/lieu/type/domicile-legal';
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
+
+
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: true)]
     private ?Suggestions $parentSugg = null;
 
+
     #[ORM\Column(length: 255, nullable: false)]
     private ?string $value = null;
+
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $path = null;
 
+
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $path_string = null;
+
 
     #[ORM\Column(nullable: true)]
     private ?bool $require_custom_value = null;
 
+
     #[ORM\Column(nullable: true)]
     private ?bool $is_locked = null;
+
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $attributes = null;
 
+
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $default_comment = null;
+
 
     #[ORM\Column(type: Types::SMALLINT, nullable: true)]
     private ?bool $is_deleted = null;
 
+
+    #[ORM\OneToMany(mappedBy: 'suge', targetEntity: PatientsInformationTemplateElement::class)]
 
     public function getId(): ?int
     {

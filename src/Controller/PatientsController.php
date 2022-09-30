@@ -6,6 +6,8 @@ use App\Entity\FollowupGoals;
 use App\Entity\FollowupReports;
 use App\Entity\Medias;
 use App\Entity\Patients;
+use App\Entity\PatientsInformation;
+use App\Entity\Suggestions;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,9 +15,23 @@ use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
+use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Encoder\XmlEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Serializer\Context\Normalizer\ObjectNormalizerContextBuilder;
 
 class PatientsController extends AbstractController
 {
+
+
+
+    // public const SERIALIZE = new Serializer([new ObjectNormalizer()], [new XmlEncoder(), new JsonEncoder()]);
+
+
     #[Route('/api/getGoals', name: 'app_patients')]
     public function getGoals(ManagerRegistry $doctrine): Response
     {
@@ -33,26 +49,63 @@ class PatientsController extends AbstractController
 
 
     #[Route('/api/getSearch', name: 'app_patientsSearch')]
-    public function findMostPopular(ManagerRegistry $doctrine, Request $request): Response
+    public function getSearchPatients(ManagerRegistry $doctrine, Request $request): Response
     {
         $request = Request::createFromGlobals();
         $val = $request->query->get('val');
-        // $firstname = $request->query->get('firstname');
-        // $lastname = $request->query->get('lastname');
-        // $nicknames = $request->query->get('nicknames');
-
-        // $research = [
-        //     "firstname" => '%' . $firstname . '%',
-        //     "lastname" => '%' . $lastname . '%',
-        //     "nicknames" => '%' . $nicknames . '%'
-        // ];
 
         $reports = $doctrine->getRepository(Patients::class)->findByNameByFirstNameByName($val);
-
-        // dd($reports)
         return $this->json($reports);
     }
 
+    #[Route('/api/patientsInformation', name: 'app_patientsInformation')]
+    public function getPatientsInformation(ManagerRegistry $doctrine, SerializerInterface $serializer)
+    {
+        // queryPathString
+
+        $patient = $doctrine->getRepository(PatientsInformation::class)->find(31);
+        // $reports = $doctrine->getRepository(Patients::class)->findLatestSuggestion($patient, "/patient/fiche/statut-du-suivi");
+        // return $this->json($reports, Response::HTTP_OK, [], ['groups' =>  'PatientsInformation', 'Patients', 'PatientsInformationTemplateElement']);
+        // dd($this->json($patient));
+        return $this->json($patient);
+    }
+
+    #[Route('/api/patientsInformationByPatients', name: 'app_patientsInformationByPatients')]
+    public function getPatientsInformationByPatients(ManagerRegistry $doctrine, Request $request, SerializerInterface $serializer)
+    {
+        // queryPathString
+
+        $serializer = new Serializer([new ObjectNormalizer()], [new XmlEncoder(), new JsonEncoder()]);
+        $request = Request::createFromGlobals();
+
+
+        $val = $request->request->get('id');
+
+        $patient = $doctrine->getRepository(Patients::class)->find($val);
+        $patientInfo = $doctrine->getRepository(PatientsInformation::class)->findInformationByPatients($patient->getId());
+
+
+
+        // $json = $serializer->serialize($patientInfo, JsonEncoder::FORMAT, [DateTimeNormalizer::FORMAT_KEY => 'Y-m-d', ObjectNormalizer::PRESERVE_EMPTY_OBJECTS => true, AbstractNormalizer::ALLOW_EXTRA_ATTRIBUTES => true, AbstractNormalizer::ATTRIBUTES => ['id', 'sugg', 'value', 'comment', 'start']]);
+        // // $json = $serializer->serialize($patientInfo, JsonEncoder::FORMAT);
+        // $response = new Response($json, 200);
+        return $this->json($patientInfo);
+    }
+
+    #[Route('/api/patientsInformationStatus', name: 'app_patientsInformationStatus')]
+    public function getPatientsInformationStatus(ManagerRegistry $doctrine, SerializerInterface $serializer)
+    {
+        // queryPathString
+        $request = Request::createFromGlobals();
+
+
+        $val = $request->request->get('id');
+        $patient = $doctrine->getRepository(PatientsInformation::class)->find($val);
+        $reports = $doctrine->getRepository(Patients::class)->findLatestSuggestion($patient, "/patient/fiche/statut-du-suivi");
+        // return $this->json($reports, Response::HTTP_OK, [], ['groups' =>  'PatientsInformation', 'Patients', 'PatientsInformationTemplateElement']);
+
+        return $this->json($reports);
+    }
 
 
     #[Route('/api/getPatients', name: 'app_getPatients')]

@@ -17,10 +17,10 @@ class FollowupReports
     #[ORM\Column]
     private ?int $activity_type = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?int $report_type = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $report_date = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
@@ -29,7 +29,7 @@ class FollowupReports
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $creation_date = null;
 
-    #[ORM\Column(type: Types::TEXT)]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $content = null;
 
     #[ORM\Column(nullable: true)]
@@ -51,12 +51,16 @@ class FollowupReports
     private ?\DateTimeInterface $duration = null;
 
     #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?Patients $pati = null;
 
     #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?User $user = null;
+
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?Places $plac = null;
 
     public function getId(): ?int
     {
@@ -227,6 +231,18 @@ class FollowupReports
     public function setUser(?User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getPlac(): ?Places
+    {
+        return $this->plac;
+    }
+
+    public function setPlac(?Places $plac): self
+    {
+        $this->plac = $plac;
 
         return $this;
     }

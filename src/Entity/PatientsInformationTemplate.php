@@ -14,7 +14,7 @@ class PatientsInformationTemplate
     private ?int $id = null;
 
     #[ORM\Column(nullable: true)]
-    private ?int $order_template = null;
+    private ?int $order = null;
 
     #[ORM\Column(nullable: true)]
     private ?int $block = null;
@@ -25,19 +25,22 @@ class PatientsInformationTemplate
     #[ORM\Column]
     private ?int $edit_type = null;
 
+    #[ORM\ManyToOne]
+    private ?Suggestions $sugg = null;
+
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getOrderTemplate(): ?int
+    public function getOrder(): ?int
     {
-        return $this->order_template;
+        return $this->order;
     }
 
-    public function setOrderTemplate(?int $order_template): self
+    public function setOrder(?int $order): self
     {
-        $this->order_template = $order_template;
+        $this->order = $order;
 
         return $this;
     }
@@ -74,6 +77,18 @@ class PatientsInformationTemplate
     public function setEditType(int $edit_type): self
     {
         $this->edit_type = $edit_type;
+
+        return $this;
+    }
+
+    public function getSugg(): ?Suggestions
+    {
+        return $this->sugg;
+    }
+
+    public function setSugg(?Suggestions $sugg): self
+    {
+        $this->sugg = $sugg;
 
         return $this;
     }
