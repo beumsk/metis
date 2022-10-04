@@ -10,6 +10,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
 class PatientsInformationTemplateBlock
 {
 
+    const TYPE_PATIENT = "patient";
+    const TYPE_CONTACT = "contact";
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -21,9 +24,10 @@ class PatientsInformationTemplateBlock
 
 
     #[ORM\Column(nullable: true)]
-    private ?int $block_order = null;
+    private ?int $order = null;
 
-
+    #[ORM\Column(nullable: true)]
+    private $type;
 
     public function getId(): ?int
     {
@@ -42,15 +46,49 @@ class PatientsInformationTemplateBlock
         return $this;
     }
 
-    public function getBlockOrder(): ?int
+    public function getOrder(): ?int
     {
-        return $this->block_order;
+        return $this->order;
     }
 
-    public function setBlockOrder(?int $block_order): self
+    public function setBlockOrder(?int $order): self
     {
-        $this->block_order = $block_order;
+        $this->order = $order;
 
         return $this;
+    }
+
+    /**
+     * Set type
+     *
+     * @param array $type
+     * @return InformationTemplateBlock
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * Get type
+     *
+     * @return array 
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * @return array
+     */
+    public static function getTypes()
+    {
+        return array(
+            self::TYPE_PATIENT => 'Patient',
+            self::TYPE_CONTACT => 'Contact'
+        );
     }
 }

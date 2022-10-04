@@ -30,6 +30,19 @@ body{
 }
 
 
+.accordion-body{
+    // padding: 0!important;
+}
+
+.accordion-item{
+    // position: relative!important;
+    // button{
+    //     position: absolute;
+    // top: 0;
+    // right: 0;
+    // }
+}
+
 @import "./scss/login";
 @import "./scss/menu";
 @import "./scss/form";

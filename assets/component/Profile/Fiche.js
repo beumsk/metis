@@ -5,6 +5,9 @@ import Accordion from "react-bootstrap/Accordion";
 import useAuth from "../..//hooks/useAuth";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import Table from "react-bootstrap/Table";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 
 const Fiche = () => {
   let id = useParams().id;
@@ -19,6 +22,8 @@ const Fiche = () => {
   const location = useLocation();
   const [locationWeb, setLocation] = useState(location);
 
+  const [statusSuivi, setStatus] = useState(null);
+
   var formData = new FormData();
   formData.append("id", id.toString());
 
@@ -26,35 +31,6 @@ const Fiche = () => {
 
   const [informationPatient, setInformation] = useState(null);
 
-  if (!idPatient) {
-  }
-
-  function timestamp(time) {
-    var a = new Date(UNIX_timestamp * 1000);
-    var months = [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec",
-    ];
-    var year = a.getFullYear();
-    var month = months[a.getMonth()];
-    var date = a.getDate();
-    var hour = a.getHours();
-    var min = a.getMinutes();
-    var sec = a.getSeconds();
-    var time =
-      date + " " + month + " " + year + " " + hour + ":" + min + ":" + sec;
-    return time;
-  }
   useEffect(() => {
     axios({
       method: "post",
@@ -66,179 +42,659 @@ const Fiche = () => {
       },
     })
       .then(function (response) {
-        setInformation(response);
+        // setInformation(response);
+        console.log(response);
 
-        // response?.forEach((element) => {
-        //   console.log(
-        //     element[0].parentSugg.pathString ===
-        //       "/patient/fiche/statut-du-suivi"
-        //   );
-        //   if (
-        //     element[0].parentSugg.pathString ===
-        //     "/patient/fiche/statut-du-suivi"
-        //   ) {
-        //     console.log([element[0]]);
-        //   }
-        // });
+        setInformation(response.data);
       })
       .catch(function (response) {});
   }, [idPatient]);
 
+  let status = informationPatient?.data?.filter(
+    (e) => e.valeurParentPathString === "/patient/fiche/information-generale"
+  );
+
+  console.log(status);
+
+  // if (statusSuivi === undefined || statusSuivi === null) {
+  //   setStatus(status);
+  // }
+
+  // setStatus(status);
+
   return (
     <section>
-      {/* {informationPatient?.data.map((patient) => (
-        <>
-          <p>
-            <b>{patient?.sugg.parentSugg.parentSugg.value}</b>
-          </p>
-          <p>
-            <b>{patient?.sugg.parentSugg.value}</b>
-          </p>
-          <p>{patient?.sugg.value}</p>
-          <p>{patient?.comment}</p>
-          <p>{patient?.value}</p>
-        </>
-      ))} */}
-      <Accordion defaultActiveKey="0" flush={true}>
+      <Accordion defaultActiveKey="0" flush={true} className="accordion-fiche">
         <Accordion.Item eventKey="0">
           <Accordion.Header>Statut de suivi</Accordion.Header>
           <Accordion.Body>
-            {informationPatient?.data.map((patient, id) => (
-              <div key={patient[0].id}>
-                {patient[0] &&
-                  patient[0] &&
-                  patient[0].parentSugg &&
-                  patient[0].parentSugg.id === 100 && (
-                    <>
-                      {/* <p>
-                        <b>{patient?.sugg.parentSugg.id}</b>
-                        <b>{patient?.sugg.parentSugg.value}</b>
-                      </p> */}
-                      {/* <p>{new Date(1375653600)}</p> */}
-                      <p>{patient[0].value}</p>
-                      <p>{patient[0].comment}</p>
-                      <p>
-                        {new Date(patient.start).toLocaleString("fr-BE", {
-                          dateStyle: "short", // include the time zone name
-                        })}{" "}
-                        -{" "}
-                        {new Date(patient.end).toLocaleString("fr-BE", {
-                          dateStyle: "short", // include the time zone name
-                        })}
-                      </p>
-                      {/* <p>{patient?.value}</p> */}
-                    </>
-                  )}
-              </div>
-            ))}
+            <div>
+              <h6>
+                Statut de suivi{" "}
+                <button>
+                  {" "}
+                  <FontAwesomeIcon icon={faPlusCircle} />
+                </button>
+              </h6>
+              {informationPatient?.map((patient, id) => (
+                <>
+                  {patient &&
+                    patient &&
+                    patient.valeurpathString &&
+                    patient.valeurpathString ===
+                      "/patient/fiche/statut-du-suivi" && (
+                      <div className="row">
+                        <div className="col-sm-4">
+                          <p>{patient.parent}</p>
+                        </div>
+                        <div className="col-sm-4">
+                          <p>
+                            {new Date(patient.startDate).toLocaleString(
+                              "fr-BE",
+                              {
+                                dateStyle: "short",
+                              }
+                            )}
+                            -
+                            {new Date(patient.endDate).toLocaleString("fr-BE", {
+                              dateStyle: "short",
+                            })}
+                          </p>
+                        </div>
+                      </div>
+                    )}
+                </>
+              ))}
+            </div>
+
+            <div className="block mt-4">
+              <h6>
+                Equipes{" "}
+                <button>
+                  <FontAwesomeIcon icon={faPlusCircle} />
+                </button>
+              </h6>
+              {informationPatient?.map((patient, id) => (
+                <>
+                  {patient &&
+                    patient &&
+                    patient.valeurpathString &&
+                    patient.valeurpathString === "/patient/suivi/equipes" && (
+                      <div className="row">
+                        <div className="col-sm-4">
+                          <p>{patient.parent}</p>
+                        </div>
+                        <div className="col-sm-4">
+                          <p>
+                            {new Date(patient.startDate).toLocaleString(
+                              "fr-BE",
+                              {
+                                dateStyle: "short",
+                              }
+                            )}
+                            -
+                            {new Date(patient.endDate).toLocaleString("fr-BE", {
+                              dateStyle: "short",
+                            })}
+                          </p>
+                        </div>
+                      </div>
+                    )}
+                </>
+              ))}
+            </div>
+            <div className="block mt-4">
+              <h6>
+                Programme{" "}
+                <button>
+                  <FontAwesomeIcon icon={faPlusCircle} />
+                </button>
+              </h6>
+              {informationPatient?.map((patient, id) => (
+                <>
+                  {patient &&
+                    patient &&
+                    patient.valeurpathString &&
+                    patient.valeurpathString === "/patient/suivi/programme" && (
+                      <div className="row">
+                        <div className="col-sm-4">
+                          <p>{patient.parent}</p>
+                        </div>
+                        <div className="col-sm-4">
+                          <p>
+                            {new Date(patient.startDate).toLocaleString(
+                              "fr-BE",
+                              {
+                                dateStyle: "short",
+                              }
+                            )}
+                            -
+                            {new Date(patient.endDate).toLocaleString("fr-BE", {
+                              dateStyle: "short",
+                            })}
+                          </p>
+                        </div>
+                      </div>
+                    )}
+                </>
+              ))}
+            </div>
+            <div className="block mt-4">
+              <h6>
+                Antenne{" "}
+                <button>
+                  {" "}
+                  <FontAwesomeIcon icon={faPlusCircle} />
+                </button>
+              </h6>
+              {informationPatient?.map((patient, id) => (
+                <>
+                  {patient &&
+                    patient &&
+                    patient.valeurpathString &&
+                    patient.valeurpathString === "/patient/suivi/antenne" && (
+                      <div className="row">
+                        <div className="col-sm-4">
+                          <p>{patient.parent}</p>
+                        </div>
+                        <div className="col-sm-4">
+                          <p>
+                            {new Date(patient.startDate).toLocaleString(
+                              "fr-BE",
+                              {
+                                dateStyle: "short",
+                              }
+                            )}
+                            -
+                            {new Date(patient.endDate).toLocaleString("fr-BE", {
+                              dateStyle: "short",
+                            })}
+                          </p>
+                        </div>
+                      </div>
+                    )}
+                </>
+              ))}
+            </div>
           </Accordion.Body>
         </Accordion.Item>
         <Accordion.Item eventKey="1">
           <Accordion.Header>Information générale</Accordion.Header>
           <Accordion.Body>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat. Duis aute irure dolor in
-            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-            culpa qui officia deserunt mollit anim id est laborum.
+            <div className="block">
+              {informationPatient?.map((patient, id) => (
+                <>
+                  {patient &&
+                    patient &&
+                    patient.valeurParentPathString &&
+                    patient.valeurParentPathString ===
+                      "/patient/fiche/information-generale" && (
+                      <div key={patient.id} className="row">
+                        <div className="col-sm-2">
+                          <h6>{patient.valeurParent}</h6>
+                        </div>
+                        <div className="col-sm-4">
+                          <p>{patient.parent}</p>
+                        </div>
+                        <div className="col-sm-2">{patient.commentColumn}</div>
+                        <div className="col-sm-4">
+                          <button>
+                            {" "}
+                            <FontAwesomeIcon icon={faPlusCircle} />
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                </>
+              ))}
+            </div>
           </Accordion.Body>
         </Accordion.Item>
         <Accordion.Item eventKey="2">
           <Accordion.Header>Description</Accordion.Header>
           <Accordion.Body>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat. Duis aute irure dolor in
-            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-            culpa qui officia deserunt mollit anim id est laborum.
+            <div className="block">
+              {informationPatient?.map((patient, id) => (
+                <>
+                  {patient &&
+                    patient &&
+                    patient.valeurParentPathString &&
+                    patient.valeurParentPathString ===
+                      "/patient/fiche/description" && (
+                      <div key={patient.id} className="row">
+                        <div className="col-sm-4">
+                          <h6>{patient.valeurParent}</h6>
+                        </div>
+                        <div className="col-sm-4">
+                          <p>{patient.valeurColumn}</p>
+                        </div>
+                        <div className="col-sm-4">
+                          <button>
+                            <FontAwesomeIcon icon={faPlusCircle} />
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                </>
+              ))}
+            </div>
           </Accordion.Body>
         </Accordion.Item>
         <Accordion.Item eventKey="3">
           <Accordion.Header>Ressources personnelles</Accordion.Header>
           <Accordion.Body>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat. Duis aute irure dolor in
-            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-            culpa qui officia deserunt mollit anim id est laborum.
+            <div>
+              <h6>
+                Langues
+                <button>
+                  {" "}
+                  <FontAwesomeIcon icon={faPlusCircle} />
+                </button>
+              </h6>
+              {informationPatient?.map((patient, id) => (
+                <>
+                  {patient &&
+                    patient &&
+                    patient.valeurParentPathString &&
+                    patient.valeurParentPathString ===
+                      "/patient/fiche/langues" && (
+                      <div key={patient.id} className="row">
+                        {/* <div className="col-sm-4">
+                          {/* <p>{patient.valeurParent}</p> 
+                        </div> */}
+                        <div className="col-sm-4">
+                          <p>{patient.parent}</p>
+                        </div>
+                        <div className="col-sm-4">
+                          <p>{patient.valeurColumn}</p>
+                        </div>
+                      </div>
+                    )}
+                </>
+              ))}
+            </div>
+            <div>
+              <h6>
+                Talents et centres d'intérêt
+                <button>
+                  {" "}
+                  <FontAwesomeIcon icon={faPlusCircle} />
+                </button>
+              </h6>
+              {informationPatient?.map((patient, id) => (
+                <>
+                  {patient &&
+                    patient &&
+                    patient.valeurParentPathString &&
+                    patient.valeurParentPathString ===
+                      "/patient/fiche/ressources-personnelles" && (
+                      <div key={patient.id} className="row">
+                        {/* <div className="col-sm-4">
+                          {/* <p>{patient.valeurParent}</p> 
+                        </div> */}
+                        <div className="col-sm-4">
+                          <p>{patient.parent}</p>
+                        </div>
+                        <div className="col-sm-4">
+                          <p>{patient.valeurColumn}</p>
+                        </div>
+                      </div>
+                    )}
+                </>
+              ))}
+            </div>
+            <div>
+              <h6>
+                Rêves
+                <button>
+                  <FontAwesomeIcon icon={faPlusCircle} />
+                </button>
+              </h6>
+              {informationPatient?.map((patient, id) => (
+                <>
+                  {patient &&
+                    patient &&
+                    patient.valeurParentPathString &&
+                    patient.valeurParentPathString ===
+                      "/patient/fiche/ressources-personnelles/reves" && (
+                      <div key={patient.id} className="row">
+                        {/* <div className="col-sm-4">
+                          {/* <p>{patient.valeurParent}</p> 
+                        </div> */}
+                        <div className="col-sm-4">
+                          <p>{patient.parent}</p>
+                        </div>
+                        <div className="col-sm-4">
+                          <p>{patient.valeurColumn}</p>
+                        </div>
+                      </div>
+                    )}
+                </>
+              ))}
+            </div>
+            <div>
+              <h6>
+                Goûts culinaires
+                <button>
+                  <FontAwesomeIcon icon={faPlusCircle} />
+                </button>
+              </h6>
+              {informationPatient?.map((patient, id) => (
+                <>
+                  {patient &&
+                    patient &&
+                    patient.valeurParentPathString &&
+                    patient.valeurParentPathString ===
+                      "/patient/fiche/ressources-personnelles/gouts-culinaires" && (
+                      <div key={patient.id} className="row">
+                        {/* <div className="col-sm-4">
+                          {/* <p>{patient.valeurParent}</p> 
+                        </div> */}
+                        <div className="col-sm-4">
+                          <p>{patient.parent}</p>
+                        </div>
+                        <div className="col-sm-4">
+                          <p>{patient.valeurColumn}</p>
+                        </div>
+                      </div>
+                    )}
+                </>
+              ))}
+            </div>
           </Accordion.Body>
         </Accordion.Item>
-        <Accordion.Item eventKey="3">
+        <Accordion.Item eventKey="4">
           <Accordion.Header>Ressources financières</Accordion.Header>
           <Accordion.Body>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat. Duis aute irure dolor in
-            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-            culpa qui officia deserunt mollit anim id est laborum.
+            {informationPatient?.map((patient, id) => (
+              <>
+                <div className="block">
+                  {patient &&
+                    patient &&
+                    patient.valeurParentPathString &&
+                    patient.valeurParentPathString ===
+                      "/patient/fiche/ressources-financieres" && (
+                      <div key={patient.id} className="row">
+                        <div className="col-sm-4">
+                          <h6>{patient.valeurParent}</h6>
+                        </div>
+                        <div className="col-sm-4">
+                          <p>{patient.parent}</p>
+                        </div>
+                      </div>
+                    )}
+                </div>
+              </>
+            ))}
           </Accordion.Body>
         </Accordion.Item>
-        <Accordion.Item eventKey="3">
+        <Accordion.Item eventKey="5">
           <Accordion.Header>Accès aux soins</Accordion.Header>
           <Accordion.Body>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat. Duis aute irure dolor in
-            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-            culpa qui officia deserunt mollit anim id est laborum.
+            {informationPatient?.map((patient, id) => (
+              <>
+                <div className="block">
+                  {patient &&
+                    patient &&
+                    patient.valeurParentPathString &&
+                    patient.valeurParentPathString ===
+                      "/patient/fiche/acces-aux-soins" && (
+                      <div key={patient.id} className="row">
+                        <div className="col-sm-4">
+                          <h6>{patient.valeurParent}</h6>
+                        </div>
+                        <div className="col-sm-4">
+                          <p>{patient.parent}</p>
+                        </div>
+                      </div>
+                    )}
+                </div>
+              </>
+            ))}
           </Accordion.Body>
         </Accordion.Item>
-        <Accordion.Item eventKey="3">
+        <Accordion.Item eventKey="6">
           <Accordion.Header>Santé physique</Accordion.Header>
           <Accordion.Body>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat. Duis aute irure dolor in
-            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-            culpa qui officia deserunt mollit anim id est laborum.
+            <div className="mt-4">
+              <h6>
+                Pathologies physiques chroniques
+                <button>
+                  <FontAwesomeIcon icon={faPlusCircle} />
+                </button>
+              </h6>
+              {informationPatient?.map((patient, id) => (
+                <>
+                  {patient &&
+                    patient &&
+                    patient.valeurParentPathString &&
+                    patient.valeurParentPathString ===
+                      "/patient/medical/pathologies" && (
+                      <div key={patient.id} className="row">
+                        {/* <div className="col-sm-4">
+                        <p>{patient.valeurParent}</p>
+                      </div> */}
+                        <div className="col-sm-4">
+                          <p>{patient.parent}</p>
+                        </div>
+                        <div className="col-sm-4">
+                          <p>{patient.commentColumn}</p>
+                        </div>
+                      </div>
+                    )}
+                </>
+              ))}
+            </div>
+
+            <div className="mt-4">
+              <h6>
+                Episodes de maladie
+                <button>
+                  <FontAwesomeIcon icon={faPlusCircle} />
+                </button>
+              </h6>
+              {informationPatient?.map((patient, id) => (
+                <>
+                  {patient &&
+                    patient &&
+                    patient.valeurpathString &&
+                    patient.valeurpathString ===
+                      "/patient/medical/episodes-de-maladie" && (
+                      <div key={patient.id} className="row">
+                        {/* <div className="col-sm-4">
+                        <p>{patient.valeurParent}</p>
+                      </div> */}
+                        <div className="col-sm-4">
+                          <p>{patient.parent}</p>
+                        </div>
+                        <div className="col-sm-4">
+                          <p>{patient.commentColumn}</p>
+                        </div>
+                      </div>
+                    )}
+                </>
+              ))}
+            </div>
+
+            <div className="mt-4">
+              <h6>
+                Allergies
+                <button>
+                  <FontAwesomeIcon icon={faPlusCircle} />
+                </button>
+              </h6>
+              {informationPatient?.map((patient, id) => (
+                <>
+                  {patient &&
+                    patient &&
+                    patient.valeurpathString &&
+                    patient.valeurpathString ===
+                      "/patient/medical/allergies" && (
+                      <div key={patient.id} className="row">
+                        {/* <div className="col-sm-4">
+                        <p>{patient.valeurParent}</p>
+                      </div> */}
+                        <div className="col-sm-4">
+                          <p>{patient.parent}</p>
+                        </div>
+                        <div className="col-sm-4">
+                          <p>{patient.commentColumn}</p>
+                        </div>
+                      </div>
+                    )}
+                </>
+              ))}
+            </div>
+
+            <div className="mt-4">
+              <h6>
+                Paramètres
+                <button>
+                  <FontAwesomeIcon icon={faPlusCircle} />
+                </button>
+              </h6>
+              {informationPatient?.map((patient, id) => (
+                <>
+                  {patient &&
+                    patient &&
+                    patient.valeurpathString &&
+                    patient.valeurpathString ===
+                      "/patient/medical/parametres" && (
+                      <div key={patient.id} className="row">
+                        {/* <div className="col-sm-4">
+                        <p>{patient.valeurParent}</p>
+                      </div> */}
+                        <div className="col-sm-4">
+                          <p>{patient.parent}</p>
+                        </div>
+                        <div className="col-sm-4">
+                          <p>{patient.commentColumn}</p>
+                        </div>
+                      </div>
+                    )}
+                </>
+              ))}
+            </div>
           </Accordion.Body>
         </Accordion.Item>
-        <Accordion.Item eventKey="3">
+        <Accordion.Item eventKey="7">
           <Accordion.Header>Pathologie mentale</Accordion.Header>
           <Accordion.Body>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat. Duis aute irure dolor in
-            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-            culpa qui officia deserunt mollit anim id est laborum.
+            <div>
+              <h6>
+                Supposée
+                <button>
+                  <FontAwesomeIcon icon={faPlusCircle} />
+                </button>
+              </h6>
+              {informationPatient?.map((patient, id) => (
+                <>
+                  {patient &&
+                    patient &&
+                    patient.valeurParentPathString &&
+                    patient.valeurParentPathString ===
+                      "/patient/fiche/pathologie-mentale/supposee" && (
+                      <div key={patient.id} className="row">
+                        <div className="col-sm-4">
+                          <p>{patient.valeurParent}</p>
+                        </div>
+                        <div className="col-sm-4">
+                          <p>{patient.parent}</p>
+                        </div>
+                      </div>
+                    )}
+                </>
+              ))}
+            </div>
+            <div>
+              <h6>
+                Déclarée
+                <button>
+                  <FontAwesomeIcon icon={faPlusCircle} />
+                </button>
+              </h6>
+              {informationPatient?.map((patient, id) => (
+                <>
+                  {patient &&
+                    patient &&
+                    patient.valeurParentPathString &&
+                    patient.valeurParentPathString ===
+                      "/patient/fiche/pathologie-mentale/declaree" && (
+                      <div key={patient.id} className="row">
+                        <div className="col-sm-4">
+                          <p>{patient.valeurParent}</p>
+                        </div>
+                        <div className="col-sm-4">
+                          <p>{patient.parent}</p>
+                        </div>
+                      </div>
+                    )}
+                </>
+              ))}
+            </div>
           </Accordion.Body>
         </Accordion.Item>
-        <Accordion.Item eventKey="3">
+        <Accordion.Item eventKey="8">
           <Accordion.Header>Assuétude</Accordion.Header>
           <Accordion.Body>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat. Duis aute irure dolor in
-            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-            culpa qui officia deserunt mollit anim id est laborum.
+            {/* <h6>
+              Déclarée
+              <button>
+                <FontAwesomeIcon icon={faPlusCircle} />
+              </button>
+            </h6> */}
+            {informationPatient?.map((patient, id) => (
+              <>
+                {patient &&
+                  patient &&
+                  patient.valeurpathString &&
+                  patient.valeurpathString ===
+                    "/patient/medical/assuetudes" && (
+                    <div key={patient.id} className="row">
+                      {/* <div className="col-sm-4"></div> */}
+                      {/* <p>{patient.parent}</p> */}
+                      <div className="col-sm-2">
+                        <h6>{patient.parent}</h6>
+                      </div>
+                      <div className="col-sm-6">
+                        <p>{patient.commentColumn}</p>
+                      </div>
+                      <div className="col-sm-4">
+                        <p>
+                          {" "}
+                          <FontAwesomeIcon icon={faPlusCircle} />
+                        </p>
+                      </div>
+                    </div>
+                  )}
+              </>
+            ))}
           </Accordion.Body>
         </Accordion.Item>
-        <Accordion.Item eventKey="3">
+        <Accordion.Item eventKey="9">
           <Accordion.Header>Traitements</Accordion.Header>
           <Accordion.Body>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat. Duis aute irure dolor in
-            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-            culpa qui officia deserunt mollit anim id est laborum.
+            <div className="block">
+              {informationPatient?.map((patient, id) => (
+                <>
+                  {patient &&
+                    patient &&
+                    patient.valeurpathString &&
+                    patient.valeurpathString ===
+                      "/patient/fiche/traitements" && (
+                      <div key={patient.id} className="row">
+                        <div className="col-sm-4">
+                          <h6>{patient.parent}</h6>
+                        </div>
+                        <div className="col-sm-4">
+                          <p>{patient.valeurColumn}</p>
+                          <p>{patient.commentColumn}</p>
+                        </div>
+                      </div>
+                    )}
+                </>
+              ))}
+            </div>
           </Accordion.Body>
         </Accordion.Item>
       </Accordion>

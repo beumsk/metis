@@ -76,13 +76,19 @@ class PatientsInformationRepository extends ServiceEntityRepository
 
     public function findInformationByBlockPatients(int $patient): array
     {
+
+
         $qb = $this->getEntityManager()->createQueryBuilder();
 
         $stringPath = '/patient/fiche/information-generale';
 
-        $qb->select('pi.comment, pi.value, pi.start, pi.end, s')
+        // $id = $patient["id"];
+
+
+
+        $qb->select('s AS suggestions, s.id AS id, pi.value AS valeurColumn, pi.comment AS commentColumn, pi.end AS endDate, pi.start AS startDate,  par.id AS valeurParentId,  sugge.path_string AS valeurParentPathString, par.value AS valeurParent, par.path_string AS valeurpathString, sugge.value AS blockName, sugge.id AS idBlockName, s.value AS parent')
             ->from('App:PatientsInformation', 'pi')
-            ->andWhere('sugge.path_string = :pathString')
+            // ->andWhere('sugge.path_string = :pathString')
             ->innerJoin(
                 'App:Patients',
                 'p',
@@ -110,15 +116,13 @@ class PatientsInformationRepository extends ServiceEntityRepository
             )
             ->setParameters([
                 'val' => $patient,
-                'pathString' => $stringPath
+                // 'pathString' => $stringPath
             ])
             // ->setMaxResults(1)
-            ->orderBy('par.id', 'ASC')
-            ->getQuery()
-            ->getResult();
+            ->orderBy('par.id', 'DESC');
 
         $query = $qb->getQuery();
-        // dd($query->getResult());
+
         return $query->getResult();
     }
 

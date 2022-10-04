@@ -7,6 +7,8 @@ use App\Entity\FollowupReports;
 use App\Entity\Medias;
 use App\Entity\Patients;
 use App\Entity\PatientsInformation;
+use App\Entity\PatientsInformationTemplateBlock;
+use App\Entity\PatientsInformationTemplateElement;
 use App\Entity\Suggestions;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -82,10 +84,10 @@ class PatientsController extends AbstractController
         $val = $request->request->get('id');
 
         $patient = $doctrine->getRepository(Patients::class)->find($val);
-        $patientInfo = $doctrine->getRepository(PatientsInformation::class)->findInformationByPatients($patient->getId());
+        $patientInfo = $doctrine->getRepository(PatientsInformation::class)->findInformationByBlockPatients($patient->getId());
+        // $json = $this->json($patientInfo);
 
-
-
+        // dd($json);
         // $json = $serializer->serialize($patientInfo, JsonEncoder::FORMAT, [DateTimeNormalizer::FORMAT_KEY => 'Y-m-d', ObjectNormalizer::PRESERVE_EMPTY_OBJECTS => true, AbstractNormalizer::ALLOW_EXTRA_ATTRIBUTES => true, AbstractNormalizer::ATTRIBUTES => ['id', 'sugg', 'value', 'comment', 'start']]);
         // // $json = $serializer->serialize($patientInfo, JsonEncoder::FORMAT);
         // $response = new Response($json, 200);
@@ -107,6 +109,75 @@ class PatientsController extends AbstractController
         return $this->json($reports);
     }
 
+    #[Route('/api/patientInformationValue', name: 'app_patientsInformationStatus')]
+    public function viewAction(ManagerRegistry $doctrine, SerializerInterface $serializer)
+    {
+
+        $request = Request::createFromGlobals();
+        $request = Request::createFromGlobals();
+
+
+        $val = $request->request->get('id');
+
+        $val = $request->request->get('id');
+        $patientRepository = $doctrine->getRepository(Patients::class);
+        // $this->get('idr_patient.repository.patient');
+        $patientInformationRepository = $doctrine->getRepository(PatientsInformation::class);
+        //  $this->get('idr_patient.repository.patient_information');
+        $templateBlocks = $doctrine->getRepository(PatientsInformationTemplateBlock::class);
+        //  $this->get('idr_patient.repository.information_template_block');
+        $templateElementRepository = $doctrine->getRepository(PatientsInformationTemplateElement::class);
+        // $this->get('idr_patient.repository.information_template_element');
+
+        $patient = $patientRepository->find($val);
+        // dd($templateBlockRepository);
+        $templateBlocks = $templateBlocks->findBy(
+            ['type' => [PatientsInformationTemplateBlock::TYPE_PATIENT]],
+            ['order' => 'ASC']
+        );
+
+
+
+        $templateElements = [];
+        $elementValues = [];
+
+        /** @var \Idr\SuiviBundle\Entity\InformationTemplateBlock $templateBlock */
+        foreach ($templateBlocks as $templateBlock) {
+            $blockId = $templateBlock->getId();
+
+            $templateElements[$blockId] = $templateElementRepository->findBy(
+                ['id' => $blockId]
+            );
+
+            /** @var \Idr\SuiviBundle\Entity\InformationTemplateElement $templateElement */
+            foreach ($templateElements[$blockId] as $templateElement) {
+
+
+                $elementId = $templateElement->getId();
+
+                // $patientInfo = $doctrine->getRepository(PatientsInformation::class)->findInformationByBlockPatients($patient->getId());
+
+                $elementValues[$blockId][$elementId] = $patientInformationRepository->findBy(
+                    [
+                        'itel' => $elementId,
+                        'pati' => $patient
+                    ],
+                    ['start' => 'DESC']
+                );
+
+
+
+                // dd([$elementId]);
+            }
+        }
+
+        return $this->json([
+            // 'patient' => $patient,
+            // 'blocks' => $templateBlocks,
+            // 'elements' => $templateElements,
+            'values' => $elementValues
+        ]);
+    }
 
     #[Route('/api/getPatients', name: 'app_getPatients')]
     public function getPatients(ManagerRegistry $doctrine, Request $request): Response

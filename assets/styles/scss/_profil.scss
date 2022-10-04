@@ -117,3 +117,30 @@ body{
 //     box-shadow: none;
 //     border: 1px solid red;
 // }
+
+.row-children{
+    padding: 1rem 0 1rem 0;
+    // background-color: white;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #dbd7d7;
+}
+
+.accordion-fiche{
+    button{
+        background-color: white!important;
+        border: 0!important;
+    }
+
+    button:hover{
+        color: #91bd10!important;
+    }
+    h6{
+        display: flex!important;
+        color: #515250!important;
+        align-items: center!important;
+        justify-content: space-between!important;
+
+       
+    }
+}
