@@ -73,6 +73,64 @@ class PatientsInformationRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
+    public function findInformationByBlockPatientsWithElements(int $patient): array
+    {
+
+
+        $qb = $this->getEntityManager()->createQueryBuilder();
+
+        $stringPath = '/patient/fiche/information-generale';
+
+        // $id = $patient["id"];
+
+
+
+        $qb->select('pi AS patientInfo')
+            ->from('App:PatientsInformation', 'pi')
+            ->andWhere('pi.pati = :val')
+            ->innerJoin(
+                'App:Patients',
+                'p',
+                'WITH',
+                'pi.pati = :val'
+            )
+            ->innerJoin(
+                'App:PatientsInformationTemplateElement',
+                'itel',
+                'WITH',
+                'pi.itel = itel.id'
+            )
+            ->innerJoin(
+                'App:Suggestions',
+                's',
+                'WITH',
+                'itel.suge = s.id'
+            )
+            ->innerJoin(
+                'App:Suggestions',
+                'par',
+                'WITH',
+                's.parentSugg = par.id'
+            )
+
+            ->innerJoin(
+                'App:Suggestions',
+                'sugge',
+                'WITH',
+                'par.parentSugg = sugge.id'
+            )
+
+            ->setParameters([
+                'val' => $patient,
+                // 'pathString' => $stringPath
+            ]);
+        // ->setMaxResults(1)
+        // ->orderBy('par.id', 'DESC');
+
+        $query = $qb->getQuery();
+
+        return $query->getResult();
+    }
 
     public function findInformationByBlockPatients(int $patient): array
     {
@@ -86,7 +144,7 @@ class PatientsInformationRepository extends ServiceEntityRepository
 
 
 
-        $qb->select('s AS suggestions, s.id AS id, pi.value AS valeurColumn, pi.comment AS commentColumn, pi.end AS endDate, pi.start AS startDate,  par.id AS valeurParentId,  sugge.path_string AS valeurParentPathString, par.value AS valeurParent, par.path_string AS valeurpathString, sugge.value AS blockName, sugge.id AS idBlockName, s.value AS parent')
+        $qb->select('  s AS suggestions, s.id AS id, pi.value AS valeurColumn, pi.comment AS commentColumn, pi.end AS endDate, pi.start AS startDate,  par.id AS valeurParentId,  sugge.path_string AS valeurParentPathString, par.value AS valeurParent, par.path_string AS valeurpathString, sugge.value AS blockName, sugge.id AS idBlockName, s.value AS parent')
             ->from('App:PatientsInformation', 'pi')
             // ->andWhere('sugge.path_string = :pathString')
             ->innerJoin(
@@ -114,6 +172,8 @@ class PatientsInformationRepository extends ServiceEntityRepository
                 'WITH',
                 'par.parentSugg = sugge.id'
             )
+
+
             ->setParameters([
                 'val' => $patient,
                 // 'pathString' => $stringPath

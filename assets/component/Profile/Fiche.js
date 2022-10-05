@@ -50,8 +50,8 @@ const Fiche = () => {
       .catch(function (response) {});
   }, [idPatient]);
 
-  let status = informationPatient?.data?.filter(
-    (e) => e.valeurParentPathString === "/patient/fiche/information-generale"
+  let status = informationPatient?.data?.itel?.suge?.pathString.filter(
+    (e) => e.valeurParentPathString === "/patient/fiche/assuetude/declaree"
   );
 
   console.log(status);
@@ -80,25 +80,29 @@ const Fiche = () => {
                 <>
                   {patient &&
                     patient &&
-                    patient.valeurpathString &&
-                    patient.valeurpathString ===
-                      "/patient/fiche/statut-du-suivi" && (
+                    patient.patientInfo &&
+                    patient.patientInfo.itel?.suge?.pathString ===
+                      "/patient/fiche/statut-du-suivi" &&
+                    patient.patientInfo.deletedAt === null && (
                       <div className="row">
                         <div className="col-sm-4">
-                          <p>{patient.parent}</p>
+                          <p>{patient.patientInfo.sugg?.value}</p>
                         </div>
                         <div className="col-sm-4">
                           <p>
-                            {new Date(patient.startDate).toLocaleString(
+                            {new Date(patient.patientInfo.start).toLocaleString(
                               "fr-BE",
                               {
                                 dateStyle: "short",
                               }
                             )}
                             -
-                            {new Date(patient.endDate).toLocaleString("fr-BE", {
-                              dateStyle: "short",
-                            })}
+                            {new Date(patient.patientInfo.end).toLocaleString(
+                              "fr-BE",
+                              {
+                                dateStyle: "short",
+                              }
+                            )}
                           </p>
                         </div>
                       </div>
@@ -119,7 +123,7 @@ const Fiche = () => {
                   {patient &&
                     patient &&
                     patient.valeurpathString &&
-                    patient.valeurpathString === "/patient/suivi/equipes" && (
+                    patient.valeurpathString === "/patient/suivi/programme" && (
                       <div className="row">
                         <div className="col-sm-4">
                           <p>{patient.parent}</p>
@@ -606,7 +610,7 @@ const Fiche = () => {
                 </>
               ))}
             </div>
-            <div>
+            {/* <div>
               <h6>
                 Déclarée
                 <button>
@@ -618,8 +622,9 @@ const Fiche = () => {
                   {patient &&
                     patient &&
                     patient.valeurParentPathString &&
-                    patient.valeurParentPathString ===
-                      "/patient/fiche/pathologie-mentale/declaree" && (
+                    patient.patientInfo.valeurParentPathString ===
+                      "/patient/fiche/pathologie-mentale/declaree" &&
+                    patient.patientInfo.deletedAt === null && (
                       <div key={patient.id} className="row">
                         <div className="col-sm-4">
                           <p>{patient.valeurParent}</p>
@@ -631,39 +636,73 @@ const Fiche = () => {
                     )}
                 </>
               ))}
-            </div>
+            </div> */}
           </Accordion.Body>
         </Accordion.Item>
         <Accordion.Item eventKey="8">
           <Accordion.Header>Assuétude</Accordion.Header>
           <Accordion.Body>
-            {/* <h6>
-              Déclarée
+            <h6>
+              Supposée
               <button>
                 <FontAwesomeIcon icon={faPlusCircle} />
               </button>
-            </h6> */}
+            </h6>
             {informationPatient?.map((patient, id) => (
               <>
                 {patient &&
                   patient &&
-                  patient.valeurpathString &&
-                  patient.valeurpathString ===
-                    "/patient/medical/assuetudes" && (
-                    <div key={patient.id} className="row">
+                  patient?.patientInfo?.itel?.suge?.pathString &&
+                  patient?.patientInfo?.itel?.suge?.pathString ===
+                    "/patient/fiche/assuetude/supposee" &&
+                  patient?.patientInfo?.deletedAt === null && (
+                    <div key={patient.id} className="row mt-4">
                       {/* <div className="col-sm-4"></div> */}
                       {/* <p>{patient.parent}</p> */}
                       <div className="col-sm-2">
-                        <h6>{patient.parent}</h6>
+                        <h6>{patient?.patientInfo?.sugg.value}</h6>
                       </div>
                       <div className="col-sm-6">
-                        <p>{patient.commentColumn}</p>
+                        <p>{patient?.patientInfo?.comment}</p>
                       </div>
                       <div className="col-sm-4">
-                        <p>
+                        {/* <p>
                           {" "}
                           <FontAwesomeIcon icon={faPlusCircle} />
-                        </p>
+                        </p> */}
+                      </div>
+                    </div>
+                  )}
+              </>
+            ))}
+            <h6>
+              Déclarée
+              <button>
+                <FontAwesomeIcon icon={faPlusCircle} />
+              </button>
+            </h6>
+            {informationPatient?.map((patient, id) => (
+              <>
+                {patient &&
+                  patient &&
+                  patient?.patientInfo?.itel?.suge?.pathString &&
+                  patient?.patientInfo?.itel?.suge?.pathString ===
+                    "/patient/fiche/assuetude/declaree" &&
+                  patient?.patientInfo?.deletedAt === null && (
+                    <div key={patient.id} className="row mt-4">
+                      {/* <div className="col-sm-4"></div> */}
+                      {/* <p>{patient.parent}</p> */}
+                      <div className="col-sm-2">
+                        <h6>{patient?.patientInfo?.sugg.value}</h6>
+                      </div>
+                      <div className="col-sm-6">
+                        <p>{patient?.patientInfo?.comment}</p>
+                      </div>
+                      <div className="col-sm-4">
+                        {/* <p>
+                          {" "}
+                          <FontAwesomeIcon icon={faPlusCircle} />
+                        </p> */}
                       </div>
                     </div>
                   )}

@@ -85,13 +85,14 @@ class PatientsController extends AbstractController
 
         $patient = $doctrine->getRepository(Patients::class)->find($val);
         $patientInfo = $doctrine->getRepository(PatientsInformation::class)->findInformationByBlockPatients($patient->getId());
+        $patientInfoAndElement = $doctrine->getRepository(PatientsInformation::class)->findInformationByBlockPatientsWithElements($patient->getId());
         // $json = $this->json($patientInfo);
 
         // dd($json);
         // $json = $serializer->serialize($patientInfo, JsonEncoder::FORMAT, [DateTimeNormalizer::FORMAT_KEY => 'Y-m-d', ObjectNormalizer::PRESERVE_EMPTY_OBJECTS => true, AbstractNormalizer::ALLOW_EXTRA_ATTRIBUTES => true, AbstractNormalizer::ATTRIBUTES => ['id', 'sugg', 'value', 'comment', 'start']]);
         // // $json = $serializer->serialize($patientInfo, JsonEncoder::FORMAT);
         // $response = new Response($json, 200);
-        return $this->json($patientInfo);
+        return $this->json([...$patientInfoAndElement, ...$patientInfo]);
     }
 
     #[Route('/api/patientsInformationStatus', name: 'app_patientsInformationStatus')]
@@ -171,10 +172,12 @@ class PatientsController extends AbstractController
             }
         }
 
+
+
         return $this->json([
-            // 'patient' => $patient,
-            // 'blocks' => $templateBlocks,
-            // 'elements' => $templateElements,
+            'patient' => $patient,
+            'blocks' => $templateBlocks,
+            'elements' => $templateElements,
             'values' => $elementValues
         ]);
     }
