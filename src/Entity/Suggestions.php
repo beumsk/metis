@@ -27,7 +27,6 @@ class Suggestions
 
 
     #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: true)]
     private ?Suggestions $parentSugg = null;
 
 

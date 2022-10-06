@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\FollowupGoals;
 use App\Entity\FollowupReports;
 use App\Entity\FollowupReportsActivities;
 use App\Entity\Patients;
@@ -26,12 +27,38 @@ class FollowUpReportsController extends AbstractController
     public $createdAt;
 
 
-    #[Route('/api/getFollowUpReports', name: 'app_report')]
+    #[Route('/api/getFollowUpReportsById', name: 'app_reportByPatient')]
     public function index(ManagerRegistry $doctrine): Response
     {
+        $request = Request::createFromGlobals();
 
+        $id = $request->request->get('id');
 
-        $places = $doctrine->getRepository(FollowupReports::class)->findAll();
+        $places = $doctrine->getRepository(FollowupReports::class)->findReportByPatient($id);
+        return $this->json($places);
+    }
+
+    #[Route('/api/getFollowUpReportsGoals', name: 'app_FollowUpReportsGoals')]
+    public function getGoals(ManagerRegistry $doctrine): Response
+    {
+        $request = Request::createFromGlobals();
+
+        $id = $request->request->get('id');
+
+        $places = $doctrine->getRepository(FollowupGoals::class)->findBy(["pati" => $id]);
+        // $places = $doctrine->getRepository(FollowupGoals::class)->findAll();
+
+        return $this->json($places);
+    }
+
+    #[Route('/api/getActivitiesReports', name: 'app_FollowUpReportsActivities')]
+    public function getActivitiesReport(ManagerRegistry $doctrine): Response
+    {
+        $request = Request::createFromGlobals();
+
+        $id = $request->request->get('id');
+
+        $places = $doctrine->getRepository(FollowupReportsActivities::class)->findBy(["pati_id" => $id]);
         return $this->json($places);
     }
 

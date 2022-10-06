@@ -34,9 +34,7 @@ body{
  h5{
     color: #333;
 }
- h6{
-    color: #ffa200;
-}
+
 .profile-edit-btn{
     border: none;
     border-radius: 1.5rem;
@@ -104,7 +102,7 @@ body{
     margin-bottom: 3rem;
     li{
         button{
-            color: white;
+            color: #6c757d!important;
             background-color: transparent;
             border-color: 0 solid #ffa200;
         }
@@ -128,7 +126,7 @@ body{
 
 .accordion-fiche{
     button{
-        background-color: white!important;
+        // background-color: white!important;
         border: 0!important;
     }
 
@@ -144,3 +142,25 @@ body{
        
     }
 }
+
+.container-ongletProfile{
+    .report-content{
+        padding: 3rem;
+        box-shadow: rgb(17 17 26 / 6%) 0px 0px 16px;
+        /* border: 1px solid #d1d5db; */
+        border-radius: 22px;
+        margin-bottom: 3rem;
+        position: relative;
+    
+        
+        h6{
+            color: rgb(39, 39, 39);
+            position: absolute;
+            right: 43px;
+        }
+
+    }
+ 
+}
+
+//

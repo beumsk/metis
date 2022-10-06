@@ -19,12 +19,10 @@ class Medias
 
 
     #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: true)]
     private ?Patients $pati = null;
 
 
     #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: true)]
     private ?Suggestions $sugg = null;
 
 

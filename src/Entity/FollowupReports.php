@@ -51,15 +51,12 @@ class FollowupReports
     private ?\DateTimeInterface $duration = null;
 
     #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: true)]
     private ?Patients $pati = null;
 
     #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: true)]
     private ?User $user = null;
 
     #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: true)]
     private ?Places $plac = null;
 
     public function getId(): ?int

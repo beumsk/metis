@@ -7,7 +7,11 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import Table from "react-bootstrap/Table";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlusCircle } from "@fortawesome/free-solid-svg-icons";
+import {
+  faPlusCircle,
+  faCancel,
+  faEdit,
+} from "@fortawesome/free-solid-svg-icons";
 
 const Fiche = () => {
   let id = useParams().id;
@@ -105,6 +109,15 @@ const Fiche = () => {
                             )}
                           </p>
                         </div>
+                        <div className="col-sm-4">
+                          <button>
+                            {/* faDeleteLeft, faEdit  */}
+                            <FontAwesomeIcon icon={faEdit} />
+                          </button>
+                          <button>
+                            <FontAwesomeIcon icon={faCancel} />
+                          </button>
+                        </div>
                       </div>
                     )}
                 </>
@@ -142,6 +155,15 @@ const Fiche = () => {
                             })}
                           </p>
                         </div>
+                        <div className="col-sm-4">
+                          <button>
+                            {/* faDeleteLeft, faEdit  */}
+                            <FontAwesomeIcon icon={faEdit} />
+                          </button>
+                          <button>
+                            <FontAwesomeIcon icon={faCancel} />
+                          </button>
+                        </div>
                       </div>
                     )}
                 </>
@@ -177,6 +199,15 @@ const Fiche = () => {
                               dateStyle: "short",
                             })}
                           </p>
+                        </div>
+                        <div className="col-sm-4">
+                          <button>
+                            {/* faDeleteLeft, faEdit  */}
+                            <FontAwesomeIcon icon={faEdit} />
+                          </button>
+                          <button>
+                            <FontAwesomeIcon icon={faCancel} />
+                          </button>
                         </div>
                       </div>
                     )}
@@ -215,6 +246,15 @@ const Fiche = () => {
                             })}
                           </p>
                         </div>
+                        <div className="col-sm-4">
+                          <button>
+                            {/* faDeleteLeft, faEdit  */}
+                            <FontAwesomeIcon icon={faEdit} />
+                          </button>
+                          <button>
+                            <FontAwesomeIcon icon={faCancel} />
+                          </button>
+                        </div>
                       </div>
                     )}
                 </>
@@ -237,13 +277,24 @@ const Fiche = () => {
                         <div className="col-sm-2">
                           <h6>{patient.valeurParent}</h6>
                         </div>
-                        <div className="col-sm-4">
+                        <div className="col-sm-2">
                           <p>{patient.parent}</p>
                         </div>
-                        <div className="col-sm-2">{patient.commentColumn}</div>
-                        <div className="col-sm-4">
+                        <div className="col-sm-4">{patient.commentColumn}</div>
+                        <div className="col-sm-2">
                           <button>
-                            {" "}
+                            {/* faDeleteLeft, faEdit  */}
+                            <FontAwesomeIcon icon={faEdit} />
+                          </button>
+                          <button>
+                            <FontAwesomeIcon icon={faCancel} />
+                          </button>
+                        </div>
+                        <div className="col-sm-2">
+                          <button
+                            className="f-right"
+                            style={{ float: "right" }}
+                          >
                             <FontAwesomeIcon icon={faPlusCircle} />
                           </button>
                         </div>
@@ -274,7 +325,7 @@ const Fiche = () => {
                           <p>{patient.patientInfo.comment}</p>
                         </div>
                         <div className="col-sm-4">
-                          <button>
+                          <button style={{ float: "right" }}>
                             <FontAwesomeIcon icon={faPlusCircle} />
                           </button>
                         </div>

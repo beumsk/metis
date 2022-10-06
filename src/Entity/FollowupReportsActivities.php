@@ -22,7 +22,6 @@ class FollowupReportsActivities
     private ?int $is_idr_step = null;
 
     #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: false)]
     private ?FollowupReports $fore = null;
 
 

@@ -30,7 +30,6 @@ class Usersgroups
     private ?string $email = null;
 
     #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 
     public function getId(): ?int

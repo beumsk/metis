@@ -60,22 +60,65 @@ class PatientsController extends AbstractController
         return $this->json($reports);
     }
 
+    #[Route('/api/setPatientsInformation', name: 'app_setPatientsInformation')]
+    public function setPatientsInformation(ManagerRegistry $doctrine, SerializerInterface $serializer)
+    {
+
+        $request = Request::createFromGlobals();
+
+        // $yearEnd = $dateEnd->format('Y-m-d');
+        $idSugg = $request->request->get('idsugg');
+        $value = $request->request->get('value');
+        $start = $request->request->get('start');
+        $end = $request->request->get('end');
+        $comment = $request->request->get('comment');
+        $patiId = $request->request->get('patiid');
+        $itelId = $request->request->get('itelId');
+        $entityManager = $doctrine->getManager();
+
+
+        $time = strtotime($start);
+        $datestart = new \DateTime('@' . $time);
+        $timeend = strtotime($end);
+        $dateend = new \DateTime('@' . $timeend);
+
+
+        $patientInfo = new PatientsInformation();
+
+        $suggestion = $doctrine->getRepository(Suggestions::class)->find($idSugg);
+        $patient = $doctrine->getRepository(Patients::class)->find($patiId);
+        $itelInfo = $doctrine->getRepository(PatientsInformationTemplateElement::class)->findBy(['suge' => $suggestion->getparentSugg()->getId()]);
+
+        $patientInfo->setSugg($suggestion);
+        $patientInfo->setValue($value);
+        $patientInfo->setStart($datestart);
+        $patientInfo->setEnd($dateend);
+        $patientInfo->setComment($comment);
+        $patientInfo->setPati($patient);
+        $patientInfo->setItel($itelInfo[0]);
+
+        $entityManager->persist($patientInfo);
+        $entityManager->flush();
+
+
+        return new JsonResponse([
+            'id' => $patient->getId(),
+            'response' => "Sent !"
+        ]);
+    }
+
+
     #[Route('/api/patientsInformation', name: 'app_patientsInformation')]
     public function getPatientsInformation(ManagerRegistry $doctrine, SerializerInterface $serializer)
     {
-        // queryPathString
 
         $patient = $doctrine->getRepository(PatientsInformation::class)->find(31);
-        // $reports = $doctrine->getRepository(Patients::class)->findLatestSuggestion($patient, "/patient/fiche/statut-du-suivi");
-        // return $this->json($reports, Response::HTTP_OK, [], ['groups' =>  'PatientsInformation', 'Patients', 'PatientsInformationTemplateElement']);
-        // dd($this->json($patient));
         return $this->json($patient);
     }
 
     #[Route('/api/patientsInformationByPatients', name: 'app_patientsInformationByPatients')]
     public function getPatientsInformationByPatients(ManagerRegistry $doctrine, Request $request, SerializerInterface $serializer)
     {
-        // queryPathString
 
         $serializer = new Serializer([new ObjectNormalizer()], [new XmlEncoder(), new JsonEncoder()]);
         $request = Request::createFromGlobals();
@@ -86,12 +129,6 @@ class PatientsController extends AbstractController
         $patient = $doctrine->getRepository(Patients::class)->find($val);
         $patientInfo = $doctrine->getRepository(PatientsInformation::class)->findInformationByBlockPatients($patient->getId());
         $patientInfoAndElement = $doctrine->getRepository(PatientsInformation::class)->findInformationByBlockPatientsWithElements($patient->getId());
-        // $json = $this->json($patientInfo);
-
-        // dd($json);
-        // $json = $serializer->serialize($patientInfo, JsonEncoder::FORMAT, [DateTimeNormalizer::FORMAT_KEY => 'Y-m-d', ObjectNormalizer::PRESERVE_EMPTY_OBJECTS => true, AbstractNormalizer::ALLOW_EXTRA_ATTRIBUTES => true, AbstractNormalizer::ATTRIBUTES => ['id', 'sugg', 'value', 'comment', 'start']]);
-        // // $json = $serializer->serialize($patientInfo, JsonEncoder::FORMAT);
-        // $response = new Response($json, 200);
         return $this->json([...$patientInfoAndElement, ...$patientInfo]);
     }
 

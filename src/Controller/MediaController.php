@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Entity\FollowupGoals;
+
 use App\Entity\FollowupReports;
 use App\Entity\Medias;
 use App\Entity\Patients;

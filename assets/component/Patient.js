@@ -9,6 +9,7 @@ import useAuth from "../hooks/useAuth";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 import Fiche from "./Profile/Fiche";
+import Profile from "./Profile/Profile";
 
 const Patient = () => {
   let id = useParams().id;
@@ -137,49 +138,10 @@ const Patient = () => {
                 <Tab eventKey="fiche" title="Fiche">
                   <Fiche />
                 </Tab>
-                <Tab eventKey="suivi" title="Profile" disabled>
-                  <div className="col-md-4">
-                    <div className="profile-work">
-                      <p>Activitée</p>
-                      {/* <a href="">Website Link</a>
-                    <br />
-                    <a href="">Bootsnipp Profile</a>
-                    <br />
-                    <a href="">Bootply Profile</a>
-                    <p>SKILLS</p>
-                    <a href="">Web Designer</a>
-                    <br />
-                    <a href="">Web Developer</a>
-                    <br />
-                    <a href="">WordPress</a>
-                    <br />
-                    <a href="">WooCommerce</a>
-                    <br />
-                    <a href="">PHP, .Net</a>
-                    <br /> */}
-                    </div>
-                    <div className="profile-work">
-                      <p>Objectifs</p>
-                      {/* <a href="">Website Link</a>
-                    <br />
-                    <a href="">Bootsnipp Profile</a>
-                    <br />
-                    <a href="">Bootply Profile</a>
-                    <p>SKILLS</p>
-                    <a href="">Web Designer</a>
-                    <br />
-                    <a href="">Web Developer</a>
-                    <br />
-                    <a href="">WordPress</a>
-                    <br />
-                    <a href="">WooCommerce</a>
-                    <br />
-                    <a href="">PHP, .Net</a>
-                    <br /> */}
-                    </div>
-                  </div>
+                <Tab eventKey="suivi" title="Profile">
+                  <Profile />
                 </Tab>
-                <Tab eventKey="indicateurs" title="Indicateurs" disabled>
+                <Tab eventKey="indicateurs" title="Indicateurs">
                   <p>test3</p>
                 </Tab>
                 <Tab eventKey="medias" title="Medias" disabled>
