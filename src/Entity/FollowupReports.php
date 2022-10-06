@@ -33,7 +33,7 @@ class FollowupReports
     private ?string $content = null;
 
     #[ORM\Column(nullable: true)]
-    private ?int $is_hightlight = null;
+    private ?int $is_highlight = null;
 
     #[ORM\Column(nullable: true)]
     private ?int $no_care = null;
@@ -138,12 +138,12 @@ class FollowupReports
 
     public function getIsHightlight(): ?int
     {
-        return $this->is_hightlight;
+        return $this->is_highlight;
     }
 
-    public function setIsHightlight(?int $is_hightlight): self
+    public function setIsHightlight(?int $is_highlight): self
     {
-        $this->is_hightlight = $is_hightlight;
+        $this->is_hightlight = $is_highlight;
 
         return $this;
     }

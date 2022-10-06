@@ -32,6 +32,9 @@ class Contacts
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $deleted_at = null;
 
+    #[ORM\ManyToOne]
+    private ?Organisations $orga = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -105,6 +108,18 @@ class Contacts
     public function setDeletedAt(?\DateTimeInterface $deleted_at): self
     {
         $this->deleted_at = $deleted_at;
+
+        return $this;
+    }
+
+    public function getOrga(): ?Organisations
+    {
+        return $this->orga;
+    }
+
+    public function setOrga(?Organisations $orga): self
+    {
+        $this->orga = $orga;
 
         return $this;
     }
