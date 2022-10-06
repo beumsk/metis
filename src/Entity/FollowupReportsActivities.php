@@ -24,6 +24,9 @@ class FollowupReportsActivities
     #[ORM\ManyToOne]
     private ?FollowupReports $fore = null;
 
+    #[ORM\ManyToOne]
+    private ?Suggestions $sugg = null;
+
 
     public function getId(): ?int
     {
@@ -62,6 +65,18 @@ class FollowupReportsActivities
     public function setFore(?FollowupReports $fore): self
     {
         $this->fore = $fore;
+
+        return $this;
+    }
+
+    public function getSugg(): ?Suggestions
+    {
+        return $this->sugg;
+    }
+
+    public function setSugg(?Suggestions $sugg): self
+    {
+        $this->sugg = $sugg;
 
         return $this;
     }
