@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use App\Entity\Contacts;
+use App\Utils\CleanAssociationsTrait;
 use App\Repository\FollowupGoalsRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -9,6 +11,8 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: FollowupGoalsRepository::class)]
 class FollowupGoals
 {
+
+    use CleanAssociationsTrait;
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -32,7 +36,8 @@ class FollowupGoals
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $delete_at = null;
 
-    #[ORM\ManyToOne]
+    #[ORM\ManyToOne(targetEntity: 'Contacts', cascade: ["all"], fetch: "EAGER")]
+    #[ORM\JoinColumn(name: "cont_id", referencedColumnName: "id", nullable: true, onDelete: "SET NULL")]
     private ?Contacts $cont = null;
 
     #[ORM\Column]
@@ -120,12 +125,16 @@ class FollowupGoals
         return $this->delete_at;
     }
 
+
+
     public function setDeleteAt(?\DateTimeInterface $delete_at): self
     {
         $this->delete_at = $delete_at;
 
         return $this;
     }
+
+
 
     public function getCont(): ?Contacts
     {
@@ -134,8 +143,7 @@ class FollowupGoals
 
     public function setCont(?Contacts $cont): self
     {
-        $this->cont = $cont;
-
+        $this->cont =  $cont;
         return $this;
     }
 

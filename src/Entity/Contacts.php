@@ -26,7 +26,7 @@ class Contacts
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
-    #[ORM\Column(type: Types::TEXT)]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $url = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
@@ -34,6 +34,31 @@ class Contacts
 
     #[ORM\ManyToOne]
     private ?Organisations $orga = null;
+
+
+    // #[ORM\OneToMany(targetEntity: "Contacts", mappedBy: "organisation", orphanRemoval: true, cascade: ["all"])]
+    // private $cont;
+
+
+    // public function addContact(Contacts $contacts)
+    // {
+    //     $this->cont[] = $cont;
+
+    //     return $this;
+    // }
+
+
+    // public function removeContact(Contacts $contacts)
+    // {
+    //     $this->cont->removeElement($contacts);
+    // }
+
+
+    // public function getContacts()
+    // {
+    //     return $this->contacts;
+    // }
+
 
     public function getId(): ?int
     {
