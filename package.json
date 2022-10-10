@@ -34,8 +34,10 @@
         "build": "encore production --progress"
     },
     "dependencies": {
+        "@ant-design/charts": "^1.4.2",
         "@babel/plugin-proposal-class-properties": "^7.18.6",
         "@babel/plugin-transform-runtime": "^7.19.1",
+        "@coreui/react-chartjs": "^2.1.0",
         "@emotion/react": "^11.10.4",
         "@emotion/styled": "^11.10.4",
         "@fortawesome/fontawesome-svg-core": "^6.2.0",
@@ -44,11 +46,15 @@
         "@mui/joy": "^5.0.0-alpha.46",
         "@mui/material": "^5.10.6",
         "bootstrap": "^5.2.1",
+        "chart.js": "^3.9.1",
+        "faker": "^6.6.6",
         "js-cookie": "^3.0.1",
         "mdb-ui-kit": "^5.0.0",
         "prop-types": "^15.8.1",
         "react": "^18.2.0",
         "react-bootstrap": "^2.5.0",
+        "react-chartjs-2": "^4.3.1",
+        "react-charts": "^3.0.0-beta.50",
         "react-cookie": "^4.1.1",
         "react-dom": "^18.2.0",
         "react-router-dom": "^6.4.0"

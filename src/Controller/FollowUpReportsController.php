@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\FollowupGoals;
 use App\Entity\FollowupReports;
 use App\Entity\FollowupReportsActivities;
+use App\Entity\FollowupReportsIndicators;
 use App\Entity\Patients;
 use App\Entity\User;
 use Doctrine\Persistence\ManagerRegistry;
@@ -34,8 +35,30 @@ class FollowUpReportsController extends AbstractController
 
         $id = $request->request->get('id');
 
-        $places = $doctrine->getRepository(FollowupReports::class)->findReportByPatient($id);
+        $places = $doctrine->getRepository(FollowupReports::class)->findBy(["pati" => $id]);
         return $this->json($places);
+    }
+
+    #[Route('/api/getFollowUpReportsIndicators', name: 'app_indicatorsByPatients')]
+    public function getIndicatorsByPatients(ManagerRegistry $doctrine): Response
+    {
+        $request = Request::createFromGlobals();
+
+        $id = $request->request->get('id');
+
+        $report = $doctrine->getRepository(FollowupReports::class)->findBy(["pati" => $id]);
+
+        // dd($report);
+        $test = [];
+        foreach ($report as $key) {
+            $test[] = $key->getId();
+        }
+        // array('id' => $idList)
+
+        // dd($test);
+        $indicators = $doctrine->getRepository(FollowupReportsIndicators::class)->findBy(array('fore' => $test));
+
+        return $this->json($indicators);
     }
 
     #[Route('/api/getFollowUpReportsGoals', name: 'app_FollowUpReportsGoals')]

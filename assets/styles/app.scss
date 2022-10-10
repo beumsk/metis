@@ -30,18 +30,17 @@ body{
 }
 
 
-.accordion-body{
-    // padding: 0!important;
-}
+.graph_container{
+    display:block;
+    width:600px;
+  }
 
-.accordion-item{
-    // position: relative!important;
-    // button{
-    //     position: absolute;
-    // top: 0;
-    // right: 0;
-    // }
-}
+  canvas{
+    display: block!important;
+    box-sizing: border-box!important;
+    // height: 300px!important;
+    // width: 600px!important;
+  }
 
 @import "./scss/login";
 @import "./scss/menu";

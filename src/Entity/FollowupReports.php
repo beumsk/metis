@@ -56,7 +56,8 @@ class FollowupReports
     #[ORM\ManyToOne]
     private ?User $user = null;
 
-    #[ORM\ManyToOne]
+    #[ORM\ManyToOne(targetEntity: 'Places', cascade: ["all"], fetch: "EAGER")]
+    #[ORM\JoinColumn(name: "plac_id", referencedColumnName: "id", nullable: true, onDelete: "SET NULL")]
     private ?Places $plac = null;
 
     public function getId(): ?int

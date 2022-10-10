@@ -26,9 +26,24 @@ class Places
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $deleted = null;
 
+    #[ORM\ManyToOne]
+    private ?Suggestions $sugg = null;
+
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getSugg(): ?Suggestions
+    {
+        return $this->sugg;
+    }
+
+    public function setPati(?Suggestions $sugg): self
+    {
+        $this->sugg = $sugg;
+
+        return $this;
     }
 
     public function getName(): ?string

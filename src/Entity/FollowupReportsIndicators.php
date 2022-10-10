@@ -20,6 +20,14 @@ class FollowupReportsIndicators
     #[ORM\Column(type: Types::TEXT)]
     private ?string $comment = null;
 
+    #[ORM\ManyToOne(targetEntity: 'FollowupReports', cascade: ["all"], fetch: "EAGER")]
+    #[ORM\JoinColumn(name: "fore_id", referencedColumnName: "id", nullable: true, onDelete: "SET NULL")]
+    private ?FollowupReports $fore = null;
+
+    #[ORM\ManyToOne(targetEntity: 'Indicators', cascade: ["all"], fetch: "EAGER")]
+    #[ORM\JoinColumn(name: "indi_id", referencedColumnName: "id", nullable: true, onDelete: "SET NULL")]
+    private ?Indicators $indi = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -45,6 +53,30 @@ class FollowupReportsIndicators
     public function setComment(string $comment): self
     {
         $this->comment = $comment;
+
+        return $this;
+    }
+
+    public function getFore(): ?FollowupReports
+    {
+        return $this->fore;
+    }
+
+    public function setFore(?FollowupReports $fore): self
+    {
+        $this->fore = $fore;
+
+        return $this;
+    }
+
+    public function getIndi(): ?Indicators
+    {
+        return $this->indi;
+    }
+
+    public function setIndi(?Indicators $indi): self
+    {
+        $this->indi = $indi;
 
         return $this;
     }

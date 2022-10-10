@@ -58,22 +58,22 @@ const Profile = () => {
       })
       .catch(function (response) {});
 
-    axios({
-      method: "post",
-      url: "/api/getActivitiesReports",
-      data: formData,
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${auth.auth.accessToken}`,
-      },
-    })
-      .then(function (response) {
-        // setInformation(response);
-        console.log(response);
+    // axios({
+    //   method: "post",
+    //   url: "/api/getActivitiesReports",
+    //   data: formData,
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //     Authorization: `Bearer ${auth.auth.accessToken}`,
+    //   },
+    // })
+    //   .then(function (response) {
+    //     // setInformation(response);
+    //     console.log(response);
 
-        setActivities(response);
-      })
-      .catch(function (response) {});
+    //     setActivities(response);
+    //   })
+    //   .catch(function (response) {});
   }, [idPatient]);
 
   console.log(goals);
@@ -89,7 +89,7 @@ const Profile = () => {
                   {new Date(g.creationDate).toLocaleString("fr-BE", {
                     dateStyle: "short",
                   })}
-                  {g.func.value} {g.description}
+                  {g?.func?.value} {g?.description}
                 </div>
               )}
             </>
@@ -97,12 +97,12 @@ const Profile = () => {
           <h6>Appels</h6>
           {goals?.data.map((g, id) => (
             <>
-              {g && g.type === 2 && (
+              {g && g?.type === 2 && (
                 <div className="item-goals">
                   {new Date(g.creationDate).toLocaleString("fr-BE", {
                     dateStyle: "short",
                   })}
-                  {g.func.value} {g.description}
+                  {g?.func?.value} {g?.description}
                 </div>
               )}
             </>

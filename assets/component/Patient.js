@@ -9,6 +9,7 @@ import useAuth from "../hooks/useAuth";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 import Fiche from "./Profile/Fiche";
+import Indicators from "./Profile/Indicators";
 import Profile from "./Profile/Profile";
 
 const Patient = () => {
@@ -142,7 +143,7 @@ const Patient = () => {
                   <Profile />
                 </Tab>
                 <Tab eventKey="indicateurs" title="Indicateurs">
-                  <p>test3</p>
+                  <Indicators />
                 </Tab>
                 <Tab eventKey="medias" title="Medias" disabled>
                   <p>test3</p>
