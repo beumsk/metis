@@ -32,8 +32,9 @@ class Contacts
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $deleted_at = null;
 
-    #[ORM\ManyToOne]
-    private ?Organisations $orga = null;
+    #[ORM\ManyToOne(targetEntity: 'Contacts', cascade: ["all"], fetch: "EAGER")]
+    #[ORM\JoinColumn(name: "orga_id", referencedColumnName: "id", nullable: true, onDelete: "SET NULL")]
+    private  $orga = null;
 
 
     // #[ORM\OneToMany(targetEntity: "Contacts", mappedBy: "organisation", orphanRemoval: true, cascade: ["all"])]
@@ -137,12 +138,12 @@ class Contacts
         return $this;
     }
 
-    public function getOrga(): ?Organisations
+    public function getOrga()
     {
         return $this->orga;
     }
 
-    public function setOrga(?Organisations $orga): self
+    public function setOrga(?Contacts $orga): self
     {
         $this->orga = $orga;
 
