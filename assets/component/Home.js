@@ -21,11 +21,9 @@ const Home = () => {
     navigate("/connect");
   };
   let { path, url } = useNavigate();
-  console.log(path);
 
   const goToRepport = () => {
     history.push("/goals");
-    console.log("test");
   };
 
   useEffect(() => {

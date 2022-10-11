@@ -17,7 +17,6 @@ function Patients() {
   formData.append("page", lengthList.toString());
 
   useEffect(() => {
-    console.log(lengthList);
     axios({
       method: "post",
       url: "/api/getPatients",
@@ -30,18 +29,13 @@ function Patients() {
       .then(function (response) {
         //handle success
         setPatientsList(response);
-        console.log(response);
       })
-      .catch(function (response) {
-        console.log(response);
-      });
+      .catch(function (response) {});
   }, [lengthList, setLengthList]);
 
   const readMore = () => {
     setLengthList(lengthList + 10);
   };
-
-  console.log(patientsList);
 
   return (
     <>

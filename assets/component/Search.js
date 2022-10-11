@@ -44,8 +44,6 @@ const Search = () => {
     } else {
       setOpenResult(false);
     }
-
-    console.log(isOpen);
   };
 
   const onClickIfValue = (e) => {
@@ -68,7 +66,6 @@ const Search = () => {
 
   const redirectionToPatient = (id) => {
     if (id) {
-      console.log(id);
       return (window.location.href = "/" + id);
     }
   };

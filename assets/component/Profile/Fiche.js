@@ -46,9 +46,6 @@ const Fiche = () => {
       },
     })
       .then(function (response) {
-        // setInformation(response);
-        console.log(response);
-
         setInformation(response.data);
       })
       .catch(function (response) {});
@@ -57,14 +54,6 @@ const Fiche = () => {
   let status = informationPatient?.data?.itel?.suge?.pathString.filter(
     (e) => e.valeurParentPathString === "/patient/fiche/assuetude/declaree"
   );
-
-  console.log(status);
-
-  // if (statusSuivi === undefined || statusSuivi === null) {
-  //   setStatus(status);
-  // }
-
-  // setStatus(status);
 
   return (
     <section>
@@ -88,7 +77,7 @@ const Fiche = () => {
                     patient.patientInfo.itel?.suge?.pathString ===
                       "/patient/fiche/statut-du-suivi" &&
                     patient.patientInfo.deletedAt === null && (
-                      <div className="row">
+                      <div className="row" key={patient.id}>
                         <div className="col-sm-4">
                           <p>{patient.patientInfo.sugg?.value}</p>
                         </div>
@@ -137,7 +126,7 @@ const Fiche = () => {
                     patient &&
                     patient.valeurpathString &&
                     patient.valeurpathString === "/patient/suivi/programme" && (
-                      <div className="row">
+                      <div className="row" key={patient.id}>
                         <div className="col-sm-4">
                           <p>{patient.parent}</p>
                         </div>
@@ -182,7 +171,7 @@ const Fiche = () => {
                     patient &&
                     patient.valeurpathString &&
                     patient.valeurpathString === "/patient/suivi/programme" && (
-                      <div className="row">
+                      <div className="row" key={patient.id}>
                         <div className="col-sm-4">
                           <p>{patient.parent}</p>
                         </div>
@@ -228,7 +217,7 @@ const Fiche = () => {
                     patient &&
                     patient.valeurpathString &&
                     patient.valeurpathString === "/patient/suivi/antenne" && (
-                      <div className="row">
+                      <div className="row" key={patient.id}>
                         <div className="col-sm-4">
                           <p>{patient.parent}</p>
                         </div>

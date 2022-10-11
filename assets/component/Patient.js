@@ -30,11 +30,6 @@ const Patient = () => {
 
   let objPatient = {};
 
-  console.log(idPatient);
-
-  if (!idPatient) {
-  }
-
   useEffect(() => {
     axios({
       method: "post",
@@ -48,8 +43,6 @@ const Patient = () => {
       .then(function (response) {
         //handle success
         objPatient.patient = response.data;
-        // setPatient(response.data);
-        console.log(response);
         setPatient(response.data);
         axios({
           method: "post",
@@ -63,21 +56,16 @@ const Patient = () => {
           .then(function (response) {
             //handle success
             // setPatient(response.data);
-            console.log(response);
+
             let backgroundImage = response.image;
             setImgPatient(response.data);
             // setPatient(response.data);
           })
-          .catch(function (response) {
-            console.log(response);
-          });
+          .catch(function (response) {});
       })
-      .catch(function (response) {
-        console.log(response);
-      });
+      .catch(function (response) {});
   }, [idPatient]);
 
-  console.log(objPatient, imgPatient);
   // "../build/images/5a94e34b4c36e28de4e704f8c2d1c39a79e91b5d.png"
   return (
     <>
@@ -148,9 +136,9 @@ const Patient = () => {
                 <Tab eventKey="medias" title="Medias" disabled>
                   <p>test3</p>
                 </Tab>
-                <Tab eventKey="statistiques" title="Statistiques" disabled>
+                {/* <Tab eventKey="statistiques" title="Statistiques" disabled>
                   <p>test4</p>
-                </Tab>
+                </Tab> */}
                 <Tab eventKey="contacts" title="Contacts" disabled>
                   <p>test5</p>
                 </Tab>

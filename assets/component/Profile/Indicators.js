@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useContext, useDebugValue } from "react";
+import { useRef, useState, useEffect } from "react";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -9,7 +10,9 @@ import {
   Legend,
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
-// import faker from "faker";
+import useAuth from "../../hooks/useAuth";
+import { useParams } from "react-router-dom";
+import axios from "axios";
 
 ChartJS.register(
   CategoryScale,
@@ -20,70 +23,104 @@ ChartJS.register(
   Legend
 );
 
-export const options = {
-  plugins: {
-    title: {
-      display: true,
-      text: "Chart.js Bar Chart - Stacked",
-    },
-  },
-  responsive: true,
-  scales: {
-    x: {
-      stacked: true,
-    },
-    y: {
-      stacked: true,
-    },
-  },
-};
-
-const labels = ["January", "February", "March", "April", "May", "June", "July"];
-// console.log(faker.datatype.number({ min: -1000, max: 1000 }));
-
-export let obj = {
-  labels: ["January", "February", "March", "April", "May", "June", "July"],
-  datasets: [
-    {
-      label: "Dataset 1",
-      data: [674, 954, 652, 454, -707, -948, 444],
-      backgroundColor: "rgb(255, 99, 132)",
-    },
-    {
-      label: "Dataset 2",
-      data: [-167, -432, -907, 559, -207, -622, 67],
-      backgroundColor: "rgb(75, 192, 192)",
-    },
-    {
-      label: "Dataset 3",
-      data: [-63, -202, 465, 866, -289, 366, 40],
-      backgroundColor: "rgb(53, 162, 235)",
-    },
-  ],
-};
-
-export const data = {
-  labels,
-  datasets: [
-    {
-      label: "Dataset 1",
-      data: [674, 954, 652, 454, -707, -948, 444],
-      backgroundColor: "rgb(255, 99, 132)",
-    },
-    {
-      label: "Dataset 2",
-      data: [-167, -432, -907, 559, -207, -622, 67],
-      backgroundColor: "rgb(75, 192, 192)",
-    },
-    {
-      label: "Dataset 3",
-      data: [-63, -202, 465, 866, -289, 366, 40],
-      backgroundColor: "rgb(53, 162, 235)",
-    },
-  ],
-};
-
-console.log(data);
 export default function App() {
-  return <Bar options={options} data={data} />;
+  let id = useParams().id;
+  var formData = new FormData();
+  formData.append("id", id.toString());
+  const [auth, setAuth] = useState(useAuth());
+  const [idPatient, setIdPatient] = useState(id);
+  const [informations, setInformations] = useState();
+  const [options, setOptions] = useState();
+  const [filterDates, setFilterDates] = useState();
+  useEffect(() => {
+    axios({
+      method: "post",
+      url: "/api/getFollowUpReportsIndicators",
+      data: formData,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    })
+      .then(function (response) {
+        let com = response.data.filter((e) => e.indi.name === "Comportement");
+        let vet = response.data.filter((e) => e.indi.name === "Vêtements");
+        let cor = response.data.filter((e) => e.indi.name === "Corps");
+
+        let arrDates = [];
+        response.data.forEach((element) => {
+          let dateformated = new Date(element.fore.reportDate).toLocaleString(
+            "fr-BE",
+            {
+              dateStyle: "short",
+            }
+          );
+          arrDates.push(dateformated);
+        });
+        let filterDates = arrDates.filter(function (value, index, array) {
+          return array.indexOf(value) === index;
+        });
+
+        setFilterDates(filterDates);
+
+        if (
+          filterDates &&
+          filterDates.length > 0 &&
+          com &&
+          com.length > 0 &&
+          vet &&
+          vet.length > 0 &&
+          cor &&
+          cor.length > 0
+        ) {
+          setOptions({
+            plugins: {
+              title: {
+                display: true,
+                text: "CVC évolution",
+              },
+            },
+            responsive: true,
+            scales: {
+              x: {
+                stacked: true,
+              },
+              y: {
+                stacked: true,
+              },
+            },
+          });
+
+          setInformations({
+            labels: [...filterDates],
+            datasets: [
+              {
+                label: "Comportement",
+                data: [...com.map((e) => e.value)],
+                backgroundColor: "rgb(255, 99, 132)",
+              },
+              {
+                label: "Vêtements",
+                data: [...vet.map((e) => e.value)],
+                backgroundColor: "rgb(75, 192, 192)",
+              },
+              {
+                label: "Corps",
+                data: [...cor.map((e) => e.value)],
+                backgroundColor: "rgb(53, 162, 235)",
+              },
+            ],
+          });
+        }
+
+        // return response.data;
+      })
+      .catch(function (response) {});
+  }, [idPatient]);
+
+  return (
+    <>
+      {options && informations && <Bar options={options} data={informations} />}
+    </>
+  );
 }
