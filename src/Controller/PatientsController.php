@@ -29,11 +29,6 @@ use Symfony\Component\Serializer\Context\Normalizer\ObjectNormalizerContextBuild
 class PatientsController extends AbstractController
 {
 
-
-
-    // public const SERIALIZE = new Serializer([new ObjectNormalizer()], [new XmlEncoder(), new JsonEncoder()]);
-
-
     #[Route('/api/getGoals', name: 'app_patients')]
     public function getGoals(ManagerRegistry $doctrine): Response
     {
@@ -147,77 +142,6 @@ class PatientsController extends AbstractController
         return $this->json($reports);
     }
 
-    #[Route('/api/patientInformationValue', name: 'app_patientsInformationStatus')]
-    public function viewAction(ManagerRegistry $doctrine, SerializerInterface $serializer)
-    {
-
-        $request = Request::createFromGlobals();
-        $request = Request::createFromGlobals();
-
-
-        $val = $request->request->get('id');
-
-        $val = $request->request->get('id');
-        $patientRepository = $doctrine->getRepository(Patients::class);
-        // $this->get('idr_patient.repository.patient');
-        $patientInformationRepository = $doctrine->getRepository(PatientsInformation::class);
-        //  $this->get('idr_patient.repository.patient_information');
-        $templateBlocks = $doctrine->getRepository(PatientsInformationTemplateBlock::class);
-        //  $this->get('idr_patient.repository.information_template_block');
-        $templateElementRepository = $doctrine->getRepository(PatientsInformationTemplateElement::class);
-        // $this->get('idr_patient.repository.information_template_element');
-
-        $patient = $patientRepository->find($val);
-        // dd($templateBlockRepository);
-        $templateBlocks = $templateBlocks->findBy(
-            ['type' => [PatientsInformationTemplateBlock::TYPE_PATIENT]],
-            ['order' => 'ASC']
-        );
-
-
-
-        $templateElements = [];
-        $elementValues = [];
-
-        /** @var \Idr\SuiviBundle\Entity\InformationTemplateBlock $templateBlock */
-        foreach ($templateBlocks as $templateBlock) {
-            $blockId = $templateBlock->getId();
-
-            $templateElements[$blockId] = $templateElementRepository->findBy(
-                ['id' => $blockId]
-            );
-
-            /** @var \Idr\SuiviBundle\Entity\InformationTemplateElement $templateElement */
-            foreach ($templateElements[$blockId] as $templateElement) {
-
-
-                $elementId = $templateElement->getId();
-
-                // $patientInfo = $doctrine->getRepository(PatientsInformation::class)->findInformationByBlockPatients($patient->getId());
-
-                $elementValues[$blockId][$elementId] = $patientInformationRepository->findBy(
-                    [
-                        'itel' => $elementId,
-                        'pati' => $patient
-                    ],
-                    ['start' => 'DESC']
-                );
-
-
-
-                // dd([$elementId]);
-            }
-        }
-
-
-
-        return $this->json([
-            'patient' => $patient,
-            'blocks' => $templateBlocks,
-            'elements' => $templateElements,
-            'values' => $elementValues
-        ]);
-    }
 
     #[Route('/api/getPatients', name: 'app_getPatients')]
     public function getPatients(ManagerRegistry $doctrine, Request $request): Response

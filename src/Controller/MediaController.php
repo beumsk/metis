@@ -19,11 +19,13 @@ class MediaController extends AbstractController
     // getAllPatient
 
     #[Route('/api/getMediaForPatient', name: 'app_media')]
-    public function getPatients(ManagerRegistry $doctrine, Request $request): Response
+    public function getCurrentProfile(ManagerRegistry $doctrine): Response
     {
         $request = Request::createFromGlobals();
         $objPatients = new Patients();
         $id = $request->request->get("id");
+
+
         $page = $request->request->get('page');
         $patient = $doctrine->getRepository(Patients::class)->find($id);
         $mediaRepository = $doctrine->getRepository(Medias::class);
@@ -37,5 +39,15 @@ class MediaController extends AbstractController
             'height' => "24px",
             'class' => "test"
         ]);
+    }
+
+    #[Route('/api/getAllMediasByPatients', name: 'app_getAllMedias')]
+    public function getAllMediasByPatients(ManagerRegistry $doctrine): Response
+    {
+        $request = Request::createFromGlobals();
+        $id = $request->request->get("id");
+        $medias = $doctrine->getRepository(Medias::class)->findBy(["pati" => $id]);
+
+        return $this->json($medias);
     }
 }

@@ -42,6 +42,22 @@ body{
     // width: 600px!important;
   }
 
+  .dropzone{
+    padding: 1rem;
+    background-color: #f6f6f6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px dashed #dcdcdc;
+    p{
+        margin: 0!important;
+    }
+  }
+
+  .delete-btn{
+    margin-right: 1rem;
+  }
+
 @import "./scss/login";
 @import "./scss/menu";
 @import "./scss/form";

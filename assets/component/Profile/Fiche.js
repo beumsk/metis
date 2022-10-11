@@ -51,10 +51,6 @@ const Fiche = () => {
       .catch(function (response) {});
   }, [idPatient]);
 
-  let status = informationPatient?.data?.itel?.suge?.pathString.filter(
-    (e) => e.valeurParentPathString === "/patient/fiche/assuetude/declaree"
-  );
-
   return (
     <section>
       <Accordion defaultActiveKey="0" flush={true} className="accordion-fiche">

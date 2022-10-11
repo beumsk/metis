@@ -11,6 +11,8 @@ import Tabs from "react-bootstrap/Tabs";
 import Fiche from "./Profile/Fiche";
 import Indicators from "./Profile/Indicators";
 import Profile from "./Profile/Profile";
+import Medias from "./Profile/Medias";
+import Contacts from "./Profile/Contacts";
 
 const Patient = () => {
   let id = useParams().id;
@@ -133,14 +135,11 @@ const Patient = () => {
                 <Tab eventKey="indicateurs" title="Indicateurs">
                   <Indicators />
                 </Tab>
-                <Tab eventKey="medias" title="Medias" disabled>
-                  <p>test3</p>
+                <Tab eventKey="medias" title="Medias">
+                  <Medias />
                 </Tab>
-                {/* <Tab eventKey="statistiques" title="Statistiques" disabled>
-                  <p>test4</p>
-                </Tab> */}
-                <Tab eventKey="contacts" title="Contacts" disabled>
-                  <p>test5</p>
+                <Tab eventKey="contacts" title="Contacts">
+                  <Contacts />
                 </Tab>
                 <Tab eventKey="lieux" title="Lieux" disabled>
                   <p>test6</p>
