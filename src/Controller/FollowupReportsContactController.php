@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Contacts;
 use App\Entity\FollowupReports;
 use App\Entity\FollowupReportsContact;
+use App\Entity\PatientsContacts;
 use App\Entity\PatientsPatients;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -32,8 +33,8 @@ class FollowupReportsContactController extends AbstractController
         // array('id' => $idList)
 
 
-        $cont = $doctrine->getRepository(FollowupReportsContact::class)->findBy(array('fore' => $test));
-        $patientspatients = $doctrine->getRepository(PatientsPatients::class)->findBy(array('tapa' => $id));
+        $cont = $doctrine->getRepository(PatientsContacts::class)->findBy(["pati" => $id]);
+        $patientspatients = $doctrine->getRepository(PatientsPatients::class)->findBy(['tapa' => $id]);
 
 
         // dd($test);

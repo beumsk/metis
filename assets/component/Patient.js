@@ -13,6 +13,7 @@ import Indicators from "./Profile/Indicators";
 import Profile from "./Profile/Profile";
 import Medias from "./Profile/Medias";
 import Contacts from "./Profile/Contacts";
+import Places from "./Profile/Places";
 
 const Patient = () => {
   let id = useParams().id;
@@ -141,8 +142,8 @@ const Patient = () => {
                 <Tab eventKey="contacts" title="Contacts">
                   <Contacts />
                 </Tab>
-                <Tab eventKey="lieux" title="Lieux" disabled>
-                  <p>test6</p>
+                <Tab eventKey="lieux" title="Lieux">
+                  <Places />
                 </Tab>
               </Tabs>
             </div>
