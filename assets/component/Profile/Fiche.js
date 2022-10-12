@@ -68,30 +68,22 @@ const Fiche = () => {
               {informationPatient?.map((patient, id) => (
                 <>
                   {patient &&
-                    patient &&
-                    patient.patientInfo &&
-                    patient.patientInfo.itel?.suge?.pathString ===
+                    patient.itel?.suge?.pathString ===
                       "/patient/fiche/statut-du-suivi" &&
-                    patient.patientInfo.deletedAt === null && (
+                    patient.deletedAt === null && (
                       <div className="row" key={patient.id}>
                         <div className="col-sm-4">
-                          <p>{patient.patientInfo.sugg?.value}</p>
+                          <p>{patient.sugg?.value}</p>
                         </div>
                         <div className="col-sm-4">
                           <p>
-                            {new Date(patient.patientInfo.start).toLocaleString(
-                              "fr-BE",
-                              {
-                                dateStyle: "short",
-                              }
-                            )}
+                            {new Date(patient.start).toLocaleString("fr-BE", {
+                              dateStyle: "short",
+                            })}
                             -
-                            {new Date(patient.patientInfo.end).toLocaleString(
-                              "fr-BE",
-                              {
-                                dateStyle: "short",
-                              }
-                            )}
+                            {new Date(patient.end).toLocaleString("fr-BE", {
+                              dateStyle: "short",
+                            })}
                           </p>
                         </div>
                         <div className="col-sm-4">
@@ -119,23 +111,20 @@ const Fiche = () => {
               {informationPatient?.map((patient, id) => (
                 <>
                   {patient &&
-                    patient &&
-                    patient.valeurpathString &&
-                    patient.valeurpathString === "/patient/suivi/programme" && (
+                    patient.sugg?.parentSugg.pathString ===
+                      "/patient/suivi/equipes" &&
+                    patient.deletedAt === null && (
                       <div className="row" key={patient.id}>
                         <div className="col-sm-4">
-                          <p>{patient.parent}</p>
+                          <p>{patient.sugg.value}</p>
                         </div>
                         <div className="col-sm-4">
                           <p>
-                            {new Date(patient.startDate).toLocaleString(
-                              "fr-BE",
-                              {
-                                dateStyle: "short",
-                              }
-                            )}
+                            {new Date(patient.start).toLocaleString("fr-BE", {
+                              dateStyle: "short",
+                            })}
                             -
-                            {new Date(patient.endDate).toLocaleString("fr-BE", {
+                            {new Date(patient.end).toLocaleString("fr-BE", {
                               dateStyle: "short",
                             })}
                           </p>
@@ -164,23 +153,20 @@ const Fiche = () => {
               {informationPatient?.map((patient, id) => (
                 <>
                   {patient &&
-                    patient &&
-                    patient.valeurpathString &&
-                    patient.valeurpathString === "/patient/suivi/programme" && (
+                    patient.sugg?.parentSugg.pathString ===
+                      "/patient/suivi/programme" &&
+                    patient.deletedAt === null && (
                       <div className="row" key={patient.id}>
                         <div className="col-sm-4">
-                          <p>{patient.parent}</p>
+                          <p>{patient.sugg.value}</p>
                         </div>
                         <div className="col-sm-4">
                           <p>
-                            {new Date(patient.startDate).toLocaleString(
-                              "fr-BE",
-                              {
-                                dateStyle: "short",
-                              }
-                            )}
+                            {new Date(patient.start).toLocaleString("fr-BE", {
+                              dateStyle: "short",
+                            })}
                             -
-                            {new Date(patient.endDate).toLocaleString("fr-BE", {
+                            {new Date(patient.end).toLocaleString("fr-BE", {
                               dateStyle: "short",
                             })}
                           </p>
@@ -210,23 +196,20 @@ const Fiche = () => {
               {informationPatient?.map((patient, id) => (
                 <>
                   {patient &&
-                    patient &&
-                    patient.valeurpathString &&
-                    patient.valeurpathString === "/patient/suivi/antenne" && (
+                    patient.sugg?.parentSugg.pathString ===
+                      "/patient/suivi/antenne" &&
+                    patient.deletedAt === null && (
                       <div className="row" key={patient.id}>
                         <div className="col-sm-4">
-                          <p>{patient.parent}</p>
+                          <p>{patient.sugg.value}</p>
                         </div>
                         <div className="col-sm-4">
                           <p>
-                            {new Date(patient.startDate).toLocaleString(
-                              "fr-BE",
-                              {
-                                dateStyle: "short",
-                              }
-                            )}
+                            {new Date(patient.start).toLocaleString("fr-BE", {
+                              dateStyle: "short",
+                            })}
                             -
-                            {new Date(patient.endDate).toLocaleString("fr-BE", {
+                            {new Date(patient.end).toLocaleString("fr-BE", {
                               dateStyle: "short",
                             })}
                           </p>
@@ -254,16 +237,15 @@ const Fiche = () => {
               {informationPatient?.map((patient, id) => (
                 <>
                   {patient &&
-                    patient &&
-                    patient.valeurParentPathString &&
-                    patient.valeurParentPathString ===
-                      "/patient/fiche/information-generale" && (
+                    patient.sugg?.parentSugg.parentSugg.pathString ===
+                      "/patient/fiche/information-generale" &&
+                    patient.deletedAt === null && (
                       <div key={patient.id} className="row">
                         <div className="col-sm-2">
-                          <h6>{patient.valeurParent}</h6>
+                          <h6>{patient.sugg.parentSugg.value}</h6>
                         </div>
                         <div className="col-sm-2">
-                          <p>{patient.parent}</p>
+                          <p>{patient.sugg.value}</p>
                         </div>
                         <div className="col-sm-4">{patient.commentColumn}</div>
                         <div className="col-sm-2">
@@ -297,17 +279,15 @@ const Fiche = () => {
               {informationPatient?.map((patient, id) => (
                 <>
                   {patient &&
-                    patient &&
-                    patient.patientInfo &&
-                    patient.patientInfo.itel?.pitb?.sugb?.pathString ===
+                    patient.itel?.itbk?.sugb?.pathString ===
                       "/patient/fiche/description" &&
-                    patient.patientInfo.deletedAt === null && (
+                    patient.deletedAt === null && (
                       <div key={patient.id} className="row">
                         <div className="col-sm-4">
-                          <h6>{patient.patientInfo.value}</h6>
+                          <h6>{patient.value}</h6>
                         </div>
                         <div className="col-sm-4">
-                          <p>{patient.patientInfo.comment}</p>
+                          <p>{patient.comment}</p>
                         </div>
                         <div className="col-sm-4">
                           <button style={{ float: "right" }}>
@@ -336,18 +316,18 @@ const Fiche = () => {
                 <>
                   {patient &&
                     patient &&
-                    patient.patientInfo &&
-                    patient.patientInfo.sugg?.parentSugg?.pathString ===
+                    patient &&
+                    patient.sugg?.parentSugg?.pathString ===
                       "/patient/fiche/ressources-personnelles/langues" && (
                       <div key={patient.id} className="row">
                         {/* <div className="col-sm-4">
                           {/* <p>{patient.valeurParent}</p> 
                         </div> */}
                         <div className="col-sm-4">
-                          <p>{patient.patientInfo.sugg?.value}</p>
+                          <p>{patient.sugg?.value}</p>
                         </div>
                         <div className="col-sm-4">
-                          <p>{patient.patientInfo.comment}</p>
+                          <p>{patient.comment}</p>
                         </div>
                       </div>
                     )}
@@ -365,19 +345,17 @@ const Fiche = () => {
               {informationPatient?.map((patient, id) => (
                 <>
                   {patient &&
-                    patient &&
-                    patient.patientInfo &&
-                    patient.patientInfo.sugg?.parentSugg?.pathString ===
+                    patient.sugg?.parentSugg?.pathString ===
                       "/patient/fiche/ressources-personnelles/talents-et-centres-d-interet" && (
                       <div key={patient.id} className="row">
                         {/* <div className="col-sm-4">
                           {/* <p>{patient.valeurParent}</p> 
                         </div> */}
                         <div className="col-sm-4">
-                          <p>{patient.patientInfo.sugg.value}</p>
+                          <p>{patient.sugg.value}</p>
                         </div>
                         <div className="col-sm-4">
-                          <p>{patient.patientInfo.comment}</p>
+                          <p>{patient.comment}</p>
                         </div>
                       </div>
                     )}
@@ -394,19 +372,17 @@ const Fiche = () => {
               {informationPatient?.map((patient, id) => (
                 <>
                   {patient &&
-                    patient &&
-                    patient.patientInfo &&
-                    patient.patientInfo.sugg?.parentSugg?.pathString ===
+                    patient.sugg?.parentSugg?.pathString ===
                       "/patient/fiche/ressources-personnelles/reves" && (
                       <div key={patient.id} className="row">
                         {/* <div className="col-sm-4">
                           {/* <p>{patient.valeurParent}</p> 
                         </div> */}
                         <div className="col-sm-4">
-                          <p>{patient.patientInfo.sugg.value}</p>
+                          <p>{patient.sugg.value}</p>
                         </div>
                         <div className="col-sm-4">
-                          <p>{patient.patientInfo.comment}</p>
+                          <p>{patient.comment}</p>
                         </div>
                       </div>
                     )}
@@ -423,19 +399,17 @@ const Fiche = () => {
               {informationPatient?.map((patient, id) => (
                 <>
                   {patient &&
-                    patient &&
-                    patient.patientInfo &&
-                    patient.patientInfo.sugg?.parentSugg?.pathString ===
+                    patient.sugg?.parentSugg?.pathString ===
                       "/patient/fiche/ressources-personnelles/gouts-culinaires" && (
                       <div key={patient.id} className="row">
                         {/* <div className="col-sm-4">
                           {/* <p>{patient.valeurParent}</p> 
                         </div> */}
                         <div className="col-sm-4">
-                          <p>{patient.patientInfo.sugg.value}</p>
+                          <p>{patient.sugg.value}</p>
                         </div>
                         <div className="col-sm-4">
-                          <p>{patient.patientInfo.comment}</p>
+                          <p>{patient.comment}</p>
                         </div>
                       </div>
                     )}
@@ -451,16 +425,15 @@ const Fiche = () => {
               <>
                 <div className="block">
                   {patient &&
-                    patient &&
-                    patient.valeurParentPathString &&
-                    patient.valeurParentPathString ===
-                      "/patient/fiche/ressources-financieres" && (
+                    patient?.sugg?.parentSugg?.parentSugg?.pathString ===
+                      "/patient/fiche/ressources-financieres" &&
+                    patient?.deletedAt === null && (
                       <div key={patient.id} className="row">
                         <div className="col-sm-4">
-                          <h6>{patient.valeurParent}</h6>
+                          <h6>{patient.sugg.parentSugg.value}</h6>
                         </div>
                         <div className="col-sm-4">
-                          <p>{patient.parent}</p>
+                          <p>{patient.sugg.value}</p>
                         </div>
                       </div>
                     )}
@@ -476,16 +449,15 @@ const Fiche = () => {
               <>
                 <div className="block">
                   {patient &&
-                    patient &&
-                    patient.valeurParentPathString &&
-                    patient.valeurParentPathString ===
-                      "/patient/fiche/acces-aux-soins" && (
+                    patient?.sugg?.parentSugg?.parentSugg?.pathString ===
+                      "/patient/fiche/acces-aux-soins" &&
+                    patient?.deletedAt === null && (
                       <div key={patient.id} className="row">
                         <div className="col-sm-4">
-                          <h6>{patient.valeurParent}</h6>
+                          <h6>{patient.sugg.parentSugg.value}</h6>
                         </div>
                         <div className="col-sm-4">
-                          <p>{patient.parent}</p>
+                          <p>{patient.sugg.value}</p>
                         </div>
                       </div>
                     )}
@@ -507,19 +479,17 @@ const Fiche = () => {
               {informationPatient?.map((patient, id) => (
                 <>
                   {patient &&
-                    patient &&
-                    patient.patientInfo &&
-                    patient.patientInfo.sugg?.parentSugg?.pathString ===
+                    patient.sugg?.parentSugg?.pathString ===
                       "/patient/medical/pathologies/pathologies-physiques-chroniques" && (
                       <div key={patient.id} className="row">
                         {/* <div className="col-sm-4">
                           {/* <p>{patient.valeurParent}</p> 
                         </div> */}
                         <div className="col-sm-4">
-                          <p>{patient.patientInfo.sugg.value}</p>
+                          <p>{patient.sugg.value}</p>
                         </div>
                         <div className="col-sm-4">
-                          <p>{patient.patientInfo.comment}</p>
+                          <p>{patient.comment}</p>
                         </div>
                       </div>
                     )}
@@ -538,19 +508,17 @@ const Fiche = () => {
               {informationPatient?.map((patient, id) => (
                 <>
                   {patient &&
-                    patient &&
-                    patient.patientInfo &&
-                    patient.patientInfo.sugg?.parentSugg?.pathString ===
+                    patient.sugg?.parentSugg?.pathString ===
                       "/patient/medical/episodes-de-maladie" && (
                       <div key={patient.id} className="row">
                         {/* <div className="col-sm-4">
                           {/* <p>{patient.valeurParent}</p> 
                         </div> */}
                         <div className="col-sm-4">
-                          <p>{patient.patientInfo.sugg.value}</p>
+                          <p>{patient.sugg.value}</p>
                         </div>
                         <div className="col-sm-4">
-                          <p>{patient.patientInfo.comment}</p>
+                          <p>{patient.comment}</p>
                         </div>
                       </div>
                     )}
@@ -569,18 +537,18 @@ const Fiche = () => {
                 <>
                   {patient &&
                     patient &&
-                    patient.patientInfo &&
-                    patient.patientInfo.sugg?.parentSugg?.pathString ===
+                    patient &&
+                    patient.sugg?.parentSugg?.pathString ===
                       "/patient/medical/allergies" && (
                       <div key={patient.id} className="row">
                         {/* <div className="col-sm-4">
                           {/* <p>{patient.valeurParent}</p> 
                         </div> */}
                         <div className="col-sm-4">
-                          <p>{patient.patientInfo.sugg.value}</p>
+                          <p>{patient.sugg.value}</p>
                         </div>
                         <div className="col-sm-4">
-                          <p>{patient.patientInfo.comment}</p>
+                          <p>{patient.comment}</p>
                         </div>
                       </div>
                     )}
@@ -598,9 +566,7 @@ const Fiche = () => {
               {informationPatient?.map((patient, id) => (
                 <>
                   {patient &&
-                    patient &&
-                    patient.valeurpathString &&
-                    patient.valeurpathString ===
+                    patient.sugg?.parentSugg?.pathString ===
                       "/patient/medical/parametres" && (
                       <div key={patient.id} className="row">
                         {/* <div className="col-sm-4">
@@ -632,10 +598,10 @@ const Fiche = () => {
               {informationPatient?.map((patient, id) => (
                 <>
                   {patient &&
-                    patient &&
-                    patient.valeurParentPathString &&
-                    patient.valeurParentPathString ===
-                      "/patient/fiche/pathologie-mentale/supposee" && (
+                    patient?.itel?.suge?.pathString &&
+                    patient?.itel?.suge?.pathString ===
+                      "/patient/fiche/pathologie-mentale/supposee" &&
+                    patient?.deletedAt === null && (
                       <div key={patient.id} className="row">
                         <div className="col-sm-4">
                           <p>{patient.valeurParent}</p>
@@ -648,9 +614,9 @@ const Fiche = () => {
                 </>
               ))}
             </div>
-            {/* <div>
+            <div>
               <h6>
-                Déclarée
+                Declarée
                 <button>
                   <FontAwesomeIcon icon={faPlusCircle} />
                 </button>
@@ -658,11 +624,10 @@ const Fiche = () => {
               {informationPatient?.map((patient, id) => (
                 <>
                   {patient &&
-                    patient &&
-                    patient.valeurParentPathString &&
-                    patient.patientInfo.valeurParentPathString ===
+                    patient?.itel?.suge?.pathString &&
+                    patient?.itel?.suge?.pathString ===
                       "/patient/fiche/pathologie-mentale/declaree" &&
-                    patient.patientInfo.deletedAt === null && (
+                    patient?.deletedAt === null && (
                       <div key={patient.id} className="row">
                         <div className="col-sm-4">
                           <p>{patient.valeurParent}</p>
@@ -674,7 +639,7 @@ const Fiche = () => {
                     )}
                 </>
               ))}
-            </div> */}
+            </div>
           </Accordion.Body>
         </Accordion.Item>
         <Accordion.Item eventKey="8">
@@ -689,19 +654,18 @@ const Fiche = () => {
             {informationPatient?.map((patient, id) => (
               <>
                 {patient &&
-                  patient &&
-                  patient?.patientInfo?.itel?.suge?.pathString &&
-                  patient?.patientInfo?.itel?.suge?.pathString ===
+                  patient?.itel?.suge?.pathString &&
+                  patient?.itel?.suge?.pathString ===
                     "/patient/fiche/assuetude/supposee" &&
-                  patient?.patientInfo?.deletedAt === null && (
+                  patient?.deletedAt === null && (
                     <div key={patient.id} className="row mt-4">
                       {/* <div className="col-sm-4"></div> */}
                       {/* <p>{patient.parent}</p> */}
                       <div className="col-sm-2">
-                        <h6>{patient?.patientInfo?.sugg.value}</h6>
+                        <h6>{patient?.sugg.value}</h6>
                       </div>
                       <div className="col-sm-6">
-                        <p>{patient?.patientInfo?.comment}</p>
+                        <p>{patient?.comment}</p>
                       </div>
                       <div className="col-sm-4">
                         {/* <p>
@@ -722,26 +686,18 @@ const Fiche = () => {
             {informationPatient?.map((patient, id) => (
               <>
                 {patient &&
-                  patient &&
-                  patient?.patientInfo?.itel?.suge?.pathString &&
-                  patient?.patientInfo?.itel?.suge?.pathString ===
+                  patient?.itel?.suge?.pathString &&
+                  patient?.itel?.suge?.pathString ===
                     "/patient/fiche/assuetude/declaree" &&
-                  patient?.patientInfo?.deletedAt === null && (
+                  patient?.deletedAt === null && (
                     <div key={patient.id} className="row mt-4">
-                      {/* <div className="col-sm-4"></div> */}
-                      {/* <p>{patient.parent}</p> */}
                       <div className="col-sm-2">
-                        <h6>{patient?.patientInfo?.sugg.value}</h6>
+                        <h6>{patient?.sugg.value}</h6>
                       </div>
                       <div className="col-sm-6">
-                        <p>{patient?.patientInfo?.comment}</p>
+                        <p>{patient?.comment}</p>
                       </div>
-                      <div className="col-sm-4">
-                        {/* <p>
-                          {" "}
-                          <FontAwesomeIcon icon={faPlusCircle} />
-                        </p> */}
-                      </div>
+                      <div className="col-sm-4"></div>
                     </div>
                   )}
               </>
@@ -754,21 +710,21 @@ const Fiche = () => {
             <div className="block">
               {informationPatient?.map((patient, id) => (
                 <>
-                  {patient &&
-                    patient &&
-                    patient.valeurpathString &&
-                    patient.valeurpathString ===
-                      "/patient/fiche/traitements" && (
-                      <div key={patient.id} className="row">
-                        <div className="col-sm-4">
-                          <h6>{patient.parent}</h6>
+                  <div className="block">
+                    {patient &&
+                      patient?.sugg?.parentSugg?.pathString ===
+                        "/patient/fiche/traitements" &&
+                      patient?.deletedAt === null && (
+                        <div key={patient.id} className="row">
+                          <div className="col-sm-4">
+                            <h6>{patient.sugg.value}</h6>
+                          </div>
+                          <div className="col-sm-4">
+                            <p>{patient.comment}</p>
+                          </div>
                         </div>
-                        <div className="col-sm-4">
-                          <p>{patient.valeurColumn}</p>
-                          <p>{patient.commentColumn}</p>
-                        </div>
-                      </div>
-                    )}
+                      )}
+                  </div>
                 </>
               ))}
             </div>

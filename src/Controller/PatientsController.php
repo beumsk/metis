@@ -122,9 +122,9 @@ class PatientsController extends AbstractController
         $val = $request->request->get('id');
 
         $patient = $doctrine->getRepository(Patients::class)->find($val);
-        $patientInfo = $doctrine->getRepository(PatientsInformation::class)->findInformationByBlockPatients($patient->getId());
-        $patientInfoAndElement = $doctrine->getRepository(PatientsInformation::class)->findInformationByBlockPatientsWithElements($patient->getId());
-        return $this->json([...$patientInfoAndElement, ...$patientInfo]);
+        $patientInfo = $doctrine->getRepository(PatientsInformation::class)->findBy(["pati" => $patient->getId()]);
+        // $patientInfoAndElement = $doctrine->getRepository(PatientsInformation::class)->findInformationByBlockPatientsWithElements($patient->getId());
+        return $this->json($patientInfo);
     }
 
     #[Route('/api/patientsInformationStatus', name: 'app_patientsInformationStatus')]
