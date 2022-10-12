@@ -8,7 +8,7 @@ import { useParams } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
-import Fiche from "./Profile/Fiche";
+import Fiche from "./Profile/Fiche/Fiche";
 import Indicators from "./Profile/Indicators";
 import Profile from "./Profile/Profile";
 import Medias from "./Profile/Medias";

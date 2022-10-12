@@ -24,20 +24,14 @@ class FollowupReportsContactController extends AbstractController
 
         $id = $request->request->get('id');
         $reports = $doctrine->getRepository(FollowupReports::class)->findBy(["pati" => $id]);
-        // $contacts = $doctrine->getRepository(Contacts::class)->findAll();
-        // dd($report);
         $test = [];
         foreach ($reports as $key) {
             $test[] = $key->getId();
         }
-        // array('id' => $idList)
-
 
         $cont = $doctrine->getRepository(PatientsContacts::class)->findBy(["pati" => $id]);
         $patientspatients = $doctrine->getRepository(PatientsPatients::class)->findBy(['tapa' => $id]);
 
-
-        // dd($test);
 
 
         return $this->json([...$cont, ...$patientspatients]);

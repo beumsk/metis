@@ -34,15 +34,11 @@ const Contacts = () => {
       <h5>Contacts</h5>
       {listContacts && listContacts.data.length > 0 && (
         <>
-          {/* <h6>Liste de fichiers déjà présents</h6> */}
-
           {listContacts?.data?.map((item, id) => (
             <div className="row">
               <div className="col-sm-4">
                 {item?.cont?.firstname} {item?.cont?.lastname}
               </div>
-              {/* <div className="col-sm-4">{item?.cont?.lastname}</div>
-              <div className="col-sm-4">{item?.cont?.description}</div> */}
             </div>
           ))}
         </>
