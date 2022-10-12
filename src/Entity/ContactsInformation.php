@@ -17,11 +17,23 @@ class ContactsInformation
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $value = null;
 
-    #[ORM\Column(type: Types::TEXT)]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $comment = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $deleted_at = null;
+
+    #[ORM\ManyToOne(targetEntity: 'Contacts', cascade: ["all"], fetch: "EAGER")]
+    #[ORM\JoinColumn(name: "cont_id", referencedColumnName: "id", nullable: true)]
+    private ?Contacts $cont = null;
+
+    #[ORM\ManyToOne(targetEntity: 'InformationTemplateElement', cascade: ["all"], fetch: "EAGER")]
+    #[ORM\JoinColumn(name: "itel_id", referencedColumnName: "id", nullable: true)]
+    private ?InformationTemplateElement $itel = null;
+
+    #[ORM\ManyToOne(targetEntity: 'Suggestions', cascade: ["all"], fetch: "EAGER")]
+    #[ORM\JoinColumn(name: "sugg_id", referencedColumnName: "id", nullable: true)]
+    private ?Suggestions $sugg = null;
 
     public function getId(): ?int
     {
@@ -60,6 +72,42 @@ class ContactsInformation
     public function setDeletedAt(?\DateTimeInterface $deleted_at): self
     {
         $this->deleted_at = $deleted_at;
+
+        return $this;
+    }
+
+    public function getCont(): ?Contacts
+    {
+        return $this->cont;
+    }
+
+    public function setCont(?Contacts $cont): self
+    {
+        $this->cont = $cont;
+
+        return $this;
+    }
+
+    public function getItel(): ?InformationTemplateElement
+    {
+        return $this->itel;
+    }
+
+    public function setItel(?InformationTemplateElement $itel): self
+    {
+        $this->itel = $itel;
+
+        return $this;
+    }
+
+    public function getSugg(): ?Suggestions
+    {
+        return $this->sugg;
+    }
+
+    public function setSugg(?Suggestions $sugg): self
+    {
+        $this->sugg = $sugg;
 
         return $this;
     }

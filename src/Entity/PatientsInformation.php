@@ -66,7 +66,7 @@ class PatientsInformation
 
 
     #[ORM\ManyToOne]
-    private ?PatientsInformationTemplateElement $itel = null;
+    private ?InformationTemplateElement $itel = null;
 
     public function getId(): ?int
     {
@@ -217,23 +217,12 @@ class PatientsInformation
         return $this;
     }
 
-    public function getItel(): ?PatientsInformationTemplateElement
+    public function getItel(): ?InformationTemplateElement
     {
-        // $template = new PatientsInformationTemplateElement;
-        // // $patient = $doctrine->getRepository(PatientsInformationTemplateElement::class)->find($this->itel->getId());
-
-
-        // // dd($patient);
-        // if (is_object($this->itel)) {
-        //     return $this->itel;
-        // } else {
-        //     $template = new PatientsInformationTemplateElement;
-        //     return $template->test = null;
-        // }
         return $this->itel;
     }
 
-    public function setItel(?PatientsInformationTemplateElement $itel): self
+    public function setItel(?InformationTemplateElement $itel): self
     {
 
         $this->itel = $itel;

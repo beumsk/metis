@@ -56,9 +56,9 @@ class FollowupReports
     #[ORM\ManyToOne]
     private ?User $user = null;
 
-    #[ORM\ManyToOne(targetEntity: 'Places', cascade: ["all"], fetch: "EAGER")]
-    #[ORM\JoinColumn(name: "plac_id", referencedColumnName: "id", nullable: true, onDelete: "SET NULL")]
-    private ?Places $plac = null;
+    #[ORM\ManyToOne(targetEntity: 'Contacts', cascade: ["all"], fetch: "EAGER")]
+    #[ORM\JoinColumn(name: "cont_id", referencedColumnName: "id", nullable: true)]
+    private ?Contacts $plac = null;
 
     public function getId(): ?int
     {
@@ -233,12 +233,12 @@ class FollowupReports
         return $this;
     }
 
-    public function getPlac(): ?Places
+    public function getPlac(): ?Contacts
     {
         return $this->plac;
     }
 
-    public function setPlac(?Places $plac): self
+    public function setPlac(?Contacts $plac): self
     {
         $this->plac = $plac;
 

@@ -4,6 +4,7 @@ namespace App\Controller;
 
 
 use App\Entity\Contacts;
+use App\Entity\FollowupReports;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,6 +21,8 @@ class ContactsController extends AbstractController
         $places = $doctrine->getRepository(Contacts::class)->findAll();
         return $this->json($places);
     }
+
+
 
     #[Route('/api/setContacts', name: 'app_medias')]
     public function setPatients(ManagerRegistry $doctrine, Request $request): JsonResponse

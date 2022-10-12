@@ -17,8 +17,7 @@ class PatientsPlaces
     #[ORM\Column(nullable: true)]
     private ?int $inaccurate = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?int $comment = null;
+
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $start = null;
@@ -33,7 +32,7 @@ class PatientsPlaces
     private ?int $end_inaccurate = null;
 
     #[ORM\Column(nullable: true)]
-    private ?int $is_hightlight = null;
+    private ?int $is_highlight = null;
 
     #[ORM\Column(nullable: true)]
     private ?int $is_streetplace = null;
@@ -43,6 +42,18 @@ class PatientsPlaces
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $deleted_at = null;
+
+    #[ORM\ManyToOne]
+    private ?Contacts $cont = null;
+
+    #[ORM\ManyToOne]
+    private ?Patients $pati = null;
+
+    #[ORM\ManyToOne]
+    private ?Suggestions $sugg = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $comment = null;
 
     public function getId(): ?int
     {
@@ -61,17 +72,7 @@ class PatientsPlaces
         return $this;
     }
 
-    public function getComment(): ?int
-    {
-        return $this->comment;
-    }
 
-    public function setComment(?int $comment): self
-    {
-        $this->comment = $comment;
-
-        return $this;
-    }
 
     public function getStart(): ?\DateTimeInterface
     {
@@ -123,12 +124,12 @@ class PatientsPlaces
 
     public function getIsHightlight(): ?int
     {
-        return $this->is_hightlight;
+        return $this->is_highlight;
     }
 
-    public function setIsHightlight(?int $is_hightlight): self
+    public function setIsHightlight(?int $is_highlight): self
     {
-        $this->is_hightlight = $is_hightlight;
+        $this->is_highlight = $is_highlight;
 
         return $this;
     }
@@ -165,6 +166,54 @@ class PatientsPlaces
     public function setDeletedAt(?\DateTimeInterface $deleted_at): self
     {
         $this->deleted_at = $deleted_at;
+
+        return $this;
+    }
+
+    public function getCont(): ?Contacts
+    {
+        return $this->cont;
+    }
+
+    public function setCont(?Contacts $cont): self
+    {
+        $this->cont = $cont;
+
+        return $this;
+    }
+
+    public function getPati(): ?Patients
+    {
+        return $this->pati;
+    }
+
+    public function setPati(?Patients $pati): self
+    {
+        $this->pati = $pati;
+
+        return $this;
+    }
+
+    public function getSugg(): ?Suggestions
+    {
+        return $this->sugg;
+    }
+
+    public function setSugg(?Suggestions $sugg): self
+    {
+        $this->sugg = $sugg;
+
+        return $this;
+    }
+
+    public function getComment(): ?string
+    {
+        return $this->comment;
+    }
+
+    public function setComment(?string $comment): self
+    {
+        $this->comment = $comment;
 
         return $this;
     }
