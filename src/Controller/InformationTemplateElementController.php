@@ -12,35 +12,42 @@ use App\Entity\User;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use App\Entity\InformationTemplateBlock;
+use App\Entity\Suggestions;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 
 class InformationTemplateElementController extends AbstractController
 {
-    #[Route('/information/template/element', name: 'app_information_template_element')]
+    #[Route('/api/findElAndBlckAndValByPatient', name: 'app_information')]
     public function index(ManagerRegistry $doctrine, Request $request): Response
     {
 
-        // $informationTemplateBlock = $doctrine->getRepository(InformationTemplateBlock::class)->findElementBlock();
-        $informationTemplateBlock = $doctrine->getRepository(InformationTemplateElement::class)->findElement();
-        // $test = [];
-        // foreach ($informationTemplateBlock as $key) {
-        //     $test[] = $key["sugb"]->getId();
-        // }
 
-        // dd($test);
         $request = Request::createFromGlobals();
 
 
         $val = $request->request->get('id');
+        // $pathString = "/patient/fiche/statut-du-suivi";
+        $pathString = $request->request->get('pathString');
+        $informationTemplateBlock = $doctrine->getRepository(InformationTemplateElement::class)->findElement($pathString);
 
-        // dd($val);
+
+
+
 
         $patient = $doctrine->getRepository(Patients::class)->find($val);
-        $patientInfo = $doctrine->getRepository(PatientsInformation::class)->findBy(["pati" => $patient->getId()]);
-        $array1 = array_merge($informationTemplateBlock, $patientInfo);
+        $sugg = $doctrine->getRepository(Suggestions::class)->findBy(["path_string" => $pathString]);
 
-        return $this->json($array1);
+        $parentSugg = $doctrine->getRepository(Suggestions::class)->findBy(["parentSugg" => $sugg[0]->getId()]);
+
+        $test = [];
+        foreach ($parentSugg as $key) {
+            $test[] = $key->getId();
+        }
+
+        $patientInfo = $doctrine->getRepository(PatientsInformation::class)->findBy(["pati" => $patient->getId(), ...['sugg' => $test]]);
+
+        return $this->json(["elementtemplateblock" => $informationTemplateBlock, "patientinfo" => $patientInfo]);
     }
 
 
