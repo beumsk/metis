@@ -40,6 +40,42 @@ class InformationTemplateElementRepository extends ServiceEntityRepository
     }
 
 
+    public function findElement()
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+
+        $stringPath = '/patient/fiche/information-generale';
+
+        // $id = $patient["id"];
+
+
+
+        $qb->select('ite, itbk, s')
+            ->from('App:InformationTemplateElement', 'ite')
+
+            ->innerJoin(
+                'App:InformationTemplateBlock',
+                'itbk',
+                'WITH',
+                'ite.itbk = itbk.id'
+            )
+            ->innerJoin(
+                'App:Suggestions',
+                's',
+                'WITH',
+                'itbk.sugb = s.parentSugg'
+            )
+            ->andWhere('itbk.block_type = :type')
+            // ->setMaxResults(1)
+            ->setParameter('type', 'patient')
+
+            ->orderBy('itbk.block_order', 'ASC');
+
+
+        $query = $qb->getQuery();
+
+        return $query->getResult();
+    }
 
 
 

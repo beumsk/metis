@@ -66,11 +66,21 @@ const Fiche = () => {
             <div>
               <h6>
                 Statut de suivi
-                <ModalItemFiche />
-                {/* <button>
-                  {" "}
-                  <FontAwesomeIcon icon={faPlusCircle} />
-                </button> */}
+                <>
+                  {/* {informationTemplateBlock.filter(
+                    (e) =>
+                      e.itel?.suge?.pathString ===
+                      "/patient/fiche/statut-du-suivi"
+                  ) && ( */}
+                  <ModalItemFiche
+                    props={informationTemplateBlock?.filter(
+                      (e) =>
+                        e.elements?.parentSugg?.pathString ===
+                        "/patient/fiche/statut-du-suivi"
+                    )}
+                  />
+                  {/* )} */}
+                </>
               </h6>
               {informationPatient?.map((patient, id) => (
                 <>
@@ -111,9 +121,13 @@ const Fiche = () => {
             <div className="block mt-4">
               <h6>
                 Equipes
-                <button>
-                  <FontAwesomeIcon icon={faPlusCircle} />
-                </button>
+                <ModalItemFiche
+                  props={informationTemplateBlock?.filter(
+                    (e) =>
+                      e.elements?.parentSugg?.pathString ===
+                      "/patient/suivi/equipes"
+                  )}
+                />
               </h6>
               {informationPatient?.map((patient, id) => (
                 <>
@@ -153,9 +167,13 @@ const Fiche = () => {
             <div className="block mt-4">
               <h6>
                 Programme
-                <button>
-                  <FontAwesomeIcon icon={faPlusCircle} />
-                </button>
+                <ModalItemFiche
+                  props={informationTemplateBlock?.filter(
+                    (e) =>
+                      e.elements?.parentSugg?.pathString ===
+                      "/patient/suivi/programme"
+                  )}
+                />
               </h6>
               {informationPatient?.map((patient, id) => (
                 <>
@@ -195,10 +213,13 @@ const Fiche = () => {
             <div className="block mt-4">
               <h6>
                 Antenne{" "}
-                <button>
-                  {" "}
-                  <FontAwesomeIcon icon={faPlusCircle} />
-                </button>
+                <ModalItemFiche
+                  props={informationTemplateBlock?.filter(
+                    (e) =>
+                      e.elements?.parentSugg?.pathString ===
+                      "/patient/suivi/antenne"
+                  )}
+                />
               </h6>
               {informationPatient?.map((patient, id) => (
                 <>
@@ -265,12 +286,15 @@ const Fiche = () => {
                           </button>
                         </div>
                         <div className="col-sm-2">
-                          <button
+                          <ModalItemFiche
                             className="f-right"
                             style={{ float: "right" }}
-                          >
-                            <FontAwesomeIcon icon={faPlusCircle} />
-                          </button>
+                            props={informationTemplateBlock?.filter(
+                              (e) =>
+                                e.elements?.parentSugg?.pathString ===
+                                patient?.sugg?.parentSugg?.pathString
+                            )}
+                          />
                         </div>
                       </div>
                     )}

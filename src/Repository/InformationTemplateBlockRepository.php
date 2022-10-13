@@ -39,6 +39,8 @@ class InformationTemplateBlockRepository extends ServiceEntityRepository
         }
     }
 
+
+
     public function findElementBlock()
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
@@ -58,6 +60,8 @@ class InformationTemplateBlockRepository extends ServiceEntityRepository
                 'WITH',
                 'itb.sugb = s.parentSugg'
             )
+
+            ->setParameter('val', 'patient')
 
             // ->setMaxResults(1)
             ->orderBy('itb.block_order', 'ASC');

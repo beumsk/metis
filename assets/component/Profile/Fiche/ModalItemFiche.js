@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -9,12 +9,17 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import Form from "react-bootstrap/Form";
 
-function ModalItemFiche() {
+function ModalItemFiche(props) {
   const [show, setShow] = useState(false);
+
+  const [elementsOpt, setElementsOpt] = useState(null);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-
+  useEffect(() => {
+    setElementsOpt(props.props);
+  });
+  console.log(elementsOpt);
   return (
     <>
       <Button onClick={handleShow}>
@@ -30,7 +35,11 @@ function ModalItemFiche() {
           <>
             <Form.Label htmlFor="inputValue">Valeur</Form.Label>
             <Form.Select size="lg">
-              <option>Valeur</option>
+              {elementsOpt?.map((el, id) => (
+                <>
+                  <option>{el.elements.value}</option>
+                </>
+              ))}
             </Form.Select>
             <Form.Label htmlFor="inputValue">Valeur Spécifique</Form.Label>
             <Form.Control
