@@ -39,28 +39,56 @@ class InformationTemplateBlockRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return InformationTemplateBlock[] Returns an array of InformationTemplateBlock objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('i')
-//            ->andWhere('i.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('i.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    public function findElementBlock()
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
 
-//    public function findOneBySomeField($value): ?InformationTemplateBlock
-//    {
-//        return $this->createQueryBuilder('i')
-//            ->andWhere('i.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+        $stringPath = '/patient/fiche/information-generale';
+
+        // $id = $patient["id"];
+
+
+
+        $qb->select('itb, s')
+            ->from('App:InformationTemplateBlock', 'itb')
+            // ->andWhere('itb.sugb = :val')
+            ->innerJoin(
+                'App:Suggestions',
+                's',
+                'WITH',
+                'itb.sugb = s.parentSugg'
+            )
+
+            // ->setMaxResults(1)
+            ->orderBy('itb.block_order', 'ASC');
+
+        $query = $qb->getQuery();
+
+        return $query->getResult();
+    }
+
+    //    /**
+    //     * @return InformationTemplateBlock[] Returns an array of InformationTemplateBlock objects
+    //     */
+    //    public function findByExampleField($value): array
+    //    {
+    //        return $this->createQueryBuilder('i')
+    //            ->andWhere('i.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->orderBy('i.id', 'ASC')
+    //            ->setMaxResults(10)
+    //            ->getQuery()
+    //            ->getResult()
+    //        ;
+    //    }
+
+    //    public function findOneBySomeField($value): ?InformationTemplateBlock
+    //    {
+    //        return $this->createQueryBuilder('i')
+    //            ->andWhere('i.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->getQuery()
+    //            ->getOneOrNullResult()
+    //        ;
+    //    }
 }

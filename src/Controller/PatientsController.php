@@ -121,6 +121,8 @@ class PatientsController extends AbstractController
 
         $val = $request->request->get('id');
 
+        // dd($val);
+
         $patient = $doctrine->getRepository(Patients::class)->find($val);
         $patientInfo = $doctrine->getRepository(PatientsInformation::class)->findBy(["pati" => $patient->getId()]);
         // $patientInfoAndElement = $doctrine->getRepository(PatientsInformation::class)->findInformationByBlockPatientsWithElements($patient->getId());

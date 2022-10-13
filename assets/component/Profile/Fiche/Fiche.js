@@ -24,6 +24,8 @@ const Fiche = () => {
   formData.append("id", id.toString());
 
   const [informationPatient, setInformation] = useState(null);
+  const [informationTemplateBlock, setInformationTemplateBlock] =
+    useState(null);
 
   useEffect(() => {
     axios({
@@ -39,8 +41,22 @@ const Fiche = () => {
         setInformation(response.data);
       })
       .catch(function (response) {});
-  }, [idPatient]);
 
+    axios({
+      method: "get",
+      url: "/information/template/element",
+      data: formData,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    })
+      .then(function (response) {
+        setInformationTemplateBlock(response.data);
+      })
+      .catch(function (response) {});
+  }, [idPatient]);
+  console.log("infos", informationTemplateBlock);
   return (
     <section>
       <Accordion defaultActiveKey="0" flush={true} className="accordion-fiche">
