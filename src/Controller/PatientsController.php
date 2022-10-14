@@ -4,9 +4,11 @@ namespace App\Controller;
 
 use App\Entity\FollowupGoals;
 use App\Entity\FollowupReports;
+use App\Entity\InformationTemplateElement;
 use App\Entity\Medias;
 use App\Entity\Patients;
 use App\Entity\PatientsInformation;
+
 use App\Entity\PatientsInformationTemplateBlock;
 use App\Entity\PatientsInformationTemplateElement;
 use App\Entity\Suggestions;
@@ -112,21 +114,45 @@ class PatientsController extends AbstractController
     }
 
     #[Route('/api/patientsInformationByPatients', name: 'app_patientsInformationByPatients')]
-    public function getPatientsInformationByPatients(ManagerRegistry $doctrine, Request $request, SerializerInterface $serializer)
+    public function getPatientsInformationByPatients(ManagerRegistry $doctrine, Request $request,  SerializerInterface $serializer)
     {
-
-        $serializer = new Serializer([new ObjectNormalizer()], [new XmlEncoder(), new JsonEncoder()]);
         $request = Request::createFromGlobals();
 
 
         $val = $request->request->get('id');
 
-        // dd($val);
+        $templateElement = $doctrine->getRepository(InformationTemplateElement::class)->findElement();
+
 
         $patient = $doctrine->getRepository(Patients::class)->find($val);
         $patientInfo = $doctrine->getRepository(PatientsInformation::class)->findBy(["pati" => $patient->getId()]);
-        // $patientInfoAndElement = $doctrine->getRepository(PatientsInformation::class)->findInformationByBlockPatientsWithElements($patient->getId());
-        return $this->json($patientInfo);
+        $test = [];
+        foreach ($templateElement as $key) {
+            $te = $key->getId();
+            foreach ($patientInfo as $pati) {
+                if ($pati->getItel()->getId() === $key->getId()) {
+                    $test[] = $pati;
+                    // dd($pati);
+                    $key->setPatientInformation($pati);
+                }
+            }
+        }
+
+        // dd($templateElement[0]);
+        // dd(array($test));
+        $encoders = [new JsonEncoder()]; // If no need for XmlEncoder
+        $normalizers = [new ObjectNormalizer()];
+        $serializer = new Serializer($normalizers, $encoders);
+
+        // Serialize your object in Json
+        $jsonObject = $serializer->serialize($templateElement, 'json', [
+            'circular_reference_handler' => function ($object) {
+                return $object->getId();
+            }
+        ]);
+
+        // For instance, return a Response with encoded Json
+        return new Response($jsonObject, 200, ['Content-Type' => 'application/json']);
     }
 
     #[Route('/api/patientsInformationStatus', name: 'app_patientsInformationStatus')]

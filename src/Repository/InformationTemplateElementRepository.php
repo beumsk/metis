@@ -40,7 +40,7 @@ class InformationTemplateElementRepository extends ServiceEntityRepository
     }
 
 
-    public function findElement($pathString)
+    public function findElement()
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
 
@@ -50,7 +50,7 @@ class InformationTemplateElementRepository extends ServiceEntityRepository
 
 
 
-        $qb->select('itbk AS block, sugge AS elements, sugges AS parentBlock')
+        $qb->select('ite')
             ->from('App:InformationTemplateElement', 'ite')
 
             ->innerJoin(
@@ -59,39 +59,14 @@ class InformationTemplateElementRepository extends ServiceEntityRepository
                 'WITH',
                 'ite.itbk = itbk.id'
             )
-            ->innerJoin(
-                'App:Suggestions',
-                's',
-                'WITH',
-                'itbk.sugb = s.parentSugg'
-            )
-            ->innerJoin(
-                'App:Suggestions',
-                'sugg',
-                'WITH',
-                's.parentSugg = sugg.id'
-            )
-
-            ->innerJoin(
-                'App:Suggestions',
-                'sugge',
-                'WITH',
-                'ite.suge = sugge.parentSugg'
-            )
-
-            ->innerJoin(
-                'App:Suggestions',
-                'sugges',
-                'WITH',
-                'sugge.parentSugg = sugges.id'
-            )
 
 
 
 
-            ->andWhere('itbk.block_type = :type AND sugg.path_string = :val')
+
+            ->andWhere('itbk.block_type = :type')
             // ->setMaxResults(1)
-            ->setParameters(['type' => 'patient', 'val' => $pathString])
+            ->setParameters(['type' => 'patient'])
 
             ->orderBy('itbk.block_order', 'ASC');
 

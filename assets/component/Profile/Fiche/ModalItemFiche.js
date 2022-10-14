@@ -42,7 +42,7 @@ function ModalItemFiche(props) {
       .catch(function (response) {});
   }, [idPatient]);
 
-  // console.log(infos);
+  console.log(props.link);
 
   return (
     <>

@@ -13,8 +13,6 @@ import {
   faEdit,
 } from "@fortawesome/free-solid-svg-icons";
 import ModalItemFiche from "./ModalItemFiche";
-import StatutDuSuiviBlock from "./Statut-du-suivi-block";
-import InformationGeneraleBlock from "./Informations-Generale-block";
 const Fiche = () => {
   let id = useParams().id;
   let backgroundImage =
@@ -30,76 +28,961 @@ const Fiche = () => {
     useState(null);
 
   useEffect(() => {
-    // axios({
-    //   method: "post",
-    //   url: "/findElAndBlckAndValByPatient",
-    //   data: formData,
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //     Authorization: `Bearer ${auth.auth.accessToken}`,
-    //   },
-    // })
-    //   .then(function (response) {
-    //     setInformation(response.data);
-    //   })
-    //   .catch(function (response) {});
-    // axios({
-    //   method: "get",
-    //   url: "/information/template/element",
-    //   data: formData,
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //     Authorization: `Bearer ${auth.auth.accessToken}`,
-    //   },
-    // })
-    //   .then(function (response) {
-    //     setInformationTemplateBlock(response.data);
-    //   })
-    //   .catch(function (response) {});
+    axios({
+      method: "post",
+      url: "/api/patientsInformationByPatients",
+      data: formData,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    })
+      .then(function (response) {
+        setInformation(response.data);
+      })
+      .catch(function (response) {});
+
+    axios({
+      method: "get",
+      url: "/information/template/element",
+      data: formData,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    })
+      .then(function (response) {
+        setInformationTemplateBlock(response.data);
+      })
+      .catch(function (response) {});
   }, [idPatient]);
+  console.log("infos", informationTemplateBlock);
   return (
     <section>
       <Accordion defaultActiveKey="0" flush={true} className="accordion-fiche">
         <Accordion.Item eventKey="0">
           <Accordion.Header>Statut de suivi</Accordion.Header>
           <Accordion.Body>
-            <StatutDuSuiviBlock
-              nameblock={"Statut de suivi"}
-              block={"/patient/fiche/statut-du-suivi"}
-            ></StatutDuSuiviBlock>
-            <StatutDuSuiviBlock
-              nameblock={"Equipes"}
-              block={"/patient/suivi/equipes"}
-            ></StatutDuSuiviBlock>
-            <StatutDuSuiviBlock
-              nameblock={"Programme"}
-              block={"/patient/suivi/programme"}
-            ></StatutDuSuiviBlock>
-            <StatutDuSuiviBlock
-              nameblock={"Antenne"}
-              block={"/patient/suivi/antenne"}
-            ></StatutDuSuiviBlock>
+            <div>
+              <h6>
+                Statut de suivi
+                <>
+                  <ModalItemFiche link={"/patient/fiche/statut-du-suivi"} />
+                </>
+              </h6>
+              {informationPatient?.map((patient, id) => (
+                <>
+                  {patient &&
+                    patient.itel?.suge?.pathString ===
+                      "/patient/fiche/statut-du-suivi" &&
+                    patient.deletedAt === null && (
+                      <div className="row" key={patient.id}>
+                        <div className="col-sm-4">
+                          <p>{patient.sugg?.value}</p>
+                        </div>
+                        <div className="col-sm-4">
+                          <p>
+                            {new Date(patient.start).toLocaleString("fr-BE", {
+                              dateStyle: "short",
+                            })}
+                            -
+                            {new Date(patient.end).toLocaleString("fr-BE", {
+                              dateStyle: "short",
+                            })}
+                          </p>
+                        </div>
+                        <div className="col-sm-4">
+                          <button>
+                            {/* faDeleteLeft, faEdit  */}
+                            <FontAwesomeIcon icon={faEdit} />
+                          </button>
+                          <button>
+                            <FontAwesomeIcon icon={faCancel} />
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                </>
+              ))}
+            </div>
+
+            <div className="block mt-4">
+              <h6>
+                Equipes
+                <ModalItemFiche link={"/patient/suivi/equipes"} />
+              </h6>
+              {informationPatient?.map((patient, id) => (
+                <>
+                  {patient &&
+                    patient.sugg?.parentSugg.pathString ===
+                      "/patient/suivi/equipes" &&
+                    patient.deletedAt === null && (
+                      <div className="row" key={patient.id}>
+                        <div className="col-sm-4">
+                          <p>{patient.sugg.value}</p>
+                        </div>
+                        <div className="col-sm-4">
+                          <p>
+                            {new Date(patient.start).toLocaleString("fr-BE", {
+                              dateStyle: "short",
+                            })}
+                            -
+                            {new Date(patient.end).toLocaleString("fr-BE", {
+                              dateStyle: "short",
+                            })}
+                          </p>
+                        </div>
+                        <div className="col-sm-4">
+                          <button>
+                            {/* faDeleteLeft, faEdit  */}
+                            <FontAwesomeIcon icon={faEdit} />
+                          </button>
+                          <button>
+                            <FontAwesomeIcon icon={faCancel} />
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                </>
+              ))}
+            </div>
+            <div className="block mt-4">
+              <h6>
+                Programme
+                <ModalItemFiche
+                  props={informationTemplateBlock?.filter(
+                    (e) =>
+                      e.elements?.parentSugg?.pathString ===
+                      "/patient/suivi/programme"
+                  )}
+                />
+              </h6>
+              {informationPatient?.map((patient, id) => (
+                <>
+                  {patient &&
+                    patient.sugg?.parentSugg.pathString ===
+                      "/patient/suivi/programme" &&
+                    patient.deletedAt === null && (
+                      <div className="row" key={patient.id}>
+                        <div className="col-sm-4">
+                          <p>{patient.sugg.value}</p>
+                        </div>
+                        <div className="col-sm-4">
+                          <p>
+                            {new Date(patient.start).toLocaleString("fr-BE", {
+                              dateStyle: "short",
+                            })}
+                            -
+                            {new Date(patient.end).toLocaleString("fr-BE", {
+                              dateStyle: "short",
+                            })}
+                          </p>
+                        </div>
+                        <div className="col-sm-4">
+                          <button>
+                            {/* faDeleteLeft, faEdit  */}
+                            <FontAwesomeIcon icon={faEdit} />
+                          </button>
+                          <button>
+                            <FontAwesomeIcon icon={faCancel} />
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                </>
+              ))}
+            </div>
+            <div className="block mt-4">
+              <h6>
+                Antenne{" "}
+                <ModalItemFiche
+                  props={informationTemplateBlock?.filter(
+                    (e) =>
+                      e.elements?.parentSugg?.pathString ===
+                      "/patient/suivi/antenne"
+                  )}
+                />
+              </h6>
+              {informationPatient?.map((patient, id) => (
+                <>
+                  {patient &&
+                    patient.sugg?.parentSugg.pathString ===
+                      "/patient/suivi/antenne" &&
+                    patient.deletedAt === null && (
+                      <div className="row" key={patient.id}>
+                        <div className="col-sm-4">
+                          <p>{patient.sugg.value}</p>
+                        </div>
+                        <div className="col-sm-4">
+                          <p>
+                            {new Date(patient.start).toLocaleString("fr-BE", {
+                              dateStyle: "short",
+                            })}
+                            -
+                            {new Date(patient.end).toLocaleString("fr-BE", {
+                              dateStyle: "short",
+                            })}
+                          </p>
+                        </div>
+                        <div className="col-sm-4">
+                          <button>
+                            {/* faDeleteLeft, faEdit  */}
+                            <FontAwesomeIcon icon={faEdit} />
+                          </button>
+                          <button>
+                            <FontAwesomeIcon icon={faCancel} />
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                </>
+              ))}
+            </div>
           </Accordion.Body>
         </Accordion.Item>
         <Accordion.Item eventKey="1">
           <Accordion.Header>Information générale</Accordion.Header>
           <Accordion.Body>
-            <InformationGeneraleBlock
-              nameblock={""}
-              block={"/patient/fiche/information-generale"}
-            ></InformationGeneraleBlock>
-            {/* <BlockElementWithValues
-              nameblock={"Equipes"}
-              block={"/patient/suivi/equipes"}
-            ></BlockElementWithValues>
-            <BlockElementWithValues
-              nameblock={"Programme"}
-              block={"/patient/suivi/programme"}
-            ></BlockElementWithValues>
-            <BlockElementWithValues
-              nameblock={"Antenne"}
-              block={"/patient/suivi/antenne"}
-            ></BlockElementWithValues> */}
+            <div className="block">
+              <div className="row">
+                <div className="col-sm-2">
+                  <h6>Genre</h6>
+                </div>
+                {informationPatient?.map((patient, id) => (
+                  <>
+                    {patient &&
+                      patient.sugg?.parentSugg.pathString ===
+                        "/patient/fiche/information-generale/genre" &&
+                      patient.deletedAt === null && (
+                        <>
+                          <div className="col-sm-2">
+                            <p>{patient.sugg.value}</p>
+                          </div>
+                          <div className="col-sm-4">
+                            {patient.commentColumn}
+                          </div>
+                          <div className="col-sm-2">
+                            <button>
+                              {/* faDeleteLeft, faEdit  */}
+                              <FontAwesomeIcon icon={faEdit} />
+                            </button>
+                            <button>
+                              <FontAwesomeIcon icon={faCancel} />
+                            </button>
+                          </div>
+                          <div className="col-sm-2">
+                            <ModalItemFiche
+                              link={informationTemplateBlock?.filter(
+                                (e) =>
+                                  e.elements?.parentSugg?.pathString ===
+                                  patient?.sugg?.parentSugg?.pathString
+                              )}
+                            />
+                          </div>
+                        </>
+                      )}
+                  </>
+                ))}
+              </div>
+              <div className="row">
+                <div className="col-sm-2">
+                  <h6>Nationalité</h6>
+                </div>
+                {informationPatient?.map((patient, id) => (
+                  <>
+                    {patient &&
+                      patient.sugg?.parentSugg.pathString ===
+                        "/patient/fiche/information-generale/nationalite" &&
+                      patient.deletedAt === null && (
+                        <>
+                          <div className="col-sm-2">
+                            <p>{patient.sugg.value}</p>
+                          </div>
+                          <div className="col-sm-4">
+                            {patient.commentColumn}
+                          </div>
+                          <div className="col-sm-2">
+                            <button>
+                              {/* faDeleteLeft, faEdit  */}
+                              <FontAwesomeIcon icon={faEdit} />
+                            </button>
+                            <button>
+                              <FontAwesomeIcon icon={faCancel} />
+                            </button>
+                          </div>
+                          <div className="col-sm-2">
+                            <ModalItemFiche
+                              link={informationTemplateBlock?.filter(
+                                (e) =>
+                                  e.elements?.parentSugg?.pathString ===
+                                  patient?.sugg?.parentSugg?.pathString
+                              )}
+                            />
+                          </div>
+                        </>
+                      )}
+                  </>
+                ))}
+              </div>
+              <div className="row">
+                <div className="col-sm-2">
+                  <h6>Composition familliale</h6>
+                </div>
+                {informationPatient?.map((patient, id) => (
+                  <>
+                    {patient &&
+                      patient.sugg?.parentSugg.pathString ===
+                        "/patient/fiche/information-generale/composition-familliale" &&
+                      patient.deletedAt === null && (
+                        <>
+                          <div className="col-sm-2">
+                            <p>{patient.sugg.value}</p>
+                          </div>
+                          <div className="col-sm-4">
+                            {patient.commentColumn}
+                          </div>
+                          <div className="col-sm-2">
+                            <button>
+                              {/* faDeleteLeft, faEdit  */}
+                              <FontAwesomeIcon icon={faEdit} />
+                            </button>
+                            <button>
+                              <FontAwesomeIcon icon={faCancel} />
+                            </button>
+                          </div>
+                          <div className="col-sm-2">
+                            <ModalItemFiche
+                              link={informationTemplateBlock?.filter(
+                                (e) =>
+                                  e.elements?.parentSugg?.pathString ===
+                                  patient?.sugg?.parentSugg?.pathString
+                              )}
+                            />
+                          </div>
+                        </>
+                      )}
+                  </>
+                ))}
+              </div>
+              <div className="row">
+                <div className="col-sm-2">
+                  <h6>Composition familliale</h6>
+                </div>
+                {informationPatient?.map((patient, id) => (
+                  <>
+                    {patient &&
+                      patient.sugg?.parentSugg.pathString ===
+                        "/patient/fiche/information-generale/composition-familliale" &&
+                      patient.deletedAt === null && (
+                        <>
+                          <div className="col-sm-2">
+                            <p>{patient.sugg.value}</p>
+                          </div>
+                          <div className="col-sm-4">
+                            {patient.commentColumn}
+                          </div>
+                          <div className="col-sm-2">
+                            <button>
+                              {/* faDeleteLeft, faEdit  */}
+                              <FontAwesomeIcon icon={faEdit} />
+                            </button>
+                            <button>
+                              <FontAwesomeIcon icon={faCancel} />
+                            </button>
+                          </div>
+                          <div className="col-sm-2">
+                            <ModalItemFiche
+                              link={informationTemplateBlock?.filter(
+                                (e) =>
+                                  e.elements?.parentSugg?.pathString ===
+                                  patient?.sugg?.parentSugg?.pathString
+                              )}
+                            />
+                          </div>
+                        </>
+                      )}
+                  </>
+                ))}
+              </div>
+              <div className="row">
+                <div className="col-sm-2">
+                  <h6>Composition familliale</h6>
+                </div>
+                {informationPatient?.map((patient, id) => (
+                  <>
+                    {patient &&
+                      patient.sugg?.parentSugg.pathString ===
+                        "/patient/fiche/information-generale/composition-familliale" &&
+                      patient.deletedAt === null && (
+                        <>
+                          <div className="col-sm-2">
+                            <p>{patient.sugg.value}</p>
+                          </div>
+                          <div className="col-sm-4">
+                            {patient.commentColumn}
+                          </div>
+                          <div className="col-sm-2">
+                            <button>
+                              {/* faDeleteLeft, faEdit  */}
+                              <FontAwesomeIcon icon={faEdit} />
+                            </button>
+                            <button>
+                              <FontAwesomeIcon icon={faCancel} />
+                            </button>
+                          </div>
+                          <div className="col-sm-2">
+                            <ModalItemFiche
+                              link={informationTemplateBlock?.filter(
+                                (e) =>
+                                  e.elements?.parentSugg?.pathString ===
+                                  patient?.sugg?.parentSugg?.pathString
+                              )}
+                            />
+                          </div>
+                        </>
+                      )}
+                  </>
+                ))}
+              </div>
+              <div className="row">
+                <div className="col-sm-2">
+                  <h6>Composition familliale</h6>
+                </div>
+                {informationPatient?.map((patient, id) => (
+                  <>
+                    {patient &&
+                      patient.sugg?.parentSugg.pathString ===
+                        "/patient/fiche/information-generale/composition-familliale" &&
+                      patient.deletedAt === null && (
+                        <>
+                          <div className="col-sm-2">
+                            <p>{patient.sugg.value}</p>
+                          </div>
+                          <div className="col-sm-4">
+                            {patient.commentColumn}
+                          </div>
+                          <div className="col-sm-2">
+                            <button>
+                              {/* faDeleteLeft, faEdit  */}
+                              <FontAwesomeIcon icon={faEdit} />
+                            </button>
+                            <button>
+                              <FontAwesomeIcon icon={faCancel} />
+                            </button>
+                          </div>
+                          <div className="col-sm-2">
+                            <ModalItemFiche
+                              link={informationTemplateBlock?.filter(
+                                (e) =>
+                                  e.elements?.parentSugg?.pathString ===
+                                  patient?.sugg?.parentSugg?.pathString
+                              )}
+                            />
+                          </div>
+                        </>
+                      )}
+                  </>
+                ))}
+              </div>
+              <div className="row">
+                <div className="col-sm-2">
+                  <h6>E-mail</h6>
+                </div>
+                {informationPatient?.map((patient, id) => (
+                  <>
+                    {patient &&
+                      patient.sugg?.parentSugg.pathString ===
+                        "/patient/fiche/information-generale/e-mail" &&
+                      patient.deletedAt === null && (
+                        <>
+                          <div className="col-sm-2">
+                            <p>{patient.sugg.value}</p>
+                          </div>
+                          <div className="col-sm-4">
+                            {patient.commentColumn}
+                          </div>
+                          <div className="col-sm-2">
+                            <button>
+                              {/* faDeleteLeft, faEdit  */}
+                              <FontAwesomeIcon icon={faEdit} />
+                            </button>
+                            <button>
+                              <FontAwesomeIcon icon={faCancel} />
+                            </button>
+                          </div>
+                          <div className="col-sm-2">
+                            <ModalItemFiche
+                              link={informationTemplateBlock?.filter(
+                                (e) =>
+                                  e.elements?.parentSugg?.pathString ===
+                                  patient?.sugg?.parentSugg?.pathString
+                              )}
+                            />
+                          </div>
+                        </>
+                      )}
+                  </>
+                ))}
+              </div>
+            </div>
+          </Accordion.Body>
+        </Accordion.Item>
+        <Accordion.Item eventKey="2">
+          <Accordion.Header>Description</Accordion.Header>
+          <Accordion.Body>
+            <div className="block">
+              {informationPatient?.map((patient, id) => (
+                <>
+                  {patient &&
+                    patient.itel?.itbk?.sugb?.pathString ===
+                      "/patient/fiche/description" &&
+                    patient.deletedAt === null && (
+                      <div key={patient.id} className="row">
+                        <div className="col-sm-4">
+                          <h6>{patient.value}</h6>
+                        </div>
+                        <div className="col-sm-4">
+                          <p>{patient.comment}</p>
+                        </div>
+                        <div className="col-sm-4">
+                          <button style={{ float: "right" }}>
+                            <FontAwesomeIcon icon={faPlusCircle} />
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                </>
+              ))}
+            </div>
+          </Accordion.Body>
+        </Accordion.Item>
+        <Accordion.Item eventKey="3">
+          <Accordion.Header>Ressources personnelles</Accordion.Header>
+          <Accordion.Body>
+            <div>
+              <h6>
+                Langues
+                <button>
+                  {" "}
+                  <FontAwesomeIcon icon={faPlusCircle} />
+                </button>
+              </h6>
+              {informationPatient?.map((patient, id) => (
+                <>
+                  {patient &&
+                    patient &&
+                    patient &&
+                    patient.sugg?.parentSugg?.pathString ===
+                      "/patient/fiche/ressources-personnelles/langues" && (
+                      <div key={patient.id} className="row">
+                        {/* <div className="col-sm-4">
+                          {/* <p>{patient.valeurParent}</p> 
+                        </div> */}
+                        <div className="col-sm-4">
+                          <p>{patient.sugg?.value}</p>
+                        </div>
+                        <div className="col-sm-4">
+                          <p>{patient.comment}</p>
+                        </div>
+                      </div>
+                    )}
+                </>
+              ))}
+            </div>
+            <div>
+              <h6>
+                Talents et centres d'intérêt
+                <button>
+                  {" "}
+                  <FontAwesomeIcon icon={faPlusCircle} />
+                </button>
+              </h6>
+              {informationPatient?.map((patient, id) => (
+                <>
+                  {patient &&
+                    patient.sugg?.parentSugg?.pathString ===
+                      "/patient/fiche/ressources-personnelles/talents-et-centres-d-interet" && (
+                      <div key={patient.id} className="row">
+                        {/* <div className="col-sm-4">
+                          {/* <p>{patient.valeurParent}</p> 
+                        </div> */}
+                        <div className="col-sm-4">
+                          <p>{patient.sugg.value}</p>
+                        </div>
+                        <div className="col-sm-4">
+                          <p>{patient.comment}</p>
+                        </div>
+                      </div>
+                    )}
+                </>
+              ))}
+            </div>
+            <div>
+              <h6>
+                Rêves
+                <button>
+                  <FontAwesomeIcon icon={faPlusCircle} />
+                </button>
+              </h6>
+              {informationPatient?.map((patient, id) => (
+                <>
+                  {patient &&
+                    patient.sugg?.parentSugg?.pathString ===
+                      "/patient/fiche/ressources-personnelles/reves" && (
+                      <div key={patient.id} className="row">
+                        {/* <div className="col-sm-4">
+                          {/* <p>{patient.valeurParent}</p> 
+                        </div> */}
+                        <div className="col-sm-4">
+                          <p>{patient.sugg.value}</p>
+                        </div>
+                        <div className="col-sm-4">
+                          <p>{patient.comment}</p>
+                        </div>
+                      </div>
+                    )}
+                </>
+              ))}
+            </div>
+            <div>
+              <h6>
+                Goûts culinaires
+                <button>
+                  <FontAwesomeIcon icon={faPlusCircle} />
+                </button>
+              </h6>
+              {informationPatient?.map((patient, id) => (
+                <>
+                  {patient &&
+                    patient.sugg?.parentSugg?.pathString ===
+                      "/patient/fiche/ressources-personnelles/gouts-culinaires" && (
+                      <div key={patient.id} className="row">
+                        {/* <div className="col-sm-4">
+                          {/* <p>{patient.valeurParent}</p> 
+                        </div> */}
+                        <div className="col-sm-4">
+                          <p>{patient.sugg.value}</p>
+                        </div>
+                        <div className="col-sm-4">
+                          <p>{patient.comment}</p>
+                        </div>
+                      </div>
+                    )}
+                </>
+              ))}
+            </div>
+          </Accordion.Body>
+        </Accordion.Item>
+        <Accordion.Item eventKey="4">
+          <Accordion.Header>Ressources financières</Accordion.Header>
+          <Accordion.Body>
+            {informationPatient?.map((patient, id) => (
+              <>
+                <div className="block">
+                  {patient &&
+                    patient?.sugg?.parentSugg?.parentSugg?.pathString ===
+                      "/patient/fiche/ressources-financieres" &&
+                    patient?.deletedAt === null && (
+                      <div key={patient.id} className="row">
+                        <div className="col-sm-4">
+                          <h6>{patient.sugg.parentSugg.value}</h6>
+                        </div>
+                        <div className="col-sm-4">
+                          <p>{patient.sugg.value}</p>
+                        </div>
+                      </div>
+                    )}
+                </div>
+              </>
+            ))}
+          </Accordion.Body>
+        </Accordion.Item>
+        <Accordion.Item eventKey="5">
+          <Accordion.Header>Accès aux soins</Accordion.Header>
+          <Accordion.Body>
+            {informationPatient?.map((patient, id) => (
+              <>
+                <div className="block">
+                  {patient &&
+                    patient?.sugg?.parentSugg?.parentSugg?.pathString ===
+                      "/patient/fiche/acces-aux-soins" &&
+                    patient?.deletedAt === null && (
+                      <div key={patient.id} className="row">
+                        <div className="col-sm-4">
+                          <h6>{patient.sugg.parentSugg.value}</h6>
+                        </div>
+                        <div className="col-sm-4">
+                          <p>{patient.sugg.value}</p>
+                        </div>
+                      </div>
+                    )}
+                </div>
+              </>
+            ))}
+          </Accordion.Body>
+        </Accordion.Item>
+        <Accordion.Item eventKey="6">
+          <Accordion.Header>Santé physique</Accordion.Header>
+          <Accordion.Body>
+            <div className="mt-4">
+              <h6>
+                Pathologies physiques chroniques
+                <button>
+                  <FontAwesomeIcon icon={faPlusCircle} />
+                </button>
+              </h6>
+              {informationPatient?.map((patient, id) => (
+                <>
+                  {patient &&
+                    patient.sugg?.parentSugg?.pathString ===
+                      "/patient/medical/pathologies/pathologies-physiques-chroniques" && (
+                      <div key={patient.id} className="row">
+                        {/* <div className="col-sm-4">
+                          {/* <p>{patient.valeurParent}</p> 
+                        </div> */}
+                        <div className="col-sm-4">
+                          <p>{patient.sugg.value}</p>
+                        </div>
+                        <div className="col-sm-4">
+                          <p>{patient.comment}</p>
+                        </div>
+                      </div>
+                    )}
+                </>
+              ))}
+            </div>
+
+            <div className="mt-4">
+              <h6>
+                Episodes de maladie
+                {/* /patient/medical/episodes-de-maladie */}
+                <button>
+                  <FontAwesomeIcon icon={faPlusCircle} />
+                </button>
+              </h6>
+              {informationPatient?.map((patient, id) => (
+                <>
+                  {patient &&
+                    patient.sugg?.parentSugg?.pathString ===
+                      "/patient/medical/episodes-de-maladie" && (
+                      <div key={patient.id} className="row">
+                        {/* <div className="col-sm-4">
+                          {/* <p>{patient.valeurParent}</p> 
+                        </div> */}
+                        <div className="col-sm-4">
+                          <p>{patient.sugg.value}</p>
+                        </div>
+                        <div className="col-sm-4">
+                          <p>{patient.comment}</p>
+                        </div>
+                      </div>
+                    )}
+                </>
+              ))}
+            </div>
+
+            <div className="mt-4">
+              <h6>
+                Allergies
+                <button>
+                  <FontAwesomeIcon icon={faPlusCircle} />
+                </button>
+              </h6>
+              {informationPatient?.map((patient, id) => (
+                <>
+                  {patient &&
+                    patient &&
+                    patient &&
+                    patient.sugg?.parentSugg?.pathString ===
+                      "/patient/medical/allergies" && (
+                      <div key={patient.id} className="row">
+                        {/* <div className="col-sm-4">
+                          {/* <p>{patient.valeurParent}</p> 
+                        </div> */}
+                        <div className="col-sm-4">
+                          <p>{patient.sugg.value}</p>
+                        </div>
+                        <div className="col-sm-4">
+                          <p>{patient.comment}</p>
+                        </div>
+                      </div>
+                    )}
+                </>
+              ))}
+            </div>
+
+            <div className="mt-4">
+              <h6>
+                Paramètres
+                <button>
+                  <FontAwesomeIcon icon={faPlusCircle} />
+                </button>
+              </h6>
+              {informationPatient?.map((patient, id) => (
+                <>
+                  {patient &&
+                    patient.sugg?.parentSugg?.pathString ===
+                      "/patient/medical/parametres" && (
+                      <div key={patient.id} className="row">
+                        {/* <div className="col-sm-4">
+                        <p>{patient.valeurParent}</p>
+                      </div> */}
+                        <div className="col-sm-4">
+                          <p>{patient.parent}</p>
+                        </div>
+                        <div className="col-sm-4">
+                          <p>{patient.commentColumn}</p>
+                        </div>
+                      </div>
+                    )}
+                </>
+              ))}
+            </div>
+          </Accordion.Body>
+        </Accordion.Item>
+        <Accordion.Item eventKey="7">
+          <Accordion.Header>Pathologie mentale</Accordion.Header>
+          <Accordion.Body>
+            <div>
+              <h6>
+                Supposée
+                <button>
+                  <FontAwesomeIcon icon={faPlusCircle} />
+                </button>
+              </h6>
+              {informationPatient?.map((patient, id) => (
+                <>
+                  {patient &&
+                    patient?.itel?.suge?.pathString &&
+                    patient?.itel?.suge?.pathString ===
+                      "/patient/fiche/pathologie-mentale/supposee" &&
+                    patient?.deletedAt === null && (
+                      <div key={patient.id} className="row">
+                        <div className="col-sm-4">
+                          <p>{patient.valeurParent}</p>
+                        </div>
+                        <div className="col-sm-4">
+                          <p>{patient.parent}</p>
+                        </div>
+                      </div>
+                    )}
+                </>
+              ))}
+            </div>
+            <div>
+              <h6>
+                Declarée
+                <button>
+                  <FontAwesomeIcon icon={faPlusCircle} />
+                </button>
+              </h6>
+              {informationPatient?.map((patient, id) => (
+                <>
+                  {patient &&
+                    patient?.itel?.suge?.pathString &&
+                    patient?.itel?.suge?.pathString ===
+                      "/patient/fiche/pathologie-mentale/declaree" &&
+                    patient?.deletedAt === null && (
+                      <div key={patient.id} className="row">
+                        <div className="col-sm-4">
+                          <p>{patient.valeurParent}</p>
+                        </div>
+                        <div className="col-sm-4">
+                          <p>{patient.parent}</p>
+                        </div>
+                      </div>
+                    )}
+                </>
+              ))}
+            </div>
+          </Accordion.Body>
+        </Accordion.Item>
+        <Accordion.Item eventKey="8">
+          <Accordion.Header>Assuétude</Accordion.Header>
+          <Accordion.Body>
+            <h6>
+              Supposée
+              <button>
+                <FontAwesomeIcon icon={faPlusCircle} />
+              </button>
+            </h6>
+            {informationPatient?.map((patient, id) => (
+              <>
+                {patient &&
+                  patient?.itel?.suge?.pathString &&
+                  patient?.itel?.suge?.pathString ===
+                    "/patient/fiche/assuetude/supposee" &&
+                  patient?.deletedAt === null && (
+                    <div key={patient.id} className="row mt-4">
+                      {/* <div className="col-sm-4"></div> */}
+                      {/* <p>{patient.parent}</p> */}
+                      <div className="col-sm-2">
+                        <h6>{patient?.sugg.value}</h6>
+                      </div>
+                      <div className="col-sm-6">
+                        <p>{patient?.comment}</p>
+                      </div>
+                      <div className="col-sm-4">
+                        {/* <p>
+                          {" "}
+                          <FontAwesomeIcon icon={faPlusCircle} />
+                        </p> */}
+                      </div>
+                    </div>
+                  )}
+              </>
+            ))}
+            <h6>
+              Déclarée
+              <button>
+                <FontAwesomeIcon icon={faPlusCircle} />
+              </button>
+            </h6>
+            {informationPatient?.map((patient, id) => (
+              <>
+                {patient &&
+                  patient?.itel?.suge?.pathString &&
+                  patient?.itel?.suge?.pathString ===
+                    "/patient/fiche/assuetude/declaree" &&
+                  patient?.deletedAt === null && (
+                    <div key={patient.id} className="row mt-4">
+                      <div className="col-sm-2">
+                        <h6>{patient?.sugg.value}</h6>
+                      </div>
+                      <div className="col-sm-6">
+                        <p>{patient?.comment}</p>
+                      </div>
+                      <div className="col-sm-4"></div>
+                    </div>
+                  )}
+              </>
+            ))}
+          </Accordion.Body>
+        </Accordion.Item>
+        <Accordion.Item eventKey="9">
+          <Accordion.Header>Traitements</Accordion.Header>
+          <Accordion.Body>
+            <div className="block">
+              {informationPatient?.map((patient, id) => (
+                <>
+                  <div className="block">
+                    {patient &&
+                      patient?.sugg?.parentSugg?.pathString ===
+                        "/patient/fiche/traitements" &&
+                      patient?.deletedAt === null && (
+                        <div key={patient.id} className="row">
+                          <div className="col-sm-4">
+                            <h6>{patient.sugg.value}</h6>
+                          </div>
+                          <div className="col-sm-4">
+                            <p>{patient.comment}</p>
+                          </div>
+                        </div>
+                      )}
+                  </div>
+                </>
+              ))}
+            </div>
           </Accordion.Body>
         </Accordion.Item>
       </Accordion>

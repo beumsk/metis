@@ -3,11 +3,13 @@
 namespace App\Entity;
 
 use App\Repository\InformationTemplateElementRepository;
+use App\Utils\InfosPatientTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: InformationTemplateElementRepository::class)]
 class InformationTemplateElement
 {
+    use InfosPatientTrait;
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]

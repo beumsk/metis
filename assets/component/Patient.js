@@ -130,7 +130,7 @@ const Patient = () => {
                 <Tab eventKey="fiche" title="Fiche">
                   <Fiche />
                 </Tab>
-                {/* <Tab eventKey="suivi" title="Profile">
+                <Tab eventKey="suivi" title="Profile">
                   <Profile />
                 </Tab>
                 <Tab eventKey="indicateurs" title="Indicateurs">
@@ -144,7 +144,7 @@ const Patient = () => {
                 </Tab>
                 <Tab eventKey="lieux" title="Lieux">
                   <Places />
-                </Tab> */}
+                </Tab>
               </Tabs>
             </div>
           </div>
