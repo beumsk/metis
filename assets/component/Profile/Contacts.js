@@ -23,12 +23,11 @@ const Contacts = () => {
       },
     })
       .then(function (response) {
-        console.log(response);
         setContacts(response);
       })
       .catch(function (response) {});
   }, [idPatient]);
-  console.log(listContacts);
+
   return (
     <>
       <h5>Contacts</h5>

@@ -13,7 +13,8 @@ import {
   faEdit,
 } from "@fortawesome/free-solid-svg-icons";
 import ModalItemFiche from "./ModalItemFiche";
-import BlockElementWithValues from "./BlockElementWithValues";
+import StatutDuSuiviBlock from "./Statut-du-suivi-block";
+import InformationGeneraleBlock from "./Informations-Generale-block";
 const Fiche = () => {
   let id = useParams().id;
   let backgroundImage =
@@ -29,20 +30,19 @@ const Fiche = () => {
     useState(null);
 
   useEffect(() => {
-    axios({
-      method: "post",
-      url: "/findElAndBlckAndValByPatient",
-      data: formData,
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${auth.auth.accessToken}`,
-      },
-    })
-      .then(function (response) {
-        setInformation(response.data);
-      })
-      .catch(function (response) {});
-
+    // axios({
+    //   method: "post",
+    //   url: "/findElAndBlckAndValByPatient",
+    //   data: formData,
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //     Authorization: `Bearer ${auth.auth.accessToken}`,
+    //   },
+    // })
+    //   .then(function (response) {
+    //     setInformation(response.data);
+    //   })
+    //   .catch(function (response) {});
     // axios({
     //   method: "get",
     //   url: "/information/template/element",
@@ -57,15 +57,50 @@ const Fiche = () => {
     //   })
     //   .catch(function (response) {});
   }, [idPatient]);
-  console.log("infos", informationPatient);
   return (
     <section>
       <Accordion defaultActiveKey="0" flush={true} className="accordion-fiche">
         <Accordion.Item eventKey="0">
           <Accordion.Header>Statut de suivi</Accordion.Header>
-          <BlockElementWithValues
-            props={"/patient/fiche/statut-du-suivi"}
-          ></BlockElementWithValues>
+          <Accordion.Body>
+            <StatutDuSuiviBlock
+              nameblock={"Statut de suivi"}
+              block={"/patient/fiche/statut-du-suivi"}
+            ></StatutDuSuiviBlock>
+            <StatutDuSuiviBlock
+              nameblock={"Equipes"}
+              block={"/patient/suivi/equipes"}
+            ></StatutDuSuiviBlock>
+            <StatutDuSuiviBlock
+              nameblock={"Programme"}
+              block={"/patient/suivi/programme"}
+            ></StatutDuSuiviBlock>
+            <StatutDuSuiviBlock
+              nameblock={"Antenne"}
+              block={"/patient/suivi/antenne"}
+            ></StatutDuSuiviBlock>
+          </Accordion.Body>
+        </Accordion.Item>
+        <Accordion.Item eventKey="1">
+          <Accordion.Header>Information générale</Accordion.Header>
+          <Accordion.Body>
+            <InformationGeneraleBlock
+              nameblock={""}
+              block={"/patient/fiche/information-generale"}
+            ></InformationGeneraleBlock>
+            {/* <BlockElementWithValues
+              nameblock={"Equipes"}
+              block={"/patient/suivi/equipes"}
+            ></BlockElementWithValues>
+            <BlockElementWithValues
+              nameblock={"Programme"}
+              block={"/patient/suivi/programme"}
+            ></BlockElementWithValues>
+            <BlockElementWithValues
+              nameblock={"Antenne"}
+              block={"/patient/suivi/antenne"}
+            ></BlockElementWithValues> */}
+          </Accordion.Body>
         </Accordion.Item>
       </Accordion>
     </section>

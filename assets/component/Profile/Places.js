@@ -24,12 +24,11 @@ const Places = () => {
       },
     })
       .then(function (response) {
-        console.log(response);
         setPlaces(response);
       })
       .catch(function (response) {});
   }, [idPatient]);
-  console.log(listPlaces);
+
   return (
     <>
       {listPlaces && listPlaces.data.length > 0 && (

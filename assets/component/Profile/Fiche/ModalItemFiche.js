@@ -1,25 +1,49 @@
 import React, { useState, useEffect } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
+import useAuth from "../../../hooks/useAuth";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faPlusCircle,
   faCancel,
   faEdit,
 } from "@fortawesome/free-solid-svg-icons";
+import { useParams } from "react-router-dom";
+import axios from "axios";
 import Form from "react-bootstrap/Form";
 
 function ModalItemFiche(props) {
   const [show, setShow] = useState(false);
-
+  const [auth, setAuth] = useState(useAuth());
+  let id = useParams().id;
+  var formData = new FormData();
+  formData.append("id", id.toString());
+  formData.append("pathString", props.link);
+  const [infos, setInfos] = useState(null);
   const [elementsOpt, setElementsOpt] = useState(null);
-
+  const [idPatient, setIdPatient] = useState(id);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   useEffect(() => {
-    setElementsOpt(props.props);
-  });
-  console.log(elementsOpt);
+    setElementsOpt(props.infos);
+
+    axios({
+      method: "post",
+      url: "/api/findElAndBlckAndValByPatient",
+      data: formData,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    })
+      .then(function (response) {
+        setInfos(response);
+      })
+      .catch(function (response) {});
+  }, [idPatient]);
+
+  // console.log(infos);
+
   return (
     <>
       <Button onClick={handleShow}>
@@ -35,9 +59,9 @@ function ModalItemFiche(props) {
           <>
             <Form.Label htmlFor="inputValue">Valeur</Form.Label>
             <Form.Select size="lg">
-              {elementsOpt?.map((el, id) => (
+              {infos?.data?.map((el, id) => (
                 <>
-                  <option>{el.elements.value}</option>
+                  <option>{el?.value}</option>
                 </>
               ))}
             </Form.Select>

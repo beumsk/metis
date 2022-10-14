@@ -24,12 +24,11 @@ const Medias = () => {
       },
     })
       .then(function (response) {
-        console.log(response);
         setMedias(response);
       })
       .catch(function (response) {});
   }, [idPatient]);
-  console.log(listMedias);
+
   return (
     <>
       <Basic />
