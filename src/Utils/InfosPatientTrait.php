@@ -6,6 +6,7 @@ use DateTime;
 use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\PatientsInformation;
+use App\Entity\Suggestions;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -18,11 +19,41 @@ trait InfosPatientTrait
     protected $patientsInformation;
 
     /**
+     * @var suggestionByBlock|null
+     */
+    protected $suggestionByBlock;
+
+    /**
      * patientsInformation constructor.
      */
     public function __construct()
     {
         $this->setPatientInformation(new PatientsInformation());
+        $this->setSuggestionForBlock(new Suggestions());
+    }
+
+    /**
+     * @return Collection|Suggestions[]
+     */
+    public function getSuggestionsByBlock(): Collection
+    {
+        if (is_null($this->suggestionByBlock)) {
+            $this->suggestionByBlock = new ArrayCollection();
+        }
+        return $this->suggestionByBlock;
+    }
+
+    /**
+     * @return $this
+     */
+    public function setSuggestionsByBlock(array $suggestionByBlock): self
+    {
+        if (is_null($this->suggestionByBlock)) {
+            $this->suggestionByBlock = new ArrayCollection();
+        }
+        $this->suggestionByBlock[] = $suggestionByBlock;
+
+        return $this;
     }
 
     /**

@@ -122,7 +122,7 @@ class PatientsController extends AbstractController
         $val = $request->request->get('id');
 
         $templateElement = $doctrine->getRepository(InformationTemplateElement::class)->findElement();
-
+        $suggestionElement = $doctrine->getRepository(Suggestions::class)->findAll();
 
         $patient = $doctrine->getRepository(Patients::class)->find($val);
         $patientInfo = $doctrine->getRepository(PatientsInformation::class)->findBy(["pati" => $patient->getId()]);
@@ -138,6 +138,40 @@ class PatientsController extends AbstractController
             }
         }
 
+
+        foreach ($templateElement as $key) {
+            $te = $key->getId();
+
+
+            foreach ($suggestionElement as $sugg) {
+
+                $test[] = $pati;
+                if ($sugg->getParentSugg() !== null && $sugg->getId() === $key->getSuge()->getId()) {
+                    $s = $doctrine->getRepository(Suggestions::class)->findBy(["parentSugg" => $sugg->getId()]);
+
+                    // dd($s);
+                    $key->setSuggestionsByBlock([...$s]);
+                }
+            }
+        }
+
+        // foreach ($templateElement as $key) {
+        //     $te = $key->getId();
+
+
+        //     foreach ($suggestionElement as $sugg) {
+
+        //         $test[] = $pati;
+        //         if ($sugg->getParentSugg() !== null && $sugg->getParentSugg()->getId() === $key->getItbk()->getSugb()->getId()) {
+
+        //             $test[] = $pati;
+        //             // dd($sugg);
+        //             $key->setSuggestionsByBlock($sugg);
+        //         }
+        //     }
+        // }
+
+
         // dd($templateElement[0]);
         // dd(array($test));
         $encoders = [new JsonEncoder()]; // If no need for XmlEncoder
@@ -152,7 +186,7 @@ class PatientsController extends AbstractController
         ]);
 
         // For instance, return a Response with encoded Json
-        return new Response($jsonObject, 200, ['Content-Type' => 'application/json']);
+        return new Response($jsonObject, 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
     }
 
     #[Route('/api/patientsInformationStatus', name: 'app_patientsInformationStatus')]
