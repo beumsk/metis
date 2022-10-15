@@ -12,7 +12,8 @@ import {
   faCancel,
   faEdit,
 } from "@fortawesome/free-solid-svg-icons";
-import ModalItemFiche from "./ModalItemFiche";
+import ModalAddInfos from "./Modal-Add-Infos";
+import ModalEditInfos from "./Modal-Edit-Infos";
 
 const BlockInfos = (props) => {
   let id = useParams().id;
@@ -27,22 +28,6 @@ const BlockInfos = (props) => {
   const [informationPatient, setInformation] = useState(null);
   const [informationTemplateBlock, setInformationTemplateBlock] =
     useState(null);
-
-  // useEffect(() => {
-  //   axios({
-  //     method: "post",
-  //     url: "/api/patientsInformationByPatients",
-  //     data: formData,
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       Authorization: `Bearer ${auth.auth.accessToken}`,
-  //     },
-  //   })
-  //     .then(function (response) {
-  //       setInformation(response.data);
-  //     })
-  //     .catch(function (response) {});
-  // }, [idPatient]);
   console.log(props);
   return (
     <>
@@ -55,11 +40,20 @@ const BlockInfos = (props) => {
               </div>
               <div className="col-sm-4">
                 {patient?.patientInformation?.map((pi, id) => (
-                  <p>{pi.sugg?.value}</p>
+                  <p key={id}>
+                    {pi.sugg?.value}
+                    {pi && (
+                      <ModalEditInfos
+                        link={props.link}
+                        infosPatient={pi}
+                        infos={patient}
+                      />
+                    )}
+                  </p>
                 ))}
               </div>
               <div className="col-sm-4">
-                <ModalItemFiche link={props.link} infos={patient} />
+                <ModalAddInfos link={props.link} infos={patient} />
               </div>
             </div>
           )}

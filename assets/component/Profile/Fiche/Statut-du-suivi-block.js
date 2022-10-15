@@ -12,7 +12,7 @@ import {
   faCancel,
   faEdit,
 } from "@fortawesome/free-solid-svg-icons";
-import ModalItemFiche from "./ModalItemFiche";
+import ModalAddInfos from "./Modal-Add-Infos";
 
 const StatutDuSuiviBlock = (props) => {
   let id = useParams().id;
@@ -54,7 +54,7 @@ const StatutDuSuiviBlock = (props) => {
         ))}
       </div>
       <div className="col-sm-2">
-        <ModalItemFiche link={props.block}></ModalItemFiche>
+        <ModalAddInfos link={props.block}></ModalAddInfos>
       </div>
     </div>
   );

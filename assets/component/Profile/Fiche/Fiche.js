@@ -12,7 +12,7 @@ import {
   faCancel,
   faEdit,
 } from "@fortawesome/free-solid-svg-icons";
-import ModalItemFiche from "./ModalItemFiche";
+import ModalAddInfos from "./Modal-Add-Infos";
 import BlockInfos from "./Block-Infos";
 
 const Fiche = () => {
