@@ -8,11 +8,14 @@ import React, {
 import useAuth from "../..//hooks/useAuth";
 import axios from "axios";
 import { Link, useNavigate, useLocation, useParams } from "react-router-dom";
+import Editor from "./Editor-Reports";
 
 const Profile = () => {
   let id = useParams().id;
   const [auth, setAuth] = useState(useAuth());
   const [idPatient, setIdPatient] = useState(id);
+  const [isEdit, setEdit] = useState(false);
+  const [toggle, setToggle] = useState(false);
 
   var formData = new FormData();
   formData.append("id", id.toString());
@@ -53,6 +56,12 @@ const Profile = () => {
       .catch(function (response) {});
   }, [idPatient]);
 
+  const editContent = (e) => {
+    console.log("e");
+    setEdit(true);
+  };
+
+  console.log(informationPatient);
   return (
     <div className="container-ongletProfile">
       <div className="row item-report">
@@ -90,14 +99,39 @@ const Profile = () => {
               {r && r.activityType === 2 && <h6>Appel Sortant</h6>}
               {r && r.activityType === 4 && <h6>Appel Entrant</h6>}
               {r && r.deletedAt === null && (
-                <div
-                  className="mt-4"
-                  dangerouslySetInnerHTML={{ __html: r.content }}
-                ></div>
+                <>
+                  <button
+                    onClick={() => {
+                      setToggle(!toggle);
+                      r.isHightlight = toggle;
+                    }}
+                  >
+                    Editer
+                  </button>
+                  {r.isHightlight === true && (
+                    <Editor contentText={r.content}></Editor>
+                  )}
+                  {r.isHightlight === false && (
+                    <div
+                      className="mt-4"
+                      dangerouslySetInnerHTML={{ __html: r.content }}
+                    ></div>
+                  )}
+                  {r.isHightlight === null && (
+                    <div
+                      className="mt-4"
+                      dangerouslySetInnerHTML={{ __html: r.content }}
+                    ></div>
+                  )}
+
+                  {/* <Editor contentText={r.content}></Editor> */}
+                </>
               )}
             </div>
           ))}
         </div>
+
+        {/* <h1>TEXT</h1> */}
       </div>
     </div>
   );
