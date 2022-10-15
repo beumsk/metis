@@ -155,37 +155,19 @@ class PatientsController extends AbstractController
             }
         }
 
-        // foreach ($templateElement as $key) {
-        //     $te = $key->getId();
 
-
-        //     foreach ($suggestionElement as $sugg) {
-
-        //         $test[] = $pati;
-        //         if ($sugg->getParentSugg() !== null && $sugg->getParentSugg()->getId() === $key->getItbk()->getSugb()->getId()) {
-
-        //             $test[] = $pati;
-        //             // dd($sugg);
-        //             $key->setSuggestionsByBlock($sugg);
-        //         }
-        //     }
-        // }
-
-
-        // dd($templateElement[0]);
-        // dd(array($test));
-        $encoders = [new JsonEncoder()]; // If no need for XmlEncoder
+        $encoders = [new JsonEncoder()];
         $normalizers = [new ObjectNormalizer()];
         $serializer = new Serializer($normalizers, $encoders);
 
-        // Serialize your object in Json
+
         $jsonObject = $serializer->serialize($templateElement, 'json', [
             'circular_reference_handler' => function ($object) {
                 return $object->getId();
             }
         ]);
 
-        // For instance, return a Response with encoded Json
+
         return new Response($jsonObject, 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
     }
 

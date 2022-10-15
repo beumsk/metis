@@ -25,24 +25,24 @@ function ModalItemFiche(props) {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   useEffect(() => {
-    setElementsOpt(props.infos);
+    setElementsOpt(...props.infos.suggestionsByBlock);
 
-    axios({
-      method: "post",
-      url: "/api/findElAndBlckAndValByPatient",
-      data: formData,
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${auth.auth.accessToken}`,
-      },
-    })
-      .then(function (response) {
-        setInfos(response);
-      })
-      .catch(function (response) {});
+    // axios({
+    //   method: "post",
+    //   url: "/api/findElAndBlckAndValByPatient",
+    //   data: formData,
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //     Authorization: `Bearer ${auth.auth.accessToken}`,
+    //   },
+    // })
+    //   .then(function (response) {
+    //     setInfos(response);
+    //   })
+    //   .catch(function (response) {});
   }, [idPatient]);
 
-  console.log(infos);
+  // console.log(...props.infos.suggestionsByBlock);
 
   return (
     <>
@@ -59,7 +59,7 @@ function ModalItemFiche(props) {
           <>
             <Form.Label htmlFor="inputValue">Valeur</Form.Label>
             <Form.Select size="lg">
-              {infos?.data?.map((el, id) => (
+              {elementsOpt?.map((el, id) => (
                 <>
                   <option>{el?.value}</option>
                 </>

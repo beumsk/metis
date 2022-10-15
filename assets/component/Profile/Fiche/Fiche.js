@@ -44,17 +44,29 @@ const Fiche = () => {
       })
       .catch(function (response) {});
   }, [idPatient]);
-  console.log("infos", informationPatient);
+  // console.log("infos", informationPatient);
   return (
     <section>
       <Accordion defaultActiveKey="0" flush={true} className="accordion-fiche">
         <Accordion.Item eventKey="0">
           <Accordion.Header>Statut de suivi</Accordion.Header>
           <Accordion.Body>
-            <BlockInfos link={"/patient/fiche/statut-du-suivi"}></BlockInfos>
-            <BlockInfos link={"/patient/suivi/equipes"}></BlockInfos>
-            <BlockInfos link={"/patient/suivi/programme"}></BlockInfos>
-            <BlockInfos link={"/patient/suivi/antenne"}></BlockInfos>
+            <BlockInfos
+              infos={informationPatient}
+              link={"/patient/fiche/statut-du-suivi"}
+            ></BlockInfos>
+            <BlockInfos
+              infos={informationPatient}
+              link={"/patient/suivi/equipes"}
+            ></BlockInfos>
+            <BlockInfos
+              infos={informationPatient}
+              link={"/patient/suivi/programme"}
+            ></BlockInfos>
+            <BlockInfos
+              infos={informationPatient}
+              link={"/patient/suivi/antenne"}
+            ></BlockInfos>
           </Accordion.Body>
         </Accordion.Item>
       </Accordion>
@@ -63,26 +75,33 @@ const Fiche = () => {
           <Accordion.Header>Information générale</Accordion.Header>
           <Accordion.Body>
             <BlockInfos
+              infos={informationPatient}
               link={"/patient/fiche/information-generale/genre"}
             ></BlockInfos>
             <BlockInfos
+              infos={informationPatient}
               link={"/patient/fiche/information-generale/etat-civil"}
             ></BlockInfos>
             <BlockInfos
+              infos={informationPatient}
               link={
                 "/patient/fiche/information-generale/composition-familliale"
               }
             ></BlockInfos>
             <BlockInfos
+              infos={informationPatient}
               link={"/patient/fiche/information-generale/nationalite"}
             ></BlockInfos>
             <BlockInfos
+              infos={informationPatient}
               link={"/patient/fiche/information-generale/titre-de-sejour"}
             ></BlockInfos>
             <BlockInfos
+              infos={informationPatient}
               link={"/patient/fiche/information-generale/numero-de-telephone"}
             ></BlockInfos>
             <BlockInfos
+              infos={informationPatient}
               link={"/patient/fiche/information-generale/e-mail"}
             ></BlockInfos>
           </Accordion.Body>

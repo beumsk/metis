@@ -28,25 +28,25 @@ const BlockInfos = (props) => {
   const [informationTemplateBlock, setInformationTemplateBlock] =
     useState(null);
 
-  useEffect(() => {
-    axios({
-      method: "post",
-      url: "/api/patientsInformationByPatients",
-      data: formData,
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${auth.auth.accessToken}`,
-      },
-    })
-      .then(function (response) {
-        setInformation(response.data);
-      })
-      .catch(function (response) {});
-  }, [idPatient]);
-  console.log("infos", informationPatient);
+  // useEffect(() => {
+  //   axios({
+  //     method: "post",
+  //     url: "/api/patientsInformationByPatients",
+  //     data: formData,
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       Authorization: `Bearer ${auth.auth.accessToken}`,
+  //     },
+  //   })
+  //     .then(function (response) {
+  //       setInformation(response.data);
+  //     })
+  //     .catch(function (response) {});
+  // }, [idPatient]);
+  console.log(props);
   return (
     <>
-      {informationPatient?.map((patient, id) => (
+      {props.infos?.map((patient, id) => (
         <>
           {patient && patient.suge?.pathString === props.link && (
             <div className="row">
@@ -59,7 +59,7 @@ const BlockInfos = (props) => {
                 ))}
               </div>
               <div className="col-sm-4">
-                <ModalItemFiche link={props.link} />
+                <ModalItemFiche link={props.link} infos={patient} />
               </div>
             </div>
           )}

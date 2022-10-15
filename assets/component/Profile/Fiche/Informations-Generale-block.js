@@ -40,7 +40,7 @@ const InformationGeneraleBlock = (props) => {
       })
       .catch(function (response) {});
   }, [idPatient]);
-  console.log(infos);
+  // console.log(infos);
   return (
     <div className="row">
       <div className="col-sm-6">{props.nameblock}</div>
