@@ -13,6 +13,7 @@ const Medias = (props) => {
   const [listMedias, setMedias] = useState(null);
   const [options, setOptions] = useState();
   const [filterDates, setFilterDates] = useState();
+  const [value, setValue] = useState(null);
   useEffect(() => {
     axios({
       method: "post",
@@ -30,12 +31,32 @@ const Medias = (props) => {
   }, [idPatient]);
 
   const sendMedias = () => {
-    console.log(acceptedFiles);
+    console.log(value);
     var formData = new FormData();
-    formData.append("id", id.toString());
-  };
 
-  const [value, setValue] = useState(null);
+    let sugg = 32;
+
+    formData.append("id", id.toString());
+    formData.append("image", value[0]);
+    formData.append("fileName", value[0].name);
+    formData.append("sugg", sugg.toString());
+
+    axios({
+      method: "post",
+      url: "/api/setMediasByPatients",
+      data: formData,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    })
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (response) {
+        console.log(response);
+      });
+  };
 
   function handleChange(newValue) {
     console.log(newValue);

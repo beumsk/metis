@@ -6,6 +6,7 @@ namespace App\Controller;
 use App\Entity\FollowupReports;
 use App\Entity\Medias;
 use App\Entity\Patients;
+use App\Entity\Suggestions;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -58,20 +59,42 @@ class MediaController extends AbstractController
         $request = Request::createFromGlobals();
         $uploadedFile = $request->files->get('image');
         $sugg = $request->request->get("sugg");
+        $filename = $request->request->get("filename");
+        $id = $request->request->get("id");
 
         // profile || current
 
-        $destination = $this->getParameter('kernel.project_dir') . '../build/images';
+        $destination = __DIR__ . '../build/images';
 
 
         $originalFilename = pathinfo($uploadedFile->getClientOriginalName(), PATHINFO_FILENAME);
         $newFilename = $originalFilename . '-' . uniqid() . '.' . $uploadedFile->guessExtension();
         // $newFilename = Urlizer::urlize($originalFilename) . '-' . uniqid() . '.' . $uploadedFile->guessExtension();
 
+        $entityManager = $doctrine->getManager();
+
+        $medias = new Medias();
+
+
+        $suggestion = $doctrine->getRepository(Suggestions::class)->find($sugg);
+        $patients = $doctrine->getRepository(Patients::class)->find($id);
+        $medias->setSugg($suggestion);
+        $medias->setOriginalFilename($originalFilename);
+        $medias->setPati($patients);
+        $medias->setFilename($newFilename);
+        $medias->setDate(new \DateTime("now"));
+
+        $entityManager->persist($medias);
+        $entityManager->flush();
+
+
         $uploadedFile->move($destination, $newFilename);
-        return [
-            "add" => "added!"
-        ];
-        // return $this->json($medias);
+
+
+
+
+
+
+        return $this->json($medias);
     }
 }
