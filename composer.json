@@ -20,6 +20,7 @@
         "doctrine/doctrine-migrations-bundle": "^3.0",
         "doctrine/orm": "^2.10",
         "friendsofsymfony/elastica-bundle": "^6.2",
+        "gedmo/doctrine-extensions": "^3.9",
         "gesdinet/jwt-refresh-token-bundle": "^1.1",
         "jms/serializer-bundle": "^4.2",
         "lcobucci/jwt": "4.0.0",

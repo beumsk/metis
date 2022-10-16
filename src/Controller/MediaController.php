@@ -50,4 +50,28 @@ class MediaController extends AbstractController
 
         return $this->json($medias);
     }
+
+
+    #[Route('/api/setMediasByPatients', name: 'app_gsetAllMedias')]
+    public function setMediasByPatients(ManagerRegistry $doctrine, Request $request)
+    {
+        $request = Request::createFromGlobals();
+        $uploadedFile = $request->files->get('image');
+        $sugg = $request->request->get("sugg");
+
+        // profile || current
+
+        $destination = $this->getParameter('kernel.project_dir') . '../build/images';
+
+
+        $originalFilename = pathinfo($uploadedFile->getClientOriginalName(), PATHINFO_FILENAME);
+        $newFilename = $originalFilename . '-' . uniqid() . '.' . $uploadedFile->guessExtension();
+        // $newFilename = Urlizer::urlize($originalFilename) . '-' . uniqid() . '.' . $uploadedFile->guessExtension();
+
+        $uploadedFile->move($destination, $newFilename);
+        return [
+            "add" => "added!"
+        ];
+        // return $this->json($medias);
+    }
 }

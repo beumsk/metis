@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import Basic from "./Dropzone";
 
-const Medias = () => {
+const Medias = (props) => {
   let id = useParams().id;
   var formData = new FormData();
   formData.append("id", id.toString());
@@ -29,9 +29,27 @@ const Medias = () => {
       .catch(function (response) {});
   }, [idPatient]);
 
+  const sendMedias = () => {
+    console.log(acceptedFiles);
+    var formData = new FormData();
+    formData.append("id", id.toString());
+  };
+
+  const [value, setValue] = useState(null);
+
+  function handleChange(newValue) {
+    console.log(newValue);
+    setValue(newValue);
+  }
+
   return (
     <>
-      <Basic />
+      <Basic value={value} onChange={handleChange} />
+      <div className="row">
+        <button className="btn-metis send-btn" onClick={(e) => sendMedias()}>
+          Envoyer
+        </button>
+      </div>
       {listMedias && listMedias.data.length > 0 && (
         <>
           <h6>Liste de fichiers déjà présents</h6>
@@ -45,6 +63,7 @@ const Medias = () => {
                   dateStyle: "short",
                 })}
               </div>
+
               <div className="col-sm-3">
                 <button className="btn-metis delete-btn">delete</button>
                 <button className="btn-metis">télécharger</button>

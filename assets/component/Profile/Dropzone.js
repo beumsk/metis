@@ -1,14 +1,22 @@
-import React from "react";
+import React, { useContext, useDebugValue, useState, useEffect } from "react";
 import { useDropzone } from "react-dropzone";
 
 const Basic = (props) => {
   const { acceptedFiles, getRootProps, getInputProps } = useDropzone();
+
+  const [fileUploaded, setFileUploaded] = useState(null);
 
   const files = acceptedFiles.map((file) => (
     <li key={file.path}>
       {file.path} - {file.size} bytes
     </li>
   ));
+
+  const FilesUploaded = (acceptedFiles) => {
+    return setFileUploaded(acceptedFiles);
+  };
+
+  props.onChange(acceptedFiles);
 
   return (
     <div className="row container-dropzone mb-4">
