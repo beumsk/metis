@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Contacts;
 use App\Entity\FollowupGoals;
 use App\Entity\FollowupReports;
 use App\Entity\Medias;
@@ -19,7 +20,7 @@ class PlacesController extends AbstractController
     #[Route('/api/getPlaces', name: 'app_places')]
     public function index(ManagerRegistry $doctrine): Response
     {
-        $places = $doctrine->getRepository(Places::class)->findAll();
+        $places = $doctrine->getRepository(Contacts::class)->findBy(["type" => 3]);
         return $this->json($places);
     }
 

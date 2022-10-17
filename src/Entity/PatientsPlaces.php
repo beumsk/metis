@@ -46,7 +46,8 @@ class PatientsPlaces
     #[ORM\ManyToOne]
     private ?Contacts $cont = null;
 
-    #[ORM\ManyToOne]
+    #[ORM\ManyToOne(targetEntity: 'Places', cascade: ["all"], fetch: "EAGER")]
+    #[ORM\JoinColumn(name: "pati_id", referencedColumnName: "id", nullable: true, onDelete: "SET NULL")]
     private ?Patients $pati = null;
 
     #[ORM\ManyToOne]

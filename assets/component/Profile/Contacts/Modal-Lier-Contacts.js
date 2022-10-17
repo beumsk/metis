@@ -39,19 +39,19 @@ function ModalLierContacts(props) {
         setType(response);
       })
       .catch(function (response) {});
-    axios({
-      method: "post",
-      url: "/api/getContacts",
-      data: formData,
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${auth.auth.accessToken}`,
-      },
-    })
-      .then(function (response) {
-        setContacts(response);
-      })
-      .catch(function (response) {});
+    // axios({
+    //   method: "post",
+    //   url: "/api/getContacts",
+    //   data: formData,
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //     Authorization: `Bearer ${auth.auth.accessToken}`,
+    //   },
+    // })
+    //   .then(function (response) {
+    //     setContacts(response);
+    //   })
+    //   .catch(function (response) {});
   }, [idPatient]);
   console.log(contacts);
   //   /api/getContacts

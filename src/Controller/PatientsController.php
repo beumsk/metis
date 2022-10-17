@@ -11,6 +11,7 @@ use App\Entity\PatientsInformation;
 
 use App\Entity\PatientsInformationTemplateBlock;
 use App\Entity\PatientsInformationTemplateElement;
+use App\Entity\PatientsPlaces;
 use App\Entity\Suggestions;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -187,7 +188,7 @@ class PatientsController extends AbstractController
     }
 
 
-    #[Route('/api/getPatients', name: 'app_getPatients')]
+    #[Route('/api/getPatients', name: 'app_getPatientsByPaquests')]
     public function getPatients(ManagerRegistry $doctrine, Request $request): Response
     {
         $request = Request::createFromGlobals();
@@ -203,7 +204,7 @@ class PatientsController extends AbstractController
         $request = Request::createFromGlobals();
 
         $page = $request->request->get('page');
-        $patients = $doctrine->getRepository(Patients::class)->findAll();
+        $patients = $doctrine->getRepository(PatientsPlaces::class)->findAll();
         return $this->json($patients);
     }
 

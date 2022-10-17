@@ -11,6 +11,8 @@ import {
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import Form from "react-bootstrap/Form";
+import InputContactList from "./Input-Contact-List";
+import InputTypeList from "./Input-Type-List";
 
 function ModalAddReports(props) {
   const [show, setShow] = useState(false);
@@ -39,22 +41,9 @@ function ModalAddReports(props) {
         setType(response);
       })
       .catch(function (response) {});
-    axios({
-      method: "post",
-      url: "/api/getContacts",
-      data: formData,
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${auth.auth.accessToken}`,
-      },
-    })
-      .then(function (response) {
-        setContacts(response);
-      })
-      .catch(function (response) {});
   }, [idPatient]);
   console.log(contacts);
-  //   /api/getContacts
+
   return (
     <>
       <Button onClick={handleShow} className="btn-metis">
@@ -68,23 +57,9 @@ function ModalAddReports(props) {
         <Modal.Body>
           <>
             <Form.Label htmlFor="inputValue">Valeur</Form.Label>
-            <Form.Select size="lg">
-              {contacts?.data?.map((el, id) => (
-                <>
-                  {el?.firstname && el?.lastname && (
-                    <option>
-                      {el?.firstname} {el?.lastname}
-                    </option>
-                  )}
-                </>
-              ))}
-            </Form.Select>
-            <Form.Label htmlFor="inputValue">Type</Form.Label>
-            <Form.Select size="lg">
-              {type?.data?.map((el, id) => (
-                <>{el.value && <option>{el?.value}</option>}</>
-              ))}
-            </Form.Select>
+            <InputContactList contacts={props?.contacts} />
+            <InputTypeList type={type} />
+
             <Form.Label htmlFor="inputValue">Description</Form.Label>
             <Form.Control
               type="text"

@@ -11,6 +11,7 @@ import {
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import Form from "react-bootstrap/Form";
+import InputContactList from "./Input-Contact-List";
 
 function ModalAddAppels(props) {
   const [show, setShow] = useState(false);
@@ -57,21 +58,9 @@ function ModalAddAppels(props) {
         setType(response);
       })
       .catch(function (response) {});
-    axios({
-      method: "post",
-      url: "/api/getContacts",
-      data: getPatientFormData,
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${auth.auth.accessToken}`,
-      },
-    })
-      .then(function (response) {
-        setContacts(response);
-      })
-      .catch(function (response) {});
   }, [idPatient]);
   console.log(contacts);
+
   //   /api/getContacts
   return (
     <>
@@ -99,18 +88,8 @@ function ModalAddAppels(props) {
             <Form.Group className="mb-3 mt-4" controlId="formBasicCheckbox">
               <Form.Check type="checkbox" label="Appeler ce patient ?" />
             </Form.Group>
-            <Form.Label htmlFor="inputValue">Contact</Form.Label>
-            <Form.Select size="lg">
-              {contacts?.data?.map((el, id) => (
-                <>
-                  {el?.firstname && el?.lastname && (
-                    <option>
-                      {el?.firstname} {el?.lastname}
-                    </option>
-                  )}
-                </>
-              ))}
-            </Form.Select>
+
+            <InputContactList contacts={props.contacts} />
 
             <Form.Label htmlFor="inputValue">
               Appel sortant (Création d'un rapport d'appel pour chaque contact)

@@ -11,6 +11,7 @@ import {
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import Form from "react-bootstrap/Form";
+import InputTypeList from "./Input-Type-List";
 
 function ModalAddObjectifs(props) {
   const [show, setShow] = useState(false);
@@ -39,20 +40,8 @@ function ModalAddObjectifs(props) {
         setType(response);
       })
       .catch(function (response) {});
-    axios({
-      method: "post",
-      url: "/api/getContacts",
-      data: formData,
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${auth.auth.accessToken}`,
-      },
-    })
-      .then(function (response) {
-        setContacts(response);
-      })
-      .catch(function (response) {});
   }, [idPatient]);
+
   console.log(contacts);
   //   /api/getContacts
   return (
@@ -67,12 +56,8 @@ function ModalAddObjectifs(props) {
         </Modal.Header>
         <Modal.Body>
           <>
-            <Form.Label htmlFor="inputValue">Type</Form.Label>
-            <Form.Select size="lg">
-              {type?.data?.map((el, id) => (
-                <>{el.value && <option>{el?.value}</option>}</>
-              ))}
-            </Form.Select>
+            <InputTypeList type={type} />
+
             <Form.Control type="text" id="inputText" className="mt-4" />
             <Form.Group className="mb-3" controlId="formBasicCheckbox">
               <Form.Check type="checkbox" label="Prioritaire ?" />

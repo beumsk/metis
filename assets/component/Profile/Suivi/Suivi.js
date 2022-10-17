@@ -8,10 +8,12 @@ import React, {
 import useAuth from "../../../hooks/useAuth";
 import axios from "axios";
 import { Link, useNavigate, useLocation, useParams } from "react-router-dom";
-import Editor from "../Editor-Reports";
+import Editor from "./Editor-Reports";
 import ModalAddAppels from "./Modal-Add-Appels";
-import ModalAddReports from "./Modal-Add-Reports";
+import RapportDetails from "./Rapport-Details";
 import ModalAddObjectifs from "./Modal-Add-Objectifs";
+import AddReportMeet from "./Add-Report-Meet";
+import DashboardReports from "./Dashboard-Reports";
 
 const Profile = () => {
   let id = useParams().id;
@@ -20,9 +22,20 @@ const Profile = () => {
   const [isEdit, setEdit] = useState(false);
   const [toggle, setToggle] = useState(false);
 
+  //   isDahsboardReports
+  //           isAddReportMeet
+  // isReportDetails
+  const [type, setType] = useState(null);
+  const [contacts, setContacts] = useState(null);
+  const [places, setPlaces] = useState(null);
+  const [isDahsboardReports, setIsDashbordReports] = useState(false);
+  const [isAddReportMeet, setIsAddReportMeet] = useState(false);
+  const [isReportDetails, setIsReportsDetails] = useState(true);
+  const [value, setValue] = useState(null);
   var formData = new FormData();
   formData.append("id", id.toString());
-
+  var suggForm = new FormData();
+  suggForm.append("id", [57, 658, 174, 25]);
   let objPatient = {};
 
   const [informationPatient, setInformation] = useState(null);
@@ -57,18 +70,79 @@ const Profile = () => {
         setGoals(response);
       })
       .catch(function (response) {});
+
+    axios({
+      method: "post",
+      url: "/api/suggestionsById",
+      data: formData,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    })
+      .then(function (response) {
+        setType(response);
+      })
+      .catch(function (response) {});
+    axios({
+      method: "post",
+      url: "/api/getContacts",
+      data: formData,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    })
+      .then(function (response) {
+        setContacts(response);
+      })
+      .catch(function (response) {});
+    [];
+    axios({
+      method: "post",
+      url: "/api/getPlaces",
+      data: formData,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    })
+      .then(function (response) {
+        setPlaces(response);
+      })
+      .catch(function (response) {});
   }, [idPatient]);
 
   const editContent = (e) => {
-    console.log("e");
     setEdit(true);
   };
 
-  console.log(informationPatient);
+  const showAddReports = (e) => {
+    setIsDashbordReports(false);
+    setIsAddReportMeet(true);
+    setIsReportsDetails(false);
+  };
+
+  const showListReports = (e) => {
+    setIsDashbordReports(true);
+    setIsAddReportMeet(false);
+    setIsReportsDetails(false);
+  };
+  const showDetailsReports = (e) => {
+    setIsDashbordReports(false);
+    setIsAddReportMeet(false);
+    setIsReportsDetails(true);
+  };
+
   return (
     <div className="container-ongletProfile">
       <div className="row item-report">
         <div className="col-sm-3">
+          <button onClick={(e) => showAddReports()}>Ajouter un rapport</button>
+          <button onClick={(e) => showListReports()}> Liste de rapports</button>
+          <button onClick={(e) => showDetailsReports()}>
+            Rapports détaillées
+          </button>
           <h6>Objectifs</h6>
           {goals?.data.map((g, id) => (
             <>
@@ -98,52 +172,41 @@ const Profile = () => {
         </div>
         <div className="col-sm-9">
           <div className="d-flex">
-            <div>
-              <ModalAddReports></ModalAddReports>
-            </div>
             <div style={{ margin: "0 1rem" }}>
-              <ModalAddAppels></ModalAddAppels>
+              <ModalAddAppels
+                type={type}
+                contacts={contacts}
+                places={places}
+              ></ModalAddAppels>
             </div>
 
             <div>
-              <ModalAddObjectifs></ModalAddObjectifs>
+              <ModalAddObjectifs
+                type={type}
+                contacts={contacts}
+                places={places}
+              ></ModalAddObjectifs>
             </div>
           </div>
-          {informationPatient?.data.map((r, id) => (
-            <div key={id} className="report-content">
-              {r && r.activityType === 2 && <h6>Appel Sortant</h6>}
-              {r && r.activityType === 4 && <h6>Appel Entrant</h6>}
-              {r && r.deletedAt === null && (
-                <>
-                  <button
-                    onClick={() => {
-                      setToggle(!toggle);
-                      r.isHightlight = toggle;
-                    }}
-                  >
-                    Editer
-                  </button>
-                  {r.isHightlight === true && (
-                    <Editor contentText={r.content}></Editor>
-                  )}
-                  {r.isHightlight === false && (
-                    <div
-                      className="mt-4"
-                      dangerouslySetInnerHTML={{ __html: r.content }}
-                    ></div>
-                  )}
-                  {r.isHightlight === null && (
-                    <div
-                      className="mt-4"
-                      dangerouslySetInnerHTML={{ __html: r.content }}
-                    ></div>
-                  )}
 
-                  {/* <Editor contentText={r.content}></Editor> */}
-                </>
-              )}
-            </div>
-          ))}
+          {isReportDetails && (
+            <RapportDetails
+              type={type}
+              contacts={contacts}
+              places={places}
+              informationPatient={informationPatient}
+            ></RapportDetails>
+          )}
+
+          {isAddReportMeet && (
+            <AddReportMeet
+              type={type}
+              contacts={contacts}
+              places={places}
+            ></AddReportMeet>
+          )}
+
+          {isDahsboardReports && <DashboardReports></DashboardReports>}
         </div>
 
         {/* <h1>TEXT</h1> */}

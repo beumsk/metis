@@ -13,7 +13,7 @@ import Indicators from "./Profile/Indicators";
 import Profile from "./Profile/Suivi/Suivi";
 import Medias from "./Profile/Medias";
 import Contacts from "./Profile/Contacts/Contacts";
-import Places from "./Profile/Places";
+import Places from "./Profile/Lieux/Places";
 
 const Patient = () => {
   let id = useParams().id;
@@ -27,6 +27,12 @@ const Patient = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [locationWeb, setLocation] = useState(location);
+  const [isFiche, setFiche] = useState(true);
+  const [isProfile, setProfile] = useState(false);
+  const [isIndicators, setIndicators] = useState(false);
+  const [isMedias, setMedias] = useState(false);
+  const [isContacts, setContacts] = useState(false);
+  const [isPlaces, setPlaces] = useState(false);
 
   var formData = new FormData();
   formData.append("id", id.toString());
@@ -70,6 +76,28 @@ const Patient = () => {
   }, [idPatient]);
 
   // "../build/images/5a94e34b4c36e28de4e704f8c2d1c39a79e91b5d.png"
+  // const [isFiche, setFiche] = useState(false);
+  // const [isProfile, setProfile] = useState(false);
+  // const [isIndicators, setIndicators] = useState(false);
+  // const [isMedias, setMedias] = useState(false);
+  // const [isContacts, setContacts] = useState(false);
+  // const [isPlaces, setPlaces] = useState(false);
+
+  const showOngletProfile = (titleOnglet) => {
+    titleOnglet === "Fiche" ? setFiche(true) : setFiche(false);
+    titleOnglet === "Profile" ? setProfile(true) : setProfile(false);
+    titleOnglet === 1 ? setIndicators(true) : setIndicators(false);
+    if (titleOnglet === 1) {
+      setIndicators(true);
+    } else {
+      setIndicators(false);
+    }
+    titleOnglet === "Medias" ? setMedias(true) : setMedias(false);
+    titleOnglet === "Contacts" ? setContacts(true) : setContacts(false);
+    titleOnglet === "Lieux" ? setPlaces(true) : setPlaces(false);
+
+    console.log(isProfile, isIndicators);
+  };
   return (
     <>
       <Menu></Menu>
@@ -120,7 +148,80 @@ const Patient = () => {
               </div>
             </div>
             <div className="row body-profile">
-              <Tabs
+              <div className="d-flex mb-4">
+                <div
+                  style={{ marginRight: "4rem" }}
+                  onClick={(e) => showOngletProfile("Fiche")}
+                >
+                  Fiche
+                </div>
+                <div
+                  style={{ marginRight: "4rem" }}
+                  onClick={(e) => showOngletProfile("Profile")}
+                >
+                  Profile
+                </div>
+                <div
+                  style={{ marginRight: "4rem" }}
+                  onClick={(e) => showOngletProfile(1)}
+                >
+                  Indicateurs
+                </div>
+                <div
+                  style={{ marginRight: "4rem" }}
+                  onClick={(e) => showOngletProfile("Medias")}
+                >
+                  Medias
+                </div>
+                <div
+                  style={{ marginRight: "4rem" }}
+                  onClick={(e) => showOngletProfile("Contacts")}
+                >
+                  Contacts
+                </div>
+                <div
+                  style={{ marginRight: "4rem" }}
+                  onClick={(e) => showOngletProfile("Lieux")}
+                >
+                  Lieux
+                </div>
+              </div>
+              <div>
+                {isFiche && (
+                  <div>
+                    <Fiche />
+                  </div>
+                )}
+                {isProfile && (
+                  <div>
+                    <Profile />
+                  </div>
+                )}
+
+                {isIndicators && (
+                  <div>
+                    <Indicators />
+                  </div>
+                )}
+
+                {isMedias && (
+                  <div>
+                    <Medias />
+                  </div>
+                )}
+                {isContacts && (
+                  <div>
+                    <Contacts />
+                  </div>
+                )}
+
+                {isPlaces && (
+                  <div>
+                    <Places />
+                  </div>
+                )}
+              </div>
+              {/* <Tabs
                 defaultActiveKey="profile"
                 id="uncontrolled-tab-example"
                 activeKey={key}
@@ -145,7 +246,7 @@ const Patient = () => {
                 <Tab eventKey="lieux" title="Lieux">
                   <Places />
                 </Tab>
-              </Tabs>
+              </Tabs> */}
             </div>
           </div>
         </section>
