@@ -10,7 +10,7 @@ import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 import Fiche from "./Profile/Fiche/Fiche";
 import Indicators from "./Profile/Indicators";
-import Profile from "./Profile/Profile";
+import Profile from "./Profile/Suivi/Suivi";
 import Medias from "./Profile/Medias";
 import Contacts from "./Profile/Contacts/Contacts";
 import Places from "./Profile/Places";
