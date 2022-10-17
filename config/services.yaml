@@ -21,3 +21,6 @@ when@test:
             alias: 'security.user_password_hasher'
             public: true
 
+parameters:
+    images_directory: '%kernel.project_dir%/assets/images'
+

@@ -12,7 +12,7 @@ import Fiche from "./Profile/Fiche/Fiche";
 import Indicators from "./Profile/Indicators";
 import Profile from "./Profile/Profile";
 import Medias from "./Profile/Medias";
-import Contacts from "./Profile/Contacts";
+import Contacts from "./Profile/Contacts/Contacts";
 import Places from "./Profile/Places";
 
 const Patient = () => {

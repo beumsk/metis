@@ -53,6 +53,20 @@ class MediaController extends AbstractController
     }
 
 
+    #[Route('/api/removeMedias', name: 'app_removeAllMedias')]
+    public function remove(ManagerRegistry $doctrine, Request $request)
+    {
+        $entityManager = $doctrine->getManager();
+
+        $id = $request->request->get("id");
+        $medias = $doctrine->getRepository(Medias::class)->find($id);
+        $entityManager->remove($medias);
+        $entityManager->flush();
+        unlink($this->getParameter('images_directory') . "/" . $medias->getFileName());
+        return $this->json($medias);
+    }
+
+
     #[Route('/api/setMediasByPatients', name: 'app_gsetAllMedias')]
     public function setMediasByPatients(ManagerRegistry $doctrine, Request $request)
     {
@@ -62,14 +76,12 @@ class MediaController extends AbstractController
         $filename = $request->request->get("filename");
         $id = $request->request->get("id");
 
-        // profile || current
-
-        $destination = __DIR__ . '../build/images';
+        // profile || current C:\projets\metis-app-2022\assets\images\4c6af1c072f8f574f9e98ccfc6c22658eb290689.jpeg
+        $destination = '../../assets/images';
 
 
         $originalFilename = pathinfo($uploadedFile->getClientOriginalName(), PATHINFO_FILENAME);
         $newFilename = $originalFilename . '-' . uniqid() . '.' . $uploadedFile->guessExtension();
-        // $newFilename = Urlizer::urlize($originalFilename) . '-' . uniqid() . '.' . $uploadedFile->guessExtension();
 
         $entityManager = $doctrine->getManager();
 
@@ -88,7 +100,7 @@ class MediaController extends AbstractController
         $entityManager->flush();
 
 
-        $uploadedFile->move($destination, $newFilename);
+        $uploadedFile->move($this->getParameter('images_directory'), $newFilename);
 
 
 

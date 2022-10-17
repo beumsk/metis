@@ -34,7 +34,7 @@ const Medias = (props) => {
     console.log(value);
     var formData = new FormData();
 
-    let sugg = 32;
+    let sugg = 2;
 
     formData.append("id", id.toString());
     formData.append("image", value[0]);
@@ -44,6 +44,28 @@ const Medias = (props) => {
     axios({
       method: "post",
       url: "/api/setMediasByPatients",
+      data: formData,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    })
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (response) {
+        console.log(response);
+      });
+  };
+
+  const deleteMedias = (id) => {
+    console.log(value);
+    var formData = new FormData();
+
+    formData.append("id", id);
+    axios({
+      method: "post",
+      url: "/api/removeMedias",
       data: formData,
       headers: {
         "Content-Type": "application/json",
@@ -86,8 +108,15 @@ const Medias = (props) => {
               </div>
 
               <div className="col-sm-3">
-                <button className="btn-metis delete-btn">delete</button>
-                <button className="btn-metis">télécharger</button>
+                <button
+                  className="btn-metis delete-btn"
+                  onClick={(e) => deleteMedias(medias.id)}
+                >
+                  delete
+                </button>
+                <a className="btn-metis" href={medias.absolutePath}>
+                  télécharger
+                </a>
               </div>
             </div>
           ))}
