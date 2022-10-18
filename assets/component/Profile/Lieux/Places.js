@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 // import Basic from "./Dropzone";
 import ModalLierLieux from "./Modal-Lier-Lieux";
+import EditLierLieux from "./Edit-Lieux";
 const Places = () => {
   let id = useParams().id;
   var formType = new FormData();
@@ -71,6 +72,13 @@ const Places = () => {
               <div className="col-sm-3">
                 {places.cont.firstname}
                 {places.cont.lastname}
+                <EditLierLieux
+                  lieu={places}
+                  type={type}
+                  lieuxList={alllistPlaces}
+                  // typeDefault={places.type.lastname}
+                  places={places}
+                ></EditLierLieux>
               </div>
               {/* <div className="col-sm-2">{places.lastname}</div> */}
               {/* <div className="col-sm-2">{medias.comment}</div>

@@ -138,11 +138,40 @@ const Profile = () => {
     <div className="container-ongletProfile">
       <div className="row item-report">
         <div className="col-sm-3">
-          <button onClick={(e) => showAddReports()}>Ajouter un rapport</button>
-          <button onClick={(e) => showListReports()}> Liste de rapports</button>
-          <button onClick={(e) => showDetailsReports()}>
-            Rapports détaillées
-          </button>
+          <div className="menu-ongletFiche mb-4">
+            <button
+              style={
+                isAddReportMeet
+                  ? { borderBottom: "0.3rem solid #ffc107" }
+                  : { border: "0" }
+              }
+              onClick={(e) => showAddReports()}
+            >
+              Ajouter un rapport
+            </button>
+            <button
+              style={
+                isDahsboardReports
+                  ? { borderBottom: "0.3rem solid #ffc107" }
+                  : { border: "0" }
+              }
+              onClick={(e) => showListReports()}
+            >
+              {" "}
+              Liste de rapports
+            </button>
+            <button
+              style={
+                isReportDetails
+                  ? { borderBottom: "0.3rem solid #ffc107" }
+                  : { border: "0" }
+              }
+              onClick={(e) => showDetailsReports()}
+            >
+              Rapports détaillées
+            </button>
+          </div>
+
           <h6>Objectifs</h6>
           {goals?.data.map((g, id) => (
             <>

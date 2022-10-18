@@ -47,9 +47,9 @@ function ModalEditInfos(props) {
   handleInputChange;
   return (
     <>
-      <Button onClick={handleShow}>
-        <FontAwesomeIcon icon={faPlusCircle} />
-      </Button>
+      <button onClick={handleShow} className="ml-4">
+        <FontAwesomeIcon icon={faEdit} />
+      </button>
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>

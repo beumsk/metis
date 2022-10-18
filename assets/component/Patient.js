@@ -148,40 +148,70 @@ const Patient = () => {
               </div>
             </div>
             <div className="row body-profile">
-              <div className="d-flex mb-4">
+              <div className="d-flex mb-4 menuFichePatient">
                 <div
-                  style={{ marginRight: "4rem" }}
+                  style={
+                    isFiche
+                      ? { borderBottom: "0.3rem solid #ffc107" }
+                      : { border: "0" }
+                  }
                   onClick={(e) => showOngletProfile("Fiche")}
+                  className="btn-menuFichePatient"
                 >
                   Fiche
                 </div>
                 <div
-                  style={{ marginRight: "4rem" }}
+                  style={
+                    isProfile
+                      ? { borderBottom: "0.3rem solid #ffc107" }
+                      : { border: "0" }
+                  }
                   onClick={(e) => showOngletProfile("Profile")}
+                  className="btn-menuFichePatient"
                 >
-                  Profile
+                  Suivi
                 </div>
                 <div
-                  style={{ marginRight: "4rem" }}
+                  style={
+                    isIndicators
+                      ? { borderBottom: "0.3rem solid #ffc107" }
+                      : { border: "0" }
+                  }
                   onClick={(e) => showOngletProfile(1)}
+                  className="btn-menuFichePatient"
                 >
                   Indicateurs
                 </div>
                 <div
-                  style={{ marginRight: "4rem" }}
+                  style={
+                    isMedias
+                      ? { borderBottom: "0.3rem solid #ffc107" }
+                      : { border: "0" }
+                  }
                   onClick={(e) => showOngletProfile("Medias")}
+                  className="btn-menuFichePatient"
                 >
                   Medias
                 </div>
                 <div
-                  style={{ marginRight: "4rem" }}
+                  style={
+                    isContacts
+                      ? { borderBottom: "0.3rem solid #ffc107" }
+                      : { border: "0" }
+                  }
                   onClick={(e) => showOngletProfile("Contacts")}
+                  className="btn-menuFichePatient"
                 >
                   Contacts
                 </div>
                 <div
-                  style={{ marginRight: "4rem" }}
+                  style={
+                    isPlaces
+                      ? { borderBottom: "0.3rem solid #ffc107" }
+                      : { border: "0" }
+                  }
                   onClick={(e) => showOngletProfile("Lieux")}
+                  className="btn-menuFichePatient"
                 >
                   Lieux
                 </div>

@@ -19,6 +19,12 @@ body{
     min-height: 100%;
 }
 
+button{
+  background-color: white;
+  border: 0;
+  padding: 0;
+}
+
 .visually-hidden {
     clip: rect(0 0 0 0);
     clip-path: inset(50%);
@@ -29,6 +35,22 @@ body{
     width: 1px;
 }
 
+
+.accordion-fiche{
+  button{
+    background-color: white!important;
+    // float: right;
+    svg{
+      color: rgb(22, 21, 21)!important;
+      margin-left: 1rem;
+      
+    }
+  }
+}
+
+.add-infos-btn{
+  float: right;
+}
 
 .graph_container{
     display:block;

@@ -11,54 +11,85 @@ import {
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import Form from "react-bootstrap/Form";
+// import InputTypeList from "./Input-Type-List";
 
-function ModalAddInfos(props) {
+function EditLierLieux(props) {
   const [show, setShow] = useState(false);
   const [auth, setAuth] = useState(useAuth());
   let id = useParams().id;
   var formData = new FormData();
-  formData.append("id", id.toString());
-  formData.append("pathString", props.link);
-  const [infos, setInfos] = useState(null);
+  formData.append("id", 174);
+  //   formData.append("pathString", props.link);
+  const [contacts, setContacts] = useState(null);
   const [elementsOpt, setElementsOpt] = useState(null);
   const [idPatient, setIdPatient] = useState(id);
+  const [type, setType] = useState(null);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   useEffect(() => {
-    setElementsOpt(...props?.infos?.suggestionsByBlock);
+    axios({
+      method: "post",
+      url: "/api/suggestionsById",
+      data: formData,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    })
+      .then(function (response) {
+        setType(response);
+      })
+      .catch(function (response) {});
   }, [idPatient]);
   console.log(props);
+  //   /api/getContacts
   return (
     <>
-      <button onClick={handleShow} className="add-infos-btn">
-        <FontAwesomeIcon icon={faPlusCircle} />
-      </button>
+      <Button onClick={handleShow}>Editer un lieu</Button>
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>Modifier une information</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {" "}
           <>
-            <Form.Label htmlFor="inputValue">Valeur</Form.Label>
-            <Form.Select size="lg">
-              {elementsOpt?.map((el, id) => (
+            {/* <InputContactList contacts={props?.contacts} /> */}
+            <Form.Label htmlFor="inputValue">Lieu</Form.Label>
+            <Form.Select size="lg" className="mb-4">
+              {props?.lieuxList?.data?.map((el, id) => (
                 <>
-                  <option>{el?.value}</option>
+                  {el?.cont?.lastname && (
+                    <>
+                      {el?.cont?.lastname}
+                      <option selected={el?.cont?.lastname}>
+                        {el?.lastname}
+                      </option>
+                    </>
+                  )}
                 </>
               ))}
             </Form.Select>
-            <Form.Label htmlFor="inputValue">Valeur Spécifique</Form.Label>
+
+            <Form.Label htmlFor="inputValue">Type</Form.Label>
+            <Form.Select size="lg" className="mb-4">
+              {props?.type?.data?.map((el, id) => (
+                <>
+                  {el?.value && (
+                    <option selected={props?.places?.sugg?.value}>
+                      {el?.value}
+                    </option>
+                  )}
+                </>
+              ))}
+            </Form.Select>
+
+            <Form.Label htmlFor="inputValue">Description</Form.Label>
             <Form.Control
               type="text"
               id="inputValueSpécifique"
               aria-describedby="valueSpécifique"
             />
-            <p>
-              Les suggestions marquées d'une étoile (*) dans la liste ci-dessus
-              demandent obligatoirement une valeur spécifique.
-            </p>
+
             <Form.Label htmlFor="inputValue">Début</Form.Label>
             <Form.Control
               type="date"
@@ -86,4 +117,4 @@ function ModalAddInfos(props) {
 
 // render(<Modal />);
 
-export default ModalAddInfos;
+export default EditLierLieux;

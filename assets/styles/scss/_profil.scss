@@ -1,6 +1,27 @@
 body{
     // background: -webkit-linear-gradient(left, #3931af, #00c6ff);
 }
+
+.menuFichePatient{
+    // border-bottom: 1px solid #dfdfdf;
+    .btn-menuFichePatient{
+        cursor: pointer;
+        /* margin-right: 4rem; */
+        width: 12%;
+        text-align: center;
+        padding-bottom: 0.5rem;
+    
+    
+    
+    }
+}
+
+.menu-ongletFiche{
+    button{
+        display: block;
+    }
+}
+
 .emp-profile{
     padding: 3%;
     margin-top: 3%;
