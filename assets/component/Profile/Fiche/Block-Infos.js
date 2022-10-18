@@ -28,36 +28,47 @@ const BlockInfos = (props) => {
   const [informationPatient, setInformation] = useState(null);
   const [informationTemplateBlock, setInformationTemplateBlock] =
     useState(null);
-  // console.log(props);
+  console.log(props);
   return (
     <>
       {props.infos?.map((patient, id) => (
-        <>
+        <div key={patient.id}>
           {patient && patient.suge?.pathString === props.link && (
             <div className="row">
               <div className="col-sm-4">
                 <p>{patient.suge?.value}</p>
               </div>
-              <div className="col-sm-4">
-                {patient?.patientInformation?.map((pi, id) => (
-                  <p key={id}>
-                    {pi.sugg?.value}
-                    {pi && (
-                      <ModalEditInfos
-                        link={props.link}
-                        infosPatient={pi}
-                        infos={patient}
-                      />
-                    )}
-                  </p>
-                ))}
+
+              <div className="col-sm-6">
+                {patient?.patientInformation && (
+                  <>
+                    {patient?.patientInformation?.map((pi, id) => (
+                      <div className="row">
+                        <div className="col-sm-6">
+                          <p key={pi.id}>
+                            {pi.sugg?.value}
+                            {pi && (
+                              <ModalEditInfos
+                                link={props.link}
+                                infosPatient={pi}
+                                infos={patient}
+                              />
+                            )}
+                          </p>
+                        </div>
+
+                        <div className="col-sm-6">{pi?.comment}</div>
+                      </div>
+                    ))}
+                  </>
+                )}
               </div>
-              <div className="col-sm-4">
+              <div className="col-sm-2">
                 <ModalAddInfos link={props.link} infos={patient} />
               </div>
             </div>
           )}
-        </>
+        </div>
       ))}
     </>
   );

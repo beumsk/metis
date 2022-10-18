@@ -44,9 +44,7 @@ function ModalAddInfos(props) {
             <Form.Label htmlFor="inputValue">Valeur</Form.Label>
             <Form.Select size="lg">
               {elementsOpt?.map((el, id) => (
-                <>
-                  <option>{el?.value}</option>
-                </>
+                <option key={el.id}>{el?.value}</option>
               ))}
             </Form.Select>
             <Form.Label htmlFor="inputValue">Valeur Spécifique</Form.Label>

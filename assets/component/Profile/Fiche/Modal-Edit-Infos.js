@@ -61,14 +61,12 @@ function ModalEditInfos(props) {
             <Form.Label htmlFor="inputValue">Valeur</Form.Label>
             <Form.Select size="lg">
               {elementsOpt?.map((el, id) => (
-                <>
-                  <option
-                    key={id}
-                    selected={props.infosPatient.sugg.value === el?.value}
-                  >
-                    {el?.value}
-                  </option>
-                </>
+                <option
+                  key={el.id}
+                  selected={props.infosPatient.sugg.value === el?.value}
+                >
+                  {el?.value}
+                </option>
               ))}
             </Form.Select>
             <Form.Label htmlFor="inputValue">Valeur Spécifique</Form.Label>
