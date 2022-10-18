@@ -5,6 +5,7 @@ import axios from "axios";
 // import Basic from "./Dropzone";
 import ModalLierLieux from "./Modal-Lier-Lieux";
 import EditLierLieux from "./Edit-Lieux";
+import Table from "react-bootstrap/Table";
 const Places = () => {
   let id = useParams().id;
   var formType = new FormData();
@@ -63,36 +64,55 @@ const Places = () => {
 
   return (
     <>
-      <ModalLierLieux lieuxList={alllistPlaces} type={type}></ModalLierLieux>
+      <div className="d-flex mb-4 row-btn">
+        <ModalLierLieux lieuxList={alllistPlaces} type={type}></ModalLierLieux>
+      </div>
+
       {listPlaces && listPlaces.data.length > 0 && (
         <>
           <h6>Lieux</h6>
-          {listPlaces?.data?.map((places, id) => (
-            <div className="row">
-              <div className="col-sm-3">
-                {places.cont.firstname}
-                {places.cont.lastname}
-                <EditLierLieux
-                  lieu={places}
-                  type={type}
-                  lieuxList={alllistPlaces}
-                  // typeDefault={places.type.lastname}
-                  places={places}
-                ></EditLierLieux>
-              </div>
-              {/* <div className="col-sm-2">{places.lastname}</div> */}
-              {/* <div className="col-sm-2">{medias.comment}</div>
-              <div className="col-sm-2">
-                {new Date(medias.date).toLocaleString("fr-BE", {
-                  dateStyle: "short",
-                })}
-              </div>
-              <div className="col-sm-3">
-                <button className="btn-metis delete-btn">delete</button>
-                <button className="btn-metis">télécharger</button>
-              </div> */}
-            </div>
-          ))}
+
+          <Table striped>
+            <thead>
+              <tr>
+                <th>Lieu</th>
+                <th>Type de lieu</th>
+                <th>Début</th>
+                <th>Fin</th>
+                <th>Comment</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+
+            {listPlaces?.data?.map((places, id) => (
+              <>
+                <tbody>
+                  <tr>
+                    <td>
+                      {places.cont.firstname}
+                      {places.cont.lastname}
+                    </td>
+                    <td>
+                      {/* {new Date(patient.creationDate).toLocaleDateString()} */}
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td> </td>
+                    <td>
+                      {" "}
+                      <EditLierLieux
+                        lieu={places}
+                        type={type}
+                        lieuxList={alllistPlaces}
+                        // typeDefault={places.type.lastname}
+                        places={places}
+                      ></EditLierLieux>
+                    </td>
+                  </tr>
+                </tbody>
+              </>
+            ))}
+          </Table>
         </>
       )}
     </>

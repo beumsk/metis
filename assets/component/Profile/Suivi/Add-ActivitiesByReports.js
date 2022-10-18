@@ -31,7 +31,7 @@ function AddActivitiesByReport(props) {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   useEffect(() => {}, [idPatient]);
-  console.log(contacts);
+  // console.log(contacts);
   //   /api/getContacts
   return (
     <>

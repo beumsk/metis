@@ -31,7 +31,7 @@ const Medias = (props) => {
   }, [idPatient]);
 
   const sendMedias = () => {
-    console.log(value);
+    // console.log(value);
     var formData = new FormData();
 
     let sugg = 2;
@@ -51,15 +51,15 @@ const Medias = (props) => {
       },
     })
       .then(function (response) {
-        console.log(response);
+        // console.log(response);
       })
       .catch(function (response) {
-        console.log(response);
+        // console.log(response);
       });
   };
 
   const deleteMedias = (id) => {
-    console.log(value);
+    // console.log(value);
     var formData = new FormData();
 
     formData.append("id", id);
@@ -73,10 +73,10 @@ const Medias = (props) => {
       },
     })
       .then(function (response) {
-        console.log(response);
+        // console.log(response);
       })
       .catch(function (response) {
-        console.log(response);
+        // console.log(response);
       });
   };
 

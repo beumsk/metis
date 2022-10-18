@@ -5,6 +5,12 @@ import React, {
   useState,
   useEffect,
 } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faPlusCircle,
+  faCancel,
+  faEdit,
+} from "@fortawesome/free-solid-svg-icons";
 import useAuth from "../../../hooks/useAuth";
 import axios from "axios";
 import { Link, useNavigate, useLocation, useParams } from "react-router-dom";
@@ -200,7 +206,7 @@ const Profile = () => {
           ))}
         </div>
         <div className="col-sm-9">
-          <div className="d-flex">
+          <div className="d-flex row-btn mb-4">
             <div style={{ margin: "0 1rem" }}>
               <ModalAddAppels
                 type={type}
@@ -235,7 +241,11 @@ const Profile = () => {
             ></AddReportMeet>
           )}
 
-          {isDahsboardReports && <DashboardReports></DashboardReports>}
+          {isDahsboardReports && (
+            <DashboardReports
+              informationPatient={informationPatient}
+            ></DashboardReports>
+          )}
         </div>
 
         {/* <h1>TEXT</h1> */}

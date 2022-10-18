@@ -9,9 +9,11 @@ import {
   faEdit,
   faDashboard,
 } from "@fortawesome/free-solid-svg-icons";
+import Accordion from "react-bootstrap/Accordion";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import Form from "react-bootstrap/Form";
+import Table from "react-bootstrap/Table";
 
 function DashboardReports(props) {
   const [show, setShow] = useState(false);
@@ -54,11 +56,60 @@ function DashboardReports(props) {
     //   })
     //   .catch(function (response) {});
   }, [idPatient]);
-  console.log(contacts);
+  // console.log(props.informationPatient);
   //   /api/getContacts
   return (
     <>
-      <h1>Dashboard rapports</h1>
+      <div className="container  row mx-auto report-content">
+        <h5 className="mt-4 mb-4">Tous les rapports</h5>
+
+        {props.informationPatient &&
+          props.informationPatient.data &&
+          props.informationPatient.data.length > 0 && (
+            <Table striped>
+              <thead>
+                <tr>
+                  <th>Type</th>
+                  <th>Date de création</th>
+                  <th>Objectifs</th>
+                  <th>Contact(s)</th>
+                  <th>Soins(s)</th>
+                  <th>Activité(s)</th>
+                  <th>Important</th>
+                  <th>Ind.</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              {props.informationPatient.data.map((patient) => (
+                <>
+                  <tbody>
+                    <tr>
+                      <td></td>
+                      <td>
+                        {new Date(patient.creationDate).toLocaleDateString()}
+                      </td>
+                      <td></td>
+                      <td></td>
+                      <td>{patient.noCare}</td>
+                      <td>{patient.noIndicators}</td>
+                      <td>{patient.noIndicators}</td>
+                      <td></td>
+                      <td>
+                        {" "}
+                        <span>
+                          <button>Détails</button>
+                        </span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </>
+              ))}
+              {/* <button className="btn-metis" onClick={readMore}>
+                Read More
+              </button> */}
+            </Table>
+          )}
+      </div>
     </>
   );
 }

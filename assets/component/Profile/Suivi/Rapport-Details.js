@@ -9,6 +9,7 @@ import {
   faEdit,
 } from "@fortawesome/free-solid-svg-icons";
 import { useParams } from "react-router-dom";
+import Table from "react-bootstrap/Table";
 import axios from "axios";
 import Editor from "./Editor-Reports";
 import Form from "react-bootstrap/Form";
@@ -44,7 +45,7 @@ function RapportDetails(props) {
       })
       .catch(function (response) {});
   }, [idPatient]);
-  console.log(contacts);
+  // console.log(contacts);
   const editContent = (e) => {
     console.log("e");
     setEdit(true);
@@ -63,7 +64,7 @@ function RapportDetails(props) {
                   r.isHightlight = toggle;
                 }}
               >
-                Editer
+                <FontAwesomeIcon icon={faEdit} /> Editer
               </button>
               {r.isHightlight === true && (
                 <EditReportMeet

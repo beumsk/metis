@@ -45,7 +45,7 @@ function AddSoinsByReport(props) {
       })
       .catch(function (response) {});
   }, [idPatient]);
-  console.log(contacts);
+  // console.log(contacts);
   //   /api/getContacts
   return (
     <>
@@ -63,10 +63,8 @@ function AddSoinsByReport(props) {
           <InputContactList contacts={props.contacts} />
         </Form.Select>
         <Form.Label htmlFor="inputValue">Lieux</Form.Label>
-        <Form.Select size="lg">
-          <option>Lieux non chargées pour l'instant</option>
-          <InputPlaceList places={props.places}></InputPlaceList>
-        </Form.Select>
+
+        <InputPlaceList places={props.places}></InputPlaceList>
       </div>
     </>
   );

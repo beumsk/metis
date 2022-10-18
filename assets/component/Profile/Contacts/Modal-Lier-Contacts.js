@@ -53,11 +53,13 @@ function ModalLierContacts(props) {
     //   })
     //   .catch(function (response) {});
   }, [idPatient]);
-  console.log(contacts);
+  // console.log(contacts);
   //   /api/getContacts
   return (
     <>
-      <Button onClick={handleShow}>Lier un contact</Button>
+      <Button onClick={handleShow} className="btn-metis">
+        Lier un contact
+      </Button>
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>

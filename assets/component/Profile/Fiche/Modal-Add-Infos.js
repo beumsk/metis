@@ -27,7 +27,7 @@ function ModalAddInfos(props) {
   useEffect(() => {
     setElementsOpt(...props?.infos?.suggestionsByBlock);
   }, [idPatient]);
-  console.log(props);
+  // console.log(props);
   return (
     <>
       <button onClick={handleShow} className="add-infos-btn">

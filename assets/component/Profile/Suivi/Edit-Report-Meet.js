@@ -50,7 +50,7 @@ function EditReportMeet(props) {
   }, [idPatient]);
 
   const choiceActivities = (e) => {
-    console.log(e);
+    // console.log(e);
     setActivities(e);
   };
   const choiceSoins = (e) => {
@@ -61,15 +61,17 @@ function EditReportMeet(props) {
   };
 
   const validRepport = (e) => {};
-  console.log(props?.informationPatient);
+  // console.log(props?.informationPatient);
   return (
     <>
-      <h4 className="mt-4 mb-4">Rajouter un rapport</h4>
+      <h4 className="mt-4 mb-4">Editer le rapport</h4>
       {/* <Form.Control type="text" id="inputText" className="mt-4" /> */}
       <Form.Group className="mb-3" controlId="formBasicCheckbox">
-        <h6 className="mr-4">Ajouter des soins ?</h6>
         <div className="d-flex">
           <div key={`inline-radio`} className="mb-3">
+            <Form.Label htmlFor="inputValue" className="mr-4">
+              Y'a t'il des soins ?
+            </Form.Label>
             <Form.Check
               inline
               label="Oui"
@@ -90,25 +92,29 @@ function EditReportMeet(props) {
         </div>
         <div>
           {showAccesSoins && (
-            <AddSoinsByReport
-              type={type}
-              contacts={props?.contacts}
-              places={props?.places}
-            ></AddSoinsByReport>
+            <div className="sous-form">
+              <AddSoinsByReport
+                type={props.type}
+                contacts={props.contacts}
+                places={props.places}
+              ></AddSoinsByReport>
+            </div>
           )}
         </div>
       </Form.Group>
       <Form.Group className="mb-3" controlId="formBasicCheckbox">
-        <h6 className="mr-4">Ajouter des activitées ?</h6>
         <div className="d-flex">
           <div key={`inline-radio`} className="mb-3">
+            <Form.Label htmlFor="inputValue" className="mr-4">
+              Y'a t'il des activitées ?
+            </Form.Label>
             <Form.Check
               inline
               label="Oui"
               onClick={(e) => choiceActivities(true)}
               name="group2"
               type={"radio"}
-              id={`inline-radio-1`}
+              id={`inline-radio-3`}
             />
             <Form.Check
               inline
@@ -116,31 +122,35 @@ function EditReportMeet(props) {
               name="group2"
               onClick={(e) => choiceActivities(false)}
               type={"radio"}
-              id={`inline-radio-2`}
+              id={`inline-radio-4`}
             />
           </div>
         </div>
         <div>
           {showActivities && (
-            <AddActivitiesByReport
-              type={type}
-              contacts={props?.contacts}
-              places={props?.places}
-            ></AddActivitiesByReport>
+            <div className="sous-form">
+              <AddActivitiesByReport
+                type={props.type}
+                contacts={props.contacts}
+                places={props.places}
+              ></AddActivitiesByReport>
+            </div>
           )}
         </div>
       </Form.Group>
       <Form.Group className="mb-3" controlId="formBasicCheckbox">
-        <h6 className="mr-4">Ajouter des indicateurs ?</h6>
         <div className="d-flex">
-          <div key={`inline-radio`} className="mb-3">
+          <div key={`inline-radio`}>
+            <Form.Label htmlFor="inputValue" className="mr-4">
+              Y'a t'il des indicateurs ?
+            </Form.Label>
             <Form.Check
               inline
               label="Oui"
               onClick={(e) => choiceIndicateurs(true)}
               name="group3"
               type={"radio"}
-              id={`inline-radio-1`}
+              id={`inline-radio-5`}
             />
             <Form.Check
               inline
@@ -148,17 +158,19 @@ function EditReportMeet(props) {
               name="group3"
               onClick={(e) => choiceIndicateurs(false)}
               type={"radio"}
-              id={`inline-radio-2`}
+              id={`inline-radio-6`}
             />
           </div>
         </div>
         <div>
           {showIndicateurs && (
-            <AddIndicateursByReport
-              type={type}
-              contacts={props?.contacts}
-              places={props?.places}
-            ></AddIndicateursByReport>
+            <div className="sous-form">
+              <AddIndicateursByReport
+                type={type}
+                contacts={props.contacts}
+                places={props.places}
+              ></AddIndicateursByReport>
+            </div>
           )}
         </div>
       </Form.Group>
@@ -191,15 +203,17 @@ function EditReportMeet(props) {
         </>
       </Form.Select>
 
-      <Form.Label htmlFor="inputValue">Contact(s)</Form.Label>
       <InputContactList contacts={props?.contacts} />
 
-      <Form.Label htmlFor="inputValue">Lieu</Form.Label>
       <InputPlaceList places={props?.places}></InputPlaceList>
 
       <Editor contentText={props?.informationPatient?.content}></Editor>
 
-      <button onClick={(e) => validRepport(e)}>Valider le rapport</button>
+      <div className="row-btn">
+        <button className="btn-metis" onClick={(e) => validRepport(e)}>
+          Valider le rapport
+        </button>
+      </div>
     </>
   );
 }

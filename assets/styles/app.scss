@@ -80,6 +80,16 @@ button{
     margin-right: 1rem;
   }
 
+  .row-btn{
+    width: 100%;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    button{
+        margin-left: 1rem;
+    }
+}
+
 @import "./scss/login";
 @import "./scss/menu";
 @import "./scss/form";
@@ -87,6 +97,7 @@ button{
 @import "./scss/patients";
 @import "./scss/profil";
 @import "./scss/search";
+@import "./scss/contact";
 
 
 @import "../../node_modules/bootstrap/scss/bootstrap-utilities.scss";

@@ -11,7 +11,7 @@ input[type=text], select {
   }
   .btn-metis {
     font-family: "Roboto", sans-serif!important;
-    text-transform: uppercase!important;
+    // text-transform: uppercase!important;
     outline: 0!important;
     background: #8cb30c!important;
     // width: 100%;
@@ -22,4 +22,20 @@ input[type=text], select {
     -webkit-transition: all 0.3 ease!important;
     transition: all 0.3 ease!important;
     cursor: pointer!important;
+  }
+
+  label{
+    margin-right: 2rem;
+  }
+
+  .sous-form{
+    margin: 0 3rem;
+    background-color: #8cb30c;
+    padding: 3rem;
+    border-radius: 50px;
+    color: white;
+
+    input{
+      margin-bottom: 2rem;
+    }
   }

@@ -36,10 +36,10 @@ function ModalEditInfos(props) {
 
     setEndDate(new Date(props?.infosPatient?.end?.timestamp * 1000).toJSON());
   }, []);
-  console.log(new Date(props?.infosPatient?.end?.timestamp * 1000).toJSON());
+  // console.log(new Date(props?.infosPatient?.end?.timestamp * 1000).toJSON());
 
   const handleInputChange = (e) => {
-    console.log(e, "target");
+    // console.log(e, "target");
     setStartDate(e.target.value);
     setEndDate(e.target.value);
   };

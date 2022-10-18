@@ -41,11 +41,13 @@ function ModalLierLieux(props) {
       })
       .catch(function (response) {});
   }, [idPatient]);
-  console.log(props?.lieuxList);
+  //   console.log(props?.lieuxList);
   //   /api/getContacts
   return (
     <>
-      <Button onClick={handleShow}>Lier un lieu</Button>
+      <Button onClick={handleShow} className="btn-metis">
+        Lier un lieu
+      </Button>
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>

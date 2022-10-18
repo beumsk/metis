@@ -55,10 +55,12 @@ function ModalLierPatient(props) {
       })
       .catch(function (response) {});
   }, [idPatient]);
-  console.log(patients);
+  // console.log(patients);
   return (
     <>
-      <Button onClick={handleShow}>Lier un patient</Button>
+      <Button onClick={handleShow} className="btn-metis">
+        Lier un patient
+      </Button>
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
