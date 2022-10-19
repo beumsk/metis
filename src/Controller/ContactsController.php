@@ -27,16 +27,32 @@ class ContactsController extends AbstractController
     public function index(ManagerRegistry $doctrine, SerializerInterface $serializer): Response
     {
         $contacts = $doctrine->getRepository(Contacts::class)->findAll();
+
+
+        $cont = [];
+        foreach ($contacts as $key) {
+
+
+            if ($key->getDeletedAt() === null) {
+                $contObj = new Contacts();
+                $contObj->setLastName($key->getlastName());
+                $contObj->setFirstName($key->getfirstName());
+
+                array_push($cont, $contObj);
+            }
+        }
+
+
         $encoders = [new JsonEncoder()];
         $normalizers = [new ObjectNormalizer()];
         $serializer = new Serializer($normalizers, $encoders);
 
 
-        $jsonObject = $serializer->serialize($contacts, 'json', [
-            'circular_reference_handler' => function ($object) {
-                return $object->getId();
-            }
-        ]);
+        $jsonObject = $serializer->serialize(
+            $cont,
+            JsonEncoder::FORMAT,
+            [AbstractNormalizer::IGNORED_ATTRIBUTES => ['orga', "url", "description", "type"]]
+        );
 
 
         return new Response($jsonObject, 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);

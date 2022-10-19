@@ -27,6 +27,7 @@ function InputTypeList(props) {
   const [elementsOpt, setElementsOpt] = useState(null);
   const [idPatient, setIdPatient] = useState(id);
   const [type, setType] = useState(null);
+  const [typeValue, setTypeValue] = useState(null);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   useEffect(() => {
@@ -47,9 +48,17 @@ function InputTypeList(props) {
   // console.log(contacts);
 
   //   /api/getContacts
+  const onChangeType = (e) => {
+    props.onChange(e.target.value);
+  };
+
   return (
     <>
-      <Form.Select size="lg">
+      <Form.Select
+        size="lg"
+        value={typeValue}
+        onChange={(e) => onChangeType(e)}
+      >
         {props?.type?.data?.map((el, id) => (
           <>{el.value && <option>{el?.value}</option>}</>
         ))}

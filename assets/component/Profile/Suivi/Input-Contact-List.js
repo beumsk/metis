@@ -27,17 +27,27 @@ function InputContactList(props) {
   const [type, setType] = useState(null);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+  const [contactValue, setContactValue] = useState(null);
   useEffect(() => {}, [idPatient]);
 
   //   /api/getContacts
+  const onChangeContact = (e) => {
+    props.onChange(e.target.value);
+  };
+
   return (
     <>
       <Form.Label htmlFor="inputValue">Contacts</Form.Label>
-      <Form.Select size="lg">
+
+      <Form.Select
+        size="lg"
+        value={contactValue}
+        onChange={(e) => onChangeContact(e)}
+      >
         {props?.contacts?.data?.map((el, id) => (
           <>
-            {el?.firstname && el?.lastname && (
-              <option>
+            {props?.contacts && props?.contacts?.data && (
+              <option value={el?.id}>
                 {el?.firstname} {el?.lastname}
               </option>
             )}

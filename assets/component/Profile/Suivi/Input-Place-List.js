@@ -29,14 +29,23 @@ function InputPlaceList(props) {
   const [idPatient, setIdPatient] = useState(id);
   const [type, setType] = useState(null);
   const [places, setPlaces] = useState(null);
+  const [placeValue, setPlaceValue] = useState(null);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   useEffect(() => {}, [idPatient]);
+  const onChangePlaceValue = (e) => {
+    props.onChange(e.target.value);
+  };
 
   return (
     <>
       <Form.Label htmlFor="inputValue">Lieu</Form.Label>
-      <Form.Select size="lg" className="mb-4">
+      <Form.Select
+        size="lg"
+        className="mb-4"
+        value={placeValue}
+        onChange={(e) => onChangePlaceValue(e)}
+      >
         {props?.places?.data?.map((el, id) => (
           <>{el?.lastname && <option>{el?.lastname}</option>}</>
         ))}

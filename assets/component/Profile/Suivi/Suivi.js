@@ -101,6 +101,8 @@ const Profile = () => {
     })
       .then(function (response) {
         setContacts(response);
+
+        console.log(contacts);
       })
       .catch(function (response) {});
     [];

@@ -28,7 +28,6 @@ const BlockInfos = (props) => {
   const [informationPatient, setInformation] = useState(null);
   const [informationTemplateBlock, setInformationTemplateBlock] =
     useState(null);
-  console.log(props);
   return (
     <>
       {props.infos?.map((patient, id) => (

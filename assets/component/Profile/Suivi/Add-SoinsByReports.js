@@ -22,14 +22,16 @@ function AddSoinsByReport(props) {
   let id = useParams().id;
   var formData = new FormData();
   formData.append("id", 57);
-  //   formData.append("pathString", props.link);
-  const [contacts, setContacts] = useState(null);
-  const [places, setPlaces] = useState(null);
-  const [elementsOpt, setElementsOpt] = useState(null);
+
+  const [typeValue, setValueTypeForm] = useState(null);
+  const [contactValue, setValueContactForm] = useState(null);
+  const [placeForm, setValuePlaceForm] = useState(null);
   const [idPatient, setIdPatient] = useState(id);
   const [type, setType] = useState(null);
+  const [valueDescription, setValueDescription] = useState(null);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
   useEffect(() => {
     axios({
       method: "post",
@@ -45,26 +47,46 @@ function AddSoinsByReport(props) {
       })
       .catch(function (response) {});
   }, [idPatient]);
-  // console.log(contacts);
-  //   /api/getContacts
+
+  function handleChangeType(newValue) {
+    setValueTypeForm(newValue);
+  }
+
+  function handleChangeContacts(newValue) {
+    setValueContactForm(newValue);
+  }
+
+  function handleChangePlaces(newValue) {
+    setValuePlaceForm(newValue);
+  }
+
+  const onChangeDescription = (e) => {
+    setValueDescription(e.target.value);
+  };
+
+  console.log(typeValue, contactValue, placeForm, valueDescription);
   return (
     <>
       <div className="addSoins-form">
         <Form.Label htmlFor="inputValue">Type</Form.Label>
-        <InputTypeList type={type} />
+        <InputTypeList type={type} onChange={handleChangeType} />
         <Form.Label htmlFor="inputValue">Description</Form.Label>
         <Form.Control
           type="text"
           id="inputValueSpécifique"
           aria-describedby="valueSpécifique"
+          onChange={(e) => onChangeDescription(e)}
         />
-        <Form.Label htmlFor="inputValue">Contacts</Form.Label>
-        <Form.Select size="lg">
-          <InputContactList contacts={props.contacts} />
-        </Form.Select>
-        <Form.Label htmlFor="inputValue">Lieux</Form.Label>
 
-        <InputPlaceList places={props.places}></InputPlaceList>
+        <InputContactList
+          contacts={props?.contacts}
+          onChange={handleChangeContacts}
+        ></InputContactList>
+
+        <InputPlaceList
+          places={props.places}
+          onChange={handleChangePlaces}
+        ></InputPlaceList>
       </div>
     </>
   );

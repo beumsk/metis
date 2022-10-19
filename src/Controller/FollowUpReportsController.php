@@ -16,6 +16,14 @@ use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
+use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Encoder\XmlEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Serializer\Context\Normalizer\ObjectNormalizerContextBuilder;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -30,14 +38,29 @@ class FollowUpReportsController extends AbstractController
 
 
     #[Route('/api/getFollowUpReportsById', name: 'app_reportByPatient')]
-    public function index(ManagerRegistry $doctrine): Response
+    public function index(ManagerRegistry $doctrine, SerializerInterface $serializer): Response
     {
         $request = Request::createFromGlobals();
 
         $id = $request->request->get('id');
 
         $places = $doctrine->getRepository(FollowupReports::class)->findBy(["pati" => $id]);
-        return $this->json($places);
+
+        $encoders = [new JsonEncoder()];
+        $normalizers = [new ObjectNormalizer()];
+        $serializer = new Serializer($normalizers, $encoders);
+
+
+        $jsonObject = $serializer->serialize(
+            $places,
+            JsonEncoder::FORMAT,
+            [AbstractNormalizer::IGNORED_ATTRIBUTES => ['pati']]
+        );
+
+
+        // dd($jsonObject);
+
+        return new Response($jsonObject, 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
     }
 
     #[Route('/api/getFollowUpReportsIndicators', name: 'app_indicatorsByPatients')]

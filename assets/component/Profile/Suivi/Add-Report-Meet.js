@@ -23,6 +23,7 @@ function AddReportMeet(props) {
   let id = useParams().id;
   var formData = new FormData();
   formData.append("id", 57);
+  const [formSoins, setFormSoins] = useState([{ id: 0 }]);
   //   formData.append("pathString", props.link);
   const [contacts, setContacts] = useState(null);
   const [showAccesSoins, setAccesSoins] = useState(false);
@@ -59,6 +60,26 @@ function AddReportMeet(props) {
     setChoiceIndicateurs(e);
   };
 
+  useEffect(() => {}, []);
+
+  const onClickOnCare = (e) => {
+    console.log(e);
+    setFormSoins((prevFormSoins) => [...prevFormSoins, e]);
+  };
+  console.log(formSoins);
+  const onClickDeleteOnCare = (e) => {
+    console.log(formSoins.length);
+    if (formSoins.length > 0) {
+      let filter = formSoins.filter((el) => el.id !== e);
+      console.log(filter);
+      for (let index = 0; index < filter.length; index++) {
+        const element = filter[index];
+        element.id = index;
+        setFormSoins(filter);
+      }
+    }
+  };
+
   return (
     <div className="report-content">
       <h5 className="mt-4 mb-4">Ajouter un rapport</h5>
@@ -90,11 +111,25 @@ function AddReportMeet(props) {
         <div>
           {showAccesSoins && (
             <div className="sous-form">
-              <AddSoinsByReport
-                type={props.type}
-                contacts={props.contacts}
-                places={props.places}
-              ></AddSoinsByReport>
+              {formSoins.map((form, idx) => (
+                <>
+                  <AddSoinsByReport
+                    key={form.id}
+                    type={props.type}
+                    contacts={props?.contacts}
+                    places={props.places}
+                  ></AddSoinsByReport>
+                  {formSoins && formSoins.length > 1 && (
+                    <button onClick={(e) => onClickDeleteOnCare(form.id)}>
+                      Supprimer un autre soin
+                    </button>
+                  )}
+                </>
+              ))}
+
+              <button onClick={(e) => onClickOnCare({ id: formSoins.length })}>
+                Ajouter un autre soin
+              </button>
             </div>
           )}
         </div>
@@ -131,6 +166,7 @@ function AddReportMeet(props) {
                 contacts={props.contacts}
                 places={props.places}
               ></AddActivitiesByReport>
+              <button>Ajouter un autre activitée</button>
             </div>
           )}
         </div>
@@ -167,6 +203,7 @@ function AddReportMeet(props) {
                 contacts={props.contacts}
                 places={props.places}
               ></AddIndicateursByReport>
+              <button>Ajouter un autre indicateur</button>
             </div>
           )}
         </div>
