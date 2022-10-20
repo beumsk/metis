@@ -66,7 +66,7 @@ function AddActivitiesByReport(props) {
     <>
       <div className="addSoins-form">
         <Form.Label htmlFor="inputValue">Type</Form.Label>
-        <InputTypeList type={props.type} onChange={handleChangeType} />
+        <InputTypeList type={props?.type} onChange={handleChangeType} />
         <Form.Label htmlFor="inputValue">Description</Form.Label>
         <Form.Control
           type="text"

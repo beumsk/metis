@@ -29,7 +29,12 @@ function AddIndicateursByReport(props) {
 
   const [idPatient, setIdPatient] = useState(id);
   const [typeCVCSelected, setTypeCVCSelected] = useState(null);
-
+  const [indicateursEstLeLogement, setIndicateursLogement] = useState(null);
+  const [
+    indicateursFormHestiaRisqueDeces,
+    setIndicateursFormHestiaRisqueDeces,
+  ] = useState(null);
+  const [indicateursFormCVC, setIndicateursFormCVC] = useState(null);
   useEffect(() => {}, []);
 
   // if (props.formIndicateurs.length > 1 && props.formIndicateurs.length < 4) {
@@ -56,20 +61,26 @@ function AddIndicateursByReport(props) {
 
   const onChangeIndicateursEstiaLogement = (e) => {
     console.log(e);
+    // setIndicateursLogement(e);
   };
 
   const onChangeIndicateursFormHestiaRisqueDeces = (e) => {
     console.log(e);
+    // setIndicateursFormHestiaRisqueDeces(e);
   };
 
   const onChangeIndicateursFormCVC = (e) => {
     console.log(e);
+    // setIndicateursFormCVC(e);
   };
 
   props.onChange([
     {
       selectedOptionType: typeCVCSelected,
       id: props.id,
+      indicateursFormCVC: indicateursFormCVC,
+      indicateursEstLeLogement: indicateursEstLeLogement,
+      indicateursFormHestiaRisqueDeces: indicateursFormHestiaRisqueDeces,
     },
   ]);
 

@@ -44,23 +44,19 @@ function IndicateursFormHestiaPerteLogement(props) {
     setDescriptionVoisinage(e.target.value);
   };
   const choiceBailleur = (e) => {
-    console.log(e);
     setTypeCVCSelected(e.target.value);
   };
 
   const choiceTypeCVC = (e) => {
-    console.log(e);
     setBailleurSelected(e.target.value);
   };
 
   const choiceVoisinage = (e) => {
-    console.log(e);
-    setVoisinageSelected(e.target.value);
+    setVoisinageSelected(e);
   };
 
   const choiceHygiene = (e) => {
-    console.log(e);
-    setHygieneSelected(e.target.value);
+    setHygieneSelected(e);
   };
 
   const onChangeDescriptionBailleur = (e) => {
@@ -68,21 +64,17 @@ function IndicateursFormHestiaPerteLogement(props) {
   };
   //   /api/getContacts
 
-  console.log(
-    typeCVCSelected,
-    bailleurSelected,
-    voisinageSelected,
-    hygieneSelected
-  );
-  // props.onChange([
-  //   {
-  //     id: props.id,
-  //     type: typeValue,
-  //     contact: contactValue,
-  //     place: placeForm,
-  //     description: valueDescription,
-  //   },
-  // ]);
+  props.onChange([
+    {
+      id: props.id,
+      bailleurSelected: bailleurSelected,
+      voisinageSelected: voisinageSelected,
+      hygieneSelected: hygieneSelected,
+      descriptionVoisinage: descriptionVoisinage,
+      descriptionHygiene: descriptionHygiene,
+      descriptionBailleur: descriptionBailleur,
+    },
+  ]);
   return (
     <>
       <div className="addSoins-form">
@@ -93,7 +85,7 @@ function IndicateursFormHestiaPerteLogement(props) {
           <Form.Check
             inline
             label="Conflits de voisinage (0)"
-            onClick={(e) => choiceVoisinage(e)}
+            onClick={(e) => choiceVoisinage("0")}
             name="group1"
             type={"radio"}
             id={`inline-radio-1`}
@@ -102,7 +94,7 @@ function IndicateursFormHestiaPerteLogement(props) {
             inline
             label="Conflits de voisinage mais gérés (1)"
             name="group1"
-            onClick={(e) => choiceVoisinage(e)}
+            onClick={(e) => choiceVoisinage("1")}
             type={"radio"}
             id={`inline-radio-2`}
           />
@@ -110,7 +102,7 @@ function IndicateursFormHestiaPerteLogement(props) {
             inline
             label="Absence de conflits de voisinage (2)"
             name="group1"
-            onClick={(e) => choiceVoisinage(e)}
+            onClick={(e) => choiceVoisinage("2")}
             type={"radio"}
             id={`inline-radio-3`}
           />
@@ -118,7 +110,7 @@ function IndicateursFormHestiaPerteLogement(props) {
             inline
             label="Bonne entente avec le voisinage (3)"
             name="group1"
-            onClick={(e) => choiceVoisinage(e)}
+            onClick={(e) => choiceVoisinage("3")}
             type={"radio"}
             id={`inline-radio-4`}
           />
@@ -136,34 +128,34 @@ function IndicateursFormHestiaPerteLogement(props) {
           <Form.Check
             inline
             label="Si cumule au moins 2 éléments : Présence d’odeurs nauséabondes, nuisibles, altération du matériel, accumulation (0)"
-            onClick={(e) => choiceHygiene(e)}
-            name="group1"
+            onClick={(e) => choiceHygiene("0")}
+            name="group2"
             type={"radio"}
-            id={`inline-radio-1`}
+            id={`inline-radio-5`}
           />
           <Form.Check
             inline
             label="Présence d’odeurs nauséabondes OU nuisibles OU altération du matériel OU accumulation (1)"
-            name="group1"
-            onClick={(e) => choiceHygiene(e)}
+            name="group2"
+            onClick={(e) => choiceHygiene("1")}
             type={"radio"}
-            id={`inline-radio-2`}
+            id={`inline-radio-6`}
           />
           <Form.Check
             inline
             label="Logement relativement propre et entretenu mais pas impeccable ou aides familiales limitées (2)"
-            name="group1"
-            onClick={(e) => choiceHygiene(e)}
+            name="group2"
+            onClick={(e) => choiceHygiene("2")}
             type={"radio"}
-            id={`inline-radio-3`}
+            id={`inline-radio-7`}
           />
           <Form.Check
             inline
             label="Logement impeccable et/ou aides familiales régulières et fonctionnelles (3)"
-            name="group1"
-            onClick={(e) => choiceHygiene(e)}
+            name="group2"
+            onClick={(e) => choiceHygiene("3")}
             type={"radio"}
-            id={`inline-radio-4`}
+            id={`inline-radio-8`}
           />
           <Form.Label htmlFor="inputValue">Commentaire</Form.Label>
           <Form.Control
@@ -179,34 +171,34 @@ function IndicateursFormHestiaPerteLogement(props) {
           <Form.Check
             inline
             label="Absence de paiement du loyer (0)"
-            onClick={(e) => choiceBailleur(e)}
-            name="group1"
+            onClick={(e) => choiceBailleur("0")}
+            name="group3"
             type={"radio"}
-            id={`inline-radio-1`}
+            id={`inline-radio-9`}
           />
           <Form.Check
             inline
             label="La personne paie son loyer mais aucune garantie de régularité ou de manière erronée (1)"
-            name="group1"
-            onClick={(e) => choiceBailleur(e)}
+            name="group3"
+            onClick={(e) => choiceBailleur("1")}
             type={"radio"}
-            id={`inline-radio-2`}
+            id={`inline-radio-10`}
           />
           <Form.Check
             inline
             label="Quelqu’un est garant du paiement du loyer mais personne n’est garant de la signature des baux (2)"
-            name="group1"
-            onClick={(e) => choiceBailleur(e)}
+            name="group3"
+            onClick={(e) => choiceBailleur("2")}
             type={"radio"}
-            id={`inline-radio-3`}
+            id={`inline-radio-11`}
           />
           <Form.Check
             inline
             label="Garantie du paiement du loyer et de la signature des baux (3)"
-            name="group1"
-            onClick={(e) => choiceBailleur(e)}
+            name="group3"
+            onClick={(e) => choiceBailleur("3")}
             type={"radio"}
-            id={`inline-radio-4`}
+            id={`inline-radio-12`}
           />
           <Form.Label
             htmlFor="inputValue"

@@ -88,11 +88,11 @@ function AddReportMeet(props) {
 
   useEffect(() => {}, []);
   const onClickAddActivities = (e) => {
-    console.log(e);
+    // console.log(e);
     setFormActivities((prevFormSoins) => [...prevFormSoins, e]);
   };
   const onClickAddIndicateurs = (e) => {
-    console.log("testestest", formIndicateurs);
+    // console.log("testestest", formIndicateurs);
 
     if (formIndicateurs && formIndicateurs.length < 3) {
       setFormIndicateurs((prevFormSoins) => [...prevFormSoins, e]);
@@ -104,14 +104,14 @@ function AddReportMeet(props) {
     // setOptions(options);
   };
   const onClickOnCare = (e) => {
-    console.log(e);
+    // console.log(e);
     setFormSoins((prevFormSoins) => [...prevFormSoins, e]);
   };
 
   const onClickDeleteOnCare = (e) => {
     if (formSoins.length > 0) {
       let filter = formSoins.filter((el) => el.id !== e);
-      console.log(filter);
+
       for (let index = 0; index < filter.length; index++) {
         const element = filter[index];
         element.id = index;
@@ -123,7 +123,7 @@ function AddReportMeet(props) {
   const onClickDeleteActivitiesForm = (e) => {
     if (formActivities.length > 0) {
       let filter = formActivities.filter((el) => el.id !== e);
-      console.log(filter);
+
       for (let index = 0; index < filter.length; index++) {
         const element = filter[index];
         element.id = index;
@@ -135,44 +135,41 @@ function AddReportMeet(props) {
   const onClickDeleteIndicateursForm = (e) => {
     if (formIndicateurs.length > 0 && formIndicateurs.length < 4) {
       let filter = formIndicateurs.filter((el) => el.id !== e);
-      console.log(filter);
+
       for (let index = 0; index < filter.length; index++) {
         const element = filter[index];
         element.id = index;
         setFormIndicateurs(filter);
-        console.log("DELETE", filter);
+
         options.push(filter[0].type);
       }
     }
   };
 
   function onChangeValuesByOnCareForm(e) {
-    console.log("ADD report", e);
-    // console.log("form soins", formSoins);
-
     if (formSoins.filter((el) => e[0].id === el.id)) {
       formSoins.filter((el) => e[0].id === el.id)[0].type = e[0].type;
       formSoins.filter((el) => e[0].id === el.id)[0].contact = e[0].contact;
       formSoins.filter((el) => e[0].id === el.id)[0].place = e[0].place;
       formSoins.filter((el) => e[0].id === el.id)[0].description =
         e[0].description;
+
       console.log(formSoins);
     }
   }
 
   function onChangeValuesByActivitiesForm(e) {
-    console.log("ADD report", e);
+    console.log(e);
     // console.log("form soins", formSoins);
-
-    // if (formActivities.filter((el) => e[0].id === el.id)) {
-    //   formActivities.filter((el) => e[0].id === el.id)[0].type = e[0].type;
-    //   formActivities.filter((el) => e[0].id === el.id)[0].contact =
-    //     e[0].contact;
-    //   formActivities.filter((el) => e[0].id === el.id)[0].place = e[0].place;
-    //   formActivities.filter((el) => e[0].id === el.id)[0].description =
-    //     e[0].description;
-    //   console.log(formActivities);
-    // }
+    if (formActivities.filter((el) => e[0].id === el.id)) {
+      formActivities.filter((el) => e[0].id === el.id)[0].type = e[0].type;
+      formActivities.filter((el) => e[0].id === el.id)[0].contact =
+        e[0].contact;
+      formActivities.filter((el) => e[0].id === el.id)[0].place = e[0].place;
+      formActivities.filter((el) => e[0].id === el.id)[0].description =
+        e[0].description;
+      console.log(formActivities);
+    }
   }
 
   function onChangeValuesIndicateursForm(e) {
@@ -184,8 +181,7 @@ function AddReportMeet(props) {
         e[0].selectedOptionType;
       formIndicateurs.filter((el) => e[0].id === el.id)[0].id = e[0].id;
     }
-    console.log(formIndicateurs);
-    console.log(options);
+
     if (
       formIndicateurs &&
       formIndicateurs.length > 0 &&
@@ -197,14 +193,13 @@ function AddReportMeet(props) {
           formIndicateurs[formIndicateurs.length - 1].type !== null &&
           formIndicateurs[formIndicateurs.length - 1].type === element
         ) {
-          console.log(formIndicateurs[formIndicateurs.length - 1]);
           options.splice(index, 1);
         }
       }
     }
 
     // if (optionsRest && optionsRest.length > 0) {
-    console.log(options);
+
     // setOptions(optionsRest);
     // }
 
@@ -264,7 +259,7 @@ function AddReportMeet(props) {
                 <>
                   <AddSoinsByReport
                     key={form.id}
-                    id={form.id}
+                    id={idx}
                     type={type}
                     contacts={props?.contacts}
                     places={props.places}
@@ -316,6 +311,7 @@ function AddReportMeet(props) {
                 <>
                   <AddActivitiesByReport
                     type={typeFormActivities}
+                    id={idx}
                     key={form.id}
                     contacts={props.contacts}
                     places={props.places}

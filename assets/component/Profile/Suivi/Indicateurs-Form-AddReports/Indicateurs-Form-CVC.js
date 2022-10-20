@@ -39,6 +39,7 @@ function IndicateursFormCVC(props) {
   };
 
   const onChangeDescriptionCorps = (e) => {
+    console.log("test");
     setDescriptionCorps(e.target.value);
   };
 
@@ -62,6 +63,18 @@ function IndicateursFormCVC(props) {
   //   /api/getContacts
 
   props.onChange([
+    {
+      id: props.id,
+      corpsScore: corpsScore,
+      corpsDescription: corpsDescription,
+      vetementsScore: vetementsScore,
+      vetementsDescription: vetementsDescription,
+      comportementScore: comportementScore,
+      comportementDescription: comportementDescription,
+    },
+  ]);
+
+  console.log([
     {
       id: props.id,
       corpsScore: corpsScore,
@@ -126,33 +139,33 @@ function IndicateursFormCVC(props) {
             inline
             label="Sales, abîmés et malodorants (0)"
             onClick={(e) => choiceVetements("0")}
-            name="group1"
+            name="group2"
             type={"radio"}
-            id={`inline-radio-1`}
+            id={`inline-radio-5`}
           />
           <Form.Check
             inline
             label="Sales et malodorants OU sales et abîmés OU inadaptés (1)"
-            name="group1"
+            name="group2"
             onClick={(e) => choiceVetements("1")}
             type={"radio"}
-            id={`inline-radio-2`}
+            id={`inline-radio-6`}
           />
           <Form.Check
             inline
             label="Sales OU abîmés OU malodorants (2)"
-            name="group1"
+            name="group2"
             onClick={(e) => choiceVetements("2")}
             type={"radio"}
-            id={`inline-radio-3`}
+            id={`inline-radio-7`}
           />
           <Form.Check
             inline
             label="Cohérents, propres et en bon état (3)"
-            name="group1"
+            name="group2"
             onClick={(e) => choiceVetements("3")}
             type={"radio"}
-            id={`inline-radio-4`}
+            id={`inline-radio-8`}
           />
           <Form.Label htmlFor="inputValue">Commentaire</Form.Label>
           <Form.Control
@@ -169,41 +182,40 @@ function IndicateursFormCVC(props) {
             inline
             label="Anormal et dangereux (0)"
             onClick={(e) => choiceComportement("0")}
-            name="group1"
+            name="group3"
             type={"radio"}
-            id={`inline-radio-1`}
+            id={`inline-radio-9`}
           />
           <Form.Check
             inline
             label="Anormal OU dangereux (1)"
-            name="group1"
+            name="group3"
             onClick={(e) => choiceComportement("1")}
             type={"radio"}
-            id={`inline-radio-2`}
+            id={`inline-radio-10`}
           />
           <Form.Check
             inline
             label="Suscite un questionnement (2)"
-            name="group1"
+            name="group3"
             onClick={(e) => choiceComportement("2")}
             type={"radio"}
-            id={`inline-radio-3`}
+            id={`inline-radio-11`}
           />
           <Form.Check
             inline
             label="Normal (3)"
-            name="group1"
+            name="group3"
             onClick={(e) => choiceComportement("3")}
             type={"radio"}
-            id={`inline-radio-4`}
+            id={`inline-radio-12`}
           />
-          <Form.Label
-            htmlFor="inputValue"
+          <Form.Label htmlFor="inputValue">Commentaire</Form.Label>
+          <Form.Control
+            as="textarea"
+            rows={3}
             onChange={(e) => onChangeDescriptionComportement(e)}
-          >
-            Commentaire
-          </Form.Label>
-          <Form.Control as="textarea" rows={3} />
+          />
         </div>
       </div>
     </>
