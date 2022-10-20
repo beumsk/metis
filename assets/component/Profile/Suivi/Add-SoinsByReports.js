@@ -28,9 +28,21 @@ function AddSoinsByReport(props) {
   const [placeForm, setValuePlaceForm] = useState(null);
   const [idPatient, setIdPatient] = useState(id);
   const [type, setType] = useState(null);
+  // const [arrValues, setArrValues] = useState(
+  //   useState([
+  //     {
+  //       id: props.id,
+  //       type: null,
+  //       contact: null,
+  //       place: null,
+  //       description: null,
+  //     },
+  //   ])
+  // );
   const [valueDescription, setValueDescription] = useState(null);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+  let ObjForm = {};
 
   useEffect(() => {
     axios({
@@ -49,22 +61,60 @@ function AddSoinsByReport(props) {
   }, [idPatient]);
 
   function handleChangeType(newValue) {
+    // ObjForm.type = newValue;
+    // props.onChange(ObjForm);
     setValueTypeForm(newValue);
   }
 
   function handleChangeContacts(newValue) {
+    // ObjForm.contact = newValue;
+    // props.onChange(ObjForm);
     setValueContactForm(newValue);
   }
 
   function handleChangePlaces(newValue) {
+    // ObjForm.place = newValue;
+    // props.onChange(ObjForm);
     setValuePlaceForm(newValue);
   }
 
   const onChangeDescription = (e) => {
+    // ObjForm.description = newValue;
+
     setValueDescription(e.target.value);
   };
 
-  console.log(typeValue, contactValue, placeForm, valueDescription);
+  // MUST TO HAVE: return multiples objects values to add report meet
+  // setArrValues((prevFormSoins) => [
+  //   ...prevFormSoins,
+  //   [
+  //     {
+  //       id: props.id,
+  //       type: typeValue,
+  //       contact: contactValue,
+  //       place: placeForm,
+  //       description: valueDescription,
+  //     },
+  //   ],
+  // ]);
+  props.onChange([
+    {
+      id: props.id,
+      type: typeValue,
+      contact: contactValue,
+      place: placeForm,
+      description: valueDescription,
+    },
+  ]);
+  // props.onChange(
+  //   props.key,
+  //   typeValue,
+  //   contactValue,
+  //   placeForm,
+  //   valueDescription
+  // );
+
+  // console.log(props.key, typeValue, contactValue, placeForm, valueDescription);
   return (
     <>
       <div className="addSoins-form">

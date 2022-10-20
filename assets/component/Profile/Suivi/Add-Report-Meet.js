@@ -129,6 +129,19 @@ function AddReportMeet(props) {
     }
   };
 
+  function onChangeValuesByOnCareForm(e) {
+    console.log("ADD report", e);
+    // console.log("form soins", formSoins);
+
+    if (formSoins.filter((el) => e[0].id === el.id)) {
+      formSoins.filter((el) => e[0].id === el.id)[0].type = e[0].type;
+      formSoins.filter((el) => e[0].id === el.id)[0].contact = e[0].contact;
+      formSoins.filter((el) => e[0].id === el.id)[0].place = e[0].place;
+      formSoins.filter((el) => e[0].id === el.id)[0].description =
+        e[0].description;
+      console.log(formSoins);
+    }
+  }
   return (
     <div className="report-content">
       <h5 className="mt-4 mb-4">Ajouter un rapport</h5>
@@ -164,9 +177,11 @@ function AddReportMeet(props) {
                 <>
                   <AddSoinsByReport
                     key={form.id}
+                    id={form.id}
                     type={type}
                     contacts={props?.contacts}
                     places={props.places}
+                    onChange={onChangeValuesByOnCareForm}
                   ></AddSoinsByReport>
                   {formSoins && formSoins.length > 1 && (
                     <button onClick={(e) => onClickDeleteOnCare(form.id)}>
