@@ -13,7 +13,7 @@ import axios from "axios";
 import Form from "react-bootstrap/Form";
 import Editor from "./Editor-Reports";
 import AddActivitiesByReport from "./Add-ActivitiesByReports";
-import AddIndicateursByReport from "./Add-IndicateursByReports";
+import AddIndicateursByReport from "./Indicateurs-Form-AddReports/Add-IndicateursByReports";
 import AddSoinsByReport from "./Add-SoinsByReports";
 import InputPlaceList from "./Input-Place-List";
 import InputContactList from "./Input-Contact-List";
@@ -142,6 +142,36 @@ function AddReportMeet(props) {
       console.log(formSoins);
     }
   }
+
+  function onChangeValuesByActivitiesForm(e) {
+    console.log("ADD report", e);
+    // console.log("form soins", formSoins);
+
+    if (formActivities.filter((el) => e[0].id === el.id)) {
+      formActivities.filter((el) => e[0].id === el.id)[0].type = e[0].type;
+      formActivities.filter((el) => e[0].id === el.id)[0].contact =
+        e[0].contact;
+      formActivities.filter((el) => e[0].id === el.id)[0].place = e[0].place;
+      formActivities.filter((el) => e[0].id === el.id)[0].description =
+        e[0].description;
+      console.log(formActivities);
+    }
+  }
+
+  function onChangeValuesIndicateursForm(e) {
+    console.log("ADD indicateurs", e);
+    // console.log("form soins", formSoins);
+
+    // if (formActivities.filter((el) => e[0].id === el.id)) {
+    //   formActivities.filter((el) => e[0].id === el.id)[0].type = e[0].type;
+    //   formActivities.filter((el) => e[0].id === el.id)[0].contact =
+    //     e[0].contact;
+    //   formActivities.filter((el) => e[0].id === el.id)[0].place = e[0].place;
+    //   formActivities.filter((el) => e[0].id === el.id)[0].description =
+    //     e[0].description;
+    //   console.log(formActivities);
+    // }
+  }
   return (
     <div className="report-content">
       <h5 className="mt-4 mb-4">Ajouter un rapport</h5>
@@ -232,6 +262,7 @@ function AddReportMeet(props) {
                     key={form.id}
                     contacts={props.contacts}
                     places={props.places}
+                    onChange={onChangeValuesByActivitiesForm}
                   ></AddActivitiesByReport>
                   {formActivities && formActivities.length > 1 && (
                     <button
@@ -285,6 +316,7 @@ function AddReportMeet(props) {
                   <AddIndicateursByReport
                     type={type}
                     key={form.id}
+                    onChange={onChangeValuesIndicateursForm}
                     contacts={props.contacts}
                     places={props.places}
                   ></AddIndicateursByReport>

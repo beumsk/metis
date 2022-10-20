@@ -13,7 +13,7 @@ import axios from "axios";
 import Form from "react-bootstrap/Form";
 import Editor from "./Editor-Reports";
 import AddActivitiesByReport from "./Add-ActivitiesByReports";
-import AddIndicateursByReport from "./Add-IndicateursByReports";
+import AddIndicateursByReport from "./Indicateurs-Form-AddReports/Add-IndicateursByReports";
 import AddSoinsByReport from "./Add-SoinsByReports";
 function InputPlaceList(props) {
   const [show, setShow] = useState(false);

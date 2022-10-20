@@ -53,7 +53,15 @@ function AddActivitiesByReport(props) {
   const onChangeDescription = (e) => {
     setValueDescription(e.target.value);
   };
-  console.log(props.type);
+  props.onChange([
+    {
+      id: props.id,
+      type: typeValue,
+      contact: contactValue,
+      place: placeForm,
+      description: valueDescription,
+    },
+  ]);
   return (
     <>
       <div className="addSoins-form">
