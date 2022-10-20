@@ -20,6 +20,7 @@ function AddIndicateursByReport(props) {
   var formData = new FormData();
   formData.append("id", 57);
   //   formData.append("pathString", props.link);
+
   const [contacts, setContacts] = useState(null);
   const [places, setPlaces] = useState(null);
   const [elementsOpt, setElementsOpt] = useState(null);

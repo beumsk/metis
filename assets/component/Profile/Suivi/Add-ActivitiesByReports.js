@@ -29,22 +29,51 @@ function AddActivitiesByReport(props) {
   const [idPatient, setIdPatient] = useState(id);
   const [type, setType] = useState(null);
   const handleClose = () => setShow(false);
+
+  const [typeValue, setValueTypeForm] = useState(null);
+  const [contactValue, setValueContactForm] = useState(null);
+  const [placeForm, setValuePlaceForm] = useState(null);
+  const [valueDescription, setValueDescription] = useState(null);
+
   const handleShow = () => setShow(true);
   useEffect(() => {}, [idPatient]);
-  // console.log(contacts);
-  //   /api/getContacts
+
+  function handleChangeType(newValue) {
+    setValueTypeForm(newValue);
+  }
+
+  function handleChangeContacts(newValue) {
+    setValueContactForm(newValue);
+  }
+
+  function handleChangePlaces(newValue) {
+    setValuePlaceForm(newValue);
+  }
+
+  const onChangeDescription = (e) => {
+    setValueDescription(e.target.value);
+  };
+  console.log(props.type);
   return (
     <>
       <div className="addSoins-form">
-        <InputTypeList type={type} />
+        <Form.Label htmlFor="inputValue">Type</Form.Label>
+        <InputTypeList type={props.type} onChange={handleChangeType} />
         <Form.Label htmlFor="inputValue">Description</Form.Label>
         <Form.Control
           type="text"
           id="inputValueSpécifique"
           aria-describedby="valueSpécifique"
+          onChange={(e) => onChangeDescription(e)}
         />
-        <InputContactList contacts={props?.contacts}></InputContactList>
-        <InputPlaceList places={props?.places}></InputPlaceList>
+        <InputContactList
+          contacts={props?.contacts}
+          onChange={handleChangeContacts}
+        ></InputContactList>
+        <InputPlaceList
+          places={props?.places}
+          onChange={handleChangePlaces}
+        ></InputPlaceList>
       </div>
     </>
   );

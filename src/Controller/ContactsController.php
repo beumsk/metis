@@ -51,7 +51,7 @@ class ContactsController extends AbstractController
         $jsonObject = $serializer->serialize(
             $cont,
             JsonEncoder::FORMAT,
-            [AbstractNormalizer::IGNORED_ATTRIBUTES => ['orga', "url", "description", "type"]]
+            [AbstractNormalizer::IGNORED_ATTRIBUTES => ['orga', "url", "description", "type", "pathString", "path"]]
         );
 
 

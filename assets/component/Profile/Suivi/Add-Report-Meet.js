@@ -23,7 +23,12 @@ function AddReportMeet(props) {
   let id = useParams().id;
   var formData = new FormData();
   formData.append("id", 57);
+
+  var formActivitiesDatas = new FormData();
+  formActivitiesDatas.append("id", 106);
   const [formSoins, setFormSoins] = useState([{ id: 0 }]);
+  const [formActivities, setFormActivities] = useState([{ id: 0 }]);
+  const [formIndicateurs, setFormIndicateurs] = useState([{ id: 0 }]);
   //   formData.append("pathString", props.link);
   const [contacts, setContacts] = useState(null);
   const [showAccesSoins, setAccesSoins] = useState(false);
@@ -31,6 +36,7 @@ function AddReportMeet(props) {
   const [showIndicateurs, setChoiceIndicateurs] = useState(false);
   const [idPatient, setIdPatient] = useState(id);
   const [type, setType] = useState(null);
+  const [typeFormActivities, setTypeFormActivities] = useState(null);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   useEffect(() => {
@@ -47,6 +53,19 @@ function AddReportMeet(props) {
         setType(response);
       })
       .catch(function (response) {});
+    axios({
+      method: "post",
+      url: "/api/suggestionsById",
+      data: formActivitiesDatas,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    })
+      .then(function (response) {
+        setTypeFormActivities(response);
+      })
+      .catch(function (response) {});
   }, [idPatient]);
 
   const choiceActivities = (e) => {
@@ -61,14 +80,20 @@ function AddReportMeet(props) {
   };
 
   useEffect(() => {}, []);
-
+  const onClickAddActivities = (e) => {
+    console.log(e);
+    setFormActivities((prevFormSoins) => [...prevFormSoins, e]);
+  };
+  const onClickAddIndicateurs = (e) => {
+    console.log(e);
+    setFormIndicateurs((prevFormSoins) => [...prevFormSoins, e]);
+  };
   const onClickOnCare = (e) => {
     console.log(e);
     setFormSoins((prevFormSoins) => [...prevFormSoins, e]);
   };
-  console.log(formSoins);
+
   const onClickDeleteOnCare = (e) => {
-    console.log(formSoins.length);
     if (formSoins.length > 0) {
       let filter = formSoins.filter((el) => el.id !== e);
       console.log(filter);
@@ -76,6 +101,30 @@ function AddReportMeet(props) {
         const element = filter[index];
         element.id = index;
         setFormSoins(filter);
+      }
+    }
+  };
+
+  const onClickDeleteActivitiesForm = (e) => {
+    if (formActivities.length > 0) {
+      let filter = formActivities.filter((el) => el.id !== e);
+      console.log(filter);
+      for (let index = 0; index < filter.length; index++) {
+        const element = filter[index];
+        element.id = index;
+        setFormActivities(filter);
+      }
+    }
+  };
+
+  const onClickDeleteIndicateursForm = (e) => {
+    if (formIndicateurs.length > 0) {
+      let filter = formIndicateurs.filter((el) => el.id !== e);
+      console.log(filter);
+      for (let index = 0; index < filter.length; index++) {
+        const element = filter[index];
+        element.id = index;
+        setFormIndicateurs(filter);
       }
     }
   };
@@ -115,7 +164,7 @@ function AddReportMeet(props) {
                 <>
                   <AddSoinsByReport
                     key={form.id}
-                    type={props.type}
+                    type={type}
                     contacts={props?.contacts}
                     places={props.places}
                   ></AddSoinsByReport>
@@ -161,12 +210,30 @@ function AddReportMeet(props) {
         <div>
           {showActivities && (
             <div className="sous-form">
-              <AddActivitiesByReport
-                type={props.type}
-                contacts={props.contacts}
-                places={props.places}
-              ></AddActivitiesByReport>
-              <button>Ajouter un autre activitée</button>
+              {formActivities.map((form, idx) => (
+                <>
+                  <AddActivitiesByReport
+                    type={typeFormActivities}
+                    key={form.id}
+                    contacts={props.contacts}
+                    places={props.places}
+                  ></AddActivitiesByReport>
+                  {formActivities && formActivities.length > 1 && (
+                    <button
+                      onClick={(e) => onClickDeleteActivitiesForm(form.id)}
+                    >
+                      Supprimer un autre soin
+                    </button>
+                  )}
+                </>
+              ))}
+              <button
+                onClick={(e) =>
+                  onClickAddActivities({ id: formActivities.length })
+                }
+              >
+                Ajouter un autre activitée
+              </button>
             </div>
           )}
         </div>
@@ -198,12 +265,30 @@ function AddReportMeet(props) {
         <div>
           {showIndicateurs && (
             <div className="sous-form">
-              <AddIndicateursByReport
-                type={type}
-                contacts={props.contacts}
-                places={props.places}
-              ></AddIndicateursByReport>
-              <button>Ajouter un autre indicateur</button>
+              {formIndicateurs.map((form, idx) => (
+                <>
+                  <AddIndicateursByReport
+                    type={type}
+                    key={form.id}
+                    contacts={props.contacts}
+                    places={props.places}
+                  ></AddIndicateursByReport>
+                  {formIndicateurs && formIndicateurs.length > 1 && (
+                    <button
+                      onClick={(e) => onClickDeleteIndicateursForm(form.id)}
+                    >
+                      Supprimer un autre soin
+                    </button>
+                  )}
+                </>
+              ))}
+              <button
+                onClick={(e) =>
+                  onClickAddIndicateurs({ id: formIndicateurs.length })
+                }
+              >
+                Ajouter un autre indicateur
+              </button>
             </div>
           )}
         </div>
