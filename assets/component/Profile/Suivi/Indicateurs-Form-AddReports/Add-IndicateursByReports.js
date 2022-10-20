@@ -20,39 +20,94 @@ function AddIndicateursByReport(props) {
   const [auth, setAuth] = useState(useAuth());
   let id = useParams().id;
 
+  // const [options, setOptions] = useState([
+  //   "Sélectionnez le type d'indicateurs",
+  //   "HESTIA - Risque perte logement",
+  //   "CVC",
+  //   "HESTIA - Risque décès",
+  // ]);
+
   const [idPatient, setIdPatient] = useState(id);
   const [typeCVCSelected, setTypeCVCSelected] = useState(null);
 
-  useEffect(() => {}, [idPatient]);
+  useEffect(() => {}, []);
+
+  // if (props.formIndicateurs.length > 1 && props.formIndicateurs.length < 4) {
+  //   let opts = options.filter((el) => el === typeCVCSelected);
+  //   console.log(opts);
+  //   options.splice(opts, 1);
+  //   setOptions(options);
+  // }
+  // if (
+  //   !props.formIndicateurs &&
+  //   props.formIndicateurs.length > 0 &&
+  //   props.formIndicateurs.length < 2
+  // ) {
+  //   let opts = options.filter((el) => el === typeCVCSelected);
+  //   console.log(opts);
+  //   options.splice(opts, 1);
+  //   setOptions(options);
+  // }
 
   const choiceTypeCVC = (e) => {
-    console.log(e);
+    console.log(e.target.value);
     setTypeCVCSelected(e.target.value);
   };
 
-  console.log(typeCVCSelected);
+  const onChangeIndicateursEstiaLogement = (e) => {
+    console.log(e);
+  };
 
+  const onChangeIndicateursFormHestiaRisqueDeces = (e) => {
+    console.log(e);
+  };
+
+  const onChangeIndicateursFormCVC = (e) => {
+    console.log(e);
+  };
+
+  props.onChange([
+    {
+      selectedOptionType: typeCVCSelected,
+      id: props.id,
+    },
+  ]);
+
+  console.log(props.form);
   return (
     <>
       <div className="addSoins-form">
-        <Form.Label htmlFor="inputValue">Type</Form.Label>
-        <Form.Select
-          size="lg"
-          onChange={(e) => choiceTypeCVC(e)}
-          value={typeCVCSelected}
-        >
-          <option>Sélectionnez le type d'indicateurs</option>
-          <option>HESTIA - Risque perte logement</option>
-          <option>CVC</option>
-          <option>HESTIA - Risque décès </option>
-        </Form.Select>
+        <Form.Label htmlFor="inputValue">Type {props.form.type}</Form.Label>
+        {props.form.type === null && (
+          <Form.Select
+            size="lg"
+            value={typeCVCSelected}
+            onChange={(e) => choiceTypeCVC(e)}
+          >
+            {props.options?.map((el, id) => (
+              <>
+                {el && (
+                  <option selected={props.form.type === el} value={el}>
+                    {el}
+                  </option>
+                )}
+              </>
+            ))}
+          </Form.Select>
+        )}
 
         {typeCVCSelected?.includes("HESTIA - Risque perte logement") && (
-          <IndicateursFormHestiaPerteLogement />
+          <IndicateursFormHestiaPerteLogement
+            onChange={(e) => onChangeIndicateursEstiaLogement(e)}
+          />
         )}
-        {typeCVCSelected?.includes("CVC") && <IndicateursFormCVC />}
+        {typeCVCSelected?.includes("CVC") && (
+          <IndicateursFormCVC onChange={(e) => onChangeIndicateursFormCVC(e)} />
+        )}
         {typeCVCSelected?.includes("HESTIA - Risque décès") && (
-          <IndicateursFormHestiaRisqueDeces />
+          <IndicateursFormHestiaRisqueDeces
+            onChange={(e) => onChangeIndicateursFormHestiaRisqueDeces(e)}
+          />
         )}
       </div>
     </>

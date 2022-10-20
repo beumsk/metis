@@ -19,60 +19,51 @@ function IndicateursFormHestiaRisqueDeces(props) {
   let id = useParams().id;
   var formData = new FormData();
   formData.append("id", 57);
-  //   formData.append("pathString", props.link);
 
-  const [contacts, setContacts] = useState(null);
-  const [places, setPlaces] = useState(null);
-  const [elementsOpt, setElementsOpt] = useState(null);
   const [idPatient, setIdPatient] = useState(id);
-  const [typeCVCSelected, setTypeCVCSelected] = useState(null);
-  const [bailleurSelected, setBailleurSelected] = useState(null);
-  const [voisinageSelected, setVoisinageSelected] = useState(null);
-  const [hygieneSelected, setHygieneSelected] = useState(null);
-  const [descriptionVoisinage, setDescriptionVoisinage] = useState(null);
-  const [descriptionHygiene, setDescriptionHygiene] = useState(null);
-  const [descriptionBailleur, setDescriptionBailleur] = useState(null);
-  const [type, setType] = useState(null);
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
-  useEffect(() => {}, [idPatient]);
+  const [valueSecuritee, setChoiceSecuriteeSelected] = useState(null);
+  const [descriptionSecuritee, setDescriptionSecuriteeSelected] =
+    useState(null);
 
-  const onChangeDescriptionHygiene = (e) => {
-    setDescriptionHygiene(e.target.value);
-  };
-  const onChangeDescriptionVoisinage = (e) => {
-    setDescriptionVoisinage(e.target.value);
-  };
-  const choiceBailleur = (e) => {
-    console.log(e);
-    setTypeCVCSelected(e.target.value);
+  const [valueSantee, setChoiceSanteeSelected] = useState(null);
+  const [descriptionSantee, setDescriptionSanteeSelected] = useState(null);
+
+  const [valueConsommation, setChoiceConsommationSelected] = useState(null);
+  const [descriptionConsommation, setDescriptionConsommationSelected] =
+    useState(null);
+
+  const choiceSecuritee = (e) => {
+    setChoiceSecuriteeSelected(e);
   };
 
-  const choiceTypeCVC = (e) => {
-    console.log(e);
-    setBailleurSelected(e.target.value);
+  const onChangeDescriptionSecuritee = (e) => {
+    setDescriptionSecuriteeSelected(e);
   };
 
-  const choiceVoisinage = (e) => {
-    console.log(e);
-    setVoisinageSelected(e.target.value);
+  const choiceSantee = (e) => {
+    setChoiceSanteeSelected(e);
   };
 
-  const choiceHygiene = (e) => {
-    console.log(e);
-    setHygieneSelected(e.target.value);
+  const onChangeDescriptionSantee = (e) => {
+    setDescriptionSanteeSelected(e);
   };
 
-  const onChangeDescriptionBailleur = (e) => {
-    setDescriptionBailleur(e.target.value);
+  const choiceConsommation = (e) => {
+    setChoiceConsommationSelected(e);
+  };
+
+  const onChangeDescriptionConsommation = (e) => {
+    setDescriptionConsommationSelected(e);
   };
   //   /api/getContacts
 
   console.log(
-    typeCVCSelected,
-    bailleurSelected,
-    voisinageSelected,
-    hygieneSelected
+    valueSecuritee,
+    descriptionSecuritee,
+    valueSantee,
+    descriptionSantee,
+    valueConsommation,
+    descriptionConsommation
   );
   // props.onChange([
   //   {
@@ -88,37 +79,37 @@ function IndicateursFormHestiaRisqueDeces(props) {
       <div className="addSoins-form">
         <div key={`inline-radio`} className="mb-3">
           <Form.Label htmlFor="inputValue" style={{ display: "block" }}>
-            Voisinage
+            Sécurité
           </Form.Label>
           <Form.Check
             inline
-            label="Conflits de voisinage (0)"
-            onClick={(e) => choiceVoisinage(e)}
+            label="Le logement est insalubre ET mal utilisé par la personne (0)"
+            onClick={(e) => choiceSecuritee(e)}
             name="group1"
             type={"radio"}
             id={`inline-radio-1`}
           />
           <Form.Check
             inline
-            label="Conflits de voisinage mais gérés (1)"
+            label="Le logement est insalubre OU mal utilisé par la personne (1)"
             name="group1"
-            onClick={(e) => choiceVoisinage(e)}
+            onClick={(e) => choiceSecuritee(e)}
             type={"radio"}
             id={`inline-radio-2`}
           />
           <Form.Check
             inline
-            label="Absence de conflits de voisinage (2)"
+            label="Le logement est bien utilisé par la personne mais seulement partiellement sain et fonctionnel (2)"
             name="group1"
-            onClick={(e) => choiceVoisinage(e)}
+            onClick={(e) => choiceSecuritee(e)}
             type={"radio"}
             id={`inline-radio-3`}
           />
           <Form.Check
             inline
-            label="Bonne entente avec le voisinage (3)"
+            label="Le logement est sain et totalement fonctionnel et la personne l'utilise correctement (3)"
             name="group1"
-            onClick={(e) => choiceVoisinage(e)}
+            onClick={(e) => choiceSecuritee(e)}
             type={"radio"}
             id={`inline-radio-4`}
           />
@@ -126,42 +117,42 @@ function IndicateursFormHestiaRisqueDeces(props) {
           <Form.Control
             as="textarea"
             rows={3}
-            onChange={(e) => onChangeDescriptionVoisinage(e)}
+            onChange={(e) => onChangeDescriptionSecuritee(e)}
           />
         </div>
         <div key={`inline-radio`} className="mb-3">
           <Form.Label htmlFor="inputValue" style={{ display: "block" }}>
-            Hygiène logement
+            Santé
           </Form.Label>
           <Form.Check
             inline
-            label="Si cumule au moins 2 éléments : Présence d’odeurs nauséabondes, nuisibles, altération du matériel, accumulation (0)"
-            onClick={(e) => choiceHygiene(e)}
+            label="La personne refuse les soins, ne prend pas son traitement et n’a aucun contact extérieur (porte fermée) (0)"
+            onClick={(e) => choiceSantee(e)}
             name="group1"
             type={"radio"}
             id={`inline-radio-1`}
           />
           <Form.Check
             inline
-            label="Présence d’odeurs nauséabondes OU nuisibles OU altération du matériel OU accumulation (1)"
+            label="La personne accepte le contact mais refuse les soins et ne prend pas son traitement (1)"
             name="group1"
-            onClick={(e) => choiceHygiene(e)}
+            onClick={(e) => choiceSantee(e)}
             type={"radio"}
             id={`inline-radio-2`}
           />
           <Form.Check
             inline
-            label="Logement relativement propre et entretenu mais pas impeccable ou aides familiales limitées (2)"
+            label="La personne accepte le contact, accepte certains soins ou prend son traitement mais pas suffisamment régulièrement pour se maintenir en bonne santé (2)"
             name="group1"
-            onClick={(e) => choiceHygiene(e)}
+            onClick={(e) => choiceSantee(e)}
             type={"radio"}
             id={`inline-radio-3`}
           />
           <Form.Check
             inline
-            label="Logement impeccable et/ou aides familiales régulières et fonctionnelles (3)"
+            label="La personne a un bon lien avec son médecin traitant et/ou infirmière à domicile ou est autonome dans sa prise de traitement (3)"
             name="group1"
-            onClick={(e) => choiceHygiene(e)}
+            onClick={(e) => choiceSantee(e)}
             type={"radio"}
             id={`inline-radio-4`}
           />
@@ -169,48 +160,48 @@ function IndicateursFormHestiaRisqueDeces(props) {
           <Form.Control
             as="textarea"
             rows={3}
-            onChange={(e) => onChangeDescriptionHygiene(e)}
+            onChange={(e) => onChangeDescriptionSantee(e)}
           />
         </div>
         <div key={`inline-radio`} className="mb-3">
           <Form.Label htmlFor="inputValue" style={{ display: "block" }}>
-            Bailleur
+            Consommation
           </Form.Label>
           <Form.Check
             inline
-            label="Absence de paiement du loyer (0)"
-            onClick={(e) => choiceBailleur(e)}
+            label="La personne a une ou plusieurs dépendances et ne gère pas du tout : elle consomme massivement et se met en danger (ne se rend pas compte du problème) (0)"
+            onClick={(e) => choiceConsommation(e)}
             name="group1"
             type={"radio"}
             id={`inline-radio-1`}
           />
           <Form.Check
             inline
-            label="La personne paie son loyer mais aucune garantie de régularité ou de manière erronée (1)"
+            label="La personne a une ou plusieurs dépendances, en a conscience mais n'est pas prête ou n'a pas envie d'envisager un changement (1)"
             name="group1"
-            onClick={(e) => choiceBailleur(e)}
+            onClick={(e) => choiceConsommation(e)}
             type={"radio"}
             id={`inline-radio-2`}
           />
           <Form.Check
             inline
-            label="Quelqu’un est garant du paiement du loyer mais personne n’est garant de la signature des baux (2)"
+            label="La personne a une ou plusieurs dépendances mais elle la/les gère et cela ne pose pas de problème majeur d'un point de vue de sa santé/sécurité ou ne les gère pas mais est prête à modifier sa consommation (2)"
             name="group1"
-            onClick={(e) => choiceBailleur(e)}
+            onClick={(e) => choiceConsommation(e)}
             type={"radio"}
             id={`inline-radio-3`}
           />
           <Form.Check
             inline
-            label="Garantie du paiement du loyer et de la signature des baux (3)"
+            label="Absence totale de consommation(s) - Abstinence (3)"
             name="group1"
-            onClick={(e) => choiceBailleur(e)}
+            onClick={(e) => choiceConsommation(e)}
             type={"radio"}
             id={`inline-radio-4`}
           />
           <Form.Label
             htmlFor="inputValue"
-            onChange={(e) => onChangeDescriptionBailleur(e)}
+            onChange={(e) => onChangeDescriptionConsommation(e)}
           >
             Commentaire
           </Form.Label>

@@ -29,7 +29,14 @@ function AddReportMeet(props) {
   const [formSoins, setFormSoins] = useState([{ id: 0 }]);
   const [formActivities, setFormActivities] = useState([{ id: 0 }]);
   const [formIndicateurs, setFormIndicateurs] = useState([{ id: 0 }]);
+  const [selectedTypeCVC, setSelectedTypeCVC] = useState(null);
   //   formData.append("pathString", props.link);
+  const [options, setOptions] = useState([
+    "Sélectionnez le type d'indicateurs",
+    "HESTIA - Risque perte logement",
+    "CVC",
+    "HESTIA - Risque décès",
+  ]);
   const [contacts, setContacts] = useState(null);
   const [showAccesSoins, setAccesSoins] = useState(false);
   const [showActivities, setActivities] = useState(false);
@@ -85,8 +92,16 @@ function AddReportMeet(props) {
     setFormActivities((prevFormSoins) => [...prevFormSoins, e]);
   };
   const onClickAddIndicateurs = (e) => {
-    console.log(e);
-    setFormIndicateurs((prevFormSoins) => [...prevFormSoins, e]);
+    console.log("testestest", formIndicateurs);
+
+    if (formIndicateurs && formIndicateurs.length < 3) {
+      setFormIndicateurs((prevFormSoins) => [...prevFormSoins, e]);
+    }
+
+    // let opts = options.filter((el) => el === selectedTypeCVC);
+    // console.log(opts);
+    // options.splice(opts, 1);
+    // setOptions(options);
   };
   const onClickOnCare = (e) => {
     console.log(e);
@@ -118,13 +133,15 @@ function AddReportMeet(props) {
   };
 
   const onClickDeleteIndicateursForm = (e) => {
-    if (formIndicateurs.length > 0) {
+    if (formIndicateurs.length > 0 && formIndicateurs.length < 4) {
       let filter = formIndicateurs.filter((el) => el.id !== e);
       console.log(filter);
       for (let index = 0; index < filter.length; index++) {
         const element = filter[index];
         element.id = index;
         setFormIndicateurs(filter);
+        console.log("DELETE", filter);
+        options.push(filter[0].type);
       }
     }
   };
@@ -147,19 +164,59 @@ function AddReportMeet(props) {
     console.log("ADD report", e);
     // console.log("form soins", formSoins);
 
-    if (formActivities.filter((el) => e[0].id === el.id)) {
-      formActivities.filter((el) => e[0].id === el.id)[0].type = e[0].type;
-      formActivities.filter((el) => e[0].id === el.id)[0].contact =
-        e[0].contact;
-      formActivities.filter((el) => e[0].id === el.id)[0].place = e[0].place;
-      formActivities.filter((el) => e[0].id === el.id)[0].description =
-        e[0].description;
-      console.log(formActivities);
-    }
+    // if (formActivities.filter((el) => e[0].id === el.id)) {
+    //   formActivities.filter((el) => e[0].id === el.id)[0].type = e[0].type;
+    //   formActivities.filter((el) => e[0].id === el.id)[0].contact =
+    //     e[0].contact;
+    //   formActivities.filter((el) => e[0].id === el.id)[0].place = e[0].place;
+    //   formActivities.filter((el) => e[0].id === el.id)[0].description =
+    //     e[0].description;
+    //   console.log(formActivities);
+    // }
   }
 
   function onChangeValuesIndicateursForm(e) {
-    console.log("ADD indicateurs", e);
+    // console.log("ADD indicateurs", e);
+    setSelectedTypeCVC(e[0].selectedOptionType);
+
+    if (formIndicateurs.filter((el) => e[0].id === el.id)) {
+      formIndicateurs.filter((el) => e[0].id === el.id)[0].type =
+        e[0].selectedOptionType;
+      formIndicateurs.filter((el) => e[0].id === el.id)[0].id = e[0].id;
+    }
+    console.log(formIndicateurs);
+    console.log(options);
+    if (
+      formIndicateurs &&
+      formIndicateurs.length > 0 &&
+      formIndicateurs.type !== null
+    ) {
+      for (let index = 0; index < options.length; index++) {
+        const element = options[index];
+        if (
+          formIndicateurs[formIndicateurs.length - 1].type !== null &&
+          formIndicateurs[formIndicateurs.length - 1].type === element
+        ) {
+          console.log(formIndicateurs[formIndicateurs.length - 1]);
+          options.splice(index, 1);
+        }
+      }
+    }
+
+    // if (optionsRest && optionsRest.length > 0) {
+    console.log(options);
+    // setOptions(optionsRest);
+    // }
+
+    // options.filter(e => )
+    // setOptions()
+
+    // console.log("ADD report", e);
+
+    // let optionsrest = e.filter((el) => el.type !== options.map((el) => el[0]));
+
+    // console.log(optionsrest);
+    // setOptions(...optionsrest.value);
     // console.log("form soins", formSoins);
 
     // if (formActivities.filter((el) => e[0].id === el.id)) {
@@ -316,6 +373,10 @@ function AddReportMeet(props) {
                   <AddIndicateursByReport
                     type={type}
                     key={form.id}
+                    id={idx}
+                    form={form}
+                    options={options}
+                    formIndicateurs={formIndicateurs}
                     onChange={onChangeValuesIndicateursForm}
                     contacts={props.contacts}
                     places={props.places}
@@ -329,13 +390,15 @@ function AddReportMeet(props) {
                   )}
                 </>
               ))}
-              <button
-                onClick={(e) =>
-                  onClickAddIndicateurs({ id: formIndicateurs.length })
-                }
-              >
-                Ajouter un autre indicateur
-              </button>
+              {formIndicateurs && formIndicateurs.length < 3 && (
+                <button
+                  onClick={(e) =>
+                    onClickAddIndicateurs({ id: formIndicateurs.length })
+                  }
+                >
+                  Ajouter un autre indicateur
+                </button>
+              )}
             </div>
           )}
         </div>
