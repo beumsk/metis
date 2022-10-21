@@ -24,6 +24,8 @@ function AddReportMeet(props) {
   var formData = new FormData();
   formData.append("id", 57);
 
+  const [userId, setUserId] = useState(null);
+  const [patiId, setPatiId] = useState(null);
   var formActivitiesDatas = new FormData();
   formActivitiesDatas.append("id", 106);
   const [formSoins, setFormSoins] = useState([{ id: 0 }]);
@@ -44,8 +46,15 @@ function AddReportMeet(props) {
   const [idPatient, setIdPatient] = useState(id);
   const [type, setType] = useState(null);
   const [typeFormActivities, setTypeFormActivities] = useState(null);
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const [meetType, setMeetType] = useState(null);
+  const [goalsInput, setGoalsInput] = useState(null);
+  const [changeTypeMeet, setChangeTypeMeet] = useState(null);
+  const [changeDate, setChangeDate] = useState(null);
+  const [changeGoals, setChangeGoals] = useState(null);
+  const [changeContacts, setChangeContacts] = useState(null);
+  const [changePlaces, setChangePlaces] = useState(null);
+  const [changeEditor, setChangeEditor] = useState(null);
+
   useEffect(() => {
     axios({
       method: "post",
@@ -73,6 +82,8 @@ function AddReportMeet(props) {
         setTypeFormActivities(response);
       })
       .catch(function (response) {});
+    setPatiId(idPatient);
+    setUserId(auth.auth.idUser);
   }, [idPatient]);
 
   const choiceActivities = (e) => {
@@ -86,22 +97,44 @@ function AddReportMeet(props) {
     setChoiceIndicateurs(e);
   };
 
+  const inputChangeTypeMeet = (e) => {
+    console.log(e.target.value);
+    setChangeTypeMeet(e.target.value);
+  };
+
+  const onChangeDate = (e) => {
+    console.log(e.target.value);
+    setChangeDate(e.target.value);
+  };
+
+  const inputChangeGoals = (e) => {
+    console.log(e);
+    setChangeGoals(e);
+  };
+
+  const onChangeContacts = (e) => {
+    console.log(e);
+    setChangeContacts(e);
+  };
+
+  const onChangePlaces = (e) => {
+    console.log(e);
+    setChangePlaces(e);
+  };
+
   useEffect(() => {}, []);
   const onClickAddActivities = (e) => {
-    // console.log(e);
     setFormActivities((prevFormSoins) => [...prevFormSoins, e]);
   };
-  const onClickAddIndicateurs = (e) => {
-    // console.log("testestest", formIndicateurs);
 
+  function editorChange(e) {
+    console.log(e);
+    setChangeEditor(e);
+  }
+  const onClickAddIndicateurs = (e) => {
     if (formIndicateurs && formIndicateurs.length < 3) {
       setFormIndicateurs((prevFormSoins) => [...prevFormSoins, e]);
     }
-
-    // let opts = options.filter((el) => el === selectedTypeCVC);
-    // console.log(opts);
-    // options.splice(opts, 1);
-    // setOptions(options);
   };
   const onClickOnCare = (e) => {
     // console.log(e);
@@ -146,6 +179,43 @@ function AddReportMeet(props) {
     }
   };
 
+  const sentRapport = (e) => {
+    var formData = new FormData();
+
+    formData.append("activityType", 1);
+    formData.append("contacts", contacts);
+    formData.append("changeTypeMeet", changeTypeMeet);
+    formData.append("changeDate", changeDate);
+    formData.append("changeGoals", changeGoals);
+    formData.append("contId", changeContacts);
+    formData.append("changePlaces", changePlaces);
+    formData.append("changeEditor", changeEditor);
+    formData.append("goalsInput", goalsInput);
+    formData.append("meetType", meetType);
+    formData.append("formSoins", JSON.stringify(formSoins));
+    formData.append("formActivities", JSON.stringify(formActivities));
+    formData.append("formIndicateurs", JSON.stringify(formIndicateurs));
+    formData.append("userId", userId);
+    formData.append("patiId", patiId);
+
+    console.log(formActivities);
+    // axios({
+    //   method: "post",
+    //   url: "/api/sendReport",
+    //   data: formData,
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //     Authorization: `Bearer ${auth.auth.accessToken}`,
+    //   },
+    // })
+    //   .then(function (response) {
+    //     console.log(response);
+    //   })
+    //   .catch(function (response) {
+    //     console.log(response);
+    //   });
+  };
+
   function onChangeValuesByOnCareForm(e) {
     if (formSoins.filter((el) => e[0].id === el.id)) {
       formSoins.filter((el) => e[0].id === el.id)[0].type = e[0].type;
@@ -173,13 +243,20 @@ function AddReportMeet(props) {
   }
 
   function onChangeValuesIndicateursForm(e) {
-    // console.log("ADD indicateurs", e);
-    setSelectedTypeCVC(e[0].selectedOptionType);
+    console.log("ADD indicateurs", e);
+    // setSelectedTypeCVC(e[0].selectedOptionType);
 
     if (formIndicateurs.filter((el) => e[0].id === el.id)) {
-      formIndicateurs.filter((el) => e[0].id === el.id)[0].type =
-        e[0].selectedOptionType;
       formIndicateurs.filter((el) => e[0].id === el.id)[0].id = e[0].id;
+      formIndicateurs.filter((el) => e[0].id === el.id)[0].indicateursFormCVC =
+        e[0].indicateursFormCVC;
+      formIndicateurs.filter(
+        (el) => e[0].id === el.id
+      )[0].indicateursFormHestiaRisqueDeces =
+        e[0].indicateursFormHestiaRisqueDeces;
+      formIndicateurs.filter(
+        (el) => e[0].id === el.id
+      )[0].indicateursEstLeLogement = e[0].indicateursEstLeLogement;
     }
 
     if (
@@ -197,32 +274,6 @@ function AddReportMeet(props) {
         }
       }
     }
-
-    // if (optionsRest && optionsRest.length > 0) {
-
-    // setOptions(optionsRest);
-    // }
-
-    // options.filter(e => )
-    // setOptions()
-
-    // console.log("ADD report", e);
-
-    // let optionsrest = e.filter((el) => el.type !== options.map((el) => el[0]));
-
-    // console.log(optionsrest);
-    // setOptions(...optionsrest.value);
-    // console.log("form soins", formSoins);
-
-    // if (formActivities.filter((el) => e[0].id === el.id)) {
-    //   formActivities.filter((el) => e[0].id === el.id)[0].type = e[0].type;
-    //   formActivities.filter((el) => e[0].id === el.id)[0].contact =
-    //     e[0].contact;
-    //   formActivities.filter((el) => e[0].id === el.id)[0].place = e[0].place;
-    //   formActivities.filter((el) => e[0].id === el.id)[0].description =
-    //     e[0].description;
-    //   console.log(formActivities);
-    // }
   }
   return (
     <div className="report-content">
@@ -246,6 +297,7 @@ function AddReportMeet(props) {
               inline
               label="Non"
               name="group1"
+              defaultChecked="true"
               onClick={(e) => choiceSoins(false)}
               type={"radio"}
               id={`inline-radio-2`}
@@ -297,6 +349,7 @@ function AddReportMeet(props) {
             <Form.Check
               inline
               label="Non"
+              defaultChecked="true"
               name="group2"
               onClick={(e) => choiceActivities(false)}
               type={"radio"}
@@ -354,6 +407,7 @@ function AddReportMeet(props) {
             <Form.Check
               inline
               label="Non"
+              defaultChecked="true"
               name="group3"
               onClick={(e) => choiceIndicateurs(false)}
               type={"radio"}
@@ -377,7 +431,7 @@ function AddReportMeet(props) {
                     contacts={props.contacts}
                     places={props.places}
                   ></AddIndicateursByReport>
-                  {formIndicateurs && formIndicateurs.length > 1 && (
+                  {formIndicateurs && (
                     <button
                       onClick={(e) => onClickDeleteIndicateursForm(form.id)}
                     >
@@ -401,12 +455,17 @@ function AddReportMeet(props) {
       </Form.Group>
 
       <Form.Label htmlFor="inputValue">Type de rencontre</Form.Label>
-      <Form.Select size="lg">
+      <Form.Select
+        size="lg"
+        onChange={(e) => inputChangeTypeMeet(e)}
+        value={meetType}
+      >
         <>
-          <option>Vu</option>
-          <option>Rencontre</option>
-          <option>Repos</option>
-          <option>Recherche</option>
+          <option>Choissisez votre type de rencontre</option>
+          <option value={"Vu"}>Vu</option>
+          <option value={"Rencontre"}>Rencontre</option>
+          <option value={"Repos"}>Repos</option>
+          <option value={"Recherche"}>Recherche</option>
         </>
       </Form.Select>
 
@@ -415,21 +474,27 @@ function AddReportMeet(props) {
         type="date"
         defaultValue={new Date("now")}
         placeholder="Here edit the release date"
-        onChange={(e) => handleInputChange(e)}
+        onChange={(e) => onChangeDate(e)}
         id="inputValueSpécifique"
       />
 
       <Form.Label htmlFor="inputValue">Objectifs</Form.Label>
-      <Form.Select size="lg">
+      <Form.Select
+        size="lg"
+        onChange={(e) => inputChangeGoals(e)}
+        value={goalsInput}
+      >
         <>
           <option>Objectifs non chargées pour l'instant</option>
         </>
       </Form.Select>
 
-      <InputContactList contacts={props.contacts} />
-      <InputPlaceList places={props.places} />
+      <InputContactList contacts={props.contacts} onChange={onChangeContacts} />
+      <InputPlaceList places={props.places} onChange={onChangePlaces} />
 
-      <Editor></Editor>
+      <Editor onChange={editorChange}></Editor>
+
+      <button onClick={(e) => sentRapport(e)}>Envoyer</button>
     </div>
   );
 }

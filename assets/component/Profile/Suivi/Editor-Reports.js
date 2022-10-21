@@ -17,6 +17,7 @@ class Editor extends Component {
           onChange={(event, editor) => {
             const data = editor.getData();
             // contentText
+            this.props.onChange(data);
             console.log({ event, editor, data });
           }}
           onBlur={(event, editor) => {

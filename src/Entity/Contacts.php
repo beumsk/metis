@@ -59,7 +59,12 @@ class Contacts
     // {
     //     return $this->contacts;
     // }
+    public function setId(?string $id): self
+    {
+        $this->id = $id;
 
+        return $this;
+    }
 
     public function getId(): ?int
     {

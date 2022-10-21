@@ -26,98 +26,95 @@ function AddIndicateursByReport(props) {
   //   "CVC",
   //   "HESTIA - Risque décès",
   // ]);
+  const [indicateursEstLeLogement, setIndicateursLogement] = useState(null);
 
   const [idPatient, setIdPatient] = useState(id);
   const [typeCVCSelected, setTypeCVCSelected] = useState(null);
-  const [indicateursEstLeLogement, setIndicateursLogement] = useState(null);
+
   const [
     indicateursFormHestiaRisqueDeces,
     setIndicateursFormHestiaRisqueDeces,
   ] = useState(null);
   const [indicateursFormCVC, setIndicateursFormCVC] = useState(null);
-  useEffect(() => {}, []);
 
-  // if (props.formIndicateurs.length > 1 && props.formIndicateurs.length < 4) {
-  //   let opts = options.filter((el) => el === typeCVCSelected);
-  //   console.log(opts);
-  //   options.splice(opts, 1);
-  //   setOptions(options);
-  // }
-  // if (
-  //   !props.formIndicateurs &&
-  //   props.formIndicateurs.length > 0 &&
-  //   props.formIndicateurs.length < 2
-  // ) {
-  //   let opts = options.filter((el) => el === typeCVCSelected);
-  //   console.log(opts);
-  //   options.splice(opts, 1);
-  //   setOptions(options);
-  // }
+  let obj = {};
 
-  const choiceTypeCVC = (e) => {
-    console.log(e.target.value);
+  useEffect(() => {
+    setIndicateursLogement(indicateursEstLeLogement);
+    setIndicateursFormHestiaRisqueDeces(indicateursFormHestiaRisqueDeces);
+    setIndicateursFormCVC(indicateursFormCVC);
+  }, [
+    indicateursEstLeLogement,
+    indicateursFormHestiaRisqueDeces,
+    indicateursFormCVC,
+  ]);
+
+  function choiceTypeCVC(e) {
     setTypeCVCSelected(e.target.value);
-  };
+  }
 
   const onChangeIndicateursEstiaLogement = (e) => {
-    console.log(e);
-    // setIndicateursLogement(e);
+    setIndicateursLogement(e);
   };
 
   const onChangeIndicateursFormHestiaRisqueDeces = (e) => {
-    console.log(e);
-    // setIndicateursFormHestiaRisqueDeces(e);
+    setIndicateursFormHestiaRisqueDeces(e);
   };
 
   const onChangeIndicateursFormCVC = (e) => {
-    console.log(e);
-    // setIndicateursFormCVC(e);
+    setIndicateursFormCVC(e);
   };
-
+  console.log({
+    id: props.id,
+    indicateursEstLeLogement: indicateursEstLeLogement,
+    indicateursFormHestiaRisqueDeces: indicateursFormHestiaRisqueDeces,
+    indicateursFormCVC: indicateursFormCVC,
+  });
   props.onChange([
     {
-      selectedOptionType: typeCVCSelected,
       id: props.id,
-      indicateursFormCVC: indicateursFormCVC,
       indicateursEstLeLogement: indicateursEstLeLogement,
       indicateursFormHestiaRisqueDeces: indicateursFormHestiaRisqueDeces,
+      indicateursFormCVC: indicateursFormCVC,
     },
   ]);
-
-  console.log(props.form);
   return (
     <>
       <div className="addSoins-form">
         <Form.Label htmlFor="inputValue">Type {props.form.type}</Form.Label>
-        {props.form.type === null && (
-          <Form.Select
-            size="lg"
-            value={typeCVCSelected}
-            onChange={(e) => choiceTypeCVC(e)}
-          >
-            {props.options?.map((el, id) => (
-              <>
-                {el && (
-                  <option selected={props.form.type === el} value={el}>
-                    {el}
-                  </option>
-                )}
-              </>
-            ))}
-          </Form.Select>
-        )}
+
+        <Form.Select
+          size="lg"
+          value={typeCVCSelected}
+          onChange={(e) => choiceTypeCVC(e)}
+        >
+          {props.options?.map((el, id) => (
+            <>
+              {el && (
+                <option selected={props.form.type === el} value={el}>
+                  {el}
+                </option>
+              )}
+            </>
+          ))}
+        </Form.Select>
 
         {typeCVCSelected?.includes("HESTIA - Risque perte logement") && (
           <IndicateursFormHestiaPerteLogement
-            onChange={(e) => onChangeIndicateursEstiaLogement(e)}
+            id={props.id}
+            onChange={onChangeIndicateursEstiaLogement}
           />
         )}
         {typeCVCSelected?.includes("CVC") && (
-          <IndicateursFormCVC onChange={(e) => onChangeIndicateursFormCVC(e)} />
+          <IndicateursFormCVC
+            id={props.id}
+            onChange={onChangeIndicateursFormCVC}
+          />
         )}
         {typeCVCSelected?.includes("HESTIA - Risque décès") && (
           <IndicateursFormHestiaRisqueDeces
-            onChange={(e) => onChangeIndicateursFormHestiaRisqueDeces(e)}
+            id={props.id}
+            onChange={onChangeIndicateursFormHestiaRisqueDeces}
           />
         )}
       </div>

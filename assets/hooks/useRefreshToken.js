@@ -13,11 +13,14 @@ const useRefreshToken = () => {
       headers: { Authorization: `Bearer ${token.data.token}` },
     });
 
+    console.log(response);
+
     setAuth((prev) => {
       return {
         ...prev,
         roles: response.data.roleNames,
         accessToken: response.data.credentials,
+        idUser: response.data.user.id,
       };
     });
     return response.data.accessToken;

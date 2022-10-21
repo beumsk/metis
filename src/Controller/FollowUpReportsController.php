@@ -63,6 +63,109 @@ class FollowUpReportsController extends AbstractController
         return new Response($jsonObject, 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
     }
 
+
+    // /api/sendReport
+    #[Route('/api/sendReport', name: 'app_sendReport')]
+    public function getSendReport(ManagerRegistry $doctrine, Request $request): Response
+    {
+        $request = Request::createFromGlobals();
+
+        $contacts = $request->request->get('contacts');
+        $changeTypeMeet = $request->request->get('changeTypeMeet');
+        $changeDate = $request->request->get('changeDate');
+        $changeGoals = $request->request->get('changeGoals');
+        $changeContacts = $request->request->get('changeContacts');
+        $changePlaces = $request->request->get('changePlaces');
+        $changeEditor = $request->request->get('changeEditor');
+        $goalsInput = $request->request->get('goalsInput');
+        $meetType = $request->request->get('meetType');
+        $formSoins = $request->request->get('formSoins');
+        $formActivities = $request->request->get('formActivities');
+        $formIndicateurs = $request->request->get('formIndicateurs');
+        $reportDate = new \DateTime("now");
+        $userId = $request->request->get('userId');
+        $changeEditor = $request->request->get('changeEditor');
+        $patiId = $request->request->get('patiId');
+
+
+
+
+        $care_jsondecode = json_decode($formSoins);
+        $activities_jsondecode = json_decode($formActivities);
+        $indicateurs_jsondecode = json_decode($formIndicateurs);
+
+
+
+
+        $care = [];
+        foreach ($care_jsondecode as $key) {
+            if (count((array)$key) > 1 && ($key->type !== null || $key->contact !== null || $key->place !== null || $key->description !== null)) {
+                array_push($care, $key);
+            }
+        }
+
+        $activities = [];
+        foreach ($activities_jsondecode as $key) {
+            if (count((array)$key) > 1 && ($key->type !== null || $key->contact !== null || $key->place !== null || $key->description !== null)) {
+                array_push($activities, $key);
+            }
+        }
+
+        $indicators = [];
+        foreach ($indicateurs_jsondecode as $key) {
+            if ($key->indicateursFormCVC !== null || $key->indicateursFormHestiaRisqueDeces !== null || $key->indicateursEstLeLogement !== null) {
+                array_push($indicators, $key);
+            }
+        }
+
+        $no_care = ($care !== []) ? 0 : 1;
+        $no_activities =  ($activities !== []) ? 0 : 1;
+        $no_indicateurs =  ($indicators !== []) ? 0 : 1;
+
+
+
+
+        $report = new FollowupReports();
+
+        $report->setUser($userId);
+        $report->setActivityType(1);
+        $report->setReportDate($reportDate);
+        $report->setPlac($changeContacts);
+        $report->setLastUpdate($reportDate);
+        $report->setContent($changeEditor);
+        $report->setDeletedAt(null);
+        $report->setPati($patiId);
+        $report->setDuration(null);
+        $report->setCreationDate($reportDate);
+        $report->setNoCare($no_care);
+        $report->setNoActivities($no_activities);
+        $report->setNoIndicators($no_indicateurs);
+        $report->setReportType("1");
+
+
+        $entityManager = $doctrine->getManager();
+
+        $entityManager->persist($report);
+
+        $entityManager->flush();
+
+
+        return new JsonResponse([
+            'id' => $report->getId(),
+            'response' => "Sent !"
+        ]);
+
+        // dd($care, $activities, $indicators);
+        // // array('id' => $idList)
+
+        // // dd($test);
+        // $indicators = $doctrine->getRepository(FollowupReportsIndicators::class)->findBy(array('fore' => $test));
+
+        // return $this->json($indicators);
+    }
+
+
+
     #[Route('/api/getFollowUpReportsIndicators', name: 'app_indicatorsByPatients')]
     public function getIndicatorsByPatients(ManagerRegistry $doctrine): Response
     {

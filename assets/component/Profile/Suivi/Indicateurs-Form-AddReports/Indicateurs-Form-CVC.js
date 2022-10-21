@@ -31,6 +31,15 @@ function IndicateursFormCVC(props) {
   const [comportementScore, setComportementScore] = useState(null);
   const [comportementDescription, setDescriptionComportement] = useState(null);
 
+  let obj = {
+    id: props.id,
+    corpsScore: corpsScore,
+    corpsDescription: corpsDescription,
+    vetementsScore: vetementsScore,
+    vetementsDescription: vetementsDescription,
+    comportementScore: comportementScore,
+    comportementDescription: comportementDescription,
+  };
   useEffect(() => {}, [idPatient]);
 
   const choiceCorps = (e) => {
@@ -73,18 +82,18 @@ function IndicateursFormCVC(props) {
       comportementDescription: comportementDescription,
     },
   ]);
-
-  console.log([
-    {
-      id: props.id,
-      corpsScore: corpsScore,
-      corpsDescription: corpsDescription,
-      vetementsScore: vetementsScore,
-      vetementsDescription: vetementsDescription,
-      comportementScore: comportementScore,
-      comportementDescription: comportementDescription,
-    },
-  ]);
+  console.log(props.id);
+  // console.log([
+  //   {
+  //     id: props.id,
+  //     corpsScore: corpsScore,
+  //     corpsDescription: corpsDescription,
+  //     vetementsScore: vetementsScore,
+  //     vetementsDescription: vetementsDescription,
+  //     comportementScore: comportementScore,
+  //     comportementDescription: comportementDescription,
+  //   },
+  // ]);
   return (
     <>
       <div className="addSoins-form">

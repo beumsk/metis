@@ -40,14 +40,16 @@ function InputPlaceList(props) {
   return (
     <>
       <Form.Label htmlFor="inputValue">Lieu</Form.Label>
+
       <Form.Select
         size="lg"
         className="mb-4"
         value={placeValue}
         onChange={(e) => onChangePlaceValue(e)}
       >
+        <option>Choissisez le lieu</option>
         {props?.places?.data?.map((el, id) => (
-          <>{el?.lastname && <option>{el?.lastname}</option>}</>
+          <>{el?.lastname && <option value={id}>{el?.lastname}</option>}</>
         ))}
       </Form.Select>
     </>

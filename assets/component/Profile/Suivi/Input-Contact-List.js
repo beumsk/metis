@@ -32,6 +32,7 @@ function InputContactList(props) {
 
   //   /api/getContacts
   const onChangeContact = (e) => {
+    console.log(props?.contacts);
     props.onChange(e.target.value);
   };
 
@@ -44,9 +45,10 @@ function InputContactList(props) {
         value={contactValue}
         onChange={(e) => onChangeContact(e)}
       >
+        <option>Choissisez le contact</option>
         {props?.contacts?.data?.map((el, id) => (
           <>
-            {props?.contacts && props?.contacts?.data && (
+            {props?.contacts && props?.contacts?.data && el.deletedAt !== null && (
               <option value={el?.id}>
                 {el?.firstname} {el?.lastname}
               </option>

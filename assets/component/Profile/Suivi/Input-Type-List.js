@@ -59,8 +59,9 @@ function InputTypeList(props) {
         value={typeValue}
         onChange={(e) => onChangeType(e)}
       >
+        <option>Choissisez le type</option>
         {props?.type?.data?.map((el, id) => (
-          <>{el.value && <option>{el?.value}</option>}</>
+          <>{el.value && <option value={id}>{el?.value}</option>}</>
         ))}
       </Form.Select>
     </>
