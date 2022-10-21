@@ -97,37 +97,42 @@ class FollowUpReportsController extends AbstractController
 
 
 
-        $care = [];
-        foreach ($care_jsondecode as $key) {
-            if (count((array)$key) > 1 && ($key->type !== null || $key->contact !== null || $key->place !== null || $key->description !== null)) {
-                array_push($care, $key);
-            }
+        // $care = [];
+        // foreach ($care_jsondecode as $key) {
+        //     if (count((array)$key) > 1 && ($key->type !== null || $key->contact !== null || $key->place !== null || $key->description !== null)) {
+        //         array_push($care, $key);
+        //     }
+        // }
+
+        // $activities = [];
+        // foreach ($activities_jsondecode as $key) {
+        //     if (count((array)$key) > 1 && ($key->type !== null || $key->contact !== null || $key->place !== null || $key->description !== null)) {
+        //         array_push($activities, $key);
+        //     }
+        // }
+
+        // $indicators = [];
+        // foreach ($indicateurs_jsondecode as $key) {
+
+        //     if ($key->indicateursFormCVC && $key->indicateursFormCVC !== null || $key->indicateursFormHestiaRisqueDeces && $key->indicateursFormHestiaRisqueDeces !== null || $key->indicateursEstLeLogement && $key->indicateursEstLeLogement !== null) {
+        //         array_push($indicators, $key);
+        //     }
+        // }
+
+
+
+        $no_care = ($care_jsondecode !== null) ? 0 : 1;
+        $no_activities =  ($activities_jsondecode !== null) ? 0 : 1;
+        $no_indicateurs =  ($indicateurs_jsondecode !== null) ? 0 : 1;
+
+
+        $user = $doctrine->getRepository(User::class)->find($userId);
+        if ($changeContacts !== null) {
+            $contact = $doctrine->getRepository(FollowupReports::class)->find($changeContacts);
+        } else {
+            $contact = null;
         }
 
-        $activities = [];
-        foreach ($activities_jsondecode as $key) {
-            if (count((array)$key) > 1 && ($key->type !== null || $key->contact !== null || $key->place !== null || $key->description !== null)) {
-                array_push($activities, $key);
-            }
-        }
-
-        $indicators = [];
-        foreach ($indicateurs_jsondecode as $key) {
-
-            if ($key->indicateursFormCVC && $key->indicateursFormCVC !== null || $key->indicateursFormHestiaRisqueDeces && $key->indicateursFormHestiaRisqueDeces !== null || $key->indicateursEstLeLogement && $key->indicateursEstLeLogement !== null) {
-                array_push($indicators, $key);
-            }
-        }
-
-
-
-        $no_care = ($care !== []) ? 0 : 1;
-        $no_activities =  ($activities !== []) ? 0 : 1;
-        $no_indicateurs =  ($indicators !== []) ? 0 : 1;
-
-
-        $user = $doctrine->getRepository(FollowupReports::class)->find($userId);
-        $contact = $doctrine->getRepository(FollowupReports::class)->find($changeContacts);
         $patient =  $doctrine->getRepository(Patients::class)->find($patiId);
 
 
@@ -149,18 +154,15 @@ class FollowUpReportsController extends AbstractController
         $report->setNoIndicators($no_indicateurs);
         $report->setReportType("1");
 
-        dd($report);
+        // dd($report);
         $entityManager = $doctrine->getManager();
 
         $entityManager->persist($report);
 
-        // $entityManager->flush();
+        $entityManager->flush();
 
 
-        // return new JsonResponse([
-        //     'id' => $report->getId(),
-        //     'response' => "Sent !"
-        // ]);
+
 
         // dd($care, $activities, $indicators);
         // // array('id' => $idList)
@@ -168,7 +170,7 @@ class FollowUpReportsController extends AbstractController
         // // dd($test);
         // $indicators = $doctrine->getRepository(FollowupReportsIndicators::class)->findBy(array('fore' => $test));
 
-        // return $this->json($indicators);
+        return $this->json($report);
     }
 
 
