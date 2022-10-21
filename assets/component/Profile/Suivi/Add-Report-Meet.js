@@ -181,6 +181,59 @@ function AddReportMeet(props) {
 
   const sentRapport = (e) => {
     var formData = new FormData();
+    let formIndic = formIndicateurs.map((el) => {
+      if (
+        Object.keys(el).length === 1 ||
+        JSON.stringify(el) ===
+          JSON.stringify({
+            id: el.id,
+            indicateursFormCVC: null,
+            indicateursFormHestiaRisqueDeces: null,
+            indicateursEstLeLogement: null,
+          })
+      ) {
+        return null;
+      } else {
+        return el;
+      }
+    });
+
+    let formActi = formActivities.map((el) => {
+      if (
+        Object.keys(el).length === 1 ||
+        JSON.stringify(el) ===
+          JSON.stringify({
+            id: el.id,
+            type: null,
+            contact: null,
+            place: null,
+            description: null,
+          })
+      ) {
+        return null;
+      } else {
+        return el;
+      }
+    });
+
+    let formCare = formSoins.map((el) => {
+      console.log(Object.keys(el).length);
+      if (
+        Object.keys(el).length === 1 ||
+        JSON.stringify(el) ===
+          JSON.stringify({
+            id: el.id,
+            type: null,
+            contact: null,
+            place: null,
+            description: null,
+          })
+      ) {
+        return null;
+      } else {
+        return el;
+      }
+    });
 
     formData.append("activityType", 1);
     formData.append("contacts", contacts);
@@ -192,28 +245,29 @@ function AddReportMeet(props) {
     formData.append("changeEditor", changeEditor);
     formData.append("goalsInput", goalsInput);
     formData.append("meetType", meetType);
-    formData.append("formSoins", JSON.stringify(formSoins));
-    formData.append("formActivities", JSON.stringify(formActivities));
-    formData.append("formIndicateurs", JSON.stringify(formIndicateurs));
+    formData.append("formSoins", JSON.stringify(...formCare));
+    formData.append("formActivities", JSON.stringify(...formActi));
+    formData.append("formIndicateurs", JSON.stringify(...formIndic));
     formData.append("userId", userId);
     formData.append("patiId", patiId);
 
-    console.log(formActivities);
-    // axios({
-    //   method: "post",
-    //   url: "/api/sendReport",
-    //   data: formData,
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //     Authorization: `Bearer ${auth.auth.accessToken}`,
-    //   },
-    // })
-    //   .then(function (response) {
-    //     console.log(response);
-    //   })
-    //   .catch(function (response) {
-    //     console.log(response);
-    //   });
+    // console.log(formIndic);
+    // console.log(formActivities);
+    axios({
+      method: "post",
+      url: "/api/sendReport",
+      data: formData,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    })
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (response) {
+        console.log(response);
+      });
   };
 
   function onChangeValuesByOnCareForm(e) {

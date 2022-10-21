@@ -113,28 +113,35 @@ class FollowUpReportsController extends AbstractController
 
         $indicators = [];
         foreach ($indicateurs_jsondecode as $key) {
-            if ($key->indicateursFormCVC !== null || $key->indicateursFormHestiaRisqueDeces !== null || $key->indicateursEstLeLogement !== null) {
+
+            if ($key->indicateursFormCVC && $key->indicateursFormCVC !== null || $key->indicateursFormHestiaRisqueDeces && $key->indicateursFormHestiaRisqueDeces !== null || $key->indicateursEstLeLogement && $key->indicateursEstLeLogement !== null) {
                 array_push($indicators, $key);
             }
         }
+
+
 
         $no_care = ($care !== []) ? 0 : 1;
         $no_activities =  ($activities !== []) ? 0 : 1;
         $no_indicateurs =  ($indicators !== []) ? 0 : 1;
 
 
+        $user = $doctrine->getRepository(FollowupReports::class)->find($userId);
+        $contact = $doctrine->getRepository(FollowupReports::class)->find($changeContacts);
+        $patient =  $doctrine->getRepository(Patients::class)->find($patiId);
+
 
 
         $report = new FollowupReports();
 
-        $report->setUser($userId);
+        $report->setUser($user);
         $report->setActivityType(1);
         $report->setReportDate($reportDate);
-        $report->setPlac($changeContacts);
+        $report->setPlac($contact);
         $report->setLastUpdate($reportDate);
         $report->setContent($changeEditor);
         $report->setDeletedAt(null);
-        $report->setPati($patiId);
+        $report->setPati($patient);
         $report->setDuration(null);
         $report->setCreationDate($reportDate);
         $report->setNoCare($no_care);
@@ -142,18 +149,18 @@ class FollowUpReportsController extends AbstractController
         $report->setNoIndicators($no_indicateurs);
         $report->setReportType("1");
 
-
+        dd($report);
         $entityManager = $doctrine->getManager();
 
         $entityManager->persist($report);
 
-        $entityManager->flush();
+        // $entityManager->flush();
 
 
-        return new JsonResponse([
-            'id' => $report->getId(),
-            'response' => "Sent !"
-        ]);
+        // return new JsonResponse([
+        //     'id' => $report->getId(),
+        //     'response' => "Sent !"
+        // ]);
 
         // dd($care, $activities, $indicators);
         // // array('id' => $idList)
