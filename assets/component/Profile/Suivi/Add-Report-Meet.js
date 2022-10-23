@@ -198,6 +198,23 @@ function AddReportMeet(props) {
       }
     });
 
+    let arr = {};
+    for (let index = 0; index < formIndicateurs.length; index++) {
+      const element = formIndicateurs[index];
+      if (element.indicateursFormCVC !== null) {
+        arr.indicateursFormCVC = element.indicateursFormCVC;
+      }
+      if (element.indicateursFormHestiaRisqueDeces !== null) {
+        arr.indicateursFormHestiaRisqueDeces =
+          element.indicateursFormHestiaRisqueDeces;
+      }
+      if (element.indicateursEstLeLogement !== null) {
+        arr.indicateursEstLeLogement = element.indicateursEstLeLogement;
+      }
+    }
+
+    console.log(arr);
+
     let formActi = formActivities.map((el) => {
       if (
         Object.keys(el).length === 1 ||
@@ -245,14 +262,27 @@ function AddReportMeet(props) {
     formData.append("changeEditor", changeEditor);
     formData.append("goalsInput", goalsInput);
     formData.append("meetType", meetType);
-    formData.append("formSoins", JSON.stringify(...formCare));
-    formData.append("formActivities", JSON.stringify(...formActi));
-    formData.append("formIndicateurs", JSON.stringify(...formIndic));
+    formData.append(
+      "formSoins",
+      formCare && Object.keys(formCare).length > 0
+        ? JSON.stringify(...formCare)
+        : null
+    );
+    formData.append(
+      "formActivities",
+      formActi && Object.keys(formActi).length > 0
+        ? JSON.stringify(...formActi)
+        : null
+    );
+    formData.append(
+      "formIndicateurs",
+      arr && Object.keys(arr).length > 0 ? JSON.stringify(arr) : null
+    );
     formData.append("userId", userId);
     formData.append("patiId", patiId);
 
-    // console.log(formIndic);
-    // console.log(formActivities);
+    console.log(formIndic);
+    console.log(formActivities);
     axios({
       method: "post",
       url: "/api/sendReport",

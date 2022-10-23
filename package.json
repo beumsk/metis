@@ -63,6 +63,7 @@
         "react-cookie": "^4.1.1",
         "react-dom": "^18.2.0",
         "react-dropzone": "^14.2.2",
+        "react-hook-form": "^7.38.0",
         "react-router-dom": "^6.4.0",
         "react-toggle": "^4.1.3"
     }

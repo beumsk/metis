@@ -2,10 +2,12 @@
 
 namespace App\Controller;
 
+use App\Entity\Contacts;
 use App\Entity\FollowupGoals;
 use App\Entity\FollowupReports;
 use App\Entity\FollowupReportsActivities;
 use App\Entity\FollowupReportsIndicators;
+use App\Entity\Indicators;
 use App\Entity\Patients;
 use App\Entity\PatientsPlaces;
 use App\Entity\User;
@@ -118,7 +120,7 @@ class FollowUpReportsController extends AbstractController
         //         array_push($indicators, $key);
         //     }
         // }
-
+        // dd($care_jsondecode, $activities_jsondecode, $indicateurs_jsondecode);
 
 
         $no_care = ($care_jsondecode !== null) ? 0 : 1;
@@ -128,7 +130,7 @@ class FollowUpReportsController extends AbstractController
 
         $user = $doctrine->getRepository(User::class)->find($userId);
         if ($changeContacts !== null) {
-            $contact = $doctrine->getRepository(FollowupReports::class)->find($changeContacts);
+            $contact = $doctrine->getRepository(Contacts::class)->find($changeContacts);
         } else {
             $contact = null;
         }
@@ -159,8 +161,40 @@ class FollowUpReportsController extends AbstractController
 
         $entityManager->persist($report);
 
-        $entityManager->flush();
+        // $entityManager->flush();
 
+        // dd($indicateurs_jsondecode->indicateursFormCVC !== null);
+
+        // if ($report && $report->getId() && $indicateurs_jsondecode->indicateursFormCVC !== null) {
+        //     // dd("ok");
+        //     $followUpReportIndicators = new FollowupReportsIndicators();
+        //     $indicators =  $doctrine->getRepository(Indicators::class)->find(1);
+        //     $followUpReportIndicators->setFore($report);
+        //     $followUpReportIndicators->setIndi($indicators);
+        //     $followUpReportIndicators->setValue($indicateurs_jsondecode->indicateursFormCVC[0]->corpsScore);
+
+
+
+
+        //     $entityManager->persist($followUpReportIndicators);
+        //     $entityManager->flush();
+
+        //     $indicators =  $doctrine->getRepository(Indicators::class)->find(2);
+        //     $followUpReportIndicators->setFore($report);
+        //     $followUpReportIndicators->setIndi($indicators);
+        //     $followUpReportIndicators->setValue($indicateurs_jsondecode->indicateursFormCVC[0]->vetementsScore);
+
+        //     $entityManager->persist($followUpReportIndicators);
+        //     $entityManager->flush();
+
+        //     $indicators =  $doctrine->getRepository(Indicators::class)->find(3);
+        //     $followUpReportIndicators->setFore($report);
+        //     $followUpReportIndicators->setIndi($indicators);
+        //     $followUpReportIndicators->setValue($indicateurs_jsondecode->indicateursFormCVC[0]->comportementScore);
+
+        //     $entityManager->persist($followUpReportIndicators);
+        //     $entityManager->flush();
+        // }
 
 
 
