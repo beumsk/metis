@@ -81,7 +81,7 @@ function IndicateursFormHestiaRisqueDeces(props) {
             onClick={(e) => choiceSecuritee("0")}
             name="group1"
             type={"radio"}
-            id={`inline-radio-1`}
+            id={`inline-radio-25`}
           />
           <Form.Check
             inline
@@ -89,7 +89,7 @@ function IndicateursFormHestiaRisqueDeces(props) {
             name="group1"
             onClick={(e) => choiceSecuritee("1")}
             type={"radio"}
-            id={`inline-radio-2`}
+            id={`inline-radio-26`}
           />
           <Form.Check
             inline
@@ -97,7 +97,7 @@ function IndicateursFormHestiaRisqueDeces(props) {
             name="group1"
             onClick={(e) => choiceSecuritee("2")}
             type={"radio"}
-            id={`inline-radio-3`}
+            id={`inline-radio-27`}
           />
           <Form.Check
             inline
@@ -105,7 +105,7 @@ function IndicateursFormHestiaRisqueDeces(props) {
             name="group1"
             onClick={(e) => choiceSecuritee("3")}
             type={"radio"}
-            id={`inline-radio-4`}
+            id={`inline-radio-28`}
           />
           <Form.Label htmlFor="inputValue">Commentaire</Form.Label>
           <Form.Control
@@ -124,7 +124,7 @@ function IndicateursFormHestiaRisqueDeces(props) {
             onClick={(e) => choiceSantee("0")}
             name="group2"
             type={"radio"}
-            id={`inline-radio-5`}
+            id={`inline-radio-29`}
           />
           <Form.Check
             inline
@@ -132,7 +132,7 @@ function IndicateursFormHestiaRisqueDeces(props) {
             name="group2"
             onClick={(e) => choiceSantee("1")}
             type={"radio"}
-            id={`inline-radio-6`}
+            id={`inline-radio-30`}
           />
           <Form.Check
             inline
@@ -140,7 +140,7 @@ function IndicateursFormHestiaRisqueDeces(props) {
             name="group2"
             onClick={(e) => choiceSantee("2")}
             type={"radio"}
-            id={`inline-radio-7`}
+            id={`inline-radio-31`}
           />
           <Form.Check
             inline
@@ -148,7 +148,7 @@ function IndicateursFormHestiaRisqueDeces(props) {
             name="group2"
             onClick={(e) => choiceSantee("3")}
             type={"radio"}
-            id={`inline-radio-8`}
+            id={`inline-radio-32`}
           />
           <Form.Label htmlFor="inputValue">Commentaire</Form.Label>
           <Form.Control
@@ -167,7 +167,7 @@ function IndicateursFormHestiaRisqueDeces(props) {
             onClick={(e) => choiceConsommation("0")}
             name="group3"
             type={"radio"}
-            id={`inline-radio-9`}
+            id={`inline-radio-33`}
           />
           <Form.Check
             inline
@@ -175,7 +175,7 @@ function IndicateursFormHestiaRisqueDeces(props) {
             name="group3"
             onClick={(e) => choiceConsommation("1")}
             type={"radio"}
-            id={`inline-radio-10`}
+            id={`inline-radio-34`}
           />
           <Form.Check
             inline
@@ -183,7 +183,7 @@ function IndicateursFormHestiaRisqueDeces(props) {
             name="group3"
             onClick={(e) => choiceConsommation("2")}
             type={"radio"}
-            id={`inline-radio-11`}
+            id={`inline-radio-35`}
           />
           <Form.Check
             inline
@@ -191,7 +191,7 @@ function IndicateursFormHestiaRisqueDeces(props) {
             name="group3"
             onClick={(e) => choiceConsommation("3")}
             type={"radio"}
-            id={`inline-radio-12`}
+            id={`inline-radio-36`}
           />
           <Form.Label htmlFor="inputValue">Commentaire</Form.Label>
           <Form.Control

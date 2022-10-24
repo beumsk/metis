@@ -332,6 +332,8 @@ function AddReportMeet(props) {
 
     if (formIndicateurs.filter((el) => e[0].id === el.id)) {
       formIndicateurs.filter((el) => e[0].id === el.id)[0].id = e[0].id;
+
+      // formIndicateurs.filter((el) => e[0].id === el.id)[0].id = e[0].id;
       formIndicateurs.filter((el) => e[0].id === el.id)[0].indicateursFormCVC =
         e[0].indicateursFormCVC;
       formIndicateurs.filter(
@@ -342,19 +344,20 @@ function AddReportMeet(props) {
         (el) => e[0].id === el.id
       )[0].indicateursEstLeLogement = e[0].indicateursEstLeLogement;
     }
-
+    console.log(formIndicateurs[0].type);
     if (
       formIndicateurs &&
-      formIndicateurs.length > 0 &&
-      formIndicateurs.type !== null
+      formIndicateurs[0] &&
+      formIndicateurs[0].type !== null
     ) {
+      // console.log("test");
       for (let index = 0; index < options.length; index++) {
         const element = options[index];
-        if (
-          formIndicateurs[formIndicateurs.length - 1].type !== null &&
-          formIndicateurs[formIndicateurs.length - 1].type === element
-        ) {
+        console.log(formIndicateurs);
+        console.log(element);
+        if (e.type === element) {
           options.splice(index, 1);
+          // console.log(options);
         }
       }
     }

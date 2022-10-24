@@ -88,7 +88,7 @@ function IndicateursFormHestiaPerteLogement(props) {
             onClick={(e) => choiceVoisinage("0")}
             name="group1"
             type={"radio"}
-            id={`inline-radio-1`}
+            id={`inline-radio-13`}
           />
           <Form.Check
             inline
@@ -96,7 +96,7 @@ function IndicateursFormHestiaPerteLogement(props) {
             name="group1"
             onClick={(e) => choiceVoisinage("1")}
             type={"radio"}
-            id={`inline-radio-2`}
+            id={`inline-radio-14`}
           />
           <Form.Check
             inline
@@ -104,7 +104,7 @@ function IndicateursFormHestiaPerteLogement(props) {
             name="group1"
             onClick={(e) => choiceVoisinage("2")}
             type={"radio"}
-            id={`inline-radio-3`}
+            id={`inline-radio-15`}
           />
           <Form.Check
             inline
@@ -112,7 +112,7 @@ function IndicateursFormHestiaPerteLogement(props) {
             name="group1"
             onClick={(e) => choiceVoisinage("3")}
             type={"radio"}
-            id={`inline-radio-4`}
+            id={`inline-radio-16`}
           />
           <Form.Label htmlFor="inputValue">Commentaire</Form.Label>
           <Form.Control
@@ -131,7 +131,7 @@ function IndicateursFormHestiaPerteLogement(props) {
             onClick={(e) => choiceHygiene("0")}
             name="group2"
             type={"radio"}
-            id={`inline-radio-5`}
+            id={`inline-radio-17`}
           />
           <Form.Check
             inline
@@ -139,7 +139,7 @@ function IndicateursFormHestiaPerteLogement(props) {
             name="group2"
             onClick={(e) => choiceHygiene("1")}
             type={"radio"}
-            id={`inline-radio-6`}
+            id={`inline-radio-18`}
           />
           <Form.Check
             inline
@@ -147,7 +147,7 @@ function IndicateursFormHestiaPerteLogement(props) {
             name="group2"
             onClick={(e) => choiceHygiene("2")}
             type={"radio"}
-            id={`inline-radio-7`}
+            id={`inline-radio-19`}
           />
           <Form.Check
             inline
@@ -155,7 +155,7 @@ function IndicateursFormHestiaPerteLogement(props) {
             name="group2"
             onClick={(e) => choiceHygiene("3")}
             type={"radio"}
-            id={`inline-radio-8`}
+            id={`inline-radio-20`}
           />
           <Form.Label htmlFor="inputValue">Commentaire</Form.Label>
           <Form.Control
@@ -174,7 +174,7 @@ function IndicateursFormHestiaPerteLogement(props) {
             onClick={(e) => choiceBailleur("0")}
             name="group3"
             type={"radio"}
-            id={`inline-radio-9`}
+            id={`inline-radio-21`}
           />
           <Form.Check
             inline
@@ -182,7 +182,7 @@ function IndicateursFormHestiaPerteLogement(props) {
             name="group3"
             onClick={(e) => choiceBailleur("1")}
             type={"radio"}
-            id={`inline-radio-10`}
+            id={`inline-radio-22`}
           />
           <Form.Check
             inline
@@ -190,7 +190,7 @@ function IndicateursFormHestiaPerteLogement(props) {
             name="group3"
             onClick={(e) => choiceBailleur("2")}
             type={"radio"}
-            id={`inline-radio-11`}
+            id={`inline-radio-23`}
           />
           <Form.Check
             inline
@@ -198,7 +198,7 @@ function IndicateursFormHestiaPerteLogement(props) {
             name="group3"
             onClick={(e) => choiceBailleur("3")}
             type={"radio"}
-            id={`inline-radio-12`}
+            id={`inline-radio-24`}
           />
           <Form.Label
             htmlFor="inputValue"

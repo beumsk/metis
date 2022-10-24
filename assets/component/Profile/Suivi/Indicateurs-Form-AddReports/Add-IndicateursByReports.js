@@ -55,27 +55,40 @@ function AddIndicateursByReport(props) {
 
   const onChangeIndicateursEstiaLogement = (e) => {
     setIndicateursLogement(e);
+    setIndicateursFormHestiaRisqueDeces(null);
+    setIndicateursFormCVC(null);
   };
 
   const onChangeIndicateursFormHestiaRisqueDeces = (e) => {
     setIndicateursFormHestiaRisqueDeces(e);
+    setIndicateursFormCVC(null);
+    setIndicateursLogement(null);
   };
 
   const onChangeIndicateursFormCVC = (e) => {
     setIndicateursFormCVC(e);
+    setIndicateursLogement(null);
+    setIndicateursFormHestiaRisqueDeces(null);
   };
   console.log({
+    selectedOptionType: typeCVCSelected ? typeCVCSelected : null,
     id: props.id,
     indicateursEstLeLogement: indicateursEstLeLogement,
     indicateursFormHestiaRisqueDeces: indicateursFormHestiaRisqueDeces,
     indicateursFormCVC: indicateursFormCVC,
   });
+
   props.onChange([
     {
+      type: typeCVCSelected ? typeCVCSelected : null,
       id: props.id,
-      indicateursEstLeLogement: indicateursEstLeLogement,
-      indicateursFormHestiaRisqueDeces: indicateursFormHestiaRisqueDeces,
-      indicateursFormCVC: indicateursFormCVC,
+      indicateursEstLeLogement: indicateursEstLeLogement
+        ? indicateursEstLeLogement
+        : null,
+      indicateursFormHestiaRisqueDeces: indicateursFormHestiaRisqueDeces
+        ? indicateursFormHestiaRisqueDeces
+        : null,
+      indicateursFormCVC: indicateursFormCVC ? indicateursFormCVC : null,
     },
   ]);
   return (
@@ -86,6 +99,7 @@ function AddIndicateursByReport(props) {
         <Form.Select
           size="lg"
           value={typeCVCSelected}
+          // disabled={(typeCVCSelected ) ? true : false}
           onChange={(e) => choiceTypeCVC(e)}
         >
           {props.options?.map((el, id) => (
