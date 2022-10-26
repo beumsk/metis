@@ -50,7 +50,12 @@ function AddIndicateursByReport(props) {
   ]);
 
   function choiceTypeCVC(e) {
-    setTypeCVCSelected(e.target.value);
+    console.log("selected", e);
+    if (e.target.value) {
+      setTypeCVCSelected(e.target.value);
+    } else {
+      setTypeCVCSelected(null);
+    }
   }
 
   const onChangeIndicateursEstiaLogement = (e) => {
@@ -80,6 +85,7 @@ function AddIndicateursByReport(props) {
 
   props.onChange([
     {
+      selectedOptionType: typeCVCSelected ? typeCVCSelected : null,
       type: typeCVCSelected ? typeCVCSelected : null,
       id: props.id,
       indicateursEstLeLogement: indicateursEstLeLogement
@@ -94,28 +100,38 @@ function AddIndicateursByReport(props) {
   return (
     <>
       <div className="addSoins-form">
-        <Form.Label htmlFor="inputValue">Type {props.form.type}</Form.Label>
+        <Form.Label htmlFor="inputValue">Type {typeCVCSelected}</Form.Label>
 
-        <Form.Select
-          size="lg"
-          value={typeCVCSelected}
-          // disabled={(typeCVCSelected ) ? true : false}
-          onChange={(e) => choiceTypeCVC(e)}
-        >
-          {props.options?.map((el, id) => (
-            <>
-              {el && (
-                <option selected={props.form.type === el} value={el}>
-                  {el}
-                </option>
-              )}
-            </>
-          ))}
-        </Form.Select>
+        {typeCVCSelected === null && (
+          <Form.Select
+            size="lg"
+            value={typeCVCSelected}
+            // disabled={(typeCVCSelected ) ? true : false}
+            onChange={(e) => choiceTypeCVC(e)}
+          >
+            <option>Sélectionnez le type d'indicateurs</option>
+            {props.options?.map((el, id) => (
+              <>
+                {el && (
+                  <option
+                    selected={
+                      props.form.type === el ||
+                      props.form.selectedOptionType === el
+                    }
+                    value={el}
+                  >
+                    {el}
+                  </option>
+                )}
+              </>
+            ))}
+          </Form.Select>
+        )}
 
         {typeCVCSelected?.includes("HESTIA - Risque perte logement") && (
           <IndicateursFormHestiaPerteLogement
             id={props.id}
+            form={props.form}
             onChange={onChangeIndicateursEstiaLogement}
           />
         )}
@@ -123,11 +139,13 @@ function AddIndicateursByReport(props) {
           <IndicateursFormCVC
             id={props.id}
             onChange={onChangeIndicateursFormCVC}
+            form={props.form}
           />
         )}
         {typeCVCSelected?.includes("HESTIA - Risque décès") && (
           <IndicateursFormHestiaRisqueDeces
             id={props.id}
+            form={props.form}
             onChange={onChangeIndicateursFormHestiaRisqueDeces}
           />
         )}

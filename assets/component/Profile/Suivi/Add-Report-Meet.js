@@ -34,7 +34,11 @@ function AddReportMeet(props) {
   const [selectedTypeCVC, setSelectedTypeCVC] = useState(null);
   //   formData.append("pathString", props.link);
   const [options, setOptions] = useState([
-    "Sélectionnez le type d'indicateurs",
+    "HESTIA - Risque perte logement",
+    "CVC",
+    "HESTIA - Risque décès",
+  ]);
+  const [optionsConst, setOptionsConst] = useState([
     "HESTIA - Risque perte logement",
     "CVC",
     "HESTIA - Risque décès",
@@ -54,6 +58,7 @@ function AddReportMeet(props) {
   const [changeContacts, setChangeContacts] = useState(null);
   const [changePlaces, setChangePlaces] = useState(null);
   const [changeEditor, setChangeEditor] = useState(null);
+  const [changeOptions, setChangeOptions] = useState(null);
 
   useEffect(() => {
     axios({
@@ -84,7 +89,8 @@ function AddReportMeet(props) {
       .catch(function (response) {});
     setPatiId(idPatient);
     setUserId(auth.auth.idUser);
-  }, [idPatient]);
+    setOptions(options);
+  }, [options]);
 
   const choiceActivities = (e) => {
     // console.log(e);
@@ -95,6 +101,15 @@ function AddReportMeet(props) {
   };
   const choiceIndicateurs = (e) => {
     setChoiceIndicateurs(e);
+    console.log(e);
+    if (e === false) {
+      setFormIndicateurs([{ id: 0 }]);
+      setOptions([
+        "HESTIA - Risque perte logement",
+        "CVC",
+        "HESTIA - Risque décès",
+      ]);
+    }
   };
 
   const inputChangeTypeMeet = (e) => {
@@ -122,7 +137,6 @@ function AddReportMeet(props) {
     setChangePlaces(e);
   };
 
-  useEffect(() => {}, []);
   const onClickAddActivities = (e) => {
     setFormActivities((prevFormSoins) => [...prevFormSoins, e]);
   };
@@ -133,6 +147,7 @@ function AddReportMeet(props) {
   }
   const onClickAddIndicateurs = (e) => {
     if (formIndicateurs && formIndicateurs.length < 3) {
+      console.log(e);
       setFormIndicateurs((prevFormSoins) => [...prevFormSoins, e]);
     }
   };
@@ -164,18 +179,27 @@ function AddReportMeet(props) {
       }
     }
   };
-
-  const onClickDeleteIndicateursForm = (e) => {
-    if (formIndicateurs.length > 0 && formIndicateurs.length < 4) {
-      let filter = formIndicateurs.filter((el) => el.id !== e);
+  let arrId = [];
+  const onClickDeleteIndicateursForm = (index, id) => {
+    if (formActivities.length > 0) {
+      let filter = formIndicateurs.filter((el) => el.id !== index);
 
       for (let index = 0; index < filter.length; index++) {
         const element = filter[index];
         element.id = index;
-        setFormIndicateurs(filter);
 
-        options.push(filter[0].type);
+        setFormIndicateurs(filter);
       }
+      console.log(formActivities);
+    }
+
+    if (formIndicateurs.length === 1) {
+      setFormIndicateurs([{ id: 0 }]);
+      setOptions([
+        "HESTIA - Risque perte logement",
+        "CVC",
+        "HESTIA - Risque décès",
+      ]);
     }
   };
 
@@ -283,21 +307,21 @@ function AddReportMeet(props) {
 
     console.log(formIndic);
     console.log(formActivities);
-    axios({
-      method: "post",
-      url: "/api/sendReport",
-      data: formData,
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${auth.auth.accessToken}`,
-      },
-    })
-      .then(function (response) {
-        console.log(response);
-      })
-      .catch(function (response) {
-        console.log(response);
-      });
+    // axios({
+    //   method: "post",
+    //   url: "/api/sendReport",
+    //   data: formData,
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //     Authorization: `Bearer ${auth.auth.accessToken}`,
+    //   },
+    // })
+    //   .then(function (response) {
+    //     console.log(response);
+    //   })
+    //   .catch(function (response) {
+    //     console.log(response);
+    //   });
   };
 
   function onChangeValuesByOnCareForm(e) {
@@ -326,14 +350,29 @@ function AddReportMeet(props) {
     }
   }
 
-  function onChangeValuesIndicateursForm(e) {
-    console.log("ADD indicateurs", e);
+  const onChangeValuesIndicateursForm = (e) => {
+    console.log("ADD indicateurs", e[0].selectedOptionType);
     // setSelectedTypeCVC(e[0].selectedOptionType);
 
-    if (formIndicateurs.filter((el) => e[0].id === el.id)) {
+    let opt = [
+      "HESTIA - Risque perte logement",
+      "CVC",
+      "HESTIA - Risque décès",
+    ];
+    for (let index = 0; index < formIndicateurs.length; index++) {
+      const element = formIndicateurs[index];
+
+      element.id = index;
+    }
+    if (
+      formIndicateurs &&
+      formIndicateurs?.filter((el) => e[0].id === el.id)[0] &&
+      formIndicateurs?.filter((el) => e[0].id === el.id)[0]?.id !== null
+    ) {
       formIndicateurs.filter((el) => e[0].id === el.id)[0].id = e[0].id;
 
-      // formIndicateurs.filter((el) => e[0].id === el.id)[0].id = e[0].id;
+      formIndicateurs.filter((el) => e[0].id === el.id)[0].selectedOptionType =
+        e[0].selectedOptionType;
       formIndicateurs.filter((el) => e[0].id === el.id)[0].indicateursFormCVC =
         e[0].indicateursFormCVC;
       formIndicateurs.filter(
@@ -344,23 +383,91 @@ function AddReportMeet(props) {
         (el) => e[0].id === el.id
       )[0].indicateursEstLeLogement = e[0].indicateursEstLeLogement;
     }
-    console.log(formIndicateurs[0].type);
+
     if (
       formIndicateurs &&
-      formIndicateurs[0] &&
-      formIndicateurs[0].type !== null
+      e[0].selectedOptionType &&
+      e[0].selectedOptionType !== null
     ) {
       // console.log("test");
-      for (let index = 0; index < options.length; index++) {
-        const element = options[index];
-        console.log(formIndicateurs);
-        console.log(element);
-        if (e.type === element) {
-          options.splice(index, 1);
-          // console.log(options);
-        }
+      let test = formIndicateurs.filter(
+        (e) => e.selectedOptionType !== null && !opt.includes(e.id)
+      );
+      console.log(test);
+      let arr1 = [];
+
+      for (let index = 0; index < formIndicateurs.length; index++) {
+        const element = formIndicateurs[index];
+
+        arr1.push(element.selectedOptionType);
       }
+      let resultA = arr1.filter(
+        (elm) =>
+          !options
+            .map((elm) => JSON.stringify(elm))
+            .includes(JSON.stringify(elm))
+      );
+
+      // a diff b
+      let resultB = opt.filter(
+        (elm) =>
+          !arr1.map((elm) => JSON.stringify(elm)).includes(JSON.stringify(elm))
+      );
+
+      // show merge
+      console.log([...resultA, ...resultB]);
+
+      options.splice(0, options.length);
+
+      // if ([...resultA, ...resultB]) {
+      options.push(...resultB);
+
+      setOptions(options);
+      console.log("B", resultB);
+      console.log("A", resultA);
+      // }
+
+      // for (let index = 0; index < opt.length; index++) {
+      //   const element = opt[index];
+      //   test.map((e) => {
+      //     if (element === e.selectedOptionType) {
+      //       opt?.splice(index, 1);
+      //       // let opt = formIndicateurs.filter(
+      //       //   (e) => e.selectedOptionType !== null && !opt.includes(e.id)
+      //       // );
+
+      //       console.log(opt);
+      //       // opt.filter((e) => e === opt[index]);
+      //       console.log(opt, index, formIndicateurs);
+      //       // console.log(opt);
+      //       if (opt && opt.length > 0) {
+      //         options.splice(0, options.length);
+      //         // setOptions(options);
+
+      //         if (options.length === 0) {
+      //           console.log(opt);
+      //           options.push(...opt);
+      //           console.log(options);
+      //           setOptions(options);
+      //           // options.filter(e => e === opt.includes(opt))
+      //         }
+      //       }
+      //     }
+      //   });
+      // }
     }
+  };
+
+  function getDifference(array1, array2) {
+    return array1.filter((object1) => {
+      return !array2.some((object2) => {
+        return object1 === object2;
+      });
+    });
+  }
+
+  function optUpdate(opt) {
+    setOptions(opt);
   }
   return (
     <div className="report-content">
@@ -509,7 +616,7 @@ function AddReportMeet(props) {
                 <>
                   <AddIndicateursByReport
                     type={type}
-                    key={form.id}
+                    key={idx}
                     id={idx}
                     form={form}
                     options={options}
@@ -518,24 +625,30 @@ function AddReportMeet(props) {
                     contacts={props.contacts}
                     places={props.places}
                   ></AddIndicateursByReport>
-                  {formIndicateurs && (
+                  {(formIndicateurs[0].indicateursEstLeLogement !== null ||
+                    formIndicateurs[0].indicateursFormCVC !== null ||
+                    formIndicateurs[0].indicateursFormHestiaRisqueDeces !==
+                      null) && (
                     <button
-                      onClick={(e) => onClickDeleteIndicateursForm(form.id)}
+                      onClick={(e) =>
+                        onClickDeleteIndicateursForm(idx, form.id)
+                      }
                     >
                       Supprimer un autre soin
                     </button>
                   )}
+
+                  {formIndicateurs && formIndicateurs.length < 3 && (
+                    <button
+                      onClick={(e) =>
+                        onClickAddIndicateurs({ id: formIndicateurs.length })
+                      }
+                    >
+                      Ajouter un autre indicateur
+                    </button>
+                  )}
                 </>
               ))}
-              {formIndicateurs && formIndicateurs.length < 3 && (
-                <button
-                  onClick={(e) =>
-                    onClickAddIndicateurs({ id: formIndicateurs.length })
-                  }
-                >
-                  Ajouter un autre indicateur
-                </button>
-              )}
             </div>
           )}
         </div>
