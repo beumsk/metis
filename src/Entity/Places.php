@@ -39,7 +39,7 @@ class Places
         return $this->sugg;
     }
 
-    public function setPati(?Suggestions $sugg): self
+    public function setSugg(?Suggestions $sugg): self
     {
         $this->sugg = $sugg;
 

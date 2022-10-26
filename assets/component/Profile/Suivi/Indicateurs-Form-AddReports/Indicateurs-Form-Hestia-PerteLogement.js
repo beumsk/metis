@@ -44,11 +44,12 @@ function IndicateursFormHestiaPerteLogement(props) {
     setDescriptionVoisinage(e.target.value);
   };
   const choiceBailleur = (e) => {
-    setTypeCVCSelected(e.target.value);
+    console.log(bailleurSelected);
+    setBailleurSelected(e);
   };
 
   const choiceTypeCVC = (e) => {
-    setBailleurSelected(e.target.value);
+    setTypeCVCSelected(e.target.value);
   };
 
   const choiceVoisinage = (e) => {
@@ -86,14 +87,14 @@ function IndicateursFormHestiaPerteLogement(props) {
             inline
             label="Conflits de voisinage (0)"
             onClick={(e) => choiceVoisinage("0")}
-            name="group1"
+            name="group4"
             type={"radio"}
             id={`inline-radio-13`}
           />
           <Form.Check
             inline
             label="Conflits de voisinage mais gérés (1)"
-            name="group1"
+            name="group4"
             onClick={(e) => choiceVoisinage("1")}
             type={"radio"}
             id={`inline-radio-14`}
@@ -101,7 +102,7 @@ function IndicateursFormHestiaPerteLogement(props) {
           <Form.Check
             inline
             label="Absence de conflits de voisinage (2)"
-            name="group1"
+            name="group4"
             onClick={(e) => choiceVoisinage("2")}
             type={"radio"}
             id={`inline-radio-15`}
@@ -109,7 +110,7 @@ function IndicateursFormHestiaPerteLogement(props) {
           <Form.Check
             inline
             label="Bonne entente avec le voisinage (3)"
-            name="group1"
+            name="group4"
             onClick={(e) => choiceVoisinage("3")}
             type={"radio"}
             id={`inline-radio-16`}
@@ -129,14 +130,14 @@ function IndicateursFormHestiaPerteLogement(props) {
             inline
             label="Si cumule au moins 2 éléments : Présence d’odeurs nauséabondes, nuisibles, altération du matériel, accumulation (0)"
             onClick={(e) => choiceHygiene("0")}
-            name="group2"
+            name="group5"
             type={"radio"}
             id={`inline-radio-17`}
           />
           <Form.Check
             inline
             label="Présence d’odeurs nauséabondes OU nuisibles OU altération du matériel OU accumulation (1)"
-            name="group2"
+            name="group5"
             onClick={(e) => choiceHygiene("1")}
             type={"radio"}
             id={`inline-radio-18`}
@@ -144,7 +145,7 @@ function IndicateursFormHestiaPerteLogement(props) {
           <Form.Check
             inline
             label="Logement relativement propre et entretenu mais pas impeccable ou aides familiales limitées (2)"
-            name="group2"
+            name="group5"
             onClick={(e) => choiceHygiene("2")}
             type={"radio"}
             id={`inline-radio-19`}
@@ -152,7 +153,7 @@ function IndicateursFormHestiaPerteLogement(props) {
           <Form.Check
             inline
             label="Logement impeccable et/ou aides familiales régulières et fonctionnelles (3)"
-            name="group2"
+            name="group5"
             onClick={(e) => choiceHygiene("3")}
             type={"radio"}
             id={`inline-radio-20`}
@@ -172,14 +173,14 @@ function IndicateursFormHestiaPerteLogement(props) {
             inline
             label="Absence de paiement du loyer (0)"
             onClick={(e) => choiceBailleur("0")}
-            name="group3"
+            name="group6"
             type={"radio"}
             id={`inline-radio-21`}
           />
           <Form.Check
             inline
             label="La personne paie son loyer mais aucune garantie de régularité ou de manière erronée (1)"
-            name="group3"
+            name="group6"
             onClick={(e) => choiceBailleur("1")}
             type={"radio"}
             id={`inline-radio-22`}
@@ -187,7 +188,7 @@ function IndicateursFormHestiaPerteLogement(props) {
           <Form.Check
             inline
             label="Quelqu’un est garant du paiement du loyer mais personne n’est garant de la signature des baux (2)"
-            name="group3"
+            name="group6"
             onClick={(e) => choiceBailleur("2")}
             type={"radio"}
             id={`inline-radio-23`}
@@ -195,7 +196,7 @@ function IndicateursFormHestiaPerteLogement(props) {
           <Form.Check
             inline
             label="Garantie du paiement du loyer et de la signature des baux (3)"
-            name="group3"
+            name="group6"
             onClick={(e) => choiceBailleur("3")}
             type={"radio"}
             id={`inline-radio-24`}

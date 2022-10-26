@@ -15,7 +15,7 @@ class FollowupReportsActivities
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(type: Types::TEXT)]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
     #[ORM\Column(nullable: true)]
@@ -33,12 +33,12 @@ class FollowupReportsActivities
         return $this->id;
     }
 
-    public function getDescription(): ?string
+    public function getDescription()
     {
         return $this->description;
     }
 
-    public function setDescription(string $description): self
+    public function setDescription($description): self
     {
         $this->description = $description;
 

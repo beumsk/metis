@@ -46,15 +46,16 @@ class PatientsPlaces
     #[ORM\ManyToOne]
     private ?Contacts $cont = null;
 
-    #[ORM\ManyToOne(targetEntity: 'Places', cascade: ["all"], fetch: "EAGER")]
-    #[ORM\JoinColumn(name: "pati_id", referencedColumnName: "id", nullable: true, onDelete: "SET NULL")]
-    private ?Patients $pati = null;
+
 
     #[ORM\ManyToOne]
     private ?Suggestions $sugg = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $comment = null;
+
+    #[ORM\ManyToOne]
+    private ?Patients $pati = null;
 
     public function getId(): ?int
     {
@@ -183,17 +184,7 @@ class PatientsPlaces
         return $this;
     }
 
-    public function getPati(): ?Patients
-    {
-        return $this->pati;
-    }
 
-    public function setPati(?Patients $pati): self
-    {
-        $this->pati = $pati;
-
-        return $this;
-    }
 
     public function getSugg(): ?Suggestions
     {
@@ -215,6 +206,18 @@ class PatientsPlaces
     public function setComment(?string $comment): self
     {
         $this->comment = $comment;
+
+        return $this;
+    }
+
+    public function getPati(): ?Patients
+    {
+        return $this->pati;
+    }
+
+    public function setPati(?Patients $pati): self
+    {
+        $this->pati = $pati;
 
         return $this;
     }

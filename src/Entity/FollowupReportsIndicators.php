@@ -17,7 +17,7 @@ class FollowupReportsIndicators
     #[ORM\Column(nullable: true)]
     private ?int $value = null;
 
-    #[ORM\Column(type: Types::TEXT)]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $comment = null;
 
     #[ORM\ManyToOne(targetEntity: 'FollowupReports', cascade: ["all"], fetch: "EAGER")]
@@ -45,12 +45,12 @@ class FollowupReportsIndicators
         return $this;
     }
 
-    public function getComment(): ?string
+    public function getComment()
     {
         return $this->comment;
     }
 
-    public function setComment(string $comment): self
+    public function setComment($comment): self
     {
         $this->comment = $comment;
 

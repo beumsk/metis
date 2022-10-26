@@ -204,6 +204,11 @@ function AddReportMeet(props) {
   };
 
   const sentRapport = (e) => {
+    let opt = [
+      "HESTIA - Risque perte logement",
+      "CVC",
+      "HESTIA - Risque décès",
+    ];
     var formData = new FormData();
     let formIndic = formIndicateurs.map((el) => {
       if (
@@ -222,9 +227,14 @@ function AddReportMeet(props) {
       }
     });
 
+    let formIndicatorsGrouped = formIndicateurs.filter(
+      (e) => e.selectedOptionType !== null && !opt.includes(e.id)
+    );
+
+    console.log(formIndicatorsGrouped);
     let arr = {};
-    for (let index = 0; index < formIndicateurs.length; index++) {
-      const element = formIndicateurs[index];
+    for (let index = 0; index < formIndicatorsGrouped.length; index++) {
+      const element = formIndicatorsGrouped[index];
       if (element.indicateursFormCVC !== null) {
         arr.indicateursFormCVC = element.indicateursFormCVC;
       }
@@ -237,44 +247,42 @@ function AddReportMeet(props) {
       }
     }
 
-    console.log(arr);
+    // let formActi = formActivities.map((el) => {
+    //   if (
+    //     Object.keys(el).length === 1 ||
+    //     JSON.stringify(el) ===
+    //       JSON.stringify({
+    //         id: el.id,
+    //         type: null,
+    //         contact: null,
+    //         place: null,
+    //         description: null,
+    //       })
+    //   ) {
+    //     return null;
+    //   } else {
+    //     return el;
+    //   }
+    // });
 
-    let formActi = formActivities.map((el) => {
-      if (
-        Object.keys(el).length === 1 ||
-        JSON.stringify(el) ===
-          JSON.stringify({
-            id: el.id,
-            type: null,
-            contact: null,
-            place: null,
-            description: null,
-          })
-      ) {
-        return null;
-      } else {
-        return el;
-      }
-    });
-
-    let formCare = formSoins.map((el) => {
-      console.log(Object.keys(el).length);
-      if (
-        Object.keys(el).length === 1 ||
-        JSON.stringify(el) ===
-          JSON.stringify({
-            id: el.id,
-            type: null,
-            contact: null,
-            place: null,
-            description: null,
-          })
-      ) {
-        return null;
-      } else {
-        return el;
-      }
-    });
+    // let formCare = formSoins.map((el) => {
+    //   console.log(Object.keys(el).length);
+    //   if (
+    //     Object.keys(el).length === 1 ||
+    //     JSON.stringify(el) ===
+    //       JSON.stringify({
+    //         id: el.id,
+    //         type: null,
+    //         contact: null,
+    //         place: null,
+    //         description: null,
+    //       })
+    //   ) {
+    //     return null;
+    //   } else {
+    //     return el;
+    //   }
+    // });
 
     formData.append("activityType", 1);
     formData.append("contacts", contacts);
@@ -288,40 +296,40 @@ function AddReportMeet(props) {
     formData.append("meetType", meetType);
     formData.append(
       "formSoins",
-      formCare && Object.keys(formCare).length > 0
-        ? JSON.stringify(...formCare)
-        : null
+      JSON.stringify(formSoins) === JSON.stringify([{ id: 0 }])
+        ? null
+        : JSON.stringify(formSoins)
     );
     formData.append(
       "formActivities",
-      formActi && Object.keys(formActi).length > 0
-        ? JSON.stringify(...formActi)
-        : null
+      JSON.stringify(formActivities) === JSON.stringify([{ id: 0 }])
+        ? null
+        : JSON.stringify(formActivities)
     );
     formData.append(
       "formIndicateurs",
-      arr && Object.keys(arr).length > 0 ? JSON.stringify(arr) : null
+      JSON.stringify(formIndicatorsGrouped) === JSON.stringify([{ id: 0 }])
+        ? null
+        : JSON.stringify(formIndicatorsGrouped)
     );
     formData.append("userId", userId);
     formData.append("patiId", patiId);
 
-    console.log(formIndic);
-    console.log(formActivities);
-    // axios({
-    //   method: "post",
-    //   url: "/api/sendReport",
-    //   data: formData,
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //     Authorization: `Bearer ${auth.auth.accessToken}`,
-    //   },
-    // })
-    //   .then(function (response) {
-    //     console.log(response);
-    //   })
-    //   .catch(function (response) {
-    //     console.log(response);
-    //   });
+    axios({
+      method: "post",
+      url: "/api/sendReport",
+      data: formData,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    })
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (response) {
+        console.log(response);
+      });
   };
 
   function onChangeValuesByOnCareForm(e) {
@@ -483,18 +491,18 @@ function AddReportMeet(props) {
               inline
               label="Oui"
               onClick={(e) => choiceSoins(true)}
-              name="group1"
+              name="group26"
               type={"radio"}
-              id={`inline-radio-1`}
+              id={`inline-radio-21`}
             />
             <Form.Check
               inline
               label="Non"
-              name="group1"
+              name="group26"
               defaultChecked="true"
               onClick={(e) => choiceSoins(false)}
               type={"radio"}
-              id={`inline-radio-2`}
+              id={`inline-radio-22`}
             />
           </div>
         </div>
@@ -536,18 +544,18 @@ function AddReportMeet(props) {
               inline
               label="Oui"
               onClick={(e) => choiceActivities(true)}
-              name="group2"
+              name="group25"
               type={"radio"}
-              id={`inline-radio-3`}
+              id={`inline-radio-23`}
             />
             <Form.Check
               inline
               label="Non"
               defaultChecked="true"
-              name="group2"
+              name="group25"
               onClick={(e) => choiceActivities(false)}
               type={"radio"}
-              id={`inline-radio-4`}
+              id={`inline-radio-24`}
             />
           </div>
         </div>
@@ -594,18 +602,18 @@ function AddReportMeet(props) {
               inline
               label="Oui"
               onClick={(e) => choiceIndicateurs(true)}
-              name="group3"
+              name="group24"
               type={"radio"}
-              id={`inline-radio-5`}
+              id={`inline-radio-25`}
             />
             <Form.Check
               inline
               label="Non"
               defaultChecked="true"
-              name="group3"
+              name="group24"
               onClick={(e) => choiceIndicateurs(false)}
               type={"radio"}
-              id={`inline-radio-6`}
+              id={`inline-radio-26`}
             />
           </div>
         </div>

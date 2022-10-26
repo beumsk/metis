@@ -21,7 +21,7 @@ function AddSoinsByReport(props) {
   const [auth, setAuth] = useState(useAuth());
   let id = useParams().id;
   var formData = new FormData();
-  formData.append("id", 57);
+  formData.append("id", 108);
 
   const [typeValue, setValueTypeForm] = useState(null);
   const [contactValue, setValueContactForm] = useState(null);
