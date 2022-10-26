@@ -22,14 +22,20 @@ function RapportDetails(props) {
   let id = useParams().id;
   var formData = new FormData();
   formData.append("id", 57);
+
+  var reportData = new FormData();
+  reportData.append("id", id.toString());
   //   formData.append("pathString", props.link);
   const [contacts, setContacts] = useState(null);
   const [elementsOpt, setElementsOpt] = useState(null);
   const [idPatient, setIdPatient] = useState(id);
+
+  const [informations, setInformations] = useState(null);
   const [type, setType] = useState(null);
   const [toggle, setToggle] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
   useEffect(() => {
     axios({
       method: "post",
@@ -44,28 +50,64 @@ function RapportDetails(props) {
         setType(response);
       })
       .catch(function (response) {});
+
+    axios({
+      method: "post",
+      url: "/api/getFollowUpReportsById",
+      data: reportData,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    })
+      .then(function (response) {
+        setInformations(response);
+      })
+      .catch(function (response) {});
   }, [idPatient]);
   // console.log(contacts);
-  const editContent = (e) => {
-    console.log("e");
-    setEdit(true);
+
+  const editContent = (e, r) => {
+    console.log(e.target.checked);
+    if (e.target.checked === true) {
+      r.isHightlight = true;
+      setInformations(informations);
+    }
+
+    if (e.target.checked === false) {
+      r.isHightlight = false;
+      setInformations(informations);
+    }
   };
   return (
     <>
-      {props?.informationPatient?.data.map((r, id) => (
+      {informations?.data?.map((r, id) => (
         <div key={id} className="report-content">
           {r && r.activityType === 2 && <h6>Appel Sortant</h6>}
           {r && r.activityType === 4 && <h6>Appel Entrant</h6>}
           {r && r.deletedAt === null && (
             <>
-              <button
+              <Form.Check
+                type="switch"
+                checked={r.isHightlight}
+                onClick={(e) => {
+                  setToggle(!toggle);
+                  r.isHightlight = toggle;
+
+                  setInformations(informations);
+                }}
+                label="Check this switch"
+              />
+
+              {toggle}
+              {/* <button
                 onClick={() => {
                   setToggle(!toggle);
                   r.isHightlight = toggle;
                 }}
               >
                 <FontAwesomeIcon icon={faEdit} /> Editer
-              </button>
+              </button> */}
               {r.isHightlight === true && (
                 <EditReportMeet
                   informationPatient={r}
