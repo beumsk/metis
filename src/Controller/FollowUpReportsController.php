@@ -99,30 +99,6 @@ class FollowUpReportsController extends AbstractController
         $indicateurs_jsondecode = json_decode($formIndicateurs);
 
 
-        // dd($care_jsondecode, $activities_jsondecode, $indicateurs_jsondecode);
-
-        // $care = [];
-        // foreach ($care_jsondecode as $key) {
-        //     if (count((array)$key) > 1 && ($key->type !== null || $key->contact !== null || $key->place !== null || $key->description !== null)) {
-        //         array_push($care, $key);
-        //     }
-        // }
-
-        // $activities = [];
-        // foreach ($activities_jsondecode as $key) {
-        //     if (count((array)$key) > 1 && ($key->type !== null || $key->contact !== null || $key->place !== null || $key->description !== null)) {
-        //         array_push($activities, $key);
-        //     }
-        // }
-
-        // $indicators = [];
-
-
-
-
-        // dd($care_jsondecode, $activities_jsondecode, $indicateurs_jsondecode);
-
-
         $no_care = ($care_jsondecode !== null) ? 0 : 1;
         $no_activities =  ($activities_jsondecode !== null) ? 0 : 1;
         $no_indicateurs =  ($indicateurs_jsondecode !== null) ? 0 : 1;
@@ -165,110 +141,112 @@ class FollowUpReportsController extends AbstractController
 
         // dd($indicateurs_jsondecode);
 
-
-        foreach ($indicateurs_jsondecode as $key) {
-            if ($key->indicateursFormCVC && $key->indicateursFormCVC !== null) {
-                $entityManager = $doctrine->getManager();
-                $followUpReportIndicators = new FollowupReportsIndicators();
-
-
-                $indicators =  $doctrine->getRepository(Indicators::class)->find(1);
-                $followUpReportIndicators->setFore($report);
-                $followUpReportIndicators->setIndi($indicators);
-                $followUpReportIndicators->setValue($key->indicateursFormCVC[0]->corpsScore);
-                $followUpReportIndicators->setComment($key->indicateursFormCVC[0]->corpsDescription);
+        if ($indicateurs_jsondecode !== null) {
+            foreach ($indicateurs_jsondecode as $key) {
+                if ($key->indicateursFormCVC && $key->indicateursFormCVC !== null) {
+                    $entityManager = $doctrine->getManager();
+                    $followUpReportIndicators = new FollowupReportsIndicators();
 
 
-                $entityManager->persist($followUpReportIndicators);
-                $entityManager->flush();
-
-                $indicators =  $doctrine->getRepository(Indicators::class)->find(2);
-                $followUpReportIndicators->setFore($report);
-                $followUpReportIndicators->setIndi($indicators);
-                $followUpReportIndicators->setValue($key->indicateursFormCVC[0]->vetementsScore);
-                $followUpReportIndicators->setComment($key->indicateursFormCVC[0]->vetementsDescription);
-
-                $entityManager->persist($followUpReportIndicators);
-                $entityManager->flush();
-
-                $indicators =  $doctrine->getRepository(Indicators::class)->find(3);
-                $followUpReportIndicators->setFore($report);
-                $followUpReportIndicators->setIndi($indicators);
-                $followUpReportIndicators->setValue($key->indicateursFormCVC[0]->comportementScore);
-                $followUpReportIndicators->setComment($key->indicateursFormCVC[0]->comportementDescription);
-
-                $entityManager->persist($followUpReportIndicators);
-                $entityManager->flush();
-            }
-
-            if ($key->indicateursEstLeLogement && $key->indicateursEstLeLogement !== null) {
-                $entityManager = $doctrine->getManager();
-                $followUpReportIndicators = new FollowupReportsIndicators();
+                    $indicators =  $doctrine->getRepository(Indicators::class)->find(1);
+                    $followUpReportIndicators->setFore($report);
+                    $followUpReportIndicators->setIndi($indicators);
+                    $followUpReportIndicators->setValue($key->indicateursFormCVC[0]->corpsScore);
+                    $followUpReportIndicators->setComment($key->indicateursFormCVC[0]->corpsDescription);
 
 
-                $indicators =  $doctrine->getRepository(Indicators::class)->find(1);
-                $followUpReportIndicators->setFore($report);
-                $followUpReportIndicators->setIndi($indicators);
-                $followUpReportIndicators->setValue($key->indicateursEstLeLogement[0]->bailleurSelected);
-                $followUpReportIndicators->setComment($key->indicateursEstLeLogement[0]->descriptionBailleur);
+                    $entityManager->persist($followUpReportIndicators);
+                    $entityManager->flush();
+
+                    $indicators =  $doctrine->getRepository(Indicators::class)->find(2);
+                    $followUpReportIndicators->setFore($report);
+                    $followUpReportIndicators->setIndi($indicators);
+                    $followUpReportIndicators->setValue($key->indicateursFormCVC[0]->vetementsScore);
+                    $followUpReportIndicators->setComment($key->indicateursFormCVC[0]->vetementsDescription);
+
+                    $entityManager->persist($followUpReportIndicators);
+                    $entityManager->flush();
+
+                    $indicators =  $doctrine->getRepository(Indicators::class)->find(3);
+                    $followUpReportIndicators->setFore($report);
+                    $followUpReportIndicators->setIndi($indicators);
+                    $followUpReportIndicators->setValue($key->indicateursFormCVC[0]->comportementScore);
+                    $followUpReportIndicators->setComment($key->indicateursFormCVC[0]->comportementDescription);
+
+                    $entityManager->persist($followUpReportIndicators);
+                    $entityManager->flush();
+                }
+
+                if ($key->indicateursEstLeLogement && $key->indicateursEstLeLogement !== null) {
+                    $entityManager = $doctrine->getManager();
+                    $followUpReportIndicators = new FollowupReportsIndicators();
 
 
-                $entityManager->persist($followUpReportIndicators);
-                $entityManager->flush();
-
-                $indicators =  $doctrine->getRepository(Indicators::class)->find(2);
-                $followUpReportIndicators->setFore($report);
-                $followUpReportIndicators->setIndi($indicators);
-                $followUpReportIndicators->setValue($key->indicateursEstLeLogement[0]->voisinageSelected);
-                $followUpReportIndicators->setComment($key->indicateursEstLeLogement[0]->descriptionVoisinage);
-
-                $entityManager->persist($followUpReportIndicators);
-                $entityManager->flush();
-
-                $indicators =  $doctrine->getRepository(Indicators::class)->find(3);
-                $followUpReportIndicators->setFore($report);
-                $followUpReportIndicators->setIndi($indicators);
-                $followUpReportIndicators->setValue($key->indicateursEstLeLogement[0]->hygieneSelected);
-                $followUpReportIndicators->setComment($key->indicateursEstLeLogement[0]->descriptionHygiene);
-
-                $entityManager->persist($followUpReportIndicators);
-                $entityManager->flush();
-            }
-
-            if ($key->indicateursFormHestiaRisqueDeces && $key->indicateursFormHestiaRisqueDeces !== null) {
-                $entityManager = $doctrine->getManager();
-                $followUpReportIndicators = new FollowupReportsIndicators();
+                    $indicators =  $doctrine->getRepository(Indicators::class)->find(1);
+                    $followUpReportIndicators->setFore($report);
+                    $followUpReportIndicators->setIndi($indicators);
+                    $followUpReportIndicators->setValue($key->indicateursEstLeLogement[0]->bailleurSelected);
+                    $followUpReportIndicators->setComment($key->indicateursEstLeLogement[0]->descriptionBailleur);
 
 
-                $indicators =  $doctrine->getRepository(Indicators::class)->find(1);
-                $followUpReportIndicators->setFore($report);
-                $followUpReportIndicators->setIndi($indicators);
-                $followUpReportIndicators->setValue($key->indicateursFormHestiaRisqueDeces[0]->valueSecuritee);
-                $followUpReportIndicators->setComment($key->indicateursFormHestiaRisqueDeces[0]->descriptionSecuritee);
+                    $entityManager->persist($followUpReportIndicators);
+                    $entityManager->flush();
+
+                    $indicators =  $doctrine->getRepository(Indicators::class)->find(2);
+                    $followUpReportIndicators->setFore($report);
+                    $followUpReportIndicators->setIndi($indicators);
+                    $followUpReportIndicators->setValue($key->indicateursEstLeLogement[0]->voisinageSelected);
+                    $followUpReportIndicators->setComment($key->indicateursEstLeLogement[0]->descriptionVoisinage);
+
+                    $entityManager->persist($followUpReportIndicators);
+                    $entityManager->flush();
+
+                    $indicators =  $doctrine->getRepository(Indicators::class)->find(3);
+                    $followUpReportIndicators->setFore($report);
+                    $followUpReportIndicators->setIndi($indicators);
+                    $followUpReportIndicators->setValue($key->indicateursEstLeLogement[0]->hygieneSelected);
+                    $followUpReportIndicators->setComment($key->indicateursEstLeLogement[0]->descriptionHygiene);
+
+                    $entityManager->persist($followUpReportIndicators);
+                    $entityManager->flush();
+                }
+
+                if ($key->indicateursFormHestiaRisqueDeces && $key->indicateursFormHestiaRisqueDeces !== null) {
+                    $entityManager = $doctrine->getManager();
+                    $followUpReportIndicators = new FollowupReportsIndicators();
 
 
-                $entityManager->persist($followUpReportIndicators);
-                $entityManager->flush();
+                    $indicators =  $doctrine->getRepository(Indicators::class)->find(1);
+                    $followUpReportIndicators->setFore($report);
+                    $followUpReportIndicators->setIndi($indicators);
+                    $followUpReportIndicators->setValue($key->indicateursFormHestiaRisqueDeces[0]->valueSecuritee);
+                    $followUpReportIndicators->setComment($key->indicateursFormHestiaRisqueDeces[0]->descriptionSecuritee);
 
-                $indicators =  $doctrine->getRepository(Indicators::class)->find(2);
-                $followUpReportIndicators->setFore($report);
-                $followUpReportIndicators->setIndi($indicators);
-                $followUpReportIndicators->setValue($key->indicateursFormHestiaRisqueDeces[0]->valueSantee);
-                $followUpReportIndicators->setComment($key->indicateursFormHestiaRisqueDeces[0]->descriptionSantee);
 
-                $entityManager->persist($followUpReportIndicators);
-                $entityManager->flush();
+                    $entityManager->persist($followUpReportIndicators);
+                    $entityManager->flush();
 
-                $indicators =  $doctrine->getRepository(Indicators::class)->find(3);
-                $followUpReportIndicators->setFore($report);
-                $followUpReportIndicators->setIndi($indicators);
-                $followUpReportIndicators->setValue($key->indicateursFormHestiaRisqueDeces[0]->valueConsommation);
-                $followUpReportIndicators->setComment($key->indicateursFormHestiaRisqueDeces[0]->descriptionConsommation);
+                    $indicators =  $doctrine->getRepository(Indicators::class)->find(2);
+                    $followUpReportIndicators->setFore($report);
+                    $followUpReportIndicators->setIndi($indicators);
+                    $followUpReportIndicators->setValue($key->indicateursFormHestiaRisqueDeces[0]->valueSantee);
+                    $followUpReportIndicators->setComment($key->indicateursFormHestiaRisqueDeces[0]->descriptionSantee);
 
-                $entityManager->persist($followUpReportIndicators);
-                $entityManager->flush();
+                    $entityManager->persist($followUpReportIndicators);
+                    $entityManager->flush();
+
+                    $indicators =  $doctrine->getRepository(Indicators::class)->find(3);
+                    $followUpReportIndicators->setFore($report);
+                    $followUpReportIndicators->setIndi($indicators);
+                    $followUpReportIndicators->setValue($key->indicateursFormHestiaRisqueDeces[0]->valueConsommation);
+                    $followUpReportIndicators->setComment($key->indicateursFormHestiaRisqueDeces[0]->descriptionConsommation);
+
+                    $entityManager->persist($followUpReportIndicators);
+                    $entityManager->flush();
+                }
             }
         }
+
 
         if ($activities_jsondecode && $activities_jsondecode !== null) {
 
@@ -331,7 +309,6 @@ class FollowUpReportsController extends AbstractController
 
         return new JsonResponse([
             'id' => $report->getId(),
-            'id' => $followUpReportIndicators->getId(),
             'response' => "Sent !"
         ]);
     }

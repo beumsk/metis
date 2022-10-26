@@ -326,6 +326,7 @@ function AddReportMeet(props) {
     })
       .then(function (response) {
         console.log(response);
+        location.replace(window.location.origin + "/" + idPatient);
       })
       .catch(function (response) {
         console.log(response);
