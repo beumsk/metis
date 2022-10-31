@@ -11,6 +11,7 @@ use App\Entity\FollowupReportsIndicators;
 use App\Entity\Indicators;
 use App\Entity\Patients;
 use App\Entity\PatientsPlaces;
+use App\Entity\Places;
 use App\Entity\Suggestions;
 use App\Entity\User;
 use Doctrine\Persistence\ManagerRegistry;
@@ -41,14 +42,17 @@ class FollowUpReportsController extends AbstractController
     public $createdAt;
 
 
-    #[Route('/api/getFollowUpReportsById', name: 'app_reportByPatient')]
-    public function index(ManagerRegistry $doctrine, SerializerInterface $serializer): Response
+    #[Route('/api/getFollowUpReportsById', name: 'app_getFollowUpReportsById')]
+    public function getFollowUpReportsById(ManagerRegistry $doctrine, SerializerInterface $serializer): Response
     {
         $request = Request::createFromGlobals();
 
         $id = $request->request->get('id');
 
-        $places = $doctrine->getRepository(FollowupReports::class)->findBy(["pati" => $id]);
+        $report = $doctrine->getRepository(FollowupReports::class)->findBy(["pati" => $id]);
+
+
+
 
         $encoders = [new JsonEncoder()];
         $normalizers = [new ObjectNormalizer()];
@@ -56,13 +60,78 @@ class FollowUpReportsController extends AbstractController
 
 
         $jsonObject = $serializer->serialize(
-            $places,
+            $report,
             JsonEncoder::FORMAT,
             [AbstractNormalizer::IGNORED_ATTRIBUTES => ['pati']]
         );
 
 
         // dd($jsonObject);
+
+        return new Response($jsonObject, 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
+    }
+
+
+    #[Route('/api/getFollowUpReportsWithAnswers', name: 'app_getFollowUpReportsWithAnswers')]
+    public function getFollowUpReportsWithAnswers(ManagerRegistry $doctrine, SerializerInterface $serializer): Response
+    {
+
+        $request = Request::createFromGlobals();
+
+        $id = $request->request->get('id');
+
+        $followUpReports = $doctrine->getRepository(FollowupReports::class)->findBy(["pati" => $id]);
+
+        $id = null;
+        foreach ($followUpReports as  $key => $value) {
+            if ($value->getId()) {
+                $report = $doctrine->getRepository(FollowupReportsActivities::class)->findBy(['fore' => $value->getId()]);
+                $indicators = $doctrine->getRepository(FollowupReportsIndicators::class)->findBy(['fore' => $value->getId()]);
+
+
+
+                if ($report !== []) {
+                    foreach ($report as $itemReport) {
+                        if ($itemReport->getSugg()->getParentSugg()->getValue() === "Soins") {
+                            $value->setFollowupReportsCare($itemReport);
+                        }
+
+                        if ($itemReport->getSugg()->getParentSugg()->getValue() === "Activités") {
+                            $value->setFollowupReportsActivities($itemReport);
+                        }
+                    }
+                }
+
+                if ($indicators !== []) {
+                    foreach ($indicators as  $indi) {
+                        $value->setFollowupReportsIndicators($indi);
+                    }
+                }
+            }
+        }
+
+
+        $encoders = [new JsonEncoder()];
+        $normalizers = [new ObjectNormalizer()];
+        $serializer = new Serializer($normalizers, $encoders);
+
+
+        $jsonObject = $serializer->serialize($followUpReports, 'json', [
+            'circular_reference_handler' => function ($object) {
+                return $object->getId();
+            },
+            JsonEncoder::FORMAT,
+            [AbstractNormalizer::IGNORED_ATTRIBUTES => ['pati', 'reportDate', 'lastUpdate', 'creationDate', 'pati']]
+        ]);
+
+
+        // $jsonObject = $serializer->serialize($followUpReports, 'json', [
+        //     'circular_reference_handler' => function ($object) {
+        //         return $object->getId();
+        //     },
+        //     JsonEncoder::FORMAT,
+        //     [AbstractNormalizer::IGNORED_ATTRIBUTES => ['pati', 'reportDate', 'lastUpdate', 'creationDate', 'pati']]
+        // ]);
 
         return new Response($jsonObject, 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
     }
@@ -112,13 +181,13 @@ class FollowUpReportsController extends AbstractController
         }
 
         $patient =  $doctrine->getRepository(Patients::class)->find($patiId);
-
+        $plac =  $doctrine->getRepository(Places::class)->find($changePlaces);
 
 
         $report = new FollowupReports();
 
         $report->setUser($user);
-        $report->setActivityType(1);
+        $report->setActivityType($meetType);
         $report->setReportDate($reportDate);
         $report->setPlac($contact);
         $report->setLastUpdate($reportDate);
@@ -131,6 +200,7 @@ class FollowUpReportsController extends AbstractController
         $report->setNoActivities($no_activities);
         $report->setNoIndicators($no_indicateurs);
         $report->setReportType("1");
+        $report->setPlac($plac);
 
         // dd($report);
         $entityManager = $doctrine->getManager();
@@ -251,7 +321,8 @@ class FollowUpReportsController extends AbstractController
         if ($activities_jsondecode && $activities_jsondecode !== null) {
 
             $followUpReportActivities = new FollowupReportsActivities();
-            $followupReportContact = new FollowupReportsContact();
+            // $followupReportContact = new FollowupReportsContact();
+            // $followupReportActivityPlace = new FollowupReportActivityPlace();
             foreach ($activities_jsondecode as $key) {
 
 
@@ -259,8 +330,11 @@ class FollowUpReportsController extends AbstractController
 
 
                 $contact =  $doctrine->getRepository(Contacts::class)->find($key->contact);
+                $place =  $doctrine->getRepository(Places::class)->find($key->place);
                 $followUpReportActivities->setFore($report);
                 $followUpReportActivities->setSugg($typeSugg);
+
+                // $followupReportActivityPlace->setPlac
 
                 $followUpReportActivities->setDescription($key->description);
 
@@ -271,10 +345,10 @@ class FollowUpReportsController extends AbstractController
                 $entityManager->persist($followUpReportActivities);
                 $entityManager->flush();
 
-                $followupReportContact->setFore($report);
-                $followupReportContact->setCont($contact);
+                $followUpReportActivities->setFore($report);
+                // $followUpReportActivities->setCont($contact);
 
-                $entityManager->persist($followupReportContact);
+                $entityManager->persist($followUpReportActivities);
                 $entityManager->flush();
             }
         }
@@ -282,7 +356,7 @@ class FollowUpReportsController extends AbstractController
         if ($care_jsondecode && $care_jsondecode !== null) {
 
             $followUpReportActivities = new FollowupReportsActivities();
-            $followupReportContact = new FollowupReportsContact();
+            // $followupReportContact = new FollowupReportsContact();
             foreach ($care_jsondecode as $key) {
                 $typeSugg =  $doctrine->getRepository(Suggestions::class)->find(intval($key->type));
                 $contact =  $doctrine->getRepository(Contacts::class)->find($key->contact);
@@ -297,10 +371,10 @@ class FollowUpReportsController extends AbstractController
                 $entityManager->persist($followUpReportActivities);
                 $entityManager->flush();
 
-                $followupReportContact->setFore($report);
-                $followupReportContact->setCont($contact);
+                $followUpReportActivities->setFore($report);
+                // $followUpReportActivities->setCont($contact);
 
-                $entityManager->persist($followupReportContact);
+                $entityManager->persist($followUpReportActivities);
                 $entityManager->flush();
             }
         }

@@ -30,13 +30,19 @@ function AddIndicateursByReport(props) {
 
   const [idPatient, setIdPatient] = useState(id);
   const [typeCVCSelected, setTypeCVCSelected] = useState(null);
+  const [CSVAlreadyAsked, setAlreadyAsked] = useState(
+    props.form.indicateursFormCVC
+  );
 
   const [
     indicateursFormHestiaRisqueDeces,
     setIndicateursFormHestiaRisqueDeces,
   ] = useState(null);
-  const [indicateursFormCVC, setIndicateursFormCVC] = useState(null);
+  const [indicateursFormCVC, setIndicateursFormCVC] = useState(
+    props?.form?.indicateursFormCVC ? props?.form?.indicateursFormCVC : null
+  );
 
+  console.log(CSVAlreadyAsked);
   let obj = {};
 
   useEffect(() => {
@@ -50,7 +56,8 @@ function AddIndicateursByReport(props) {
   ]);
 
   function choiceTypeCVC(e) {
-    console.log("selected", e);
+    console.log("selected", props);
+
     if (e.target.value) {
       setTypeCVCSelected(e.target.value);
     } else {
@@ -71,7 +78,16 @@ function AddIndicateursByReport(props) {
   };
 
   const onChangeIndicateursFormCVC = (e) => {
-    setIndicateursFormCVC(e);
+    if (CSVAlreadyAsked && CSVAlreadyAsked.length > 0) {
+      console.log("testtest");
+      setIndicateursFormCVC(CSVAlreadyAsked);
+      setTypeCVCSelected("CVC");
+
+      // console.log(selectedOptionType, CSVAlreadyAsked);
+    } else {
+      setIndicateursFormCVC(e);
+    }
+
     setIndicateursLogement(null);
     setIndicateursFormHestiaRisqueDeces(null);
   };
@@ -82,7 +98,7 @@ function AddIndicateursByReport(props) {
     indicateursFormHestiaRisqueDeces: indicateursFormHestiaRisqueDeces,
     indicateursFormCVC: indicateursFormCVC,
   });
-
+  // console.log(props?.form);
   props.onChange([
     {
       selectedOptionType: typeCVCSelected ? typeCVCSelected : null,
@@ -97,6 +113,7 @@ function AddIndicateursByReport(props) {
       indicateursFormCVC: indicateursFormCVC ? indicateursFormCVC : null,
     },
   ]);
+  // console.log(CSVAlreadyAsked);
   return (
     <>
       <div className="addSoins-form">
@@ -135,10 +152,14 @@ function AddIndicateursByReport(props) {
             onChange={onChangeIndicateursEstiaLogement}
           />
         )}
-        {typeCVCSelected?.includes("CVC") && (
+        {/* {typeCVCSelected?.includes("CVC").toString()} */}
+        {(typeCVCSelected?.includes("CVC") ||
+          indicateursFormCVC.length > 0) && (
           <IndicateursFormCVC
             id={props.id}
+            editForm={props?.form?.indicateursFormCVC}
             onChange={onChangeIndicateursFormCVC}
+            followupReportsIndicators={props.form}
             form={props.form}
           />
         )}

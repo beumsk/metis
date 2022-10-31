@@ -11,7 +11,7 @@ class Editor extends Component {
           onReady={(editor) => {
             // You can store the "editor" and use when it is needed.
             console.log(this.props);
-            editor.setData(this.props.contentText);
+            editor.setData(this.props.content || this.props.contentText);
             console.log("Editor is ready to use!", editor);
           }}
           onChange={(event, editor) => {

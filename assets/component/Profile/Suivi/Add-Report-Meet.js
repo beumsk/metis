@@ -671,10 +671,10 @@ function AddReportMeet(props) {
       >
         <>
           <option>Choissisez votre type de rencontre</option>
-          <option value={"Vu"}>Vu</option>
-          <option value={"Rencontre"}>Rencontre</option>
-          <option value={"Repos"}>Repos</option>
-          <option value={"Recherche"}>Recherche</option>
+          <option value={1}>Vu</option>
+          <option value={2}>Rencontre</option>
+          <option value={3}>Repos</option>
+          <option value={4}>Recherche</option>
         </>
       </Form.Select>
 

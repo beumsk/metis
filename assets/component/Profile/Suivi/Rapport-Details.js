@@ -53,7 +53,7 @@ function RapportDetails(props) {
 
     axios({
       method: "post",
-      url: "/api/getFollowUpReportsById",
+      url: "/api/getFollowUpReportsWithAnswers",
       data: reportData,
       headers: {
         "Content-Type": "application/json",
@@ -61,11 +61,11 @@ function RapportDetails(props) {
       },
     })
       .then(function (response) {
+        console.log(response);
         setInformations(response);
       })
       .catch(function (response) {});
   }, [idPatient]);
-  // console.log(contacts);
 
   const editContent = (e, r) => {
     console.log(e.target.checked);
@@ -89,16 +89,28 @@ function RapportDetails(props) {
             <>
               <Form.Check
                 type="switch"
-                checked={r.isHightlight}
+                defaultChecked={r.isHightlight === false}
                 onClick={(e) => {
-                  setToggle(!toggle);
-                  r.isHightlight = toggle;
+                  console.log(e);
+                  // setToggle(!toggle);
+                  if (e.target.checked === true) {
+                    setToggle(!toggle);
+                    r.isHightlight = toggle;
+                    console.log(r);
 
-                  setInformations(informations);
+                    setInformations(informations);
+                  }
+
+                  if (e.target.checked === false) {
+                    setToggle(!toggle);
+                    r.isHightlight = toggle;
+                    console.log(r);
+                    setInformations(informations);
+                  }
                 }}
-                label="Check this switch"
+                label="Activer le mode édition"
               />
-
+              {r.isHightlight}
               {toggle}
               {/* <button
                 onClick={() => {
@@ -114,6 +126,7 @@ function RapportDetails(props) {
                   type={type}
                   contacts={props?.contacts}
                   places={props?.places}
+                  indicatorsResponse={r.followupReportsIndicators}
                 ></EditReportMeet>
               )}
               {r.isHightlight === false && (
@@ -123,10 +136,21 @@ function RapportDetails(props) {
                 ></div>
               )}
               {r.isHightlight === null && (
-                <div
-                  className="mt-4"
-                  dangerouslySetInnerHTML={{ __html: r.content }}
-                ></div>
+                <>
+                  <div className="row">
+                    {r.followupReportsIndicators.map((item, id) => (
+                      <div class="row">
+                        <div className="col-sm-4">{item.indi.name}</div>
+                        <div className="col-sm-8">{item.indi.description}</div>
+                        {/* <div className="col-sm-4">{item.indi.comment}</div> */}
+                      </div>
+                    ))}
+                  </div>
+                  <div
+                    className="mt-4"
+                    dangerouslySetInnerHTML={{ __html: r.content }}
+                  ></div>
+                </>
               )}
 
               {/* <Editor contentText={r.content}></Editor> */}

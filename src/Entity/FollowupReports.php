@@ -5,10 +5,13 @@ namespace App\Entity;
 use App\Repository\FollowupReportsRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Utils\InfosReportTrait;
 
 #[ORM\Entity(repositoryClass: FollowupReportsRepository::class)]
 class FollowupReports
 {
+
+    use InfosReportTrait;
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]

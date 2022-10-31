@@ -82,18 +82,8 @@ function IndicateursFormCVC(props) {
       comportementDescription: comportementDescription,
     },
   ]);
-  console.log(props.id);
-  // console.log([
-  //   {
-  //     id: props.id,
-  //     corpsScore: corpsScore,
-  //     corpsDescription: corpsDescription,
-  //     vetementsScore: vetementsScore,
-  //     vetementsDescription: vetementsDescription,
-  //     comportementScore: comportementScore,
-  //     comportementDescription: comportementDescription,
-  //   },
-  // ]);
+  console.log("indicateurs", props.editForm);
+
   return (
     <>
       <div className="addSoins-form">
@@ -106,6 +96,9 @@ function IndicateursFormCVC(props) {
             label="Saleté apparente avec parasites OU saleté apparente avec odeurs (0)"
             onClick={(e) => choiceCorps("0")}
             name="group1"
+            defaultChecked={
+              props.editForm && props?.editForm[0]?.value === 0 ? true : false
+            }
             type={"radio"}
             id={`inline-radio-1`}
           />
@@ -115,6 +108,9 @@ function IndicateursFormCVC(props) {
             name="group1"
             onClick={(e) => choiceCorps("1")}
             type={"radio"}
+            defaultChecked={
+              props.editForm && props?.editForm[0]?.value === 1 ? true : false
+            }
             id={`inline-radio-2`}
           />
           <Form.Check
@@ -122,6 +118,9 @@ function IndicateursFormCVC(props) {
             label="Négligence (2)"
             name="group1"
             onClick={(e) => choiceCorps("2")}
+            defaultChecked={
+              props.editForm && props.editForm[0]?.value === 2 ? true : false
+            }
             type={"radio"}
             id={`inline-radio-3`}
           />
@@ -129,6 +128,9 @@ function IndicateursFormCVC(props) {
             inline
             label="Propre et soigné (3)"
             name="group1"
+            defaultChecked={
+              props.editForm && props.editForm[0]?.value === 3 ? true : false
+            }
             onClick={(e) => choiceCorps("3")}
             type={"radio"}
             id={`inline-radio-4`}
@@ -137,6 +139,7 @@ function IndicateursFormCVC(props) {
           <Form.Control
             as="textarea"
             rows={3}
+            // defaultValue={props.editForm[0].comment}
             onChange={(e) => onChangeDescriptionCorps(e)}
           />
         </div>
@@ -148,6 +151,9 @@ function IndicateursFormCVC(props) {
             inline
             label="Sales, abîmés et malodorants (0)"
             onClick={(e) => choiceVetements("0")}
+            defaultChecked={
+              props.editForm && props.editForm[1]?.value === 0 ? true : false
+            }
             name="group2"
             type={"radio"}
             id={`inline-radio-5`}
@@ -157,6 +163,9 @@ function IndicateursFormCVC(props) {
             label="Sales et malodorants OU sales et abîmés OU inadaptés (1)"
             name="group2"
             onClick={(e) => choiceVetements("1")}
+            defaultChecked={
+              props.editForm && props.editForm[1]?.value === 1 ? true : false
+            }
             type={"radio"}
             id={`inline-radio-6`}
           />
@@ -165,6 +174,9 @@ function IndicateursFormCVC(props) {
             label="Sales OU abîmés OU malodorants (2)"
             name="group2"
             onClick={(e) => choiceVetements("2")}
+            defaultChecked={
+              props.editForm && props.editForm[1]?.value === 2 ? true : false
+            }
             type={"radio"}
             id={`inline-radio-7`}
           />
@@ -173,12 +185,16 @@ function IndicateursFormCVC(props) {
             label="Cohérents, propres et en bon état (3)"
             name="group2"
             onClick={(e) => choiceVetements("3")}
+            defaultChecked={
+              props.editForm && props.editForm[1]?.value === 3 ? true : false
+            }
             type={"radio"}
             id={`inline-radio-8`}
           />
           <Form.Label htmlFor="inputValue">Commentaire</Form.Label>
           <Form.Control
             as="textarea"
+            defaultValue={props.editForm[1]?.comment}
             rows={3}
             onChange={(e) => onChangeDescriptionVetements(e)}
           />
@@ -192,6 +208,9 @@ function IndicateursFormCVC(props) {
             label="Anormal et dangereux (0)"
             onClick={(e) => choiceComportement("0")}
             name="group3"
+            defaultChecked={
+              props.editForm && props.editForm[2]?.value === 0 ? true : false
+            }
             type={"radio"}
             id={`inline-radio-9`}
           />
@@ -200,6 +219,9 @@ function IndicateursFormCVC(props) {
             label="Anormal OU dangereux (1)"
             name="group3"
             onClick={(e) => choiceComportement("1")}
+            defaultChecked={
+              props.editForm && props.editForm[2]?.value === 1 ? true : false
+            }
             type={"radio"}
             id={`inline-radio-10`}
           />
@@ -208,6 +230,9 @@ function IndicateursFormCVC(props) {
             label="Suscite un questionnement (2)"
             name="group3"
             onClick={(e) => choiceComportement("2")}
+            defaultChecked={
+              props.editForm && props.editForm[2]?.value === 2 ? true : false
+            }
             type={"radio"}
             id={`inline-radio-11`}
           />
@@ -216,6 +241,9 @@ function IndicateursFormCVC(props) {
             label="Normal (3)"
             name="group3"
             onClick={(e) => choiceComportement("3")}
+            defaultChecked={
+              props.editForm && props.editForm[2]?.value === 3 ? true : false
+            }
             type={"radio"}
             id={`inline-radio-12`}
           />
@@ -223,6 +251,7 @@ function IndicateursFormCVC(props) {
           <Form.Control
             as="textarea"
             rows={3}
+            defaultValue={props.editForm[2]?.comment}
             onChange={(e) => onChangeDescriptionComportement(e)}
           />
         </div>
