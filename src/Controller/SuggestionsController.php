@@ -34,7 +34,7 @@ class SuggestionsController extends AbstractController
 
 
         $encoders = [new JsonEncoder()];
-        $normalizers = [new ObjectNormalizer()];
+        $normalizers = [new DateTimeNormalizer(), new ObjectNormalizer()];
         $serializer = new Serializer($normalizers, $encoders);
 
 

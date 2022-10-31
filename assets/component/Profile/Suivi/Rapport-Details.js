@@ -25,6 +25,7 @@ function RapportDetails(props) {
 
   var reportData = new FormData();
   reportData.append("id", id.toString());
+  reportData.append("countResult", 10);
   //   formData.append("pathString", props.link);
   const [contacts, setContacts] = useState(null);
   const [elementsOpt, setElementsOpt] = useState(null);
@@ -61,6 +62,7 @@ function RapportDetails(props) {
       },
     })
       .then(function (response) {
+        console.log(response);
         setInformations(response);
       })
       .catch(function (response) {});
@@ -79,36 +81,38 @@ function RapportDetails(props) {
   };
   return (
     <>
-      {informations?.data?.map((r, id) => (
-        <div key={id} className="report-content">
-          {r && r.activityType === 2 && <h6>Appel Sortant</h6>}
-          {r && r.activityType === 4 && <h6>Appel Entrant</h6>}
-          {r && r.deletedAt === null && (
-            <>
-              <Form.Check
-                type="switch"
-                defaultChecked={r.isHightlight === false}
-                onClick={(e) => {
-                  // setToggle(!toggle);
-                  if (e.target.checked === true) {
-                    setToggle(!toggle);
-                    r.isHightlight = toggle;
+      {informations && informations.data && informations.data.length > 0 && (
+        <>
+          {informations.data.map((r, id) => (
+            <div key={id} className="report-content">
+              {r && r.activityType === 2 && <h6>Appel Sortant</h6>}
+              {r && r.activityType === 4 && <h6>Appel Entrant</h6>}
+              {r && r.deletedAt === null && (
+                <>
+                  <Form.Check
+                    type="switch"
+                    defaultChecked={r.isHightlight === false}
+                    onClick={(e) => {
+                      // setToggle(!toggle);
+                      if (e.target.checked === true) {
+                        setToggle(!toggle);
+                        r.isHightlight = toggle;
 
-                    setInformations(informations);
-                  }
+                        setInformations(informations);
+                      }
 
-                  if (e.target.checked === false) {
-                    setToggle(!toggle);
-                    r.isHightlight = toggle;
+                      if (e.target.checked === false) {
+                        setToggle(!toggle);
+                        r.isHightlight = toggle;
 
-                    setInformations(informations);
-                  }
-                }}
-                label="Activer le mode édition"
-              />
-              {r.isHightlight}
-              {toggle}
-              {/* <button
+                        setInformations(informations);
+                      }
+                    }}
+                    label="Activer le mode édition"
+                  />
+                  {r.isHightlight}
+                  {toggle}
+                  {/* <button
                 onClick={() => {
                   setToggle(!toggle);
                   r.isHightlight = toggle;
@@ -116,55 +120,62 @@ function RapportDetails(props) {
               >
                 <FontAwesomeIcon icon={faEdit} /> Editer
               </button> */}
-              {r.isHightlight === true && (
-                <EditReportMeet
-                  informationPatient={r}
-                  type={type}
-                  contacts={props?.contacts}
-                  places={props?.places}
-                  indicatorsResponse={r.followupReportsIndicators}
-                ></EditReportMeet>
-              )}
-              {r.isHightlight === false && (
-                <>
-                  <div className="row">
-                    {r.followupReportsIndicators.map((item, id) => (
-                      <div class="row">
-                        <div className="col-sm-4">{item.indi.name}</div>
-                        <div className="col-sm-8">{item.indi.description}</div>
-                        {/* <div className="col-sm-4">{item.indi.comment}</div> */}
+                  {r.isHightlight === true && (
+                    <EditReportMeet
+                      informationPatient={r}
+                      type={type}
+                      contacts={props?.contacts}
+                      places={props?.places}
+                      indicatorsResponse={r.followupReportsIndicators}
+                    ></EditReportMeet>
+                  )}
+                  {r && r.length > 0 && r.isHightlight === false && (
+                    <>
+                      <div className="row">
+                        {r.followupReportsIndicators.map((item, id) => (
+                          <div class="row">
+                            <div className="col-sm-4">{item.indi.name}</div>
+                            <div className="col-sm-8">
+                              {item.indi.description}
+                            </div>
+                            {/* <div className="col-sm-4">{item.indi.comment}</div> */}
+                          </div>
+                        ))}
                       </div>
-                    ))}
-                  </div>
-                  <div
-                    className="mt-4"
-                    dangerouslySetInnerHTML={{ __html: r.content }}
-                  ></div>
-                </>
-              )}
-              {r.isHightlight === null && (
-                <>
-                  <div className="row">
-                    {r.followupReportsIndicators.map((item, id) => (
-                      <div class="row">
-                        <div className="col-sm-4">{item.indi.name}</div>
-                        <div className="col-sm-8">{item.indi.description}</div>
-                        {/* <div className="col-sm-4">{item.indi.comment}</div> */}
+                      <div
+                        className="mt-4"
+                        dangerouslySetInnerHTML={{ __html: r.content }}
+                      ></div>
+                    </>
+                  )}
+                  {r && r.isHightlight === null && (
+                    <>
+                      <div className="row">
+                        {r.followupReportsIndicators.map((item, id) => (
+                          <div class="row">
+                            <div className="col-sm-4">{item.indi.name}</div>
+                            <div className="col-sm-8">
+                              {item.indi.description}
+                            </div>
+                            {/* <div className="col-sm-4">{item.indi.comment}</div> */}
+                          </div>
+                        ))}
                       </div>
-                    ))}
-                  </div>
-                  <div
-                    className="mt-4"
-                    dangerouslySetInnerHTML={{ __html: r.content }}
-                  ></div>
-                </>
-              )}
+                      {r.content}
+                      <div
+                        className="mt-4"
+                        dangerouslySetInnerHTML={{ __html: r.content }}
+                      ></div>
+                    </>
+                  )}
 
-              {/* <Editor contentText={r.content}></Editor> */}
-            </>
-          )}
-        </div>
-      ))}
+                  {/* <Editor contentText={r.content}></Editor> */}
+                </>
+              )}
+            </div>
+          ))}
+        </>
+      )}
     </>
   );
 }

@@ -46,7 +46,7 @@ class ContactsController extends AbstractController
 
         // dd($contObj);
         $encoders = [new JsonEncoder()];
-        $normalizers = [new ObjectNormalizer()];
+        $normalizers = [new DateTimeNormalizer(), new ObjectNormalizer()];
         $serializer = new Serializer($normalizers, $encoders);
 
 

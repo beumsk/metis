@@ -22,6 +22,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Serializer\SerializerBuilder;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
@@ -55,7 +56,7 @@ class FollowUpReportsController extends AbstractController
 
 
         $encoders = [new JsonEncoder()];
-        $normalizers = [new ObjectNormalizer()];
+        $normalizers = [new DateTimeNormalizer(), new ObjectNormalizer()];
         $serializer = new Serializer($normalizers, $encoders);
 
 
@@ -81,17 +82,26 @@ class FollowUpReportsController extends AbstractController
     public function getFollowUpReportsWithAnswers(ManagerRegistry $doctrine, SerializerInterface $serializer): Response
     {
 
+
         $request = Request::createFromGlobals();
 
         $id = $request->request->get('id');
+        $countResult = $request->request->get('countResult');
 
-        $followUpReports = $doctrine->getRepository(FollowupReports::class)->findBy(["pati" => $id]);
+        $followUpReports = $doctrine->getRepository(FollowupReports::class)->findBy(["pati" => $id, 'deleted_at' => null]);
+
 
         $id = null;
         foreach ($followUpReports as  $key => $value) {
             if ($value->getId()) {
                 $report = $doctrine->getRepository(FollowupReportsActivities::class)->findBy(['fore' => $value->getId()]);
+
+
+
+
                 $indicators = $doctrine->getRepository(FollowupReportsIndicators::class)->findBy(['fore' => $value->getId()]);
+                $followUpGoals = $doctrine->getRepository(FollowupGoals::class)->findBy(['pati' => $value->getId()]);
+
 
 
 
@@ -112,21 +122,42 @@ class FollowUpReportsController extends AbstractController
                         $value->setFollowupReportsIndicators($indi);
                     }
                 }
+                if ($followUpGoals !== []) {
+                    foreach ($followUpGoals as  $goal) {
+                        // dd($goal);
+
+                        $value->setFollowupReportsGoals($goal);
+                    }
+                }
             }
         }
 
 
+        $arrFollowUpLimited = [];
+
+
+
+        for ($i = 0; $i < $countResult; $i++) {
+            // dd($followUpReports[$i]);
+            if ($i < $countResult && $followUpReports[$i]) {
+                array_push($arrFollowUpLimited, $followUpReports[$i]);
+            }
+        }
+
+
+        // dd($arrFollowUpLimited);
         $encoders = [new JsonEncoder()];
-        $normalizers = [new ObjectNormalizer()];
+        $normalizers = [new DateTimeNormalizer(), new ObjectNormalizer()];
         $serializer = new Serializer($normalizers, $encoders);
 
-
-        $jsonObject = $serializer->serialize($followUpReports, 'json', [
+        // $serializer = SerializerBuilder::create()->build();
+        $jsonObject = $serializer->serialize($arrFollowUpLimited, 'json', [
             'circular_reference_handler' => function ($object) {
                 return $object->getId();
             },
             JsonEncoder::FORMAT
         ]);
+
 
         $response = new Response($jsonObject, 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
 

@@ -7,6 +7,7 @@ use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\FollowupReportsActivities;
 use App\Entity\FollowupReportsIndicators;
+use App\Entity\FollowupGoals;
 use App\Entity\Suggestions;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -29,7 +30,10 @@ trait InfosReportTrait
      */
     protected $followupReportsIndicators;
 
-
+    /**
+     * @var FollowupGoals|null
+     */
+    protected $followupGoals;
 
     /**
      * patientsInformation constructor.
@@ -39,7 +43,33 @@ trait InfosReportTrait
         $this->setFollowupReportsCare(new FollowupReportsActivities());
         $this->setFollowupReportsActivities(new FollowupReportsActivities());
         $this->setFollowupReportsIndicators(new FollowupReportsIndicators());
+        $this->setFollowupReportsGoals(new FollowupGoals());
     }
+
+    /**
+     * @return Collection|FollowupReportsActivities[]
+     */
+    public function getFollowupReportsGoals(): Collection
+    {
+        if (is_null($this->followupGoals)) {
+            $this->followupGoals = new ArrayCollection();
+        }
+        return $this->followupGoals;
+    }
+
+    /**
+     * @return $this
+     */
+    public function setFollowupReportsGoals(FollowupGoals $followupGoals): self
+    {
+        if (is_null($this->followupGoals)) {
+            $this->followupGoals = new ArrayCollection();
+        }
+        $this->followupGoals[] = $followupGoals;
+
+        return $this;
+    }
+
 
 
     /**

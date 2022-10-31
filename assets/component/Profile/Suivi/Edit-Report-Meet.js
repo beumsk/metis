@@ -17,6 +17,7 @@ import AddIndicateursByReport from "./Indicateurs-Form-AddReports/Add-Indicateur
 import AddSoinsByReport from "./Add-SoinsByReports";
 import InputPlaceList from "./Input-Place-List";
 import InputContactList from "./Input-Contact-List";
+import InputGoalsList from "./Input-Goals-List";
 function EditReportMeet(props) {
   const [show, setShow] = useState(false);
   const [auth, setAuth] = useState(useAuth());
@@ -717,7 +718,9 @@ function EditReportMeet(props) {
       {reportDate ? (
         <Form.Control
           type="date"
-          defaultValue={new Date(reportDate).toJSON().slice(0, 10)}
+          defaultValue={new Date(props?.informationPatient?.reportDate)
+            .toJSON()
+            .slice(0, 10)}
           placeholder="Here edit the release date"
           onChange={(e) => onChangeDate(e)}
           id="inputValueSpécifique"
@@ -734,16 +737,11 @@ function EditReportMeet(props) {
         />
       )}
 
-      <Form.Label htmlFor="inputValue">Objectifs</Form.Label>
-      <Form.Select
-        size="lg"
-        onChange={(e) => inputChangeGoals(e)}
-        value={goalsInput}
-      >
-        <>
-          <option>Objectifs non chargées pour l'instant</option>
-        </>
-      </Form.Select>
+      <InputGoalsList
+        goals={props?.informationPatient?.followupReportsGoals}
+        // defaultValue={props?.informationPatient?.cont[0]?.orga?.id}
+        onChange={onChangeContacts}
+      />
 
       <InputContactList
         contacts={props.contacts}
