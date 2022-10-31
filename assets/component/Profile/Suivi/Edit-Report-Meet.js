@@ -524,7 +524,9 @@ function EditReportMeet(props) {
               label="Oui"
               onClick={(e) => choiceSoins(true)}
               name="group26"
-              defaultChecked={showAccesSoins}
+              defaultChecked={
+                props?.informationPatient?.followupReportsCare?.length > 0
+              }
               type={"radio"}
               id={`inline-radio-21`}
             />
@@ -532,7 +534,9 @@ function EditReportMeet(props) {
               inline
               label="Non"
               name="group26"
-              defaultChecked={showAccesSoins}
+              defaultChecked={
+                props?.informationPatient?.followupReportsCare?.length === 0
+              }
               onClick={(e) => choiceSoins(false)}
               type={"radio"}
               id={`inline-radio-22`}
@@ -578,6 +582,9 @@ function EditReportMeet(props) {
               label="Oui"
               onClick={(e) => choiceActivities(true)}
               name="group25"
+              defaultChecked={
+                props?.informationPatient?.followupReportsActivities?.length > 0
+              }
               type={"radio"}
               id={`inline-radio-23`}
             />
@@ -585,6 +592,10 @@ function EditReportMeet(props) {
               inline
               label="Non"
               name="group25"
+              defaultChecked={
+                props?.informationPatient?.followupReportsActivities?.length ===
+                0
+              }
               onClick={(e) => choiceActivities(false)}
               type={"radio"}
               id={`inline-radio-24`}
@@ -635,7 +646,9 @@ function EditReportMeet(props) {
               label="Oui"
               onClick={(e) => choiceIndicateurs(true)}
               name="group24"
-              defaultChecked={showIndicateurs}
+              defaultChecked={
+                props?.informationPatient?.followupReportsIndicators?.length > 0
+              }
               type={"radio"}
               id={`inline-radio-25`}
             />
@@ -643,7 +656,10 @@ function EditReportMeet(props) {
               inline
               label="Non"
               name="group24"
-              // defaultChecked={showIndicateurs}
+              defaultChecked={
+                props?.informationPatient?.followupReportsIndicators?.length ===
+                0
+              }
               onClick={(e) => choiceIndicateurs(false)}
               type={"radio"}
               id={`inline-radio-26`}

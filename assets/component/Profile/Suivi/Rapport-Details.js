@@ -91,9 +91,10 @@ function RapportDetails(props) {
                 <>
                   <Form.Check
                     type="switch"
-                    defaultChecked={r.isHightlight === false}
+                    defaultChecked={r.isHightlight === true}
                     onClick={(e) => {
                       // setToggle(!toggle);
+                      console.log(e);
                       if (e.target.checked === true) {
                         setToggle(!toggle);
                         r.isHightlight = toggle;
@@ -107,19 +108,16 @@ function RapportDetails(props) {
 
                         setInformations(informations);
                       }
+
+                      if (r.isHightlight === false) {
+                        setToggle(!toggle);
+                        r.isHightlight = toggle;
+
+                        setInformations(informations);
+                      }
                     }}
                     label="Activer le mode édition"
                   />
-                  {r.isHightlight}
-                  {toggle}
-                  {/* <button
-                onClick={() => {
-                  setToggle(!toggle);
-                  r.isHightlight = toggle;
-                }}
-              >
-                <FontAwesomeIcon icon={faEdit} /> Editer
-              </button> */}
                   {r.isHightlight === true && (
                     <EditReportMeet
                       informationPatient={r}
@@ -129,7 +127,7 @@ function RapportDetails(props) {
                       indicatorsResponse={r.followupReportsIndicators}
                     ></EditReportMeet>
                   )}
-                  {r && r.length > 0 && r.isHightlight === false && (
+                  {r.isHightlight === false && (
                     <>
                       <div className="row">
                         {r.followupReportsIndicators.map((item, id) => (
@@ -142,26 +140,6 @@ function RapportDetails(props) {
                           </div>
                         ))}
                       </div>
-                      <div
-                        className="mt-4"
-                        dangerouslySetInnerHTML={{ __html: r.content }}
-                      ></div>
-                    </>
-                  )}
-                  {r && r.isHightlight === null && (
-                    <>
-                      <div className="row">
-                        {r.followupReportsIndicators.map((item, id) => (
-                          <div class="row">
-                            <div className="col-sm-4">{item.indi.name}</div>
-                            <div className="col-sm-8">
-                              {item.indi.description}
-                            </div>
-                            {/* <div className="col-sm-4">{item.indi.comment}</div> */}
-                          </div>
-                        ))}
-                      </div>
-                      {r.content}
                       <div
                         className="mt-4"
                         dangerouslySetInnerHTML={{ __html: r.content }}
