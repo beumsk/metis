@@ -24,3 +24,7 @@ when@test:
 parameters:
     images_directory: '%kernel.project_dir%/assets/images'
 
+
+when@dev:
+    framework:
+        http_cache: true

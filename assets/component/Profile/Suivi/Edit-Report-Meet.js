@@ -73,6 +73,7 @@ function EditReportMeet(props) {
   const [changePlaces, setChangePlaces] = useState(null);
   const [changeEditor, setChangeEditor] = useState(null);
   const [changeOptions, setChangeOptions] = useState(null);
+  const [reportDate, setReportDate] = useState(null);
 
   useEffect(() => {
     if (props.informationPatient?.noCare === 0) {
@@ -87,6 +88,11 @@ function EditReportMeet(props) {
       choiceIndicateurs(true);
     }
 
+    setReportDate(
+      new Date(props?.informationPatient?.reportDate?.timestamp * 1000).toJSON()
+    );
+
+    console.log(props.informationPatient);
     // setFormIndicateurs([
     //   {
     //     id: 0,
@@ -133,7 +139,7 @@ function EditReportMeet(props) {
   }, [options]);
 
   const choiceActivities = (e) => {
-    // console.log(e);
+    //
     setActivities(e);
   };
   const choiceSoins = (e) => {
@@ -141,7 +147,7 @@ function EditReportMeet(props) {
   };
   const choiceIndicateurs = (e) => {
     setChoiceIndicateurs(e);
-    // console.log(e);
+    //
     if (e === false) {
       setFormIndicateurs([{ id: 0 }]);
       setOptions([
@@ -153,12 +159,12 @@ function EditReportMeet(props) {
   };
 
   const inputChangeTypeMeet = (e) => {
-    // console.log(e.target.value);
+    //
     setChangeTypeMeet(e.target.value);
   };
 
   const onChangeDate = (e) => {
-    // console.log(e.target.value);
+    //
     setChangeDate(e.target.value);
   };
 
@@ -178,24 +184,24 @@ function EditReportMeet(props) {
   //   // });
 
   //   formIndicateurs[0].indicateursFormCVC = [...props.indicatorsResponse];
-  //   console.log(formIndicateurs);
+  //
   //   setFormIndicateurs(formIndicateurs);
   // } else {
   //   setFormIndicateurs([{ id: 0 }]);
   // }
 
   const inputChangeGoals = (e) => {
-    // console.log(e);
+    //
     setChangeGoals(e);
   };
 
   const onChangeContacts = (e) => {
-    // console.log(e);
+    //
     setChangeContacts(e);
   };
 
   const onChangePlaces = (e) => {
-    // console.log(e);
+    //
     setChangePlaces(e);
   };
 
@@ -204,17 +210,17 @@ function EditReportMeet(props) {
   };
 
   function editorChange(e) {
-    // console.log(e);
+    //
     setChangeEditor(e);
   }
   const onClickAddIndicateurs = (e) => {
     if (formIndicateurs && formIndicateurs.length < 3) {
-      // console.log(e);
+      //
       setFormIndicateurs((prevFormSoins) => [...prevFormSoins, e]);
     }
   };
   const onClickOnCare = (e) => {
-    // console.log(e);
+    //
     setFormSoins((prevFormSoins) => [...prevFormSoins, e]);
   };
 
@@ -252,7 +258,7 @@ function EditReportMeet(props) {
 
         setFormIndicateurs(filter);
       }
-      // console.log(formActivities);
+      //
     }
 
     if (formIndicateurs.length === 1) {
@@ -293,7 +299,7 @@ function EditReportMeet(props) {
       (e) => e.selectedOptionType !== null && !opt.includes(e.id)
     );
 
-    // console.log(formIndicatorsGrouped);
+    //
     let arr = {};
     for (let index = 0; index < formIndicatorsGrouped.length; index++) {
       const element = formIndicatorsGrouped[index];
@@ -350,11 +356,11 @@ function EditReportMeet(props) {
       },
     })
       .then(function (response) {
-        // console.log(response);
+        //
         location.replace(window.location.origin + "/" + idPatient);
       })
       .catch(function (response) {
-        // console.log(response);
+        //
       });
   };
 
@@ -366,13 +372,13 @@ function EditReportMeet(props) {
       formSoins.filter((el) => e[0].id === el.id)[0].description =
         e[0].description;
 
-      // console.log(formSoins);
+      //
     }
   }
 
   function onChangeValuesByActivitiesForm(e) {
-    // console.log(e);
-    // console.log("form soins", formSoins);
+    //
+    //
     if (formActivities.filter((el) => e[0].id === el.id)) {
       formActivities.filter((el) => e[0].id === el.id)[0].type = e[0].type;
       formActivities.filter((el) => e[0].id === el.id)[0].contact =
@@ -380,7 +386,7 @@ function EditReportMeet(props) {
       formActivities.filter((el) => e[0].id === el.id)[0].place = e[0].place;
       formActivities.filter((el) => e[0].id === el.id)[0].description =
         e[0].description;
-      // console.log(formActivities);
+      //
     }
   }
 
@@ -422,7 +428,7 @@ function EditReportMeet(props) {
       e[0].selectedOptionType &&
       e[0].selectedOptionType !== null
     ) {
-      // console.log("test");
+      //
       let test = formIndicateurs.filter(
         (e) => e.selectedOptionType !== null && !opt.includes(e.id)
       );
@@ -464,7 +470,7 @@ function EditReportMeet(props) {
             //   (e) => e.selectedOptionType !== null && !opt.includes(e.id)
             // );
 
-            // console.log(opt);
+            //
             if (opt && opt.length > 0) {
               options.splice(0, options.length);
               // setOptions(options);
@@ -498,7 +504,7 @@ function EditReportMeet(props) {
     setOptions(opt);
   }
 
-  // console.log(props.informationPatient);
+  //
   // const [showAccesSoins, setAccesSoins] = useState(false);
   // const [showActivities, setActivities] = useState(false);
   // const [showIndicateurs, setChoiceIndicateurs] = useState(false);
@@ -628,6 +634,7 @@ function EditReportMeet(props) {
               label="Oui"
               onClick={(e) => choiceIndicateurs(true)}
               name="group24"
+              defaultChecked={showIndicateurs}
               type={"radio"}
               id={`inline-radio-25`}
             />
@@ -635,6 +642,7 @@ function EditReportMeet(props) {
               inline
               label="Non"
               name="group24"
+              // defaultChecked={showIndicateurs}
               onClick={(e) => choiceIndicateurs(false)}
               type={"radio"}
               id={`inline-radio-26`}
@@ -692,25 +700,39 @@ function EditReportMeet(props) {
       <Form.Select
         size="lg"
         onChange={(e) => inputChangeTypeMeet(e)}
-        value={meetType}
+        defaultValue={props?.informationPatient?.reportType}
+        // selected={props?.informationPatient?.reportType}
       >
         <>
           <option>Choissisez votre type de rencontre</option>
-          <option value={"Vu"}>Vu</option>
-          <option value={"Rencontre"}>Rencontre</option>
-          <option value={"Repos"}>Repos</option>
-          <option value={"Recherche"}>Recherche</option>
+          <option value={1}>Vu</option>
+          <option value={2}>Rencontre</option>
+          <option value={3}>Repos</option>
+          <option value={4}>Recherche</option>
         </>
       </Form.Select>
 
       <Form.Label htmlFor="inputValue">Date de la rencontre</Form.Label>
-      <Form.Control
-        type="date"
-        defaultValue={new Date("now")}
-        placeholder="Here edit the release date"
-        onChange={(e) => onChangeDate(e)}
-        id="inputValueSpécifique"
-      />
+
+      {reportDate ? (
+        <Form.Control
+          type="date"
+          defaultValue={new Date(reportDate).toJSON().slice(0, 10)}
+          placeholder="Here edit the release date"
+          onChange={(e) => onChangeDate(e)}
+          id="inputValueSpécifique"
+        />
+      ) : (
+        <Form.Control
+          type="date"
+          // defaultValue={new Date(
+          //   props?.informationPatient?.reportDate * 1000
+          // ).toJSON()}
+          placeholder="Here edit the release date"
+          onChange={(e) => onChangeDate(e)}
+          id="inputValueSpécifique"
+        />
+      )}
 
       <Form.Label htmlFor="inputValue">Objectifs</Form.Label>
       <Form.Select
@@ -723,8 +745,16 @@ function EditReportMeet(props) {
         </>
       </Form.Select>
 
-      <InputContactList contacts={props.contacts} onChange={onChangeContacts} />
-      <InputPlaceList places={props.places} onChange={onChangePlaces} />
+      <InputContactList
+        contacts={props.contacts}
+        defaultValue={props?.informationPatient?.cont[0]?.orga?.id}
+        onChange={onChangeContacts}
+      />
+      <InputPlaceList
+        places={props.places}
+        defaultValue={props?.informationPatient?.plac?.id}
+        onChange={onChangePlaces}
+      />
 
       <Editor
         onChange={editorChange}

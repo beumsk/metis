@@ -44,7 +44,7 @@ function InputPlaceList(props) {
       <Form.Select
         size="lg"
         className="mb-4"
-        value={placeValue}
+        defaultValue={props.defaultValue || placeValue}
         onChange={(e) => onChangePlaceValue(e)}
       >
         <option>Choissisez le lieu</option>

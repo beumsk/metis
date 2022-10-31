@@ -41,7 +41,7 @@ function ModalLierLieux(props) {
       })
       .catch(function (response) {});
   }, [idPatient]);
-  //   console.log(props?.lieuxList);
+  //
   //   /api/getContacts
   return (
     <>

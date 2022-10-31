@@ -95,8 +95,6 @@ const Patient = () => {
     titleOnglet === "Medias" ? setMedias(true) : setMedias(false);
     titleOnglet === "Contacts" ? setContacts(true) : setContacts(false);
     titleOnglet === "Lieux" ? setPlaces(true) : setPlaces(false);
-
-    console.log(isProfile, isIndicators);
   };
   return (
     <>

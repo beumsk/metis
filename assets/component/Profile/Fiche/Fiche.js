@@ -66,7 +66,7 @@ const Fiche = () => {
       })
       .catch(function (response) {});
   }, [idPatient]);
-  // console.log("infos", informationPatient);
+  //
   return (
     <section>
       <Accordion defaultActiveKey="0" flush={true} className="accordion-fiche">

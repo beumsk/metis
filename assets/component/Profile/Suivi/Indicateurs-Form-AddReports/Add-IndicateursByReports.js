@@ -42,7 +42,6 @@ function AddIndicateursByReport(props) {
     props?.form?.indicateursFormCVC ? props?.form?.indicateursFormCVC : null
   );
 
-  console.log(CSVAlreadyAsked);
   let obj = {};
 
   useEffect(() => {
@@ -56,8 +55,6 @@ function AddIndicateursByReport(props) {
   ]);
 
   function choiceTypeCVC(e) {
-    console.log("selected", props);
-
     if (e.target.value) {
       setTypeCVCSelected(e.target.value);
     } else {
@@ -79,11 +76,10 @@ function AddIndicateursByReport(props) {
 
   const onChangeIndicateursFormCVC = (e) => {
     if (CSVAlreadyAsked && CSVAlreadyAsked.length > 0) {
-      console.log("testtest");
       setIndicateursFormCVC(CSVAlreadyAsked);
       setTypeCVCSelected("CVC");
 
-      // console.log(selectedOptionType, CSVAlreadyAsked);
+      //
     } else {
       setIndicateursFormCVC(e);
     }
@@ -91,14 +87,14 @@ function AddIndicateursByReport(props) {
     setIndicateursLogement(null);
     setIndicateursFormHestiaRisqueDeces(null);
   };
-  console.log({
-    selectedOptionType: typeCVCSelected ? typeCVCSelected : null,
-    id: props.id,
-    indicateursEstLeLogement: indicateursEstLeLogement,
-    indicateursFormHestiaRisqueDeces: indicateursFormHestiaRisqueDeces,
-    indicateursFormCVC: indicateursFormCVC,
-  });
-  // console.log(props?.form);
+
+  //   selectedOptionType: typeCVCSelected ? typeCVCSelected : null,
+  //   id: props.id,
+  //   indicateursEstLeLogement: indicateursEstLeLogement,
+  //   indicateursFormHestiaRisqueDeces: indicateursFormHestiaRisqueDeces,
+  //   indicateursFormCVC: indicateursFormCVC,
+  // });
+  //
   props.onChange([
     {
       selectedOptionType: typeCVCSelected ? typeCVCSelected : null,
@@ -113,7 +109,7 @@ function AddIndicateursByReport(props) {
       indicateursFormCVC: indicateursFormCVC ? indicateursFormCVC : null,
     },
   ]);
-  // console.log(CSVAlreadyAsked);
+  //
   return (
     <>
       <div className="addSoins-form">
@@ -154,7 +150,7 @@ function AddIndicateursByReport(props) {
         )}
         {/* {typeCVCSelected?.includes("CVC").toString()} */}
         {(typeCVCSelected?.includes("CVC") ||
-          indicateursFormCVC.length > 0) && (
+          (indicateursFormCVC && indicateursFormCVC.length > 0)) && (
           <IndicateursFormCVC
             id={props.id}
             editForm={props?.form?.indicateursFormCVC}

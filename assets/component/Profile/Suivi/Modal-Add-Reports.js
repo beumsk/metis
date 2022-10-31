@@ -42,7 +42,7 @@ function ModalAddReports(props) {
       })
       .catch(function (response) {});
   }, [idPatient]);
-  // console.log(contacts);
+  //
 
   return (
     <>

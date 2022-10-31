@@ -93,7 +93,7 @@ function AddReportMeet(props) {
   }, [options]);
 
   const choiceActivities = (e) => {
-    // console.log(e);
+    //
     setActivities(e);
   };
   const choiceSoins = (e) => {
@@ -101,7 +101,7 @@ function AddReportMeet(props) {
   };
   const choiceIndicateurs = (e) => {
     setChoiceIndicateurs(e);
-    console.log(e);
+
     if (e === false) {
       setFormIndicateurs([{ id: 0 }]);
       setOptions([
@@ -113,27 +113,22 @@ function AddReportMeet(props) {
   };
 
   const inputChangeTypeMeet = (e) => {
-    console.log(e.target.value);
     setChangeTypeMeet(e.target.value);
   };
 
   const onChangeDate = (e) => {
-    console.log(e.target.value);
     setChangeDate(e.target.value);
   };
 
   const inputChangeGoals = (e) => {
-    console.log(e);
     setChangeGoals(e);
   };
 
   const onChangeContacts = (e) => {
-    console.log(e);
     setChangeContacts(e);
   };
 
   const onChangePlaces = (e) => {
-    console.log(e);
     setChangePlaces(e);
   };
 
@@ -142,17 +137,15 @@ function AddReportMeet(props) {
   };
 
   function editorChange(e) {
-    console.log(e);
     setChangeEditor(e);
   }
   const onClickAddIndicateurs = (e) => {
     if (formIndicateurs && formIndicateurs.length < 3) {
-      console.log(e);
       setFormIndicateurs((prevFormSoins) => [...prevFormSoins, e]);
     }
   };
   const onClickOnCare = (e) => {
-    // console.log(e);
+    //
     setFormSoins((prevFormSoins) => [...prevFormSoins, e]);
   };
 
@@ -190,7 +183,6 @@ function AddReportMeet(props) {
 
         setFormIndicateurs(filter);
       }
-      console.log(formActivities);
     }
 
     if (formIndicateurs.length === 1) {
@@ -231,7 +223,6 @@ function AddReportMeet(props) {
       (e) => e.selectedOptionType !== null && !opt.includes(e.id)
     );
 
-    console.log(formIndicatorsGrouped);
     let arr = {};
     for (let index = 0; index < formIndicatorsGrouped.length; index++) {
       const element = formIndicatorsGrouped[index];
@@ -266,7 +257,7 @@ function AddReportMeet(props) {
     // });
 
     // let formCare = formSoins.map((el) => {
-    //   console.log(Object.keys(el).length);
+    //
     //   if (
     //     Object.keys(el).length === 1 ||
     //     JSON.stringify(el) ===
@@ -325,12 +316,9 @@ function AddReportMeet(props) {
       },
     })
       .then(function (response) {
-        console.log(response);
         location.replace(window.location.origin + "/" + idPatient);
       })
-      .catch(function (response) {
-        console.log(response);
-      });
+      .catch(function (response) {});
   };
 
   function onChangeValuesByOnCareForm(e) {
@@ -340,14 +328,11 @@ function AddReportMeet(props) {
       formSoins.filter((el) => e[0].id === el.id)[0].place = e[0].place;
       formSoins.filter((el) => e[0].id === el.id)[0].description =
         e[0].description;
-
-      console.log(formSoins);
     }
   }
 
   function onChangeValuesByActivitiesForm(e) {
-    console.log(e);
-    // console.log("form soins", formSoins);
+    //
     if (formActivities.filter((el) => e[0].id === el.id)) {
       formActivities.filter((el) => e[0].id === el.id)[0].type = e[0].type;
       formActivities.filter((el) => e[0].id === el.id)[0].contact =
@@ -355,12 +340,10 @@ function AddReportMeet(props) {
       formActivities.filter((el) => e[0].id === el.id)[0].place = e[0].place;
       formActivities.filter((el) => e[0].id === el.id)[0].description =
         e[0].description;
-      console.log(formActivities);
     }
   }
 
   const onChangeValuesIndicateursForm = (e) => {
-    console.log("ADD indicateurs", e[0].selectedOptionType);
     // setSelectedTypeCVC(e[0].selectedOptionType);
 
     let opt = [
@@ -398,11 +381,11 @@ function AddReportMeet(props) {
       e[0].selectedOptionType &&
       e[0].selectedOptionType !== null
     ) {
-      // console.log("test");
+      //
       let test = formIndicateurs.filter(
         (e) => e.selectedOptionType !== null && !opt.includes(e.id)
       );
-      console.log(test);
+
       let arr1 = [];
 
       for (let index = 0; index < formIndicateurs.length; index++) {
@@ -424,7 +407,6 @@ function AddReportMeet(props) {
       );
 
       // show merge
-      console.log([...resultA, ...resultB]);
 
       options.splice(0, options.length);
 
@@ -432,8 +414,7 @@ function AddReportMeet(props) {
       options.push(...resultB);
 
       setOptions(options);
-      console.log("B", resultB);
-      console.log("A", resultA);
+
       // }
 
       // for (let index = 0; index < opt.length; index++) {
@@ -445,18 +426,18 @@ function AddReportMeet(props) {
       //       //   (e) => e.selectedOptionType !== null && !opt.includes(e.id)
       //       // );
 
-      //       console.log(opt);
+      //
       //       // opt.filter((e) => e === opt[index]);
-      //       console.log(opt, index, formIndicateurs);
-      //       // console.log(opt);
+      //
+      //       //
       //       if (opt && opt.length > 0) {
       //         options.splice(0, options.length);
       //         // setOptions(options);
 
       //         if (options.length === 0) {
-      //           console.log(opt);
+      //
       //           options.push(...opt);
-      //           console.log(options);
+      //
       //           setOptions(options);
       //           // options.filter(e => e === opt.includes(opt))
       //         }

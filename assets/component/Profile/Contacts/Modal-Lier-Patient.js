@@ -55,7 +55,7 @@ function ModalLierPatient(props) {
       })
       .catch(function (response) {});
   }, [idPatient]);
-  // console.log(patients);
+  //
   return (
     <>
       <Button onClick={handleShow} className="btn-metis">

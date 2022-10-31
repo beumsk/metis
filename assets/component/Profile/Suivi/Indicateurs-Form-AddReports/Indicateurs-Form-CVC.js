@@ -43,17 +43,14 @@ function IndicateursFormCVC(props) {
   useEffect(() => {}, [idPatient]);
 
   const choiceCorps = (e) => {
-    console.log(e);
     setCorpsScore(e);
   };
 
   const onChangeDescriptionCorps = (e) => {
-    console.log("test");
     setDescriptionCorps(e.target.value);
   };
 
   const choiceVetements = (e) => {
-    console.log(e);
     setVetementsScore(e);
   };
 
@@ -62,7 +59,6 @@ function IndicateursFormCVC(props) {
   };
 
   const choiceComportement = (e) => {
-    console.log(e);
     setComportementScore(e);
   };
 
@@ -82,7 +78,6 @@ function IndicateursFormCVC(props) {
       comportementDescription: comportementDescription,
     },
   ]);
-  console.log("indicateurs", props.editForm);
 
   return (
     <>
@@ -139,7 +134,11 @@ function IndicateursFormCVC(props) {
           <Form.Control
             as="textarea"
             rows={3}
-            // defaultValue={props.editForm[0].comment}
+            defaultValue={
+              props.editForm && props.editForm[0].comment
+                ? props.editForm[0].comment
+                : ""
+            }
             onChange={(e) => onChangeDescriptionCorps(e)}
           />
         </div>
@@ -194,7 +193,11 @@ function IndicateursFormCVC(props) {
           <Form.Label htmlFor="inputValue">Commentaire</Form.Label>
           <Form.Control
             as="textarea"
-            defaultValue={props.editForm[1]?.comment}
+            defaultValue={
+              props.editForm && props.editForm[1]?.comment
+                ? props.editForm[1]?.comment
+                : ""
+            }
             rows={3}
             onChange={(e) => onChangeDescriptionVetements(e)}
           />
@@ -251,7 +254,11 @@ function IndicateursFormCVC(props) {
           <Form.Control
             as="textarea"
             rows={3}
-            defaultValue={props.editForm[2]?.comment}
+            defaultValue={
+              props?.editForm && props?.editForm?.length > 0
+                ? props?.editForm[2]?.comment
+                : ""
+            }
             onChange={(e) => onChangeDescriptionComportement(e)}
           />
         </div>

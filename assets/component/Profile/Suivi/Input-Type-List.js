@@ -45,7 +45,7 @@ function InputTypeList(props) {
       })
       .catch(function (response) {});
   }, [idPatient]);
-  // console.log(contacts);
+  //
 
   //   /api/getContacts
   const onChangeType = (e) => {

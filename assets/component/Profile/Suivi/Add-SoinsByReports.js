@@ -114,7 +114,7 @@ function AddSoinsByReport(props) {
   //   valueDescription
   // );
 
-  // console.log(props.key, typeValue, contactValue, placeForm, valueDescription);
+  //
   return (
     <>
       <div className="addSoins-form">

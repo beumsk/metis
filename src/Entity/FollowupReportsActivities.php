@@ -32,7 +32,7 @@ class FollowupReportsActivities
     #[ORM\ManyToMany(targetEntity: Contacts::class)]
     #[ORM\JoinTable(name: "followup_report_activity_place")]
     #[ORM\JoinColumn(name: "fora_id", referencedColumnName: "id", nullable: true)]
-    #[ORM\InverseJoinColumn(name: "cont_id", referencedColumnName: "id", nullable: true)]
+    #[ORM\InverseJoinColumn(name: "plac_id", referencedColumnName: "id", nullable: true)]
     private Collection $places;
 
     #[ORM\ManyToOne]

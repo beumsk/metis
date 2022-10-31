@@ -50,14 +50,22 @@ class ContactsController extends AbstractController
         $serializer = new Serializer($normalizers, $encoders);
 
 
-        $jsonObject = $serializer->serialize(
-            $contacts,
+
+        $jsonObject = $serializer->serialize($contacts, 'json', [
+            'circular_reference_handler' => function ($object) {
+                return $object->getId();
+            },
             JsonEncoder::FORMAT,
-            [AbstractNormalizer::IGNORED_ATTRIBUTES => ['orga', "url", "description", "type", "pathString", "path"]]
-        );
+            [AbstractNormalizer::IGNORED_ATTRIBUTES => ["url", "description", "type", "pathString", "path"]]
+        ]);
+
+        $response =  new Response($jsonObject, 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
+
+        $response->setSharedMaxAge(3600);
 
 
-        return new Response($jsonObject, 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
+
+        return $response;
 
 
         // return $this->json($contacts);

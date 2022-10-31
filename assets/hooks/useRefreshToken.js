@@ -13,8 +13,6 @@ const useRefreshToken = () => {
       headers: { Authorization: `Bearer ${token.data.token}` },
     });
 
-    console.log(response);
-
     setAuth((prev) => {
       return {
         ...prev,

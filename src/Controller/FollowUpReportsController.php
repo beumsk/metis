@@ -67,8 +67,13 @@ class FollowUpReportsController extends AbstractController
 
 
         // dd($jsonObject);
+        $response = new Response($jsonObject, 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
 
-        return new Response($jsonObject, 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
+        $response->setSharedMaxAge(3600);
+
+        return $response;
+
+        // return new Response($jsonObject, 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
     }
 
 
@@ -120,20 +125,17 @@ class FollowUpReportsController extends AbstractController
             'circular_reference_handler' => function ($object) {
                 return $object->getId();
             },
-            JsonEncoder::FORMAT,
-            [AbstractNormalizer::IGNORED_ATTRIBUTES => ['pati', 'reportDate', 'lastUpdate', 'creationDate', 'pati']]
+            JsonEncoder::FORMAT
         ]);
 
+        $response = new Response($jsonObject, 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
 
-        // $jsonObject = $serializer->serialize($followUpReports, 'json', [
-        //     'circular_reference_handler' => function ($object) {
-        //         return $object->getId();
-        //     },
-        //     JsonEncoder::FORMAT,
-        //     [AbstractNormalizer::IGNORED_ATTRIBUTES => ['pati', 'reportDate', 'lastUpdate', 'creationDate', 'pati']]
-        // ]);
 
-        return new Response($jsonObject, 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
+
+        $response->setSharedMaxAge(3600);
+        // return new Response($jsonObject, 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
+
+        return $response;
     }
 
 

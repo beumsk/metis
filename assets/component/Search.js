@@ -16,10 +16,10 @@ const Search = () => {
 
   const setValue = (e) => {
     // e.defaultPrevented();
-    // console.log(e);
+    //
     setSearch(e.target.value);
     // posts.filter((e) => e.name === valueSearch);
-    // console.log(valueSearch);
+    //
     if (valueSearch && valueSearch?.length > 1) {
       setOpenResult(true);
       axios({
@@ -35,11 +35,11 @@ const Search = () => {
           //handle success
           // setPatientsList(response);
           setResultSearch(response.data);
-          // console.log(resultSearch);
+          //
           setSearch(e.target.value);
         })
         .catch(function (response) {
-          // console.log(response);
+          //
         });
     } else {
       setOpenResult(false);

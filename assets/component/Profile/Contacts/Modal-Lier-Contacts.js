@@ -53,7 +53,7 @@ function ModalLierContacts(props) {
     //   })
     //   .catch(function (response) {});
   }, [idPatient]);
-  // console.log(contacts);
+  //
   //   /api/getContacts
   return (
     <>

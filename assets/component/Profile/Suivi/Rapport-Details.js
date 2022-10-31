@@ -61,14 +61,12 @@ function RapportDetails(props) {
       },
     })
       .then(function (response) {
-        console.log(response);
         setInformations(response);
       })
       .catch(function (response) {});
   }, [idPatient]);
 
   const editContent = (e, r) => {
-    console.log(e.target.checked);
     if (e.target.checked === true) {
       r.isHightlight = true;
       setInformations(informations);
@@ -91,12 +89,10 @@ function RapportDetails(props) {
                 type="switch"
                 defaultChecked={r.isHightlight === false}
                 onClick={(e) => {
-                  console.log(e);
                   // setToggle(!toggle);
                   if (e.target.checked === true) {
                     setToggle(!toggle);
                     r.isHightlight = toggle;
-                    console.log(r);
 
                     setInformations(informations);
                   }
@@ -104,7 +100,7 @@ function RapportDetails(props) {
                   if (e.target.checked === false) {
                     setToggle(!toggle);
                     r.isHightlight = toggle;
-                    console.log(r);
+
                     setInformations(informations);
                   }
                 }}
@@ -130,10 +126,21 @@ function RapportDetails(props) {
                 ></EditReportMeet>
               )}
               {r.isHightlight === false && (
-                <div
-                  className="mt-4"
-                  dangerouslySetInnerHTML={{ __html: r.content }}
-                ></div>
+                <>
+                  <div className="row">
+                    {r.followupReportsIndicators.map((item, id) => (
+                      <div class="row">
+                        <div className="col-sm-4">{item.indi.name}</div>
+                        <div className="col-sm-8">{item.indi.description}</div>
+                        {/* <div className="col-sm-4">{item.indi.comment}</div> */}
+                      </div>
+                    ))}
+                  </div>
+                  <div
+                    className="mt-4"
+                    dangerouslySetInnerHTML={{ __html: r.content }}
+                  ></div>
+                </>
               )}
               {r.isHightlight === null && (
                 <>

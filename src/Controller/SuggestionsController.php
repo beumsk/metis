@@ -5,9 +5,9 @@ namespace App\Controller;
 use App\Entity\Suggestions;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
@@ -44,9 +44,11 @@ class SuggestionsController extends AbstractController
             [AbstractNormalizer::IGNORED_ATTRIBUTES => ['parentSugg', "requireCustomValue", "isLocked", "attributes", "pathString", "path", 'defaultComment', "isDeleted"]]
         );
 
-
+        $response =  new Response($jsonObject, 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
         // dd($jsonObject);
 
-        return new Response($jsonObject, 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
+        $response->setSharedMaxAge(3600);
+
+        return $response;
     }
 }

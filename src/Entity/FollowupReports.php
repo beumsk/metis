@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\FollowupReportsRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Utils\InfosReportTrait;
@@ -62,6 +64,17 @@ class FollowupReports
     #[ORM\ManyToOne(targetEntity: 'Contacts', cascade: ["all"], fetch: "EAGER")]
     #[ORM\JoinColumn(name: "cont_id", referencedColumnName: "id", nullable: true)]
     private ?Contacts $plac = null;
+
+    #[ORM\ManyToMany(targetEntity: Contacts::class)]
+    #[ORM\JoinTable(name: "followup_report_contact")]
+    #[ORM\JoinColumn(name: "fore_id", referencedColumnName: "id", nullable: true)]
+    #[ORM\InverseJoinColumn(name: "cont_id", referencedColumnName: "id", nullable: true)]
+    private Collection $cont;
+
+    public function __construct()
+    {
+        $this->cont = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -244,6 +257,30 @@ class FollowupReports
     public function setPlac(?Contacts $plac): self
     {
         $this->plac = $plac;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Contacts>
+     */
+    public function getCont(): Collection
+    {
+        return $this->cont;
+    }
+
+    public function addCont(Contacts $cont): self
+    {
+        if (!$this->cont->contains($cont)) {
+            $this->cont->add($cont);
+        }
+
+        return $this;
+    }
+
+    public function removeCont(Contacts $cont): self
+    {
+        $this->cont->removeElement($cont);
 
         return $this;
     }

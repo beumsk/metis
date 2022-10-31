@@ -41,7 +41,7 @@ function EditLierLieux(props) {
       })
       .catch(function (response) {});
   }, [idPatient]);
-  //   console.log(props);
+  //   
   //   /api/getContacts
   return (
     <>

@@ -44,7 +44,6 @@ function IndicateursFormHestiaPerteLogement(props) {
     setDescriptionVoisinage(e.target.value);
   };
   const choiceBailleur = (e) => {
-    console.log(bailleurSelected);
     setBailleurSelected(e);
   };
 
