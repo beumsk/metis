@@ -96,13 +96,15 @@ class FollowupReportsActivities
 
     public function getSugg(): ?Suggestions
     {
+
+        // dd($sugg);
         return $this->sugg;
     }
 
     public function setSugg(?Suggestions $sugg): self
     {
-        $this->sugg = $sugg;
 
+        $this->sugg = $sugg;
         return $this;
     }
 

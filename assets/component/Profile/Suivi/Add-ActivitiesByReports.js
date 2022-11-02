@@ -34,7 +34,7 @@ function AddActivitiesByReport(props) {
   ]);
 
   const [idEditFormActivities, setIdEditFormActivities] = useState([
-    props.formActivitiesEdit.id,
+    props.formActivitiesEdit.act_id,
   ]);
 
   const [value, setValueForm] = useState(null);
@@ -63,23 +63,18 @@ function AddActivitiesByReport(props) {
 
   props.onChange([
     {
-      idEdit: idEditFormActivities[0],
+      act_id:
+        idEditFormActivities[0] !== undefined ? idEditFormActivities[0] : null,
       id: props.id,
-      value: props.formActivitiesEdit?.value
-        ? props.formActivitiesEdit?.value
-        : value,
-      contact: props.formActivitiesEdit?.contact
-        ? props.formActivitiesEdit?.contact
-        : contact,
-      place: props.formActivitiesEdit?.place
-        ? props.formActivitiesEdit?.place
-        : place,
-      description: props.formActivitiesEdit?.description
-        ? props.formActivitiesEdit?.description
-        : description,
+      value: value ? value : props.formActivitiesEdit?.value,
+      contact: contact ? contact : props.formActivitiesEdit?.contact,
+      place: place ? place : props.formActivitiesEdit?.place,
+      description: description
+        ? description
+        : props.formActivitiesEdit?.description,
     },
   ]);
-  console.log(props.formActivitiesEdit);
+  // console.log(props.formActivitiesEdit);
 
   return (
     <>

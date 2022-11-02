@@ -34,7 +34,7 @@ function InputContactList(props) {
   const onChangeContact = (e) => {
     props.onChange(e.target.value);
   };
-
+  console.log(props?.contacts);
   return (
     <>
       <Form.Label htmlFor="inputValue">Contacts</Form.Label>
@@ -47,16 +47,21 @@ function InputContactList(props) {
         <option>Choissisez le contact</option>
         {props?.contacts?.data?.map((el, id) => (
           <>
-            {props?.contacts && props?.contacts?.data && el.deletedAt !== null && (
-              <option
-                value={el?.orga?.id}
-                selected={
-                  props.defaultValue === el?.orga?.id ? props.defaultValue : ""
-                }
-              >
-                {el?.firstname} {el?.lastname}
-              </option>
-            )}
+            {props?.contacts &&
+              props?.contacts?.data &&
+              el?.orga !== null &&
+              el.deletedAt !== null && (
+                <option
+                  value={el?.orga?.id}
+                  selected={
+                    props.defaultValue === el?.orga?.id
+                      ? props.defaultValue
+                      : ""
+                  }
+                >
+                  {el?.firstname} {el?.lastname}
+                </option>
+              )}
           </>
         ))}
       </Form.Select>

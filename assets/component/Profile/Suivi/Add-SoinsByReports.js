@@ -22,10 +22,12 @@ function AddSoinsByReport(props) {
   let id = useParams().id;
   var formData = new FormData();
   formData.append("id", 108);
-
+  const [idEditFormSoins, setIdEditFormSoins] = useState([
+    props.formCaresEdit.care_id,
+  ]);
   const [value, setValueTypeForm] = useState(null);
-  const [contactValue, setValueContactForm] = useState(null);
-  const [placeForm, setValuePlaceForm] = useState(null);
+  const [contact, setValueContactForm] = useState(null);
+  const [place, setValuePlaceForm] = useState(null);
   const [idPatient, setIdPatient] = useState(id);
   const [type, setType] = useState(null);
   // const [arrValues, setArrValues] = useState(
@@ -39,7 +41,7 @@ function AddSoinsByReport(props) {
   //     },
   //   ])
   // );
-  const [valueDescription, setValueDescription] = useState(null);
+  const [description, setValueDescription] = useState(null);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   let ObjForm = {};
@@ -84,37 +86,17 @@ function AddSoinsByReport(props) {
     setValueDescription(e.target.value);
   };
 
-  // MUST TO HAVE: return multiples objects values to add report meet
-  // setArrValues((prevFormSoins) => [
-  //   ...prevFormSoins,
-  //   [
-  //     {
-  //       id: props.id,
-  //       type: typeValue,
-  //       contact: contactValue,
-  //       place: placeForm,
-  //       description: valueDescription,
-  //     },
-  //   ],
-  // ]);
   props.onChange([
     {
+      care_id: idEditFormSoins[0] !== undefined ? idEditFormSoins[0] : null,
       id: props.id,
-      value: value,
-      contact: contactValue,
-      place: placeForm,
-      description: valueDescription,
+      value: value ? value : props.formCaresEdit?.value,
+      contact: contact ? contact : props.formCaresEdit?.contact,
+      place: place ? place : props.formCaresEdit?.place,
+      description: description ? description : props.formCaresEdit?.description,
     },
   ]);
-  // props.onChange(
-  //   props.key,
-  //   typeValue,
-  //   contactValue,
-  //   placeForm,
-  //   valueDescription
-  // );
-  // formCaresEdit
-  //
+
   return (
     <>
       <div className="addSoins-form">

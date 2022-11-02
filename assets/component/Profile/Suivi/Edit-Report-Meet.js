@@ -32,12 +32,30 @@ function EditReportMeet(props) {
   const [formSoins, setFormSoins] = useState(
     props?.informationPatient?.followupReportsCare?.length > 0
       ? [{ ...props?.informationPatient?.followupReportsCare }]
-      : [{ id: 0 }]
+      : [
+          {
+            idEdit: null,
+            id: 0,
+            value: null,
+            contact: null,
+            place: null,
+            description: null,
+          },
+        ]
   );
   const [formActivities, setFormActivities] = useState(
     props?.informationPatient?.followupReportsActivities?.length > 0
       ? [{ ...props?.informationPatient?.followupReportsActivities }]
-      : [{ id: 0 }]
+      : [
+          {
+            idEdit: null,
+            id: 0,
+            value: null,
+            contact: null,
+            place: null,
+            description: null,
+          },
+        ]
   );
   const [formIndicateurs, setFormIndicateurs] = useState([
     {
@@ -114,87 +132,95 @@ function EditReportMeet(props) {
     //   },
     // ]);
     // formIndicateurs.splice(0, formIndicateurs.length);
-
-    function Cares() {
-      idEdit: null;
-      id: null;
-      value: null;
-      contact: null;
-      place: null;
-      description: null;
-    }
-
-    var copyCares = JSON.parse(JSON.stringify(...formSoins));
-    var i = 0;
-
-    let arrCareHydrated = [];
-    for (var prop in copyCares) {
-      console.log(prop);
-      if (Object.prototype.hasOwnProperty.call(copyCares, prop)) {
-        var care = new Cares();
-        console.log(care);
-        care["idEdit"] = prop;
-        care["id"] = copyCares[prop].id;
-        care["value"] = copyCares[prop].activity?.id;
-        care["contact"] =
-          copyCares[prop].contacts && copyCares[prop].contacts.length > 0
-            ? copyCares[prop].contacts[0]?.orga?.id
-            : null;
-        care["place"] =
-          copyCares[prop].places && copyCares[prop].places.length > 0
-            ? copyCares[prop].places[0]?.id
-            : null;
-        care["description"] = copyCares[prop].description;
-
-        console.log(copyCares);
-        arrCareHydrated.push(care);
+    if (props?.informationPatient?.followupReportsCare?.length > 0) {
+      function Cares() {
+        care_id: null;
+        id: null;
+        value: null;
+        contact: null;
+        place: null;
+        description: null;
       }
-    }
 
-    setFormSoins(arrCareHydrated);
+      var copyCares = JSON.parse(JSON.stringify(...formSoins));
+      var i = 0;
 
-    function Activities() {
-      idEdit: null;
-      id: null;
-      value: null;
-      contact: null;
-      place: null;
-      description: null;
-    }
+      let arrCareHydrated = [];
+      for (var prop in copyCares) {
+        console.log(prop);
+        if (Object.prototype.hasOwnProperty.call(copyCares, prop)) {
+          var care = new Cares();
+          console.log(care);
+          care["care_id"] = copyCares[prop]?.id;
+          care["id"] = Number(prop);
+          care["value"] = Number(copyCares[prop].activity?.id);
+          care["contact"] =
+            copyCares[prop].cont && copyCares[prop].cont.length > 0
+              ? Number(copyCares[prop].cont[0]?.orga?.id)
+              : null;
+          care["place"] =
+            copyCares[prop].places && copyCares[prop].places.length > 0
+              ? Number(copyCares[prop].places[0]?.id)
+              : null;
+          care["description"] = copyCares[prop].description;
 
-    var copy = JSON.parse(JSON.stringify(...formActivities));
-    var i = 0;
-
-    let arrActivitiesHydrated = [];
-    for (var prop in copy) {
-      console.log(prop);
-      if (Object.prototype.hasOwnProperty.call(copy, prop)) {
-        var activities = new Activities();
-        console.log(activities);
-        activities["idEdit"] = copy[prop]?.id;
-        activities["id"] = Number(prop);
-        activities["value"] = copy[prop].activity?.id;
-        activities["contact"] =
-          copy[prop].contacts && copy[prop].contacts.length > 0
-            ? copy[prop].contacts[0]?.orga?.id
-            : null;
-        activities["place"] =
-          copy[prop].places && copy[prop].places.length > 0
-            ? copy[prop].places[0]?.id
-            : null;
-        activities["description"] = copy[prop].description;
-
-        console.log(activities);
-        arrActivitiesHydrated.push(activities);
+          console.log(copyCares);
+          arrCareHydrated.push(care);
+        }
       }
+      formSoins.splice(0, formSoins.length);
+      formSoins.push(...arrCareHydrated);
+      setFormSoins(arrCareHydrated);
     }
 
-    formActivities.splice(0, formActivities.length);
-    formActivities.push(...arrActivitiesHydrated);
+    if (props?.informationPatient?.followupReportsActivities?.length > 0) {
+      function Activities() {
+        act_id: null;
+        id: null;
+        value: null;
+        contact: null;
+        place: null;
+        description: null;
+      }
 
-    setFormActivities(formActivities);
+      var copy = JSON.parse(JSON.stringify(...formActivities));
+      var i = 0;
 
-    console.log(formActivities);
+      let arrActivitiesHydrated = [];
+      for (var prop in copy) {
+        // console.log(prop);
+        if (Object.prototype.hasOwnProperty.call(copy, prop)) {
+          var activities = new Activities();
+          var editID = JSON.parse(JSON.stringify(...formActivities))[prop].id;
+          let copyID = editID;
+          console.log(activities);
+          activities["act_id"] = copy[prop].id;
+          activities["id"] = Number(prop);
+
+          // activities["id"] = Number(prop);
+          activities["value"] = Number(copy[prop].activity?.id);
+          activities["contact"] =
+            copy[prop].cont && copy[prop].cont.length > 0
+              ? Number(copy[prop].cont[0]?.orga?.id)
+              : null;
+          activities["place"] =
+            copy[prop].places && copy[prop].places.length > 0
+              ? Number(copy[prop].places[0]?.id)
+              : null;
+          activities["description"] = copy[prop].description;
+
+          console.log(activities);
+          arrActivitiesHydrated.push(activities);
+        }
+      }
+
+      formActivities.splice(0, formActivities.length);
+      formActivities.push(...arrActivitiesHydrated);
+      console.log(formActivities);
+      setFormActivities(formActivities);
+    }
+
+    // console.log(formActivities);
 
     axios({
       method: "post",
@@ -449,6 +475,92 @@ function EditReportMeet(props) {
     })
       .then(function (response) {
         console.log(response);
+
+        if (response && formSoins) {
+          let endpoints = [];
+
+          for (let index = 0; index < formSoins.length; index++) {
+            endpoints.push("/api/addCaresToReport");
+          }
+
+          axios
+            .all(
+              endpoints.map((endpoint, i) => {
+                let care = formSoins[i];
+                let formData = new FormData();
+
+                formData.append(
+                  "rapportId",
+                  response.data.id ? response.data.id : null
+                );
+                formData.append("value", care.value ? care.value : null);
+                formData.append("formSoins", JSON.stringify(care));
+
+                axios({
+                  method: "post",
+                  url: endpoint,
+                  data: formData,
+                  headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${auth.auth.accessToken}`,
+                  },
+                });
+              })
+            )
+            .then((data) => console.log(data));
+        }
+
+        if (response && formActivities) {
+          let endpoints = [];
+
+          for (let index = 0; index < formActivities.length; index++) {
+            endpoints.push("/api/addActivitiesToReport");
+          }
+          axios
+            .all(
+              endpoints.map((endpoint, i) => {
+                let activities = formActivities[i];
+                let formData = new FormData();
+
+                formData.append(
+                  "rapportId",
+                  response.data.id ? response.data.id : null
+                );
+                formData.append(
+                  "value",
+                  activities.value ? activities.value : null
+                );
+                formData.append("formActivities", JSON.stringify(activities));
+
+                axios({
+                  method: "post",
+                  url: endpoint,
+                  data: formData,
+                  headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${auth.auth.accessToken}`,
+                  },
+                });
+              })
+            )
+            .then((data) => console.log(data));
+        }
+
+        if (response && formIndicateurs) {
+          for (let index = 0; index < formIndicateurs.length; index++) {
+            let indi = formIndicateurs[index];
+            formIndicateurs[index].rapportId = response.idRapport;
+            axios({
+              method: "post",
+              url: "/api/addIndicators",
+              data: JSON.stringify(indi),
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${auth.auth.accessToken}`,
+              },
+            });
+          }
+        }
         // location.replace(window.location.origin + "/" + idPatient);
       })
       .catch(function (response) {
@@ -458,11 +570,18 @@ function EditReportMeet(props) {
 
   function onChangeValuesByOnCareForm(e) {
     if (formSoins.filter((el) => e[0].id === el.id)) {
-      formSoins.filter((el) => e[0].id === el.id)[0].value = e[0].value;
-      formSoins.filter((el) => e[0].id === el.id)[0].contact = e[0].contact;
-      formSoins.filter((el) => e[0].id === el.id)[0].place = e[0].place;
+      formSoins.filter((el) => e[0].id === el.id)[0].id =
+        e[0].idEdit !== null ? e[0].id : null;
+      formSoins.filter((el) => e[0].id === el.id)[0].care_id =
+        e[0].idEdit !== null ? e[0].care_id : null;
+      formSoins.filter((el) => e[0].id === el.id)[0].value =
+        e[0].value !== null ? e[0].value : null;
+      formSoins.filter((el) => e[0].id === el.id)[0].contact =
+        e[0].contact !== null ? e[0].contact : null;
+      formSoins.filter((el) => e[0].id === el.id)[0].place =
+        e[0].place !== null ? e[0].place : null;
       formSoins.filter((el) => e[0].id === el.id)[0].description =
-        e[0].description;
+        e[0].description !== null ? e[0].description : null;
 
       //
     }
@@ -471,15 +590,23 @@ function EditReportMeet(props) {
   function onChangeValuesByActivitiesForm(e) {
     console.log(e);
     if (formActivities.filter((el) => e[0].id === el.id)) {
-      formActivities.filter((el) => e[0].id === el.id)[0].value = e[0].value;
+      // idEdit
+      formActivities.filter((el) => e[0].id === el.id)[0].act_id =
+        e[0].act_id !== null ? e[0].act_id : null;
+      formActivities.filter((el) => e[0].id === el.id)[0].id =
+        e[0].id !== null ? e[0].id : null;
+      formActivities.filter((el) => e[0].id === el.id)[0].value =
+        e[0].value !== null ? e[0].value : null;
       formActivities.filter((el) => e[0].id === el.id)[0].contact =
-        e[0].contact;
-      formActivities.filter((el) => e[0].id === el.id)[0].place = e[0].place;
+        e[0].contact !== null ? e[0].contact : null;
+      formActivities.filter((el) => e[0].id === el.id)[0].place =
+        e[0].place !== null ? e[0].place : null;
       formActivities.filter((el) => e[0].id === el.id)[0].description =
-        e[0].description;
+        e[0].description !== null ? e[0].description : null;
+      console.log(formActivities);
       //
     }
-    console.log(formActivities);
+    // console.log(formActivities);
   }
 
   const onChangeValuesIndicateursForm = (e) => {
@@ -596,10 +723,6 @@ function EditReportMeet(props) {
     setOptions(opt);
   }
 
-  //
-  // const [showAccesSoins, setAccesSoins] = useState(false);
-  // const [showActivities, setActivities] = useState(false);
-  // const [showIndicateurs, setChoiceIndicateurs] = useState(false);
   return (
     <div className="report-content">
       <h5 className="mt-4 mb-4">Ajouter un rapport</h5>

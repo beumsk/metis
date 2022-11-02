@@ -49,7 +49,7 @@ function InputPlaceList(props) {
       >
         <option>Choissisez le lieu</option>
         {props?.places?.data?.map((el, id) => (
-          <>{el?.lastname && <option value={id}>{el?.lastname}</option>}</>
+          <>{el?.lastname && <option value={el.id}>{el?.lastname}</option>}</>
         ))}
       </Form.Select>
     </>

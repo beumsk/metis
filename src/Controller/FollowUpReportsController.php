@@ -107,11 +107,13 @@ class FollowUpReportsController extends AbstractController
 
                 if ($report !== []) {
                     foreach ($report as $itemReport) {
-                        if ($itemReport->getSugg()->getParentSugg()->getValue() === "Soins") {
+                        if ($itemReport->getSugg()->getParentSugg() !== null && $itemReport->getSugg()->getParentSugg()->getValue() === "Soins") {
                             $value->setFollowupReportsCare($itemReport);
                         }
 
-                        if ($itemReport->getSugg()->getParentSugg()->getValue() === "Activités") {
+                        if ($itemReport->getSugg()->getParentSugg() !== null && $itemReport->getSugg()->getParentSugg()->getValue() === "Activités") {
+
+                            // array_push([$itemReport], ["idFront" => $itemReport->getId()]);
                             $value->setFollowupReportsActivities($itemReport);
                         }
                     }
@@ -242,8 +244,25 @@ class FollowUpReportsController extends AbstractController
 
         $entityManager->flush();
 
-        // dd($indicateurs_jsondecode);
 
+
+        return new JsonResponse([
+            'id' => $report->getId(),
+            'response' => "Sent !"
+        ]);
+    }
+    #[Route('/api/addIndicators', name: 'app_addIndicators')]
+    public function addIndicators(ManagerRegistry $doctrine, Request $request)
+    {
+
+        $entityManager = $doctrine->getManager();
+        $request = Request::createFromGlobals();
+        $formIndicateurs = $request->request->get('formIndicateurs');
+        $reportId = $request->request->get('rapportId');
+
+        $report = $doctrine->getRepository(FollowupReports::class)->find($reportId);
+
+        $indicateurs_jsondecode = json_decode($formIndicateurs);
         if ($indicateurs_jsondecode !== null) {
             foreach ($indicateurs_jsondecode as $key) {
                 if ($key->indicateursFormCVC && $key->indicateursFormCVC !== null) {
@@ -467,78 +486,113 @@ class FollowUpReportsController extends AbstractController
                 }
             }
         }
+    }
 
 
-        if ($activities_jsondecode && $activities_jsondecode !== null) {
+    #[Route('/api/addCaresToReport', name: 'app_addCaresToReport')]
+    public function addCaresToReport(ManagerRegistry $doctrine, Request $request): JsonResponse
+    {
+        $entityManager = $doctrine->getManager();
+        $request = Request::createFromGlobals();
+        $formSoins = $request->request->get('formSoins');
+        // dd($formSoins);
 
-            $followUpReportActivities = new FollowupReportsActivities();
-            // $followupReportContact = new FollowupReportsContact();
-            // $followupReportActivityPlace = new FollowupReportActivityPlace();
-            foreach ($activities_jsondecode as $key) {
+        $reportId = $request->request->get('rapportId');
+        $value = $request->request->get('value');
 
+        $report = $doctrine->getRepository(FollowupReports::class)->find($reportId);
+        $sugg =  $doctrine->getRepository(Suggestions::class)->find($value);
+        // dd($report);
+        $care_jsondecode = json_decode($formSoins);
 
-                // $editFollowUpReportIndicators =  $doctrine->getRepository(FollowupReportsActivities::class)->findBy(["sugg" => $key->type, "fore" => $report->getId()]);
-                // dd($activities_jsondecode);
-                $typeSugg =  $doctrine->getRepository(Suggestions::class)->find(intval($key->type));
-
-
-                $contact =  $doctrine->getRepository(Contacts::class)->find($key->contact);
-                $place =  $doctrine->getRepository(Places::class)->find($key->place);
-                $followUpReportActivities->setFore($report);
-                $followUpReportActivities->setSugg($typeSugg);
-
-                // $followupReportActivityPlace->setPlac
-
-                $followUpReportActivities->setDescription($key->description);
-
-
-                //must to have: add checkbox for idr step ?
-                $followUpReportActivities->setIsIdrStep(1);
-
-                // $entityManager->persist($followUpReportActivities);
-                $entityManager->flush();
-
-                $followUpReportActivities->setFore($report);
-                // $followUpReportActivities->setCont($contact);
-
-                // $entityManager->persist($followUpReportActivities);
-                $entityManager->flush();
-            }
-        }
 
         if ($care_jsondecode && $care_jsondecode !== null) {
+            $editFollowUpReportCare =  $doctrine->getRepository(FollowupReportsActivities::class)->findBy(["id" => $care_jsondecode->care_id]);
+
+            $contact =  (property_exists($care_jsondecode, "contact") === true) ? $doctrine->getRepository(Contacts::class)->find(intval($care_jsondecode->contact)) : null;
+            $place =  (property_exists($care_jsondecode, "place") === true) ? $doctrine->getRepository(Contacts::class)->find(intval($care_jsondecode->place)) : null;
+
+            $description = $care_jsondecode->description;
 
             $followUpReportActivities = new FollowupReportsActivities();
-            // $followupReportContact = new FollowupReportsContact();
-            foreach ($care_jsondecode as $key) {
-                $typeSugg =  $doctrine->getRepository(Suggestions::class)->find(intval($key->type));
-                $contact =  $doctrine->getRepository(Contacts::class)->find($key->contact);
-                $followUpReportActivities->setFore($report);
-                $followUpReportActivities->setSugg($typeSugg);
-                $followUpReportActivities->setDescription($key->description);
+            if (count($editFollowUpReportCare) === 0) {
+                $followUpReportActivities->setActivity($sugg);
 
-
-                //must to have: add checkbox for idr step ?
+                $followUpReportActivities->setDescription($care_jsondecode->description);
                 $followUpReportActivities->setIsIdrStep(1);
-
-                // $entityManager->persist($followUpReportActivities);
-                $entityManager->flush();
-
                 $followUpReportActivities->setFore($report);
-                // $followUpReportActivities->setCont($contact);
 
-                // $entityManager->persist($followUpReportActivities);
+                if (property_exists($care_jsondecode, "place") === true && $care_jsondecode->place !== null) {
+                    $followUpReportActivities->addPlace($place);
+                }
+
+                if (property_exists($care_jsondecode, "contact") === true && $care_jsondecode->contact !== null) {
+                    $followUpReportActivities->addContact($contact);
+                }
+
+
+                $entityManager->persist($followUpReportActivities);
                 $entityManager->flush();
             }
         }
 
-
-
         return new JsonResponse([
-            'id' => $report->getId(),
-            'response' => "Sent !"
+            'response' => $followUpReportActivities
         ]);
     }
+    #[Route('/api/addActivitiesToReport', name: 'app_addActivitiesToReport')]
+    public function addActivitiesToReport(ManagerRegistry $doctrine, Request $request): JsonResponse
+    {
+
+        $entityManager = $doctrine->getManager();
+        $request = Request::createFromGlobals();
+        $formSoins = $request->request->get('formActivities');
+        // dd($formSoins);
+
+        $reportId = $request->request->get('rapportId');
+        $value = $request->request->get('value');
+
+        $report = $doctrine->getRepository(FollowupReports::class)->find($reportId);
+        $sugg =  $doctrine->getRepository(Suggestions::class)->find($value);
+        // dd($report);
+        $care_jsondecode = json_decode($formSoins);
+
+
+        if ($care_jsondecode && $care_jsondecode !== null) {
+            $editFollowUpReportCare =  $doctrine->getRepository(FollowupReportsActivities::class)->findBy(["id" => $care_jsondecode->act_id]);
+
+            $contact =  (property_exists($care_jsondecode, "contact") === true) ? $doctrine->getRepository(Contacts::class)->find(intval($care_jsondecode->contact)) : null;
+            $place =  (property_exists($care_jsondecode, "place") === true) ? $doctrine->getRepository(Contacts::class)->find(intval($care_jsondecode->place)) : null;
+
+            $description = $care_jsondecode->description;
+
+            $followUpReportActivities = new FollowupReportsActivities();
+            if (count($editFollowUpReportCare) === 0) {
+                $followUpReportActivities->setActivity($sugg);
+
+                $followUpReportActivities->setDescription($care_jsondecode->description);
+                $followUpReportActivities->setIsIdrStep(1);
+                $followUpReportActivities->setFore($report);
+
+                if (property_exists($care_jsondecode, "place") === true && $care_jsondecode->place !== null) {
+                    $followUpReportActivities->addPlace($place);
+                }
+
+                if (property_exists($care_jsondecode, "contact") === true && $care_jsondecode->contact !== null) {
+                    $followUpReportActivities->addContact($contact);
+                }
+
+
+                $entityManager->persist($followUpReportActivities);
+                $entityManager->flush();
+            }
+        }
+
+        return new JsonResponse([
+            'response' => $followUpReportActivities
+        ]);
+    }
+
 
     // /api/sendReport
     #[Route('/api/sendReport', name: 'app_sendReport')]
