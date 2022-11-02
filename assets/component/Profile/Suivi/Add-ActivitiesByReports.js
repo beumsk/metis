@@ -29,17 +29,24 @@ function AddActivitiesByReport(props) {
   const [idPatient, setIdPatient] = useState(id);
   const [type, setType] = useState(null);
   const handleClose = () => setShow(false);
+  const [editFormActivities, setEditFormActivities] = useState([
+    props.formActivitiesEdit,
+  ]);
 
-  const [typeValue, setValueTypeForm] = useState(null);
-  const [contactValue, setValueContactForm] = useState(null);
-  const [placeForm, setValuePlaceForm] = useState(null);
-  const [valueDescription, setValueDescription] = useState(null);
+  const [idEditFormActivities, setIdEditFormActivities] = useState([
+    props.formActivitiesEdit.id,
+  ]);
+
+  const [value, setValueForm] = useState(null);
+  const [contact, setValueContactForm] = useState(null);
+  const [place, setValuePlaceForm] = useState(null);
+  const [description, setValueDescription] = useState(null);
 
   const handleShow = () => setShow(true);
   useEffect(() => {}, [idPatient]);
 
-  function handleChangeType(newValue) {
-    setValueTypeForm(newValue);
+  function handleChangeValue(newValue) {
+    setValueForm(newValue);
   }
 
   function handleChangeContacts(newValue) {
@@ -53,34 +60,63 @@ function AddActivitiesByReport(props) {
   const onChangeDescription = (e) => {
     setValueDescription(e.target.value);
   };
+
   props.onChange([
     {
+      idEdit: idEditFormActivities[0],
       id: props.id,
-      type: typeValue,
-      contact: contactValue,
-      place: placeForm,
-      description: valueDescription,
+      value: props.formActivitiesEdit?.value
+        ? props.formActivitiesEdit?.value
+        : value,
+      contact: props.formActivitiesEdit?.contact
+        ? props.formActivitiesEdit?.contact
+        : contact,
+      place: props.formActivitiesEdit?.place
+        ? props.formActivitiesEdit?.place
+        : place,
+      description: props.formActivitiesEdit?.description
+        ? props.formActivitiesEdit?.description
+        : description,
     },
   ]);
+  console.log(props.formActivitiesEdit);
+
   return (
     <>
       <div className="addSoins-form">
         <Form.Label htmlFor="inputValue">Type</Form.Label>
-        <InputTypeList type={props?.type} onChange={handleChangeType} />
+        <InputTypeList
+          type={props?.type}
+          onChange={handleChangeValue}
+          defaultValue={props.formActivitiesEdit?.value}
+        />
         <Form.Label htmlFor="inputValue">Description</Form.Label>
         <Form.Control
           type="text"
           id="inputValueSpécifique"
           aria-describedby="valueSpécifique"
+          defaultValue={props.formActivitiesEdit?.description}
           onChange={(e) => onChangeDescription(e)}
         />
         <InputContactList
           contacts={props?.contacts}
           onChange={handleChangeContacts}
+          defaultValue={
+            props.formActivitiesEdit?.contacts &&
+            props.formActivitiesEdit?.contacts[0]
+              ? props.formActivitiesEdit?.contacts[0]?.orga?.id
+              : ""
+          }
         ></InputContactList>
         <InputPlaceList
           places={props?.places}
           onChange={handleChangePlaces}
+          defaultValue={
+            props.formActivitiesEdit?.places &&
+            props.formActivitiesEdit?.places[0]
+              ? props.formActivitiesEdit?.places[0]?.id
+              : ""
+          }
         ></InputPlaceList>
       </div>
     </>

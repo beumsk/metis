@@ -29,8 +29,16 @@ function EditReportMeet(props) {
   const [patiId, setPatiId] = useState(null);
   var formActivitiesDatas = new FormData();
   formActivitiesDatas.append("id", 106);
-  const [formSoins, setFormSoins] = useState([{ id: 0 }]);
-  const [formActivities, setFormActivities] = useState([{ id: 0 }]);
+  const [formSoins, setFormSoins] = useState(
+    props?.informationPatient?.followupReportsCare?.length > 0
+      ? [{ ...props?.informationPatient?.followupReportsCare }]
+      : [{ id: 0 }]
+  );
+  const [formActivities, setFormActivities] = useState(
+    props?.informationPatient?.followupReportsActivities?.length > 0
+      ? [{ ...props?.informationPatient?.followupReportsActivities }]
+      : [{ id: 0 }]
+  );
   const [formIndicateurs, setFormIndicateurs] = useState([
     {
       id: 0,
@@ -106,6 +114,87 @@ function EditReportMeet(props) {
     //   },
     // ]);
     // formIndicateurs.splice(0, formIndicateurs.length);
+
+    function Cares() {
+      idEdit: null;
+      id: null;
+      value: null;
+      contact: null;
+      place: null;
+      description: null;
+    }
+
+    var copyCares = JSON.parse(JSON.stringify(...formSoins));
+    var i = 0;
+
+    let arrCareHydrated = [];
+    for (var prop in copyCares) {
+      console.log(prop);
+      if (Object.prototype.hasOwnProperty.call(copyCares, prop)) {
+        var care = new Cares();
+        console.log(care);
+        care["idEdit"] = prop;
+        care["id"] = copyCares[prop].id;
+        care["value"] = copyCares[prop].activity?.id;
+        care["contact"] =
+          copyCares[prop].contacts && copyCares[prop].contacts.length > 0
+            ? copyCares[prop].contacts[0]?.orga?.id
+            : null;
+        care["place"] =
+          copyCares[prop].places && copyCares[prop].places.length > 0
+            ? copyCares[prop].places[0]?.id
+            : null;
+        care["description"] = copyCares[prop].description;
+
+        console.log(copyCares);
+        arrCareHydrated.push(care);
+      }
+    }
+
+    setFormSoins(arrCareHydrated);
+
+    function Activities() {
+      idEdit: null;
+      id: null;
+      value: null;
+      contact: null;
+      place: null;
+      description: null;
+    }
+
+    var copy = JSON.parse(JSON.stringify(...formActivities));
+    var i = 0;
+
+    let arrActivitiesHydrated = [];
+    for (var prop in copy) {
+      console.log(prop);
+      if (Object.prototype.hasOwnProperty.call(copy, prop)) {
+        var activities = new Activities();
+        console.log(activities);
+        activities["idEdit"] = copy[prop]?.id;
+        activities["id"] = Number(prop);
+        activities["value"] = copy[prop].activity?.id;
+        activities["contact"] =
+          copy[prop].contacts && copy[prop].contacts.length > 0
+            ? copy[prop].contacts[0]?.orga?.id
+            : null;
+        activities["place"] =
+          copy[prop].places && copy[prop].places.length > 0
+            ? copy[prop].places[0]?.id
+            : null;
+        activities["description"] = copy[prop].description;
+
+        console.log(activities);
+        arrActivitiesHydrated.push(activities);
+      }
+    }
+
+    formActivities.splice(0, formActivities.length);
+    formActivities.push(...arrActivitiesHydrated);
+
+    setFormActivities(formActivities);
+
+    console.log(formActivities);
 
     axios({
       method: "post",
@@ -317,6 +406,7 @@ function EditReportMeet(props) {
     }
 
     formData.append("activityType", 1);
+    formData.append("idRapport", props?.informationPatient?.id);
     formData.append("contacts", contacts);
     formData.append("changeTypeMeet", changeTypeMeet);
     formData.append("changeDate", changeDate);
@@ -347,9 +437,10 @@ function EditReportMeet(props) {
     formData.append("userId", userId);
     formData.append("patiId", patiId);
 
+    console.log(formData);
     axios({
       method: "post",
-      url: "/api/sendReport",
+      url: "/api/updateSendReport",
       data: formData,
       headers: {
         "Content-Type": "application/json",
@@ -357,17 +448,17 @@ function EditReportMeet(props) {
       },
     })
       .then(function (response) {
-        //
-        location.replace(window.location.origin + "/" + idPatient);
+        console.log(response);
+        // location.replace(window.location.origin + "/" + idPatient);
       })
       .catch(function (response) {
-        //
+        console.log(response);
       });
   };
 
   function onChangeValuesByOnCareForm(e) {
     if (formSoins.filter((el) => e[0].id === el.id)) {
-      formSoins.filter((el) => e[0].id === el.id)[0].type = e[0].type;
+      formSoins.filter((el) => e[0].id === el.id)[0].value = e[0].value;
       formSoins.filter((el) => e[0].id === el.id)[0].contact = e[0].contact;
       formSoins.filter((el) => e[0].id === el.id)[0].place = e[0].place;
       formSoins.filter((el) => e[0].id === el.id)[0].description =
@@ -378,10 +469,9 @@ function EditReportMeet(props) {
   }
 
   function onChangeValuesByActivitiesForm(e) {
-    //
-    //
+    console.log(e);
     if (formActivities.filter((el) => e[0].id === el.id)) {
-      formActivities.filter((el) => e[0].id === el.id)[0].type = e[0].type;
+      formActivities.filter((el) => e[0].id === el.id)[0].value = e[0].value;
       formActivities.filter((el) => e[0].id === el.id)[0].contact =
         e[0].contact;
       formActivities.filter((el) => e[0].id === el.id)[0].place = e[0].place;
@@ -389,6 +479,7 @@ function EditReportMeet(props) {
         e[0].description;
       //
     }
+    console.log(formActivities);
   }
 
   const onChangeValuesIndicateursForm = (e) => {
@@ -553,6 +644,7 @@ function EditReportMeet(props) {
                     id={idx}
                     type={type}
                     contacts={props?.contacts}
+                    formCaresEdit={form}
                     places={props.places}
                     onChange={onChangeValuesByOnCareForm}
                   ></AddSoinsByReport>
@@ -613,6 +705,7 @@ function EditReportMeet(props) {
                     key={form.id}
                     contacts={props.contacts}
                     places={props.places}
+                    formActivitiesEdit={form}
                     onChange={onChangeValuesByActivitiesForm}
                   ></AddActivitiesByReport>
                   {formActivities && formActivities.length > 1 && (
@@ -775,7 +868,7 @@ function EditReportMeet(props) {
         content={props.informationPatient.content}
       ></Editor>
 
-      <button onClick={(e) => sentRapport(e)}>Envoyer</button>
+      <button onClick={(e) => sentRapport(e)}>Confirmer</button>
     </div>
   );
 }

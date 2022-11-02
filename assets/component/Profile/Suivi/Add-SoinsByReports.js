@@ -23,7 +23,7 @@ function AddSoinsByReport(props) {
   var formData = new FormData();
   formData.append("id", 108);
 
-  const [typeValue, setValueTypeForm] = useState(null);
+  const [value, setValueTypeForm] = useState(null);
   const [contactValue, setValueContactForm] = useState(null);
   const [placeForm, setValuePlaceForm] = useState(null);
   const [idPatient, setIdPatient] = useState(id);
@@ -100,7 +100,7 @@ function AddSoinsByReport(props) {
   props.onChange([
     {
       id: props.id,
-      type: typeValue,
+      value: value,
       contact: contactValue,
       place: placeForm,
       description: valueDescription,
@@ -113,29 +113,44 @@ function AddSoinsByReport(props) {
   //   placeForm,
   //   valueDescription
   // );
-
+  // formCaresEdit
   //
   return (
     <>
       <div className="addSoins-form">
         <Form.Label htmlFor="inputValue">Type</Form.Label>
-        <InputTypeList type={type} onChange={handleChangeType} />
+        <InputTypeList
+          type={type}
+          onChange={handleChangeType}
+          defaultValue={props.formCaresEdit?.value}
+        />
         <Form.Label htmlFor="inputValue">Description</Form.Label>
         <Form.Control
           type="text"
           id="inputValueSpécifique"
           aria-describedby="valueSpécifique"
           onChange={(e) => onChangeDescription(e)}
+          defaultValue={props.formCaresEdit?.description}
         />
 
         <InputContactList
           contacts={props?.contacts}
           onChange={handleChangeContacts}
+          defaultValue={
+            props.formCaresEdit?.contacts && props.formCaresEdit?.contacts[0]
+              ? props.formCaresEdit?.contacts[0]?.orga?.id
+              : ""
+          }
         ></InputContactList>
 
         <InputPlaceList
           places={props.places}
           onChange={handleChangePlaces}
+          defaultValue={
+            props.formCaresEdit?.places && props.formCaresEdit?.places[0]
+              ? props.formCaresEdit?.places[0]?.id
+              : ""
+          }
         ></InputPlaceList>
       </div>
     </>

@@ -135,8 +135,8 @@ function IndicateursFormCVC(props) {
             as="textarea"
             rows={3}
             defaultValue={
-              props.editForm && props.editForm[0].comment
-                ? props.editForm[0].comment
+              props?.editForm && props?.editForm[0]?.comment
+                ? props?.editForm[0]?.comment
                 : ""
             }
             onChange={(e) => onChangeDescriptionCorps(e)}

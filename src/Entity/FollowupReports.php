@@ -19,7 +19,7 @@ class FollowupReports
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?int $activity_type = null;
 
     #[ORM\Column(nullable: true)]

@@ -61,7 +61,13 @@ function InputTypeList(props) {
       >
         <option>Choissisez le type</option>
         {props?.type?.data?.map((el, id) => (
-          <>{el.value && <option value={id}>{el?.value}</option>}</>
+          <>
+            {el.value && (
+              <option value={el.id} selected={el.id === props.defaultValue}>
+                {el?.value}
+              </option>
+            )}
+          </>
         ))}
       </Form.Select>
     </>
