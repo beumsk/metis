@@ -119,7 +119,7 @@ function EditReportMeet(props) {
       new Date(props?.informationPatient?.reportDate?.timestamp * 1000).toJSON()
     );
 
-    console.log(props.informationPatient);
+    // console.log(props.informationPatient);
     // setFormIndicateurs([
     //   {
     //     id: 0,
@@ -147,10 +147,10 @@ function EditReportMeet(props) {
 
       let arrCareHydrated = [];
       for (var prop in copyCares) {
-        console.log(prop);
+        // console.log(prop);
         if (Object.prototype.hasOwnProperty.call(copyCares, prop)) {
           var care = new Cares();
-          console.log(care);
+          // console.log(care);
           care["care_id"] = copyCares[prop]?.id;
           care["id"] = Number(prop);
           care["value"] = Number(copyCares[prop].activity?.id);
@@ -164,7 +164,7 @@ function EditReportMeet(props) {
               : null;
           care["description"] = copyCares[prop].description;
 
-          console.log(copyCares);
+          // console.log(copyCares);
           arrCareHydrated.push(care);
         }
       }
@@ -193,7 +193,7 @@ function EditReportMeet(props) {
           var activities = new Activities();
           var editID = JSON.parse(JSON.stringify(...formActivities))[prop].id;
           let copyID = editID;
-          console.log(activities);
+          // console.log(activities);
           activities["act_id"] = copy[prop].id;
           activities["id"] = Number(prop);
 
@@ -216,7 +216,7 @@ function EditReportMeet(props) {
 
       formActivities.splice(0, formActivities.length);
       formActivities.push(...arrActivitiesHydrated);
-      console.log(formActivities);
+      // console.log(formActivities);
       setFormActivities(formActivities);
     }
 
@@ -550,10 +550,18 @@ function EditReportMeet(props) {
           for (let index = 0; index < formIndicateurs.length; index++) {
             let indi = formIndicateurs[index];
             formIndicateurs[index].rapportId = response.idRapport;
+            let formData = new FormData();
+
+            formData.append(
+              "rapportId",
+              response.data.id ? response.data.id : null
+            );
+
+            formData.append("formIndicateurs", JSON.stringify(indi));
             axios({
               method: "post",
               url: "/api/addIndicators",
-              data: JSON.stringify(indi),
+              data: formData,
               headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${auth.auth.accessToken}`,
@@ -611,6 +619,7 @@ function EditReportMeet(props) {
 
   const onChangeValuesIndicateursForm = (e) => {
     // setSelectedTypeCVC(e[0].selectedOptionType);
+    // console.log(e);
 
     let opt = [
       "HESTIA - Risque perte logement",
@@ -640,8 +649,14 @@ function EditReportMeet(props) {
       formIndicateurs.filter(
         (el) => e[0].id === el.id
       )[0].indicateursEstLeLogement = e[0].indicateursEstLeLogement;
+      formIndicateurs.filter((el) => e[0].id === el.id)[0].id_corps =
+        e[0].id_corps;
+      formIndicateurs.filter((el) => e[0].id === el.id)[0].id_vetements =
+        e[0].id_vetements;
+      formIndicateurs.filter((el) => e[0].id === el.id)[0].id_comportement =
+        e[0].id_comportement;
     }
-
+    console.log("FINAL", formIndicateurs);
     if (
       formIndicateurs &&
       e[0].selectedOptionType &&
@@ -708,7 +723,7 @@ function EditReportMeet(props) {
   };
 
   if (formIndicateurs !== null) {
-    // console.log(formIndicateurs);
+    console.log(formIndicateurs);
   }
 
   function getDifference(array1, array2) {
@@ -890,7 +905,7 @@ function EditReportMeet(props) {
                   <AddIndicateursByReport
                     type={type}
                     key={idx}
-                    id={idx}
+                    id={form.id}
                     // followupReportsIndicators={
                     //   formIndicateurs
                     // }

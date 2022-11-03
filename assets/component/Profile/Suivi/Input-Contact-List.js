@@ -34,7 +34,7 @@ function InputContactList(props) {
   const onChangeContact = (e) => {
     props.onChange(e.target.value);
   };
-  console.log(props?.contacts);
+  // console.log(props?.contacts);
   return (
     <>
       <Form.Label htmlFor="inputValue">Contacts</Form.Label>

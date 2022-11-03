@@ -64,6 +64,7 @@ function AddIndicateursByReport(props) {
 
   const onChangeIndicateursEstiaLogement = (e) => {
     setIndicateursLogement(e);
+    setTypeCVCSelected("HESTIA - Risque perte logement");
     setIndicateursFormHestiaRisqueDeces(null);
     setIndicateursFormCVC(null);
   };
@@ -72,29 +73,28 @@ function AddIndicateursByReport(props) {
     setIndicateursFormHestiaRisqueDeces(e);
     setIndicateursFormCVC(null);
     setIndicateursLogement(null);
+    setTypeCVCSelected("HESTIA - Risque décès");
   };
 
-  const onChangeIndicateursFormCVC = (e) => {
-    if (CSVAlreadyAsked && CSVAlreadyAsked.length > 0) {
-      setIndicateursFormCVC(CSVAlreadyAsked);
-      setTypeCVCSelected("CVC");
-
-      //
-    } else {
-      setIndicateursFormCVC(e);
-    }
-
+  const onChangeIndicateursFormCVC = (indicateursFormCVC) => {
+    console.log(indicateursFormCVC);
+    setIndicateursFormCVC(indicateursFormCVC);
     setIndicateursLogement(null);
     setIndicateursFormHestiaRisqueDeces(null);
+    setTypeCVCSelected("CVC");
+    // if (CSVAlreadyAsked && CSVAlreadyAsked.length > 0) {
+    //   setIndicateursFormCVC(CSVAlreadyAsked);
+    //   setTypeCVCSelected("CVC");
+
+    //   //
+    // } else {
+    //   setIndicateursFormCVC(e);
+    // }
+
+    // setIndicateursLogement(null);
+    // setIndicateursFormHestiaRisqueDeces(null);
   };
 
-  //   selectedOptionType: typeCVCSelected ? typeCVCSelected : null,
-  //   id: props.id,
-  //   indicateursEstLeLogement: indicateursEstLeLogement,
-  //   indicateursFormHestiaRisqueDeces: indicateursFormHestiaRisqueDeces,
-  //   indicateursFormCVC: indicateursFormCVC,
-  // });
-  //
   props.onChange([
     {
       selectedOptionType: typeCVCSelected ? typeCVCSelected : null,
@@ -106,7 +106,10 @@ function AddIndicateursByReport(props) {
       indicateursFormHestiaRisqueDeces: indicateursFormHestiaRisqueDeces
         ? indicateursFormHestiaRisqueDeces
         : null,
-      indicateursFormCVC: indicateursFormCVC ? indicateursFormCVC : null,
+      indicateursFormCVC:
+        indicateursFormCVC && indicateursFormCVC.length > 0
+          ? indicateursFormCVC
+          : null,
     },
   ]);
   //
