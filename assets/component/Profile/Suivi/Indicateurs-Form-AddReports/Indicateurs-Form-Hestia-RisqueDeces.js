@@ -21,16 +21,51 @@ function IndicateursFormHestiaRisqueDeces(props) {
   formData.append("id", 57);
 
   const [idPatient, setIdPatient] = useState(id);
-  const [valueSecuritee, setChoiceSecuriteeSelected] = useState(null);
-  const [descriptionSecuritee, setDescriptionSecuriteeSelected] =
-    useState(null);
 
-  const [valueSantee, setChoiceSanteeSelected] = useState(null);
-  const [descriptionSantee, setDescriptionSanteeSelected] = useState(null);
+  const [idSecuritee, setidSecuritee] = useState(
+    props?.editForm && props?.editForm[0]?.id ? props?.editForm[0]?.id : null
+  );
+  const [idSantee, setidSantee] = useState(
+    props?.editForm && props?.editForm[1]?.id ? props?.editForm[1]?.id : null
+  );
 
-  const [valueConsommation, setChoiceConsommationSelected] = useState(null);
+  const [idConsommation, setidConsommation] = useState(
+    props?.editForm && props?.editForm[2]?.id ? props?.editForm[2]?.id : null
+  );
+
+  const [valueSecuritee, setChoiceSecuriteeSelected] = useState(
+    props?.editForm && props?.editForm[0]?.value
+      ? props?.editForm[0]?.value
+      : null
+  );
+  const [descriptionSecuritee, setDescriptionSecuriteeSelected] = useState(
+    props?.editForm && props?.editForm[0]?.comment
+      ? props?.editForm[0]?.comment
+      : null
+  );
+
+  const [valueSantee, setChoiceSanteeSelected] = useState(
+    props?.editForm && props.editForm[1]?.value
+      ? props.editForm[1]?.value
+      : null
+  );
+  const [descriptionSantee, setDescriptionSanteeSelected] = useState(
+    props?.editForm && props.editForm[1]?.comment
+      ? props.editForm[1]?.comment
+      : null
+  );
+
+  const [valueConsommation, setChoiceConsommationSelected] = useState(
+    props?.editForm && props.editForm[2]?.value
+      ? Number(props.editForm[2]?.value)
+      : null
+  );
   const [descriptionConsommation, setDescriptionConsommationSelected] =
-    useState(null);
+    useState(
+      props?.editForm && props?.editForm[2]?.comment
+        ? props?.editForm[2]?.comment
+        : null
+    );
 
   const choiceSecuritee = (e) => {
     setChoiceSecuriteeSelected(e);
@@ -60,6 +95,9 @@ function IndicateursFormHestiaRisqueDeces(props) {
   props.onChange([
     {
       id: props.id,
+      id_secur: idSecuritee,
+      id_sant: idSantee,
+      id_conso: idConsommation,
       valueSecuritee: valueSecuritee,
       descriptionSecuritee: descriptionSecuritee,
       valueSantee: valueSantee,

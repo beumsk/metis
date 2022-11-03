@@ -66,18 +66,6 @@ function IndicateursFormCVC(props) {
       : null
   );
 
-  let obj = {
-    id: props.id,
-    id_corps: idCorps,
-    id_vetements: idVetements,
-    id_comportement: idComportement,
-    corpsScore: corpsScore,
-    corpsDescription: corpsDescription,
-    vetementsScore: vetementsScore,
-    vetementsDescription: vetementsDescription,
-    comportementScore: comportementScore,
-    comportementDescription: comportementDescription,
-  };
   useEffect(() => {
     setCorpsScore(corpsScore);
   }, [idPatient, corpsScore]);

@@ -26,16 +26,62 @@ function IndicateursFormHestiaPerteLogement(props) {
   const [elementsOpt, setElementsOpt] = useState(null);
   const [idPatient, setIdPatient] = useState(id);
   const [typeCVCSelected, setTypeCVCSelected] = useState(null);
-  const [bailleurSelected, setBailleurSelected] = useState(null);
-  const [voisinageSelected, setVoisinageSelected] = useState(null);
-  const [hygieneSelected, setHygieneSelected] = useState(null);
-  const [descriptionVoisinage, setDescriptionVoisinage] = useState(null);
-  const [descriptionHygiene, setDescriptionHygiene] = useState(null);
-  const [descriptionBailleur, setDescriptionBailleur] = useState(null);
+
   const [type, setType] = useState(null);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  console.log(props.form);
+  // const [vetementsDescription, setDescriptionVetements] = useState(
+  //   props?.editForm && props.editForm[2]?.comment
+  //     ? props.form[2]?.comment
+  //     : null
+  // );
   useEffect(() => {}, [idPatient]);
+
+  const [idBailleur, setidBailleur] = useState(
+    props?.editForm && props?.editForm[0]?.id ? props?.editForm[0]?.id : null
+  );
+  const [idVoisinage, setidVoisinage] = useState(
+    props?.editForm && props?.editForm[1]?.id ? props?.editForm[1]?.id : null
+  );
+
+  const [idHygiene, setidHygiene] = useState(
+    props?.editForm && props?.editForm[2]?.id ? props?.editForm[2]?.id : null
+  );
+
+  const [voisinageSelected, setVoisinageSelected] = useState(
+    props?.editForm && props?.editForm[0]?.value
+      ? props?.editForm[0]?.value
+      : null
+  );
+  const [descriptionVoisinage, setDescriptionVoisinage] = useState(
+    props?.editForm && props?.editForm[0]?.comment
+      ? props?.editForm[0]?.comment
+      : null
+  );
+
+  const [hygieneSelected, setHygieneSelected] = useState(
+    props?.editForm && props.editForm[1]?.value
+      ? props.editForm[1]?.value
+      : null
+  );
+  const [descriptionHygiene, setDescriptionHygiene] = useState(
+    props?.editForm && props.editForm[1]?.comment
+      ? props.editForm[1]?.comment
+      : null
+  );
+
+  const [bailleurSelected, setBailleurSelected] = useState(
+    props?.editForm && props.editForm[2]?.value
+      ? Number(props.editForm[2]?.value)
+      : null
+  );
+  const [descriptionBailleur, setDescriptionBailleur] = useState(
+    props?.editForm && props?.editForm[2]?.comment
+      ? props?.editForm[2]?.comment
+      : null
+  );
 
   const onChangeDescriptionHygiene = (e) => {
     setDescriptionHygiene(e.target.value);
@@ -67,6 +113,9 @@ function IndicateursFormHestiaPerteLogement(props) {
   props.onChange([
     {
       id: props.id,
+      id_bailleur: idBailleur,
+      id_voisinage: idVoisinage,
+      id_hygiene: idHygiene,
       bailleurSelected: bailleurSelected,
       voisinageSelected: voisinageSelected,
       hygieneSelected: hygieneSelected,

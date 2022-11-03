@@ -60,6 +60,7 @@ function EditReportMeet(props) {
   const [formIndicateurs, setFormIndicateurs] = useState([
     {
       id: 0,
+
       selectedOptionType: "CVC",
       indicateursFormCVC: props.indicatorsResponse
         ? [...props.indicatorsResponse]
@@ -68,6 +69,8 @@ function EditReportMeet(props) {
       indicateursEstLeLogement: null,
     },
   ]);
+
+  console.log(props.indicatorsResponse);
   const [selectedTypeCVC, setSelectedTypeCVC] = useState(null);
   //   formData.append("pathString", props.link);
   const [options, setOptions] = useState([
@@ -655,6 +658,20 @@ function EditReportMeet(props) {
         e[0].id_vetements;
       formIndicateurs.filter((el) => e[0].id === el.id)[0].id_comportement =
         e[0].id_comportement;
+
+      formIndicateurs.filter((el) => e[0].id === el.id)[0].id_bailleur =
+        e[0].id_bailleur;
+      formIndicateurs.filter((el) => e[0].id === el.id)[0].id_voisinage =
+        e[0].id_voisinage;
+      formIndicateurs.filter((el) => e[0].id === el.id)[0].id_hygiene =
+        e[0].id_hygiene;
+
+      formIndicateurs.filter((el) => e[0].id === el.id)[0].id_secur =
+        e[0].id_secur;
+      formIndicateurs.filter((el) => e[0].id === el.id)[0].id_sant =
+        e[0].id_sant;
+      formIndicateurs.filter((el) => e[0].id === el.id)[0].id_conso =
+        e[0].id_conso;
     }
     console.log("FINAL", formIndicateurs);
     if (

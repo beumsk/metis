@@ -266,8 +266,93 @@ class FollowUpReportsController extends AbstractController
         // dd($indicateurs_jsondecode);
         if ($indicateurs_jsondecode !== null) {
             if ($indicateurs_jsondecode->selectedOptionType === "HESTIA - Risque décès") {
+                $securitee = ($indicateurs_jsondecode->indicateursFormHestiaRisqueDeces[0]->id_secur !== null) ? $doctrine->getRepository(FollowupReportsIndicators::class)->find($indicateurs_jsondecode->indicateursFormHestiaRisqueDeces[0]->id_secur) : null;
+                $santee = ($indicateurs_jsondecode->indicateursFormHestiaRisqueDeces[0]->id_sant !== null) ? $doctrine->getRepository(FollowupReportsIndicators::class)->find($indicateurs_jsondecode->indicateursFormHestiaRisqueDeces[0]->id_sant) : null;
+                $consommation = ($indicateurs_jsondecode->indicateursFormHestiaRisqueDeces[0]->id_conso !== null) ? $doctrine->getRepository(FollowupReportsIndicators::class)->find($indicateurs_jsondecode->indicateursFormHestiaRisqueDeces[0]->id_conso) : null;
 
-                dd($indicateurs_jsondecode->indicateursFormHestiaRisqueDeces[0]);
+                if ($securitee === null) {
+                    $indicators = new FollowupReportsIndicators();
+                    $indi = $doctrine->getRepository(Indicators::class)->find(7);
+                    $fore = $doctrine->getRepository(FollowupReports::class)->find($reportId);
+
+                    $indicators->setFore($fore);
+                    $indicators->setIndi($indi);
+                    $indicators->setValue($indicateurs_jsondecode->indicateursFormHestiaRisqueDeces[0]->valueSecuritee);
+                    $indicators->setComment($indicateurs_jsondecode->indicateursFormHestiaRisqueDeces[0]->descriptionSecuritee);
+                    $entityManager->persist($indicators);
+
+                    $entityManager->flush();
+                }
+
+                if ($santee === null) {
+                    $indicators = new FollowupReportsIndicators();
+                    $indi = $doctrine->getRepository(Indicators::class)->find(8);
+                    $fore = $doctrine->getRepository(FollowupReports::class)->find($reportId);
+
+                    $indicators->setFore($fore);
+                    $indicators->setIndi($indi);
+                    $indicators->setValue($indicateurs_jsondecode->indicateursFormHestiaRisqueDeces[0]->valueSantee);
+                    $indicators->setComment($indicateurs_jsondecode->indicateursFormHestiaRisqueDeces[0]->descriptionSantee);
+                    $entityManager->persist($indicators);
+
+                    $entityManager->flush();
+                }
+
+                if ($consommation === null) {
+                    $indicators = new FollowupReportsIndicators();
+                    $indi = $doctrine->getRepository(Indicators::class)->find(9);
+                    $fore = $doctrine->getRepository(FollowupReports::class)->find($reportId);
+
+                    $indicators->setFore($fore);
+                    $indicators->setIndi($indi);
+                    $indicators->setValue($indicateurs_jsondecode->indicateursFormHestiaRisqueDeces[0]->valueConsommation);
+                    $indicators->setComment($indicateurs_jsondecode->indicateursFormHestiaRisqueDeces[0]->descriptionConsommation);
+                    $entityManager->persist($indicators);
+
+                    $entityManager->flush();
+                }
+
+                if ($securitee !== null) {
+                    $indicators = new FollowupReportsIndicators();
+                    $indi = $doctrine->getRepository(Indicators::class)->find(7);
+                    $fore = $doctrine->getRepository(FollowupReports::class)->find($reportId);
+
+                    $indicators->setFore($fore);
+                    $indicators->setIndi($indi);
+                    $indicators->setValue($indicateurs_jsondecode->indicateursFormHestiaRisqueDeces[0]->valueSecuritee);
+                    $indicators->setComment($indicateurs_jsondecode->indicateursFormHestiaRisqueDeces[0]->descriptionSecuritee);
+                    // $entityManager->persist($indicators);
+
+                    $entityManager->flush();
+                }
+
+                if ($santee !== null) {
+                    $indicators = new FollowupReportsIndicators();
+                    $indi = $doctrine->getRepository(Indicators::class)->find(8);
+                    $fore = $doctrine->getRepository(FollowupReports::class)->find($reportId);
+
+                    $indicators->setFore($fore);
+                    $indicators->setIndi($indi);
+                    $indicators->setValue($indicateurs_jsondecode->indicateursFormHestiaRisqueDeces[0]->valueSantee);
+                    $indicators->setComment($indicateurs_jsondecode->indicateursFormHestiaRisqueDeces[0]->descriptionSantee);
+                    // $entityManager->persist($indicators);
+
+                    $entityManager->flush();
+                }
+
+                if ($consommation !== null) {
+                    $indicators = new FollowupReportsIndicators();
+                    $indi = $doctrine->getRepository(Indicators::class)->find(9);
+                    $fore = $doctrine->getRepository(FollowupReports::class)->find($reportId);
+
+                    $indicators->setFore($fore);
+                    $indicators->setIndi($indi);
+                    $indicators->setValue($indicateurs_jsondecode->indicateursFormHestiaRisqueDeces[0]->valueConsommation);
+                    $indicators->setComment($indicateurs_jsondecode->indicateursFormHestiaRisqueDeces[0]->descriptionConsommation);
+                    // $entityManager->persist($indicators);
+
+                    $entityManager->flush();
+                }
             }
             if ($indicateurs_jsondecode->selectedOptionType === "CVC") {
                 // dd($indicateurs_jsondecode);
@@ -359,7 +444,94 @@ class FollowUpReportsController extends AbstractController
             }
             if ($indicateurs_jsondecode->selectedOptionType === "HESTIA - Risque perte logement") {
 
-                dd($indicateurs_jsondecode->indicateursEstLeLogement[0]);
+                // dd($indicateurs_jsondecode->indicateursEstLeLogement[0]);
+                $bailleur = ($indicateurs_jsondecode->indicateursEstLeLogement[0]->id_bailleur !== null) ? $doctrine->getRepository(FollowupReportsIndicators::class)->find($indicateurs_jsondecode->indicateursFormHestiaRisqueDeces[0]->id_bailleur) : null;
+                $hygiene = ($indicateurs_jsondecode->indicateursEstLeLogement[0]->id_hygiene !== null) ? $doctrine->getRepository(FollowupReportsIndicators::class)->find($indicateurs_jsondecode->indicateursFormHestiaRisqueDeces[0]->id_hygiene) : null;
+                $voisinage = ($indicateurs_jsondecode->indicateursEstLeLogement[0]->id_voisinage !== null) ? $doctrine->getRepository(FollowupReportsIndicators::class)->find($indicateurs_jsondecode->indicateursFormHestiaRisqueDeces[0]->id_voisinage) : null;
+
+                if ($bailleur === null) {
+                    $indicators = new FollowupReportsIndicators();
+                    $indi = $doctrine->getRepository(Indicators::class)->find(6);
+                    $fore = $doctrine->getRepository(FollowupReports::class)->find($reportId);
+
+                    $indicators->setFore($fore);
+                    $indicators->setIndi($indi);
+                    $indicators->setValue($indicateurs_jsondecode->indicateursEstLeLogement[0]->bailleurSelected);
+                    $indicators->setComment($indicateurs_jsondecode->indicateursEstLeLogement[0]->descriptionBailleur);
+                    $entityManager->persist($indicators);
+
+                    $entityManager->flush();
+                }
+
+                if ($hygiene === null) {
+                    $indicators = new FollowupReportsIndicators();
+                    $indi = $doctrine->getRepository(Indicators::class)->find(5);
+                    $fore = $doctrine->getRepository(FollowupReports::class)->find($reportId);
+
+                    $indicators->setFore($fore);
+                    $indicators->setIndi($indi);
+                    $indicators->setValue($indicateurs_jsondecode->indicateursEstLeLogement[0]->bailleurSelected);
+                    $indicators->setComment($indicateurs_jsondecode->indicateursEstLeLogement[0]->descriptionBailleur);
+                    $entityManager->persist($indicators);
+
+                    $entityManager->flush();
+                }
+
+                if ($voisinage === null) {
+                    $indicators = new FollowupReportsIndicators();
+                    $indi = $doctrine->getRepository(Indicators::class)->find(4);
+                    $fore = $doctrine->getRepository(FollowupReports::class)->find($reportId);
+
+                    $indicators->setFore($fore);
+                    $indicators->setIndi($indi);
+                    $indicators->setValue($indicateurs_jsondecode->indicateursEstLeLogement[0]->bailleurSelected);
+                    $indicators->setComment($indicateurs_jsondecode->indicateursEstLeLogement[0]->descriptionBailleur);
+                    $entityManager->persist($indicators);
+
+                    $entityManager->flush();
+                }
+
+                if ($bailleur !== null) {
+                    $indicators = new FollowupReportsIndicators();
+                    $indi = $doctrine->getRepository(Indicators::class)->find(6);
+                    $fore = $doctrine->getRepository(FollowupReports::class)->find($reportId);
+
+                    $indicators->setFore($fore);
+                    $indicators->setIndi($indi);
+                    $indicators->setValue($indicateurs_jsondecode->indicateursEstLeLogement[0]->bailleurSelected);
+                    $indicators->setComment($indicateurs_jsondecode->indicateursEstLeLogement[0]->descriptionBailleur);
+                    // $entityManager->persist($indicators);
+
+                    $entityManager->flush();
+                }
+
+                if ($hygiene !== null) {
+                    $indicators = new FollowupReportsIndicators();
+                    $indi = $doctrine->getRepository(Indicators::class)->find(5);
+                    $fore = $doctrine->getRepository(FollowupReports::class)->find($reportId);
+
+                    $indicators->setFore($fore);
+                    $indicators->setIndi($indi);
+                    $indicators->setValue($indicateurs_jsondecode->indicateursEstLeLogement[0]->bailleurSelected);
+                    $indicators->setComment($indicateurs_jsondecode->indicateursEstLeLogement[0]->descriptionBailleur);
+                    // $entityManager->persist($indicators);
+
+                    $entityManager->flush();
+                }
+
+                if ($voisinage !== null) {
+                    $indicators = new FollowupReportsIndicators();
+                    $indi = $doctrine->getRepository(Indicators::class)->find(4);
+                    $fore = $doctrine->getRepository(FollowupReports::class)->find($reportId);
+
+                    $indicators->setFore($fore);
+                    $indicators->setIndi($indi);
+                    $indicators->setValue($indicateurs_jsondecode->indicateursEstLeLogement[0]->bailleurSelected);
+                    $indicators->setComment($indicateurs_jsondecode->indicateursEstLeLogement[0]->descriptionBailleur);
+                    // $entityManager->persist($indicators);
+
+                    $entityManager->flush();
+                }
             }
             // dd($key);
 
