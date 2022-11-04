@@ -39,28 +39,41 @@ class FollowupReportsRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return FollowupReports[] Returns an array of FollowupReports objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('f')
-//            ->andWhere('f.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('f.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    /**
+     * @return FollowupReports[] Returns an array of FollowupReports objects
+     */
+    public function findByDesc($id): array
+    {
+        // NICE TO HAVE: order the rapports by users
+        // dd($patient);
+        $qb = $this->getEntityManager()->createQueryBuilder();
 
-//    public function findOneBySomeField($value): ?FollowupReports
-//    {
-//        return $this->createQueryBuilder('f')
-//            ->andWhere('f.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+        $qb->select('m')
+            ->from('App:FollowupReports', 'm')
+            ->where(
+                $qb->expr()->andX(
+                    'm.pati = :id'
+                    // 'm.deleted_at = null',
+                )
+            )
+            ->setMaxResults(10)
+            ->orderBy('m.creation_date', 'desc')
+            ->setParameters(
+                array(
+                    'id' => $id
+                )
+            );
+
+        return $qb->getQuery()->getResult();
+    }
+
+    //    public function findOneBySomeField($value): ?FollowupReports
+    //    {
+    //        return $this->createQueryBuilder('f')
+    //            ->andWhere('f.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->getQuery()
+    //            ->getOneOrNullResult()
+    //        ;
+    //    }
 }

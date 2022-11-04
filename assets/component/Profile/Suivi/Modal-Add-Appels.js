@@ -24,13 +24,26 @@ function ModalAddAppels(props) {
   typeFormData.append("id", 57);
   var funcAppelFormData = new FormData();
   funcAppelFormData.append("id", 658);
+
+  var valueFormData = new FormData();
+  valueFormData.append("id", 174);
   //   formData.append("pathString", props.link);
   const [contacts, setContacts] = useState(null);
   const [fonction, setFonction] = useState(null);
   const [idPatient, setIdPatient] = useState(id);
   const [type, setType] = useState(null);
+
+  // FormwhatDoinFunction
+  const [callsFunctionValue, setCallsFunction] = useState(null);
+  const [isCallsPatients, setIsCallsPatients] = useState(false);
+  const [isPriority, setPriority] = useState(false);
+  const [contact, setonChangeContact] = useState(null);
+  const [description, setDescription] = useState(null);
+  const [whatDoinFunction, setWhatDoinFunction] = useState(null);
+  const [valueWhatDoinFunction, setValueWhatDoinFunction] = useState(null);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
   useEffect(() => {
     axios({
       method: "post",
@@ -58,9 +71,54 @@ function ModalAddAppels(props) {
         setType(response);
       })
       .catch(function (response) {});
+
+    axios({
+      method: "post",
+      url: "/api/suggestionsById",
+      data: valueFormData,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    })
+      .then(function (response) {
+        setWhatDoinFunction(response);
+      })
+      .catch(function (response) {});
   }, [idPatient]);
   //
 
+  const onChangeFunction = (e) => {
+    setCallsFunction(e.target.value);
+  };
+
+  const onChangeContacts = (e) => {
+    setonChangeContact(e);
+  };
+
+  const onChangeDescription = (e) => {
+    setDescription(e.target.value);
+  };
+
+  const onChangeWhatDoinFunction = (e) => {
+    // console.log(e);
+    // setWhatDoinFunction(e.target.value);
+    setValueWhatDoinFunction(e.target.value);
+  };
+  function onSent() {
+    // isCall is true appel entrant
+
+    let obj = {};
+
+    console.log(
+      callsFunctionValue,
+      isCallsPatients,
+      isPriority,
+      contact,
+      description,
+      valueWhatDoinFunction
+    );
+  }
   //   /api/getContacts
   return (
     <>
@@ -75,33 +133,61 @@ function ModalAddAppels(props) {
         <Modal.Body>
           {" "}
           <>
-            <Form.Label htmlFor="inputValue">Fonction</Form.Label>
-            <Form.Select size="lg">
+            <Form.Label htmlFor="inputValue">Fonction du référent</Form.Label>
+            <Form.Select size="lg" onChange={(e) => onChangeFunction(e)}>
+              <option>Rajoutez la fonction du référent</option>
               {fonction?.data?.map((el, id) => (
-                <>{el.value && <option>{el?.value}</option>}</>
+                <>{el.value && <option value={el?.id}>{el?.value}</option>}</>
               ))}
             </Form.Select>
+            <Form.Label htmlFor="inputValue">Value</Form.Label>
+            <Form.Select
+              size="lg"
+              onChange={(e) => onChangeWhatDoinFunction(e)}
+            >
+              <option>Rajoutez sa valeur</option>
+              {whatDoinFunction?.data?.map((el, id) => (
+                <>{el.value && <option value={el?.id}>{el?.value}</option>}</>
+              ))}
+            </Form.Select>
+
             <Form.Control type="text" id="inputText" className="mt-4" />
             <Form.Group className="mb-3" controlId="formBasicCheckbox">
-              <Form.Check type="checkbox" label="Prioritaire ?" />
+              <Form.Check
+                type="checkbox"
+                label="Prioritaire ?"
+                onClick={(e) => setPriority(true)}
+              />
             </Form.Group>
             <Form.Group className="mb-3 mt-4" controlId="formBasicCheckbox">
-              <Form.Check type="checkbox" label="Appeler ce patient ?" />
+              <Form.Check
+                type="checkbox"
+                label="Appeler ce patient ?"
+                onClick={(e) => setIsCallsPatients(!isCallsPatients)}
+              />
             </Form.Group>
+            {isCallsPatients === true && (
+              <InputContactList
+                contacts={props.contacts}
+                onChange={(e) => onChangeContacts(e)}
+              />
+            )}
 
-            <InputContactList contacts={props.contacts} />
-
-            <Form.Label htmlFor="inputValue">
+            {/* <Form.Label htmlFor="inputValue">
               Appel sortant (Création d'un rapport d'appel pour chaque contact)
             </Form.Label>
-            <Form.Control as="textarea" rows={3} />
+            <Form.Control as="textarea" rows={3} /> */}
             <Form.Label htmlFor="inputValue">Description</Form.Label>
-            <Form.Control as="textarea" rows={3} />
+            <Form.Control
+              as="textarea"
+              rows={3}
+              onChange={(e) => onChangeDescription(e)}
+            />
           </>
         </Modal.Body>
         <Modal.Footer>
           <Button onClick={handleClose}>Close</Button>
-          <Button onClick={handleClose}>Save Changes</Button>
+          <Button onClick={onSent}>Save Changes</Button>
         </Modal.Footer>
       </Modal>
     </>

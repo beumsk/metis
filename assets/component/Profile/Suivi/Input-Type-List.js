@@ -63,7 +63,7 @@ function InputTypeList(props) {
         {props?.type?.data?.map((el, id) => (
           <>
             {el.value && (
-              <option value={el.id} selected={el.id === props.defaultValue}>
+              <option defaultValue={el.id === props.defaultValue}>
                 {el?.value}
               </option>
             )}

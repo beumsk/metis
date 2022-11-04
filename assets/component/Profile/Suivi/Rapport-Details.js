@@ -135,7 +135,7 @@ function RapportDetails(props) {
                             <div className="col-sm-8">
                               {item.indi.description}
                             </div>
-                            {/* <div className="col-sm-4">{item.indi.comment}</div> */}
+                            <div className="col-sm-4">{item.indi.comment}</div>
                           </div>
                         ))}
                       </div>

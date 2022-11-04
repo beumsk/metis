@@ -53,7 +53,7 @@ function InputContactList(props) {
               el.deletedAt !== null && (
                 <option
                   value={el?.orga?.id}
-                  selected={
+                  defaultValue={
                     props.defaultValue === el?.orga?.id
                       ? props.defaultValue
                       : ""

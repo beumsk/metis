@@ -23,7 +23,9 @@ function AddSoinsByReport(props) {
   var formData = new FormData();
   formData.append("id", 108);
   const [idEditFormSoins, setIdEditFormSoins] = useState([
-    props.formCaresEdit.care_id,
+    props.formCaresEdit && props.formCaresEdit.care_id
+      ? props.formCaresEdit.care_id
+      : null,
   ]);
   const [value, setValueTypeForm] = useState(null);
   const [contact, setValueContactForm] = useState(null);

@@ -173,6 +173,7 @@ const Profile = () => {
                   : { border: "0" }
               }
               onClick={(e) => showDetailsReports()}
+              id="rapport_details-btn"
             >
               Rapports détaillées
             </button>

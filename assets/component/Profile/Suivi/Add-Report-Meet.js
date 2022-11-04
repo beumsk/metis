@@ -113,6 +113,7 @@ function AddReportMeet(props) {
   };
 
   const inputChangeTypeMeet = (e) => {
+    console.log(e);
     setChangeTypeMeet(e.target.value);
   };
 
@@ -238,43 +239,6 @@ function AddReportMeet(props) {
       }
     }
 
-    // let formActi = formActivities.map((el) => {
-    //   if (
-    //     Object.keys(el).length === 1 ||
-    //     JSON.stringify(el) ===
-    //       JSON.stringify({
-    //         id: el.id,
-    //         type: null,
-    //         contact: null,
-    //         place: null,
-    //         description: null,
-    //       })
-    //   ) {
-    //     return null;
-    //   } else {
-    //     return el;
-    //   }
-    // });
-
-    // let formCare = formSoins.map((el) => {
-    //
-    //   if (
-    //     Object.keys(el).length === 1 ||
-    //     JSON.stringify(el) ===
-    //       JSON.stringify({
-    //         id: el.id,
-    //         type: null,
-    //         contact: null,
-    //         place: null,
-    //         description: null,
-    //       })
-    //   ) {
-    //     return null;
-    //   } else {
-    //     return el;
-    //   }
-    // });
-
     formData.append("activityType", 1);
     formData.append("contacts", contacts);
     formData.append("changeTypeMeet", changeTypeMeet);
@@ -284,7 +248,7 @@ function AddReportMeet(props) {
     formData.append("changePlaces", changePlaces);
     formData.append("changeEditor", changeEditor);
     formData.append("goalsInput", goalsInput);
-    formData.append("meetType", meetType);
+    formData.append("meetType", changeTypeMeet);
     formData.append(
       "formSoins",
       JSON.stringify(formSoins) === JSON.stringify([{ id: 0 }])
@@ -316,7 +280,103 @@ function AddReportMeet(props) {
       },
     })
       .then(function (response) {
-        location.replace(window.location.origin + "/" + idPatient);
+        console.log(response);
+
+        if (response && formSoins) {
+          let endpoints = [];
+
+          for (let index = 0; index < formSoins.length; index++) {
+            endpoints.push("/api/addCaresToReport");
+          }
+
+          axios
+            .all(
+              endpoints.map((endpoint, i) => {
+                let care = formSoins[i];
+                let formData = new FormData();
+
+                formData.append(
+                  "rapportId",
+                  response.data.id ? response.data.id : null
+                );
+                formData.append("value", care.value ? care.value : null);
+                formData.append("formSoins", JSON.stringify(care));
+
+                axios({
+                  method: "post",
+                  url: endpoint,
+                  data: formData,
+                  headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${auth.auth.accessToken}`,
+                  },
+                });
+              })
+            )
+            .then((data) => console.log(data));
+        }
+
+        if (response && formActivities) {
+          let endpoints = [];
+
+          for (let index = 0; index < formActivities.length; index++) {
+            endpoints.push("/api/addActivitiesToReport");
+          }
+          axios
+            .all(
+              endpoints.map((endpoint, i) => {
+                let activities = formActivities[i];
+                let formData = new FormData();
+
+                formData.append(
+                  "rapportId",
+                  response.data.id ? response.data.id : null
+                );
+                formData.append(
+                  "value",
+                  activities.value ? activities.value : null
+                );
+                formData.append("formActivities", JSON.stringify(activities));
+
+                axios({
+                  method: "post",
+                  url: endpoint,
+                  data: formData,
+                  headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${auth.auth.accessToken}`,
+                  },
+                });
+              })
+            )
+            .then((data) => console.log(data));
+        }
+
+        if (response && formIndicateurs) {
+          for (let index = 0; index < formIndicateurs.length; index++) {
+            let indi = formIndicateurs[index];
+            formIndicateurs[index].rapportId = response.idRapport;
+            let formData = new FormData();
+
+            formData.append(
+              "rapportId",
+              response.data.id ? response.data.id : null
+            );
+
+            formData.append("formIndicateurs", JSON.stringify(indi));
+            axios({
+              method: "post",
+              url: "/api/addIndicators",
+              data: formData,
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${auth.auth.accessToken}`,
+              },
+            });
+          }
+        }
+        // location.replace(window.location.origin + "/" + idPatient);
+        document.getElementById("rapport_details-btn").click();
       })
       .catch(function (response) {});
   };
