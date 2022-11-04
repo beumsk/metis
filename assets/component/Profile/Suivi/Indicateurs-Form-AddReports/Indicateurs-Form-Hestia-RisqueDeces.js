@@ -92,8 +92,6 @@ function IndicateursFormHestiaRisqueDeces(props) {
   };
   //   /api/getContacts
 
-  console.log(props.editForm);
-
   props.onChange([
     {
       id: props.id,

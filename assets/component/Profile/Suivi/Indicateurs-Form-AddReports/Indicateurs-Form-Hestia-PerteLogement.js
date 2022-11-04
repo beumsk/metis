@@ -31,7 +31,6 @@ function IndicateursFormHestiaPerteLogement(props) {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  console.log(props.form);
   // const [vetementsDescription, setDescriptionVetements] = useState(
   //   props?.editForm && props.editForm[2]?.comment
   //     ? props.form[2]?.comment

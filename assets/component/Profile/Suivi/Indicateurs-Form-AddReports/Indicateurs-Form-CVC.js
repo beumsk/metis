@@ -94,26 +94,24 @@ function IndicateursFormCVC(props) {
     setDescriptionComportement(e.target.value);
   };
   //   /api/getContacts
-
+  console.log(props?.editForm);
   props.onChange([
     {
       id: props.id,
-      id_corps: idCorps ? idCorps : null,
-      corpsScore: corpsScore ? corpsScore : null,
+      id_corps: idCorps,
+      corpsScore: corpsScore,
       // id_indi:
-      corpsDescription: corpsDescription ? corpsDescription : null,
-      id_vetements: idVetements ? idVetements : null,
-      vetementsScore: vetementsScore ? vetementsScore : null,
-      vetementsDescription: vetementsDescription ? vetementsDescription : null,
-      id_comportement: idComportement ? idComportement : null,
-      comportementScore: comportementScore ? comportementScore : null,
-      comportementDescription: comportementDescription
-        ? comportementDescription
-        : null,
+      corpsDescription: corpsDescription,
+      id_vetements: idVetements,
+      vetementsScore: vetementsScore,
+      vetementsDescription: vetementsDescription,
+      id_comportement: idComportement,
+      comportementScore: comportementScore,
+      comportementDescription: comportementDescription,
     },
   ]);
 
-  // console.log({
+  //
   //   id: props.id,
   //   corpsScore: corpsScore ? corpsScore : props?.editForm[0]?.value,
   //   // corpsDescription: corpsDescription
@@ -130,8 +128,6 @@ function IndicateursFormCVC(props) {
   //   //   ? comportementDescription
   //   //   : props?.editForm[2]?.comment,
   // });
-
-  console.log(props?.editForm);
 
   return (
     <>

@@ -62,7 +62,6 @@ function RapportDetails(props) {
       },
     })
       .then(function (response) {
-        console.log(response);
         setInformations(response);
       })
       .catch(function (response) {});
@@ -94,7 +93,7 @@ function RapportDetails(props) {
                     defaultChecked={r.isHightlight === true}
                     onClick={(e) => {
                       // setToggle(!toggle);
-                      console.log(e);
+
                       if (e.target.checked === true) {
                         setToggle(!toggle);
                         r.isHightlight = toggle;

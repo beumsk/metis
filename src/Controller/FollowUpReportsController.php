@@ -461,6 +461,7 @@ class FollowUpReportsController extends AbstractController
                     $entityManager->persist($indicators);
 
                     $entityManager->flush();
+                    // dd($indicateurs_jsondecode->indicateursEstLeLogement[0]);
                 }
 
                 if ($hygiene === null) {

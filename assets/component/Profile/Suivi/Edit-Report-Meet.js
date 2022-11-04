@@ -86,7 +86,6 @@ function EditReportMeet(props) {
     },
   ]);
 
-  console.log(formIndicateurs);
   const [selectedTypeCVC, setSelectedTypeCVC] = useState(null);
   //   formData.append("pathString", props.link);
   const [options, setOptions] = useState([
@@ -102,11 +101,8 @@ function EditReportMeet(props) {
   const [contacts, setContacts] = useState(null);
   const [showAccesSoins, setAccesSoins] = useState(false);
   const [showActivities, setActivities] = useState(false);
-  const [showIndicateurs, setChoiceIndicateurs] = useState(
-    props.indicatorsResponse && props.indicatorsResponse.length > 0
-      ? true
-      : false
-  );
+  const [showIndicateurs, setChoiceIndicateurs] = useState(false);
+
   const [idPatient, setIdPatient] = useState(id);
   const [type, setType] = useState(null);
   const [typeFormActivities, setTypeFormActivities] = useState(null);
@@ -122,15 +118,24 @@ function EditReportMeet(props) {
   const [reportDate, setReportDate] = useState(null);
 
   useEffect(() => {
-    if (props.informationPatient?.noCare === 0) {
+    if (
+      props?.informationPatient &&
+      props?.informationPatient?.followupReportsCare?.length > 0
+    ) {
       choiceSoins(true);
     }
 
-    if (props.informationPatient?.noActivities === 0) {
+    if (
+      props?.informationPatient &&
+      props?.informationPatient?.followupReportsActivities?.length > 0
+    ) {
       choiceActivities(true);
     }
 
-    if (props.informationPatient?.noIndicators === 0) {
+    if (
+      props?.informationPatient &&
+      props?.informationPatient?.followupReportsIndicators?.length > 0
+    ) {
       choiceIndicateurs(true);
     }
 
@@ -138,19 +143,6 @@ function EditReportMeet(props) {
       new Date(props?.informationPatient?.reportDate?.timestamp * 1000).toJSON()
     );
 
-    // console.log(props.informationPatient);
-    // setFormIndicateurs([
-    //   {
-    //     id: 0,
-    //     selectedOptionType: "CVC",
-    //     indicateursFormCVC: [
-    //       props.indicatorsResponse.followupReportsIndicators,
-    //     ],
-    //     indicateursFormHestiaRisqueDeces: null,
-    //     indicateursEstLeLogement: null,
-    //   },
-    // ]);
-    // formIndicateurs.splice(0, formIndicateurs.length);
     if (props?.informationPatient?.followupReportsCare?.length > 0) {
       function Cares() {
         care_id: null;
@@ -237,6 +229,7 @@ function EditReportMeet(props) {
       formActivities.push(...arrActivitiesHydrated);
       // console.log(formActivities);
       setFormActivities(formActivities);
+      console.log(props.informationPatient);
     }
 
     // console.log(formActivities);
@@ -302,28 +295,6 @@ function EditReportMeet(props) {
     //
     setChangeDate(e.target.value);
   };
-
-  // if (
-  //   formIndicateurs &&
-  //   formIndicateurs[0] &&
-  //   formIndicateurs[0].indicateursFormCVC
-  // ) {
-  //   choiceIndicateurs(true);
-  //   // setFormIndicateurs(formIndicateurs);
-  //   // formIndicateurs.push({
-  //   //   id: 0,
-  //   //   selectedOptionType: "CVC",
-  //   //   indicateursFormCVC: [...props.indicatorsResponse],
-  //   //   indicateursFormHestiaRisqueDeces: null,
-  //   //   indicateursEstLeLogement: null,
-  //   // });
-
-  //   formIndicateurs[0].indicateursFormCVC = [...props.indicatorsResponse];
-  //
-  //   setFormIndicateurs(formIndicateurs);
-  // } else {
-  //   setFormIndicateurs([{ id: 0 }]);
-  // }
 
   const inputChangeGoals = (e) => {
     //
@@ -588,7 +559,7 @@ function EditReportMeet(props) {
             });
           }
         }
-        // location.replace(window.location.origin + "/" + idPatient);
+        location.replace(window.location.origin + "/" + idPatient);
       })
       .catch(function (response) {
         console.log(response);
@@ -640,119 +611,119 @@ function EditReportMeet(props) {
     // setSelectedTypeCVC(e[0].selectedOptionType);
     console.log(e);
 
-    // let opt = [
-    //   "HESTIA - Risque perte logement",
-    //   "CVC",
-    //   "HESTIA - Risque décès",
-    // ];
-    // for (let index = 0; index < formIndicateurs.length; index++) {
-    //   const element = formIndicateurs[index];
+    let opt = [
+      "HESTIA - Risque perte logement",
+      "CVC",
+      "HESTIA - Risque décès",
+    ];
+    for (let index = 0; index < formIndicateurs.length; index++) {
+      const element = formIndicateurs[index];
 
-    //   element.id = index;
-    // }
-    // if (
-    //   formIndicateurs &&
-    //   formIndicateurs?.filter((el) => e[0].id === el.id)[0] &&
-    //   formIndicateurs?.filter((el) => e[0].id === el.id)[0]?.id !== null
-    // ) {
-    //   formIndicateurs.filter((el) => e[0].id === el.id)[0].id = e[0].id;
+      element.id = index;
+    }
+    if (
+      formIndicateurs &&
+      formIndicateurs?.filter((el) => e[0].id === el.id)[0] &&
+      formIndicateurs?.filter((el) => e[0].id === el.id)[0]?.id !== null
+    ) {
+      formIndicateurs.filter((el) => e[0].id === el.id)[0].id = e[0].id;
 
-    //   formIndicateurs.filter((el) => e[0].id === el.id)[0].selectedOptionType =
-    //     e[0].selectedOptionType;
-    //   formIndicateurs.filter((el) => e[0].id === el.id)[0].indicateursFormCVC =
-    //     e[0].indicateursFormCVC;
-    //   formIndicateurs.filter(
-    //     (el) => e[0].id === el.id
-    //   )[0].indicateursFormHestiaRisqueDeces =
-    //     e[0].indicateursFormHestiaRisqueDeces;
-    //   formIndicateurs.filter(
-    //     (el) => e[0].id === el.id
-    //   )[0].indicateursEstLeLogement = e[0].indicateursEstLeLogement;
-    //   formIndicateurs.filter((el) => e[0].id === el.id)[0].id_corps =
-    //     e[0].id_corps;
-    //   formIndicateurs.filter((el) => e[0].id === el.id)[0].id_vetements =
-    //     e[0].id_vetements;
-    //   formIndicateurs.filter((el) => e[0].id === el.id)[0].id_comportement =
-    //     e[0].id_comportement;
+      formIndicateurs.filter((el) => e[0].id === el.id)[0].selectedOptionType =
+        e[0].selectedOptionType;
+      formIndicateurs.filter((el) => e[0].id === el.id)[0].indicateursFormCVC =
+        e[0].indicateursFormCVC;
+      formIndicateurs.filter(
+        (el) => e[0].id === el.id
+      )[0].indicateursFormHestiaRisqueDeces =
+        e[0].indicateursFormHestiaRisqueDeces;
+      formIndicateurs.filter(
+        (el) => e[0].id === el.id
+      )[0].indicateursEstLeLogement = e[0].indicateursEstLeLogement;
+      formIndicateurs.filter((el) => e[0].id === el.id)[0].id_corps =
+        e[0].id_corps;
+      formIndicateurs.filter((el) => e[0].id === el.id)[0].id_vetements =
+        e[0].id_vetements;
+      formIndicateurs.filter((el) => e[0].id === el.id)[0].id_comportement =
+        e[0].id_comportement;
 
-    //   formIndicateurs.filter((el) => e[0].id === el.id)[0].id_bailleur =
-    //     e[0].id_bailleur;
-    //   formIndicateurs.filter((el) => e[0].id === el.id)[0].id_voisinage =
-    //     e[0].id_voisinage;
-    //   formIndicateurs.filter((el) => e[0].id === el.id)[0].id_hygiene =
-    //     e[0].id_hygiene;
+      formIndicateurs.filter((el) => e[0].id === el.id)[0].id_bailleur =
+        e[0].id_bailleur;
+      formIndicateurs.filter((el) => e[0].id === el.id)[0].id_voisinage =
+        e[0].id_voisinage;
+      formIndicateurs.filter((el) => e[0].id === el.id)[0].id_hygiene =
+        e[0].id_hygiene;
 
-    //   formIndicateurs.filter((el) => e[0].id === el.id)[0].id_secur =
-    //     e[0].id_secur;
-    //   formIndicateurs.filter((el) => e[0].id === el.id)[0].id_sant =
-    //     e[0].id_sant;
-    //   formIndicateurs.filter((el) => e[0].id === el.id)[0].id_conso =
-    //     e[0].id_conso;
-    // }
-    // console.log("FINAL", formIndicateurs);
-    // if (
-    //   formIndicateurs &&
-    //   e[0].selectedOptionType &&
-    //   e[0].selectedOptionType !== null
-    // ) {
-    //   //
-    //   let test = formIndicateurs.filter(
-    //     (e) => e.selectedOptionType !== null && !opt.includes(e.id)
-    //   );
+      formIndicateurs.filter((el) => e[0].id === el.id)[0].id_secur =
+        e[0].id_secur;
+      formIndicateurs.filter((el) => e[0].id === el.id)[0].id_sant =
+        e[0].id_sant;
+      formIndicateurs.filter((el) => e[0].id === el.id)[0].id_conso =
+        e[0].id_conso;
+    }
+    console.log("FINAL", formIndicateurs);
+    if (
+      formIndicateurs &&
+      e[0].selectedOptionType &&
+      e[0].selectedOptionType !== null
+    ) {
+      //
+      let test = formIndicateurs.filter(
+        (e) => e.selectedOptionType !== null && !opt.includes(e.id)
+      );
 
-    //   let arr1 = [];
+      let arr1 = [];
 
-    //   for (let index = 0; index < formIndicateurs.length; index++) {
-    //     const element = formIndicateurs[index];
+      for (let index = 0; index < formIndicateurs.length; index++) {
+        const element = formIndicateurs[index];
 
-    //     arr1.push(element.selectedOptionType);
-    //   }
-    //   let resultA = arr1.filter(
-    //     (elm) =>
-    //       !options
-    //         .map((elm) => JSON.stringify(elm))
-    //         .includes(JSON.stringify(elm))
-    //   );
+        arr1.push(element.selectedOptionType);
+      }
+      let resultA = arr1.filter(
+        (elm) =>
+          !options
+            .map((elm) => JSON.stringify(elm))
+            .includes(JSON.stringify(elm))
+      );
 
-    //   // a diff b
-    //   let resultB = opt.filter(
-    //     (elm) =>
-    //       !arr1.map((elm) => JSON.stringify(elm)).includes(JSON.stringify(elm))
-    //   );
+      // a diff b
+      let resultB = opt.filter(
+        (elm) =>
+          !arr1.map((elm) => JSON.stringify(elm)).includes(JSON.stringify(elm))
+      );
 
-    //   options.splice(0, options.length);
+      options.splice(0, options.length);
 
-    //   // if ([...resultA, ...resultB]) {
-    //   options.push(...resultB);
+      // if ([...resultA, ...resultB]) {
+      options.push(...resultB);
 
-    //   setOptions(options);
-    //   // }
+      setOptions(options);
+      // }
 
-    //   for (let index = 0; index < opt.length; index++) {
-    //     const element = opt[index];
-    //     test.map((e) => {
-    //       if (element === e.selectedOptionType) {
-    //         opt?.splice(index, 1);
-    //         // let opt = formIndicateurs.filter(
-    //         //   (e) => e.selectedOptionType !== null && !opt.includes(e.id)
-    //         // );
+      for (let index = 0; index < opt.length; index++) {
+        const element = opt[index];
+        test.map((e) => {
+          if (element === e.selectedOptionType) {
+            opt?.splice(index, 1);
+            // let opt = formIndicateurs.filter(
+            //   (e) => e.selectedOptionType !== null && !opt.includes(e.id)
+            // );
 
-    //         //
-    //         if (opt && opt.length > 0) {
-    //           options.splice(0, options.length);
-    //           // setOptions(options);
+            //
+            if (opt && opt.length > 0) {
+              options.splice(0, options.length);
+              // setOptions(options);
 
-    //           if (options.length === 0) {
-    //             options.push(...opt);
+              if (options.length === 0) {
+                options.push(...opt);
 
-    //             setOptions(options);
-    //             // options.filter(e => e === opt.includes(opt))
-    //           }
-    //         }
-    //       }
-    //     });
-    //   }
-    // }
+                setOptions(options);
+                // options.filter(e => e === opt.includes(opt))
+              }
+            }
+          }
+        });
+      }
+    }
   };
 
   if (formIndicateurs !== null) {

@@ -74,7 +74,7 @@ function AddActivitiesByReport(props) {
         : props.formActivitiesEdit?.description,
     },
   ]);
-  // console.log(props.formActivitiesEdit);
+  //
 
   return (
     <>

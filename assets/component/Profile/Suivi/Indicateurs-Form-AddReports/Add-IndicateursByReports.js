@@ -121,7 +121,7 @@ function AddIndicateursByReport(props) {
       setIsIndicateursFormCVC(true);
     }
     // if (!typeCVCSelected) {
-    //   console.log(typeCVCSelected.includes("CVC"));
+    //
     // }
     // if (props.form.indicateursEstLeLogement.length > 0) {
     //   setTypeCVCSelected("HESTIA - Risque perte logement");
@@ -151,7 +151,6 @@ function AddIndicateursByReport(props) {
   };
 
   const onChangeIndicateursFormCVC = (indicateursFormCVC) => {
-    console.log(indicateursFormCVC);
     setIndicateursFormCVC(indicateursFormCVC);
     // setIndicateursLogement(indicateursEstLeLogement);
     // setIndicateursFormHestiaRisqueDeces(indicateursFormHestiaRisqueDeces);
@@ -186,11 +185,7 @@ function AddIndicateursByReport(props) {
           : null,
     },
   ]);
-  console.log(
-    isIndicateursLogement,
-    isIndicateursHestiaRisqueDeces,
-    isIndicateursFormCVC
-  );
+  console.log(props?.form);
   return (
     <>
       <div className="addSoins-form">
@@ -235,7 +230,7 @@ function AddIndicateursByReport(props) {
         {isIndicateursFormCVC && (
           <IndicateursFormCVC
             id={props.id}
-            editForm={props?.form?.inqdicateursFormCVC}
+            editForm={props?.form?.indicateursFormCVC}
             onChange={onChangeIndicateursFormCVC}
             followupReportsIndicators={props.form}
             form={props.form}
