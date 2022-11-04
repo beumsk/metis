@@ -67,30 +67,32 @@ function IndicateursFormHestiaRisqueDeces(props) {
         : null
     );
 
-  const choiceSecuritee = (e) => {
-    setChoiceSecuriteeSelected(e);
+  const choiceSecuritee = (valueSecuritee) => {
+    setChoiceSecuriteeSelected(valueSecuritee);
   };
 
   const onChangeDescriptionSecuritee = (e) => {
     setDescriptionSecuriteeSelected(e.target.value);
   };
 
-  const choiceSantee = (e) => {
-    setChoiceSanteeSelected(e);
+  const choiceSantee = (valueSantee) => {
+    setChoiceSanteeSelected(valueSantee);
   };
 
   const onChangeDescriptionSantee = (e) => {
     setDescriptionSanteeSelected(e);
   };
 
-  const choiceConsommation = (e) => {
-    setChoiceConsommationSelected(e);
+  const choiceConsommation = (valueConsommation) => {
+    setChoiceConsommationSelected(valueConsommation);
   };
 
   const onChangeDescriptionConsommation = (e) => {
     setDescriptionConsommationSelected(e.target.value);
   };
   //   /api/getContacts
+
+  console.log(props.editForm);
 
   props.onChange([
     {
@@ -118,6 +120,9 @@ function IndicateursFormHestiaRisqueDeces(props) {
             label="Le logement est insalubre ET mal utilisé par la personne (0)"
             onClick={(e) => choiceSecuritee("0")}
             name="group7"
+            defaultChecked={
+              props.editForm && props?.editForm[0]?.value === 0 ? true : false
+            }
             type={"radio"}
             id={`inline-radio-25`}
           />
@@ -125,6 +130,9 @@ function IndicateursFormHestiaRisqueDeces(props) {
             inline
             label="Le logement est insalubre OU mal utilisé par la personne (1)"
             name="group7"
+            defaultChecked={
+              props.editForm && props?.editForm[0]?.value === 1 ? true : false
+            }
             onClick={(e) => choiceSecuritee("1")}
             type={"radio"}
             id={`inline-radio-26`}
@@ -135,6 +143,9 @@ function IndicateursFormHestiaRisqueDeces(props) {
             name="group7"
             onClick={(e) => choiceSecuritee("2")}
             type={"radio"}
+            defaultChecked={
+              props.editForm && props?.editForm[0]?.value === 2 ? true : false
+            }
             id={`inline-radio-27`}
           />
           <Form.Check
@@ -143,12 +154,20 @@ function IndicateursFormHestiaRisqueDeces(props) {
             name="group7"
             onClick={(e) => choiceSecuritee("3")}
             type={"radio"}
+            defaultChecked={
+              props.editForm && props?.editForm[0]?.value === 3 ? true : false
+            }
             id={`inline-radio-28`}
           />
           <Form.Label htmlFor="inputValue">Commentaire</Form.Label>
           <Form.Control
             as="textarea"
             rows={3}
+            defaultValue={
+              props?.editForm && props?.editForm[0]?.comment
+                ? props?.editForm[0]?.comment
+                : ""
+            }
             onChange={(e) => onChangeDescriptionSecuritee(e)}
           />
         </div>
@@ -161,6 +180,9 @@ function IndicateursFormHestiaRisqueDeces(props) {
             label="La personne refuse les soins, ne prend pas son traitement et n’a aucun contact extérieur (porte fermée) (0)"
             onClick={(e) => choiceSantee("0")}
             name="group8"
+            defaultChecked={
+              props.editForm && props.editForm[1]?.value === 0 ? true : false
+            }
             type={"radio"}
             id={`inline-radio-29`}
           />
@@ -170,6 +192,9 @@ function IndicateursFormHestiaRisqueDeces(props) {
             name="group8"
             onClick={(e) => choiceSantee("1")}
             type={"radio"}
+            defaultChecked={
+              props.editForm && props.editForm[1]?.value === 1 ? true : false
+            }
             id={`inline-radio-30`}
           />
           <Form.Check
@@ -178,6 +203,9 @@ function IndicateursFormHestiaRisqueDeces(props) {
             name="group8"
             onClick={(e) => choiceSantee("2")}
             type={"radio"}
+            defaultChecked={
+              props.editForm && props.editForm[1]?.value === 2 ? true : false
+            }
             id={`inline-radio-31`}
           />
           <Form.Check
@@ -186,12 +214,20 @@ function IndicateursFormHestiaRisqueDeces(props) {
             name="group8"
             onClick={(e) => choiceSantee("3")}
             type={"radio"}
+            defaultChecked={
+              props.editForm && props.editForm[1]?.value === 3 ? true : false
+            }
             id={`inline-radio-32`}
           />
           <Form.Label htmlFor="inputValue">Commentaire</Form.Label>
           <Form.Control
             as="textarea"
             rows={3}
+            defaultValue={
+              props.editForm && props.editForm[1]?.comment
+                ? props.editForm[1]?.comment
+                : ""
+            }
             onChange={(e) => onChangeDescriptionSantee(e)}
           />
         </div>
@@ -205,6 +241,9 @@ function IndicateursFormHestiaRisqueDeces(props) {
             onClick={(e) => choiceConsommation("0")}
             name="group9"
             type={"radio"}
+            defaultChecked={
+              props.editForm && props.editForm[2]?.value === 0 ? true : false
+            }
             id={`inline-radio-33`}
           />
           <Form.Check
@@ -213,6 +252,9 @@ function IndicateursFormHestiaRisqueDeces(props) {
             name="group9"
             onClick={(e) => choiceConsommation("1")}
             type={"radio"}
+            defaultChecked={
+              props.editForm && props.editForm[2]?.value === 1 ? true : false
+            }
             id={`inline-radio-34`}
           />
           <Form.Check
@@ -221,6 +263,9 @@ function IndicateursFormHestiaRisqueDeces(props) {
             name="group9"
             onClick={(e) => choiceConsommation("2")}
             type={"radio"}
+            defaultChecked={
+              props.editForm && props.editForm[2]?.value === 2 ? true : false
+            }
             id={`inline-radio-35`}
           />
           <Form.Check
@@ -229,12 +274,20 @@ function IndicateursFormHestiaRisqueDeces(props) {
             name="group9"
             onClick={(e) => choiceConsommation("3")}
             type={"radio"}
+            defaultChecked={
+              props.editForm && props.editForm[2]?.value === 3 ? true : false
+            }
             id={`inline-radio-36`}
           />
           <Form.Label htmlFor="inputValue">Commentaire</Form.Label>
           <Form.Control
             as="textarea"
             rows={3}
+            defaultValue={
+              props?.editForm && props?.editForm?.length > 0
+                ? props?.editForm[2]?.comment
+                : ""
+            }
             onChange={(e) => onChangeDescriptionConsommation(e)}
           />
         </div>

@@ -63,14 +63,30 @@ function EditReportMeet(props) {
 
       selectedOptionType: "CVC",
       indicateursFormCVC: props.indicatorsResponse
-        ? [...props.indicatorsResponse]
+        ? [...props.indicatorsResponse.filter((e) => e.indi.id < 4)]
         : null,
-      indicateursFormHestiaRisqueDeces: null,
-      indicateursEstLeLogement: null,
+      indicateursFormHestiaRisqueDeces: props.indicatorsResponse
+        ? [
+            ...props.indicatorsResponse.filter((e) => {
+              if (e.indi.id > 6 && e.indi.id < 11) {
+                return e;
+              }
+            }),
+          ]
+        : null,
+      indicateursEstLeLogement: props.indicatorsResponse
+        ? [
+            ...props.indicatorsResponse.filter((e) => {
+              if (e.indi.id > 3 && e.indi.id < 7) {
+                return e;
+              }
+            }),
+          ]
+        : null,
     },
   ]);
 
-  console.log(props.indicatorsResponse);
+  console.log(formIndicateurs);
   const [selectedTypeCVC, setSelectedTypeCVC] = useState(null);
   //   formData.append("pathString", props.link);
   const [options, setOptions] = useState([
@@ -622,121 +638,121 @@ function EditReportMeet(props) {
 
   const onChangeValuesIndicateursForm = (e) => {
     // setSelectedTypeCVC(e[0].selectedOptionType);
-    // console.log(e);
+    console.log(e);
 
-    let opt = [
-      "HESTIA - Risque perte logement",
-      "CVC",
-      "HESTIA - Risque décès",
-    ];
-    for (let index = 0; index < formIndicateurs.length; index++) {
-      const element = formIndicateurs[index];
+    // let opt = [
+    //   "HESTIA - Risque perte logement",
+    //   "CVC",
+    //   "HESTIA - Risque décès",
+    // ];
+    // for (let index = 0; index < formIndicateurs.length; index++) {
+    //   const element = formIndicateurs[index];
 
-      element.id = index;
-    }
-    if (
-      formIndicateurs &&
-      formIndicateurs?.filter((el) => e[0].id === el.id)[0] &&
-      formIndicateurs?.filter((el) => e[0].id === el.id)[0]?.id !== null
-    ) {
-      formIndicateurs.filter((el) => e[0].id === el.id)[0].id = e[0].id;
+    //   element.id = index;
+    // }
+    // if (
+    //   formIndicateurs &&
+    //   formIndicateurs?.filter((el) => e[0].id === el.id)[0] &&
+    //   formIndicateurs?.filter((el) => e[0].id === el.id)[0]?.id !== null
+    // ) {
+    //   formIndicateurs.filter((el) => e[0].id === el.id)[0].id = e[0].id;
 
-      formIndicateurs.filter((el) => e[0].id === el.id)[0].selectedOptionType =
-        e[0].selectedOptionType;
-      formIndicateurs.filter((el) => e[0].id === el.id)[0].indicateursFormCVC =
-        e[0].indicateursFormCVC;
-      formIndicateurs.filter(
-        (el) => e[0].id === el.id
-      )[0].indicateursFormHestiaRisqueDeces =
-        e[0].indicateursFormHestiaRisqueDeces;
-      formIndicateurs.filter(
-        (el) => e[0].id === el.id
-      )[0].indicateursEstLeLogement = e[0].indicateursEstLeLogement;
-      formIndicateurs.filter((el) => e[0].id === el.id)[0].id_corps =
-        e[0].id_corps;
-      formIndicateurs.filter((el) => e[0].id === el.id)[0].id_vetements =
-        e[0].id_vetements;
-      formIndicateurs.filter((el) => e[0].id === el.id)[0].id_comportement =
-        e[0].id_comportement;
+    //   formIndicateurs.filter((el) => e[0].id === el.id)[0].selectedOptionType =
+    //     e[0].selectedOptionType;
+    //   formIndicateurs.filter((el) => e[0].id === el.id)[0].indicateursFormCVC =
+    //     e[0].indicateursFormCVC;
+    //   formIndicateurs.filter(
+    //     (el) => e[0].id === el.id
+    //   )[0].indicateursFormHestiaRisqueDeces =
+    //     e[0].indicateursFormHestiaRisqueDeces;
+    //   formIndicateurs.filter(
+    //     (el) => e[0].id === el.id
+    //   )[0].indicateursEstLeLogement = e[0].indicateursEstLeLogement;
+    //   formIndicateurs.filter((el) => e[0].id === el.id)[0].id_corps =
+    //     e[0].id_corps;
+    //   formIndicateurs.filter((el) => e[0].id === el.id)[0].id_vetements =
+    //     e[0].id_vetements;
+    //   formIndicateurs.filter((el) => e[0].id === el.id)[0].id_comportement =
+    //     e[0].id_comportement;
 
-      formIndicateurs.filter((el) => e[0].id === el.id)[0].id_bailleur =
-        e[0].id_bailleur;
-      formIndicateurs.filter((el) => e[0].id === el.id)[0].id_voisinage =
-        e[0].id_voisinage;
-      formIndicateurs.filter((el) => e[0].id === el.id)[0].id_hygiene =
-        e[0].id_hygiene;
+    //   formIndicateurs.filter((el) => e[0].id === el.id)[0].id_bailleur =
+    //     e[0].id_bailleur;
+    //   formIndicateurs.filter((el) => e[0].id === el.id)[0].id_voisinage =
+    //     e[0].id_voisinage;
+    //   formIndicateurs.filter((el) => e[0].id === el.id)[0].id_hygiene =
+    //     e[0].id_hygiene;
 
-      formIndicateurs.filter((el) => e[0].id === el.id)[0].id_secur =
-        e[0].id_secur;
-      formIndicateurs.filter((el) => e[0].id === el.id)[0].id_sant =
-        e[0].id_sant;
-      formIndicateurs.filter((el) => e[0].id === el.id)[0].id_conso =
-        e[0].id_conso;
-    }
-    console.log("FINAL", formIndicateurs);
-    if (
-      formIndicateurs &&
-      e[0].selectedOptionType &&
-      e[0].selectedOptionType !== null
-    ) {
-      //
-      let test = formIndicateurs.filter(
-        (e) => e.selectedOptionType !== null && !opt.includes(e.id)
-      );
+    //   formIndicateurs.filter((el) => e[0].id === el.id)[0].id_secur =
+    //     e[0].id_secur;
+    //   formIndicateurs.filter((el) => e[0].id === el.id)[0].id_sant =
+    //     e[0].id_sant;
+    //   formIndicateurs.filter((el) => e[0].id === el.id)[0].id_conso =
+    //     e[0].id_conso;
+    // }
+    // console.log("FINAL", formIndicateurs);
+    // if (
+    //   formIndicateurs &&
+    //   e[0].selectedOptionType &&
+    //   e[0].selectedOptionType !== null
+    // ) {
+    //   //
+    //   let test = formIndicateurs.filter(
+    //     (e) => e.selectedOptionType !== null && !opt.includes(e.id)
+    //   );
 
-      let arr1 = [];
+    //   let arr1 = [];
 
-      for (let index = 0; index < formIndicateurs.length; index++) {
-        const element = formIndicateurs[index];
+    //   for (let index = 0; index < formIndicateurs.length; index++) {
+    //     const element = formIndicateurs[index];
 
-        arr1.push(element.selectedOptionType);
-      }
-      let resultA = arr1.filter(
-        (elm) =>
-          !options
-            .map((elm) => JSON.stringify(elm))
-            .includes(JSON.stringify(elm))
-      );
+    //     arr1.push(element.selectedOptionType);
+    //   }
+    //   let resultA = arr1.filter(
+    //     (elm) =>
+    //       !options
+    //         .map((elm) => JSON.stringify(elm))
+    //         .includes(JSON.stringify(elm))
+    //   );
 
-      // a diff b
-      let resultB = opt.filter(
-        (elm) =>
-          !arr1.map((elm) => JSON.stringify(elm)).includes(JSON.stringify(elm))
-      );
+    //   // a diff b
+    //   let resultB = opt.filter(
+    //     (elm) =>
+    //       !arr1.map((elm) => JSON.stringify(elm)).includes(JSON.stringify(elm))
+    //   );
 
-      options.splice(0, options.length);
+    //   options.splice(0, options.length);
 
-      // if ([...resultA, ...resultB]) {
-      options.push(...resultB);
+    //   // if ([...resultA, ...resultB]) {
+    //   options.push(...resultB);
 
-      setOptions(options);
-      // }
+    //   setOptions(options);
+    //   // }
 
-      for (let index = 0; index < opt.length; index++) {
-        const element = opt[index];
-        test.map((e) => {
-          if (element === e.selectedOptionType) {
-            opt?.splice(index, 1);
-            // let opt = formIndicateurs.filter(
-            //   (e) => e.selectedOptionType !== null && !opt.includes(e.id)
-            // );
+    //   for (let index = 0; index < opt.length; index++) {
+    //     const element = opt[index];
+    //     test.map((e) => {
+    //       if (element === e.selectedOptionType) {
+    //         opt?.splice(index, 1);
+    //         // let opt = formIndicateurs.filter(
+    //         //   (e) => e.selectedOptionType !== null && !opt.includes(e.id)
+    //         // );
 
-            //
-            if (opt && opt.length > 0) {
-              options.splice(0, options.length);
-              // setOptions(options);
+    //         //
+    //         if (opt && opt.length > 0) {
+    //           options.splice(0, options.length);
+    //           // setOptions(options);
 
-              if (options.length === 0) {
-                options.push(...opt);
+    //           if (options.length === 0) {
+    //             options.push(...opt);
 
-                setOptions(options);
-                // options.filter(e => e === opt.includes(opt))
-              }
-            }
-          }
-        });
-      }
-    }
+    //             setOptions(options);
+    //             // options.filter(e => e === opt.includes(opt))
+    //           }
+    //         }
+    //       }
+    //     });
+    //   }
+    // }
   };
 
   if (formIndicateurs !== null) {
