@@ -3,11 +3,7 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import useAuth from "../../../hooks/useAuth";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faPlusCircle,
-  faCancel,
-  faEdit,
-} from "@fortawesome/free-solid-svg-icons";
+import { faCheck, faCancel, faEdit } from "@fortawesome/free-solid-svg-icons";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import Form from "react-bootstrap/Form";
@@ -18,6 +14,7 @@ import AddSoinsByReport from "./Add-SoinsByReports";
 import InputPlaceList from "./Input-Place-List";
 import InputContactList from "./Input-Contact-List";
 import InputGoalsList from "./Input-Goals-List";
+
 function EditReportMeet(props) {
   const [show, setShow] = useState(false);
   const [auth, setAuth] = useState(useAuth());
@@ -27,6 +24,8 @@ function EditReportMeet(props) {
 
   const [userId, setUserId] = useState(null);
   const [patiId, setPatiId] = useState(null);
+  const [isSentGoals, setSentGoals] = useState(false);
+  const [isSentRepport, setSentRepport] = useState(false);
   var formActivitiesDatas = new FormData();
   formActivitiesDatas.append("id", 106);
   const [formSoins, setFormSoins] = useState(
@@ -112,6 +111,7 @@ function EditReportMeet(props) {
   const [changeDate, setChangeDate] = useState(null);
   const [changeGoals, setChangeGoals] = useState(null);
   const [changeContacts, setChangeContacts] = useState(null);
+  const [changeDescriptionGoals, setChangeDescriptionGoals] = useState(null);
   const [changePlaces, setChangePlaces] = useState(null);
   const [changeEditor, setChangeEditor] = useState(null);
   const [changeOptions, setChangeOptions] = useState(null);
@@ -293,6 +293,7 @@ function EditReportMeet(props) {
 
   const onChangeDate = (e) => {
     //
+    console.log(e);
     setChangeDate(e.target.value);
   };
 
@@ -377,6 +378,43 @@ function EditReportMeet(props) {
     }
   };
 
+  const sentCalls = (e) => {
+    // if (props.informationPatient.type === 2){
+    //   formData.append("activityType", 1);
+    // }
+    var formData = new FormData();
+    formData.append("idRapport", props?.informationPatient?.id);
+
+    if (changeDate !== null) {
+      formData.append("changeDate", changeDate);
+    } else {
+      formData.append(
+        "dateDefault",
+        new Date(props?.informationPatient?.creationDate).toJSON().slice(0, 10)
+      );
+    }
+
+    formData.append("changeGoals", changeGoals);
+    formData.append("contId", changeContacts);
+    formData.append("goalsInput", goalsInput);
+    formData.append("userId", userId);
+    formData.append("patiId", patiId);
+    formData.append("description", changeDescriptionGoals);
+
+    axios({
+      method: "post",
+      url: "/api/updateCalls",
+      data: formData,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    }).then(function (response) {
+      // location.replace(window.location.origin + "/" + idPatient);
+      setSentGoals(true);
+    });
+  };
+
   const sentRapport = (e) => {
     let opt = [
       "HESTIA - Risque perte logement",
@@ -425,7 +463,13 @@ function EditReportMeet(props) {
     formData.append("idRapport", props?.informationPatient?.id);
     formData.append("contacts", contacts);
     formData.append("changeTypeMeet", changeTypeMeet);
-    formData.append("changeDate", changeDate);
+
+    if (changeDate === null) {
+      formData.append("changeDate", props.informationPatient.reportDate);
+    } else {
+      formData.append("changeDate", changeDate);
+    }
+
     formData.append("changeGoals", changeGoals);
     formData.append("contId", changeContacts);
     formData.append("changePlaces", changePlaces);
@@ -559,7 +603,10 @@ function EditReportMeet(props) {
             });
           }
         }
-        location.replace(window.location.origin + "/" + idPatient);
+        // location.replace(window.location.origin + "/" + idPatient);
+        // const [isSentGoals, setSentGoals] = useState(false);
+        // const [isSentRepport, setSentRepport] = useState(false);
+        setSentRepport(true);
       })
       .catch(function (response) {
         console.log(response);
@@ -726,8 +773,8 @@ function EditReportMeet(props) {
     }
   };
 
-  if (formIndicateurs !== null) {
-    console.log(formIndicateurs);
+  if (props?.informationPatient !== null) {
+    console.log(props?.informationPatient);
   }
 
   function getDifference(array1, array2) {
@@ -744,226 +791,235 @@ function EditReportMeet(props) {
 
   return (
     <div className="report-content">
-      <h5 className="mt-4 mb-4">Ajouter un rapport</h5>
-      {/* <Form.Control type="text" id="inputText" className="mt-4" /> */}
-      <Form.Group className="mb-3" controlId="formBasicCheckbox">
-        <div className="d-flex">
-          <div key={`inline-radio`} className="mb-3">
-            <Form.Label htmlFor="inputValue" className="mr-4">
-              Y'a t'il des soins ?
-            </Form.Label>
-            <Form.Check
-              inline
-              label="Oui"
-              onClick={(e) => choiceSoins(true)}
-              name="group26"
-              defaultChecked={
-                props?.informationPatient?.followupReportsCare?.length > 0
-              }
-              type={"radio"}
-              id={`inline-radio-21`}
-            />
-            <Form.Check
-              inline
-              label="Non"
-              name="group26"
-              defaultChecked={
-                props?.informationPatient?.followupReportsCare?.length === 0
-              }
-              onClick={(e) => choiceSoins(false)}
-              type={"radio"}
-              id={`inline-radio-22`}
-            />
-          </div>
-        </div>
-        <div>
-          {showAccesSoins && (
-            <div className="sous-form">
-              {formSoins.map((form, idx) => (
-                <>
-                  <AddSoinsByReport
-                    key={form.id}
-                    id={idx}
-                    type={type}
-                    contacts={props?.contacts}
-                    formCaresEdit={form}
-                    places={props.places}
-                    onChange={onChangeValuesByOnCareForm}
-                  ></AddSoinsByReport>
-                  {formSoins && formSoins.length > 1 && (
-                    <button onClick={(e) => onClickDeleteOnCare(form.id)}>
-                      Supprimer un autre soin
-                    </button>
-                  )}
-                </>
-              ))}
-
-              <button onClick={(e) => onClickOnCare({ id: formSoins.length })}>
-                Ajouter un autre soin
-              </button>
-            </div>
-          )}
-        </div>
-      </Form.Group>
-      <Form.Group className="mb-3" controlId="formBasicCheckbox">
-        <div className="d-flex">
-          <div key={`inline-radio`} className="mb-3">
-            <Form.Label htmlFor="inputValue" className="mr-4">
-              Y'a t'il des activitées ?
-            </Form.Label>
-            <Form.Check
-              inline
-              label="Oui"
-              onClick={(e) => choiceActivities(true)}
-              name="group25"
-              defaultChecked={
-                props?.informationPatient?.followupReportsActivities?.length > 0
-              }
-              type={"radio"}
-              id={`inline-radio-23`}
-            />
-            <Form.Check
-              inline
-              label="Non"
-              name="group25"
-              defaultChecked={
-                props?.informationPatient?.followupReportsActivities?.length ===
-                0
-              }
-              onClick={(e) => choiceActivities(false)}
-              type={"radio"}
-              id={`inline-radio-24`}
-            />
-          </div>
-        </div>
-        <div>
-          {showActivities && (
-            <div className="sous-form">
-              {formActivities.map((form, idx) => (
-                <>
-                  <AddActivitiesByReport
-                    type={typeFormActivities}
-                    id={idx}
-                    key={form.id}
-                    contacts={props.contacts}
-                    places={props.places}
-                    formActivitiesEdit={form}
-                    onChange={onChangeValuesByActivitiesForm}
-                  ></AddActivitiesByReport>
-                  {formActivities && formActivities.length > 1 && (
-                    <button
-                      onClick={(e) => onClickDeleteActivitiesForm(form.id)}
-                    >
-                      Supprimer un autre soin
-                    </button>
-                  )}
-                </>
-              ))}
-              <button
-                onClick={(e) =>
-                  onClickAddActivities({ id: formActivities.length })
-                }
-              >
-                Ajouter un autre activitée
-              </button>
-            </div>
-          )}
-        </div>
-      </Form.Group>
-      <Form.Group className="mb-3" controlId="formBasicCheckbox">
-        <div className="d-flex">
-          <div key={`inline-radio`}>
-            <Form.Label htmlFor="inputValue" className="mr-4">
-              Y'a t'il des indicateurs ?
-            </Form.Label>
-            <Form.Check
-              inline
-              label="Oui"
-              onClick={(e) => choiceIndicateurs(true)}
-              name="group24"
-              defaultChecked={
-                props?.informationPatient?.followupReportsIndicators?.length > 0
-              }
-              type={"radio"}
-              id={`inline-radio-25`}
-            />
-            <Form.Check
-              inline
-              label="Non"
-              name="group24"
-              defaultChecked={
-                props?.informationPatient?.followupReportsIndicators?.length ===
-                0
-              }
-              onClick={(e) => choiceIndicateurs(false)}
-              type={"radio"}
-              id={`inline-radio-26`}
-            />
-          </div>
-        </div>
-        <div>
-          {showIndicateurs && (
-            <div className="sous-form">
-              {formIndicateurs?.map((form, idx) => (
-                <>
-                  <AddIndicateursByReport
-                    type={type}
-                    key={idx}
-                    id={form.id}
-                    // followupReportsIndicators={
-                    //   formIndicateurs
-                    // }
-                    form={form}
-                    options={options}
-                    onChange={onChangeValuesIndicateursForm}
-                    contacts={props.contacts}
-                    places={props.places}
-                  ></AddIndicateursByReport>
-                  {(formIndicateurs[0].indicateursEstLeLogement !== null ||
-                    formIndicateurs[0].indicateursFormCVC !== null ||
-                    formIndicateurs[0].indicateursFormHestiaRisqueDeces !==
-                      null) && (
-                    <button
-                      onClick={(e) =>
-                        onClickDeleteIndicateursForm(idx, form.id)
-                      }
-                    >
-                      Supprimer un autre soin
-                    </button>
-                  )}
-
-                  {formIndicateurs && formIndicateurs.length < 3 && (
-                    <button
-                      onClick={(e) =>
-                        onClickAddIndicateurs({ id: formIndicateurs.length })
-                      }
-                    >
-                      Ajouter un autre indicateur
-                    </button>
-                  )}
-                </>
-              ))}
-            </div>
-          )}
-        </div>
-      </Form.Group>
-
-      <Form.Label htmlFor="inputValue">Type de rencontre</Form.Label>
-      <Form.Select
-        size="lg"
-        onChange={(e) => inputChangeTypeMeet(e)}
-        defaultValue={props?.informationPatient?.reportType}
-        // selected={props?.informationPatient?.reportType}
-      >
+      {props?.informationPatient?.hasOwnProperty("type") === false && (
         <>
-          <option>Choissisez votre type de rencontre</option>
-          <option value={1}>Vu</option>
-          <option value={2}>Rencontre</option>
-          <option value={3}>Repos</option>
-          <option value={4}>Recherche</option>
-        </>
-      </Form.Select>
+          <h5 className="mt-4 mb-4">Ajouter un rapport</h5>
+          {/* <Form.Control type="text" id="inputText" className="mt-4" /> */}
+          <Form.Group className="mb-3" controlId="formBasicCheckbox">
+            <div className="d-flex">
+              <div key={`inline-radio`} className="mb-3">
+                <Form.Label htmlFor="inputValue" className="mr-4">
+                  Y'a t'il des soins ?
+                </Form.Label>
+                <Form.Check
+                  inline
+                  label="Oui"
+                  onClick={(e) => choiceSoins(true)}
+                  name="group26"
+                  defaultChecked={
+                    props?.informationPatient?.followupReportsCare?.length > 0
+                  }
+                  type={"radio"}
+                  id={`inline-radio-21`}
+                />
+                <Form.Check
+                  inline
+                  label="Non"
+                  name="group26"
+                  defaultChecked={
+                    props?.informationPatient?.followupReportsCare?.length === 0
+                  }
+                  onClick={(e) => choiceSoins(false)}
+                  type={"radio"}
+                  id={`inline-radio-22`}
+                />
+              </div>
+            </div>
+            <div>
+              {showAccesSoins && (
+                <div className="sous-form">
+                  {formSoins.map((form, idx) => (
+                    <>
+                      <AddSoinsByReport
+                        key={form.id}
+                        id={idx}
+                        type={type}
+                        contacts={props?.contacts}
+                        formCaresEdit={form}
+                        places={props.places}
+                        onChange={onChangeValuesByOnCareForm}
+                      ></AddSoinsByReport>
+                      {formSoins && formSoins.length > 1 && (
+                        <button onClick={(e) => onClickDeleteOnCare(form.id)}>
+                          Supprimer un autre soin
+                        </button>
+                      )}
+                    </>
+                  ))}
 
+                  <button
+                    onClick={(e) => onClickOnCare({ id: formSoins.length })}
+                  >
+                    Ajouter un autre soin
+                  </button>
+                </div>
+              )}
+            </div>
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="formBasicCheckbox">
+            <div className="d-flex">
+              <div key={`inline-radio`} className="mb-3">
+                <Form.Label htmlFor="inputValue" className="mr-4">
+                  Y'a t'il des activitées ?
+                </Form.Label>
+                <Form.Check
+                  inline
+                  label="Oui"
+                  onClick={(e) => choiceActivities(true)}
+                  name="group25"
+                  defaultChecked={
+                    props?.informationPatient?.followupReportsActivities
+                      ?.length > 0
+                  }
+                  type={"radio"}
+                  id={`inline-radio-23`}
+                />
+                <Form.Check
+                  inline
+                  label="Non"
+                  name="group25"
+                  defaultChecked={
+                    props?.informationPatient?.followupReportsActivities
+                      ?.length === 0
+                  }
+                  onClick={(e) => choiceActivities(false)}
+                  type={"radio"}
+                  id={`inline-radio-24`}
+                />
+              </div>
+            </div>
+            <div>
+              {showActivities && (
+                <div className="sous-form">
+                  {formActivities.map((form, idx) => (
+                    <>
+                      <AddActivitiesByReport
+                        type={typeFormActivities}
+                        id={idx}
+                        key={form.id}
+                        contacts={props.contacts}
+                        places={props.places}
+                        formActivitiesEdit={form}
+                        onChange={onChangeValuesByActivitiesForm}
+                      ></AddActivitiesByReport>
+                      {formActivities && formActivities.length > 1 && (
+                        <button
+                          onClick={(e) => onClickDeleteActivitiesForm(form.id)}
+                        >
+                          Supprimer un autre soin
+                        </button>
+                      )}
+                    </>
+                  ))}
+                  <button
+                    onClick={(e) =>
+                      onClickAddActivities({ id: formActivities.length })
+                    }
+                  >
+                    Ajouter un autre activitée
+                  </button>
+                </div>
+              )}
+            </div>
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="formBasicCheckbox">
+            <div className="d-flex">
+              <div key={`inline-radio`}>
+                <Form.Label htmlFor="inputValue" className="mr-4">
+                  Y'a t'il des indicateurs ?
+                </Form.Label>
+                <Form.Check
+                  inline
+                  label="Oui"
+                  onClick={(e) => choiceIndicateurs(true)}
+                  name="group24"
+                  defaultChecked={
+                    props?.informationPatient?.followupReportsIndicators
+                      ?.length > 0
+                  }
+                  type={"radio"}
+                  id={`inline-radio-25`}
+                />
+                <Form.Check
+                  inline
+                  label="Non"
+                  name="group24"
+                  defaultChecked={
+                    props?.informationPatient?.followupReportsIndicators
+                      ?.length === 0
+                  }
+                  onClick={(e) => choiceIndicateurs(false)}
+                  type={"radio"}
+                  id={`inline-radio-26`}
+                />
+              </div>
+            </div>
+            <div>
+              {showIndicateurs && (
+                <div className="sous-form">
+                  {formIndicateurs?.map((form, idx) => (
+                    <>
+                      <AddIndicateursByReport
+                        type={type}
+                        key={idx}
+                        id={form.id}
+                        // followupReportsIndicators={
+                        //   formIndicateurs
+                        // }
+                        form={form}
+                        options={options}
+                        onChange={onChangeValuesIndicateursForm}
+                        contacts={props.contacts}
+                        places={props.places}
+                      ></AddIndicateursByReport>
+                      {(formIndicateurs[0].indicateursEstLeLogement !== null ||
+                        formIndicateurs[0].indicateursFormCVC !== null ||
+                        formIndicateurs[0].indicateursFormHestiaRisqueDeces !==
+                          null) && (
+                        <button
+                          onClick={(e) =>
+                            onClickDeleteIndicateursForm(idx, form.id)
+                          }
+                        >
+                          Supprimer un autre soin
+                        </button>
+                      )}
+
+                      {formIndicateurs && formIndicateurs.length < 3 && (
+                        <button
+                          onClick={(e) =>
+                            onClickAddIndicateurs({
+                              id: formIndicateurs.length,
+                            })
+                          }
+                        >
+                          Ajouter un autre indicateur
+                        </button>
+                      )}
+                    </>
+                  ))}
+                </div>
+              )}
+            </div>
+          </Form.Group>
+
+          <Form.Label htmlFor="inputValue">Type de rencontre</Form.Label>
+          <Form.Select
+            size="lg"
+            onChange={(e) => inputChangeTypeMeet(e)}
+            defaultValue={props?.informationPatient?.reportType}
+            // selected={props?.informationPatient?.reportType}
+          >
+            <>
+              <option>Choissisez votre type de rencontre</option>
+              <option value={1}>Vu</option>
+              <option value={2}>Rencontre</option>
+              <option value={3}>Repos</option>
+              <option value={4}>Recherche</option>
+            </>
+          </Form.Select>
+        </>
+      )}
       <Form.Label htmlFor="inputValue">Date de la rencontre</Form.Label>
 
       {reportDate ? (
@@ -979,9 +1035,9 @@ function EditReportMeet(props) {
       ) : (
         <Form.Control
           type="date"
-          // defaultValue={new Date(
-          //   props?.informationPatient?.reportDate * 1000
-          // ).toJSON()}
+          defaultValue={new Date(props?.informationPatient?.creationDate)
+            .toJSON()
+            .slice(0, 10)}
           placeholder="Here edit the release date"
           onChange={(e) => onChangeDate(e)}
           id="inputValueSpécifique"
@@ -993,24 +1049,72 @@ function EditReportMeet(props) {
         // defaultValue={props?.informationPatient?.cont[0]?.orga?.id}
         onChange={onChangeContacts}
       />
+      {props?.informationPatient?.hasOwnProperty("type") === false && (
+        <InputContactList
+          contacts={props.contacts}
+          defaultValue={
+            props?.informationPatient?.cont
+              ? props?.informationPatient?.cont[0]?.orga?.id
+              : null
+          }
+          onChange={onChangeContacts}
+        />
+      )}
 
-      <InputContactList
-        contacts={props.contacts}
-        defaultValue={props?.informationPatient?.cont[0]?.orga?.id}
-        onChange={onChangeContacts}
-      />
-      <InputPlaceList
-        places={props.places}
-        defaultValue={props?.informationPatient?.plac?.id}
-        onChange={onChangePlaces}
-      />
+      {props?.informationPatient?.hasOwnProperty("type") === true && (
+        <InputContactList
+          contacts={props.contacts}
+          defaultValue={props?.informationPatient?.cont?.id}
+          onChange={onChangeContacts}
+        />
+      )}
 
-      <Editor
-        onChange={editorChange}
-        content={props.informationPatient.content}
-      ></Editor>
+      {props?.informationPatient?.hasOwnProperty("type") === false && (
+        <>
+          <InputPlaceList
+            places={props.places}
+            defaultValue={props?.informationPatient?.plac?.id}
+            onChange={onChangePlaces}
+          />
 
-      <button onClick={(e) => sentRapport(e)}>Confirmer</button>
+          <Editor
+            onChange={editorChange}
+            content={
+              props.informationPatient.content ||
+              props.informationPatient.description
+            }
+          ></Editor>
+        </>
+      )}
+
+      {props?.informationPatient?.hasOwnProperty("type") === true && (
+        <>
+          <Form.Label htmlFor="inputValue">Description</Form.Label>
+          <Form.Control
+            as="textarea"
+            className="mt-4"
+            placeholder="Leave a comment here"
+            onChange={(e) => setChangeDescriptionGoals(e.target.value)}
+            defaultValue={props.informationPatient.description}
+            style={{ height: "100px" }}
+          />
+
+          <button onClick={(e) => sentCalls(e)} className="mr-4">
+            Confirmer
+          </button>
+          {isSentGoals && <FontAwesomeIcon icon={faCheck} />}
+        </>
+      )}
+      {/* const [isSentGoals, setSentGoals] = useState(false);
+  const [isSentRepport, setSentRepport] = useState(false); */}
+      {props?.informationPatient?.hasOwnProperty("type") === false && (
+        <>
+          <button onClick={(e) => sentRapport(e)} className="mr-4">
+            Confirmer
+          </button>
+          {isSentRepport && <FontAwesomeIcon icon={faCheck} />}
+        </>
+      )}
     </div>
   );
 }

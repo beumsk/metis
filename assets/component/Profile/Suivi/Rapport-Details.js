@@ -84,8 +84,8 @@ function RapportDetails(props) {
         <>
           {informations.data.map((r, id) => (
             <div key={id} className="report-content">
-              {r && r.activityType === 2 && <h6>Appel Sortant</h6>}
-              {r && r.activityType === 4 && <h6>Appel Entrant</h6>}
+              {r && r.type === 1 && <h6>Appel Sortant</h6>}
+              {r && r.type === 2 && <h6>Appel Entrant</h6>}
               {r && r.deletedAt === null && (
                 <>
                   <Form.Check
@@ -129,19 +129,55 @@ function RapportDetails(props) {
                   {r.isHightlight === false && (
                     <>
                       <div className="row">
-                        {r.followupReportsIndicators.map((item, id) => (
-                          <div class="row">
-                            <div className="col-sm-4">{item.indi.name}</div>
-                            <div className="col-sm-8">
-                              {item.indi.description}
-                            </div>
-                            <div className="col-sm-4">{item.indi.comment}</div>
-                          </div>
-                        ))}
+                        {r.followupReportsIndicators && (
+                          <>
+                            {r.followupReportsIndicators.map((item, id) => (
+                              <div class="row">
+                                <div className="col-sm-4">{item.indi.name}</div>
+                                <div className="col-sm-8">
+                                  {item.indi.description}
+                                </div>
+                                <div className="col-sm-4">
+                                  {item.indi.comment}
+                                </div>
+                              </div>
+                            ))}
+                          </>
+                        )}
                       </div>
                       <div
                         className="mt-4"
-                        dangerouslySetInnerHTML={{ __html: r.content }}
+                        dangerouslySetInnerHTML={{
+                          __html: r.content || r.description,
+                        }}
+                      ></div>
+                    </>
+                  )}
+
+                  {r.isHightlight === null && (
+                    <>
+                      <div className="row">
+                        {r.followupReportsIndicators && (
+                          <>
+                            {r.followupReportsIndicators.map((item, id) => (
+                              <div class="row">
+                                <div className="col-sm-4">{item.indi.name}</div>
+                                <div className="col-sm-8">
+                                  {item.indi.description}
+                                </div>
+                                <div className="col-sm-4">
+                                  {item.indi.comment}
+                                </div>
+                              </div>
+                            ))}
+                          </>
+                        )}
+                      </div>
+                      <div
+                        className="mt-4"
+                        dangerouslySetInnerHTML={{
+                          __html: r.content || r.description,
+                        }}
                       ></div>
                     </>
                   )}

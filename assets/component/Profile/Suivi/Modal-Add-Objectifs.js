@@ -16,6 +16,7 @@ import InputTypeList from "./Input-Type-List";
 function ModalAddObjectifs(props) {
   const [show, setShow] = useState(false);
   const [auth, setAuth] = useState(useAuth());
+  const [userId, setUserId] = useState(null);
   let id = useParams().id;
   var formData = new FormData();
   formData.append("id", 174);
@@ -40,6 +41,7 @@ function ModalAddObjectifs(props) {
         setType(response);
       })
       .catch(function (response) {});
+    setUserId(auth.auth.idUser);
   }, [idPatient]);
 
   //

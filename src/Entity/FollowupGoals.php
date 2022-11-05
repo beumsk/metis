@@ -34,7 +34,7 @@ class FollowupGoals
     private ?string $description = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $delete_at = null;
+    private ?\DateTimeInterface $deleted_at = null;
 
     #[ORM\ManyToOne(targetEntity: 'Contacts', cascade: ["all"], fetch: "EAGER")]
     #[ORM\JoinColumn(name: "cont_id", referencedColumnName: "id", nullable: true, onDelete: "SET NULL")]
@@ -50,7 +50,7 @@ class FollowupGoals
     private ?Suggestions $func = null;
 
     #[ORM\Column(nullable: true)]
-    private ?int $is_highlight = null;
+    private ?int $is_hightlight = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $creation_date = null;
@@ -120,16 +120,16 @@ class FollowupGoals
         return $this;
     }
 
-    public function getDeleteAt(): ?\DateTimeInterface
+    public function getDeletedAt(): ?\DateTimeInterface
     {
-        return $this->delete_at;
+        return $this->deleted_at;
     }
 
 
 
-    public function setDeleteAt(?\DateTimeInterface $delete_at): self
+    public function setDeletedAt(?\DateTimeInterface $deleted_at): self
     {
-        $this->delete_at = $delete_at;
+        $this->deleted_at = $deleted_at;
 
         return $this;
     }
@@ -183,14 +183,14 @@ class FollowupGoals
         return $this;
     }
 
-    public function getIsHighlight(): ?int
+    public function getIsHightlight(): ?bool
     {
-        return $this->is_highlight;
+        return $this->is_hightlight;
     }
 
-    public function setIsHighlight(?int $is_highlight): self
+    public function setIsHightlight(?bool $is_hightlight): self
     {
-        $this->is_highlight = $is_highlight;
+        $this->is_hightlight = $is_hightlight;
 
         return $this;
     }

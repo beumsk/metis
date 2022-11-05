@@ -37,7 +37,7 @@ function InputGoalsList(props) {
 
   return (
     <>
-      <Form.Label htmlFor="inputValue">Contacts</Form.Label>
+      <Form.Label htmlFor="inputValue">Objectifs</Form.Label>
 
       <Form.Select
         size="lg"

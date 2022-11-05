@@ -28,6 +28,7 @@ function ModalAddAppels(props) {
   var valueFormData = new FormData();
   valueFormData.append("id", 174);
   //   formData.append("pathString", props.link);
+  const [userId, setUserId] = useState(null);
   const [contacts, setContacts] = useState(null);
   const [fonction, setFonction] = useState(null);
   const [idPatient, setIdPatient] = useState(id);
@@ -85,6 +86,7 @@ function ModalAddAppels(props) {
         setWhatDoinFunction(response);
       })
       .catch(function (response) {});
+    setUserId(auth.auth.idUser);
   }, [idPatient]);
   //
 
@@ -108,7 +110,28 @@ function ModalAddAppels(props) {
   function onSent() {
     // isCall is true appel entrant
 
-    let obj = {};
+    let formData = new FormData();
+
+    formData.append("callsFunctionValue", callsFunctionValue);
+    formData.append("isCallsPatients", isCallsPatients);
+    formData.append("isPriority", isPriority);
+    formData.append("contact", contact);
+    formData.append("description", description);
+    formData.append("valueWhatDoinFunction", valueWhatDoinFunction);
+    formData.append("patientId", idPatient);
+    formData.append("userId", userId);
+
+    axios({
+      method: "post",
+      url: "/api/setCalls",
+      data: formData,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    }).then(function (response) {
+      document.querySelectorAll(".btn-close")[0].click();
+    });
 
     console.log(
       callsFunctionValue,
