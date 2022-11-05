@@ -42,6 +42,43 @@ class FollowUpReportsController extends AbstractController
     #[Assert\DateTime]
     public $createdAt;
 
+    #[Route('/api/setGoals', name: 'app_setGoals')]
+    public function setGoals(ManagerRegistry $doctrine, SerializerInterface $serializer): Response
+    {
+        $entityManager = $doctrine->getManager();
+        $request = Request::createFromGlobals();
+        $typeValue = $request->request->get('typeValue');
+        $isPriority = $request->request->get('isPriority');
+        $description = $request->request->get('description');
+        $valueType = $request->request->get('valueType');
+        $description = $request->request->get('description');
+        $patientId = $request->request->get('patientId');
+        $userId = $request->request->get('userId');
+        $valueType = $request->request->get('valueType');
+
+
+
+        $followupGoals = new FollowupGoals();
+        $patients = $doctrine->getRepository(Patients::class)->find($patientId);
+        $user = $doctrine->getRepository(Patients::class)->find($userId);
+        $suggestions = $doctrine->getRepository(Suggestions::class)->find($typeValue);
+        // $function = $doctrine->getRepository(Suggestions::class)->find($callsFunctionValue);
+
+        $followupGoals->setPati($patients);
+        $followupGoals->setType(1);
+        $followupGoals->setSugg($suggestions);
+        $followupGoals->setCreationDate(new \DateTime("now"));
+        $followupGoals->setDescription($description);
+        $followupGoals->setStatus(3);
+        $followupGoals->setTitle($valueType);
+        $entityManager->persist($followupGoals);
+
+        $entityManager->flush();
+        return new JsonResponse([
+            'response' => "Sent !",
+            'idAppel' => $followupGoals->getId()
+        ]);
+    }
 
     #[Route('/api/getFollowUpReportsById', name: 'app_getFollowUpReportsById')]
     public function getFollowUpReportsById(ManagerRegistry $doctrine, SerializerInterface $serializer): Response

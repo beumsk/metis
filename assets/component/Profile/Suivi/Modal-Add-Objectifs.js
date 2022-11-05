@@ -25,6 +25,15 @@ function ModalAddObjectifs(props) {
   const [elementsOpt, setElementsOpt] = useState(null);
   const [idPatient, setIdPatient] = useState(id);
   const [type, setType] = useState(null);
+  const [typeValue, setTypeValue] = useState(null);
+  const [fonction, setFonction] = useState(null);
+  const [callsFunctionValue, setCallsFunction] = useState(null);
+  const [isCallsPatients, setIsCallsPatients] = useState(false);
+  const [isPriority, setPriority] = useState(false);
+  const [contact, setonChangeContact] = useState(null);
+  const [description, setDescription] = useState(null);
+  const [whatDoinFunction, setWhatDoinFunction] = useState(null);
+  const [valueType, setValueType] = useState(null);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   useEffect(() => {
@@ -44,6 +53,33 @@ function ModalAddObjectifs(props) {
     setUserId(auth.auth.idUser);
   }, [idPatient]);
 
+  function onSent() {
+    // isCall is true appel entrant
+
+    let formData = new FormData();
+
+    formData.append("typeValue", typeValue);
+
+    formData.append("isPriority", isPriority);
+
+    formData.append("description", description);
+    formData.append("valueType", valueType);
+    formData.append("patientId", idPatient);
+    formData.append("userId", userId);
+
+    axios({
+      method: "post",
+      url: "/api/setGoals",
+      data: formData,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    }).then(function (response) {
+      location.replace(window.location.origin + "/" + idPatient);
+      document.querySelectorAll(".btn-close")[0].click();
+    });
+  }
   //
   //   /api/getContacts
   return (
@@ -58,9 +94,14 @@ function ModalAddObjectifs(props) {
         </Modal.Header>
         <Modal.Body>
           <>
-            <InputTypeList type={type} />
+            <InputTypeList type={type} onChange={(e) => setTypeValue(e)} />
 
-            <Form.Control type="text" id="inputText" className="mt-4" />
+            <Form.Control
+              type="text"
+              onChange={(e) => setValueType(e.target.value)}
+              id="inputText"
+              className="mt-4"
+            />
             <Form.Group className="mb-3" controlId="formBasicCheckbox">
               <Form.Check type="checkbox" label="Prioritaire ?" />
             </Form.Group>
@@ -69,12 +110,13 @@ function ModalAddObjectifs(props) {
               type="text"
               id="inputValueSpécifique"
               aria-describedby="valueSpécifique"
+              onChange={(e) => setDescription(e.target.value)}
             />
           </>
         </Modal.Body>
         <Modal.Footer>
           <Button onClick={handleClose}>Close</Button>
-          <Button onClick={handleClose}>Save Changes</Button>
+          <Button onClick={onSent}>Save Changes</Button>
         </Modal.Footer>
       </Modal>
     </>

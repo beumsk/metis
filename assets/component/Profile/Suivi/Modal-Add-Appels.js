@@ -130,19 +130,11 @@ function ModalAddAppels(props) {
         Authorization: `Bearer ${auth.auth.accessToken}`,
       },
     }).then(function (response) {
+      location.replace(window.location.origin + "/" + idPatient);
       document.querySelectorAll(".btn-close")[0].click();
     });
-
-    console.log(
-      callsFunctionValue,
-      isCallsPatients,
-      isPriority,
-      contact,
-      description,
-      valueWhatDoinFunction
-    );
   }
-  //   /api/getContacts
+
   return (
     <>
       <Button onClick={handleShow} className="btn-metis">
