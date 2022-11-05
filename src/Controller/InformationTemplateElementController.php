@@ -14,10 +14,50 @@ use Symfony\Component\HttpFoundation\Request;
 use App\Entity\InformationTemplateBlock;
 use App\Entity\Suggestions;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 
 class InformationTemplateElementController extends AbstractController
 {
+
+    #[Route('/api/editPatientInformation', name: 'app_editPatientInformation')]
+    public function editPatientInformation(ManagerRegistry $doctrine, Request $request): JsonResponse
+    {
+        $entityManager = $doctrine->getManager();
+        $request = Request::createFromGlobals();
+
+
+        $idInfo = $request->request->get('idInfo');
+
+        $valueSelect = $request->request->get('valueSelect');
+        $specificValueInput = $request->request->get('specificValueInput');
+        $commentaireInput = $request->request->get('commentaireInput');
+        $start = $request->request->get('start');
+        $end = $request->request->get('end');
+
+        $patientInfo = $doctrine->getRepository(PatientsInformation::class)->find($idInfo);
+
+
+        if ($valueSelect !== "null") {
+            $suggestion = $doctrine->getRepository(Suggestions::class)->find($valueSelect);
+            $patientInfo->setSugg($suggestion);
+        }
+
+        $patientInfo->setValue($specificValueInput);
+        if ($start !== "null") {
+            $patientInfo->setStart(new \DateTime($start));
+        }
+        if ($end !== "null") {
+            $patientInfo->setEnd(new \DateTime($end));
+        }
+        $patientInfo->setComment($commentaireInput);
+
+        $entityManager->flush();
+        return new JsonResponse([
+            'response' => "Sent !",
+            'idAppel' => $patientInfo->getId()
+        ]);
+    }
     #[Route('/api/findElAndBlckAndValByPatient', name: 'app_information')]
     public function index(ManagerRegistry $doctrine, Request $request): Response
     {

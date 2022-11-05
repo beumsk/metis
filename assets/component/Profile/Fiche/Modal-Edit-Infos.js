@@ -23,13 +23,35 @@ function ModalEditInfos(props) {
   const [infos, setInfos] = useState(null);
   const [elementsOpt, setElementsOpt] = useState(null);
   const [idPatient, setIdPatient] = useState(id);
-  const [start, setStartDate] = useState(new Date());
-  const [end, setEndDate] = useState(new Date());
+  const [start, setStartDate] = useState(
+    props?.infosPatient?.start !== null ? props?.infosPatient?.start : null
+  );
+  const [end, setEndDate] = useState(
+    props?.infosPatient?.end !== null ? props?.infosPatient?.end : null
+  );
+
+  const [valueSelect, setValueSelect] = useState(
+    props?.infosPatient?.sugg?.id !== null
+      ? props?.infosPatient?.sugg?.id
+      : null
+  );
+  const [specificValueInput, setSpecificValueInput] = useState(
+    props?.infosPatient?.value !== null ? props?.infosPatient?.value : null
+  );
+
+  const [commentaireInput, setCommentaire] = useState(
+    props?.infosPatient?.comment !== null ? props?.infosPatient?.comment : null
+  );
+
+  // console.log({new Date(g.creationDate).toLocaleString("fr-BE", {
+  //   dateStyle: "short",
+  // })});
+  console.log(start);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   useEffect(() => {
     setElementsOpt(...props?.infos?.suggestionsByBlock);
-
+    // console.log(props?.infosPatient);
     setStartDate(
       new Date(props?.infosPatient?.start?.timestamp * 1000).toJSON()
     );
@@ -39,12 +61,36 @@ function ModalEditInfos(props) {
   //
 
   const handleInputChange = (e) => {
-    //
-    setStartDate(e.target.value);
-    setEndDate(e.target.value);
+    //new Date(start).toJSON().slice(0, 10)
+    setStartDate(new Date(e.target.value).toJSON().slice(0, 10));
+    setEndDate(new Date(e.target.value).toJSON().slice(0, 10));
+  };
+
+  const handleSave = (e) => {
+    let formData = new FormData();
+    // value-sugg
+
+    formData.append("valueSelect", valueSelect);
+    formData.append("specificValueInput", specificValueInput);
+    formData.append("commentaireInput", commentaireInput);
+    formData.append("start", start);
+    formData.append("end", end);
+    formData.append("idInfo", props?.infosPatient?.id);
+    axios({
+      method: "post",
+      url: "/api/editPatientInformation",
+      data: formData,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    }).then(function (response) {
+      location.replace(window.location.origin + "/" + idPatient);
+      document.querySelectorAll(".btn-close")[0].click();
+    });
   };
   //   new Date(1254088800 *1000)
-  handleInputChange;
+  // handleInputChange;
   return (
     <>
       <button onClick={handleShow} className="ml-4">
@@ -59,11 +105,16 @@ function ModalEditInfos(props) {
           {" "}
           <>
             <Form.Label htmlFor="inputValue">Valeur</Form.Label>
-            <Form.Select size="lg">
+            <Form.Select
+              size="lg"
+              onChange={(e) => setValueSelect(e.target.value)}
+              id="value-sugg"
+            >
               {elementsOpt?.map((el, id) => (
                 <option
                   key={el.id}
-                  selected={props.infosPatient.sugg.value === el?.value}
+                  value={el.id}
+                  selected={props?.infosPatient?.sugg?.value === el?.value}
                 >
                   {el?.value}
                 </option>
@@ -73,6 +124,7 @@ function ModalEditInfos(props) {
             <input
               type="text"
               id="inputValueSpécifique"
+              onChange={(e) => setSpecificValueInput(e.target.value)}
               defaultValue={props?.infosPatient?.value}
               aria-describedby="valueSpécifique"
             />
@@ -83,18 +135,25 @@ function ModalEditInfos(props) {
             <Form.Label htmlFor="inputValue">Début</Form.Label>
 
             {start ? (
-              <Form.Control
-                type="date"
-                defaultValue={new Date(start).toJSON().slice(0, 10)}
-                placeholder="Here edit the release date"
-                onChange={(e) => handleInputChange(e)}
-                id="inputValueSpécifique"
-              />
+              <>
+                <Form.Control
+                  type="date"
+                  defaultValue={new Date(props?.infosPatient?.start)
+                    .toISOString()
+                    .substring(0, 10)}
+                  placeholder="Here edit the release date"
+                  onChange={handleInputChange}
+                  id="inputValueSpécifique"
+                />
+              </>
             ) : (
               <Form.Control
                 type="date"
+                defaultValue={new Date(props?.infosPatient?.start)
+                  .toISOString()
+                  .substring(0, 10)}
                 placeholder="Here edit the release date"
-                onChange={(e) => handleInputChange(e)}
+                onChange={handleInputChange}
                 id="inputValueSpécifique"
               />
             )}
@@ -104,24 +163,32 @@ function ModalEditInfos(props) {
             {end ? (
               <Form.Control
                 type="date"
-                defaultValue={new Date(end).toJSON().slice(0, 10)}
+                defaultValue={new Date(end).toISOString().substring(0, 10)}
+                onChange={handleInputChange}
                 id="inputValueSpécifique"
               />
             ) : (
-              <Form.Control type="date" id="inputValueSpécifique" />
+              <Form.Control
+                type="date"
+                defaultValue={new Date(end).toISOString().substring(0, 10)}
+                onChange={handleInputChange}
+                id="inputValueSpécifique"
+              />
             )}
 
             <Form.Label htmlFor="inputValue">Commentaire</Form.Label>
             <Form.Control
               as="textarea"
+              onChange={(e) => setCommentaire(e.target.value)}
               rows={3}
+              id="comment-value"
               defaultValue={props?.infosPatient?.comment}
             />
           </>
         </Modal.Body>
         <Modal.Footer>
           <Button onClick={handleClose}>Close</Button>
-          <Button onClick={handleClose}>Save Changes</Button>
+          <Button onClick={handleSave}>Save Changes</Button>
         </Modal.Footer>
       </Modal>
     </>
