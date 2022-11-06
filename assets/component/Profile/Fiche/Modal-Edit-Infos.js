@@ -90,8 +90,6 @@ function ModalEditInfos(props) {
         Authorization: `Bearer ${auth.auth.accessToken}`,
       },
     }).then(function (response) {
-      // location.replace(window.location.origin + "/" + idPatient);
-      // document.querySelectorAll(".btn-close")[0].click();
       if (response) {
         axios({
           method: "post",

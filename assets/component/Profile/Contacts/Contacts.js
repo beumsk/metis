@@ -60,12 +60,21 @@ const Contacts = () => {
       .catch(function (response) {});
   }, [idPatient]);
 
+  function contactLierResponse(e) {
+    console.log(e);
+    if (e && e.response) {
+      setContacts(e.response);
+    }
+  }
   return (
     <div className="onglet-contact">
       {listContacts && listContacts.data.length > 0 && (
         <div className="d-flex mb-4 row-btn">
           <ModalLierPatient listPatients={patients}></ModalLierPatient>
-          <ModalLierContacts listContacts={contactList}></ModalLierContacts>
+          <ModalLierContacts
+            onChangeContacts={(e) => contactLierResponse(e)}
+            listContacts={contactList}
+          ></ModalLierContacts>
         </div>
       )}
 
