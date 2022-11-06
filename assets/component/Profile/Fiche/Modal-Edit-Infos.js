@@ -8,6 +8,7 @@ import {
   faPlusCircle,
   faCancel,
   faEdit,
+  faCheck,
 } from "@fortawesome/free-solid-svg-icons";
 import { useParams } from "react-router-dom";
 import axios from "axios";
@@ -21,6 +22,8 @@ function ModalEditInfos(props) {
   formData.append("id", id.toString());
   formData.append("pathString", props.link);
   const [infos, setInfos] = useState(null);
+  const [isSentRepport, setIsSentRepport] = useState(false);
+  const [responseDatas, setResponseDatas] = useState(null);
   const [elementsOpt, setElementsOpt] = useState(null);
   const [idPatient, setIdPatient] = useState(id);
   const [start, setStartDate] = useState(
@@ -76,6 +79,8 @@ function ModalEditInfos(props) {
     formData.append("start", start);
     formData.append("end", end);
     formData.append("idInfo", props?.infosPatient?.id);
+    var formGetInfos = new FormData();
+    formGetInfos.append("id", id.toString());
     axios({
       method: "post",
       url: "/api/editPatientInformation",
@@ -85,12 +90,39 @@ function ModalEditInfos(props) {
         Authorization: `Bearer ${auth.auth.accessToken}`,
       },
     }).then(function (response) {
-      location.replace(window.location.origin + "/" + idPatient);
-      document.querySelectorAll(".btn-close")[0].click();
+      // location.replace(window.location.origin + "/" + idPatient);
+      // document.querySelectorAll(".btn-close")[0].click();
+      if (response) {
+        axios({
+          method: "post",
+          url: "/api/patientsInformationByPatients",
+          data: formGetInfos,
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${auth.auth.accessToken}`,
+          },
+        })
+          .then(function (response) {
+            setResponseDatas(response.data);
+            setIsSentRepport(true);
+            document.querySelectorAll(".btn-close")[0].click();
+          })
+          .catch(function (response) {});
+        // document.querySelectorAll(".btn-close")[0].click();
+        // location.replace(window.location.origin + "/" + idPatient);
+      }
     });
   };
   //   new Date(1254088800 *1000)
   // handleInputChange;
+
+  if (responseDatas !== null) {
+    props.onChange({
+      response: responseDatas,
+    });
+
+    // document.querySelectorAll(".btn-close")[0].click();
+  }
   return (
     <>
       <button onClick={handleShow} className="ml-4">
@@ -187,6 +219,7 @@ function ModalEditInfos(props) {
           </>
         </Modal.Body>
         <Modal.Footer>
+          {isSentRepport && <FontAwesomeIcon icon={faCheck} />}
           <Button onClick={handleClose}>Close</Button>
           <Button onClick={handleSave}>Save Changes</Button>
         </Modal.Footer>

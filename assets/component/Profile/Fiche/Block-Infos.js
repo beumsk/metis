@@ -28,6 +28,20 @@ const BlockInfos = (props) => {
   const [informationPatient, setInformation] = useState(null);
   const [informationTemplateBlock, setInformationTemplateBlock] =
     useState(null);
+
+  function onChangeEditPatientInformation(e) {
+    if (e && e.response) {
+      props.onChangeEditPati(e.response);
+    }
+  }
+  function onChangePatientInformation(e) {
+    console.log(e);
+    if (e && e.response) {
+      props.onChangeAddPati(e.response);
+    }
+    // props.onChangeAddPati(e.response);
+  }
+
   return (
     <>
       {props.infos?.map((patient, id) => (
@@ -51,6 +65,9 @@ const BlockInfos = (props) => {
                                 link={props.link}
                                 infosPatient={pi}
                                 infos={patient}
+                                onChange={(e) =>
+                                  onChangeEditPatientInformation(e)
+                                }
                               />
                             )}
                           </p>
@@ -63,7 +80,11 @@ const BlockInfos = (props) => {
                 )}
               </div>
               <div className="col-sm-2">
-                <ModalAddInfos link={props.link} infos={patient} />
+                <ModalAddInfos
+                  link={props.link}
+                  infos={patient}
+                  onChange={(e) => onChangePatientInformation(e)}
+                />
               </div>
             </div>
           )}

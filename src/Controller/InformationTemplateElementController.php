@@ -52,11 +52,58 @@ class InformationTemplateElementController extends AbstractController
         }
         $patientInfo->setComment($commentaireInput);
 
+
+
         $entityManager->flush();
         return new JsonResponse([
             'response' => "Sent !",
             'idAppel' => $patientInfo->getId()
         ]);
+    }
+
+    #[Route('/api/setPatientInformation', name: 'app_setPatientInformation')]
+    public function setPatientInformation(ManagerRegistry $doctrine, Request $request): JsonResponse
+    {
+        $entityManager = $doctrine->getManager();
+        $request = Request::createFromGlobals();
+
+
+        $idInfo = $request->request->get('idInfo');
+
+        $valueSelect = $request->request->get('valueSelect');
+        $specificValueInput = $request->request->get('specificValueInput');
+        $commentaireInput = $request->request->get('commentaireInput');
+        $start = $request->request->get('start');
+        $end = $request->request->get('end');
+
+        $idPatient = $request->request->get('idPatient');
+        $idItel = $request->request->get('itel');
+        $itel = $doctrine->getRepository(InformationTemplateElement::class)->find($idItel);
+        $patient = $doctrine->getRepository(Patients::class)->find($idPatient);
+
+        $patientInfo = new PatientsInformation();
+
+
+        if ($valueSelect !== "null") {
+            $suggestion = $doctrine->getRepository(Suggestions::class)->find($valueSelect);
+            $patientInfo->setSugg($suggestion);
+        }
+
+        $patientInfo->setValue($specificValueInput);
+        if ($start !== "null") {
+            $patientInfo->setStart(new \DateTime($start));
+        }
+        if ($end !== "null") {
+            $patientInfo->setEnd(new \DateTime($end));
+        }
+        $patientInfo->setComment($commentaireInput);
+        $patientInfo->setPati($patient);
+        $patientInfo->setItel($itel);
+        $entityManager->persist($patientInfo);
+
+        $entityManager->flush();
+
+        return $this->json($patientInfo);
     }
     #[Route('/api/findElAndBlckAndValByPatient', name: 'app_information')]
     public function index(ManagerRegistry $doctrine, Request $request): Response

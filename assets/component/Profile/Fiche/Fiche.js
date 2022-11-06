@@ -67,6 +67,18 @@ const Fiche = () => {
       .catch(function (response) {});
   }, [idPatient]);
   //
+  const onChangeEditPatientInformation = (e) => {
+    // console.log(e);
+    setInformation(e);
+
+    // document.querySelectorAll(".btn-close")[0].click();
+  };
+  const onChangeAddPatientInformation = (e) => {
+    // console.log(e);
+    setInformation(e);
+
+    // document.querySelectorAll(".btn-close")[0].click();
+  };
   return (
     <section>
       <Accordion defaultActiveKey="0" flush={true} className="accordion-fiche">
@@ -75,19 +87,27 @@ const Fiche = () => {
           <Accordion.Body>
             <BlockInfos
               infos={informationPatient}
+              onChangeAddPati={(e) => onChangeAddPatientInformation(e)}
+              onChangeEditPati={(e) => onChangeEditPatientInformation(e)}
               link={"/patient/fiche/statut-du-suivi"}
             ></BlockInfos>
             <BlockInfos
               infos={informationPatient}
               link={"/patient/suivi/equipes"}
+              onChangeAddPati={(e) => onChangeAddPatientInformation(e)}
+              onChangeEditPati={(e) => onChangeEditPatientInformation(e)}
             ></BlockInfos>
             <BlockInfos
               infos={informationPatient}
               link={"/patient/suivi/programme"}
+              onChangeAddPati={(e) => onChangeAddPatientInformation(e)}
+              onChangeEditPati={(e) => onChangeEditPatientInformation(e)}
             ></BlockInfos>
             <BlockInfos
               infos={informationPatient}
               link={"/patient/suivi/antenne"}
+              onChangeAddPati={(e) => onChangeAddPatientInformation(e)}
+              onChangeEditPati={(e) => onChangeEditPatientInformation(e)}
             ></BlockInfos>
           </Accordion.Body>
         </Accordion.Item>
@@ -99,32 +119,46 @@ const Fiche = () => {
             <BlockInfos
               infos={informationPatient}
               link={"/patient/fiche/information-generale/genre"}
+              onChangeAddPati={(e) => onChangeAddPatientInformation(e)}
+              onChangeEditPati={(e) => onChangeEditPatientInformation(e)}
             ></BlockInfos>
             <BlockInfos
               infos={informationPatient}
               link={"/patient/fiche/information-generale/etat-civil"}
+              onChangeAddPati={(e) => onChangeAddPatientInformation(e)}
+              onChangeEditPati={(e) => onChangeEditPatientInformation(e)}
             ></BlockInfos>
             <BlockInfos
               infos={informationPatient}
               link={
                 "/patient/fiche/information-generale/composition-familliale"
               }
+              onChangeAddPati={(e) => onChangeAddPatientInformation(e)}
+              onChangeEditPati={(e) => onChangeEditPatientInformation(e)}
             ></BlockInfos>
             <BlockInfos
               infos={informationPatient}
               link={"/patient/fiche/information-generale/nationalite"}
+              onChangeAddPati={(e) => onChangeAddPatientInformation(e)}
+              onChangeEditPati={(e) => onChangeEditPatientInformation(e)}
             ></BlockInfos>
             <BlockInfos
               infos={informationPatient}
               link={"/patient/fiche/information-generale/titre-de-sejour"}
+              onChangeAddPati={(e) => onChangeAddPatientInformation(e)}
+              onChangeEditPati={(e) => onChangeEditPatientInformation(e)}
             ></BlockInfos>
             <BlockInfos
               infos={informationPatient}
               link={"/patient/fiche/information-generale/numero-de-telephone"}
+              onChangeAddPati={(e) => onChangeAddPatientInformation(e)}
+              onChangeEditPati={(e) => onChangeEditPatientInformation(e)}
             ></BlockInfos>
             <BlockInfos
               infos={informationPatient}
               link={"/patient/fiche/information-generale/e-mail"}
+              onChangeAddPati={(e) => onChangeAddPatientInformation(e)}
+              onChangeEditPati={(e) => onChangeEditPatientInformation(e)}
             ></BlockInfos>
           </Accordion.Body>
         </Accordion.Item>
@@ -134,20 +168,28 @@ const Fiche = () => {
             <BlockInfos
               infos={informationPatient}
               link={"/patient/fiche/description"}
+              onChangeAddPati={(e) => onChangeAddPatientInformation(e)}
+              onChangeEditPati={(e) => onChangeEditPatientInformation(e)}
             ></BlockInfos>
             <BlockInfos
               infos={informationPatient}
               link={"/patient/fiche/description/signes-distinctifs"}
+              onChangeAddPati={(e) => onChangeAddPatientInformation(e)}
+              onChangeEditPati={(e) => onChangeEditPatientInformation(e)}
             ></BlockInfos>
             <BlockInfos
               infos={informationPatient}
               link={"/patient/fiche/description/histoire"}
+              onChangeAddPati={(e) => onChangeAddPatientInformation(e)}
+              onChangeEditPati={(e) => onChangeEditPatientInformation(e)}
             ></BlockInfos>
             <BlockInfos
               infos={informationPatient}
               link={
                 "/patient/fiche/description/points-d-attention-sensibilites"
               }
+              onChangeAddPati={(e) => onChangeAddPatientInformation(e)}
+              onChangeEditPati={(e) => onChangeEditPatientInformation(e)}
             ></BlockInfos>
           </Accordion.Body>
         </Accordion.Item>
@@ -157,20 +199,28 @@ const Fiche = () => {
             <BlockInfos
               infos={informationPatient}
               link={"/patient/fiche/ressources-personnelles/langues"}
+              onChangeAddPati={(e) => onChangeAddPatientInformation(e)}
+              onChangeEditPati={(e) => onChangeEditPatientInformation(e)}
             ></BlockInfos>
             <BlockInfos
               infos={informationPatient}
               link={
                 "/patient/fiche/ressources-personnelles/talents-et-centres-d-interet"
               }
+              onChangeAddPati={(e) => onChangeAddPatientInformation(e)}
+              onChangeEditPati={(e) => onChangeEditPatientInformation(e)}
             ></BlockInfos>
             <BlockInfos
               infos={informationPatient}
               link={"/patient/fiche/ressources-personnelles/reves"}
+              onChangeAddPati={(e) => onChangeAddPatientInformation(e)}
+              onChangeEditPati={(e) => onChangeEditPatientInformation(e)}
             ></BlockInfos>
             <BlockInfos
               infos={informationPatient}
               link={"/patient/fiche/ressources-personnelles/gouts-culinaires"}
+              onChangeAddPati={(e) => onChangeAddPatientInformation(e)}
+              onChangeEditPati={(e) => onChangeEditPatientInformation(e)}
             ></BlockInfos>
           </Accordion.Body>
         </Accordion.Item>
@@ -180,20 +230,28 @@ const Fiche = () => {
             <BlockInfos
               infos={informationPatient}
               link={"/patient/fiche/ressources-financieres/type-de-revenu"}
+              onChangeAddPati={(e) => onChangeAddPatientInformation(e)}
+              onChangeEditPati={(e) => onChangeEditPatientInformation(e)}
             ></BlockInfos>
             <BlockInfos
               infos={informationPatient}
               link={"/patient/fiche/ressources-financieres/gestion-budgetaire"}
+              onChangeAddPati={(e) => onChangeAddPatientInformation(e)}
+              onChangeEditPati={(e) => onChangeEditPatientInformation(e)}
             ></BlockInfos>
             <BlockInfos
               infos={informationPatient}
               link={"/patient/fiche/ressources-financieres/dettes"}
+              onChangeAddPati={(e) => onChangeAddPatientInformation(e)}
+              onChangeEditPati={(e) => onChangeEditPatientInformation(e)}
             ></BlockInfos>
             <BlockInfos
               infos={informationPatient}
               link={
                 "/patient/fiche/ressources-financieres/aides-exceptionnelles-ponctuelles"
               }
+              onChangeAddPati={(e) => onChangeAddPatientInformation(e)}
+              onChangeEditPati={(e) => onChangeEditPatientInformation(e)}
             ></BlockInfos>
           </Accordion.Body>
         </Accordion.Item>
@@ -203,10 +261,14 @@ const Fiche = () => {
             <BlockInfos
               infos={informationPatient}
               link={"/patient/fiche/acces-aux-soins/aide-medicale-du-cpas"}
+              onChangeAddPati={(e) => onChangeAddPatientInformation(e)}
+              onChangeEditPati={(e) => onChangeEditPatientInformation(e)}
             ></BlockInfos>
             <BlockInfos
               infos={informationPatient}
               link={"/patient/fiche/acces-aux-soins/mutuelle"}
+              onChangeAddPati={(e) => onChangeAddPatientInformation(e)}
+              onChangeEditPati={(e) => onChangeEditPatientInformation(e)}
             ></BlockInfos>
           </Accordion.Body>
         </Accordion.Item>
@@ -218,18 +280,26 @@ const Fiche = () => {
               link={
                 "/patient/medical/pathologies/pathologies-physiques-chroniques"
               }
+              onChangeAddPati={(e) => onChangeAddPatientInformation(e)}
+              onChangeEditPati={(e) => onChangeEditPatientInformation(e)}
             ></BlockInfos>
             <BlockInfos
               infos={informationPatient}
               link={"/patient/medical/episodes-de-maladie"}
+              onChangeAddPati={(e) => onChangeAddPatientInformation(e)}
+              onChangeEditPati={(e) => onChangeEditPatientInformation(e)}
             ></BlockInfos>
             <BlockInfos
               infos={informationPatient}
               link={"/patient/medical/allergies"}
+              onChangeAddPati={(e) => onChangeAddPatientInformation(e)}
+              onChangeEditPati={(e) => onChangeEditPatientInformation(e)}
             ></BlockInfos>
             <BlockInfos
               infos={informationPatient}
               link={"/patient/medical/parametres"}
+              onChangeAddPati={(e) => onChangeAddPatientInformation(e)}
+              onChangeEditPati={(e) => onChangeEditPatientInformation(e)}
             ></BlockInfos>
           </Accordion.Body>
         </Accordion.Item>
@@ -239,10 +309,14 @@ const Fiche = () => {
             <BlockInfos
               infos={informationPatient}
               link={"/patient/fiche/assuetude/supposee"}
+              onChangeAddPati={(e) => onChangeAddPatientInformation(e)}
+              onChangeEditPati={(e) => onChangeEditPatientInformation(e)}
             ></BlockInfos>
             <BlockInfos
               infos={informationPatient}
               link={"/patient/fiche/assuetude/declaree"}
+              onChangeAddPati={(e) => onChangeAddPatientInformation(e)}
+              onChangeEditPati={(e) => onChangeEditPatientInformation(e)}
             ></BlockInfos>
           </Accordion.Body>
         </Accordion.Item>
@@ -252,10 +326,14 @@ const Fiche = () => {
             <BlockInfos
               infos={informationPatient}
               link={"/patient/fiche/pathologie-mentale/supposee"}
+              onChangeAddPati={(e) => onChangeAddPatientInformation(e)}
+              onChangeEditPati={(e) => onChangeEditPatientInformation(e)}
             ></BlockInfos>
             <BlockInfos
               infos={informationPatient}
               link={"/patient/fiche/pathologie-mentale/declaree"}
+              onChangeAddPati={(e) => onChangeAddPatientInformation(e)}
+              onChangeEditPati={(e) => onChangeEditPatientInformation(e)}
             ></BlockInfos>
           </Accordion.Body>
         </Accordion.Item>
@@ -265,6 +343,8 @@ const Fiche = () => {
             <BlockInfos
               infos={informationPatient}
               link={"/patient/fiche/traitements"}
+              onChangeAddPati={(e) => onChangeAddPatientInformation(e)}
+              onChangeEditPati={(e) => onChangeEditPatientInformation(e)}
             ></BlockInfos>
             {/* {blockTraitements?.map((traitement, idx) => (
               <div key={idx}>
