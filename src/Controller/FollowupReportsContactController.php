@@ -17,6 +17,22 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 class FollowupReportsContactController extends AbstractController
 {
+    #[Route('/api/getPatientsByPatients', name: 'app_getPatientsByPatients')]
+    public function getPatientsByPatients(ManagerRegistry $doctrine, Request $request): Response
+    {
+        $request = Request::createFromGlobals();
+
+        $id = $request->request->get('id');
+        $reports = $doctrine->getRepository(FollowupReports::class)->findBy(["pati" => $id]);
+
+        $cont = $doctrine->getRepository(PatientsContacts::class)->findBy(["pati" => $id]);
+        $patientspatients = $doctrine->getRepository(PatientsPatients::class)->findBy(['tapa' => $id]);
+
+
+
+        return $this->json($patientspatients);
+    }
+
     #[Route('/api/getContactsByPatients', name: 'app_contactsbypatients')]
     public function getContactsByPatients(ManagerRegistry $doctrine, Request $request): Response
     {
@@ -34,6 +50,6 @@ class FollowupReportsContactController extends AbstractController
 
 
 
-        return $this->json([...$cont, ...$patientspatients]);
+        return $this->json($cont);
     }
 }

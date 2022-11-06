@@ -17,6 +17,7 @@ const Contacts = () => {
   const [contactList, setContactList] = useState();
   const [filterDates, setFilterDates] = useState();
   const [patients, setPatients] = useState(null);
+  const [patientsLists, setPatientsLists] = useState(null);
   useEffect(() => {
     axios({
       method: "post",
@@ -31,7 +32,19 @@ const Contacts = () => {
         setContacts(response);
       })
       .catch(function (response) {});
-
+    axios({
+      method: "post",
+      url: "/api/getPatientsByPatients",
+      data: formData,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    })
+      .then(function (response) {
+        setPatientsLists(response);
+      })
+      .catch(function (response) {});
     axios({
       method: "post",
       url: "/api/getContacts",
@@ -97,24 +110,26 @@ const Contacts = () => {
             </thead>
             {listContacts?.data.map((item) => (
               <>
-                <tbody>
-                  <tr>
-                    <td></td>
-                    <td>{item?.cont?.firstname}</td>
-                    <td>{item?.cont?.lastname}</td>
-                    <td></td>
-                    <td> </td>
-                    <td></td>
-                    <td></td>
+                {item && (
+                  <tbody>
+                    <tr>
+                      <td></td>
+                      <td>{item?.cont?.firstname}</td>
+                      <td>{item?.cont?.lastname}</td>
+                      <td></td>
+                      <td> </td>
+                      <td></td>
+                      <td></td>
 
-                    <td>
-                      {" "}
-                      <span>
-                        <button>Modifier</button>
-                      </span>
-                    </td>
-                  </tr>
-                </tbody>
+                      <td>
+                        {" "}
+                        <span>
+                          <button>Modifier</button>
+                        </span>
+                      </td>
+                    </tr>
+                  </tbody>
+                )}
               </>
             ))}
           </Table>
@@ -122,50 +137,49 @@ const Contacts = () => {
       )}
 
       <h5>Patients</h5>
-      {listContacts && listContacts.data.length > 0 && (
-        <>
-          {/* <h6>Liste de fichiers déjà présents</h6> */}
-          <Table striped>
-            <thead>
-              <tr>
-                <th>Nom</th>
-                <th>Organisation</th>
-                <th>Type</th>
-                <th>Description</th>
-                <th>Début</th>
-                <th>Fin</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
 
-            {listContacts?.data.map((item) => (
-              <>
-                <tbody>
-                  <tr>
-                    <td>
-                      {item?.orpa?.firstname} {item?.orpa?.lastname}
-                    </td>
-                    <td>
-                      {/* {new Date(patient.creationDate).toLocaleDateString()} */}
-                    </td>
-                    <td></td>
-                    <td></td>
-                    <td> </td>
-                    <td></td>
+      {/* <h6>Liste de fichiers déjà présents</h6> */}
+      <Table striped>
+        <thead>
+          <tr>
+            <th>Nom</th>
+            <th>Organisation</th>
+            <th>Type</th>
+            <th>Description</th>
+            <th>Début</th>
+            <th>Fin</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
 
-                    <td>
-                      {" "}
-                      <span>
-                        <button>Modifier</button>
-                      </span>
-                    </td>
-                  </tr>
-                </tbody>
-              </>
-            ))}
-          </Table>
-        </>
-      )}
+        {patientsLists?.data.map((item) => (
+          <>
+            {item && (
+              <tbody>
+                <tr>
+                  <td>
+                    {item?.orpa?.firstname} {item?.orpa?.lastname}
+                  </td>
+                  <td>
+                    {/* {new Date(patient.creationDate).toLocaleDateString()} */}
+                  </td>
+                  <td></td>
+                  <td></td>
+                  <td> </td>
+                  <td></td>
+
+                  <td>
+                    {" "}
+                    <span>
+                      <button>Modifier</button>
+                    </span>
+                  </td>
+                </tr>
+              </tbody>
+            )}
+          </>
+        ))}
+      </Table>
     </div>
   );
 };
