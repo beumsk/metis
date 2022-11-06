@@ -14,7 +14,9 @@ const Contacts = () => {
   const [idPatient, setIdPatient] = useState(id);
   const [listContacts, setContacts] = useState(null);
   const [options, setOptions] = useState();
+  const [contactList, setContactList] = useState();
   const [filterDates, setFilterDates] = useState();
+  const [patients, setPatients] = useState(null);
   useEffect(() => {
     axios({
       method: "post",
@@ -29,14 +31,41 @@ const Contacts = () => {
         setContacts(response);
       })
       .catch(function (response) {});
+
+    axios({
+      method: "post",
+      url: "/api/getContacts",
+      data: formData,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    })
+      .then(function (response) {
+        setContactList(response);
+      })
+      .catch(function (response) {});
+    axios({
+      method: "post",
+      url: "/api/getAllPatients",
+      data: formData,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    })
+      .then(function (response) {
+        setPatients(response);
+      })
+      .catch(function (response) {});
   }, [idPatient]);
 
   return (
     <div className="onglet-contact">
       {listContacts && listContacts.data.length > 0 && (
         <div className="d-flex mb-4 row-btn">
-          <ModalLierPatient listContacts={listContacts}></ModalLierPatient>
-          <ModalLierContacts listContacts={listContacts}></ModalLierContacts>
+          <ModalLierPatient listPatients={patients}></ModalLierPatient>
+          <ModalLierContacts listContacts={contactList}></ModalLierContacts>
         </div>
       )}
 

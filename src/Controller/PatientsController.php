@@ -208,7 +208,7 @@ class PatientsController extends AbstractController
         $request = Request::createFromGlobals();
 
         $page = $request->request->get('page');
-        $patients = $doctrine->getRepository(PatientsPlaces::class)->findAll();
+        $patients = $doctrine->getRepository(Patients::class)->findAll();
         return $this->json($patients);
     }
 

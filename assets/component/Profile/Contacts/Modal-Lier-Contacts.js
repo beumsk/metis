@@ -70,7 +70,7 @@ function ModalLierContacts(props) {
           <>
             <Form.Label htmlFor="inputValue">Valeur</Form.Label>
             <Form.Select size="lg">
-              {contacts?.data?.map((el, id) => (
+              {props.listContacts?.data?.map((el, id) => (
                 <>
                   {el?.firstname && el?.lastname && (
                     <option>

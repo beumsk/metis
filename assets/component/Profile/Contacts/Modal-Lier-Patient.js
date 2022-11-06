@@ -23,7 +23,7 @@ function ModalLierPatient(props) {
   const [elementsOpt, setElementsOpt] = useState(null);
   const [idPatient, setIdPatient] = useState(id);
   const [type, setType] = useState(null);
-  const [patients, setPatients] = useState(null);
+
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   useEffect(() => {
@@ -38,20 +38,6 @@ function ModalLierPatient(props) {
     })
       .then(function (response) {
         setType(response);
-      })
-      .catch(function (response) {});
-
-    axios({
-      method: "post",
-      url: "/api/getAllPatients",
-      data: formData,
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${auth.auth.accessToken}`,
-      },
-    })
-      .then(function (response) {
-        setPatients(response);
       })
       .catch(function (response) {});
   }, [idPatient]);
@@ -71,7 +57,7 @@ function ModalLierPatient(props) {
           <>
             <Form.Label htmlFor="inputValue">Valeur</Form.Label>
             <Form.Select size="lg">
-              {patients?.data?.map((el, id) => (
+              {props.listPatients?.data?.map((el, id) => (
                 <>
                   {el?.firstname && el?.lastname && (
                     <option>
