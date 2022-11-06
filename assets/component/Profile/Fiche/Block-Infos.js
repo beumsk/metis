@@ -14,6 +14,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import ModalAddInfos from "./Modal-Add-Infos";
 import ModalEditInfos from "./Modal-Edit-Infos";
+import ModalDeleteInfos from "./Modal-Delete-Infos";
 
 const BlockInfos = (props) => {
   let id = useParams().id;
@@ -61,14 +62,24 @@ const BlockInfos = (props) => {
                           <p key={pi.id}>
                             {pi.sugg?.value}
                             {pi && (
-                              <ModalEditInfos
-                                link={props.link}
-                                infosPatient={pi}
-                                infos={patient}
-                                onChange={(e) =>
-                                  onChangeEditPatientInformation(e)
-                                }
-                              />
+                              <>
+                                <ModalEditInfos
+                                  link={props.link}
+                                  infosPatient={pi}
+                                  infos={patient}
+                                  onChange={(e) =>
+                                    onChangeEditPatientInformation(e)
+                                  }
+                                />
+                                <ModalDeleteInfos
+                                  link={props.link}
+                                  infosPatient={pi}
+                                  infos={patient}
+                                  onChange={(e) =>
+                                    onChangeEditPatientInformation(e)
+                                  }
+                                />
+                              </>
                             )}
                           </p>
                         </div>

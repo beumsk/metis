@@ -136,7 +136,9 @@ class PatientsController extends AbstractController
                 if ($pati->getItel()->getId() === $key->getId()) {
                     $test[] = $pati;
                     // dd($pati);
-                    $key->setPatientInformation($pati);
+                    if ($pati->getDeletedAt() === null) {
+                        $key->setPatientInformation($pati);
+                    }
                 }
             }
         }
