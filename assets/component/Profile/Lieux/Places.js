@@ -5,6 +5,7 @@ import axios from "axios";
 // import Basic from "./Dropzone";
 import ModalLierLieux from "./Modal-Lier-Lieux";
 import EditLierLieux from "./Edit-Lieux";
+import ModalDeletePlaces from "./Delete-Lieux";
 import Table from "react-bootstrap/Table";
 const Places = () => {
   let id = useParams().id;
@@ -77,6 +78,11 @@ const Places = () => {
     setPlaces(e);
   }
 
+  function onChangeDeletePlace(e) {
+    console.log(e);
+    setPlaces(e);
+  }
+
   return (
     <>
       <div className="d-flex mb-4 row-btn">
@@ -127,6 +133,12 @@ const Places = () => {
                         // typeDefault={places.type.lastname}
                         places={places}
                       ></EditLierLieux>
+                      <ModalDeletePlaces
+                        lieu={places}
+                        type={type}
+                        onChangeDeletePlace={(e) => onChangeDeletePlace(e)}
+                        places={places}
+                      ></ModalDeletePlaces>
                     </td>
                   </tr>
                 </tbody>

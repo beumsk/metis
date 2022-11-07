@@ -118,12 +118,12 @@ function ModalLierLieux(props) {
   return (
     <>
       <Button onClick={handleShow} className="btn-metis">
-        Lier un lieu
+        Modifier le lieu
       </Button>
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Modifier une information</Modal.Title>
+          <Modal.Title>Modifier le lieu</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <>

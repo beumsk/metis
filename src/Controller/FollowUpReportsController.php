@@ -924,7 +924,7 @@ class FollowUpReportsController extends AbstractController
 
         $id = $request->request->get('id');
 
-        $places = $doctrine->getRepository(PatientsPlaces::class)->findBy(["pati" => $id]);
+        $places = $doctrine->getRepository(PatientsPlaces::class)->findBy(["pati" => $id, "deleted_at" => null]);
         // $places = $doctrine->getRepository(FollowupGoals::class)->findAll();
 
         return $this->json($places);

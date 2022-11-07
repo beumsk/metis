@@ -27,6 +27,44 @@ class PlacesController extends AbstractController
         return $this->json($places);
     }
 
+    #[Route('/api/deleteLierPlaces', name: 'app_deleteLierPlaces')]
+    public function deleteLierPlaces(ManagerRegistry $doctrine, Request $request): JsonResponse
+    {
+        $request = Request::createFromGlobals();
+
+
+
+        $idPatient = $request->request->get('idPatient');
+        $idLieu = $request->request->get('idLieu');
+
+        $entityManager = $doctrine->getManager();
+
+        $place = $doctrine->getRepository(PatientsPlaces::class)->find($idLieu);
+
+
+        // $place->setComment($valueCommentary);
+        // $place->setCont($places);
+        // if ($start !== "null") {
+        //     $place->setStart(new \DateTime($start));
+        // }
+
+        // if ($end !== "null") {
+        //     $place->setEnd(new \DateTime($end));
+        // }
+        // $place->setSugg($suggType);
+        // $place->setPati($patient);
+        $place->setDeletedAt(new \DateTime('now'));
+
+        // $entityManager->persist($place);
+        $entityManager->flush();
+
+
+        return new JsonResponse([
+            'id' => $place->getId(),
+            'response' => "Sent !"
+        ]);
+    }
+
     #[Route('/api/updateLierPlaces', name: 'app_updateLierPlaces')]
     public function updateLierPlaces(ManagerRegistry $doctrine, Request $request): JsonResponse
     {
