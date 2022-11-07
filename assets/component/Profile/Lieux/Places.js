@@ -9,7 +9,7 @@ import Table from "react-bootstrap/Table";
 const Places = () => {
   let id = useParams().id;
   var formType = new FormData();
-  formType.append("id", 174);
+  formType.append("id", 745);
   var formData = new FormData();
   formData.append("id", id.toString());
   const [auth, setAuth] = useState(useAuth());
@@ -73,6 +73,10 @@ const Places = () => {
     // console.log("base", listPlaces);
   }
 
+  function editPlacesResponse(e) {
+    setPlaces(e);
+  }
+
   return (
     <>
       <div className="d-flex mb-4 row-btn">
@@ -118,6 +122,7 @@ const Places = () => {
                       <EditLierLieux
                         lieu={places}
                         type={type}
+                        onChangeEditPlaces={(e) => editPlacesResponse(e)}
                         lieuxList={alllistPlaces}
                         // typeDefault={places.type.lastname}
                         places={places}

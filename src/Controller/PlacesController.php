@@ -27,6 +27,51 @@ class PlacesController extends AbstractController
         return $this->json($places);
     }
 
+    #[Route('/api/updateLierPlaces', name: 'app_updateLierPlaces')]
+    public function updateLierPlaces(ManagerRegistry $doctrine, Request $request): JsonResponse
+    {
+        $request = Request::createFromGlobals();
+
+
+        $valueLieux = $request->request->get('valueLieux');
+        $start = $request->request->get('start');
+        $end = $request->request->get('end');
+        $valueType = $request->request->get('valueType');
+        $idPatient = $request->request->get('idPatient');
+        $idLieu = $request->request->get('idLieu');
+
+        $entityManager = $doctrine->getManager();
+
+        $place = $doctrine->getRepository(PatientsPlaces::class)->find($idLieu);
+        $valueCommentary = $request->request->get('valueCommentary');
+
+        $places = $doctrine->getRepository(Contacts::class)->find($valueLieux);
+        $suggType = $doctrine->getRepository(Suggestions::class)->find($valueType);
+        $patient = $doctrine->getRepository(Patients::class)->find($idPatient);
+
+
+        $place->setComment($valueCommentary);
+        $place->setCont($places);
+        if ($start !== "null") {
+            $place->setStart(new \DateTime($start));
+        }
+
+        if ($end !== "null") {
+            $place->setEnd(new \DateTime($end));
+        }
+        $place->setSugg($suggType);
+        $place->setPati($patient);
+
+        // $entityManager->persist($place);
+        $entityManager->flush();
+
+
+        return new JsonResponse([
+            'id' => $patient->getId(),
+            'response' => "Sent !"
+        ]);
+    }
+
     #[Route('/api/setLierPlaces', name: 'app_setLierPlaces')]
     public function setLierPlaces(ManagerRegistry $doctrine, Request $request): JsonResponse
     {

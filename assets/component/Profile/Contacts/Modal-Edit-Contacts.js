@@ -155,7 +155,7 @@ function ModalEditContacts(props) {
             <Form.Select
               size="lg"
               onChange={(e) => setContactItemList(e.target.value)}
-              defaultValue={props?.cont?.id}
+              defaultValue={props?.infos.cont?.id}
             >
               {props.listContacts?.data?.map((el, id) => (
                 <>
@@ -170,7 +170,7 @@ function ModalEditContacts(props) {
             <Form.Label htmlFor="inputValue">Type</Form.Label>
             <Form.Select
               size="lg"
-              defaultValue={props?.sugg?.id}
+              defaultValue={props?.infos.sugg?.id}
               onChange={(e) => setTypeItemList(e.target.value)}
             >
               {type?.data?.map((el, id) => (
