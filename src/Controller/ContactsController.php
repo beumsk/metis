@@ -95,10 +95,48 @@ class ContactsController extends AbstractController
         $entityManager->flush();
 
 
-        return new JsonResponse([
-            'id' => $contact->getId(),
-            'response' => "Sent !"
-        ]);
+        return $this->json($contact);
+    }
+
+    #[Route('/api/updatePatientPatient', name: 'app_updatePatientPatient')]
+    public function updatePatientPatient(ManagerRegistry $doctrine, Request $request): JsonResponse
+    {
+        $request = Request::createFromGlobals();
+
+        $description = $request->request->get('description');
+        $commentaire = $request->request->get('commentaire');
+        $patientItemList = $request->request->get('patientItemList');
+        $start = $request->request->get('start');
+        $end = $request->request->get('end');
+        $typeItemList = $request->request->get('typeItemList');
+        $idPatient = $request->request->get('idPatient');
+
+        $entityManager = $doctrine->getManager();
+
+        $contact = new PatientsPatients();
+
+        $contact->setLinkDescription($description);
+        $pati_item = $doctrine->getRepository(Patients::class)->find($patientItemList);
+        $contact->setOrpa($pati_item);
+
+        if ($start !== "null") {
+            $contact->setStart(new \DateTime($start));
+        }
+
+        if ($end !== "null") {
+            $contact->setEnd(new \DateTime($end));
+        }
+        $sugg_item = $doctrine->getRepository(Suggestions::class)->find($typeItemList);
+        $contact->setSugg($sugg_item);
+        $patient = $doctrine->getRepository(Patients::class)->find($idPatient);
+        $contact->setTapa($patient);
+
+
+        // $entityManager->persist($contact);
+        $entityManager->flush();
+
+
+        return $this->json($contact);
     }
 
 
@@ -114,6 +152,7 @@ class ContactsController extends AbstractController
         $end = $request->request->get('end');
         $typeItemList = $request->request->get('typeItemList');
         $idPatient = $request->request->get('idPatient');
+        $Idinfos = $request->request->get('Idinfos');
 
         $entityManager = $doctrine->getManager();
 
@@ -140,10 +179,49 @@ class ContactsController extends AbstractController
         $entityManager->flush();
 
 
-        return new JsonResponse([
-            'id' => $contact->getId(),
-            'response' => "Sent !"
-        ]);
+        return $this->json($contact);
+    }
+
+    #[Route('/api/updatePatientContact', name: 'app_updatePatientContact')]
+    public function updatePatientContact(ManagerRegistry $doctrine, Request $request): JsonResponse
+    {
+        $request = Request::createFromGlobals();
+
+        $description = $request->request->get('description');
+        $commentaire = $request->request->get('commentaire');
+        $contactItemList = $request->request->get('contactItemList');
+        $start = $request->request->get('start');
+        $end = $request->request->get('end');
+        $typeItemList = $request->request->get('typeItemList');
+        $idPatient = $request->request->get('idPatient');
+        $Idinfos = $request->request->get('Idinfos');
+
+        $entityManager = $doctrine->getManager();
+
+        $contact = $doctrine->getRepository(PatientsContacts::class)->find($Idinfos);
+
+        $contact->setLinkDescription($description);
+        $cont_item = $doctrine->getRepository(Contacts::class)->find($contactItemList);
+        $contact->setCont($cont_item);
+
+        if ($start !== "null") {
+            $contact->setStart(new \DateTime($start));
+        }
+
+        if ($end !== "null") {
+            $contact->setEnd(new \DateTime($end));
+        }
+        $sugg_item = $doctrine->getRepository(Suggestions::class)->find($typeItemList);
+        $contact->setSugg($sugg_item);
+        $patient = $doctrine->getRepository(Patients::class)->find($idPatient);
+        $contact->setPati($patient);
+
+
+        // $entityManager->persist($contact);
+        $entityManager->flush();
+
+
+        return $this->json($contact);
     }
 
 

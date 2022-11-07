@@ -12,7 +12,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import Form from "react-bootstrap/Form";
 
-function ModalEditPatient(props) {
+function ModalLierPatient(props) {
   const [show, setShow] = useState(false);
   const [auth, setAuth] = useState(useAuth());
   let id = useParams().id;
@@ -21,14 +21,25 @@ function ModalEditPatient(props) {
   //   formData.append("pathString", props.link);
   const [infos, setInfos] = useState(null);
   const [elementsOpt, setElementsOpt] = useState(null);
+  const [isSentRepport, setIsSentRepport] = useState(false);
   const [idPatient, setIdPatient] = useState(id);
   const [responseDatas, setResponseDatas] = useState(null);
-  const [description, setDescription] = useState(null);
+  const [description, setDescription] = useState(
+    props?.infos?.linkDescription ? props?.infos?.linkDescription : null
+  );
   const [commentaire, setCommentaire] = useState(null);
-  const [patientItemList, setPatientItemList] = useState(null);
-  const [start, setStartDate] = useState(null);
-  const [end, setEndDate] = useState(null);
-  const [typeItemList, setTypeItemList] = useState();
+  const [patientItemList, setPatientItemList] = useState(
+    props?.infos?.orpa?.id ? props?.infos?.orpa?.id : null
+  );
+  const [start, setStartDate] = useState(
+    props?.infos?.start ? props?.infos?.start : null
+  );
+  const [end, setEndDate] = useState(
+    props?.infos?.end ? props?.infos?.end : null
+  );
+  const [typeItemList, setTypeItemList] = useState(
+    props?.infos?.sugg?.id ? props?.infos?.sugg?.id : null
+  );
   const [type, setType] = useState(null);
 
   const handleClose = () => setShow(false);
@@ -49,14 +60,6 @@ function ModalEditPatient(props) {
       .catch(function (response) {});
   }, [idPatient]);
   function handleSave() {
-    console.log(
-      description,
-      commentaire,
-      contactItemList,
-      start,
-      end,
-      typeItemList
-    );
     let formData = new FormData();
     // value-sugg
 
@@ -67,9 +70,10 @@ function ModalEditPatient(props) {
     formData.append("end", end);
     formData.append("typeItemList", typeItemList);
     formData.append("idPatient", idPatient);
+    formData.append("Idinfos", props?.infos.id);
     axios({
       method: "post",
-      url: "/api/setPatientContact",
+      url: "/api/updatePatientPatient",
       data: formData,
       headers: {
         "Content-Type": "application/json",
@@ -81,7 +85,7 @@ function ModalEditPatient(props) {
         formGetInfos.append("id", id.toString());
         axios({
           method: "post",
-          url: "/api/setPatientPatient",
+          url: "/api/getPatientsByPatients",
           data: formGetInfos,
           headers: {
             "Content-Type": "application/json",
@@ -90,7 +94,7 @@ function ModalEditPatient(props) {
         })
           .then(function (response) {
             console.log(response);
-            setResponseDatas(response.data);
+            setResponseDatas(response);
             setIsSentRepport(true);
             document.querySelectorAll(".btn-close")[0].click();
           })
@@ -102,9 +106,13 @@ function ModalEditPatient(props) {
   }
 
   if (responseDatas !== null) {
-    props.onChangeContacts({
+    props.onChangePatientsPatients({
       data: responseDatas,
     });
+  }
+
+  if (props.infos) {
+    // console.log(props.infos);
   }
 
   const handleInputChange = (e) => {
@@ -128,12 +136,13 @@ function ModalEditPatient(props) {
             <Form.Label htmlFor="inputValue">Valeur</Form.Label>
             <Form.Select
               size="lg"
+              defaultValue={props?.infos?.orpa?.id}
               onChange={(e) => setPatientItemList(e.target.value)}
             >
               {props.listPatients?.data?.map((el, id) => (
                 <>
                   {el?.firstname && el?.lastname && (
-                    <option>
+                    <option value={el.id}>
                       {el?.firstname} {el?.lastname}
                     </option>
                   )}
@@ -144,6 +153,7 @@ function ModalEditPatient(props) {
             <Form.Select
               size="lg"
               onChange={(e) => setTypeItemList(e.target.value)}
+              defaultValue={props?.infos?.sugg?.id}
             >
               {type?.data?.map((el, id) => (
                 <>{el.value && <option>{el?.value}</option>}</>
@@ -151,7 +161,9 @@ function ModalEditPatient(props) {
             </Form.Select>
             <Form.Label htmlFor="inputValue">Description</Form.Label>
             <Form.Control
-              type="text"
+              as="textarea"
+              rows={3}
+              defaultValue={props?.infos?.linkDescription}
               id="inputValueSpécifique"
               onChange={(e) => setDescription(e.target.value)}
               aria-describedby="valueSpécifique"
@@ -161,6 +173,9 @@ function ModalEditPatient(props) {
             <Form.Control
               type="date"
               onChange={handleInputChange}
+              defaultValue={new Date(props?.infos?.start)
+                .toISOString()
+                .substring(0, 10)}
               id="inputValueSpécifique"
               aria-describedby="valueSpécifique"
             />
@@ -169,15 +184,16 @@ function ModalEditPatient(props) {
               type="date"
               id="inputValueSpécifique"
               onChange={handleInputChange}
+              defaultValue={new Date(props?.infos?.end)
+                .toISOString()
+                .substring(0, 10)}
               aria-describedby="valueSpécifique"
             />
-            <Form.Label htmlFor="inputValue">Commentaire</Form.Label>
-            <Form.Control as="textarea" rows={3} />
           </>
         </Modal.Body>
         <Modal.Footer>
           <Button onClick={handleClose}>Close</Button>
-          <Button onClick={handleClose}>Save Changes</Button>
+          <Button onClick={handleSave}>Save Changes</Button>
         </Modal.Footer>
       </Modal>
     </>
@@ -186,4 +202,4 @@ function ModalEditPatient(props) {
 
 // render(<Modal />);
 
-export default ModalEditPatient;
+export default ModalLierPatient;

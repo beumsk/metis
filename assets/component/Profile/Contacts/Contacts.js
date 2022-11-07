@@ -5,6 +5,8 @@ import axios from "axios";
 import ModalLierPatient from "./Modal-Lier-Patient";
 import ModalLierContacts from "./Modal-Lier-Contacts";
 import Table from "react-bootstrap/Table";
+import ModalEditContacts from "./Modal-Edit-Contacts";
+import ModalEditPatient from "./Modal-Edit-Patient";
 
 const Contacts = () => {
   let id = useParams().id;
@@ -73,17 +75,50 @@ const Contacts = () => {
       .catch(function (response) {});
   }, [idPatient]);
 
+  function onChangePatientsPatients(e) {
+    console.log(e);
+    if (e && e.data?.data) {
+      setContacts(e.data?.data);
+    }
+  }
+
+  function onChangeUpdateContact(e) {
+    console.log(e);
+    if (e && e.response) {
+      setContacts(e.response);
+    }
+  }
+
+  function patientLierResponse(e) {
+    console.log(e);
+    if (e && e.response) {
+      setPatientsLists(e.response);
+    }
+  }
+
   function contactLierResponse(e) {
     console.log(e);
     if (e && e.response) {
       setContacts(e.response);
     }
   }
+
+  function onChangeUpdateContact(e) {
+    console.log(e.data.data);
+    setContacts(e.data);
+  }
+
+  function onChangePatientsPatients(e) {
+    console.log(e);
+  }
   return (
     <div className="onglet-contact">
       {listContacts && listContacts.data.length > 0 && (
         <div className="d-flex mb-4 row-btn">
-          <ModalLierPatient listPatients={patients}></ModalLierPatient>
+          <ModalLierPatient
+            listPatients={patients}
+            onChangePatientsPatients={(e) => patientLierResponse(e)}
+          ></ModalLierPatient>
           <ModalLierContacts
             onChangeContacts={(e) => contactLierResponse(e)}
             listContacts={contactList}
@@ -117,14 +152,21 @@ const Contacts = () => {
                       <td>{item?.cont?.firstname}</td>
                       <td>{item?.cont?.lastname}</td>
                       <td></td>
-                      <td> </td>
+                      <td>{item.linkDesciption}</td>
                       <td></td>
                       <td></td>
 
                       <td>
                         {" "}
                         <span>
-                          <button>Modifier</button>
+                          <ModalEditContacts
+                            infos={item}
+                            // onChangeContacts={(e) => contactLierResponse(e)}
+                            onChangeUpdateContact={(e) =>
+                              onChangeUpdateContact(e)
+                            }
+                            listContacts={contactList}
+                          />
                         </span>
                       </td>
                     </tr>
@@ -171,7 +213,14 @@ const Contacts = () => {
                   <td>
                     {" "}
                     <span>
-                      <button>Modifier</button>
+                      <ModalEditPatient
+                        infos={item}
+                        // onChangeContacts={(e) => contactLierResponse(e)}
+                        onChangePatientsPatients={(e) =>
+                          onChangePatientsPatients(e)
+                        }
+                        listPatients={patients}
+                      />
                     </span>
                   </td>
                 </tr>

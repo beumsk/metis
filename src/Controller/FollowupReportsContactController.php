@@ -17,6 +17,9 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 class FollowupReportsContactController extends AbstractController
 {
+
+
+
     #[Route('/api/getPatientsByPatients', name: 'app_getPatientsByPatients')]
     public function getPatientsByPatients(ManagerRegistry $doctrine, Request $request): Response
     {

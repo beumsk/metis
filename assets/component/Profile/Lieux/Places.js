@@ -60,12 +60,27 @@ const Places = () => {
         setType(response);
       })
       .catch(function (response) {});
+    setPlaces(listPlaces);
   }, [idPatient]);
+
+  function onChangePlaces(e) {
+    console.log(e);
+    // listPlaces.data.splice(listPlaces.data.length, 0);
+    // console.log("base", listPlaces);
+    // listPlaces.data.push(...e.data);
+    setPlaces(e);
+    // console.log("devenir", e);
+    // console.log("base", listPlaces);
+  }
 
   return (
     <>
       <div className="d-flex mb-4 row-btn">
-        <ModalLierLieux lieuxList={alllistPlaces} type={type}></ModalLierLieux>
+        <ModalLierLieux
+          lieuxList={alllistPlaces}
+          type={type}
+          onChangeLierPlaces={(e) => onChangePlaces(e)}
+        ></ModalLierLieux>
       </div>
 
       {listPlaces && listPlaces.data.length > 0 && (

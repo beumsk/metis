@@ -49,7 +49,7 @@ function ModalEditInfos(props) {
   // console.log({new Date(g.creationDate).toLocaleString("fr-BE", {
   //   dateStyle: "short",
   // })});
-  console.log(start);
+
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   useEffect(() => {
