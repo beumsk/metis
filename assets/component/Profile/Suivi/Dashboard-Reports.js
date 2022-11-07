@@ -14,7 +14,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import Form from "react-bootstrap/Form";
 import Table from "react-bootstrap/Table";
-
+import TableAllRapports from "./Table-AllRapports/Table";
 function DashboardReports(props) {
   const [show, setShow] = useState(false);
   const [auth, setAuth] = useState(useAuth());
@@ -26,88 +26,25 @@ function DashboardReports(props) {
   const [elementsOpt, setElementsOpt] = useState(null);
   const [idPatient, setIdPatient] = useState(id);
   const [type, setType] = useState(null);
+  const [informations, setInformation] = useState(null);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-  useEffect(() => {
-    // axios({
-    //   method: "post",
-    //   url: "/api/suggestionsById",
-    //   data: formData,
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //     Authorization: `Bearer ${auth.auth.accessToken}`,
-    //   },
-    // })
-    //   .then(function (response) {
-    //     setType(response);
-    //   })
-    //   .catch(function (response) {});
-    // axios({
-    //   method: "post",
-    //   url: "/api/getContacts",
-    //   data: formData,
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //     Authorization: `Bearer ${auth.auth.accessToken}`,
-    //   },
-    // })
-    //   .then(function (response) {
-    //     setContacts(response);
-    //   })
-    //   .catch(function (response) {});
-  }, [idPatient]);
+
   //
+  // console.log(...props.informationPatient.data);
   //   /api/getContacts
   return (
     <>
-      <div className="container  row mx-auto report-content">
+      <div className="container ">
         <h5 className="mt-4 mb-4">Tous les rapports</h5>
 
         {props.informationPatient &&
           props.informationPatient.data &&
           props.informationPatient.data.length > 0 && (
-            <Table striped>
-              <thead>
-                <tr>
-                  <th>Type</th>
-                  <th>Date de création</th>
-                  <th>Objectifs</th>
-                  <th>Contact(s)</th>
-                  <th>Soins(s)</th>
-                  <th>Activité(s)</th>
-                  <th>Important</th>
-                  <th>Ind.</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              {props.informationPatient.data.map((patient) => (
-                <>
-                  <tbody>
-                    <tr>
-                      <td></td>
-                      <td>
-                        {new Date(patient.creationDate).toLocaleDateString()}
-                      </td>
-                      <td></td>
-                      <td></td>
-                      <td>{patient.noCare}</td>
-                      <td>{patient.noIndicators}</td>
-                      <td>{patient.noIndicators}</td>
-                      <td></td>
-                      <td>
-                        {" "}
-                        <span>
-                          <button>Détails</button>
-                        </span>
-                      </td>
-                    </tr>
-                  </tbody>
-                </>
-              ))}
-              {/* <button className="btn-metis" onClick={readMore}>
-                Read More
-              </button> */}
-            </Table>
+            <TableAllRapports
+              data={[...props.informationPatient.data]}
+              rowsPerPage={10}
+            />
           )}
       </div>
     </>

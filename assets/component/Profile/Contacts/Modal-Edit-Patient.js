@@ -112,7 +112,7 @@ function ModalLierPatient(props) {
   }
 
   if (props.infos) {
-    // console.log(props.infos);
+    console.log(props.infos);
   }
 
   const handleInputChange = (e) => {
