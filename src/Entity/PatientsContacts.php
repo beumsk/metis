@@ -38,6 +38,9 @@ class PatientsContacts
     #[ORM\ManyToOne]
     private ?Suggestions $sugg = null;
 
+    #[ORM\ManyToOne(inversedBy: 'patients')]
+    private ?Contacts $contact = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -135,6 +138,18 @@ class PatientsContacts
     public function setSugg(?Suggestions $sugg): self
     {
         $this->sugg = $sugg;
+
+        return $this;
+    }
+
+    public function getContact(): ?Contacts
+    {
+        return $this->contact;
+    }
+
+    public function setContact(?Contacts $contact): self
+    {
+        $this->contact = $contact;
 
         return $this;
     }

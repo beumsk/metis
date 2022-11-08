@@ -19,6 +19,7 @@ import RepportCalls from "./component/list_reportCalls";
 import RepportGoals from "./component/list_reportGoals";
 
 import Patient from "./component/Patient";
+import AppelsOrganisation from "./component/Appels-Organisation/Appels-Organisation";
 import "./styles/app.scss";
 
 const ROLES = {
@@ -42,6 +43,10 @@ function App() {
           <Route element={<RequireAuth allowedRoles={[ROLES.Admin]} />}>
             <Route path="statistiques" element={<Statistiques />} />
             <Route path="patients" element={<Patients />} />
+            <Route
+              path="appels-organisation"
+              element={<AppelsOrganisation />}
+            />
             <Route path=":id" element={<Patient />} />
           </Route>
 

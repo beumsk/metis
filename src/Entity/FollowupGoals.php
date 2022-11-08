@@ -55,6 +55,10 @@ class FollowupGoals
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $creation_date = null;
 
+    #[ORM\ManyToOne(targetEntity: "Contacts", inversedBy: 'calls')]
+    #[ORM\JoinColumn(name: "cont_id", referencedColumnName: "id", nullable: true)]
+    private ?Contacts $contact = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -203,6 +207,18 @@ class FollowupGoals
     public function setCreationDate(?\DateTimeInterface $creation_date): self
     {
         $this->creation_date = $creation_date;
+
+        return $this;
+    }
+
+    public function getContact(): ?Contacts
+    {
+        return $this->contact;
+    }
+
+    public function setContact(?Contacts $contact): self
+    {
+        $this->contact = $contact;
 
         return $this;
     }

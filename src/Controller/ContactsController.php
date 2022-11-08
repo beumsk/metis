@@ -30,7 +30,7 @@ class ContactsController extends AbstractController
     #[Route('/api/getContacts', name: 'app_allContacts')]
     public function index(ManagerRegistry $doctrine, SerializerInterface $serializer): Response
     {
-        $contacts = $doctrine->getRepository(Contacts::class)->findAll();
+        $contacts = $doctrine->getRepository(Contacts::class)->findByExampleField();
         $encoders = [new JsonEncoder()];
         $normalizers = [new DateTimeNormalizer(), new ObjectNormalizer()];
         $serializer = new Serializer($normalizers, $encoders);

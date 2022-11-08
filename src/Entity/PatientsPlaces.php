@@ -57,6 +57,9 @@ class PatientsPlaces
     #[ORM\ManyToOne]
     private ?Patients $pati = null;
 
+    #[ORM\ManyToOne(inversedBy: 'occupants')]
+    private ?Contacts $place = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -218,6 +221,18 @@ class PatientsPlaces
     public function setPati(?Patients $pati): self
     {
         $this->pati = $pati;
+
+        return $this;
+    }
+
+    public function getPlace(): ?Contacts
+    {
+        return $this->place;
+    }
+
+    public function setPlace(?Contacts $place): self
+    {
+        $this->place = $place;
 
         return $this;
     }

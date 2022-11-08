@@ -11,6 +11,7 @@ import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import Search from "./Search";
+// import AppelsOrganisation from "./Appels-Organisation";
 
 const Menu = () => {
   const logout = useLogout();
@@ -39,6 +40,9 @@ const Menu = () => {
 
               <Nav.Link href="/patients">Patients</Nav.Link>
               <Nav.Link href="/statistiques">Statistiques</Nav.Link>
+              <Nav.Link href="/appels-organisation">
+                Appels/Organisation
+              </Nav.Link>
               {/* <NavDropdown
                 title="Appels"
                 className="text-white"
