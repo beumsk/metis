@@ -38,7 +38,8 @@ const Menu = () => {
               {/* <Link to="/admin">Go to the Admin page</Link> */}
 
               <Nav.Link href="/patients">Patients</Nav.Link>
-              <NavDropdown
+              <Nav.Link href="/statistiques">Statistiques</Nav.Link>
+              {/* <NavDropdown
                 title="Appels"
                 className="text-white"
                 id={`offcanvasNavbarDropdown-expand-${"xl"}`}
@@ -57,7 +58,7 @@ const Menu = () => {
                 <NavDropdown.Item href="#action4">
                   Contact/Organisation
                 </NavDropdown.Item>
-              </NavDropdown>
+              </NavDropdown> */}
               <Nav.Link onClick={signOut}>
                 <FontAwesomeIcon icon={faSignOut} />{" "}
               </Nav.Link>
