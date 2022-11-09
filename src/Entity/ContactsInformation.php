@@ -35,7 +35,8 @@ class ContactsInformation
     #[ORM\JoinColumn(name: "sugg_id", referencedColumnName: "id", nullable: true)]
     private ?Suggestions $sugg = null;
 
-    #[ORM\ManyToOne(inversedBy: 'informations')]
+    #[ORM\ManyToOne(targetEntity: 'Contacts', inversedBy: 'informations')]
+    #[ORM\JoinColumn(name: "cont_id", referencedColumnName: "id", nullable: true)]
     private ?Contacts $contact = null;
 
     public function getId(): ?int

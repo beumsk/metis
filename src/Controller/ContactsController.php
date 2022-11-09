@@ -30,28 +30,39 @@ class ContactsController extends AbstractController
     #[Route('/api/getContacts', name: 'app_allContacts')]
     public function index(ManagerRegistry $doctrine, SerializerInterface $serializer): Response
     {
-        $contacts = $doctrine->getRepository(Contacts::class)->findByExampleField();
-        $encoders = [new JsonEncoder()];
-        $normalizers = [new DateTimeNormalizer(), new ObjectNormalizer()];
-        $serializer = new Serializer($normalizers, $encoders);
+        $contacts = $doctrine->getRepository(Contacts::class)->find(1);
 
-
-
-        $jsonObject = $serializer->serialize($contacts, 'json', [
-            'circular_reference_handler' => function ($object) {
+        $encoder = new JsonEncoder();
+        $defaultContext = [
+            AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context) {
                 return $object->getId();
             },
-            JsonEncoder::FORMAT,
-            [AbstractNormalizer::IGNORED_ATTRIBUTES => ["url", "description", "type", "pathString", "path"]]
-        ]);
+        ];
+        $normalizer = new ObjectNormalizer(null, null, null, null, null, null, $defaultContext);
 
-        $response =  new Response($jsonObject, 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
+        $serializer = new Serializer([new DateTimeNormalizer(), $normalizer], [$encoder]);
+        return new Response($serializer->serialize($contacts, 'json'), 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
+        // $encoders = [new JsonEncoder()];
+        // $normalizers = [new DateTimeNormalizer(), new ObjectNormalizer()];
+        // $serializer = new Serializer($normalizers, $encoders);
 
-        $response->setSharedMaxAge(3600);
+
+
+        // $jsonObject = $serializer->serialize($contacts, 'json', [
+        //     'circular_reference_handler' => function ($object) {
+        //         return $object->getId();
+        //     },
+        //     JsonEncoder::FORMAT,
+        //     [AbstractNormalizer::IGNORED_ATTRIBUTES => ["url", "description", "type", "pathString", "path"]]
+        // ]);
+
+        // $response =  new Response($jsonObject, 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
+
+        // $response->setSharedMaxAge(3600);
 
 
 
-        return $response;
+        // return $response;
 
 
         // return $this->json($contacts);
