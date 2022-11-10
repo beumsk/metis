@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import Table from "react-bootstrap/Table";
-import PersistLogin from "./PersistLogin";
-import useAuth from "../hooks/useAuth";
+import useAuth from "../../hooks/useAuth";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
-import Menu from "./Menu";
+import Menu from "../Menu";
 import Accordion from "react-bootstrap/Accordion";
 import { Link } from "react-router-dom";
 // import AppelsOrganisation from "../Appels/Appels-Organisation";
@@ -20,7 +18,7 @@ function AppelsOrganisation() {
   useEffect(() => {
     axios({
       method: "post",
-      url: "/api/getPatients",
+      url: "/api/getOrganisationAndAppels",
       data: formData,
       headers: {
         "Content-Type": "application/json",
@@ -42,7 +40,7 @@ function AppelsOrganisation() {
     <>
       <Menu></Menu>
       <div className="container container-patients row mx-auto ">
-        <h3>Tous les patients</h3>
+        <h3>Tous les Appels</h3>
 
         {patientsList && patientsList.data && patientsList.data.length > 0 && (
           <>

@@ -5,12 +5,28 @@ namespace App\Entity;
 use App\Entity\Contacts;
 use App\Utils\CleanAssociationsTrait;
 use App\Repository\FollowupGoalsRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 #[ORM\Entity(repositoryClass: FollowupGoalsRepository::class)]
 class FollowupGoals
 {
+    const STATUS_NEW = 0;
+    const STATUS_OPEN = 1;
+    const STATUS_COMPLETED = 2;
+    const STATUS_CANCELED = 3;
+
+    const STATUS_GROUP_RUNNING = 'En cours';
+    const STATUS_GROUP_CLOSED = 'Fermés';
+
+    const STATUS_GROUP_RUNNING_CLASS = 'running';
+    const STATUS_GROUP_CLOSED_CLASS = 'closed';
+
+    const TYPE_GOAL = 1;
+    const TYPE_CALL = 2;
 
     use CleanAssociationsTrait;
     #[ORM\Id]
@@ -58,6 +74,15 @@ class FollowupGoals
     #[ORM\ManyToOne(targetEntity: "Contacts", inversedBy: 'calls')]
     #[ORM\JoinColumn(name: "cont_id", referencedColumnName: "id", nullable: true)]
     private ?Contacts $contact = null;
+
+    #[MaxDepth(2)]
+    #[ORM\ManyToMany(targetEntity: FollowupReports::class)]
+    private Collection $fore;
+
+    public function __construct()
+    {
+        $this->fore = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -221,5 +246,66 @@ class FollowupGoals
         $this->contact = $contact;
 
         return $this;
+    }
+
+    /**
+     * @return Collection<int, fore>
+     */
+    public function getfore(): Collection
+    {
+        return $this->fore;
+    }
+
+    public function addFollowupReport(FollowupReports $fore): self
+    {
+        $this->fore[] = $fore;
+
+        return $this;
+    }
+
+    public function removeFollowupReport(FollowupReports $fore): self
+    {
+        $this->fore->removeElement($fore);
+
+        return $this;
+    }
+
+    /**
+     * @param string $group
+     *
+     * @return array
+     */
+    public function getStatusForGroup($group)
+    {
+        switch ($group) {
+            default:
+            case self::STATUS_GROUP_RUNNING:
+                return [self::STATUS_NEW, self::STATUS_OPEN];
+                break;
+            case self::STATUS_GROUP_CLOSED:
+                return [self::STATUS_COMPLETED, self::STATUS_CANCELED];
+                break;
+        }
+    }
+
+    /**
+     * @param int $status
+     *
+     * @return int
+     */
+    public function getStatusGroup($status)
+    {
+        switch ($status) {
+            case self::STATUS_NEW:
+            case self::STATUS_OPEN:
+                return self::STATUS_GROUP_RUNNING;
+                break;
+            case self::STATUS_COMPLETED:
+            case self::STATUS_CANCELED:
+                return self::STATUS_GROUP_CLOSED;
+                break;
+            default:
+                return 'wrong status';
+        }
     }
 }

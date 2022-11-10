@@ -11,6 +11,7 @@ use Doctrine\Persistence\ManagerRegistry;
 #[ORM\Entity(repositoryClass: PatientsInformationRepository::class)]
 class PatientsInformation
 {
+    const INFO_PHONE = "/patient/fiche/information-generale/numero-de-telephone";
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]

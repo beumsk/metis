@@ -42,7 +42,7 @@ class ContactsRepository extends ServiceEntityRepository
     /**
      * @return Contacts[] Returns an array of Contacts objects
      */
-    public function findByExampleField(): array
+    public function findByPaquetsContacts(): array
     {
         return $this->createQueryBuilder('c')
             ->orderBy('c.id', 'ASC')
@@ -60,4 +60,25 @@ class ContactsRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+
+    /**
+     * @return array
+     */
+    public function findContactInfos($contactId, $stringInfo)
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+
+        $qb
+            ->select('ci')
+            ->from('App:ContactsInformation', 'ci')
+            ->join('ci.itel', 'ite')
+            ->join('ite.suge', 's')
+            ->where('s.path_string = :path_string AND ci.cont = :contactId')
+            ->setParameters([
+                'path_string' => $stringInfo,
+                'contactId' => $contactId
+            ]);
+
+        return $qb->getQuery()->getResult();
+    }
 }

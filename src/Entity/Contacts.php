@@ -7,10 +7,19 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Utils\InfosCallsTrait;
 
 #[ORM\Entity(repositoryClass: ContactsRepository::class)]
 class Contacts
 {
+    const TYPE_ORGANISATION = 1;
+    const TYPE_PERSON = 2;
+    const TYPE_LOCATION = 3;
+
+    const PHONE_PATH = '/patient/contacts/infos/telephone';
+    const TAGS_PATH = '/patient/contacts/tags';
+    const COLLAB_PATH = '/patient/contacts/type-de-collaborateur';
+    use InfosCallsTrait;
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -38,24 +47,24 @@ class Contacts
     #[ORM\JoinColumn(name: "orga_id", referencedColumnName: "id", nullable: true)]
     private  $orga = null;
 
-    #[ORM\OneToMany(mappedBy: 'contact', targetEntity: FollowupGoals::class)]
-    private Collection $calls;
+    // #[ORM\OneToMany(mappedBy: 'contact', targetEntity: FollowupGoals::class)]
+    // private Collection $calls;
 
-    #[ORM\OneToMany(mappedBy: 'contact', targetEntity: PatientsContacts::class)]
-    private Collection $patients;
+    // #[ORM\OneToMany(mappedBy: 'contact', targetEntity: PatientsContacts::class)]
+    // private Collection $patients;
 
-    #[ORM\OneToMany(mappedBy: 'contact', targetEntity: ContactsInformation::class)]
-    private Collection $informations;
+    // #[ORM\OneToMany(mappedBy: 'contact', targetEntity: ContactsInformation::class)]
+    // private Collection $informations;
 
-    #[ORM\OneToMany(mappedBy: 'place', targetEntity: PatientsPlaces::class)]
-    private Collection $occupants;
+    // #[ORM\OneToMany(mappedBy: 'place', targetEntity: PatientsPlaces::class)]
+    // private Collection $occupants;
 
     public function __construct()
     {
-        $this->calls = new ArrayCollection();
-        $this->patients = new ArrayCollection();
-        $this->informations = new ArrayCollection();
-        $this->occupants = new ArrayCollection();
+        // $this->calls = new ArrayCollection();
+        // $this->patients = new ArrayCollection();
+        // $this->informations = new ArrayCollection();
+        // $this->occupants = new ArrayCollection();
     }
 
 
@@ -177,115 +186,115 @@ class Contacts
         return $this;
     }
 
-    /**
-     * @return Collection<int, FollowupGoals>
-     */
-    public function getCalls(): Collection
-    {
-        return $this->calls;
-    }
+    // /**
+    //  * @return Collection<int, FollowupGoals>
+    //  */
+    // public function getCalls(): Collection
+    // {
+    //     return $this->calls;
+    // }
 
-    public function addCall(FollowupGoals $call): self
-    {
-        $this->calls[] = $call;
+    // public function addCall(FollowupGoals $call): self
+    // {
+    //     $this->calls[] = $call;
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
-    public function removeCall(FollowupGoals $call): self
-    {
-        $this->calls->removeElement($call);
+    // public function removeCall(FollowupGoals $call): self
+    // {
+    //     $this->calls->removeElement($call);
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
-    /**
-     * @return Collection<int, PatientsContacts>
-     */
-    public function getPatients(): Collection
-    {
-        return $this->patients;
-    }
+    // /**
+    //  * @return Collection<int, PatientsContacts>
+    //  */
+    // public function getPatients(): Collection
+    // {
+    //     return $this->patients;
+    // }
 
-    public function addPatient(PatientsContacts $patient): self
-    {
-        if (!$this->patients->contains($patient)) {
-            $this->patients->add($patient);
-            $patient->setContact($this);
-        }
+    // public function addPatient(PatientsContacts $patient): self
+    // {
+    //     if (!$this->patients->contains($patient)) {
+    //         $this->patients->add($patient);
+    //         $patient->setContact($this);
+    //     }
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
-    public function removePatient(PatientsContacts $patient): self
-    {
-        if ($this->patients->removeElement($patient)) {
-            // set the owning side to null (unless already changed)
-            if ($patient->getContact() === $this) {
-                $patient->setContact(null);
-            }
-        }
+    // public function removePatient(PatientsContacts $patient): self
+    // {
+    //     if ($this->patients->removeElement($patient)) {
+    //         // set the owning side to null (unless already changed)
+    //         if ($patient->getContact() === $this) {
+    //             $patient->setContact(null);
+    //         }
+    //     }
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
-    /**
-     * @return Collection<int, ContactsInformation>
-     */
-    public function getInformations(): Collection
-    {
-        return $this->informations;
-    }
+    // /**
+    //  * @return Collection<int, ContactsInformation>
+    //  */
+    // public function getInformations(): Collection
+    // {
+    //     return $this->informations;
+    // }
 
-    public function addInformation(ContactsInformation $information): self
-    {
-        if (!$this->informations->contains($information)) {
-            $this->informations->add($information);
-            $information->setContact($this);
-        }
+    // public function addInformation(ContactsInformation $information): self
+    // {
+    //     if (!$this->informations->contains($information)) {
+    //         $this->informations->add($information);
+    //         $information->setContact($this);
+    //     }
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
-    public function removeInformation(ContactsInformation $information): self
-    {
-        if ($this->informations->removeElement($information)) {
-            // set the owning side to null (unless already changed)
-            if ($information->getContact() === $this) {
-                $information->setContact(null);
-            }
-        }
+    // public function removeInformation(ContactsInformation $information): self
+    // {
+    //     if ($this->informations->removeElement($information)) {
+    //         // set the owning side to null (unless already changed)
+    //         if ($information->getContact() === $this) {
+    //             $information->setContact(null);
+    //         }
+    //     }
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
-    /**
-     * @return Collection<int, PatientsPlaces>
-     */
-    public function getOccupants(): Collection
-    {
-        return $this->occupants;
-    }
+    // /**
+    //  * @return Collection<int, PatientsPlaces>
+    //  */
+    // public function getOccupants(): Collection
+    // {
+    //     return $this->occupants;
+    // }
 
-    public function addOccupant(PatientsPlaces $occupant): self
-    {
-        if (!$this->occupants->contains($occupant)) {
-            $this->occupants->add($occupant);
-            $occupant->setPlace($this);
-        }
+    // public function addOccupant(PatientsPlaces $occupant): self
+    // {
+    //     if (!$this->occupants->contains($occupant)) {
+    //         $this->occupants->add($occupant);
+    //         $occupant->setPlace($this);
+    //     }
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
-    public function removeOccupant(PatientsPlaces $occupant): self
-    {
-        if ($this->occupants->removeElement($occupant)) {
-            // set the owning side to null (unless already changed)
-            if ($occupant->getPlace() === $this) {
-                $occupant->setPlace(null);
-            }
-        }
+    // public function removeOccupant(PatientsPlaces $occupant): self
+    // {
+    //     if ($this->occupants->removeElement($occupant)) {
+    //         // set the owning side to null (unless already changed)
+    //         if ($occupant->getPlace() === $this) {
+    //             $occupant->setPlace(null);
+    //         }
+    //     }
 
-        return $this;
-    }
+    //     return $this;
+    // }
 }

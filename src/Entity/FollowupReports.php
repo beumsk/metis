@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Utils\InfosReportTrait;
+use Proxies\__CG__\App\Entity\FollowupGoals;
 
 #[ORM\Entity(repositoryClass: FollowupReportsRepository::class)]
 class FollowupReports
@@ -71,9 +72,16 @@ class FollowupReports
     #[ORM\InverseJoinColumn(name: "cont_id", referencedColumnName: "id", nullable: true)]
     private Collection $cont;
 
+    #[ORM\ManyToMany(targetEntity: FollowupGoals::class)]
+    #[ORM\JoinTable(name: "followup_report_goal")]
+    #[ORM\JoinColumn(name: "fore_id", referencedColumnName: "id", nullable: true)]
+    #[ORM\InverseJoinColumn(name: "fogo_id", referencedColumnName: "id", nullable: true)]
+    private Collection $fogo;
+
     public function __construct()
     {
         $this->cont = new ArrayCollection();
+        $this->fogo = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -281,6 +289,30 @@ class FollowupReports
     public function removeCont(Contacts $cont): self
     {
         $this->cont->removeElement($cont);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, FollowupGoals>
+     */
+    public function getfogo(): Collection
+    {
+        return $this->fogo;
+    }
+
+    public function addfogo(FollowupGoals $fogo): self
+    {
+        if (!$this->fogo->contains($fogo)) {
+            $this->fogo->add($fogo);
+        }
+
+        return $this;
+    }
+
+    public function removefogo(FollowupGoals $fogo): self
+    {
+        $this->fogo->removeElement($fogo);
 
         return $this;
     }
