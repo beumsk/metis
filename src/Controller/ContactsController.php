@@ -38,26 +38,50 @@ class ContactsController extends AbstractController
     #[Route('/api/getContacts', name: 'app_allContacts')]
     public function index(ManagerRegistry $doctrine, SerializerInterface $serializer): Response
     {
-        // $contacts = $doctrine->getRepository(Contacts::class)->findAll();
+        $contacts = $doctrine->getRepository(Contacts::class)->findByPaquetsContacts();
 
-        // $encoder = new JsonEncoder();
-        // $defaultContext = [
-        //     AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context) {
-        //         return $object->getId();
-        //     },
-        // ];
-        // $normalizer = new ObjectNormalizer(null, null, null, null, null, null, $defaultContext);
+        $encoder = new JsonEncoder();
+        $defaultContext = [
+            AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context) {
+                return $object->getId();
+            },
+        ];
+        $normalizer = new ObjectNormalizer(null, null, null, null, null, null, $defaultContext);
 
-        // $serializer = new Serializer([new DateTimeNormalizer(), $normalizer], [$encoder]);
-        // return new Response($serializer->serialize($contacts, 'json'), 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
+        $serializer = new Serializer([new DateTimeNormalizer(), $normalizer], [$encoder]);
+        return new Response($serializer->serialize($contacts, 'json'), 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
     }
-    #[Route('/api/getCallsAndOrganisation', name: 'app_getLastWomenStanding')]
-    public function getLastWomenStanding(ManagerRegistry $doctrine, SerializerInterface $serializer)
+    #[Route('/api/getCallsAndOrganisationRunning', name: 'app_getLastWomenStanding')]
+    public function getCallsAndOrganisationRunning(ManagerRegistry $doctrine, SerializerInterface $serializer)
     {
         $contact = $doctrine->getRepository(Contacts::class)->findByPaquetsContacts();
 
         foreach ($contact as $value) {
             $fogo = $doctrine->getRepository(FollowupGoals::class)->findBy(["cont" => $value->getId(), "deleted_at" => null, "type" => 2, "status" => 1]);
+            $value->setGoalsInformation($fogo);
+        }
+        $encoders = [new JsonEncoder()];
+        $normalizers = [new DateTimeNormalizer(), new ObjectNormalizer()];
+        $serializer = new Serializer($normalizers, $encoders);
+
+
+        $jsonObject = $serializer->serialize($contact, 'json', [
+            'circular_reference_handler' => function ($object) {
+                return $object->getId();
+            }
+        ]);
+
+
+        return new Response($jsonObject, 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
+    }
+
+    #[Route('/api/getCallsAndOrganisationFinnished', name: 'app_getCallsAndOrganisationFinnished')]
+    public function getCallsAndOrganisationFinnished(ManagerRegistry $doctrine, SerializerInterface $serializer)
+    {
+        $contact = $doctrine->getRepository(Contacts::class)->findAll();
+
+        foreach ($contact as $value) {
+            $fogo = $doctrine->getRepository(FollowupGoals::class)->findBy(["cont" => $value->getId(), "deleted_at" => null, "type" => 2, "status" => 0]);
             $value->setGoalsInformation($fogo);
         }
         $encoders = [new JsonEncoder()];

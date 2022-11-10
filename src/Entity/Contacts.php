@@ -50,8 +50,8 @@ class Contacts
     // #[ORM\OneToMany(mappedBy: 'contact', targetEntity: FollowupGoals::class)]
     // private Collection $calls;
 
-    // #[ORM\OneToMany(mappedBy: 'contact', targetEntity: PatientsContacts::class)]
-    // private Collection $patients;
+    #[ORM\OneToMany(mappedBy: 'contact', targetEntity: PatientsContacts::class)]
+    private Collection $patients;
 
     // #[ORM\OneToMany(mappedBy: 'contact', targetEntity: ContactsInformation::class)]
     // private Collection $informations;
@@ -62,7 +62,7 @@ class Contacts
     public function __construct()
     {
         // $this->calls = new ArrayCollection();
-        // $this->patients = new ArrayCollection();
+        $this->patients = new ArrayCollection();
         // $this->informations = new ArrayCollection();
         // $this->occupants = new ArrayCollection();
     }
@@ -208,35 +208,35 @@ class Contacts
     //     return $this;
     // }
 
-    // /**
-    //  * @return Collection<int, PatientsContacts>
-    //  */
-    // public function getPatients(): Collection
-    // {
-    //     return $this->patients;
-    // }
+    /**
+     * @return Collection<int, PatientsContacts>
+     */
+    public function getPatients(): Collection
+    {
+        return $this->patients;
+    }
 
-    // public function addPatient(PatientsContacts $patient): self
-    // {
-    //     if (!$this->patients->contains($patient)) {
-    //         $this->patients->add($patient);
-    //         $patient->setContact($this);
-    //     }
+    public function addPatient(PatientsContacts $patient): self
+    {
+        if (!$this->patients->contains($patient)) {
+            $this->patients->add($patient);
+            $patient->setContact($this);
+        }
 
-    //     return $this;
-    // }
+        return $this;
+    }
 
-    // public function removePatient(PatientsContacts $patient): self
-    // {
-    //     if ($this->patients->removeElement($patient)) {
-    //         // set the owning side to null (unless already changed)
-    //         if ($patient->getContact() === $this) {
-    //             $patient->setContact(null);
-    //         }
-    //     }
+    public function removePatient(PatientsContacts $patient): self
+    {
+        if ($this->patients->removeElement($patient)) {
+            // set the owning side to null (unless already changed)
+            if ($patient->getContact() === $this) {
+                $patient->setContact(null);
+            }
+        }
 
-    //     return $this;
-    // }
+        return $this;
+    }
 
     // /**
     //  * @return Collection<int, ContactsInformation>

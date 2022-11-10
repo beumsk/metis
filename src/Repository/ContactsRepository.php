@@ -45,8 +45,11 @@ class ContactsRepository extends ServiceEntityRepository
     public function findByPaquetsContacts(): array
     {
         return $this->createQueryBuilder('c')
+            ->andWhere('c.deleted_at IS NULL')
+            ->join('c.patients',  'p')
+            ->andWhere('p.deleted_at IS NULL')
             ->orderBy('c.id', 'ASC')
-            ->setMaxResults(10)
+            // ->setMaxResults(10)
             ->getQuery()
             ->getResult();
     }
