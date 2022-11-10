@@ -39,6 +39,29 @@ class FollowupReportsRepository extends ServiceEntityRepository
         }
     }
 
+    public function findCalls($activityType, $antenna = null, $limit = 1000)
+    {
+        $parameters = [];
+        $parameters["activityType"] = $activityType;
+
+        $q = $this->createQueryBuilder('r')
+            ->leftJoin('r.pati', 'p')
+            ->andWhere('r.activity_type in (:activityType)');
+
+        if (null !== $antenna) {
+            $q->andWhere('p.antenna = :antenna');
+            $parameters["antenna"] = $antenna;
+        }
+
+        $q->setParameters($parameters)
+            ->orderBy('r.report_date', 'DESC')
+            ->setMaxResults($limit);
+
+        // dd($q->getQuery()->getResult());
+        return $q->getQuery()->getResult();
+    }
+
+
     /**
      * @return FollowupReports[] Returns an array of FollowupReports objects
      */

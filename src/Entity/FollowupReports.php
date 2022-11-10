@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\FollowupGoals as EntityFollowupGoals;
 use App\Repository\FollowupReportsRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -13,6 +14,30 @@ use Proxies\__CG__\App\Entity\FollowupGoals;
 #[ORM\Entity(repositoryClass: FollowupReportsRepository::class)]
 class FollowupReports
 {
+    const ACTIVITY_STREET = 1;
+    const ACTIVITY_CALL_OUT = 2;
+    const ACTIVITY_MEETING = 3;
+    const ACTIVITY_CALL_IN = 4;
+
+    const REPORT_TYPE_RENC = 1;
+    const REPORT_TYPE_VU = 2;
+    const REPORT_TYPE_REPOS = 3;
+    const REPORT_TYPE_SEARCH = 4;
+
+    const DEFAULT_REPORT_CONTENT = "<b><u>Nom(s) du travailleur :</u></b>
+
+<b><u>Résumé :</u></b>
+
+<b><u>Bien-être :</u></b>
+
+<b><u>Logement :</u></b>
+
+<b><u>Médical :</u></b>
+
+<b><u>Social :</u></b>
+";
+    const DEFAULT_COMMENT_MISSING_ACTION = "[AUTO] - Pas de réponse ou absent";
+    const DEFAULT_COMMENT_CANCEL_ACTION = "[AUTO] - Appel annulé";
 
     use InfosReportTrait;
     #[ORM\Id]
@@ -72,10 +97,7 @@ class FollowupReports
     #[ORM\InverseJoinColumn(name: "cont_id", referencedColumnName: "id", nullable: true)]
     private Collection $cont;
 
-    #[ORM\ManyToMany(targetEntity: FollowupGoals::class)]
-    #[ORM\JoinTable(name: "followup_report_goal")]
-    #[ORM\JoinColumn(name: "fore_id", referencedColumnName: "id", nullable: true)]
-    #[ORM\InverseJoinColumn(name: "fogo_id", referencedColumnName: "id", nullable: true)]
+    #[ORM\ManyToMany(targetEntity: EntityFollowupGoals::class)]
     private Collection $fogo;
 
     public function __construct()

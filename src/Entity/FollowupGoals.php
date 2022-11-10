@@ -77,6 +77,9 @@ class FollowupGoals
 
     #[MaxDepth(2)]
     #[ORM\ManyToMany(targetEntity: FollowupReports::class)]
+    #[ORM\JoinTable(name: "followup_report_goal")]
+    #[ORM\JoinColumn(name: "fogo_id", referencedColumnName: "id", nullable: true)]
+    #[ORM\InverseJoinColumn(name: "fore_id", referencedColumnName: "id", nullable: true)]
     private Collection $fore;
 
     public function __construct()
@@ -258,6 +261,7 @@ class FollowupGoals
 
     public function addFollowupReport(FollowupReports $fore): self
     {
+
         $this->fore[] = $fore;
 
         return $this;
@@ -265,6 +269,7 @@ class FollowupGoals
 
     public function removeFollowupReport(FollowupReports $fore): self
     {
+
         $this->fore->removeElement($fore);
 
         return $this;

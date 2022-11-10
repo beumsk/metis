@@ -207,6 +207,7 @@ class FollowupGoalsRepository extends ServiceEntityRepository
             ->createQuery($query)
             ->setParameters($parameters);
 
+        // dd($query);
         return $query->getResult();
     }
 

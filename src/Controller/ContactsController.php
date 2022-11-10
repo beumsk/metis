@@ -51,7 +51,61 @@ class ContactsController extends AbstractController
         // $serializer = new Serializer([new DateTimeNormalizer(), $normalizer], [$encoder]);
         // return new Response($serializer->serialize($contacts, 'json'), 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
     }
+    #[Route('/api/getCallsAndOrganisation', name: 'app_getLastWomenStanding')]
+    public function getLastWomenStanding(ManagerRegistry $doctrine, SerializerInterface $serializer)
+    {
+        $contact = $doctrine->getRepository(Contacts::class)->findByPaquetsContacts();
 
+        foreach ($contact as $value) {
+            $fogo = $doctrine->getRepository(FollowupGoals::class)->findBy(["cont" => $value->getId(), "deleted_at" => null, "type" => 2, "status" => 1]);
+            $value->setGoalsInformation($fogo);
+        }
+        $encoders = [new JsonEncoder()];
+        $normalizers = [new DateTimeNormalizer(), new ObjectNormalizer()];
+        $serializer = new Serializer($normalizers, $encoders);
+
+
+        $jsonObject = $serializer->serialize($contact, 'json', [
+            'circular_reference_handler' => function ($object) {
+                return $object->getId();
+            }
+        ]);
+
+
+        return new Response($jsonObject, 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
+    }
+    #[Route('/api/getAppandOrga', name: 'app_getAppandOrga')]
+    public function getAppandOrga(ManagerRegistry $doctrine, SerializerInterface $serializer)
+    {
+        // if (!$this->get('security.context')->isGranted('ROLE_USER')) {
+        //     return $this->redirect($this->generateUrl('idr_suivi_home'));
+        // }
+
+        // $request = $this->getRequest();
+        $antenna = 'Bruxelles';
+
+        $followUpReportRepository = $doctrine->getRepository(FollowupReports::class);
+        $calls = $followUpReportRepository->findCalls(
+            [FollowupReports::ACTIVITY_CALL_OUT, FollowupReports::ACTIVITY_CALL_IN],
+            $antenna
+        );
+
+        /*        $calls = $followUpReportRepository->findBy(
+            ['activityType' => [FollowUpReport::ACTIVITY_CALL_OUT, FollowUpReport::ACTIVITY_CALL_IN]],
+            ["reportDate" => "DESC" ],
+            1000
+        );
+*/
+        // if ($format == "json") {
+        // return new JsonResponse([
+        //     'calls' => $calls,
+        // ]);
+        // }
+        return $this->json($calls);
+        // return [
+        //     'calls' => $calls,
+        // ];
+    }
 
     #[Route('/api/getOrganisationAndAppels', name: 'app_getOrganisationAndAppels')]
     public function getOrganisationAndAppels(ManagerRegistry $doctrine, SerializerInterface $serializer)
@@ -120,7 +174,7 @@ class ContactsController extends AbstractController
 
         foreach ($contacts as $contact) {
             $followUpGoalsEntity = new FollowupGoals();
-            $todo = $followUpGoalRepository->findTodo(
+            $todo = $followUpGoalsRepository->findTodo(
                 $contact,
                 $followUpGoalsEntity->getStatusForGroup(FollowupGoals::STATUS_GROUP_RUNNING),
                 FollowupGoals::TYPE_CALL,
@@ -143,7 +197,8 @@ class ContactsController extends AbstractController
             $contactId = $contact->getId();
 
             $phones[$contactId] = $contactRepository->findContactInfos($contactId, Contacts::PHONE_PATH);
-            //            $reports[$contactId] = $followUpReportRepository->findBy(['followUpGoals' => $contact], ['reportDate' => 'asc']);
+            // $reports[$contactId] = $followUpReportRepository->findBy(['followupGoals' => $contact], ['report_date' => 'asc']);
+            // dd($followUpReportRepository);
         }
 
 
@@ -203,10 +258,10 @@ class ContactsController extends AbstractController
         }
 
         $contacts = [
-            'calls' => $runningCalls,
-            'oldCalls' => $closedCalls,
+            // 'calls' => $runningCalls,
+            // 'oldCalls' => $closedCalls,
             // 'phones' => $phones,
-            // 'phonesPatient' => $phonesPatient,
+            'phonesPatient' => $phonesPatient,
             // 'filterForm' => $filterForm->createView(),
         ];
 

@@ -87,7 +87,7 @@ class FollowUpReportsController extends AbstractController
 
         $id = $request->request->get('id');
 
-        $report = $doctrine->getRepository(FollowupReports::class)->findBy(["pati" => $id]);
+        $report = $doctrine->getRepository(FollowupGoals::class)->findBy(["pati" => $id]);
 
 
 
