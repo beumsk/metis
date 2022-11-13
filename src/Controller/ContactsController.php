@@ -38,7 +38,7 @@ class ContactsController extends AbstractController
     #[Route('/api/getContacts', name: 'app_allContacts')]
     public function index(ManagerRegistry $doctrine, SerializerInterface $serializer): Response
     {
-        $contacts = $doctrine->getRepository(Contacts::class)->findByPaquetsContacts();
+        $contacts = $doctrine->getRepository(Contacts::class)->findByPaquetsContacts(["deleted_at" => null]);
 
         $encoder = new JsonEncoder();
         $defaultContext = [
@@ -54,25 +54,69 @@ class ContactsController extends AbstractController
     #[Route('/api/getCallsAndOrganisationRunning', name: 'app_getLastWomenStanding')]
     public function getCallsAndOrganisationRunning(ManagerRegistry $doctrine, SerializerInterface $serializer)
     {
-        $contact = $doctrine->getRepository(Contacts::class)->findByPaquetsContacts();
+
+        $followup = $doctrine->getRepository(FollowupGoals::class)->findAll();
+        $arrCont = [];
+
+        foreach ($followup as $value) {
+            if ($value->getCont() !== null && $value->getDeletedAt() !== null && $value->getType() === 2 && $value->getStatus() === 1) {
+                $arrCont[] = $value->getCont()->getId();
+            }
+        }
+        $arrunique = array_unique($arrCont);
+
+        $arrByPaquets = [];
+
+        // dd($arrunique);
+        for ($i = 0; $i < 10; $i++) {
+            array_push($arrByPaquets, $arrCont[$i]);
+        }
+
+
+        $contact = $doctrine->getRepository(Contacts::class)->findBy(array('id' => $arrByPaquets));
+
+
+
+
 
         foreach ($contact as $value) {
-            $fogo = $doctrine->getRepository(FollowupGoals::class)->findBy(["cont" => $value->getId(), "deleted_at" => null, "type" => 2, "status" => 1]);
-            $value->setGoalsInformation($fogo);
-        }
-        $encoders = [new JsonEncoder()];
-        $normalizers = [new DateTimeNormalizer(), new ObjectNormalizer()];
-        $serializer = new Serializer($normalizers, $encoders);
-
-
-        $jsonObject = $serializer->serialize($contact, 'json', [
-            'circular_reference_handler' => function ($object) {
-                return $object->getId();
+            $fogo = $doctrine->getRepository(FollowupGoals::class)->findBy(["cont" => $value->getId(), "deleted_at" => null]);
+            // $value->setGoalsInformation($fogo);
+            foreach ($fogo as $fg) {
+                //     // dd($fg);
+                // $value->setGoalsInformation($fogo);
+                $value->setGoalsInformation([
+                    "id" => $fg->getId(), "description" => $fg->getDescription(), "type" => $fg->getType(), "creationDate" => $fg->getCreationDate(), "contact" => $fg->getContact(), "patientfirstName" => $fg->getPati()->getFirstName(), "patientLastName" => $fg->getPati()->getLastName(),
+                    "fore" =>     array_map(function ($a) {
+                        return $a->getContent();
+                    }, [...$fg->getFore()])
+                ]);
             }
-        ]);
+        }
 
 
-        return new Response($jsonObject, 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
+
+
+
+
+        $encoder = new JsonEncoder();
+        // $encoders = [new JsonEncoder()];
+        // $normalizers = [new DateTimeNormalizer(), new ObjectNormalizer()];
+        // $serializer = new Serializer($normalizers, $encoders);
+
+        $defaultContext = [
+            AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context) {
+                return $object->getId();
+            },
+        ];
+
+        $normalizer = new ObjectNormalizer(null, null, null, null, null, null, $defaultContext);
+
+        $serializer = new Serializer([new DateTimeNormalizer(), $normalizer], [$encoder]);
+        // var_dump($serializer->serialize($org, 'json'));
+        $data = $serializer->serialize($contact, 'json', [AbstractNormalizer::IGNORED_ATTRIBUTES => ["contacts", "patients", "cont", "orga"]]);
+
+        return $this->json(json_decode($data)); // Output: {"name":"foo"}
     }
 
     #[Route('/api/getCallsAndOrganisationFinnished', name: 'app_getCallsAndOrganisationFinnished')]

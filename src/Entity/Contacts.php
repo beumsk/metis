@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Utils\InfosCallsTrait;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ContactsRepository::class)]
 class Contacts
@@ -25,25 +26,30 @@ class Contacts
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Groups(['appels'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $firstname = null;
 
+    #[Groups(['appels'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $lastname = null;
 
     #[ORM\Column]
     private ?int $type = null;
 
+    #[Groups(['appels'])]
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
+    #[Groups(['appels'])]
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $url = null;
 
+    #[Groups(['appels'])]
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $deleted_at = null;
 
-    #[ORM\ManyToOne(targetEntity: 'Contacts', cascade: ["all"], fetch: "EAGER")]
+    #[ORM\ManyToOne(targetEntity: 'Contacts', cascade: ["all"], fetch: "EAGER", inversedBy: "cont")]
     #[ORM\JoinColumn(name: "orga_id", referencedColumnName: "id", nullable: true)]
     private  $orga = null;
 
@@ -56,8 +62,6 @@ class Contacts
     // #[ORM\OneToMany(mappedBy: 'contact', targetEntity: ContactsInformation::class)]
     // private Collection $informations;
 
-    // #[ORM\OneToMany(mappedBy: 'place', targetEntity: PatientsPlaces::class)]
-    // private Collection $occupants;
 
     public function __construct()
     {
@@ -68,28 +72,28 @@ class Contacts
     }
 
 
-    // #[ORM\OneToMany(targetEntity: "Contacts", mappedBy: "organisation", orphanRemoval: true, cascade: ["all"])]
-    // private $cont;
+    #[ORM\OneToMany(targetEntity: Contacts::class, mappedBy: "orga", orphanRemoval: true, cascade: ["all"])]
+    private $cont;
 
 
-    // public function addContact(Contacts $contacts)
-    // {
-    //     $this->cont[] = $cont;
+    public function addContact(Contacts $cont)
+    {
+        $this->cont[] = $cont;
 
-    //     return $this;
-    // }
-
-
-    // public function removeContact(Contacts $contacts)
-    // {
-    //     $this->cont->removeElement($contacts);
-    // }
+        return $this;
+    }
 
 
-    // public function getContacts()
-    // {
-    //     return $this->contacts;
-    // }
+    public function removeContact(Contacts $cont)
+    {
+        $this->cont->removeElement($cont);
+    }
+
+
+    public function getContacts()
+    {
+        return $this->cont;
+    }
     public function setId(?string $id): self
     {
         $this->id = $id;

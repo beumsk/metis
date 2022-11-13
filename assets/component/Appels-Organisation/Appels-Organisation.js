@@ -18,7 +18,7 @@ function AppelsOrganisation() {
   useEffect(() => {
     axios({
       method: "post",
-      url: "/api/getOrganisationAndAppels",
+      url: "/api/getCallsAndOrganisationRunning",
       data: formData,
       headers: {
         "Content-Type": "application/json",

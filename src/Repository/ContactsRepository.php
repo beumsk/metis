@@ -44,14 +44,18 @@ class ContactsRepository extends ServiceEntityRepository
      */
     public function findByPaquetsContacts(): array
     {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.deleted_at IS NULL')
-            ->join('c.patients',  'p')
-            ->andWhere('p.deleted_at IS NULL')
-            ->orderBy('c.id', 'ASC')
-            // ->setMaxResults(10)
-            ->getQuery()
-            ->getResult();
+        $qb = $this->getEntityManager()->createQueryBuilder();
+
+        $qb
+            ->select('ci')
+            ->from('App:Contacts', 'ci')
+            ->andWhere('ci.deleted_at IS NULL')
+            ->andWhere('ci.cont IS NOT NULL');
+        // ->join('ite.suge', 's')
+        // ->where('s.path_string = :path_string AND ci.cont = :contactId');
+
+        // dd($qb->getQuery());
+        return $qb->getQuery()->getResult();
     }
 
     //    public function findOneBySomeField($value): ?Contacts

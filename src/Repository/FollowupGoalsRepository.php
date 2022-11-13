@@ -322,7 +322,22 @@ class FollowupGoalsRepository extends ServiceEntityRepository
 
         return $qb->getQuery()->getResult();
     }
+    /**
+     * @return FollowupGoals[] Returns an array of Contacts objects
+     */
+    public function findByPaquetsFollowupGoals()
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
 
+        $qb->select('c')
+            ->from('App:FollowupGoals', 'c')
+            ->andWhere('c.deleted_at IS NULL AND c.cont IS NOT NULL AND c.status = 2')
+            ->join('c.contact', 'cont')
+            // ->where('c.id = f.cont')
+            ->orderBy('cont.id', 'ASC');
+
+        return $qb->getQuery()->getResult();
+    }
     //    /**
     //     * @return FollowupGoals[] Returns an array of FollowupGoals objects
     //     */
