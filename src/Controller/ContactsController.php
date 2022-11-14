@@ -4,6 +4,7 @@ namespace App\Controller;
 
 
 use App\Entity\Contacts;
+use App\Entity\ContactsInformation;
 use App\Entity\FollowupGoals;
 use App\Entity\FollowupReports;
 use App\Entity\Patients;
@@ -51,7 +52,64 @@ class ContactsController extends AbstractController
         $serializer = new Serializer([new DateTimeNormalizer(), $normalizer], [$encoder]);
         return new Response($serializer->serialize($contacts, 'json'), 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
     }
-    #[Route('/api/getCallsAndOrganisationRunning', name: 'app_getLastWomenStanding')]
+
+    #[Route('/api/getCallsAndOrganisationById', name: 'app_getLastWomenStanding')]
+    public function getCallsAndOrganisationById(ManagerRegistry $doctrine, SerializerInterface $serializer)
+    {
+        $request = Request::createFromGlobals();
+
+        $id = $request->request->get('id');
+
+        $contact = $doctrine->getRepository(Contacts::class)->find($id);
+        $suggestions = $doctrine->getRepository(Suggestions::class)->findBy(['parentSugg' => 155]);
+        // $contactInfos = $doctrine->getRepository(ContactsInformation::class)->find($id);
+
+        $encoders = [new JsonEncoder()];
+        $normalizers = [new DateTimeNormalizer(), new ObjectNormalizer()];
+        $serializer = new Serializer($normalizers, $encoders);
+        // dd($suggestions);
+        // dd($contact->getInformations());
+        $nameOfBlocks = [];
+        foreach ($suggestions as $value) {
+            $nameOfBlocks[] = ["id" => $value->getId(), "value" => $value->getValue(), "obj" => []];
+        }
+
+
+
+
+        $blocksEncode = json_encode($nameOfBlocks);
+        $blocksDecode = json_decode($blocksEncode);
+
+        // dd($blocksDecode);
+        foreach ($blocksDecode as $value) {
+            foreach ($contact->getInformations() as $infosCont) {
+                // dd($contact->getInformations());
+                if ($infosCont->getItel()->getSuge()->getId() === $value->id) {
+                    array_push($value->obj, ["id" => $infosCont->getId(), "valueInformations" => $infosCont->getValue(), "valueDescription" => $infosCont->getComment()]);
+                }
+            }
+        }
+
+        $patients = [];
+
+        foreach ($contact->getPatients() as $patient) {
+            $patients[] = ["id" => $patient->getPati()->getId(), "firstName" => $patient->getPati()->getFirstName(), "lastName" => $patient->getPati()->getLastName()];
+        }
+
+
+
+        $jsonObject = $serializer->serialize(["informations" => $blocksDecode, "patients" => $patients, "firstname" => $contact->getFirstName(), "lastname" => $contact->getLastName(), "description" => $contact->getDescription()], 'json', [
+            'circular_reference_handler' => function ($object) {
+                return $object->getId();
+            }
+        ]);
+
+
+
+
+        return new Response($jsonObject, 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
+    }
+    #[Route('/api/getCallsAndOrganisationRunning', name: 'app_getCallsAndOrganisationRunning')]
     public function getCallsAndOrganisationRunning(ManagerRegistry $doctrine, SerializerInterface $serializer)
     {
 
@@ -175,177 +233,7 @@ class ContactsController extends AbstractController
         // ];
     }
 
-    #[Route('/api/getOrganisationAndAppels', name: 'app_getOrganisationAndAppels')]
-    public function getOrganisationAndAppels(ManagerRegistry $doctrine, SerializerInterface $serializer)
-    {
-        // $request = $this->getRequest();
-        $antenna = "Bruxelles";
 
-        $since = null;
-        // $since = $request->query->get('call_filter')['date'];
-        // if (null == $since) {
-        //     $since = new \Datetime();
-        //     $since->modify('-1 month');
-        // } else {
-        //     $since = \Datetime::createFromFormat('d/m/Y', $since);
-        // }
-
-        // $filter = $request->query->get('call_filter');
-
-        $function = isset($filter['function']) ? $filter['function'] : "";
-        $team = isset($filter['team']) ? $filter['team'] : "";
-        $referent = isset($filter['referent']) ? $filter['referent'] : "";
-        $isHighlight = isset($filter['isHighlight']) ? $filter['isHighlight'] : "";
-
-        // $functions = $this->get('idr_suivi.repository.suggestion')->findById($function);
-        // $teams = $this->get('idr_suivi.repository.suggestion')->findById($team);
-        // $referents = $this->get('idr_suivi.repository.contact')->findById($referent);
-
-        // $tt = [];
-        // foreach ($teams as $t) {
-        //     $tt[] = $t->getValue();
-        // }
-        // $team = implode("','", $tt);
-
-        // $rr = [];
-        // foreach ($referents as $r) {
-        //     $rr[] = $r->getId();
-        // }
-        // $referents = implode("','", $rr);   
-
-        // var_dump($referents);
-
-        // $filterForm = $this->createForm(new CallFilterType(), [
-        //     'function' => $functions,
-        //     'team' => $teams,
-        //     'referent' => $referents,
-        //     'date' => $since,
-        //     'isHighlight' => (bool)$isHighlight
-        // ]);
-
-        $followUpReportRepository = $doctrine->getRepository(FollowupReports::class);
-        $followUpGoalRepository = $doctrine->getRepository(FollowupGoals::class);
-
-        $contacts = $followUpGoalRepository->findDistinctContacts(Contacts::TYPE_PERSON);
-        $organisations = $followUpGoalRepository->findDistinctContacts(Contacts::TYPE_ORGANISATION);
-        $patients = $followUpGoalRepository->findDistinctPatients();
-
-        $contactRepository = $doctrine->getRepository(Contacts::class);
-        $patientInfosRepository = $doctrine->getRepository(PatientsInformation::class);
-        $followUpGoalsRepository = $doctrine->getRepository(FollowupGoals::class);
-
-        $runningCalls = [];
-        $closedCalls = [];
-        $phones = [];
-        $phonesPatient = [];
-        //        $reports = [];
-
-        foreach ($contacts as $contact) {
-            $followUpGoalsEntity = new FollowupGoals();
-            $todo = $followUpGoalsRepository->findTodo(
-                $contact,
-                $followUpGoalsEntity->getStatusForGroup(FollowupGoals::STATUS_GROUP_RUNNING),
-                FollowupGoals::TYPE_CALL,
-                $function,
-                $team,
-                $isHighlight,
-                null,
-                $antenna,
-                $referent
-            );
-            if ($todo) {
-                $runningCalls[] = $todo;
-            }
-
-            $closed = $followUpGoalRepository->findClosedByContact($contact, FollowupGoals::TYPE_CALL, $since, $function, $team, $isHighlight, $antenna, $referent);
-            if ($closed) {
-                $closedCalls[] = $closed;
-            }
-
-            $contactId = $contact->getId();
-
-            $phones[$contactId] = $contactRepository->findContactInfos($contactId, Contacts::PHONE_PATH);
-            // $reports[$contactId] = $followUpReportRepository->findBy(['followupGoals' => $contact], ['report_date' => 'asc']);
-            // dd($followUpReportRepository);
-        }
-
-
-        foreach ($organisations as $organisation) {
-            $followUpGoalsEntity = new FollowupGoals();
-            $todo = $followUpGoalRepository->findTodo(
-                $organisation,
-                $followUpGoalsEntity->getStatusForGroup(FollowupGoals::STATUS_GROUP_RUNNING),
-                FollowupGoals::TYPE_CALL,
-                $function,
-                $team,
-                $isHighlight,
-                null,
-                $antenna,
-                $referent
-            );
-            if ($todo) {
-                $runningCalls[] = $todo;
-            }
-
-            $closed = $followUpGoalRepository->findClosedByContact($organisation, FollowupGoals::TYPE_CALL, $since, $function, $team, $isHighlight, $antenna, $referent);
-            if ($closed) {
-                $closedCalls[] = $closed;
-            }
-
-            $contactId = $organisation->getId();
-
-            $phones[$contactId] = $contactRepository->findContactInfos($contactId, Contacts::PHONE_PATH);
-            //            $reports[$contactId] = $followUpReportRepository->findBy(['followUpGoals' => $contact], ['reportDate' => 'asc']);
-        }
-
-        foreach ($patients as $patient) {
-            $followUpGoalsEntity = new FollowupGoals();
-            $todo = $followUpGoalRepository->findTodo(
-                NULL,
-                $followUpGoalsEntity->getStatusForGroup(FollowupGoals::STATUS_GROUP_RUNNING),
-                FollowupGoals::TYPE_CALL,
-                $function,
-                $team,
-                $isHighlight,
-                $patient,
-                $antenna,
-                $referent
-            );
-            if ($todo) {
-                $runningCalls[] = $todo;
-            }
-
-            $closed = $followUpGoalRepository->findClosedByPatient($patient, FollowupGoals::TYPE_CALL, $since, $function, $team, $isHighlight, $antenna, $referent);
-            if ($closed) {
-                $closedCalls[] = $closed;
-            }
-
-            $patientId = $patient->getId();
-
-            $phonesPatient[$patientId] = $patientInfosRepository->findPatientInfos($patientId, PatientsInformation::INFO_PHONE);
-        }
-
-        $contacts = [
-            // 'calls' => $runningCalls,
-            // 'oldCalls' => $closedCalls,
-            // 'phones' => $phones,
-            'phonesPatient' => $phonesPatient,
-            // 'filterForm' => $filterForm->createView(),
-        ];
-
-
-        // return dd($runningCalls);
-        $encoder = new JsonEncoder();
-        $defaultContext = [
-            AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context) {
-                return $object->getId();
-            },
-        ];
-        $normalizer = new ObjectNormalizer(null, null, null, null, null, null, $defaultContext);
-
-        $serializer = new Serializer([new DateTimeNormalizer(), $normalizer], [$encoder]);
-        return new Response($serializer->serialize($contacts, 'json'), 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
-    }
 
     #[Route('/api/setPatientPatient', name: 'app_setPatientPatient')]
     public function setPatientPatient(ManagerRegistry $doctrine, Request $request): JsonResponse

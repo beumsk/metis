@@ -59,15 +59,15 @@ class Contacts
     #[ORM\OneToMany(mappedBy: 'contact', targetEntity: PatientsContacts::class)]
     private Collection $patients;
 
-    // #[ORM\OneToMany(mappedBy: 'contact', targetEntity: ContactsInformation::class)]
-    // private Collection $informations;
+    #[ORM\OneToMany(mappedBy: 'contact', targetEntity: ContactsInformation::class)]
+    private Collection $informations;
 
 
     public function __construct()
     {
         // $this->calls = new ArrayCollection();
         $this->patients = new ArrayCollection();
-        // $this->informations = new ArrayCollection();
+        $this->informations = new ArrayCollection();
         // $this->occupants = new ArrayCollection();
     }
 
@@ -242,35 +242,35 @@ class Contacts
         return $this;
     }
 
-    // /**
-    //  * @return Collection<int, ContactsInformation>
-    //  */
-    // public function getInformations(): Collection
-    // {
-    //     return $this->informations;
-    // }
+    /**
+     * @return Collection<int, ContactsInformation>
+     */
+    public function getInformations(): Collection
+    {
+        return $this->informations;
+    }
 
-    // public function addInformation(ContactsInformation $information): self
-    // {
-    //     if (!$this->informations->contains($information)) {
-    //         $this->informations->add($information);
-    //         $information->setContact($this);
-    //     }
+    public function addInformation(ContactsInformation $information): self
+    {
+        if (!$this->informations->contains($information)) {
+            $this->informations->add($information);
+            $information->setContact($this);
+        }
 
-    //     return $this;
-    // }
+        return $this;
+    }
 
-    // public function removeInformation(ContactsInformation $information): self
-    // {
-    //     if ($this->informations->removeElement($information)) {
-    //         // set the owning side to null (unless already changed)
-    //         if ($information->getContact() === $this) {
-    //             $information->setContact(null);
-    //         }
-    //     }
+    public function removeInformation(ContactsInformation $information): self
+    {
+        if ($this->informations->removeElement($information)) {
+            // set the owning side to null (unless already changed)
+            if ($information->getContact() === $this) {
+                $information->setContact(null);
+            }
+        }
 
-    //     return $this;
-    // }
+        return $this;
+    }
 
     // /**
     //  * @return Collection<int, PatientsPlaces>
