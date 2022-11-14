@@ -39,7 +39,7 @@ function ModalEditInfos(props) {
       : null
   );
 
-  console.log(props?.infosAppels);
+  console.log(props);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -53,18 +53,18 @@ function ModalEditInfos(props) {
   };
 
   const handleSave = (e) => {
-    let formData = new FormData();
+    let formGetInfos = new FormData();
     // value-sugg
 
-    formData.append("valueSelect", valueSelect);
-    formData.append("commentaireInput", commentaireInput);
-    formData.append("idInfo", props?.infosAppels?.id);
-    var formGetInfos = new FormData();
-    formGetInfos.append("id", id.toString());
+    formGetInfos.append("value", specificValueInput);
+    formGetInfos.append("idCont", id.toString());
+    formGetInfos.append("commentaire", commentaireInput);
+    formGetInfos.append("idInfo", props?.infosAppels?.id);
+
     axios({
       method: "post",
-      url: "/api/editPatientInformation",
-      data: formData,
+      url: "/api/saveItemAppels",
+      data: formGetInfos,
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${auth.auth.accessToken}`,
@@ -73,21 +73,19 @@ function ModalEditInfos(props) {
       if (response) {
         axios({
           method: "post",
-          url: "/api/patientsInformationByPatients",
-          data: formGetInfos,
+          url: "/api/getCallsAndOrganisationById",
+          data: formData,
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${auth.auth.accessToken}`,
           },
-        })
-          .then(function (response) {
+        }).then(function (response) {
+          if (response) {
             setResponseDatas(response.data);
             setIsSentRepport(true);
             document.querySelectorAll(".btn-close")[0].click();
-          })
-          .catch(function (response) {});
-        // document.querySelectorAll(".btn-close")[0].click();
-        // location.replace(window.location.origin + "/" + idPatient);
+          }
+        });
       }
     });
   };

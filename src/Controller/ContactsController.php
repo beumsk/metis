@@ -53,6 +53,55 @@ class ContactsController extends AbstractController
         return new Response($serializer->serialize($contacts, 'json'), 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
     }
 
+
+
+    #[Route('/api/saveItemAppels', name: 'app_saveItemAppels')]
+    public function saveItemAppels(ManagerRegistry $doctrine, SerializerInterface $serializer)
+    {
+        $entityManager = $doctrine->getManager();
+        $request = Request::createFromGlobals();
+
+        $id = $request->request->get('idInfo');
+        $value = $request->request->get('value');
+        $comment = $request->request->get('commentaire');
+        $idCont = $request->request->get('idCont');
+
+        $contactInfos = $doctrine->getRepository(ContactsInformation::class)->find($id);
+
+        $contactInfos->setValue($value);
+        $contactInfos->setComment($comment);
+
+        // dd($contactInfos);
+        $entityManager->flush();
+
+
+
+        $contact = $doctrine->getRepository(Contacts::class)->find($idCont);
+
+        $encoder = new JsonEncoder();
+        // $encoders = [new JsonEncoder()];
+        // $normalizers = [new DateTimeNormalizer(), new ObjectNormalizer()];
+        // $serializer = new Serializer($normalizers, $encoders);
+
+        $defaultContext = [
+            AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context) {
+                return $object->getId();
+            },
+        ];
+
+        $normalizer = new ObjectNormalizer(null, null, null, null, null, null, $defaultContext);
+
+        $serializer = new Serializer([new DateTimeNormalizer(), $normalizer], [$encoder]);
+        // var_dump($serializer->serialize($org, 'json'));
+        $data = $serializer->serialize($contact, 'json', [AbstractNormalizer::IGNORED_ATTRIBUTES => ["contacts", "patients", "cont", "orga"]]);
+
+
+
+        return $this->json(json_decode($data));
+    }
+
+
+
     #[Route('/api/getCallsAndOrganisationById', name: 'app_getLastWomenStanding')]
     public function getCallsAndOrganisationById(ManagerRegistry $doctrine, SerializerInterface $serializer)
     {
@@ -62,13 +111,10 @@ class ContactsController extends AbstractController
 
         $contact = $doctrine->getRepository(Contacts::class)->find($id);
         $suggestions = $doctrine->getRepository(Suggestions::class)->findBy(['parentSugg' => 155]);
-        // $contactInfos = $doctrine->getRepository(ContactsInformation::class)->find($id);
 
         $encoders = [new JsonEncoder()];
         $normalizers = [new DateTimeNormalizer(), new ObjectNormalizer()];
         $serializer = new Serializer($normalizers, $encoders);
-        // dd($suggestions);
-        // dd($contact->getInformations());
         $nameOfBlocks = [];
         foreach ($suggestions as $value) {
             $nameOfBlocks[] = ["id" => $value->getId(), "value" => $value->getValue(), "obj" => []];

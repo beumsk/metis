@@ -49,6 +49,10 @@ const ProfilAppel = () => {
     console.log(contactInformation);
   }
 
+  function informationSaved(e) {
+    setContactInformation(e.response);
+  }
+
   return (
     <>
       <Menu></Menu>
@@ -73,7 +77,13 @@ const ProfilAppel = () => {
                         {e?.obj.map((e) => (
                           <span>
                             {e.valueInformations}{" "}
-                            <ModalEditInfos infosAppels={e}></ModalEditInfos>
+                            <ModalEditInfos
+                              infosAppels={e}
+                              contact={contactInformation}
+                              idInfo={e.id}
+                              informations={contactInformation.informations}
+                              onChange={(e) => informationSaved(e)}
+                            ></ModalEditInfos>
                           </span>
                         ))}
                       </>
