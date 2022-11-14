@@ -61,7 +61,7 @@ function Patients() {
                     <div className="col-sm-2">
                       {new Date(patient.birthdate).toLocaleDateString()}
                     </div>
-                    <div className="col-sm-2">14/02/2022</div>
+
                     <div className="col-sm-3">{patient.birthLocation}</div>
                     <div className="col-sm-1">
                       <span className="status">{patient.status}</span>

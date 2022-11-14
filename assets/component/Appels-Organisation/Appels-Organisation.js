@@ -51,47 +51,34 @@ function AppelsOrganisation() {
                     <div className="col-sm-1">
                       <FontAwesomeIcon icon={faUser} />
                     </div>
-                    <div className="col-sm-2">
+                    <div className="col-sm-4">
                       {patient.firstname} {patient.lastname}
-                      <Link className="seeProfil" to={"/" + patient.id}>
+                      <Link
+                        className="seeProfil"
+                        from={"/appels-organisation"}
+                        to={"/appels-organisation/" + patient.id}
+                      >
                         Voir profil
                       </Link>
                     </div>
-                    <div className="col-sm-2">
-                      {new Date(patient.birthdate).toLocaleDateString()}
-                    </div>
-                    <div className="col-sm-2">14/02/2022</div>
-                    <div className="col-sm-3">{patient.birthLocation}</div>
-                    <div className="col-sm-1">
-                      <span className="status">{patient.status}</span>
-                    </div>
+                    <div className="col-sm-4">{patient.description}</div>
+                    {/* <div className="col-sm-3">{patient.birthLocation}</div> */}
+                    {/* <div className="col-sm-1">
+                      <span className="status">{(patient.type)? Appel}</span>
+                    </div> */}
                     {/* <div className="col-sm-3">{Date.now()}</div> */}
                   </Accordion.Header>
                   <Accordion.Body>
                     <div className="row body-accordeonitemPatient">
-                      <div className="col-sm-4">
-                        <b>Dernière activitée</b>
-                        <p>Rapport de rencontre 12/08/2021</p>
-                        <p>Rapport de rencontre 20/08/2022</p>
-                        <p>Rapport de rencontre 14/09/2022</p>
-                      </div>
-                      <div className="col-sm-2">
-                        <b>Hygiène</b>
-                        <p>Google Agenda</p>
-                      </div>
-                      <div className="col-sm-2">
-                        <b>Santée mentale</b>
-                        <p>Google Agenda</p>
-                      </div>
-                      <div className="col-sm-2">
-                        <b>Liens</b>
-                        <p>Google Agenda</p>
-                      </div>
-                      <div className="col-sm-2">
-                        <b>Autres détails</b>
-                        <p>Sans papiers</p>
-                        <p>Inscris au logement social</p>
-                      </div>
+                      {patient.goalsInformation.map((e) => (
+                        <div className="row">
+                          <div className="col-sm-6">
+                            {e.patientfirstName}
+                            {e.patientLastName}
+                          </div>
+                          <div className="col-sm-6">{e.description}</div>
+                        </div>
+                      ))}
                     </div>
                   </Accordion.Body>
                 </Accordion.Item>

@@ -17,6 +17,7 @@ import Patients from "./component/Patients";
 import Statistiques from "./component/Statistiques/Statistiques";
 import RepportCalls from "./component/list_reportCalls";
 import RepportGoals from "./component/list_reportGoals";
+import ProfilAppel from "./component/Appels-Organisation/Profil-Appel/Profil-Appel";
 
 import Patient from "./component/Patient";
 import AppelsOrganisation from "./component/Appels-Organisation/Appels-Organisation";
@@ -26,6 +27,7 @@ const ROLES = {
   User: "ROLE_USER",
   Admin: "ROLE_ADMIN",
 };
+console.log("test");
 
 function App() {
   return (
@@ -44,8 +46,13 @@ function App() {
             <Route path="statistiques" element={<Statistiques />} />
             <Route path="patients" element={<Patients />} />
             <Route
+              exact
               path="appels-organisation"
               element={<AppelsOrganisation />}
+            ></Route>
+            <Route
+              path="appels-organisation/:idContact"
+              element={<ProfilAppel />}
             />
             <Route path=":id" element={<Patient />} />
           </Route>
