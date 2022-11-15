@@ -51,7 +51,7 @@ const Medias = (props) => {
       },
     })
       .then(function (response) {
-        //
+        window.location.reload();
       })
       .catch(function (response) {
         //
@@ -73,7 +73,7 @@ const Medias = (props) => {
       },
     })
       .then(function (response) {
-        //
+        window.location.reload();
       })
       .catch(function (response) {
         //

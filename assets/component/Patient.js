@@ -63,25 +63,13 @@ const Patient = () => {
           },
         })
           .then(function (response) {
-            //handle success
-            // setPatient(response.data);
-
             let backgroundImage = response.image;
             setImgPatient(response.data);
-            // setPatient(response.data);
           })
           .catch(function (response) {});
       })
       .catch(function (response) {});
   }, [idPatient]);
-
-  // "../build/images/5a94e34b4c36e28de4e704f8c2d1c39a79e91b5d.png"
-  // const [isFiche, setFiche] = useState(false);
-  // const [isProfile, setProfile] = useState(false);
-  // const [isIndicators, setIndicators] = useState(false);
-  // const [isMedias, setMedias] = useState(false);
-  // const [isContacts, setContacts] = useState(false);
-  // const [isPlaces, setPlaces] = useState(false);
 
   const showOngletProfile = (titleOnglet) => {
     titleOnglet === "Fiche" ? setFiche(true) : setFiche(false);
@@ -95,6 +83,32 @@ const Patient = () => {
     titleOnglet === "Medias" ? setMedias(true) : setMedias(false);
     titleOnglet === "Contacts" ? setContacts(true) : setContacts(false);
     titleOnglet === "Lieux" ? setPlaces(true) : setPlaces(false);
+  };
+
+  const uploadFile = (e) => {
+    console.log(e);
+    var formData = new FormData();
+
+    console.log(document.getElementById("fileInput").files[0]);
+    let fileName = document.getElementById("fileInput").files[0].name;
+    formData.append("id", id.toString());
+    formData.append("image", document.getElementById("fileInput").files[0]);
+    formData.append("fileName", fileName);
+    formData.append("sugg", "32");
+
+    axios({
+      method: "post",
+      url: "/api/setMediasByPatients",
+      data: formData,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    })
+      .then(function (response) {
+        window.location.reload();
+      })
+      .catch(function (response) {});
   };
   return (
     <>
@@ -125,7 +139,13 @@ const Patient = () => {
 
                   <div className="file btn btn-lg btn-primary">
                     Change Photo
-                    <input type="file" name="file" />
+                    <input
+                      type="file"
+                      name="file"
+                      id="fileInput"
+                      accept="image/png, image/gif, image/jpeg"
+                      onChange={(e) => uploadFile(e)}
+                    />
                   </div>
                 </div>
               </div>
