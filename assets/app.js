@@ -22,6 +22,8 @@ import ProfilAppel from "./component/Appels-Organisation/Profil-Appel/Profil-App
 import Patient from "./component/Patient";
 import AppelsOrganisation from "./component/Appels-Organisation/Appels-Organisation";
 import ContactOrganisations from "./component/Administration/Contact-Organisation/Contact-Organisation";
+import Anniversaire from "./component/Administration/Anniversaire/Anniversaire";
+import Lieux from "./component/Administration/Lieux/Lieux";
 import "./styles/app.scss";
 
 const ROLES = {
@@ -48,7 +50,9 @@ function App() {
               path="contactsorganisation"
               element={<ContactOrganisations />}
             />
+            <Route path="lieux" element={<Lieux />} />
             <Route path="patients" element={<Patients />} />
+            <Route path="anniversaire" element={<Anniversaire />} />
             <Route
               exact
               path="appels-organisation"

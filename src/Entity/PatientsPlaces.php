@@ -57,7 +57,8 @@ class PatientsPlaces
     #[ORM\ManyToOne]
     private ?Patients $pati = null;
 
-    #[ORM\ManyToOne(inversedBy: 'occupants')]
+    #[ORM\ManyToOne(targetEntity: Contacts::class, inversedBy: 'occupants')]
+    #[ORM\JoinColumn(name: "cont_id", referencedColumnName: "id", nullable: true)]
     private ?Contacts $place = null;
 
     public function getId(): ?int

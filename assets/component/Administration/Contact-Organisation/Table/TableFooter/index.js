@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
-
+import "./TableFooter.module.css";
+import Pagination from "react-js-pagination";
 const TableFooter = ({ range, setPage, page, slice }) => {
   useEffect(() => {
     if (slice.length < 1 && page !== 1) {
@@ -8,11 +9,22 @@ const TableFooter = ({ range, setPage, page, slice }) => {
   }, [slice, page, setPage]);
   return (
     <div>
-      {range.map((el, index) => (
-        <button key={index} onClick={() => setPage(el)}>
+      <Pagination
+        activePage={page}
+        itemsCountPerPage={10}
+        totalItemsCount={range.length}
+        pageRangeDisplayed={5}
+        onChange={(e) => setPage(e)}
+      />
+      {/* {range.map((el, index) => (
+        <button
+          key={index}
+          style={{ marginRight: "1rem" }}
+          onClick={() => setPage(el)}
+        >
           {el}
         </button>
-      ))}
+      ))} */}
     </div>
   );
 };

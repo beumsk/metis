@@ -38,8 +38,26 @@ class PlacesController extends AbstractController
         $normalizers = [new DateTimeNormalizer(), new ObjectNormalizer()];
         $serializer = new Serializer($normalizers, $encoders);
 
-        // dd($places);
-        // $serializer = SerializerBuilder::create()->build();
+        $jsonObject = $serializer->serialize($places, 'json', [
+            AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context) {
+                return $object->getId();
+            },
+            AbstractNormalizer::IGNORED_ATTRIBUTES => ["pati", "sugg", "user", "informations", "orga", "calls", "patients", "informations", "cont", "goalsByBlock", "occupants"]
+        ]);
+
+        $response = new Response($jsonObject, 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
+        $response->setSharedMaxAge(3600);
+        return $response;
+    }
+
+    #[Route('/api/getPlacesList', name: 'app_getPlacesList')]
+    public function getPlacesList(ManagerRegistry $doctrine): Response
+    {
+        $places = $doctrine->getRepository(Contacts::class)->findBy(["type" => 3, "deleted_at" => null]);
+        $encoders = [new JsonEncoder()];
+        $normalizers = [new DateTimeNormalizer(), new ObjectNormalizer()];
+        $serializer = new Serializer($normalizers, $encoders);
+
         $jsonObject = $serializer->serialize($places, 'json', [
             AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context) {
                 return $object->getId();
@@ -47,14 +65,8 @@ class PlacesController extends AbstractController
             AbstractNormalizer::IGNORED_ATTRIBUTES => ["pati", "sugg", "user", "informations", "orga", "calls", "patients", "informations", "cont", "goalsByBlock"]
         ]);
 
-
         $response = new Response($jsonObject, 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
-
-
-
         $response->setSharedMaxAge(3600);
-        // return new Response($jsonObject, 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
-
         return $response;
     }
 

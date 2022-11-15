@@ -79,6 +79,10 @@ const Menu = () => {
                   <Dropdown.Item href="/contactsorganisation">
                     Contacts/Organisation
                   </Dropdown.Item>
+                  <Dropdown.Item href="/lieux">Lieux</Dropdown.Item>
+                  <Dropdown.Item href="/anniversaire">
+                    Anniversaire
+                  </Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
               <Nav.Link onClick={signOut}>

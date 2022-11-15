@@ -62,13 +62,16 @@ class Contacts
     #[ORM\OneToMany(mappedBy: 'contact', targetEntity: ContactsInformation::class)]
     private Collection $informations;
 
+    #[ORM\OneToMany(mappedBy: 'place', targetEntity: PatientsPlaces::class)]
+    private $occupants;
+
 
     public function __construct()
     {
         $this->calls = new ArrayCollection();
         $this->patients = new ArrayCollection();
         $this->informations = new ArrayCollection();
-        // $this->occupants = new ArrayCollection();
+        $this->occupants = new ArrayCollection();
     }
 
 
@@ -272,33 +275,33 @@ class Contacts
         return $this;
     }
 
-    // /**
-    //  * @return Collection<int, PatientsPlaces>
-    //  */
-    // public function getOccupants(): Collection
-    // {
-    //     return $this->occupants;
-    // }
+    /**
+     * @return Collection<int, PatientsPlaces>
+     */
+    public function getOccupants(): Collection
+    {
+        return $this->occupants;
+    }
 
-    // public function addOccupant(PatientsPlaces $occupant): self
-    // {
-    //     if (!$this->occupants->contains($occupant)) {
-    //         $this->occupants->add($occupant);
-    //         $occupant->setPlace($this);
-    //     }
+    public function addOccupant(PatientsPlaces $occupant): self
+    {
+        if (!$this->occupants->contains($occupant)) {
+            $this->occupants->add($occupant);
+            $occupant->setPlace($this);
+        }
 
-    //     return $this;
-    // }
+        return $this;
+    }
 
-    // public function removeOccupant(PatientsPlaces $occupant): self
-    // {
-    //     if ($this->occupants->removeElement($occupant)) {
-    //         // set the owning side to null (unless already changed)
-    //         if ($occupant->getPlace() === $this) {
-    //             $occupant->setPlace(null);
-    //         }
-    //     }
+    public function removeOccupant(PatientsPlaces $occupant): self
+    {
+        if ($this->occupants->removeElement($occupant)) {
+            // set the owning side to null (unless already changed)
+            if ($occupant->getPlace() === $this) {
+                $occupant->setPlace(null);
+            }
+        }
 
-    //     return $this;
-    // }
+        return $this;
+    }
 }

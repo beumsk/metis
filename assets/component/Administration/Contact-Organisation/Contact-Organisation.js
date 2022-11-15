@@ -4,8 +4,9 @@ import useAuth from "../../../hooks/useAuth";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import Menu from "../../Menu";
-import Table from "react-bootstrap/Table";
+import Table from "./Table/Table";
 import { Link } from "react-router-dom";
+
 function ContactOrganisations() {
   const [auth, setAuth] = useState(useAuth());
   const [listContacts, setListContacts] = useState(null);
@@ -49,33 +50,15 @@ function ContactOrganisations() {
             <div className="row coordonnes-body">
               <div>
                 <h6>Infos</h6>
-                {listContacts.data.map((e) => (
-                  <div className="row row-contactOrganisation">
-                    <div className="col-sm-2">
-                      {e.type === 2 ? "Physique" : "Morale"}
-                    </div>
-                    <div className="col-sm-6">
-                      {e.firstname}
-                      {e.lastname}
-                    </div>
-                    <div className="col-sm-1">{e.numberPatients}</div>
-                    <div className="col-sm-1">{e.numberApps}</div>
-                    <div className="col-sm-2">
-                      <Link
-                        className="seeProfil"
-                        from={"/appels-organisation"}
-                        to={"/appels-organisation/" + e.id}
-                      >
-                        Voir profil
-                      </Link>
-                    </div>
-                  </div>
-                ))}
+
+                <Table
+                  data={[...listContacts.data]}
+                  rowsPerPage={10}
+                  // listContacts={contactList}
+                  onChangeUpdateContact={(e) => onChangeUpdateContact(e)}
+                />
               </div>
             </div>
-            <button className="btn-metis" onClick={readMore}>
-              Read More
-            </button>
           </>
         )}
       </div>
