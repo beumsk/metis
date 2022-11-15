@@ -113,7 +113,6 @@ function AddReportMeet(props) {
   };
 
   const inputChangeTypeMeet = (e) => {
-    console.log(e);
     setChangeTypeMeet(e.target.value);
   };
 
@@ -280,8 +279,6 @@ function AddReportMeet(props) {
       },
     })
       .then(function (response) {
-        console.log(response);
-
         if (response && formSoins) {
           let endpoints = [];
 

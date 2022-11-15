@@ -158,10 +158,8 @@ function EditReportMeet(props) {
 
       let arrCareHydrated = [];
       for (var prop in copyCares) {
-        // console.log(prop);
         if (Object.prototype.hasOwnProperty.call(copyCares, prop)) {
           var care = new Cares();
-          // console.log(care);
           care["care_id"] = copyCares[prop]?.id;
           care["id"] = Number(prop);
           care["value"] = Number(copyCares[prop].activity?.id);
@@ -175,7 +173,6 @@ function EditReportMeet(props) {
               : null;
           care["description"] = copyCares[prop].description;
 
-          // console.log(copyCares);
           arrCareHydrated.push(care);
         }
       }
@@ -220,16 +217,13 @@ function EditReportMeet(props) {
               : null;
           activities["description"] = copy[prop].description;
 
-          console.log(activities);
           arrActivitiesHydrated.push(activities);
         }
       }
 
       formActivities.splice(0, formActivities.length);
       formActivities.push(...arrActivitiesHydrated);
-      // console.log(formActivities);
       setFormActivities(formActivities);
-      console.log(props.informationPatient);
     }
 
     // console.log(formActivities);
@@ -292,8 +286,6 @@ function EditReportMeet(props) {
   };
 
   const onChangeDate = (e) => {
-    //
-    console.log(e);
     setChangeDate(e.target.value);
   };
 
@@ -497,7 +489,6 @@ function EditReportMeet(props) {
     formData.append("userId", userId);
     formData.append("patiId", patiId);
 
-    console.log(formData);
     axios({
       method: "post",
       url: "/api/updateSendReport",
@@ -508,8 +499,6 @@ function EditReportMeet(props) {
       },
     })
       .then(function (response) {
-        console.log(response);
-
         if (response && formSoins) {
           let endpoints = [];
 
@@ -633,7 +622,6 @@ function EditReportMeet(props) {
   }
 
   function onChangeValuesByActivitiesForm(e) {
-    console.log(e);
     if (formActivities.filter((el) => e[0].id === el.id)) {
       // idEdit
       formActivities.filter((el) => e[0].id === el.id)[0].act_id =
@@ -648,15 +636,11 @@ function EditReportMeet(props) {
         e[0].place !== null ? e[0].place : null;
       formActivities.filter((el) => e[0].id === el.id)[0].description =
         e[0].description !== null ? e[0].description : null;
-      console.log(formActivities);
-      //
     }
-    // console.log(formActivities);
   }
 
   const onChangeValuesIndicateursForm = (e) => {
     // setSelectedTypeCVC(e[0].selectedOptionType);
-    console.log(e);
 
     let opt = [
       "HESTIA - Risque perte logement",
@@ -707,7 +691,7 @@ function EditReportMeet(props) {
       formIndicateurs.filter((el) => e[0].id === el.id)[0].id_conso =
         e[0].id_conso;
     }
-    console.log("FINAL", formIndicateurs);
+
     if (
       formIndicateurs &&
       e[0].selectedOptionType &&
@@ -773,10 +757,6 @@ function EditReportMeet(props) {
     }
   };
 
-  if (props?.informationPatient !== null) {
-    console.log(props?.informationPatient);
-  }
-
   function getDifference(array1, array2) {
     return array1.filter((object1) => {
       return !array2.some((object2) => {
@@ -795,7 +775,7 @@ function EditReportMeet(props) {
         <>
           <h5 className="mt-4 mb-4">Ajouter un rapport</h5>
           {/* <Form.Control type="text" id="inputText" className="mt-4" /> */}
-          <Form.Group className="mb-3" controlId="formBasicCheckbox">
+          <Form.Group className="mb-3">
             <div className="d-flex">
               <div key={`inline-radio`} className="mb-3">
                 <Form.Label htmlFor="inputValue" className="mr-4">
@@ -856,7 +836,7 @@ function EditReportMeet(props) {
               )}
             </div>
           </Form.Group>
-          <Form.Group className="mb-3" controlId="formBasicCheckbox">
+          <Form.Group className="mb-3">
             <div className="d-flex">
               <div key={`inline-radio`} className="mb-3">
                 <Form.Label htmlFor="inputValue" className="mr-4">
@@ -922,7 +902,7 @@ function EditReportMeet(props) {
               )}
             </div>
           </Form.Group>
-          <Form.Group className="mb-3" controlId="formBasicCheckbox">
+          <Form.Group className="mb-3">
             <div className="d-flex">
               <div key={`inline-radio`}>
                 <Form.Label htmlFor="inputValue" className="mr-4">

@@ -8,7 +8,6 @@ import ModalEditPatient from "../Modal-Edit-Patient";
 const TablePatients = ({ data, rowsPerPage }) => {
   const [page, setPage] = useState(1);
   const { slice, range } = useTable(data, page, rowsPerPage);
-  console.log(slice);
 
   function onChangePatientsPatients(e) {
     props.onChangePatientsPatients(e);

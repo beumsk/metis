@@ -64,14 +64,6 @@ function ModalLierContacts(props) {
   //   /api/getContacts
 
   function handleSave() {
-    console.log(
-      description,
-      commentaire,
-      contactItemList,
-      start,
-      end,
-      typeItemList
-    );
     let formData = new FormData();
     // value-sugg
 
@@ -104,7 +96,6 @@ function ModalLierContacts(props) {
           },
         })
           .then(function (response) {
-            console.log(response);
             setResponseDatas(response.data);
             setIsSentRepport(true);
             document.querySelectorAll(".btn-close")[0].click();

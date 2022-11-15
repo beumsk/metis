@@ -132,7 +132,7 @@ function RapportDetails(props) {
                         {r.followupReportsIndicators && (
                           <>
                             {r.followupReportsIndicators.map((item, id) => (
-                              <div class="row">
+                              <div className="row">
                                 <div className="col-sm-4">{item.indi.name}</div>
                                 <div className="col-sm-8">
                                   {item.indi.description}
@@ -160,7 +160,7 @@ function RapportDetails(props) {
                         {r.followupReportsIndicators && (
                           <>
                             {r.followupReportsIndicators.map((item, id) => (
-                              <div class="row">
+                              <div className="row">
                                 <div className="col-sm-4">{item.indi.name}</div>
                                 <div className="col-sm-8">
                                   {item.indi.description}

@@ -7,7 +7,6 @@ const TableAllRapports = ({ data, rowsPerPage }) => {
   const [page, setPage] = useState(1);
 
   const { slice, range } = useTable(data, page, rowsPerPage);
-  console.log(data);
 
   function onChangePatientsPatients(e) {
     props.onChangePatientsPatients(e);

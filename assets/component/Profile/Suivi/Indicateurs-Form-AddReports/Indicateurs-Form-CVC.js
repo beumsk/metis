@@ -93,8 +93,7 @@ function IndicateursFormCVC(props) {
   const onChangeDescriptionComportement = (e) => {
     setDescriptionComportement(e.target.value);
   };
-  //   /api/getContacts
-  console.log(props?.editForm);
+
   props.onChange([
     {
       id: props.id,

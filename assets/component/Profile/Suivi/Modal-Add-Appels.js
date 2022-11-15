@@ -103,8 +103,6 @@ function ModalAddAppels(props) {
   };
 
   const onChangeWhatDoinFunction = (e) => {
-    // console.log(e);
-    // setWhatDoinFunction(e.target.value);
     setValueWhatDoinFunction(e.target.value);
   };
   function onSent() {

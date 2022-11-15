@@ -30,9 +30,6 @@ function DashboardReports(props) {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  //
-  // console.log(...props.informationPatient.data);
-  //   /api/getContacts
   return (
     <>
       <div className="container ">

@@ -18,13 +18,11 @@ import ModalAddInfos from "./Modal-Add-Infos";
 const ProfilAppel = () => {
   const [auth, setAuth] = useState(useAuth());
   let id = useParams().id;
-  console.log(id);
   const [contactInformation, setContactInformation] = useState(null);
   const [lengthList, setLengthList] = useState(10);
   const [idAppel, setIdAppel] = useState(id);
   var formData = new FormData();
   formData.append("id", useParams().idContact);
-  // console.log(useParams());
   useEffect(() => {
     axios({
       method: "post",
@@ -36,7 +34,6 @@ const ProfilAppel = () => {
       },
     })
       .then(function (response) {
-        // console.log(response);
         setContactInformation(response.data);
       })
       .catch(function (response) {});
@@ -46,15 +43,9 @@ const ProfilAppel = () => {
   //     setLengthList(lengthList + 10);
   //   };
 
-  if (contactInformation && contactInformation.length > 0) {
-    console.log(contactInformation);
-  }
-
   function informationSaved(e) {
-    console.log("RESPONSE2", e);
     if (e) {
       setContactInformation(e.response);
-      console.log("RESPONSE3", e);
     }
   }
 

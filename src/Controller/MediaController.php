@@ -75,6 +75,7 @@ class MediaController extends AbstractController
         $sugg = $request->request->get("sugg");
         $filename = $request->request->get("filename");
         $id = $request->request->get("id");
+        $isProfilePage = $request->request->get("isProfilePage");
 
         // profile || current C:\projets\metis-app-2022\assets\images\4c6af1c072f8f574f9e98ccfc6c22658eb290689.jpeg
         $destination = '../../assets/images';
@@ -87,7 +88,8 @@ class MediaController extends AbstractController
 
         $medias = new Medias();
 
-
+        // sugg 32 for profile page
+        // if ($isProfilePage === )
         $suggestion = $doctrine->getRepository(Suggestions::class)->find($sugg);
         $patients = $doctrine->getRepository(Patients::class)->find($id);
         $medias->setSugg($suggestion);
@@ -101,11 +103,6 @@ class MediaController extends AbstractController
 
 
         $uploadedFile->move($this->getParameter('images_directory'), $newFilename);
-
-
-
-
-
 
         return $this->json($medias);
     }

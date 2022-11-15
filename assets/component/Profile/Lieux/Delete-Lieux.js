@@ -46,15 +46,9 @@ function ModalDeletePlaces(props) {
     props?.infosPatient?.comment !== null ? props?.infosPatient?.comment : null
   );
 
-  // console.log({new Date(g.creationDate).toLocaleString("fr-BE", {
-  //   dateStyle: "short",
-  // })});
-  console.log(start);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   useEffect(() => {
-    // setElementsOpt(...props?.infos?.suggestionsByBlock);
-    // console.log(props?.infosPatient);
     setStartDate(
       new Date(props?.infosPatient?.start?.timestamp * 1000).toJSON()
     );

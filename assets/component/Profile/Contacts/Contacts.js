@@ -79,7 +79,6 @@ const Contacts = () => {
   }, [idPatient]);
 
   function onChangePatientsPatients(e) {
-    console.log(e);
     if (e && e.data?.data) {
       setContacts(e.data?.data);
     }

@@ -36,7 +36,6 @@ const BlockInfos = (props) => {
     }
   }
   function onChangePatientInformation(e) {
-    console.log(e);
     if (e && e.response) {
       props.onChangeAddPati(e.response);
     }

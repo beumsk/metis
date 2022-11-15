@@ -65,13 +65,7 @@ const Places = () => {
   }, [idPatient]);
 
   function onChangePlaces(e) {
-    console.log(e);
-    // listPlaces.data.splice(listPlaces.data.length, 0);
-    // console.log("base", listPlaces);
-    // listPlaces.data.push(...e.data);
     setPlaces(e);
-    // console.log("devenir", e);
-    // console.log("base", listPlaces);
   }
 
   function editPlacesResponse(e) {
@@ -79,7 +73,6 @@ const Places = () => {
   }
 
   function onChangeDeletePlace(e) {
-    console.log(e);
     setPlaces(e);
   }
 

@@ -7,7 +7,6 @@ import Table from "react-bootstrap/Table";
 const TableContacts = ({ data, rowsPerPage }) => {
   const [page, setPage] = useState(1);
   const { slice, range } = useTable(data, page, rowsPerPage);
-  console.log(slice);
 
   function onChangeUpdateContact(e) {
     props.onChangeUpdateContact(e);

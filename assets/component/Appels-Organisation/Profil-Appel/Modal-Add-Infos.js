@@ -30,8 +30,6 @@ function ModalAddInfos(props) {
 
   const [commentaireInput, setCommentaire] = useState(null);
 
-  console.log(props);
-
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   useEffect(() => {}, []);
@@ -61,7 +59,6 @@ function ModalAddInfos(props) {
         Authorization: `Bearer ${auth.auth.accessToken}`,
       },
     }).then(function (response) {
-      console.log(response);
       var formData = new FormData();
       formData.append("id", response.data.data.id);
       if (response) {
@@ -75,7 +72,6 @@ function ModalAddInfos(props) {
           },
         }).then(function (response) {
           if (response) {
-            console.log("RESPONSE1", response);
             setResponseDatas(response.data);
             setIsSentRepport(true);
             document.querySelectorAll(".btn-close")[0].click();

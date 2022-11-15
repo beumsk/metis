@@ -86,7 +86,6 @@ function ModalLierLieux(props) {
           },
         })
           .then(function (response) {
-            console.log(response);
             setResponseDatas(response);
             setIsSentRepport(true);
             document.querySelectorAll(".btn-close")[0].click();

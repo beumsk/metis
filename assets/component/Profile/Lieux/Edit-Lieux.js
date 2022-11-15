@@ -96,7 +96,6 @@ function ModalLierLieux(props) {
           },
         })
           .then(function (response) {
-            console.log(response);
             setResponseDatas(response);
             setIsSentRepport(true);
             document.querySelectorAll(".btn-close")[0].click();
@@ -111,8 +110,6 @@ function ModalLierLieux(props) {
   if (responseDatas !== null) {
     props.onChangeEditPlaces(responseDatas);
   }
-
-  console.log(props.lieu);
 
   //   /api/getContacts
   return (

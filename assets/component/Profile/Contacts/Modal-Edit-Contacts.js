@@ -74,14 +74,6 @@ function ModalEditContacts(props) {
   //   /api/getContacts
 
   function handleSave() {
-    console.log(
-      description,
-      commentaire,
-      contactItemList,
-      start,
-      end,
-      typeItemList
-    );
     let formData = new FormData();
     // value-sugg
 
@@ -115,7 +107,6 @@ function ModalEditContacts(props) {
           },
         })
           .then(function (response) {
-            console.log(response);
             setResponseDatas(response);
             setIsSentRepport(true);
             document.querySelectorAll(".btn-close")[0].click();

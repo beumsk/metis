@@ -185,7 +185,7 @@ function AddIndicateursByReport(props) {
           : null,
     },
   ]);
-  console.log(props?.form);
+
   return (
     <>
       <div className="addSoins-form">

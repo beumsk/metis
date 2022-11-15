@@ -93,7 +93,6 @@ function ModalLierPatient(props) {
           },
         })
           .then(function (response) {
-            console.log(response);
             setResponseDatas(response);
             setIsSentRepport(true);
             document.querySelectorAll(".btn-close")[0].click();
@@ -109,10 +108,6 @@ function ModalLierPatient(props) {
     props.onChangePatientsPatients({
       data: responseDatas,
     });
-  }
-
-  if (props.infos) {
-    console.log(props.infos);
   }
 
   const handleInputChange = (e) => {

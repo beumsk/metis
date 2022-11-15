@@ -68,13 +68,11 @@ const Fiche = () => {
   }, [idPatient]);
   //
   const onChangeEditPatientInformation = (e) => {
-    // console.log(e);
     setInformation(e);
 
     // document.querySelectorAll(".btn-close")[0].click();
   };
   const onChangeAddPatientInformation = (e) => {
-    // console.log(e);
     setInformation(e);
 
     // document.querySelectorAll(".btn-close")[0].click();

@@ -44,15 +44,10 @@ function ModalEditInfos(props) {
     props?.infosPatient?.comment !== null ? props?.infosPatient?.comment : null
   );
 
-  // console.log({new Date(g.creationDate).toLocaleString("fr-BE", {
-  //   dateStyle: "short",
-  // })});
-  console.log(start);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   useEffect(() => {
     setElementsOpt(...props?.infos?.suggestionsByBlock);
-    // console.log(props?.infosPatient);
     setStartDate(
       new Date(props?.infosPatient?.start?.timestamp * 1000).toJSON()
     );
@@ -121,10 +116,6 @@ function ModalEditInfos(props) {
     // document.querySelectorAll(".btn-close")[0].click();
   }
 
-  // props.onChange;
-  console.log(props?.infos);
-  //   new Date(1254088800 *1000)
-  // handleInputChange;
   return (
     <>
       <button onClick={handleShow} className="ml-4">
