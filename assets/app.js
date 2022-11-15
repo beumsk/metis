@@ -21,6 +21,7 @@ import ProfilAppel from "./component/Appels-Organisation/Profil-Appel/Profil-App
 
 import Patient from "./component/Patient";
 import AppelsOrganisation from "./component/Appels-Organisation/Appels-Organisation";
+import ContactOrganisations from "./component/Administration/Contact-Organisation/Contact-Organisation";
 import "./styles/app.scss";
 
 const ROLES = {
@@ -44,6 +45,10 @@ function App() {
 
           <Route element={<RequireAuth allowedRoles={[ROLES.Admin]} />}>
             <Route path="statistiques" element={<Statistiques />} />
+            <Route
+              path="contactsorganisation"
+              element={<ContactOrganisations />}
+            />
             <Route path="patients" element={<Patients />} />
             <Route
               exact

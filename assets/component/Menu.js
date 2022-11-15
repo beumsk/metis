@@ -1,5 +1,6 @@
 import React, { useContext, useDebugValue } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import Dropdown from "react-bootstrap/Dropdown";
 import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -39,6 +40,7 @@ const Menu = () => {
               {/* <Link to="/admin">Go to the Admin page</Link> */}
 
               <Nav.Link href="/patients">Patients</Nav.Link>
+
               <Nav.Link href="/statistiques">Statistiques</Nav.Link>
               <Nav.Link href="/appels-organisation">
                 Appels/Organisation
@@ -63,6 +65,15 @@ const Menu = () => {
                   Contact/Organisation
                 </NavDropdown.Item>
               </NavDropdown> */}
+              <Dropdown>
+                <Dropdown.Toggle>Administration</Dropdown.Toggle>
+
+                <Dropdown.Menu>
+                  <Dropdown.Item href="/contactsorganisation">
+                    Contacts/Organisation
+                  </Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
               <Nav.Link onClick={signOut}>
                 <FontAwesomeIcon icon={faSignOut} />{" "}
               </Nav.Link>

@@ -53,8 +53,8 @@ class Contacts
     #[ORM\JoinColumn(name: "orga_id", referencedColumnName: "id", nullable: true)]
     private  $orga = null;
 
-    // #[ORM\OneToMany(mappedBy: 'contact', targetEntity: FollowupGoals::class)]
-    // private Collection $calls;
+    #[ORM\OneToMany(mappedBy: 'contact', targetEntity: FollowupGoals::class)]
+    private Collection $calls;
 
     #[ORM\OneToMany(mappedBy: 'contact', targetEntity: PatientsContacts::class)]
     private Collection $patients;
@@ -65,7 +65,7 @@ class Contacts
 
     public function __construct()
     {
-        // $this->calls = new ArrayCollection();
+        $this->calls = new ArrayCollection();
         $this->patients = new ArrayCollection();
         $this->informations = new ArrayCollection();
         // $this->occupants = new ArrayCollection();
@@ -190,27 +190,27 @@ class Contacts
         return $this;
     }
 
-    // /**
-    //  * @return Collection<int, FollowupGoals>
-    //  */
-    // public function getCalls(): Collection
-    // {
-    //     return $this->calls;
-    // }
+    /**
+     * @return Collection<int, FollowupGoals>
+     */
+    public function getCalls(): Collection
+    {
+        return $this->calls;
+    }
 
-    // public function addCall(FollowupGoals $call): self
-    // {
-    //     $this->calls[] = $call;
+    public function addCall(FollowupGoals $call): self
+    {
+        $this->calls[] = $call;
 
-    //     return $this;
-    // }
+        return $this;
+    }
 
-    // public function removeCall(FollowupGoals $call): self
-    // {
-    //     $this->calls->removeElement($call);
+    public function removeCall(FollowupGoals $call): self
+    {
+        $this->calls->removeElement($call);
 
-    //     return $this;
-    // }
+        return $this;
+    }
 
     /**
      * @return Collection<int, PatientsContacts>

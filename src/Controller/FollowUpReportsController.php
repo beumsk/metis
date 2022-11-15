@@ -97,11 +97,13 @@ class FollowUpReportsController extends AbstractController
         $serializer = new Serializer($normalizers, $encoders);
 
 
-        $jsonObject = $serializer->serialize(
-            $report,
-            JsonEncoder::FORMAT,
-            [AbstractNormalizer::IGNORED_ATTRIBUTES => ['pati']]
-        );
+        $jsonObject = $serializer->serialize($report, 'json', [
+            AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context) {
+                return $object->getId();
+            },
+            AbstractNormalizer::IGNORED_ATTRIBUTES => ['pati', 'cont', 'contact', 'func', 'sugg']
+        ]);
+
 
 
         // dd($jsonObject);
@@ -125,11 +127,12 @@ class FollowUpReportsController extends AbstractController
         $id = $request->request->get('id');
         $countResult = $request->request->get('countResult');
 
-        $followUpReports = $doctrine->getRepository(FollowupReports::class)->findByDesc($id, null);
+        $followUpReports = $doctrine->getRepository(FollowupReports::class)->findBy(['pati' => $id]);
         $followUpGoals = $doctrine->getRepository(FollowupGoals::class)->findBy(['pati' => $id]);
+        // dd($followUpReports);
 
         $id = null;
-        foreach ($followUpReports as  $key => $value) {
+        foreach ($followUpReports as  $value) {
             if ($value->getId()) {
                 $report = $doctrine->getRepository(FollowupReportsActivities::class)->findBy(['fore' => $value->getId()]);
 
@@ -180,12 +183,12 @@ class FollowUpReportsController extends AbstractController
             // dd($followUpReports[$i]);
             if ($i < $countResult && $followUpReports[$i]) {
 
-                array_push($arrFollowUpLimited, $followUpReports[$i]);
+                array_push($followUpReports, $followUpReports[$i]);
             }
         }
 
         // array_push($arrFollowUpLimited, ...$followUpGoals);
-        $result = array_merge([...$arrFollowUpLimited], [...$followUpGoals]);
+        $result = array_merge([...$followUpReports], [...$followUpGoals]);
 
         // dd($followUpGoals);
         $encoders = [new JsonEncoder()];
@@ -193,15 +196,23 @@ class FollowUpReportsController extends AbstractController
         $serializer = new Serializer($normalizers, $encoders);
 
         // $serializer = SerializerBuilder::create()->build();
-        $jsonObject = $serializer->serialize($result, 'json', [
-            'circular_reference_handler' => function ($object) {
+        $jsonObject = $serializer->serialize($followUpReports, 'json', [
+            AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context) {
                 return $object->getId();
             },
-            JsonEncoder::FORMAT
+            AbstractNormalizer::IGNORED_ATTRIBUTES => ["pati", "sugg", "user", "informations", "cont", "fogo"]
         ]);
 
+        $jsonObject2 = $serializer->serialize($followUpGoals, 'json', [
+            AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context) {
+                return $object->getId();
+            },
+            AbstractNormalizer::IGNORED_ATTRIBUTES => ["pati", "sugg", "user", "informations", "cont", "fore"]
+        ]);
 
-        $response = new Response($jsonObject, 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
+        $result = array_merge([$jsonObject], [$jsonObject2]);
+        $response = new Response($result[0], 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
+        // $response2 = new Response($jsonObject2, 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
 
 
 
@@ -913,8 +924,41 @@ class FollowUpReportsController extends AbstractController
 
         // dd($test);
         $indicators = $doctrine->getRepository(FollowupReportsIndicators::class)->findBy(array('fore' => $test));
+        // dd($indicators);
+        $fore = [];
+        // dd($indicators);
+        foreach ($indicators as $value) {
+            // dd($value);
+            // foreach ($value->getFore() as $indi) {
 
-        return $this->json($indicators);
+            array_push($fore, ["indi" => $value->getIndi(), "value" => $value->getValue(), "comment" => $value->getComment(), "fore" => ["reportDate" => $value->getFore()->getReportDate()]]);
+            // }
+        }
+
+        // dd($fore);
+
+        $encoders = [new JsonEncoder()];
+        $normalizers = [new DateTimeNormalizer(), new ObjectNormalizer()];
+        $serializer = new Serializer($normalizers, $encoders);
+
+        // $serializer = SerializerBuilder::create()->build();
+        $jsonObject = $serializer->serialize($fore, 'json', [
+            AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context) {
+                return $object->getId();
+            },
+            AbstractNormalizer::IGNORED_ATTRIBUTES => ["pati", "sugg", "user", "informations", "fore"]
+        ]);
+
+
+        // $response = new Response($jsonObject, 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
+
+
+
+        // $response->setSharedMaxAge(3600);
+        return new Response($jsonObject, 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
+
+
+        // return $this->json($fore);
     }
 
     #[Route('/api/getPlacesPatients', name: 'app_PlacesPatients')]
@@ -927,7 +971,28 @@ class FollowUpReportsController extends AbstractController
         $places = $doctrine->getRepository(PatientsPlaces::class)->findBy(["pati" => $id, "deleted_at" => null]);
         // $places = $doctrine->getRepository(FollowupGoals::class)->findAll();
 
-        return $this->json($places);
+
+        $encoders = [new JsonEncoder()];
+        $normalizers = [new DateTimeNormalizer(), new ObjectNormalizer()];
+        $serializer = new Serializer($normalizers, $encoders);
+
+        // $serializer = SerializerBuilder::create()->build();
+        $jsonObject = $serializer->serialize($places, 'json', [
+            AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context) {
+                return $object->getId();
+            },
+            AbstractNormalizer::IGNORED_ATTRIBUTES => ["pati", "sugg", "user", "informations"]
+        ]);
+
+
+        $response = new Response($jsonObject, 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
+
+
+
+        $response->setSharedMaxAge(3600);
+        // return new Response($jsonObject, 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
+
+        return $response;
     }
 
     #[Route('/api/getFollowUpReportsGoals', name: 'app_FollowUpReportsGoals')]
@@ -939,8 +1004,20 @@ class FollowUpReportsController extends AbstractController
 
         $places = $doctrine->getRepository(FollowupGoals::class)->findBy(["pati" => $id]);
         // $places = $doctrine->getRepository(FollowupGoals::class)->findAll();
+        $encoders = [new JsonEncoder()];
+        $normalizers = [new DateTimeNormalizer(), new ObjectNormalizer()];
+        $serializer = new Serializer($normalizers, $encoders);
 
-        return $this->json($places);
+        // $serializer = SerializerBuilder::create()->build();
+        $jsonObject = $serializer->serialize($places, 'json', [
+            AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context) {
+                return $object->getId();
+            },
+            AbstractNormalizer::IGNORED_ATTRIBUTES => ['pati', 'cont', 'contact', 'func', 'sugg']
+        ]);
+
+        $response = new Response($jsonObject, 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
+        return $response;
     }
 
     #[Route('/api/getActivitiesReports', name: 'app_FollowUpReportsActivities')]

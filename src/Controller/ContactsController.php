@@ -7,6 +7,7 @@ use App\Entity\Contacts;
 use App\Entity\ContactsInformation;
 use App\Entity\FollowupGoals;
 use App\Entity\FollowupReports;
+use App\Entity\InformationTemplateElement;
 use App\Entity\Patients;
 use App\Entity\PatientsContacts;
 use App\Entity\PatientsInformation;
@@ -34,13 +35,61 @@ use Symfony\Component\Serializer\Context\Normalizer\ObjectNormalizerContextBuild
 class ContactsController extends AbstractController
 {
 
+    #[Route('/api/getContacts', name: 'app_listContacts')]
+    public function listContacts(ManagerRegistry $doctrine, SerializerInterface $serializer): Response
+    {
+        $contacts = $doctrine->getRepository(Contacts::class)->findAll();
+        $encoders = [new JsonEncoder()];
+        $normalizers = [new DateTimeNormalizer(), new ObjectNormalizer()];
+        $serializer = new Serializer($normalizers, $encoders);
+
+        $calls = [];
+        foreach ($contacts as $value) {
+            $calls[] = [
+                "id" => $value->getId(),
+                "firstname" => $value->getFirstName(),
+                "lastname" => $value->getLastName()
+            ];
+        }
 
 
-    #[Route('/api/getContacts', name: 'app_allContacts')]
+
+        $jsonObject = $serializer->serialize($calls, 'json', [
+            'circular_reference_handler' => function ($object) {
+                return $object->getId();
+            },
+            JsonEncoder::FORMAT,
+            [AbstractNormalizer::IGNORED_ATTRIBUTES => ["url", "description", "type", "pathString", "path", "calls", "patients", "informations"]]
+        ]);
+
+        $response =  new Response($jsonObject, 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
+
+        $response->setSharedMaxAge(3600);
+
+
+
+        return $response;
+    }
+
+
+    #[Route('/api/getContactsPage', name: 'app_allContacts')]
     public function index(ManagerRegistry $doctrine, SerializerInterface $serializer): Response
     {
-        $contacts = $doctrine->getRepository(Contacts::class)->findByPaquetsContacts(["deleted_at" => null]);
+        $contacts = $doctrine->getRepository(Contacts::class)->findPackBySomeField();
 
+        $arrContact = [];
+        foreach ($contacts as $value) {
+            $arrContact[] = [
+                "id" => $value->getId(),
+                "firstname" => $value->getFirstName(),
+                "lastname" => $value->getLastName(),
+                "type" => $value->getType(),
+                "numberPatients" => count($value->getPatients()),
+                "numberApps" => count($value->getCalls())
+            ];
+        }
+
+        // dd($contacts);
         $encoder = new JsonEncoder();
         $defaultContext = [
             AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context) {
@@ -50,7 +99,7 @@ class ContactsController extends AbstractController
         $normalizer = new ObjectNormalizer(null, null, null, null, null, null, $defaultContext);
 
         $serializer = new Serializer([new DateTimeNormalizer(), $normalizer], [$encoder]);
-        return new Response($serializer->serialize($contacts, 'json'), 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
+        return new Response($serializer->serialize($arrContact, 'json'), 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
     }
 
 
@@ -78,26 +127,12 @@ class ContactsController extends AbstractController
 
         $contact = $doctrine->getRepository(Contacts::class)->find($idCont);
 
-        $encoder = new JsonEncoder();
-        // $encoders = [new JsonEncoder()];
-        // $normalizers = [new DateTimeNormalizer(), new ObjectNormalizer()];
-        // $serializer = new Serializer($normalizers, $encoders);
-
-        $defaultContext = [
-            AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context) {
-                return $object->getId();
-            },
-        ];
-
-        $normalizer = new ObjectNormalizer(null, null, null, null, null, null, $defaultContext);
-
-        $serializer = new Serializer([new DateTimeNormalizer(), $normalizer], [$encoder]);
-        // var_dump($serializer->serialize($org, 'json'));
-        $data = $serializer->serialize($contact, 'json', [AbstractNormalizer::IGNORED_ATTRIBUTES => ["contacts", "patients", "cont", "orga"]]);
-
-
-
-        return $this->json(json_decode($data));
+        if ($contactInfos) {
+            return new JsonResponse([
+                'data' => ["id" => $contactInfos->getCont()->getId()],
+                'response' => "Sent !"
+            ]);
+        }
     }
 
 
@@ -110,7 +145,16 @@ class ContactsController extends AbstractController
         $id = $request->request->get('id');
 
         $contact = $doctrine->getRepository(Contacts::class)->find($id);
-        $suggestions = $doctrine->getRepository(Suggestions::class)->findBy(['parentSugg' => 155]);
+        $itbk = $doctrine->getRepository(InformationTemplateElement::class)->findBy(['itbk' => 12]);
+
+
+        $arritbk = [];
+        foreach ($itbk as $value) {
+            $arritbk[] = $value->getSuge()->getId();
+        }
+
+
+        $suggestions = $doctrine->getRepository(Suggestions::class)->findBy(array('id' => $arritbk));
 
         $encoders = [new JsonEncoder()];
         $normalizers = [new DateTimeNormalizer(), new ObjectNormalizer()];
@@ -131,11 +175,11 @@ class ContactsController extends AbstractController
             foreach ($contact->getInformations() as $infosCont) {
                 // dd($contact->getInformations());
                 if ($infosCont->getItel()->getSuge()->getId() === $value->id) {
-                    array_push($value->obj, ["id" => $infosCont->getId(), "valueInformations" => $infosCont->getValue(), "valueDescription" => $infosCont->getComment()]);
+                    array_push($value->obj, ["id" => $infosCont->getId(), "valueInformations" => $infosCont->getValue(), "valueDescription" => $infosCont->getComment(), "sugge" => ($infosCont !== null) ? $infosCont->getSugg() : null]);
                 }
             }
         }
-
+        // dd($infosCont->getItel());
         $patients = [];
 
         foreach ($contact->getPatients() as $patient) {
@@ -218,7 +262,7 @@ class ContactsController extends AbstractController
 
         $serializer = new Serializer([new DateTimeNormalizer(), $normalizer], [$encoder]);
         // var_dump($serializer->serialize($org, 'json'));
-        $data = $serializer->serialize($contact, 'json', [AbstractNormalizer::IGNORED_ATTRIBUTES => ["contacts", "patients", "cont", "orga"]]);
+        $data = $serializer->serialize($contact, 'json', [AbstractNormalizer::IGNORED_ATTRIBUTES => ["contacts", "patients", "cont", "orga", "calls", "informations"]]);
 
         return $this->json(json_decode($data)); // Output: {"name":"foo"}
     }

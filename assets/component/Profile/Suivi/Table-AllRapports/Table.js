@@ -40,7 +40,11 @@ const TableAllRapports = ({ data, rowsPerPage }) => {
               <td>{new Date(patient.creationDate).toLocaleDateString()}</td>
               <td></td>
               <td>
-                {patient?.cont[0]?.firstname} {patient?.cont[0]?.lastname}
+                {patient?.cont && (
+                  <>
+                    {patient?.cont[0]?.firstname} {patient?.cont[0]?.lastname}
+                  </>
+                )}
               </td>
               <td>{patient.noCare}</td>
               <td>{patient.noIndicators}</td>

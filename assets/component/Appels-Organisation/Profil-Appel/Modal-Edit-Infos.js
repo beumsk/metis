@@ -18,9 +18,8 @@ function ModalEditInfos(props) {
   const [show, setShow] = useState(false);
   const [auth, setAuth] = useState(useAuth());
   let id = useParams().idContact;
-  var formData = new FormData();
-  formData.append("id", id.toString());
-  formData.append("pathString", props.link);
+
+  // formData.append("pathString", props.link);
   const [infos, setInfos] = useState(null);
   const [isSentRepport, setIsSentRepport] = useState(false);
   const [responseDatas, setResponseDatas] = useState(null);
@@ -70,6 +69,9 @@ function ModalEditInfos(props) {
         Authorization: `Bearer ${auth.auth.accessToken}`,
       },
     }).then(function (response) {
+      console.log(response);
+      var formData = new FormData();
+      formData.append("id", response.data.data.id);
       if (response) {
         axios({
           method: "post",
@@ -81,6 +83,7 @@ function ModalEditInfos(props) {
           },
         }).then(function (response) {
           if (response) {
+            console.log("RESPONSE1", response);
             setResponseDatas(response.data);
             setIsSentRepport(true);
             document.querySelectorAll(".btn-close")[0].click();

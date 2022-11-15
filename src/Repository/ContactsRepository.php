@@ -58,15 +58,14 @@ class ContactsRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
-    //    public function findOneBySomeField($value): ?Contacts
-    //    {
-    //        return $this->createQueryBuilder('c')
-    //            ->andWhere('c.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+    public function findPackBySomeField(): array
+    {
+        return $this->createQueryBuilder('c')
+            ->orderBy('c.id', 'ASC')
+            ->setMaxResults(10)
+            ->getQuery()
+            ->getResult();
+    }
 
     /**
      * @return array

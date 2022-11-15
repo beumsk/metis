@@ -17,14 +17,45 @@ use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Serializer\SerializerBuilder;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
+use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Encoder\XmlEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Serializer\Context\Normalizer\ObjectNormalizerContextBuilder;
+
 
 class PlacesController extends AbstractController
 {
     #[Route('/api/getPlaces', name: 'app_places')]
     public function index(ManagerRegistry $doctrine): Response
     {
-        $places = $doctrine->getRepository(Contacts::class)->findBy(["type" => 3]);
-        return $this->json($places);
+        $places = $doctrine->getRepository(Contacts::class)->findBy(["type" => 3, "deleted_at" => null]);
+        $encoders = [new JsonEncoder()];
+        $normalizers = [new DateTimeNormalizer(), new ObjectNormalizer()];
+        $serializer = new Serializer($normalizers, $encoders);
+
+        // dd($places);
+        // $serializer = SerializerBuilder::create()->build();
+        $jsonObject = $serializer->serialize($places, 'json', [
+            AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context) {
+                return $object->getId();
+            },
+            AbstractNormalizer::IGNORED_ATTRIBUTES => ["pati", "sugg", "user", "informations", "orga", "calls", "patients", "informations", "cont", "goalsByBlock"]
+        ]);
+
+
+        $response = new Response($jsonObject, 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
+
+
+
+        $response->setSharedMaxAge(3600);
+        // return new Response($jsonObject, 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
+
+        return $response;
     }
 
     #[Route('/api/deleteLierPlaces', name: 'app_deleteLierPlaces')]

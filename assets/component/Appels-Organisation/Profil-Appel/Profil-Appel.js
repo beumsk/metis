@@ -14,6 +14,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useParams } from "react-router-dom";
 import ModalEditInfos from "./Modal-Edit-Infos";
+import ModalAddInfos from "./Modal-Add-Infos";
 const ProfilAppel = () => {
   const [auth, setAuth] = useState(useAuth());
   let id = useParams().id;
@@ -50,7 +51,11 @@ const ProfilAppel = () => {
   }
 
   function informationSaved(e) {
-    setContactInformation(e.response);
+    console.log("RESPONSE2", e);
+    if (e) {
+      setContactInformation(e.response);
+      console.log("RESPONSE3", e);
+    }
   }
 
   return (
@@ -76,12 +81,11 @@ const ProfilAppel = () => {
                       <>
                         {e?.obj.map((e) => (
                           <span>
-                            {e.valueInformations}{" "}
+                            {e.valueInformations || e.sugge.value}
                             <ModalEditInfos
                               infosAppels={e}
                               contact={contactInformation}
                               idInfo={e.id}
-                              informations={contactInformation.informations}
                               onChange={(e) => informationSaved(e)}
                             ></ModalEditInfos>
                           </span>
@@ -90,10 +94,14 @@ const ProfilAppel = () => {
                     )}
 
                     {e?.obj && e?.obj.length === 0 && <>Pas d'informations</>}
-
-                    {/* {e.valueInformations
-                      ? e.valueInformations
-                      : "Pas d'informations"} */}
+                    <div style={{ float: "right" }}>
+                      <ModalAddInfos
+                        infosAppels={e}
+                        contact={contactInformation}
+                        idInfo={e.id}
+                        onChange={(e) => informationSaved(e)}
+                      ></ModalAddInfos>
+                    </div>
                   </td>
                   <td></td>
                 </tr>

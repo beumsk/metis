@@ -25,7 +25,7 @@ function RapportDetails(props) {
 
   var reportData = new FormData();
   reportData.append("id", id.toString());
-  reportData.append("countResult", 10);
+  //reportData.append("countResult", 10);
   //   formData.append("pathString", props.link);
   const [contacts, setContacts] = useState(null);
   const [elementsOpt, setElementsOpt] = useState(null);
