@@ -290,39 +290,6 @@ class ContactsController extends AbstractController
 
         return new Response($jsonObject, 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
     }
-    #[Route('/api/getAppandOrga', name: 'app_getAppandOrga')]
-    public function getAppandOrga(ManagerRegistry $doctrine, SerializerInterface $serializer)
-    {
-        // if (!$this->get('security.context')->isGranted('ROLE_USER')) {
-        //     return $this->redirect($this->generateUrl('idr_suivi_home'));
-        // }
-
-        // $request = $this->getRequest();
-        $antenna = 'Bruxelles';
-
-        $followUpReportRepository = $doctrine->getRepository(FollowupReports::class);
-        $calls = $followUpReportRepository->findCalls(
-            [FollowupReports::ACTIVITY_CALL_OUT, FollowupReports::ACTIVITY_CALL_IN],
-            $antenna
-        );
-
-        /*        $calls = $followUpReportRepository->findBy(
-            ['activityType' => [FollowUpReport::ACTIVITY_CALL_OUT, FollowUpReport::ACTIVITY_CALL_IN]],
-            ["reportDate" => "DESC" ],
-            1000
-        );
-*/
-        // if ($format == "json") {
-        // return new JsonResponse([
-        //     'calls' => $calls,
-        // ]);
-        // }
-        return $this->json($calls);
-        // return [
-        //     'calls' => $calls,
-        // ];
-    }
-
 
 
     #[Route('/api/setPatientPatient', name: 'app_setPatientPatient')]

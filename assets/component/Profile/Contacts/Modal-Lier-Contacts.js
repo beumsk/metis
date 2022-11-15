@@ -144,6 +144,7 @@ function ModalLierContacts(props) {
             <Form.Select
               size="lg"
               onChange={(e) => setContactItemList(e.target.value)}
+              defaultValue={props?.infos?.cont?.id}
             >
               {props.listContacts?.data?.map((el, id) => (
                 <>

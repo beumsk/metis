@@ -49,14 +49,14 @@ function ModalEditPatient(props) {
       .catch(function (response) {});
   }, [idPatient]);
   function handleSave() {
-    console.log(
-      description,
-      commentaire,
-      contactItemList,
-      start,
-      end,
-      typeItemList
-    );
+    // console.log(
+    //   description,
+    //   commentaire,
+    //   contactItemList,
+    //   start,
+    //   end,
+    //   typeItemList
+    // );
     let formData = new FormData();
     // value-sugg
 
@@ -69,7 +69,7 @@ function ModalEditPatient(props) {
     formData.append("idPatient", idPatient);
     axios({
       method: "post",
-      url: "/api/setPatientContact",
+      url: "/api/setPatientPatient",
       data: formData,
       headers: {
         "Content-Type": "application/json",
@@ -81,7 +81,7 @@ function ModalEditPatient(props) {
         formGetInfos.append("id", id.toString());
         axios({
           method: "post",
-          url: "/api/setPatientPatient",
+          url: "/api/getPatientsByPatients",
           data: formGetInfos,
           headers: {
             "Content-Type": "application/json",
@@ -102,7 +102,7 @@ function ModalEditPatient(props) {
   }
 
   if (responseDatas !== null) {
-    props.onChangeContacts({
+    props.onChangePatients({
       data: responseDatas,
     });
   }
@@ -177,7 +177,7 @@ function ModalEditPatient(props) {
         </Modal.Body>
         <Modal.Footer>
           <Button onClick={handleClose}>Close</Button>
-          <Button onClick={handleClose}>Save Changes</Button>
+          <Button onClick={handleSave}>Save Changes</Button>
         </Modal.Footer>
       </Modal>
     </>

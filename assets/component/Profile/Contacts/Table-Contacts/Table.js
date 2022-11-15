@@ -46,6 +46,7 @@ const TableContacts = ({ data, rowsPerPage }) => {
                     // onChangeContacts={(e) => contactLierResponse(e)}
                     onChangeUpdateContact={(e) => onChangeUpdateContact(e)}
                     listContacts={slice}
+                    // listContactsSelect={props.listContacts}
                   />
                 </span>
               </td>

@@ -86,33 +86,29 @@ const Contacts = () => {
   }
 
   function onChangeUpdateContact(e) {
-    console.log(e);
     if (e && e.response) {
       setContacts(e.response);
     }
   }
 
   function patientLierResponse(e) {
-    console.log(e);
     if (e && e.response) {
       setPatientsLists(e.response);
     }
   }
 
   function contactLierResponse(e) {
-    console.log(e);
     if (e && e.response) {
       setContacts(e.response);
     }
   }
 
   function onChangeUpdateContact(e) {
-    console.log(e.data.data);
     setContacts(e.data);
   }
 
-  function onChangePatientsPatients(e) {
-    console.log(e);
+  function onChangePatients(e) {
+    setPatients(e.data);
   }
   return (
     <div className="onglet-contact">
@@ -120,7 +116,7 @@ const Contacts = () => {
         <div className="d-flex mb-4 row-btn">
           <ModalLierPatient
             listPatients={patients}
-            onChangePatientsPatients={(e) => patientLierResponse(e)}
+            onChangePatients={(e) => patientLierResponse(e)}
           ></ModalLierPatient>
           <ModalLierContacts
             onChangeContacts={(e) => contactLierResponse(e)}
@@ -135,7 +131,7 @@ const Contacts = () => {
           <TableContacts
             data={[...listContacts.data]}
             rowsPerPage={4}
-            // listContacts={contactList}
+            listContacts={contactList}
             onChangeUpdateContact={(e) => onChangeUpdateContact(e)}
           />
         </>

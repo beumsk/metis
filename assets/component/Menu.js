@@ -41,7 +41,7 @@ const Menu = () => {
 
               <Nav.Link href="/patients">Patients</Nav.Link>
 
-              <Nav.Link href="/statistiques">Statistiques</Nav.Link>
+              {/* <Nav.Link href="/statistiques">Statistiques</Nav.Link> */}
               <Nav.Link href="/appels-organisation">
                 Appels/Organisation
               </Nav.Link>
@@ -66,7 +66,14 @@ const Menu = () => {
                 </NavDropdown.Item>
               </NavDropdown> */}
               <Dropdown>
-                <Dropdown.Toggle>Administration</Dropdown.Toggle>
+                <Dropdown.Toggle
+                  style={{
+                    backgroundColor: "transparent",
+                    border: "transparent",
+                  }}
+                >
+                  Administration
+                </Dropdown.Toggle>
 
                 <Dropdown.Menu>
                   <Dropdown.Item href="/contactsorganisation">

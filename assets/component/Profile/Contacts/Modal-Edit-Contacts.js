@@ -157,7 +157,7 @@ function ModalEditContacts(props) {
               onChange={(e) => setContactItemList(e.target.value)}
               defaultValue={props?.infos.cont?.id}
             >
-              {props.listContacts?.data?.map((el, id) => (
+              {props.listContactsSelect?.data?.map((el, id) => (
                 <>
                   {el?.firstname && el?.lastname && (
                     <option value={el.id}>

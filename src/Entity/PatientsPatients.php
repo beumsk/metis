@@ -31,7 +31,7 @@ class PatientsPatients
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $end = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?int $is_highlight = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
