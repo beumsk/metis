@@ -24,8 +24,9 @@ class BirthdaysController extends AbstractController
 
         $p_bdays = $isPatiBirthday = $ages = [];
         foreach ($months as $month) {
-            $labelOfMonth = \DateTime::createFromFormat('!m', $month);
-            $p_bdays[$labelOfMonth->getTimeStamp()] = $patientRepository->findBirthdays($month);
+            $labelOfMonth = date('F ', $month);
+            // dd($month);
+            $p_bdays[$month] = $patientRepository->findBirthdays($month);
         }
 
         $isPatiBirthday = [];

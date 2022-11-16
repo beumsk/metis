@@ -108,14 +108,10 @@ class PatientsRepository extends ServiceEntityRepository
 
         $conn = $this->getEntityManager()->getConnection();
         $query = '                      
-                SELECT c.*, ci.value as birthdate
-                FROM contacts c
-                INNER JOIN contacts_information ci ON c.id = ci.cont_id
-                INNER JOIN information_template_element ite on ite.id = ci.itel_id 
-                INNER JOIN suggestions s ON ite.suge_id = s.id 
-                WHERE s.path_string = "' . ContactsInformation::INFO_BIRTHDATE . '"
-                AND (c.deleted_at IS NULL) AND ci.deleted_at IS NULL
-                GROUP BY MONTH(birthdate), birthdate 
+                SELECT p.*
+                FROM patients p                      
+                WHERE p.deleted_at is null       
+                GROUP BY MONTH(birthdate), birthdate                 
                 HAVING MONTH(birthdate) = "' . $month . '"
                 ORDER BY birthdate 
             ';
