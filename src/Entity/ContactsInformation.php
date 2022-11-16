@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: ContactsInformationRepository::class)]
 class ContactsInformation
 {
+    const INFO_BIRTHDATE = "/patient/contacts/infos/date-de-naissance";
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]

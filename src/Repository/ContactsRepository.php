@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Contacts;
+use App\Entity\ContactsInformation;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -16,6 +17,8 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class ContactsRepository extends ServiceEntityRepository
 {
+
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Contacts::class);
@@ -65,6 +68,37 @@ class ContactsRepository extends ServiceEntityRepository
             ->setMaxResults(10)
             ->getQuery()
             ->getResult();
+    }
+
+    /**
+     * @param array $months
+     *
+     * @return array
+     */
+    public function findBirthdays($month)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $query = '                      
+                SELECT c.*, ci.value as birthdate
+                FROM contacts c
+                INNER JOIN contacts_information ci ON c.id = ci.cont_id
+                INNER JOIN information_template_element ite on ite.id = ci.itel_id 
+                INNER JOIN suggestions s ON ite.suge_id = s.id 
+                WHERE s.path_string = "' . ContactsInformation::INFO_BIRTHDATE . '"
+                AND (c.deleted_at IS NULL) AND ci.deleted_at IS NULL
+                GROUP BY MONTH(birthdate), birthdate 
+                HAVING MONTH(birthdate) = "' . $month . '"
+                ORDER BY birthdate 
+            ';
+
+
+        $stmt = $conn->prepare($query);
+        $resultSet = $stmt->executeQuery();
+
+
+
+        // returns an array of arrays (i.e. a raw data set)
+        return $resultSet->fetchAllAssociative();
     }
 
     /**
