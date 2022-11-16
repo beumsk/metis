@@ -3,32 +3,34 @@
 namespace App\Controller;
 
 
+use GuzzleHttp\Client;
 use App\Entity\Contacts;
-use App\Entity\ContactsInformation;
+use App\Entity\Patients;
+use App\Entity\Suggestions;
 use App\Entity\FollowupGoals;
 use App\Entity\FollowupReports;
-use App\Entity\InformationTemplateElement;
-use App\Entity\Patients;
 use App\Entity\PatientsContacts;
+use App\Entity\PatientsPatients;
+use App\Entity\ContactsInformation;
 use App\Entity\PatientsInformation;
 use App\Serializer\MyMaxDepthHandler;
-use App\Entity\PatientsPatients;
-use App\Entity\Suggestions;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use App\Entity\InformationTemplateElement;
+use Symfony\Component\HttpClient\HttpClient;
+use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Serializer\Encoder\XmlEncoder;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Encoder\XmlEncoder;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
-use Symfony\Component\Serializer\Serializer;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Serializer\Context\Normalizer\ObjectNormalizerContextBuilder;
 
 
@@ -133,6 +135,20 @@ class ContactsController extends AbstractController
                 'response' => "Sent !"
             ]);
         }
+    }
+
+    #[Route('/api/setPlacesToContact', name: 'app_setPlacesToContact')]
+    public function setPlacesToContact(ManagerRegistry $doctrine, SerializerInterface $serializer)
+    {
+        $search = "Place  Cathédrale";
+        $new = str_replace(' ', '%20', $search);
+        $url = 'https://webservices-pub.bpost.be/ws/ExternalMailingAddressProofingCSREST_v1/address/autocomplete?id=1&q={' . $new . '}1000';
+
+        $httpClient = HttpClient::create();
+        $response = $httpClient->request('GET', $url);
+
+        $content = $response->getContent();
+        return $this->json(json_decode($content));
     }
 
 

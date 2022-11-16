@@ -16,6 +16,7 @@ function Lieux() {
 
   var formData = new FormData();
   formData.append("page", lengthList.toString());
+  formData.append("antenna", auth.antenna);
 
   useEffect(() => {
     axios({
@@ -29,10 +30,11 @@ function Lieux() {
     })
       .then(function (response) {
         //handle success
+        console.log(response);
         setListContacts(response);
       })
       .catch(function (response) {});
-  }, [lengthList, setLengthList]);
+  }, []);
 
   const readMore = () => {
     setLengthList(lengthList + 10);
@@ -40,6 +42,9 @@ function Lieux() {
 
   function onChangeUpdateContact(e) {
     props.onChangeUpdateContact(e);
+  }
+  if (listContacts) {
+    console.log(listContacts.data);
   }
 
   return (
@@ -53,7 +58,21 @@ function Lieux() {
               <h6>Infos</h6>
 
               <Table
-                data={[...listContacts.data]}
+                data={[...listContacts.data.bruxelles]}
+                rowsPerPage={10}
+                // listContacts={contactList}
+                onChangeUpdateContact={(e) => onChangeUpdateContact(e)}
+              />
+
+              <Table
+                data={[...listContacts.data.liege]}
+                rowsPerPage={10}
+                // listContacts={contactList}
+                onChangeUpdateContact={(e) => onChangeUpdateContact(e)}
+              />
+
+              <Table
+                data={[...listContacts.data.other]}
                 rowsPerPage={10}
                 // listContacts={contactList}
                 onChangeUpdateContact={(e) => onChangeUpdateContact(e)}

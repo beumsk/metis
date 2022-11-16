@@ -42,6 +42,7 @@ class ContactsRepository extends ServiceEntityRepository
         }
     }
 
+
     /**
      * @return Contacts[] Returns an array of Contacts objects
      */

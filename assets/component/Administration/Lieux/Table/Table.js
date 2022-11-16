@@ -7,6 +7,7 @@ import Table from "react-bootstrap/Table";
 const TablePagination = ({ data, rowsPerPage }) => {
   const [page, setPage] = useState(1);
   const { slice, range } = useTable(data, page, rowsPerPage);
+  console.log(data);
   return (
     <>
       <Table striped bordered hover>
