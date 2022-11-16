@@ -25,7 +25,7 @@ const Search = () => {
       axios({
         method: "post",
         url: "/api/getSearch",
-        params: { val: valueSearch.toString() },
+        params: { val: valueSearch.toString(), antenna: auth.antenna },
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${auth.auth.accessToken}`,

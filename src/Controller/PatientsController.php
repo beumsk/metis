@@ -53,8 +53,9 @@ class PatientsController extends AbstractController
     {
         $request = Request::createFromGlobals();
         $val = $request->query->get('val');
+        $antenna = $request->query->get('antenna');
 
-        $reports = $doctrine->getRepository(Patients::class)->findByNameByFirstNameByName($val);
+        $reports = $doctrine->getRepository(Patients::class)->findByNameByFirstNameByName($val, $antenna);
         return $this->json($reports);
     }
 

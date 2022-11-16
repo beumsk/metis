@@ -14,7 +14,7 @@ function AppelsOrganisation() {
 
   var formData = new FormData();
   formData.append("page", lengthList.toString());
-
+  formData.append("antenna", auth.antenna);
   useEffect(() => {
     axios({
       method: "post",

@@ -203,7 +203,11 @@ class ContactsController extends AbstractController
     public function getCallsAndOrganisationRunning(ManagerRegistry $doctrine, SerializerInterface $serializer)
     {
 
-        $followup = $doctrine->getRepository(FollowupGoals::class)->findAll();
+        $request = Request::createFromGlobals();
+
+        $antenna = $request->request->get('antenna');
+
+        $followup = $doctrine->getRepository(FollowupGoals::class)->followupGoalsByAntenna($antenna);
         $arrCont = [];
 
         foreach ($followup as $value) {

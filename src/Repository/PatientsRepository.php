@@ -59,7 +59,7 @@ class PatientsRepository extends ServiceEntityRepository
 
 
 
-    public function findByNameByFirstNameByName(string $search): array
+    public function findByNameByFirstNameByName(string $search, string $antenna): array
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
 
@@ -67,7 +67,11 @@ class PatientsRepository extends ServiceEntityRepository
         $qb->select('p.id, p.lastname, p.firstname, p.nicknames')
             ->from('App:Patients', 'p')
             ->andWhere('CONCAT(p.lastname,\' \', p.firstname,\' \', COALESCE(p.nicknames, p.id)) LIKE :val')
-            ->setParameter('val', '%' . $search . '%')
+            ->andWhere('p.antenna = :antenna')
+            ->setParameters([
+                'val' => '%' . $search . '%',
+                'antenna' => $antenna
+            ])
             ->orderBy('p.id', 'ASC');
 
         $query = $qb->getQuery();

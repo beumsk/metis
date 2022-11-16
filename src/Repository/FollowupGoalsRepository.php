@@ -338,20 +338,19 @@ class FollowupGoalsRepository extends ServiceEntityRepository
 
         return $qb->getQuery()->getResult();
     }
-    //    /**
-    //     * @return FollowupGoals[] Returns an array of FollowupGoals objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('f')
-    //            ->andWhere('f.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('f.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    /**
+     * @return FollowupGoals[] Returns an array of FollowupGoals objects
+     */
+    public function followupGoalsByAntenna($antenna): array
+    {
+        return $this->createQueryBuilder('f')
+            ->innerJoin('f.pati', 'p')
+            ->andWhere('p.antenna = :antenna')
+            ->setParameter('antenna', $antenna)
+            ->orderBy('f.id', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
 
     //    public function findOneBySomeField($value): ?FollowupGoals
     //    {
