@@ -43,11 +43,15 @@ class PatientsRepository extends ServiceEntityRepository
     //    /**
     //     * @return Patients[] Returns an array of Patients objects
     //     */
-    public function findByPaquets($value): array
+    public function findByPaquets($numberPage, $antenna): array
     {
         return $this->createQueryBuilder('p')
+            ->andWhere('p.antenna = :antenna')
             ->orderBy('p.id', 'ASC')
-            ->setMaxResults($value)
+            ->setMaxResults($numberPage)
+            ->setParameters([
+                'antenna' => $antenna
+            ])
             ->getQuery()
             ->getResult();
     }
