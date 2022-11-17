@@ -5,10 +5,17 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import Menu from "../../Menu";
 // import Table from "react-bootstrap/Table";
-import Table from "./Table/Table";
+import BootstrapTable from "react-bootstrap-table-next";
+import ToolkitProvider, {
+  Search,
+} from "react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit";
 import Pagination from "react-js-pagination";
 import { Link } from "react-router-dom";
+import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
+import paginationFactory from "react-bootstrap-table2-paginator";
+
 function Lieux() {
+  const { SearchBar } = Search;
   const [auth, setAuth] = useState(useAuth());
   const [listContacts, setListContacts] = useState(null);
   const [lengthList, setLengthList] = useState(10);
@@ -16,8 +23,28 @@ function Lieux() {
 
   var formData = new FormData();
   formData.append("page", lengthList.toString());
-  formData.append("antenna", auth.antenna);
-
+  let linker = <a href="profil-lieux/1">Détails</a>;
+  const columns = [
+    {
+      dataField: "id",
+      text: "Product ID",
+      sort: true,
+    },
+    {
+      dataField: "lastname",
+      text: "Nom",
+      sort: true,
+    },
+    {
+      dataField: "Détails",
+      text: "Product Price",
+      formatter: (cell, row, rowIndex, extraData) => (
+        <div>
+          <a href={"/profil-lieux/" + row.id}>Détails</a>
+        </div>
+      ),
+    },
+  ];
   useEffect(() => {
     axios({
       method: "post",
@@ -30,11 +57,10 @@ function Lieux() {
     })
       .then(function (response) {
         //handle success
-        console.log(response);
         setListContacts(response);
       })
       .catch(function (response) {});
-  }, []);
+  }, [lengthList, setLengthList]);
 
   const readMore = () => {
     setLengthList(lengthList + 10);
@@ -43,42 +69,29 @@ function Lieux() {
   function onChangeUpdateContact(e) {
     props.onChangeUpdateContact(e);
   }
-  if (listContacts) {
-    console.log(listContacts.data);
-  }
 
   return (
     <>
       <Menu></Menu>
       <div className="container container-patients row mx-auto ">
-        <h3>Lieux</h3>
-        {listContacts && listContacts.data.length > 0 && (
-          <>
-            <div className="row coordonnes-body">
-              <h6>Infos</h6>
-
-              <Table
-                data={[...listContacts.data.bruxelles]}
-                rowsPerPage={10}
-                // listContacts={contactList}
-                onChangeUpdateContact={(e) => onChangeUpdateContact(e)}
-              />
-
-              <Table
-                data={[...listContacts.data.liege]}
-                rowsPerPage={10}
-                // listContacts={contactList}
-                onChangeUpdateContact={(e) => onChangeUpdateContact(e)}
-              />
-
-              <Table
-                data={[...listContacts.data.other]}
-                rowsPerPage={10}
-                // listContacts={contactList}
-                onChangeUpdateContact={(e) => onChangeUpdateContact(e)}
-              />
-            </div>
-          </>
+        <h3>Tous les Lieux</h3>
+        {listContacts && listContacts.data && (
+          <ToolkitProvider
+            keyField="id"
+            data={[...listContacts.data]}
+            columns={columns}
+            search
+          >
+            {(props) => (
+              <div>
+                <SearchBar {...props.searchProps} />
+                <BootstrapTable
+                  {...props.baseProps}
+                  pagination={paginationFactory()}
+                />
+              </div>
+            )}
+          </ToolkitProvider>
         )}
       </div>
     </>

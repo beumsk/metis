@@ -39,7 +39,7 @@ class PatientsContacts
     private ?Suggestions $sugg = null;
 
     #[ORM\ManyToOne(targetEntity: 'Contacts', inversedBy: 'patients', cascade: ["all"], fetch: "EAGER")]
-    #[ORM\JoinColumn(name: "cont_id", referencedColumnName: "id", nullable: true)]
+    #[ORM\JoinColumn(name: "pati_id", referencedColumnName: "id", nullable: true)]
     private ?Contacts $contact = null;
 
     public function getId(): ?int

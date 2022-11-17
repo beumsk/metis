@@ -8,6 +8,7 @@ use App\Entity\FollowupReports;
 use App\Entity\Medias;
 use App\Bpost\Bpost_Address_Validation;
 use App\Entity\Patients;
+use App\Entity\InformationTemplateElement;
 use App\Entity\PatientsPlaces;
 use App\Entity\Places;
 use App\Entity\Suggestions;
@@ -55,77 +56,105 @@ class PlacesController extends AbstractController
     #[Route('/api/getPlacesList', name: 'app_getPlacesList')]
     public function getPlacesList(ManagerRegistry $doctrine): Response
     {
-        $request = Request::createFromGlobals();
-
-
-
-        $antenna = $request->request->get('antenna');
-
-
         $places = $doctrine->getRepository(Contacts::class)->findBy(["type" => 3, "deleted_at" => null]);
-
-
-        // dd($isBrussels);
-
         $encoders = [new JsonEncoder()];
         $normalizers = [new DateTimeNormalizer(), new ObjectNormalizer()];
         $serializer = new Serializer($normalizers, $encoders);
 
-        $jsonObject = $serializer->normalize($places, 'json', [
+        $jsonObject = $serializer->serialize($places, 'json', [
             AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context) {
                 return $object->getId();
             },
-            AbstractNormalizer::IGNORED_ATTRIBUTES => ["pati", "sugg", "user", "orga", "calls", "cont", "goalsByBlock", "informations"]
+            AbstractNormalizer::IGNORED_ATTRIBUTES => ["pati", "sugg", "user", "informations", "orga", "calls", "patients", "informations", "cont", "goalsByBlock"]
         ]);
 
-        $lieuxInBrussels = [];
-        $lieuxInLiege = [];
-        $other = [];
+        $response = new Response($jsonObject, 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
+        $response->setSharedMaxAge(3600);
+        return $response;
+    }
 
-        foreach ($jsonObject as $value) {
-            $suggestionsBruxelles = ["/Bruxelles/i", "/gare du midi/i", "/Anderlecht/i", "/Auderghem/i", "/Berchem-Sainte-Agathe/i", "/Etterbeek/i", "/Evere/i", "/Forest/i", "/Ganshoren/i", "/Ixelles/i", "/Jette/i", "/Koekelberg/i", "/Molenbeek-Saint-Jean/i", "/Saint-Gilles/i", "/Saint-Josse-ten-Noode/i", "/Schaerbeek/i", "/Uccle/i", "/Watermael-Boitsfort/i", "/Woluwe-Saint-Lambert/i", "/Woluwe-Saint-Pierre/i"];
-            $suggestionsLiege = ["/Liège/i"];
-            $isBrussels = "/Bruxelles/i";
-            $isLiege = "/Liège/i";
+    #[Route('/api/getPlacesListById', name: 'app_getPlacesListById')]
+    public function getPlacesListById(ManagerRegistry $doctrine): Response
+    {
 
-            $mergeArr = array_merge($suggestionsBruxelles, $suggestionsLiege);
-            // dd($mergeArr);
-            foreach ($suggestionsBruxelles as $dpt) {
-                dd($value);
-                if (
-                    preg_match($dpt, $value->getLastName()) === 1 ||
-                    preg_match($dpt, $value->getUrl()) === 1
-                ) {
-                    array_push($lieuxInBrussels, $value);
-                }
-            }
+        $request = Request::createFromGlobals();
 
-            foreach ($suggestionsLiege as $dpt) {
-                if (
-                    preg_match($dpt, $value->getLastName()) === 1 ||
-                    preg_match($dpt, $value->getUrl()) === 1
-                ) {
-                    array_push($lieuxInLiege, $value);
-                }
-            }
+        $id = $request->request->get('id');
 
-            foreach ($mergeArr as $dpt) {
+        $contact = $doctrine->getRepository(Contacts::class)->find($id);
+        $itbk = $doctrine->getRepository(InformationTemplateElement::class)->findBy(['itbk' => 12]);
 
 
-                if (
-                    preg_match($dpt, $value->getLastName()) !== 1 ||
-                    preg_match($dpt, $value->getUrl()) !== 1
-                ) {
-                    array_push($other, $value);
+        $arritbk = [];
+        foreach ($itbk as $value) {
+            $arritbk[] = $value->getSuge()->getId();
+        }
+
+
+        $suggestions = $doctrine->getRepository(Suggestions::class)->findBy(array('id' => $arritbk));
+
+        $encoders = [new JsonEncoder()];
+        $normalizers = [new DateTimeNormalizer(), new ObjectNormalizer()];
+        $serializer = new Serializer($normalizers, $encoders);
+        $nameOfBlocks = [];
+        foreach ($suggestions as $value) {
+            $nameOfBlocks[] = ["id" => $value->getId(), "value" => $value->getValue(), "obj" => []];
+        }
+
+
+
+
+        $blocksEncode = json_encode($nameOfBlocks);
+        $blocksDecode = json_decode($blocksEncode);
+
+        // dd($blocksDecode);
+        foreach ($blocksDecode as $value) {
+            foreach ($contact->getInformations() as $infosCont) {
+                // dd($contact->getInformations());
+                if ($infosCont->getItel()->getSuge()->getId() === $value->id) {
+                    array_push($value->obj, ["id" => $infosCont->getId(), "valueInformations" => $infosCont->getValue(), "valueDescription" => $infosCont->getComment(), "sugge" => ($infosCont !== null) ? $infosCont->getSugg() : null]);
                 }
             }
         }
+        // dd($infosCont->getItel());
+        $patients = [];
 
-        $arr = [count($lieuxInBrussels) => [$lieuxInBrussels], count($lieuxInLiege) => [$lieuxInLiege], count($other) => [$other]];
-        // dd($arr);
-        $response = new Response(json_encode($arr), 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
+        foreach ($contact->getPatients() as $patient) {
+            $patients[] = ["id" => $patient->getPati()->getId(), "firstName" => $patient->getPati()->getFirstName(), "lastName" => $patient->getPati()->getLastName()];
+        }
+
+
+
+        $jsonObject = $serializer->serialize(["informations" => $blocksDecode, "patients" => $patients, "firstname" => $contact->getFirstName(), "lastname" => $contact->getLastName(), "description" => $contact->getDescription()], 'json', [
+            'circular_reference_handler' => function ($object) {
+                return $object->getId();
+            }
+        ]);
+
+
+
+
+        return new Response($jsonObject, 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
+
+        // $request = Request::createFromGlobals();
+        // $idLieux = $request->request->get('id');
+
+
+        // $places = $doctrine->getRepository(Contacts::class)->find($idLieux);
+        // $encoders = [new JsonEncoder()];
+        // $normalizers = [new DateTimeNormalizer(), new ObjectNormalizer()];
+        // $serializer = new Serializer($normalizers, $encoders);
+
+        // $jsonObject = $serializer->serialize($places, 'json', [
+        //     AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context) {
+        //         return $object->getId();
+        //     },
+        //     AbstractNormalizer::IGNORED_ATTRIBUTES => ["sugg", "user", "orga", "calls", "occupants", "cont", "goalsByBlock"]
+        // ]);
+
+        // $response = new Response($jsonObject, 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
         // $response->setSharedMaxAge(3600);
-        return $response;
+        // return $response;
     }
 
     #[Route('/api/deleteLierPlaces', name: 'app_deleteLierPlaces')]
@@ -141,22 +170,8 @@ class PlacesController extends AbstractController
         $entityManager = $doctrine->getManager();
 
         $place = $doctrine->getRepository(PatientsPlaces::class)->find($idLieu);
-
-
-        // $place->setComment($valueCommentary);
-        // $place->setCont($places);
-        // if ($start !== "null") {
-        //     $place->setStart(new \DateTime($start));
-        // }
-
-        // if ($end !== "null") {
-        //     $place->setEnd(new \DateTime($end));
-        // }
-        // $place->setSugg($suggType);
-        // $place->setPati($patient);
         $place->setDeletedAt(new \DateTime('now'));
 
-        // $entityManager->persist($place);
         $entityManager->flush();
 
 
