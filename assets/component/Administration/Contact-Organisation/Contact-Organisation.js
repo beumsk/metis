@@ -6,15 +6,42 @@ import { faUser } from "@fortawesome/free-solid-svg-icons";
 import Menu from "../../Menu";
 import Table from "./Table/Table";
 import { Link } from "react-router-dom";
-
+import BootstrapTable from "react-bootstrap-table-next";
+import ToolkitProvider, {
+  Search,
+} from "react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit";
+import Pagination from "react-js-pagination";
+import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
+import paginationFactory from "react-bootstrap-table2-paginator";
 function ContactOrganisations() {
+  const { SearchBar } = Search;
   const [auth, setAuth] = useState(useAuth());
   const [listContacts, setListContacts] = useState(null);
   const [lengthList, setLengthList] = useState(10);
 
   var formData = new FormData();
   formData.append("page", lengthList.toString());
-
+  const columns = [
+    {
+      dataField: "id",
+      text: "Product ID",
+      sort: true,
+    },
+    {
+      dataField: "lastname",
+      text: "Nom",
+      sort: true,
+    },
+    {
+      dataField: "Détails",
+      text: "Product Price",
+      formatter: (cell, row, rowIndex, extraData) => (
+        <div>
+          <a href={"/profil-lieux/" + row.id}>Détails</a>
+        </div>
+      ),
+    },
+  ];
   useEffect(() => {
     axios({
       method: "post",
@@ -44,22 +71,30 @@ function ContactOrganisations() {
     <>
       <Menu></Menu>
       <div className="container container-patients row mx-auto ">
-        <h3>Contact & Organisations</h3>
-        {listContacts && listContacts.data.length > 0 && (
-          <>
-            <div className="row coordonnes-body">
+        <h3>Contact et organisation</h3>
+        {listContacts && listContacts.data && (
+          <ToolkitProvider
+            keyField="id"
+            data={[...listContacts.data]}
+            columns={columns}
+            search
+          >
+            {(props) => (
               <div>
-                <h6>Infos</h6>
+                <div className="mb-2 mt-2">
+                  <SearchBar
+                    {...props.searchProps}
+                    placeholder="Rechercher le les appels"
+                  />
+                </div>
 
-                <Table
-                  data={[...listContacts.data]}
-                  rowsPerPage={10}
-                  // listContacts={contactList}
-                  onChangeUpdateContact={(e) => onChangeUpdateContact(e)}
+                <BootstrapTable
+                  {...props.baseProps}
+                  pagination={paginationFactory()}
                 />
               </div>
-            </div>
-          </>
+            )}
+          </ToolkitProvider>
         )}
       </div>
     </>

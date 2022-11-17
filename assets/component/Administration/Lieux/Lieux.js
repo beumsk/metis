@@ -84,7 +84,13 @@ function Lieux() {
           >
             {(props) => (
               <div>
-                <SearchBar {...props.searchProps} />
+                <div className="mb-2 mt-2">
+                  <SearchBar
+                    {...props.searchProps}
+                    placeholder="Rechercher le lieu"
+                  />
+                </div>
+
                 <BootstrapTable
                   {...props.baseProps}
                   pagination={paginationFactory()}
