@@ -110,15 +110,15 @@ class PatientsRepository extends ServiceEntityRepository
      *
      * @return array
      */
-    public function findBirthdays($month)
+    public function findBirthdays($month, $antenna)
     {
 
 
         $conn = $this->getEntityManager()->getConnection();
         $query = '                      
                 SELECT p.*
-                FROM patients p                      
-                WHERE p.deleted_at is null       
+                FROM patients p                                      
+                WHERE p.deleted_at is null AND p.antenna = "' . $antenna  . '"      
                 GROUP BY MONTH(birthdate), birthdate                 
                 HAVING MONTH(birthdate) = "' . $month . '"
                 ORDER BY birthdate 

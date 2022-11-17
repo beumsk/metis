@@ -3,19 +3,18 @@
 namespace App\Controller;
 
 
-use GuzzleHttp\Client;
+
 use App\Entity\Contacts;
 use App\Entity\Patients;
 use App\Entity\Suggestions;
 use App\Entity\FollowupGoals;
-use App\Entity\FollowupReports;
 use App\Entity\PatientsContacts;
 use App\Entity\PatientsPatients;
 use App\Entity\ContactsInformation;
-use App\Entity\PatientsInformation;
-use App\Serializer\MyMaxDepthHandler;
+
 use Doctrine\Persistence\ManagerRegistry;
 use App\Entity\InformationTemplateElement;
+
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,15 +22,12 @@ use Symfony\Component\HttpFoundation\Response;
 
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Serializer\Encoder\XmlEncoder;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Serializer\Context\Normalizer\ObjectNormalizerContextBuilder;
 
 
 class ContactsController extends AbstractController

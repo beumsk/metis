@@ -8,7 +8,6 @@ import {
   faArrowUp,
 } from "@fortawesome/free-solid-svg-icons";
 import Menu from "../../Menu";
-import Table from "./Table/Table";
 import { Link } from "react-router-dom";
 import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider, {
@@ -21,8 +20,8 @@ function Anniversaire() {
   const { SearchBar } = Search;
   const [birthdayList, setBirthDaysList] = useState(null);
 
-  // var formData = new FormData();
-  // formData.append("page", lengthList.toString());
+  var formData = new FormData();
+  formData.append("antenna", auth.antenna);
   const columns = [
     {
       dataField: "id",
@@ -115,9 +114,9 @@ function Anniversaire() {
   ];
   useEffect(() => {
     axios({
-      method: "get",
+      method: "post",
       url: "/api/birthdays",
-      //   data: formData,
+      data: formData,
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${auth.auth.accessToken}`,

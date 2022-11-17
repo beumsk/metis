@@ -59,15 +59,15 @@ const Home = () => {
             <h3>Bienvenue sur Métis</h3>
             <p>Cliquez ici pour vos rappels ou éditer un patient:</p>
 
-            <Link onClick={onClickRepportMeet}>
+            {/*<Link onClick={onClickRepportMeet}>
               <FontAwesomeIcon icon={faArrowRight} /> Rapport de rencontre
             </Link>
-            <Link onClick={onClickRepportCalls}>
+             <Link onClick={onClickRepportCalls}>
               <FontAwesomeIcon icon={faArrowRight} /> Rapport d'appels
             </Link>
             <Link onClick={onClickRepportGoals}>
               <FontAwesomeIcon icon={faArrowRight} /> Rapport d'objectifs
-            </Link>
+            </Link> */}
           </div>
         </div>
 

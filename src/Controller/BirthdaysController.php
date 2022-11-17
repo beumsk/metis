@@ -8,14 +8,17 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Request;
 
 class BirthdaysController extends AbstractController
 {
     #[Route('/api/birthdays', name: 'app_birthdays')]
-    public function index(ManagerRegistry $doctrine): Response
+    public function index(ManagerRegistry $doctrine, Request $request): Response
     {
 
+        $request = Request::createFromGlobals();
 
+        $antenna = $request->request->get('antenna');
         $contactRepository = $doctrine->getRepository(Contacts::class);
         $patientRepository = $doctrine->getRepository(Patients::class);
 
@@ -26,7 +29,7 @@ class BirthdaysController extends AbstractController
         foreach ($months as $month) {
             $labelOfMonth = date('F ', $month);
             // dd($month);
-            $p_bdays[$month] = $patientRepository->findBirthdays($month);
+            $p_bdays[$month] = $patientRepository->findBirthdays($month, $antenna);
         }
 
         $isPatiBirthday = [];

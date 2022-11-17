@@ -59,6 +59,47 @@ class PatientsController extends AbstractController
         return $this->json($reports);
     }
 
+    #[Route('/api/setCreationPatient', name: 'app_setCreationPatient')]
+    public function setCreationPatient(ManagerRegistry $doctrine, SerializerInterface $serializer)
+    {
+
+        $request = Request::createFromGlobals();
+
+        // $yearEnd = $dateEnd->format('Y-m-d');
+        // $idSugg = $request->request->get('idsugg');
+        $lastname = $request->request->get('lastname');
+        $firstname = $request->request->get('firstname');
+        $nickname = $request->request->get('nicknames');
+        $antenna = $request->request->get('antenna');
+        // $patiId = $request->request->get('patiid');
+        // $itelId = $request->request->get('itelId');
+        $entityManager = $doctrine->getManager();
+
+
+        // $time = strtotime($start);
+        // $datestart = new \DateTime('@' . $time);
+        // $timeend = strtotime($end);
+        // $dateend = new \DateTime('@' . $timeend);
+
+
+        $patientInfo = new Patients();
+
+        $patientInfo->setLastname($lastname);
+        $patientInfo->setFirstname($firstname);
+        $patientInfo->setNicknames($nickname);
+        $patientInfo->setAntenna($antenna);
+        $patientInfo->setFollowUpType(0);
+
+        $entityManager->persist($patientInfo);
+        $entityManager->flush();
+
+
+        return new JsonResponse([
+            'id' => $patientInfo->getId(),
+            'response' => "Sent !"
+        ]);
+    }
+
     #[Route('/api/setPatientsInformation', name: 'app_setPatientsInformation')]
     public function setPatientsInformation(ManagerRegistry $doctrine, SerializerInterface $serializer)
     {
