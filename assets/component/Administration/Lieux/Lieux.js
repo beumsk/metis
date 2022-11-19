@@ -1,18 +1,14 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import useAuth from "../../../hooks/useAuth";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser } from "@fortawesome/free-solid-svg-icons";
 import Menu from "../../Menu";
-// import Table from "react-bootstrap/Table";
 import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider, {
   Search,
 } from "react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit";
-import Pagination from "react-js-pagination";
-import { Link } from "react-router-dom";
 import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
 import paginationFactory from "react-bootstrap-table2-paginator";
+import ModalAddLieux from "./Modal-Add-Lieux";
 
 function Lieux() {
   const { SearchBar } = Search;
@@ -73,8 +69,14 @@ function Lieux() {
   return (
     <>
       <Menu></Menu>
+
       <div className="container container-patients row mx-auto ">
+        <div className="row-btn">
+          <ModalAddLieux></ModalAddLieux>
+        </div>
+
         <h3>Tous les Lieux</h3>
+
         {listContacts && listContacts.data && (
           <ToolkitProvider
             keyField="id"

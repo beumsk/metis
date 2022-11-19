@@ -89,7 +89,6 @@ class ContactsInformation
     public function setCont(?Contacts $cont): self
     {
         $this->cont = $cont;
-
         return $this;
     }
 

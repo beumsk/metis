@@ -200,7 +200,7 @@ class FollowUpReportsController extends AbstractController
             AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context) {
                 return $object->getId();
             },
-            AbstractNormalizer::IGNORED_ATTRIBUTES => ["pati", "sugg", "user", "informations", "cont", "fogo"]
+            AbstractNormalizer::IGNORED_ATTRIBUTES => ["pati", "sugg", "user", "informations", "cont", "fogo", "occupants", "parentSugg", "contacts"]
         ]);
 
         $jsonObject2 = $serializer->serialize($followUpGoals, 'json', [
@@ -216,7 +216,7 @@ class FollowUpReportsController extends AbstractController
 
 
 
-        $response->setSharedMaxAge(3600);
+        // $response->setSharedMaxAge(3600);
         // return new Response($jsonObject, 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
 
         return $response;
@@ -976,12 +976,31 @@ class FollowUpReportsController extends AbstractController
         $normalizers = [new DateTimeNormalizer(), new ObjectNormalizer()];
         $serializer = new Serializer($normalizers, $encoders);
 
+        $arrPatientsByContacts = [];
+
+        foreach ($places as $value) {
+            // dd($value->getCont()->getFirstname());
+            if ($value) {
+                $arrPatientsByContacts[] = [
+                    "id" => $value->getId(),
+                    "start" => $value->getStart(),
+                    "end" => $value->getEnd(),
+                    "comment" => $value->getComment(),
+                    "cont" => [$value->getCont()],
+                    "pati" => [$value->getPati()],
+                    "sugg" => [$value->getSugg()]
+                    // "firstname" => ($value->getCont()->getFirstname() !== null) ? $value->getCont()->getFirstname() : null,
+                ];
+            }
+        }
+
+
         // $serializer = SerializerBuilder::create()->build();
-        $jsonObject = $serializer->serialize($places, 'json', [
+        $jsonObject = $serializer->serialize($arrPatientsByContacts, 'json', [
             AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context) {
                 return $object->getId();
             },
-            AbstractNormalizer::IGNORED_ATTRIBUTES => ["pati", "sugg", "user", "informations"]
+            AbstractNormalizer::IGNORED_ATTRIBUTES => ["cont", "pati", "sugg", "orga", "calls", "user", "informations", "fore", "contact"]
         ]);
 
 

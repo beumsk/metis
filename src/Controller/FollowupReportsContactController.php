@@ -52,27 +52,37 @@ class FollowupReportsContactController extends AbstractController
         $request = Request::createFromGlobals();
 
         $id = $request->request->get('id');
-        $reports = $doctrine->getRepository(FollowupReports::class)->findBy(["pati" => $id]);
-        $test = [];
-        foreach ($reports as $key) {
-            $test[] = $key->getId();
-        }
-
-        $cont = $doctrine->getRepository(PatientsContacts::class)->findBy(["pati" => $id]);
-        $patientspatients = $doctrine->getRepository(PatientsPatients::class)->findBy(['tapa' => $id]);
 
 
+        $cont = $doctrine->getRepository(PatientsContacts::class)->findBy(["pati" => $id, "deleted_at" => null]);
 
         $encoders = [new JsonEncoder()];
         $normalizers = [new DateTimeNormalizer(), new ObjectNormalizer()];
         $serializer = new Serializer($normalizers, $encoders);
 
+        $arrContactByPatients = [];
+
+        foreach ($cont as $value) {
+            // dd($value->getCont()->getFirstname());
+            if ($value) {
+                $arrContactByPatients[] = [
+                    "id" => $value->getId(),
+                    "start" => $value->getStart(),
+                    "end" => $value->getEnd(),
+                    "comment" => $value->getLinkDescription(),
+                    "cont" => [$value->getCont()],
+                    "pati" => [$value->getPati()],
+                    "sugg" => [$value->getSugg()]
+                    // "firstname" => ($value->getCont()->getFirstname() !== null) ? $value->getCont()->getFirstname() : null,
+                ];
+            }
+        }
         // $serializer = SerializerBuilder::create()->build();
-        $jsonObject = $serializer->serialize($cont, 'json', [
+        $jsonObject = $serializer->serialize($arrContactByPatients, 'json', [
             AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context) {
                 return $object->getId();
             },
-            AbstractNormalizer::IGNORED_ATTRIBUTES => ["pati", "sugg", "user", "informations", "fore"]
+            AbstractNormalizer::IGNORED_ATTRIBUTES => ["cont", "pati", "sugg", "orga", "calls", "user", "informations", "fore", "contact"]
         ]);
 
 

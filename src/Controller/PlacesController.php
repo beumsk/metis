@@ -7,6 +7,7 @@ use App\Entity\FollowupGoals;
 use App\Entity\FollowupReports;
 use App\Entity\Medias;
 use App\Bpost\Bpost_Address_Validation;
+use App\Entity\Contact;
 use App\Entity\Patients;
 use App\Entity\InformationTemplateElement;
 use App\Entity\PatientsPlaces;
@@ -65,7 +66,7 @@ class PlacesController extends AbstractController
             AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context) {
                 return $object->getId();
             },
-            AbstractNormalizer::IGNORED_ATTRIBUTES => ["pati", "sugg", "user", "informations", "orga", "calls", "patients", "informations", "cont", "goalsByBlock"]
+            AbstractNormalizer::IGNORED_ATTRIBUTES => ["pati", "sugg", "user", "orga", "calls", "patients", "cont", "goalsByBlock"]
         ]);
 
         $response = new Response($jsonObject, 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
@@ -110,7 +111,6 @@ class PlacesController extends AbstractController
         // dd($blocksDecode);
         foreach ($blocksDecode as $value) {
             foreach ($contact->getInformations() as $infosCont) {
-                // dd($contact->getInformations());
                 if ($infosCont->getItel()->getSuge()->getId() === $value->id) {
                     array_push($value->obj, ["id" => $infosCont->getId(), "valueInformations" => $infosCont->getValue(), "valueDescription" => $infosCont->getComment(), "sugge" => ($infosCont !== null) ? $infosCont->getSugg() : null]);
                 }
@@ -135,26 +135,6 @@ class PlacesController extends AbstractController
 
 
         return new Response($jsonObject, 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
-
-        // $request = Request::createFromGlobals();
-        // $idLieux = $request->request->get('id');
-
-
-        // $places = $doctrine->getRepository(Contacts::class)->find($idLieux);
-        // $encoders = [new JsonEncoder()];
-        // $normalizers = [new DateTimeNormalizer(), new ObjectNormalizer()];
-        // $serializer = new Serializer($normalizers, $encoders);
-
-        // $jsonObject = $serializer->serialize($places, 'json', [
-        //     AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context) {
-        //         return $object->getId();
-        //     },
-        //     AbstractNormalizer::IGNORED_ATTRIBUTES => ["sugg", "user", "orga", "calls", "occupants", "cont", "goalsByBlock"]
-        // ]);
-
-        // $response = new Response($jsonObject, 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
-        // $response->setSharedMaxAge(3600);
-        // return $response;
     }
 
     #[Route('/api/deleteLierPlaces', name: 'app_deleteLierPlaces')]
@@ -180,6 +160,36 @@ class PlacesController extends AbstractController
             'response' => "Sent !"
         ]);
     }
+
+
+
+    #[Route('/api/addPlace', name: 'app_addPlace')]
+    public function addPlace(ManagerRegistry $doctrine, Request $request): JsonResponse
+    {
+        $request = Request::createFromGlobals();
+
+
+        $name = $request->request->get('name');
+        $url = $request->request->get('url');
+        $description = $request->request->get('description');
+        $entityManager = $doctrine->getManager();
+        $places = new Contacts();
+
+        $places->setFirstname($name);
+        $places->setUrl($url);
+        $places->setDescription($description);
+        $places->setType(3);
+
+        $entityManager->persist($places);
+        $entityManager->flush();
+
+
+        return new JsonResponse([
+            'id' => $places->getId(),
+            'response' => "Sent !"
+        ]);
+    }
+
 
     #[Route('/api/updateLierPlaces', name: 'app_updateLierPlaces')]
     public function updateLierPlaces(ManagerRegistry $doctrine, Request $request): JsonResponse

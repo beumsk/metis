@@ -100,10 +100,45 @@ class ContactsController extends AbstractController
         return new Response($serializer->serialize($arrContact, 'json'), 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
     }
 
+    #[Route('/api/saveItem', name: 'app_saveItem')]
+    public function saveItem(ManagerRegistry $doctrine, SerializerInterface $serializer)
+    {
+        $entityManager = $doctrine->getManager();
+        $request = Request::createFromGlobals();
+
+        $value = $request->request->get('value');
+        $comment = $request->request->get('commentaire');
+        $idCont = $request->request->get('idCont');
+        $idSugg = $request->request->get('idSugg');
+
+        $contactInformation = new ContactsInformation();
+
+        $informationelement = $doctrine->getRepository(InformationTemplateElement::class)->findBy(['suge' => $idSugg]);
+        $suggestion = $doctrine->getRepository(Suggestions::class)->find($idSugg);
+        $contact = $doctrine->getRepository(Contacts::class)->find($idCont);
 
 
-    #[Route('/api/saveItemAppels', name: 'app_saveItemAppels')]
-    public function saveItemAppels(ManagerRegistry $doctrine, SerializerInterface $serializer)
+        $contactInformation->setValue($value);
+        $contactInformation->setComment($comment);
+        $contactInformation->setContact($contact);
+        $contactInformation->setSugg($suggestion);
+        $contactInformation->setItel($informationelement[0]);
+
+
+        $entityManager->persist($contactInformation);
+        $entityManager->flush();
+
+
+        if ($contactInformation) {
+            return new JsonResponse([
+                'data' => ["id" => $contactInformation->getId()],
+                'response' => "Sent !"
+            ]);
+        }
+    }
+
+    #[Route('/api/editItem', name: 'app_editItem')]
+    public function editItem(ManagerRegistry $doctrine, SerializerInterface $serializer)
     {
         $entityManager = $doctrine->getManager();
         $request = Request::createFromGlobals();

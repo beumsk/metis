@@ -55,7 +55,6 @@ const Menu = () => {
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="justify-content-end flex-grow-1 pe-3">
-              <Form_AddPatients></Form_AddPatients>
               <Nav.Link href="/patients">Patients</Nav.Link>
 
               <Nav.Link href="/appels-organisation">
@@ -101,6 +100,7 @@ const Menu = () => {
                 ))}
               </Dropdown> */}
 
+              <Form_AddPatients></Form_AddPatients>
               <Nav.Link onClick={signOut}>
                 <FontAwesomeIcon icon={faSignOut} />{" "}
               </Nav.Link>
