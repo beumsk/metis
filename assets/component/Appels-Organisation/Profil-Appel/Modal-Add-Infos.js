@@ -48,11 +48,11 @@ function ModalAddInfos(props) {
     formGetInfos.append("value", specificValueInput);
     formGetInfos.append("idCont", id.toString());
     formGetInfos.append("commentaire", commentaireInput);
-    formGetInfos.append("idInfo", props?.infosAppels?.id);
+    formGetInfos.append("idSugg", props?.infosAppels?.id);
 
     axios({
       method: "post",
-      url: "/api/saveItemAppels",
+      url: "/api/saveItem",
       data: formGetInfos,
       headers: {
         "Content-Type": "application/json",
@@ -60,6 +60,7 @@ function ModalAddInfos(props) {
       },
     }).then(function (response) {
       var formData = new FormData();
+      console.log(response);
       formData.append("id", response.data.data.id);
       if (response) {
         axios({

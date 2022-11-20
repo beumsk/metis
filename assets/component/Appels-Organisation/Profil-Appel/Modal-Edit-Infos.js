@@ -19,6 +19,8 @@ function ModalEditInfos(props) {
   const [auth, setAuth] = useState(useAuth());
   let id = useParams().idContact;
 
+  // console.log(props);
+
   // formData.append("pathString", props.link);
   const [infos, setInfos] = useState(null);
   const [isSentRepport, setIsSentRepport] = useState(false);
@@ -60,7 +62,7 @@ function ModalEditInfos(props) {
 
     axios({
       method: "post",
-      url: "/api/saveItemAppels",
+      url: "/api/editItem",
       data: formGetInfos,
       headers: {
         "Content-Type": "application/json",

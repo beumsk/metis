@@ -131,7 +131,7 @@ class ContactsController extends AbstractController
 
         if ($contactInformation) {
             return new JsonResponse([
-                'data' => ["id" => $contactInformation->getId()],
+                'data' => ["id" => $contact->getId()],
                 'response' => "Sent !"
             ]);
         }
@@ -191,43 +191,42 @@ class ContactsController extends AbstractController
 
         $id = $request->request->get('id');
 
-        $contact = $doctrine->getRepository(Contacts::class)->find($id);
+        if ($id) {
+            $contact = $doctrine->getRepository(Contacts::class)->find($id);
+        }
         $itbk = $doctrine->getRepository(InformationTemplateElement::class)->findBy(['itbk' => 12]);
-
 
         $arritbk = [];
         foreach ($itbk as $value) {
             $arritbk[] = $value->getSuge()->getId();
         }
 
-
         $suggestions = $doctrine->getRepository(Suggestions::class)->findBy(array('id' => $arritbk));
 
         $encoders = [new JsonEncoder()];
         $normalizers = [new DateTimeNormalizer(), new ObjectNormalizer()];
         $serializer = new Serializer($normalizers, $encoders);
+
         $nameOfBlocks = [];
+
         foreach ($suggestions as $value) {
             $nameOfBlocks[] = ["id" => $value->getId(), "value" => $value->getValue(), "obj" => []];
         }
 
-
-
-
         $blocksEncode = json_encode($nameOfBlocks);
         $blocksDecode = json_decode($blocksEncode);
 
-        // dd($blocksDecode);
+        $patients = [];
+
+
+
         foreach ($blocksDecode as $value) {
             foreach ($contact->getInformations() as $infosCont) {
-                // dd($contact->getInformations());
                 if ($infosCont->getItel()->getSuge()->getId() === $value->id) {
                     array_push($value->obj, ["id" => $infosCont->getId(), "valueInformations" => $infosCont->getValue(), "valueDescription" => $infosCont->getComment(), "sugge" => ($infosCont !== null) ? $infosCont->getSugg() : null]);
                 }
             }
         }
-        // dd($infosCont->getItel());
-        $patients = [];
 
         foreach ($contact->getPatients() as $patient) {
             $patients[] = ["id" => $patient->getPati()->getId(), "firstName" => $patient->getPati()->getFirstName(), "lastName" => $patient->getPati()->getLastName()];
@@ -235,15 +234,11 @@ class ContactsController extends AbstractController
 
 
 
-        $jsonObject = $serializer->serialize(["informations" => $blocksDecode, "patients" => $patients, "firstname" => $contact->getFirstName(), "lastname" => $contact->getLastName(), "description" => $contact->getDescription()], 'json', [
+        $jsonObject = $serializer->serialize(["id" => $contact->getId(), "informations" => $blocksDecode, "patients" => $patients, "firstname" => $contact->getFirstName(), "lastname" => $contact->getLastName(), "description" => $contact->getDescription()], 'json', [
             'circular_reference_handler' => function ($object) {
                 return $object->getId();
             }
         ]);
-
-
-
-
         return new Response($jsonObject, 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
     }
     #[Route('/api/getCallsAndOrganisationRunning', name: 'app_getCallsAndOrganisationRunning')]
@@ -257,22 +252,20 @@ class ContactsController extends AbstractController
         $followup = $doctrine->getRepository(FollowupGoals::class)->followupGoalsByAntenna($antenna);
         $arrCont = [];
 
+        //dd($followup);
         foreach ($followup as $value) {
-            if ($value->getCont() !== null && $value->getDeletedAt() !== null && $value->getType() === 2 && $value->getStatus() === 1) {
-                $arrCont[] = $value->getCont()->getId();
-            }
+
+
+            $arrCont[] = $value->getCont()->getId();
         }
+
+
         $arrunique = array_unique($arrCont);
 
-        $arrByPaquets = [];
-
-        // dd($arrunique);
-        for ($i = 0; $i < 10; $i++) {
-            array_push($arrByPaquets, $arrCont[$i]);
-        }
 
 
-        $contact = $doctrine->getRepository(Contacts::class)->findBy(array('id' => $arrByPaquets));
+
+        $contact = $doctrine->getRepository(Contacts::class)->findBy(array('id' => $arrCont));
 
 
 
@@ -313,7 +306,7 @@ class ContactsController extends AbstractController
 
         $serializer = new Serializer([new DateTimeNormalizer(), $normalizer], [$encoder]);
         // var_dump($serializer->serialize($org, 'json'));
-        $data = $serializer->serialize($contact, 'json', [AbstractNormalizer::IGNORED_ATTRIBUTES => ["contacts", "patients", "cont", "orga", "calls", "informations"]]);
+        $data = $serializer->serialize($contact, 'json', [AbstractNormalizer::IGNORED_ATTRIBUTES => ["contacts", "patients", "cont", "orga", "calls", "informations", "sugg", "occupants"]]);
 
         return $this->json(json_decode($data)); // Output: {"name":"foo"}
     }

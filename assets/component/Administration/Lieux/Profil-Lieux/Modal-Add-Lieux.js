@@ -41,7 +41,7 @@ function ModalAddLieux(props) {
     setEndDate(new Date(e.target.value).toJSON().slice(0, 10));
   };
 
-  console.log(props);
+  // console.log(props);
 
   const handleSave = (e) => {
     let formGetInfos = new FormData();

@@ -31,19 +31,19 @@ function InputTypeList(props) {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   useEffect(() => {
-    axios({
-      method: "post",
-      url: "/api/suggestionsById",
-      data: formData,
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${auth.auth.accessToken}`,
-      },
-    })
-      .then(function (response) {
-        setType(response);
-      })
-      .catch(function (response) {});
+    // axios({
+    //   method: "post",
+    //   url: "/api/suggestionsById",
+    //   data: formData,
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //     Authorization: `Bearer ${auth.auth.accessToken}`,
+    //   },
+    // })
+    //   .then(function (response) {
+    //     setType(response);
+    //   })
+    //   .catch(function (response) {});
   }, [idPatient]);
   //
 
