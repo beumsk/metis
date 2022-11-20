@@ -22,6 +22,8 @@ const ProfilLieux = () => {
   const [contactInformation, setContactInformation] = useState(null);
   const [lengthList, setLengthList] = useState(10);
   const [idAppel, setIdAppel] = useState(id);
+  const [tagsList, setTagsList] = useState(null);
+  const [typeCollabList, setTypeCollabList] = useState(null);
   var formData = new FormData();
   formData.append("id", useParams().idLieux);
   useEffect(() => {
@@ -39,6 +41,33 @@ const ProfilLieux = () => {
         setContactInformation(response.data);
       })
       .catch(function (response) {});
+
+    const formDataTagsList = new FormData();
+    formDataTagsList.append("id", 159);
+    axios({
+      method: "post",
+      url: "/api/suggestionsById",
+      data: formDataTagsList,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    }).then(function (response) {
+      setTagsList(response);
+    });
+    const formDataCollabList = new FormData();
+    formDataCollabList.append("id", 674);
+    axios({
+      method: "post",
+      url: "/api/suggestionsById",
+      data: formDataCollabList,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    }).then(function (response) {
+      setTypeCollabList(response);
+    });
   }, []);
 
   //   const readMore = () => {
@@ -76,6 +105,8 @@ const ProfilLieux = () => {
                           <span>
                             {e.valueInformations || e.sugge.value}
                             <ModalEditLieux
+                              selectListCollab={typeCollabList}
+                              selectListTags={tagsList}
                               infosAppels={e}
                               contact={contactInformation}
                               idInfo={e.id}
@@ -89,6 +120,8 @@ const ProfilLieux = () => {
                     {e?.obj && e?.obj.length === 0 && <>Pas d'informations</>}
                     <div style={{ float: "right" }}>
                       <ModalAddLieux
+                        selectListCollab={typeCollabList}
+                        selectListTags={tagsList}
                         infosAppels={e}
                         contact={contactInformation}
                         idInfo={e.id}

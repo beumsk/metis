@@ -13,7 +13,7 @@ import {
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import Form from "react-bootstrap/Form";
-
+import InputTypeList from "../../../../component/Input-Type-List";
 function ModalAddLieux(props) {
   const [show, setShow] = useState(false);
   const [auth, setAuth] = useState(useAuth());
@@ -25,6 +25,7 @@ function ModalAddLieux(props) {
   const [responseDatas, setResponseDatas] = useState(null);
   const [elementsOpt, setElementsOpt] = useState(null);
   const [idPatient, setIdPatient] = useState(id);
+  const [type, setType] = useState(null);
 
   const [specificValueInput, setSpecificValueInput] = useState(null);
 
@@ -50,6 +51,7 @@ function ModalAddLieux(props) {
     // $idBlock = $request->request->get('idBlock');
     // $idSugg = $request->request->get('idSugg');
     console.log("test");
+    formGetInfos.append("type", type);
     formGetInfos.append("value", specificValueInput);
     formGetInfos.append("idCont", id.toString());
     formGetInfos.append("commentaire", commentaireInput);
@@ -64,12 +66,12 @@ function ModalAddLieux(props) {
         Authorization: `Bearer ${auth.auth.accessToken}`,
       },
     }).then(function (response) {
-      // var formData = new FormData();
-      // formData.append("id", response.data.data.id);
+      var formData = new FormData();
+      formData.append("id", response.data.data.id);
       if (response) {
         axios({
           method: "post",
-          url: "/api/getPlacesList",
+          url: "/api/getCallsAndOrganisationById",
           data: formData,
           headers: {
             "Content-Type": "application/json",
@@ -108,13 +110,37 @@ function ModalAddLieux(props) {
         <Modal.Body>
           {" "}
           <>
+            {props.infosAppels.value === "Tags" && (
+              <InputTypeList
+                type={props.selectListTags}
+                onChangeType={(e) => setType(e)}
+              ></InputTypeList>
+            )}
+
+            {props.infosAppels.value === "Type de Collaborateur" && (
+              <InputTypeList
+                type={props.selectListCollab}
+                onChangeType={(e) => setType(e)}
+              ></InputTypeList>
+            )}
+
             <Form.Label htmlFor="inputValue">Valeur Spécifique</Form.Label>
-            <input
-              type="text"
-              id="inputValueSpécifique"
-              onChange={(e) => setSpecificValueInput(e.target.value)}
-              aria-describedby="valueSpécifique"
-            />
+
+            {props.infosAppels.value === "Date de naissance" ? (
+              <input
+                type="date"
+                id="inputValueSpécifique"
+                onChange={(e) => setSpecificValueInput(e.target.value)}
+                aria-describedby="valueSpécifique"
+              />
+            ) : (
+              <input
+                type="text"
+                id="inputValueSpécifique"
+                onChange={(e) => setSpecificValueInput(e.target.value)}
+                aria-describedby="valueSpécifique"
+              />
+            )}
 
             <Form.Label htmlFor="inputValue">Commentaire</Form.Label>
             <Form.Control

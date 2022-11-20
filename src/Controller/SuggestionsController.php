@@ -24,11 +24,8 @@ class SuggestionsController extends AbstractController
     {
         $request = Request::createFromGlobals();
         $id = $request->request->get("id");
-        $test = [57, 658, 174, 25];
-        foreach ($test as $key) {
-            $test[] = $key;
-        }
-        $suggestion = $doctrine->getRepository(Suggestions::class)->findBy(array("parentSugg" => $id));
+
+        $suggestion = $doctrine->getRepository(Suggestions::class)->findBy(["parentSugg" => $id]);
 
 
 

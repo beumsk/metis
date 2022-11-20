@@ -15,12 +15,14 @@ import {
 import { useParams } from "react-router-dom";
 import ModalEditInfos from "./Modal-Edit-Infos";
 import ModalAddInfos from "./Modal-Add-Infos";
-const ProfilAppel = () => {
+const ProfilAppel = (props) => {
   const [auth, setAuth] = useState(useAuth());
   let id = useParams().id;
   const [contactInformation, setContactInformation] = useState(null);
   const [lengthList, setLengthList] = useState(10);
   const [idAppel, setIdAppel] = useState(id);
+  const [tagsList, setTagsList] = useState(null);
+  const [typeCollabList, setTypeCollabList] = useState(null);
   var formData = new FormData();
   formData.append("id", useParams().idContact);
   useEffect(() => {
@@ -37,6 +39,33 @@ const ProfilAppel = () => {
         setContactInformation(response.data);
       })
       .catch(function (response) {});
+
+    const formDataTagsList = new FormData();
+    formDataTagsList.append("id", 159);
+    axios({
+      method: "post",
+      url: "/api/suggestionsById",
+      data: formDataTagsList,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    }).then(function (response) {
+      setTagsList(response);
+    });
+    const formDataCollabList = new FormData();
+    formDataCollabList.append("id", 674);
+    axios({
+      method: "post",
+      url: "/api/suggestionsById",
+      data: formDataCollabList,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    }).then(function (response) {
+      setTypeCollabList(response);
+    });
   }, []);
 
   //   const readMore = () => {
@@ -73,7 +102,10 @@ const ProfilAppel = () => {
                         {e?.obj.map((e) => (
                           <span>
                             {e.valueInformations || e.sugge.value}
+
                             <ModalEditInfos
+                              selectListCollab={typeCollabList}
+                              selectListTags={tagsList}
                               infosAppels={e}
                               contact={contactInformation}
                               idInfo={e.id}
@@ -87,6 +119,8 @@ const ProfilAppel = () => {
                     {e?.obj && e?.obj.length === 0 && <>Pas d'informations</>}
                     <div style={{ float: "right" }}>
                       <ModalAddInfos
+                        selectListCollab={typeCollabList}
+                        selectListTags={tagsList}
                         infosAppels={e}
                         contact={contactInformation}
                         idInfo={e.id}

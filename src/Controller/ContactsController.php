@@ -110,11 +110,12 @@ class ContactsController extends AbstractController
         $comment = $request->request->get('commentaire');
         $idCont = $request->request->get('idCont');
         $idSugg = $request->request->get('idSugg');
+        $type = $request->request->get('type');
 
         $contactInformation = new ContactsInformation();
 
         $informationelement = $doctrine->getRepository(InformationTemplateElement::class)->findBy(['suge' => $idSugg]);
-        $suggestion = $doctrine->getRepository(Suggestions::class)->find($idSugg);
+        $suggestion = $doctrine->getRepository(Suggestions::class)->find(($type !== null) ? $type : $idSugg);
         $contact = $doctrine->getRepository(Contacts::class)->find($idCont);
 
 
