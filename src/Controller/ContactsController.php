@@ -100,6 +100,24 @@ class ContactsController extends AbstractController
         return new Response($serializer->serialize($arrContact, 'json'), 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
     }
 
+    #[Route('/api/deleteItem', name: 'app_deleteItem')]
+    public function deleteItem(ManagerRegistry $doctrine, SerializerInterface $serializer)
+    {
+        $entityManager = $doctrine->getManager();
+        $request = Request::createFromGlobals();
+
+
+        $id = $request->request->get('id');
+        $contInfo = $doctrine->getRepository(ContactsInformation::class)->find($id);
+
+        $contInfo->setDeletedAt(new \DateTime('now'));
+        $entityManager->flush();
+        return new JsonResponse([
+            'response' => "Delete !",
+            'data' => ["id" => $contInfo->getCont()->getId()],
+        ]);
+    }
+
     #[Route('/api/saveItem', name: 'app_saveItem')]
     public function saveItem(ManagerRegistry $doctrine, SerializerInterface $serializer)
     {
@@ -115,15 +133,39 @@ class ContactsController extends AbstractController
         $contactInformation = new ContactsInformation();
 
         $informationelement = $doctrine->getRepository(InformationTemplateElement::class)->findBy(['suge' => $idSugg]);
-        $suggestion = $doctrine->getRepository(Suggestions::class)->find(($type !== null) ? $type : $idSugg);
+
+
+
+
+
+
+
         $contact = $doctrine->getRepository(Contacts::class)->find($idCont);
 
+        if ($value !== "null") {
+            $contactInformation->setValue($value);
+        }
 
-        $contactInformation->setValue($value);
-        $contactInformation->setComment($comment);
+        if ($comment !== "null") {
+            $contactInformation->setComment($comment);
+        }
+
+
         $contactInformation->setContact($contact);
-        $contactInformation->setSugg($suggestion);
+        if ($type !== "null") {
+            $typeSugg = $doctrine->getRepository(Suggestions::class)->find($type);
+            $contactInformation->setSugg($typeSugg);
+        }
+
+        if ($type === "null") {
+            $suggestion = $doctrine->getRepository(Suggestions::class)->find($idSugg);
+            $contactInformation->setSugg($suggestion);
+        }
+
+
         $contactInformation->setItel($informationelement[0]);
+
+
 
 
         $entityManager->persist($contactInformation);
@@ -148,11 +190,31 @@ class ContactsController extends AbstractController
         $value = $request->request->get('value');
         $comment = $request->request->get('commentaire');
         $idCont = $request->request->get('idCont');
-
+        $type = $request->request->get('type');
+        $idSugg = $request->request->get('idSugg');
         $contactInfos = $doctrine->getRepository(ContactsInformation::class)->find($id);
 
-        $contactInfos->setValue($value);
-        $contactInfos->setComment($comment);
+
+        if ($type !== "null") {
+            $typeSugg = $doctrine->getRepository(Suggestions::class)->find($type);
+            $contactInfos->setSugg($typeSugg);
+        }
+
+        if ($type === "null") {
+            $suggestion = $doctrine->getRepository(Suggestions::class)->find($idSugg);
+            $contactInfos->setSugg($suggestion);
+        }
+
+
+
+        if ($value !== "null") {
+            $contactInfos->setValue($value);
+        }
+
+        if ($comment !== "null") {
+            $contactInfos->setComment($comment);
+        }
+
 
         // dd($contactInfos);
         $entityManager->flush();
@@ -223,8 +285,8 @@ class ContactsController extends AbstractController
 
         foreach ($blocksDecode as $value) {
             foreach ($contact->getInformations() as $infosCont) {
-                if ($infosCont->getItel()->getSuge()->getId() === $value->id) {
-                    array_push($value->obj, ["id" => $infosCont->getId(), "valueInformations" => $infosCont->getValue(), "valueDescription" => $infosCont->getComment(), "sugge" => ($infosCont !== null) ? $infosCont->getSugg() : null]);
+                if ($infosCont->getItel()->getSuge()->getId() === $value->id && $infosCont->getDeletedAt() === null) {
+                    array_push($value->obj, ["id" => $infosCont->getId(), "deletedAt" => $infosCont->getDeletedAt(), "valueInformations" => $infosCont->getValue(), "valueDescription" => $infosCont->getComment(), "sugge" => ($infosCont !== null) ? $infosCont->getSugg() : null]);
                 }
             }
         }

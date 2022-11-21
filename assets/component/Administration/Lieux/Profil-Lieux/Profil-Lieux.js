@@ -15,6 +15,7 @@ import {
 import { useParams } from "react-router-dom";
 import ModalEditLieux from "./Modal-Edit-Lieux";
 import ModalAddLieux from "./Modal-Add-Lieux";
+import ModalDeleteInfos from "./Modal-Delete-Lieux";
 const ProfilLieux = () => {
   const [auth, setAuth] = useState(useAuth());
   let id = useParams().id;
@@ -29,7 +30,7 @@ const ProfilLieux = () => {
   useEffect(() => {
     axios({
       method: "post",
-      url: "/api/getPlacesListById",
+      url: "/api/getCallsAndOrganisationById",
       data: formData,
       headers: {
         "Content-Type": "application/json",
@@ -95,36 +96,46 @@ const ProfilLieux = () => {
           <div className="row coordonnes-body">
             <Table>
               <h6>Infos</h6>
-              {contactInformation?.informations.map((e) => (
+              {contactInformation?.informations.map((contInfo) => (
                 <tr>
-                  <td>{e.value}</td>
+                  <td>{contInfo.value}</td>
                   <td>
-                    {e?.obj && e?.obj?.length > 0 && (
+                    {contInfo?.obj && contInfo?.obj?.length > 0 && (
                       <>
-                        {e?.obj.map((e) => (
+                        {contInfo?.obj.map((e) => (
                           <span>
-                            {e.valueInformations || e.sugge.value}
+                            {e.value === "Tags" ||
+                            e.value === "Type de Collaborateur"
+                              ? e.sugge.value + "test"
+                              : e.valueInformations}
                             <ModalEditLieux
                               selectListCollab={typeCollabList}
                               selectListTags={tagsList}
                               infosAppels={e}
+                              contInfo={contInfo}
                               contact={contactInformation}
                               idInfo={e.id}
                               onChange={(e) => informationSaved(e)}
                             ></ModalEditLieux>
+                            <ModalDeleteInfos
+                              infosPatient={e}
+                              onChange={(e) => informationSaved(e)}
+                            ></ModalDeleteInfos>
                           </span>
                         ))}
                       </>
                     )}
 
-                    {e?.obj && e?.obj.length === 0 && <>Pas d'informations</>}
+                    {contInfo?.obj && contInfo?.obj.length === 0 && (
+                      <>Pas d'informations</>
+                    )}
                     <div style={{ float: "right" }}>
                       <ModalAddLieux
                         selectListCollab={typeCollabList}
                         selectListTags={tagsList}
-                        infosAppels={e}
+                        infosAppels={contInfo}
                         contact={contactInformation}
-                        idInfo={e.id}
+                        idInfo={contInfo.id}
                         onChange={(e) => informationSaved(e)}
                       ></ModalAddLieux>
                     </div>

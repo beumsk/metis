@@ -60,6 +60,7 @@ function ModalEditLieux(props) {
     formGetInfos.append("idCont", id.toString());
     formGetInfos.append("commentaire", commentaireInput);
     formGetInfos.append("idInfo", props?.infosAppels?.id);
+    formGetInfos.append("idSugg", props?.contInfo?.id);
 
     axios({
       method: "post",
@@ -114,7 +115,7 @@ function ModalEditLieux(props) {
         <Modal.Body>
           {" "}
           <>
-            {props?.infosAppels?.sugge?.value === "Tags" && (
+            {props?.infosAppels?.sugge?.parentSugg?.value === "Tags" && (
               <InputTypeList
                 onChangeType={(e) => setType(e)}
                 type={props.selectListTags}

@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\ContactsInformationRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ContactsInformationRepository::class)]
 class ContactsInformation
@@ -15,9 +16,11 @@ class ContactsInformation
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Assert\IsNull]
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $value = null;
 
+    #[Assert\IsNull]
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $comment = null;
 

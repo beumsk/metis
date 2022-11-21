@@ -42,7 +42,7 @@ function ModalAddLieux(props) {
     setEndDate(new Date(e.target.value).toJSON().slice(0, 10));
   };
 
-  // console.log(props);
+  console.log(props);
 
   const handleSave = (e) => {
     let formGetInfos = new FormData();
@@ -55,6 +55,7 @@ function ModalAddLieux(props) {
     formGetInfos.append("value", specificValueInput);
     formGetInfos.append("idCont", id.toString());
     formGetInfos.append("commentaire", commentaireInput);
+
     formGetInfos.append("idSugg", props?.infosAppels?.id);
 
     axios({
@@ -110,14 +111,14 @@ function ModalAddLieux(props) {
         <Modal.Body>
           {" "}
           <>
-            {props.infosAppels.value === "Tags" && (
+            {props?.infosAppels?.value === "Tags" && (
               <InputTypeList
                 type={props.selectListTags}
                 onChangeType={(e) => setType(e)}
               ></InputTypeList>
             )}
 
-            {props.infosAppels.value === "Type de Collaborateur" && (
+            {props?.infosAppels?.value === "Type de Collaborateur" && (
               <InputTypeList
                 type={props.selectListCollab}
                 onChangeType={(e) => setType(e)}
