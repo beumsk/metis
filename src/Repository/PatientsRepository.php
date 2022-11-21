@@ -57,7 +57,17 @@ class PatientsRepository extends ServiceEntityRepository
     }
 
 
-
+    public function listPatientsByAntenna($antenna): array
+    {
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.antenna = :antenna')
+            ->orderBy('p.id', 'ASC')
+            ->setParameters([
+                'antenna' => $antenna
+            ])
+            ->getQuery()
+            ->getResult();
+    }
 
     public function findByNameByFirstNameByName(string $search, string $antenna): array
     {

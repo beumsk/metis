@@ -13,9 +13,11 @@ import countriesData from "./data.js";
 
 const Contacts = () => {
   let id = useParams().id;
+  const [auth, setAuth] = useState(useAuth());
   var formData = new FormData();
   formData.append("id", id.toString());
-  const [auth, setAuth] = useState(useAuth());
+  formData.append("antenna", auth.antenna);
+
   const [idPatient, setIdPatient] = useState(id);
   const [listContacts, setContacts] = useState(null);
   const [options, setOptions] = useState();

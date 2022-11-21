@@ -3,8 +3,13 @@ import { useNavigate, useParams, Link } from "react-router-dom";
 import useLogout from "../hooks/useLogout";
 import axios from "axios";
 import useAuth from "../hooks/useAuth";
-import Button from "react-bootstrap/Button";
-import Container from "react-bootstrap/Container";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faPlusCircle,
+  faCancel,
+  faEdit,
+  faCheck,
+} from "@fortawesome/free-solid-svg-icons";
 import Form from "react-bootstrap/Form";
 import Nav from "react-bootstrap/Nav";
 import Editor from "../component/Profile/Suivi/Editor-Reports";
@@ -20,9 +25,10 @@ const Form_MeetRapports = () => {
   let id = useParams().id;
   var formData = new FormData();
   formData.append("id", 57);
-
+  formData.append("antenna", auth.antenna);
   const [userId, setUserId] = useState(null);
   const [patiId, setPatiId] = useState(null);
+  const [isSent, setIsSent] = useState(false);
   const [places, setPlaces] = useState(null);
   var formActivitiesDatas = new FormData();
   formActivitiesDatas.append("id", 106);
@@ -56,10 +62,24 @@ const Form_MeetRapports = () => {
   const [changeContacts, setChangeContacts] = useState(null);
   const [changePlaces, setChangePlaces] = useState(null);
   const [changeEditor, setChangeEditor] = useState(null);
-
+  const [patientsLists, setPatientsLists] = useState(null);
   const [changeOptions, setChangeOptions] = useState(null);
 
   useEffect(() => {
+    axios({
+      method: "post",
+      url: "/api/getAllPatients",
+      data: formData,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    })
+      .then(function (response) {
+        setPatientsLists(response);
+      })
+      .catch(function (response) {});
+
     axios({
       method: "post",
       url: "/api/suggestionsById",
@@ -137,52 +157,16 @@ const Form_MeetRapports = () => {
   const onChangePlaces = (e) => {
     setChangePlaces(e);
   };
-
+  console.log(idPatient);
   const sentRapport = (e) => {
     let opt = [
       "HESTIA - Risque perte logement",
       "CVC",
       "HESTIA - Risque décès",
     ];
-    var formData = new FormData();
-    let formIndic = formIndicateurs.map((el) => {
-      if (
-        Object.keys(el).length === 1 ||
-        JSON.stringify(el) ===
-          JSON.stringify({
-            id: el.id,
-            indicateursFormCVC: null,
-            indicateursFormHestiaRisqueDeces: null,
-            indicateursEstLeLogement: null,
-          })
-      ) {
-        return null;
-      } else {
-        return el;
-      }
-    });
-
-    let formIndicatorsGrouped = formIndicateurs.filter(
-      (e) => e.selectedOptionType !== null && !opt.includes(e.id)
-    );
-
-    let arr = {};
-    for (let index = 0; index < formIndicatorsGrouped.length; index++) {
-      const element = formIndicatorsGrouped[index];
-      if (element.indicateursFormCVC !== null) {
-        arr.indicateursFormCVC = element.indicateursFormCVC;
-      }
-      if (element.indicateursFormHestiaRisqueDeces !== null) {
-        arr.indicateursFormHestiaRisqueDeces =
-          element.indicateursFormHestiaRisqueDeces;
-      }
-      if (element.indicateursEstLeLogement !== null) {
-        arr.indicateursEstLeLogement = element.indicateursEstLeLogement;
-      }
-    }
 
     formData.append("activityType", 1);
-    formData.append("contacts", contacts);
+    // formData.append("contacts", JSON.stringify(contacts));
     formData.append("changeTypeMeet", changeTypeMeet);
     formData.append("changeDate", changeDate);
     formData.append("changeGoals", changeGoals);
@@ -195,7 +179,7 @@ const Form_MeetRapports = () => {
     formData.append("formActivities", null);
     formData.append("formIndicateurs", null);
     formData.append("userId", userId);
-    formData.append("patiId", patiId);
+    formData.append("patiId", idPatient);
 
     axios({
       method: "post",
@@ -208,6 +192,7 @@ const Form_MeetRapports = () => {
     })
       .then(function (response) {
         console.log(response);
+        setIsSent(true);
       })
       .catch(function (response) {});
   };
@@ -221,6 +206,19 @@ const Form_MeetRapports = () => {
     <>
       <h3 style={{ color: "white" }}>Rapport de rencontre</h3>
       <Form className="formMeet-home">
+        <Form.Label htmlFor="inputValue">Patient</Form.Label>
+        <Form.Select size="lg" onChange={(e) => setIdPatient(e.target.value)}>
+          {patientsLists?.data?.map((el, id) => (
+            <>
+              {el?.firstname && el?.lastname && (
+                <option value={el.id}>
+                  {el?.firstname} {el?.lastname}
+                </option>
+              )}
+            </>
+          ))}
+        </Form.Select>
+
         <Form.Label htmlFor="inputValue" style={{ color: "white" }}>
           Type de rencontre
         </Form.Label>
@@ -245,7 +243,7 @@ const Form_MeetRapports = () => {
           type="date"
           defaultValue={new Date("now")}
           placeholder="Here edit the release date"
-          onChange={(e) => onChangeDate(e)}
+          onChange={(e) => setChangeDate(e.target.value)}
           id="inputValueSpécifique"
         />
         <InputContactList contacts={contacts} onChange={onChangeContacts} />
@@ -253,7 +251,10 @@ const Form_MeetRapports = () => {
 
         <Editor onChange={editorChange} content={editorChange}></Editor>
 
-        <button onClick={(e) => sentRapport(e)}>Envoyer</button>
+        <a className={"send-btn"} onClick={sentRapport}>
+          Envoyer
+        </a>
+        {isSent && <FontAwesomeIcon icon={faCheck} />}
       </Form>
     </>
   );
