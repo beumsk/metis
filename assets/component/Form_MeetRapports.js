@@ -1,15 +1,216 @@
-import React, { useContext, useDebugValue } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import React, { useContext, useDebugValue, useState, useEffect } from "react";
+import { useNavigate, useParams, Link } from "react-router-dom";
 import useLogout from "../hooks/useLogout";
+import axios from "axios";
+import useAuth from "../hooks/useAuth";
 import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
 import Nav from "react-bootstrap/Nav";
+import Editor from "../component/Profile/Suivi/Editor-Reports";
+import InputPlaceList from "../component/Profile/Suivi/Input-Place-List";
+import InputContactList from "../component/Profile/Suivi/Input-Contact-List";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
 const Form_MeetRapports = () => {
   const navigate = useNavigate();
   const logout = useLogout();
+  const [show, setShow] = useState(false);
+  const [auth, setAuth] = useState(useAuth());
+  let id = useParams().id;
+  var formData = new FormData();
+  formData.append("id", 57);
+
+  const [userId, setUserId] = useState(null);
+  const [patiId, setPatiId] = useState(null);
+  const [places, setPlaces] = useState(null);
+  var formActivitiesDatas = new FormData();
+  formActivitiesDatas.append("id", 106);
+  const [formSoins, setFormSoins] = useState([{ id: 0 }]);
+  const [formActivities, setFormActivities] = useState([{ id: 0 }]);
+  const [formIndicateurs, setFormIndicateurs] = useState([{ id: 0 }]);
+  const [selectedTypeCVC, setSelectedTypeCVC] = useState(null);
+  //   formData.append("pathString", props.link);
+  const [options, setOptions] = useState([
+    "HESTIA - Risque perte logement",
+    "CVC",
+    "HESTIA - Risque décès",
+  ]);
+  const [optionsConst, setOptionsConst] = useState([
+    "HESTIA - Risque perte logement",
+    "CVC",
+    "HESTIA - Risque décès",
+  ]);
+  const [contacts, setContacts] = useState(null);
+  const [showAccesSoins, setAccesSoins] = useState(false);
+  const [showActivities, setActivities] = useState(false);
+  const [showIndicateurs, setChoiceIndicateurs] = useState(false);
+  const [idPatient, setIdPatient] = useState(id);
+  const [type, setType] = useState(null);
+  const [typeFormActivities, setTypeFormActivities] = useState(null);
+  const [meetType, setMeetType] = useState(null);
+  const [goalsInput, setGoalsInput] = useState(null);
+  const [changeTypeMeet, setChangeTypeMeet] = useState(null);
+  const [changeDate, setChangeDate] = useState(null);
+  const [changeGoals, setChangeGoals] = useState(null);
+  const [changeContacts, setChangeContacts] = useState(null);
+  const [changePlaces, setChangePlaces] = useState(null);
+  const [changeEditor, setChangeEditor] = useState(null);
+
+  const [changeOptions, setChangeOptions] = useState(null);
+
+  useEffect(() => {
+    axios({
+      method: "post",
+      url: "/api/suggestionsById",
+      data: formData,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    })
+      .then(function (response) {
+        setType(response);
+      })
+      .catch(function (response) {});
+    axios({
+      method: "post",
+      url: "/api/getPlaces",
+      data: formData,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    })
+      .then(function (response) {
+        setPlaces(response);
+      })
+      .catch(function (response) {});
+    axios({
+      method: "post",
+      url: "/api/getContacts",
+      data: formData,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    })
+      .then(function (response) {
+        setContacts(response);
+      })
+      .catch(function (response) {});
+    axios({
+      method: "post",
+      url: "/api/suggestionsById",
+      data: formActivitiesDatas,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    })
+      .then(function (response) {
+        setTypeFormActivities(response);
+      })
+      .catch(function (response) {});
+    setPatiId(idPatient);
+    setUserId(auth.auth.idUser);
+    setOptions(options);
+  }, [options]);
+
+  const onChangeContacts = (e) => {
+    setChangeContacts(e);
+  };
+
+  const onChangeDate = (e) => {
+    setChangeDate(e.target.value);
+  };
+
+  function editorChange(e) {
+    console.log(e);
+    setChangeEditor(e);
+  }
+
+  const inputChangeTypeMeet = (e) => {
+    setChangeTypeMeet(e.target.value);
+  };
+
+  const onChangePlaces = (e) => {
+    setChangePlaces(e);
+  };
+
+  const sentRapport = (e) => {
+    let opt = [
+      "HESTIA - Risque perte logement",
+      "CVC",
+      "HESTIA - Risque décès",
+    ];
+    var formData = new FormData();
+    let formIndic = formIndicateurs.map((el) => {
+      if (
+        Object.keys(el).length === 1 ||
+        JSON.stringify(el) ===
+          JSON.stringify({
+            id: el.id,
+            indicateursFormCVC: null,
+            indicateursFormHestiaRisqueDeces: null,
+            indicateursEstLeLogement: null,
+          })
+      ) {
+        return null;
+      } else {
+        return el;
+      }
+    });
+
+    let formIndicatorsGrouped = formIndicateurs.filter(
+      (e) => e.selectedOptionType !== null && !opt.includes(e.id)
+    );
+
+    let arr = {};
+    for (let index = 0; index < formIndicatorsGrouped.length; index++) {
+      const element = formIndicatorsGrouped[index];
+      if (element.indicateursFormCVC !== null) {
+        arr.indicateursFormCVC = element.indicateursFormCVC;
+      }
+      if (element.indicateursFormHestiaRisqueDeces !== null) {
+        arr.indicateursFormHestiaRisqueDeces =
+          element.indicateursFormHestiaRisqueDeces;
+      }
+      if (element.indicateursEstLeLogement !== null) {
+        arr.indicateursEstLeLogement = element.indicateursEstLeLogement;
+      }
+    }
+
+    formData.append("activityType", 1);
+    formData.append("contacts", contacts);
+    formData.append("changeTypeMeet", changeTypeMeet);
+    formData.append("changeDate", changeDate);
+    formData.append("changeGoals", changeGoals);
+    formData.append("contId", changeContacts);
+    formData.append("changePlaces", changePlaces);
+    formData.append("changeEditor", changeEditor);
+    formData.append("goalsInput", goalsInput);
+    formData.append("meetType", changeTypeMeet);
+    formData.append("formSoins", null);
+    formData.append("formActivities", null);
+    formData.append("formIndicateurs", null);
+    formData.append("userId", userId);
+    formData.append("patiId", patiId);
+
+    axios({
+      method: "post",
+      url: "/api/sendReport",
+      data: formData,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    })
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (response) {});
+  };
 
   const signOut = async () => {
     await logout();
@@ -18,29 +219,41 @@ const Form_MeetRapports = () => {
 
   return (
     <>
-      <h3>Rapport de rencontre</h3>
-      <Form>
-        <Form.Group className="mb-3" controlId="formBasicEmail">
-          <Form.Control type="email" placeholder="Tapez le nom" />
-        </Form.Group>
-
-        <Form.Group className="mb-3" controlId="formBasicPassword">
-          <Form.Control type="text" placeholder="Tapez le prénom" />
-        </Form.Group>
-
-        <Form.Group className="mb-3" controlId="formBasicPassword">
-          <Form.Control type="text" placeholder="Tapez le surnom" />
-        </Form.Group>
-
-        <Form.Select aria-label="Default select example">
-          <option>Choissisez votre antenne</option>
-          <option value="1">Liège</option>
-          <option value="2">Bruxelles</option>
+      <h3 style={{ color: "white" }}>Rapport de rencontre</h3>
+      <Form className="formMeet-home">
+        <Form.Label htmlFor="inputValue" style={{ color: "white" }}>
+          Type de rencontre
+        </Form.Label>
+        <Form.Select
+          size="lg"
+          onChange={(e) => inputChangeTypeMeet(e)}
+          value={meetType}
+        >
+          <>
+            <option>Choissisez votre type de rencontre</option>
+            <option value={1}>Vu</option>
+            <option value={2}>Rencontre</option>
+            <option value={3}>Repos</option>
+            <option value={4}>Recherche</option>
+          </>
         </Form.Select>
 
-        <Button variant="primary" type="submit" className="btn-metis mt-3">
-          Submit
-        </Button>
+        <Form.Label htmlFor="inputValue" style={{ color: "white" }}>
+          Date de la rencontre
+        </Form.Label>
+        <Form.Control
+          type="date"
+          defaultValue={new Date("now")}
+          placeholder="Here edit the release date"
+          onChange={(e) => onChangeDate(e)}
+          id="inputValueSpécifique"
+        />
+        <InputContactList contacts={contacts} onChange={onChangeContacts} />
+        <InputPlaceList places={places} onChange={onChangePlaces} />
+
+        <Editor onChange={editorChange} content={editorChange}></Editor>
+
+        <button onClick={(e) => sentRapport(e)}>Envoyer</button>
       </Form>
     </>
   );

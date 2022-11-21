@@ -27,10 +27,6 @@ const Profile = () => {
   const [idPatient, setIdPatient] = useState(id);
   const [isEdit, setEdit] = useState(false);
   const [toggle, setToggle] = useState(false);
-
-  //   isDahsboardReports
-  //           isAddReportMeet
-  // isReportDetails
   const [type, setType] = useState(null);
   const [contacts, setContacts] = useState(null);
   const [places, setPlaces] = useState(null);

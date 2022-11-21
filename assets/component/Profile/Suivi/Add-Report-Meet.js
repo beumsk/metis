@@ -471,37 +471,6 @@ function AddReportMeet(props) {
       options.push(...resultB);
 
       setOptions(options);
-
-      // }
-
-      // for (let index = 0; index < opt.length; index++) {
-      //   const element = opt[index];
-      //   test.map((e) => {
-      //     if (element === e.selectedOptionType) {
-      //       opt?.splice(index, 1);
-      //       // let opt = formIndicateurs.filter(
-      //       //   (e) => e.selectedOptionType !== null && !opt.includes(e.id)
-      //       // );
-
-      //
-      //       // opt.filter((e) => e === opt[index]);
-      //
-      //       //
-      //       if (opt && opt.length > 0) {
-      //         options.splice(0, options.length);
-      //         // setOptions(options);
-
-      //         if (options.length === 0) {
-      //
-      //           options.push(...opt);
-      //
-      //           setOptions(options);
-      //           // options.filter(e => e === opt.includes(opt))
-      //         }
-      //       }
-      //     }
-      //   });
-      // }
     }
   };
 
