@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import useAuth from "../../../hooks/useAuth";
+import useAuth from "../../../../hooks/useAuth";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import moment from "moment";
 import {
@@ -13,11 +13,11 @@ import {
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import Form from "react-bootstrap/Form";
-import InputTypeList from "../../../component/Input-Type-List";
-function ModalEditLieux(props) {
+import InputTypeList from "../../../Input-Type-List";
+function ModalEditContact(props) {
   const [show, setShow] = useState(false);
   const [auth, setAuth] = useState(useAuth());
-  let id = useParams().idLieux;
+  let id = useParams().idContact;
   console.log(props);
   // formData.append("pathString", props.link);
   const [infos, setInfos] = useState(null);
@@ -194,4 +194,4 @@ function ModalEditLieux(props) {
 
 // render(<Modal />);
 
-export default ModalEditLieux;
+export default ModalEditContact;

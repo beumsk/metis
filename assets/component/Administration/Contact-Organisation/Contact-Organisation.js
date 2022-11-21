@@ -4,7 +4,6 @@ import useAuth from "../../../hooks/useAuth";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import Menu from "../../Menu";
-import Table from "./Table/Table";
 import { Link } from "react-router-dom";
 import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider, {
@@ -37,7 +36,7 @@ function ContactOrganisations() {
       text: "Product Price",
       formatter: (cell, row, rowIndex, extraData) => (
         <div>
-          <a href={"/profil-lieux/" + row.id}>Détails</a>
+          <a href={"/profil-contact/" + row.id}>Détails</a>
         </div>
       ),
     },

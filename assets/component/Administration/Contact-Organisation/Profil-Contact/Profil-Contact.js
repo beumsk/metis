@@ -1,9 +1,9 @@
 import React, { useContext, useDebugValue, useState, useEffect } from "react";
 import { Outlet, Link } from "react-router-dom";
-import Menu from "../../Menu";
+import Menu from "../../../Menu";
 import axios from "axios";
 import Table from "react-bootstrap/Table";
-import useAuth from "../../../hooks/useAuth";
+import useAuth from "../../../../hooks/useAuth";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import moment from "moment";
 import {
@@ -13,12 +13,12 @@ import {
   faCheck,
 } from "@fortawesome/free-solid-svg-icons";
 import { useParams } from "react-router-dom";
-import ModalEditInfos from "./Modal-Edit-Infos";
-import ModalAddInfos from "./Modal-Add-Infos";
-import ModalDeleteInfos from "./Modal-Delete-Infos";
-const ProfilLieux = () => {
+import ModalEditContact from "./Modal-Edit-Contact";
+import ModalAddContact from "./Modal-Add-Contact";
+import ModalDeleteInfos from "./Modal-Delete-Contact";
+const ProfilContact = () => {
   const [auth, setAuth] = useState(useAuth());
-  let id = useParams().id;
+  let id = useParams().idContact;
   console.log(id);
   const [contactInformation, setContactInformation] = useState(null);
   const [lengthList, setLengthList] = useState(10);
@@ -26,7 +26,7 @@ const ProfilLieux = () => {
   const [tagsList, setTagsList] = useState(null);
   const [typeCollabList, setTypeCollabList] = useState(null);
   var formData = new FormData();
-  formData.append("id", useParams().idLieux);
+  formData.append("id", id);
   useEffect(() => {
     axios({
       method: "post",
@@ -108,7 +108,7 @@ const ProfilLieux = () => {
                             contInfo.value === "Type de Collaborateur"
                               ? e.sugge.value
                               : e.valueInformations}
-                            <ModalEditInfos
+                            <ModalEditContact
                               selectListCollab={typeCollabList}
                               selectListTags={tagsList}
                               infosAppels={e}
@@ -116,7 +116,7 @@ const ProfilLieux = () => {
                               contact={contactInformation}
                               idInfo={e.id}
                               onChange={(e) => informationSaved(e)}
-                            ></ModalEditInfos>
+                            ></ModalEditContact>
                             <ModalDeleteInfos
                               infosPatient={e}
                               onChange={(e) => informationSaved(e)}
@@ -130,14 +130,14 @@ const ProfilLieux = () => {
                       <>Pas d'informations</>
                     )}
                     <div style={{ float: "right" }}>
-                      <ModalAddInfos
+                      <ModalAddContact
                         selectListCollab={typeCollabList}
                         selectListTags={tagsList}
                         infosAppels={contInfo}
                         contact={contactInformation}
                         idInfo={contInfo.id}
                         onChange={(e) => informationSaved(e)}
-                      ></ModalAddInfos>
+                      ></ModalAddContact>
                     </div>
                   </td>
                   <td></td>
@@ -167,4 +167,4 @@ const ProfilLieux = () => {
   );
 };
 
-export default ProfilLieux;
+export default ProfilContact;

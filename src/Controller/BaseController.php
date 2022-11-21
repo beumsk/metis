@@ -27,4 +27,12 @@ class BaseController extends AbstractController
     {
         return $this->render('default/index.html.twig');
     }
+
+    /**
+     * @Route("/profil-contact/{id}", name="subdomain-profil-contact")
+     */
+    public function subdomainContact()
+    {
+        return $this->render('default/index.html.twig');
+    }
 }

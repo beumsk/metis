@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import useAuth from "../../../hooks/useAuth";
+import useAuth from "../../../../hooks/useAuth";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import moment from "moment";
 import {
@@ -13,31 +13,23 @@ import {
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import Form from "react-bootstrap/Form";
-import InputTypeList from "../../../component/Input-Type-List";
-function ModalEditLieux(props) {
+import InputTypeList from "../../../Input-Type-List";
+function ModalAddContact(props) {
   const [show, setShow] = useState(false);
   const [auth, setAuth] = useState(useAuth());
   let id = useParams().idLieux;
-  console.log(props);
+
   // formData.append("pathString", props.link);
   const [infos, setInfos] = useState(null);
   const [isSentRepport, setIsSentRepport] = useState(false);
   const [responseDatas, setResponseDatas] = useState(null);
-  const [type, setType] = useState(props?.infosAppels?.sugge?.id);
   const [elementsOpt, setElementsOpt] = useState(null);
   const [idPatient, setIdPatient] = useState(id);
+  const [type, setType] = useState(null);
 
-  const [specificValueInput, setSpecificValueInput] = useState(
-    props?.infosAppels?.valueInformations !== null
-      ? props?.infosAppels?.valueInformations
-      : null
-  );
+  const [specificValueInput, setSpecificValueInput] = useState(null);
 
-  const [commentaireInput, setCommentaire] = useState(
-    props?.infosAppels?.valueDescription !== null
-      ? props?.infosAppels?.valueDescription
-      : null
-  );
+  const [commentaireInput, setCommentaire] = useState(null);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -49,22 +41,26 @@ function ModalEditLieux(props) {
     setStartDate(new Date(e.target.value).toJSON().slice(0, 10));
     setEndDate(new Date(e.target.value).toJSON().slice(0, 10));
   };
+
   console.log(props);
 
   const handleSave = (e) => {
     let formGetInfos = new FormData();
     // value-sugg
-
+    // $idCont = $request->request->get('idCont');
+    // $idBlock = $request->request->get('idBlock');
+    // $idSugg = $request->request->get('idSugg');
+    console.log("test");
     formGetInfos.append("type", type);
     formGetInfos.append("value", specificValueInput);
     formGetInfos.append("idCont", id.toString());
     formGetInfos.append("commentaire", commentaireInput);
-    formGetInfos.append("idInfo", props?.infosAppels?.id);
-    formGetInfos.append("idSugg", props?.contInfo?.id);
+
+    formGetInfos.append("idSugg", props?.infosAppels?.id);
 
     axios({
       method: "post",
-      url: "/api/editItem",
+      url: "/api/saveItem",
       data: formGetInfos,
       headers: {
         "Content-Type": "application/json",
@@ -105,38 +101,27 @@ function ModalEditLieux(props) {
   return (
     <>
       <button onClick={handleShow} className="ml-4">
-        <FontAwesomeIcon icon={faEdit} />
+        <FontAwesomeIcon icon={faPlusCircle} />
       </button>
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Modifier une information</Modal.Title>
+          <Modal.Title>Ajouter une information</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {" "}
           <>
-            {props?.infosAppels?.sugge?.parentSugg?.value === "Tags" && (
+            {props?.infosAppels?.value === "Tags" && (
               <InputTypeList
-                onChangeType={(e) => setType(e)}
                 type={props.selectListTags}
-                defaultValue={
-                  props.infosAppels.sugge.id !== null
-                    ? props.infosAppels.sugge.id
-                    : null
-                }
+                onChangeType={(e) => setType(e)}
               ></InputTypeList>
             )}
 
-            {props?.infosAppels?.sugge?.parentSugg?.value ===
-              "Type de Collaborateur" && (
+            {props?.infosAppels?.value === "Type de Collaborateur" && (
               <InputTypeList
-                onChangeType={(e) => setType(e)}
                 type={props.selectListCollab}
-                defaultValue={
-                  props.infosAppels.sugge.id !== null
-                    ? props.infosAppels.sugge.id
-                    : null
-                }
+                onChangeType={(e) => setType(e)}
               ></InputTypeList>
             )}
 
@@ -148,22 +133,12 @@ function ModalEditLieux(props) {
                 id="inputValueSpécifique"
                 onChange={(e) => setSpecificValueInput(e.target.value)}
                 aria-describedby="valueSpécifique"
-                defaultValue={
-                  props?.infosAppels?.valueInformations !== null
-                    ? props?.infosAppels?.valueInformations
-                    : ""
-                }
               />
             ) : (
               <input
                 type="text"
                 id="inputValueSpécifique"
                 onChange={(e) => setSpecificValueInput(e.target.value)}
-                defaultValue={
-                  props?.infosAppels?.valueInformations !== null
-                    ? props?.infosAppels?.valueInformations
-                    : ""
-                }
                 aria-describedby="valueSpécifique"
               />
             )}
@@ -174,11 +149,6 @@ function ModalEditLieux(props) {
               onChange={(e) => setCommentaire(e.target.value)}
               rows={3}
               id="comment-value"
-              defaultValue={
-                props?.infosAppels?.valueDescription !== null
-                  ? props?.infosAppels?.valueDescription
-                  : ""
-              }
             />
           </>
         </Modal.Body>
@@ -194,4 +164,4 @@ function ModalEditLieux(props) {
 
 // render(<Modal />);
 
-export default ModalEditLieux;
+export default ModalAddContact;

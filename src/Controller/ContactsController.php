@@ -57,7 +57,7 @@ class ContactsController extends AbstractController
                 return $object->getId();
             },
             JsonEncoder::FORMAT,
-            [AbstractNormalizer::IGNORED_ATTRIBUTES => ["url", "description", "type", "pathString", "path", "calls", "patients", "informations"]]
+            [AbstractNormalizer::IGNORED_ATTRIBUTES => ["url", "description", "type", "pathString", "path", "calls", "informations"]]
         ]);
 
         $response =  new Response($jsonObject, 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
@@ -281,7 +281,7 @@ class ContactsController extends AbstractController
 
         $patients = [];
 
-
+        // dd($contact->getPatients());
 
         foreach ($blocksDecode as $value) {
             foreach ($contact->getInformations() as $infosCont) {
@@ -290,6 +290,7 @@ class ContactsController extends AbstractController
                 }
             }
         }
+
 
         foreach ($contact->getPatients() as $patient) {
             $patients[] = ["id" => $patient->getPati()->getId(), "firstName" => $patient->getPati()->getFirstName(), "lastName" => $patient->getPati()->getLastName()];

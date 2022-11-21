@@ -14,47 +14,26 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import Form from "react-bootstrap/Form";
 import InputTypeList from "../../../component/Input-Type-List";
-
-function ModalAddInfos(props) {
+function ModalAddLieux(props) {
   const [show, setShow] = useState(false);
   const [auth, setAuth] = useState(useAuth());
-  let id = useParams().idContact;
-  console.log(props);
+  let id = useParams().idLieux;
+
   // formData.append("pathString", props.link);
   const [infos, setInfos] = useState(null);
   const [isSentRepport, setIsSentRepport] = useState(false);
   const [responseDatas, setResponseDatas] = useState(null);
   const [elementsOpt, setElementsOpt] = useState(null);
   const [idPatient, setIdPatient] = useState(id);
-  const [type, setType] = useState(id);
+  const [type, setType] = useState(null);
 
   const [specificValueInput, setSpecificValueInput] = useState(null);
 
   const [commentaireInput, setCommentaire] = useState(null);
-  const [tagsList, setTagsList] = useState(null);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-  useEffect(() => {
-    // var formData = new FormData();
-    // if (props.infosAppels.value === "Tags") {
-    //   formData.append("id", 159);
-    // }
-    // if (props.infosAppels.value === "Type de Collaborateur") {
-    //   formData.append("id", 674);
-    // }
-    // axios({
-    //   method: "post",
-    //   url: "/api/suggestionsById",
-    //   data: formData,
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //     Authorization: `Bearer ${auth.auth.accessToken}`,
-    //   },
-    // }).then(function (response) {
-    //   setTagsList(response);
-    // });
-  }, []);
+  useEffect(() => {}, []);
   //
 
   const handleInputChange = (e) => {
@@ -63,14 +42,20 @@ function ModalAddInfos(props) {
     setEndDate(new Date(e.target.value).toJSON().slice(0, 10));
   };
 
+  console.log(props);
+
   const handleSave = (e) => {
     let formGetInfos = new FormData();
     // value-sugg
-
+    // $idCont = $request->request->get('idCont');
+    // $idBlock = $request->request->get('idBlock');
+    // $idSugg = $request->request->get('idSugg');
+    console.log("test");
     formGetInfos.append("type", type);
     formGetInfos.append("value", specificValueInput);
     formGetInfos.append("idCont", id.toString());
     formGetInfos.append("commentaire", commentaireInput);
+
     formGetInfos.append("idSugg", props?.infosAppels?.id);
 
     axios({
@@ -83,7 +68,6 @@ function ModalAddInfos(props) {
       },
     }).then(function (response) {
       var formData = new FormData();
-      console.log(response);
       formData.append("id", response.data.data.id);
       if (response) {
         axios({
@@ -111,8 +95,7 @@ function ModalAddInfos(props) {
     props.onChange({
       response: responseDatas,
     });
-    // selectListCollab={typeCollabList}
-    // selectListTags={tagsList}
+
     // document.querySelectorAll(".btn-close")[0].click();
   }
   return (
@@ -123,19 +106,19 @@ function ModalAddInfos(props) {
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Modifier une information</Modal.Title>
+          <Modal.Title>Ajouter une information</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {" "}
           <>
-            {props.infosAppels.value === "Tags" && (
+            {props?.infosAppels?.value === "Tags" && (
               <InputTypeList
                 type={props.selectListTags}
                 onChangeType={(e) => setType(e)}
               ></InputTypeList>
             )}
 
-            {props.infosAppels.value === "Type de Collaborateur" && (
+            {props?.infosAppels?.value === "Type de Collaborateur" && (
               <InputTypeList
                 type={props.selectListCollab}
                 onChangeType={(e) => setType(e)}
@@ -181,4 +164,4 @@ function ModalAddInfos(props) {
 
 // render(<Modal />);
 
-export default ModalAddInfos;
+export default ModalAddLieux;

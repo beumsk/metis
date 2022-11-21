@@ -26,6 +26,7 @@ import Anniversaire from "./component/Administration/Anniversaire/Anniversaire";
 import Lieux from "./component/Administration/Lieux/Lieux";
 import "./styles/app.scss";
 import ProfilLieux from "./component/Administration/Lieux/Profil-Lieux/Profil-Lieux";
+import ProfilContact from "./component/Administration/Contact-Organisation/Profil-Contact/Profil-Contact";
 
 const ROLES = {
   User: "ROLE_USER",
@@ -50,6 +51,10 @@ function App() {
             <Route
               path="contactsorganisation"
               element={<ContactOrganisations />}
+            />
+            <Route
+              path="profil-contact/:idContact"
+              element={<ProfilContact />}
             />
             <Route path="lieux" element={<Lieux />} />
             <Route path="profil-lieux/:idLieux" element={<ProfilLieux />} />
