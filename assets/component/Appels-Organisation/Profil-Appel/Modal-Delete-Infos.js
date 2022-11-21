@@ -17,7 +17,7 @@ import Form from "react-bootstrap/Form";
 function ModalDeleteInfos(props) {
   const [show, setShow] = useState(false);
   const [auth, setAuth] = useState(useAuth());
-  let id = useParams().idLieux;
+  let id = useParams().idContact;
   var formData = new FormData();
   formData.append("id", id.toString());
   formData.append("pathString", props.link);

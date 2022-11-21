@@ -18,7 +18,7 @@ import ModalAddInfos from "./Modal-Add-Infos";
 import ModalDeleteInfos from "./Modal-Delete-Infos";
 const ProfilLieux = () => {
   const [auth, setAuth] = useState(useAuth());
-  let id = useParams().id;
+  let id = useParams().idContact;
   console.log(id);
   const [contactInformation, setContactInformation] = useState(null);
   const [lengthList, setLengthList] = useState(10);
@@ -26,7 +26,7 @@ const ProfilLieux = () => {
   const [tagsList, setTagsList] = useState(null);
   const [typeCollabList, setTypeCollabList] = useState(null);
   var formData = new FormData();
-  formData.append("id", useParams().idLieux);
+  formData.append("id", id);
   useEffect(() => {
     axios({
       method: "post",

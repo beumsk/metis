@@ -17,7 +17,7 @@ import InputTypeList from "../../../component/Input-Type-List";
 function ModalAddLieux(props) {
   const [show, setShow] = useState(false);
   const [auth, setAuth] = useState(useAuth());
-  let id = useParams().idLieux;
+  let id = useParams().idContact;
 
   // formData.append("pathString", props.link);
   const [infos, setInfos] = useState(null);
