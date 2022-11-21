@@ -200,7 +200,7 @@ class ContactsController extends AbstractController
             $contactInfos->setSugg($typeSugg);
         }
 
-        if ($type === "null") {
+        if ($type === "null" && $contactInfos->getSugg() !== "null") {
             $suggestion = $doctrine->getRepository(Suggestions::class)->find($idSugg);
             $contactInfos->setSugg($suggestion);
         }

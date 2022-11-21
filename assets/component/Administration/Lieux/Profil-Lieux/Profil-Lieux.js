@@ -104,9 +104,9 @@ const ProfilLieux = () => {
                       <>
                         {contInfo?.obj.map((e) => (
                           <span>
-                            {e.value === "Tags" ||
-                            e.value === "Type de Collaborateur"
-                              ? e.sugge.value + "test"
+                            {contInfo.value === "Tags" ||
+                            contInfo.value === "Type de Collaborateur"
+                              ? e.sugge.value
                               : e.valueInformations}
                             <ModalEditLieux
                               selectListCollab={typeCollabList}

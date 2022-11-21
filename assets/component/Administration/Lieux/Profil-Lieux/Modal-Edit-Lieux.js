@@ -23,7 +23,7 @@ function ModalEditLieux(props) {
   const [infos, setInfos] = useState(null);
   const [isSentRepport, setIsSentRepport] = useState(false);
   const [responseDatas, setResponseDatas] = useState(null);
-  const [type, setType] = useState(null);
+  const [type, setType] = useState(props?.infosAppels?.sugge?.id);
   const [elementsOpt, setElementsOpt] = useState(null);
   const [idPatient, setIdPatient] = useState(id);
 
