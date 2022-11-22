@@ -2,21 +2,21 @@
   "entrypoints": {
     "app": {
       "js": [
-        "/build/runtime.js",
-        "/build/vendors-node_modules_ckeditor_ckeditor5-build-classic_build_ckeditor_js-node_modules_ckeditor-e528d2.js",
-        "/build/app.js"
+        "/build/runtime.7cd1ab07.js",
+        "/build/630.bd8ddfcb.js",
+        "/build/app.8f5aeca9.js"
       ],
       "css": [
-        "/build/assets_styles_app_scss.css",
-        "/build/app.css"
+        "/build/408.d168c70f.css",
+        "/build/app.e9d5f572.css"
       ]
     },
     "global": {
       "js": [
-        "/build/runtime.js"
+        "/build/runtime.7cd1ab07.js"
       ],
       "css": [
-        "/build/assets_styles_app_scss.css"
+        "/build/408.d168c70f.css"
       ]
     }
   }

@@ -27,6 +27,8 @@ import Lieux from "./component/Administration/Lieux/Lieux";
 import "./styles/app.scss";
 import ProfilLieux from "./component/Administration/Lieux/Profil-Lieux/Profil-Lieux";
 import ProfilContact from "./component/Administration/Contact-Organisation/Profil-Contact/Profil-Contact";
+import EditPassword from "./component/User/User-Reset-Password";
+import EditProfile from "./component/User/User-Edit-Profile";
 
 const ROLES = {
   User: "ROLE_USER",
@@ -60,6 +62,8 @@ function App() {
             <Route path="profil-lieux/:idLieux" element={<ProfilLieux />} />
             <Route path="patients" element={<Patients />} />
             <Route path="anniversaire" element={<Anniversaire />} />
+            <Route path="edit-profile" element={<EditProfile />} />
+            <Route path="edit-password" element={<EditPassword />} />
             <Route
               exact
               path="appels-organisation"

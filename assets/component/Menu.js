@@ -101,9 +101,29 @@ const Menu = () => {
               </Dropdown> */}
 
               <Form_AddPatients></Form_AddPatients>
-              <Nav.Link onClick={signOut}>
-                <FontAwesomeIcon icon={faSignOut} />{" "}
-              </Nav.Link>
+
+              <Dropdown>
+                <Dropdown.Toggle
+                  style={{
+                    backgroundColor: "transparent",
+                    border: "transparent",
+                  }}
+                >
+                  User
+                </Dropdown.Toggle>
+
+                <Dropdown.Menu>
+                  <Dropdown.Item href="/edit-profile">
+                    Editer le profile
+                  </Dropdown.Item>
+                  <Dropdown.Item href="/edit-password">
+                    Editer le mot de passe
+                  </Dropdown.Item>
+                  <Dropdown.Item onClick={signOut}>
+                    Déconnexion <FontAwesomeIcon icon={faSignOut} />{" "}
+                  </Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
             </Nav>
 
             <Form.Select
