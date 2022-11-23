@@ -23,24 +23,24 @@ const Statistiques = () => {
 
   function exportCSV() {
     console.log(statValue);
-    if (statValue === "1") {
-      axios({
-        method: "get",
-        url: "/api/statistiques",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${auth.auth.accessToken}`,
-        },
+    let request = "/api/statistiques" + statValue;
+
+    axios({
+      method: "get",
+      url: request,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    })
+      .then(function (response) {
+        setResultCSV(response.data);
+        if (response.data) {
+          jsonToCsv(response.data);
+        }
+        exportFile();
       })
-        .then(function (response) {
-          setResultCSV(response.data);
-          if (response.data) {
-            jsonToCsv(response.data);
-          }
-          exportFile();
-        })
-        .catch(function (response) {});
-    }
+      .catch(function (response) {});
   }
 
   function jsonToCsv(items) {
@@ -65,7 +65,7 @@ const Statistiques = () => {
       // document.write(csv);
 
       var hiddenElement = document.createElement("a");
-      hiddenElement.href = "data:text/csv;charset=utf-8," + encodeURI(csv);
+      hiddenElement.href = "data:text/csv;charset=utf8," + encodeURI(csv);
       hiddenElement.target = "_blank";
 
       hiddenElement.download = "test.csv";
@@ -84,6 +84,11 @@ const Statistiques = () => {
       >
         <option>Selectionner un stat</option>
         <option value={1}>Stats1</option>
+        <option value={2}>Stats2</option>
+        <option value={3}>Stats3</option>
+        <option value={4}>Liste de personnes décédés sans date mises</option>
+        <option value={5}>Lister les patients ayant 2 états simultanés</option>
+        <option value={6}>Nombre de status part patients</option>
       </Form.Select>
       <a onClick={exportCSV}>export</a>
     </>
