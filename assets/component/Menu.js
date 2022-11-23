@@ -61,6 +61,8 @@ const Menu = () => {
                 Appels/Organisation
               </Nav.Link>
 
+              <Nav.Link href="/statistiques">Statistiques</Nav.Link>
+
               <Dropdown>
                 <Dropdown.Toggle
                   style={{
