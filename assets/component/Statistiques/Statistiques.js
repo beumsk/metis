@@ -89,7 +89,34 @@ const Statistiques = () => {
         <option value={4}>Liste de personnes décédés sans date mises</option>
         <option value={5}>Lister les patients ayant 2 états simultanés</option>
         <option value={6}>Nombre de status part patients</option>
+        <option value={7}>patients without status at reference date</option>
+        <option value={8}>patients without team at reference date</option>
+        <option value={9}>patients without birthdate</option>
+        <option value={10}>
+          Nombre de patients suivi par l'équipe rue au cours de la periode de
+          reference, en suivi ou pre-suivi actif, ayant une pathologie physique
+          chronique (inclus assuetude) et pour qui au moins une rencontre a été
+          réalisée dans la période de reference
+        </option>
       </Form.Select>
+      <option value={11}>
+        Nombre de patients suivi par l'équipe rue au cours de la periode de
+        reference, en suivi ou pre-suivi actif, ayant une pathologie physique
+        chronique (inclus assuetude) et pour qui au moins une rencontre a été
+        réalisée dans la période de reference
+      </option>
+      <option value={12}>
+        Nombre de patients suivi par l'équipe rue au cours de la periode de
+        reference, en suivi ou pre-suivi actif, ayant une pathologie physique
+        chronique (inclus assuetude) mais une rencontre n'a pas été forcement
+        réalisée dans la période de reference
+      </option>
+      <option value={13}>
+        Nombre de patients suivi par l'équipe rue au cours de la periode de
+        reference, en suivi ou pre-suivi actif, ayant une pathologie physique
+        chronique (inclus assuetude) mais une rencontre n'a pas été forcement
+        réalisée dans la période de reference - liste nominative
+      </option>
       <a onClick={exportCSV}>export</a>
     </>
   );
