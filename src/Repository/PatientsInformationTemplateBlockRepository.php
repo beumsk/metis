@@ -39,28 +39,24 @@ class PatientsInformationTemplateBlockRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return PatientsInformationTemplateBlock[] Returns an array of PatientsInformationTemplateBlock objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('p')
-//            ->andWhere('p.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('p.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    /**
+     * @return PatientsInformationTemplateBlock[] Returns an array of PatientsInformationTemplateBlock objects
+     */
+    public function findBlockElements(): array
+    {
+        return $this->createQueryBuilder('iftb')
+            ->orderBy('iftb.block_order', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
 
-//    public function findOneBySomeField($value): ?PatientsInformationTemplateBlock
-//    {
-//        return $this->createQueryBuilder('p')
-//            ->andWhere('p.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    //    public function findOneBySomeField($value): ?PatientsInformationTemplateBlock
+    //    {
+    //        return $this->createQueryBuilder('p')
+    //            ->andWhere('p.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->getQuery()
+    //            ->getOneOrNullResult()
+    //        ;
+    //    }
 }

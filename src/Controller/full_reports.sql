@@ -1102,555 +1102,556 @@ select '--------------------------------------------------------------';
 
 select 'TABLEAU 1 : NOMBRE DE PERSONNES AVEC QUI NOUS TRAVAILLONS';
 select 'Tableau 1.A. – Nouveaux signalements encodés';
-
-select 
-	s_stat.value as statut, count(p.hash) as nombre
+-- Statistiques 14
+-- select 
+-- 	s_stat.value as statut, count(p.hash) as nombre
 	
-from patients p
-	inner join 
-	(
-		SELECT
-					p.pati_id,
-					min(pi.start) as minstart
-				FROM
-					patients as p
-					inner join patients_information as pi on p.pati_id = pi.pati_id
-					inner join suggestions as s on s.sugg_id = pi.sugg_id
-				where
-					s.path_string like "/patient/fiche/statut-du-suivi/signalement%"
-					and pi.deleted_at is null
-					and p.deleted_at is null
-				group by
-					p.pati_id
-	) q on q.pati_id = p.pati_id 
+-- from patients p
+-- 	inner join 
+-- 	(
+-- 		SELECT
+-- 					p.pati_id,
+-- 					min(pi.start) as minstart
+-- 				FROM
+-- 					patients as p
+-- 					inner join patients_information as pi on p.pati_id = pi.pati_id
+-- 					inner join suggestions as s on s.sugg_id = pi.sugg_id
+-- 				where
+-- 					s.path_string like "/patient/fiche/statut-du-suivi/signalement%"
+-- 					and pi.deleted_at is null
+-- 					and p.deleted_at is null
+-- 				group by
+-- 					p.pati_id
+-- 	) q on q.pati_id = p.pati_id 
 	
-    inner  join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id 
-	inner  join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id 
-	inner  join patients_information pi_stat on pi_stat.pati_id = p.pati_id 
-	inner  join suggestions s_stat on s_stat.sugg_id = pi_stat.sugg_id 
+--     inner  join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id 
+-- 	inner  join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id 
+-- 	inner  join patients_information pi_stat on pi_stat.pati_id = p.pati_id 
+-- 	inner  join suggestions s_stat on s_stat.sugg_id = pi_stat.sugg_id 
 
-where 
-	q.minstart between COALESCE(pi_antenna.start, @past) and COALESCE (pi_antenna.end, @refdate)
-	and s_antenna.path_string like "/patient/suivi/antenne/%"
-	and pi_antenna.deleted_at is null
-	and s_antenna.value like @antenna 
+-- where 
+-- 	q.minstart between COALESCE(pi_antenna.start, @past) and COALESCE (pi_antenna.end, @refdate)
+-- 	and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 	and pi_antenna.deleted_at is null
+-- 	and s_antenna.value like @antenna 
 
-	and s_stat.path_string like "/patient/fiche/statut-du-suivi/signalement%"
-	and q.minstart  = pi_stat.start
-	and pi_stat.deleted_at is null
-    and pi_stat.start like @refyearwc
-group by s_stat.value;
+-- 	and s_stat.path_string like "/patient/fiche/statut-du-suivi/signalement%"
+-- 	and q.minstart  = pi_stat.start
+-- 	and pi_stat.deleted_at is null
+--     and pi_stat.start like @refyearwc
+-- group by s_stat.value;
 
 
 select 'Tableau 1.A. – Nouveaux signalements encodés - Liste nominative';
+-- statistiques 15
+-- select 
+-- 	s_stat.value as statut, p.hash, p.firstname, p.lastname, pi_stat.start as 'date enregistrement', minstart, s_antenna.value as 'antenne'
 
-select 
-	s_stat.value as statut, p.hash, p.firstname, p.lastname, pi_stat.start as 'date enregistrement', minstart, s_antenna.value as 'antenne'
-
-from patients p
-	inner join 
-	(
-		SELECT
-					p.pati_id,
-					min(pi.start) as minstart
-				FROM
-					patients as p
-					inner join patients_information as pi on p.pati_id = pi.pati_id
-					inner join suggestions as s on s.sugg_id = pi.sugg_id
-				where
-					s.path_string like "/patient/fiche/statut-du-suivi/signalement%"
-					and pi.deleted_at is null
-					and p.deleted_at is null
-				group by
-					p.pati_id
-	) q on q.pati_id = p.pati_id 
+-- from patients p
+-- 	inner join 
+-- 	(
+-- 		SELECT
+-- 					p.pati_id,
+-- 					min(pi.start) as minstart
+-- 				FROM
+-- 					patients as p
+-- 					inner join patients_information as pi on p.pati_id = pi.pati_id
+-- 					inner join suggestions as s on s.sugg_id = pi.sugg_id
+-- 				where
+-- 					s.path_string like "/patient/fiche/statut-du-suivi/signalement%"
+-- 					and pi.deleted_at is null
+-- 					and p.deleted_at is null
+-- 				group by
+-- 					p.pati_id
+-- 	) q on q.pati_id = p.pati_id 
 	
-    inner  join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id 
-	inner  join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id 
-	inner  join patients_information pi_stat on pi_stat.pati_id = p.pati_id 
-	inner  join suggestions s_stat on s_stat.sugg_id = pi_stat.sugg_id 
+--     inner  join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id 
+-- 	inner  join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id 
+-- 	inner  join patients_information pi_stat on pi_stat.pati_id = p.pati_id 
+-- 	inner  join suggestions s_stat on s_stat.sugg_id = pi_stat.sugg_id 
 
-where 
-	q.minstart between COALESCE(pi_antenna.start, @past) and COALESCE (pi_antenna.end, @refdate)
-	and s_antenna.path_string like "/patient/suivi/antenne/%"
-	and pi_antenna.deleted_at is null
-	and s_antenna.value like @antenna 
+-- where 
+-- 	q.minstart between COALESCE(pi_antenna.start, @past) and COALESCE (pi_antenna.end, @refdate)
+-- 	and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 	and pi_antenna.deleted_at is null
+-- 	and s_antenna.value like @antenna 
 
-	and s_stat.path_string like "/patient/fiche/statut-du-suivi/signalement%"
-	and q.minstart  = pi_stat.start
-	and pi_stat.deleted_at is null
-    and pi_stat.start like @refyearwc
-order by statut, hash;
+-- 	and s_stat.path_string like "/patient/fiche/statut-du-suivi/signalement%"
+-- 	and q.minstart  = pi_stat.start
+-- 	and pi_stat.deleted_at is null
+--     and pi_stat.start like @refyearwc
+-- order by statut, hash;
 			
 select 'Tableau 1.B. Nouveaux pré-suivis actifs encodes';
+-- statistiques 16
+-- select 
+-- 	s_stat.value as statut, count(p.hash) as nombre
+-- from patients p
+-- 	inner join 
+-- 	(
+-- 		SELECT
+-- 			p.pati_id, 
+-- 			min(pi.start) as minstart
+-- 		FROM
+-- 			patients as p
+-- 			inner join patients_information as pi on p.pati_id = pi.pati_id
+-- 			inner join suggestions as s on s.sugg_id = pi.sugg_id
+-- 		where
+-- 			s.path_string like "/patient/fiche/statut-du-suivi/pre-suivi-actif%"
+-- 			and pi.deleted_at is null
+-- 			and p.deleted_at is null
+-- 		group by
+-- 			p.pati_id
+-- 	) q on q.pati_id = p.pati_id 
+--     inner  join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id 
+-- 	inner  join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id 
+-- 	inner  join patients_information pi_stat on pi_stat.pati_id = p.pati_id 
+-- 	inner  join suggestions s_stat on s_stat.sugg_id = pi_stat.sugg_id 
 
-select 
-	s_stat.value as statut, count(p.hash) as nombre
-from patients p
-	inner join 
-	(
-		SELECT
-			p.pati_id, 
-			min(pi.start) as minstart
-		FROM
-			patients as p
-			inner join patients_information as pi on p.pati_id = pi.pati_id
-			inner join suggestions as s on s.sugg_id = pi.sugg_id
-		where
-			s.path_string like "/patient/fiche/statut-du-suivi/pre-suivi-actif%"
-			and pi.deleted_at is null
-			and p.deleted_at is null
-		group by
-			p.pati_id
-	) q on q.pati_id = p.pati_id 
-    inner  join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id 
-	inner  join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id 
-	inner  join patients_information pi_stat on pi_stat.pati_id = p.pati_id 
-	inner  join suggestions s_stat on s_stat.sugg_id = pi_stat.sugg_id 
+-- where 
+-- 	s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 	and pi_antenna.deleted_at is null
+-- 	and s_antenna.value like @antenna 
+-- 	and minstart between COALESCE(pi_antenna.start, @past) and COALESCE (pi_antenna.end, @refdate)
 
-where 
-	s_antenna.path_string like "/patient/suivi/antenne/%"
-	and pi_antenna.deleted_at is null
-	and s_antenna.value like @antenna 
-	and minstart between COALESCE(pi_antenna.start, @past) and COALESCE (pi_antenna.end, @refdate)
-
-	and s_stat.path_string like "/patient/fiche/statut-du-suivi/%"
-	and minstart = pi_stat.start
-	and pi_stat.deleted_at is null
-    and pi_stat.start like @refyearwc
-group by s_stat.value;
+-- 	and s_stat.path_string like "/patient/fiche/statut-du-suivi/%"
+-- 	and minstart = pi_stat.start
+-- 	and pi_stat.deleted_at is null
+--     and pi_stat.start like @refyearwc
+-- group by s_stat.value;
 
 
 select 'Tableau 1.B. Nouveaux pré-suivis actifs encodes - liste nominative';
+-- statistiques 17
+-- select 
+-- 	s_stat.value as statut, p.hash, p.firstname, p.lastname, pi_stat.start as 'date enregistrement', minstart, s_antenna.value as 'antenne'
 
-select 
-	s_stat.value as statut, p.hash, p.firstname, p.lastname, pi_stat.start as 'date enregistrement', minstart, s_antenna.value as 'antenne'
-
-from patients p
-	inner join 
-	(
-		SELECT
-					p.pati_id,
-					min(pi.start) as minstart
-				FROM
-					patients as p
-					inner join patients_information as pi on p.pati_id = pi.pati_id
-					inner join suggestions as s on s.sugg_id = pi.sugg_id
-				where
-					s.path_string like "/patient/fiche/statut-du-suivi/pre-suivi-actif%"
-					and pi.deleted_at is null
-					and p.deleted_at is null
-				group by
-					p.pati_id
-	) q on q.pati_id = p.pati_id 
+-- from patients p
+-- 	inner join 
+-- 	(
+-- 		SELECT
+-- 					p.pati_id,
+-- 					min(pi.start) as minstart
+-- 				FROM
+-- 					patients as p
+-- 					inner join patients_information as pi on p.pati_id = pi.pati_id
+-- 					inner join suggestions as s on s.sugg_id = pi.sugg_id
+-- 				where
+-- 					s.path_string like "/patient/fiche/statut-du-suivi/pre-suivi-actif%"
+-- 					and pi.deleted_at is null
+-- 					and p.deleted_at is null
+-- 				group by
+-- 					p.pati_id
+-- 	) q on q.pati_id = p.pati_id 
 	
-    inner  join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id 
-	inner  join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id 
-	inner  join patients_information pi_stat on pi_stat.pati_id = p.pati_id 
-	inner  join suggestions s_stat on s_stat.sugg_id = pi_stat.sugg_id 
+--     inner  join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id 
+-- 	inner  join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id 
+-- 	inner  join patients_information pi_stat on pi_stat.pati_id = p.pati_id 
+-- 	inner  join suggestions s_stat on s_stat.sugg_id = pi_stat.sugg_id 
 
-where 
-	q.minstart between COALESCE(pi_antenna.start, @past) and COALESCE (pi_antenna.end, @refdate)
-	and s_antenna.path_string like "/patient/suivi/antenne/%"
-	and pi_antenna.deleted_at is null
-	and s_antenna.value like @antenna 
+-- where 
+-- 	q.minstart between COALESCE(pi_antenna.start, @past) and COALESCE (pi_antenna.end, @refdate)
+-- 	and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 	and pi_antenna.deleted_at is null
+-- 	and s_antenna.value like @antenna 
 
-	and s_stat.path_string like "/patient/fiche/statut-du-suivi/pre-suivi-actif%"
-	and q.minstart  = pi_stat.start
-	and pi_stat.deleted_at is null
-    and pi_stat.start like @refyearwc
-order by statut, hash;
+-- 	and s_stat.path_string like "/patient/fiche/statut-du-suivi/pre-suivi-actif%"
+-- 	and q.minstart  = pi_stat.start
+-- 	and pi_stat.deleted_at is null
+--     and pi_stat.start like @refyearwc
+-- order by statut, hash;
 
 
 
 
 select 'Tableau 1.C. – Nombre de nouveaux suivis au cours de l’année';
-select 
-	s_stat.value as statut, count(p.hash) as nombre
-from patients p
-	inner join 
-	(
-		SELECT
-			p.pati_id, 
-			min(pi.start) as minstart
-		FROM
-			patients as p
-			inner join patients_information as pi on p.pati_id = pi.pati_id
-			inner join suggestions as s on s.sugg_id = pi.sugg_id
-		where
-			s.path_string like "/patient/fiche/statut-du-suivi/en-suivi"
-			and pi.deleted_at is null
-			and p.deleted_at is null
-		group by
-			p.pati_id
-	) q on q.pati_id = p.pati_id 
+-- statistiques 18
+-- select 
+-- 	s_stat.value as statut, count(p.hash) as nombre
+-- from patients p
+-- 	inner join 
+-- 	(
+-- 		SELECT
+-- 			p.pati_id, 
+-- 			min(pi.start) as minstart
+-- 		FROM
+-- 			patients as p
+-- 			inner join patients_information as pi on p.pati_id = pi.pati_id
+-- 			inner join suggestions as s on s.sugg_id = pi.sugg_id
+-- 		where
+-- 			s.path_string like "/patient/fiche/statut-du-suivi/en-suivi"
+-- 			and pi.deleted_at is null
+-- 			and p.deleted_at is null
+-- 		group by
+-- 			p.pati_id
+-- 	) q on q.pati_id = p.pati_id 
 	
-    inner  join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id 
-	inner  join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id 
-	inner  join patients_information pi_stat on pi_stat.pati_id = p.pati_id 
-	inner  join suggestions s_stat on s_stat.sugg_id = pi_stat.sugg_id 
+--     inner  join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id 
+-- 	inner  join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id 
+-- 	inner  join patients_information pi_stat on pi_stat.pati_id = p.pati_id 
+-- 	inner  join suggestions s_stat on s_stat.sugg_id = pi_stat.sugg_id 
 
-where 
-	s_antenna.path_string like "/patient/suivi/antenne/%"
-	and pi_antenna.deleted_at is null
-	and s_antenna.value like @antenna 
-	and minstart between COALESCE(pi_antenna.start, @past) and COALESCE (pi_antenna.end, @refdate)
+-- where 
+-- 	s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 	and pi_antenna.deleted_at is null
+-- 	and s_antenna.value like @antenna 
+-- 	and minstart between COALESCE(pi_antenna.start, @past) and COALESCE (pi_antenna.end, @refdate)
 
-	and s_stat.path_string like "/patient/fiche/statut-du-suivi/en-suivi"
-	and minstart = pi_stat.start
-	and pi_stat.deleted_at is null
-    and pi_stat.start like @refyearwc
-group by statut;
+-- 	and s_stat.path_string like "/patient/fiche/statut-du-suivi/en-suivi"
+-- 	and minstart = pi_stat.start
+-- 	and pi_stat.deleted_at is null
+--     and pi_stat.start like @refyearwc
+-- group by statut;
 
 
 select "Tableau 1.C. – Nombre de nouveaux suivis au cours de l’année - liste nominative";
-select 
-	s_stat.value as statut, p.hash, p.firstname, p.lastname, pi_stat.start as 'date enregistrement', s_antenna.value as 'antenne'
-from patients p
-	inner join 
-	(
-		SELECT
-			p.pati_id, 
-			min(pi.start) as minstart
-		FROM
-			patients as p
-			inner join patients_information as pi on p.pati_id = pi.pati_id
-			inner join suggestions as s on s.sugg_id = pi.sugg_id
-		where
-			s.path_string like "/patient/fiche/statut-du-suivi/en-suivi"
-			and pi.deleted_at is null
-			and p.deleted_at is null
-		group by
-			p.pati_id
-	) q on q.pati_id = p.pati_id 
+-- select 
+-- 	s_stat.value as statut, p.hash, p.firstname, p.lastname, pi_stat.start as 'date enregistrement', s_antenna.value as 'antenne'
+-- from patients p
+-- 	inner join 
+-- 	(
+-- 		SELECT
+-- 			p.pati_id, 
+-- 			min(pi.start) as minstart
+-- 		FROM
+-- 			patients as p
+-- 			inner join patients_information as pi on p.pati_id = pi.pati_id
+-- 			inner join suggestions as s on s.sugg_id = pi.sugg_id
+-- 		where
+-- 			s.path_string like "/patient/fiche/statut-du-suivi/en-suivi"
+-- 			and pi.deleted_at is null
+-- 			and p.deleted_at is null
+-- 		group by
+-- 			p.pati_id
+-- 	) q on q.pati_id = p.pati_id 
 	
-    inner  join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id 
-	inner  join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id 
-	inner  join patients_information pi_stat on pi_stat.pati_id = p.pati_id 
-	inner  join suggestions s_stat on s_stat.sugg_id = pi_stat.sugg_id 
+--     inner  join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id 
+-- 	inner  join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id 
+-- 	inner  join patients_information pi_stat on pi_stat.pati_id = p.pati_id 
+-- 	inner  join suggestions s_stat on s_stat.sugg_id = pi_stat.sugg_id 
 
-where 
-	s_antenna.path_string like "/patient/suivi/antenne/%"
-	and pi_antenna.deleted_at is null
-	and s_antenna.value like @antenna 
-	and minstart between COALESCE(pi_antenna.start, @past) and COALESCE (pi_antenna.end, @refdate)
+-- where 
+-- 	s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 	and pi_antenna.deleted_at is null
+-- 	and s_antenna.value like @antenna 
+-- 	and minstart between COALESCE(pi_antenna.start, @past) and COALESCE (pi_antenna.end, @refdate)
 
-	and s_stat.path_string like "/patient/fiche/statut-du-suivi/en-suivi%"
-	and minstart = pi_stat.start
-	and pi_stat.deleted_at is null
-    and pi_stat.start like @refyearwc
-order by statut, hash;
+-- 	and s_stat.path_string like "/patient/fiche/statut-du-suivi/en-suivi%"
+-- 	and minstart = pi_stat.start
+-- 	and pi_stat.deleted_at is null
+--     and pi_stat.start like @refyearwc
+-- order by statut, hash;
 
 
 
 select "Tableau 1.D. – Nombre de personnes passées par le suivi en cours d année";
 
-select 
-	count(pati_id) as 'Nombre de personnes passées par le suivi en cours d année'
-from 
-(
-		SELECT 
-            p.pati_id
-		FROM 
-			patients p 
-			inner join patients_information pi on p.pati_id = pi.pati_id 
-			inner join suggestions s on s.sugg_id = pi.sugg_id
-			inner join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id 
-			inner join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id 
-        where 
-			s_antenna.path_string like "/patient/suivi/antenne/%"
-			and pi_antenna.deleted_at is null
-			and s_antenna.value like @antenna
-			and pi.start between COALESCE(pi_antenna.start, @past) and COALESCE (pi_antenna.end, @refdate)
-			and p.deleted_at is null
-			and s.path_string like "/patient/fiche/statut-du-suivi/en-suivi" 
-			and pi.deleted_at is null
-			and pi.start < @nextyear0101  
-			and coalesce(pi.end, @refdate) >= concat(@refyear, "-01-01")
-		group by 
-			p.pati_id
-) r;
+-- select 
+-- 	count(pati_id) as 'Nombre de personnes passées par le suivi en cours d année'
+-- from 
+-- (
+-- 		SELECT 
+--             p.pati_id
+-- 		FROM 
+-- 			patients p 
+-- 			inner join patients_information pi on p.pati_id = pi.pati_id 
+-- 			inner join suggestions s on s.sugg_id = pi.sugg_id
+-- 			inner join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id 
+-- 			inner join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id 
+--         where 
+-- 			s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 			and pi_antenna.deleted_at is null
+-- 			and s_antenna.value like @antenna
+-- 			and pi.start between COALESCE(pi_antenna.start, @past) and COALESCE (pi_antenna.end, @refdate)
+-- 			and p.deleted_at is null
+-- 			and s.path_string like "/patient/fiche/statut-du-suivi/en-suivi" 
+-- 			and pi.deleted_at is null
+-- 			and pi.start < @nextyear0101  
+-- 			and coalesce(pi.end, @refdate) >= concat(@refyear, "-01-01")
+-- 		group by 
+-- 			p.pati_id
+-- ) r;
 
 
 select "Tableau 1.D. – Nombre de personnes passées par le suivi en cours d’année - liste nominative";
 
-SELECT 
-	p.pati_id,
-    p.hash,
-    p.firstname,
-    p.lastname,
-	pi.start,
-	pi.end
-FROM 
-	patients p 
-	inner join patients_information pi on p.pati_id = pi.pati_id 
-	inner join suggestions s on s.sugg_id = pi.sugg_id
-	inner join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id 
-	inner join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id 
-where 
-	s_antenna.path_string like "/patient/suivi/antenne/%"
-	and pi_antenna.deleted_at is null
-	and s_antenna.value like @antenna
-	and COALESCE(pi.start, makedate(year(@refdate), 1)) < COALESCE (pi_antenna.end, makedate(year(@refdate)+1, 1))
-	and COALESCE(pi.end, makedate(year(@refdate)+1, 1)) > COALESCE (pi_antenna.start, makedate(year(@refdate), 1))
-	and p.deleted_at is null
-	and s.path_string like "/patient/fiche/statut-du-suivi/en-suivi" 
-	and pi.deleted_at is null
-	and pi.start < makedate(year(@refdate)+1, 1)
-	and coalesce(pi.end, @refdate) >= makedate(year(@refdate), 1);
+-- SELECT 
+-- 	p.pati_id,
+--     p.hash,
+--     p.firstname,
+--     p.lastname,
+-- 	pi.start,
+-- 	pi.end
+-- FROM 
+-- 	patients p 
+-- 	inner join patients_information pi on p.pati_id = pi.pati_id 
+-- 	inner join suggestions s on s.sugg_id = pi.sugg_id
+-- 	inner join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id 
+-- 	inner join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id 
+-- where 
+-- 	s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 	and pi_antenna.deleted_at is null
+-- 	and s_antenna.value like @antenna
+-- 	and COALESCE(pi.start, makedate(year(@refdate), 1)) < COALESCE (pi_antenna.end, makedate(year(@refdate)+1, 1))
+-- 	and COALESCE(pi.end, makedate(year(@refdate)+1, 1)) > COALESCE (pi_antenna.start, makedate(year(@refdate), 1))
+-- 	and p.deleted_at is null
+-- 	and s.path_string like "/patient/fiche/statut-du-suivi/en-suivi" 
+-- 	and pi.deleted_at is null
+-- 	and pi.start < makedate(year(@refdate)+1, 1)
+-- 	and coalesce(pi.end, @refdate) >= makedate(year(@refdate), 1);
 
 
 select "Tableau 1.D.2. – Nombre de personnes passées par le post-suivi en cours d’année";
-Select 
-	count(pati_id) as "Nombre de personnes passées par le post-suivi en cours d'année"
-from 
-(
-		SELECT 
-            p.pati_id
-		FROM 
-			patients p 
-			inner join patients_information pi on p.pati_id = pi.pati_id 
-			inner join suggestions s on s.sugg_id = pi.sugg_id
-			inner join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id 
-			inner join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id 
-        where 
-			s_antenna.path_string like "/patient/suivi/antenne/%"
-			and pi_antenna.deleted_at is null
-			and s_antenna.value like @antenna
-			and pi.start between COALESCE(pi_antenna.start, @past) and COALESCE (pi_antenna.end, @refdate)
-			and p.deleted_at is null
-			and s.path_string like "/patient/fiche/statut-du-suivi/post-suivi" 
-			and pi.deleted_at is null
-			and pi.start < @nextyear0101  
-			and coalesce(pi.end, @refdate) >= concat(@refyear, "-01-01")
-		group by 
-			p.pati_id
-) r;
+-- Select 
+-- 	count(pati_id) as "Nombre de personnes passées par le post-suivi en cours d'année"
+-- from 
+-- (
+-- 		SELECT 
+--             p.pati_id
+-- 		FROM 
+-- 			patients p 
+-- 			inner join patients_information pi on p.pati_id = pi.pati_id 
+-- 			inner join suggestions s on s.sugg_id = pi.sugg_id
+-- 			inner join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id 
+-- 			inner join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id 
+--         where 
+-- 			s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 			and pi_antenna.deleted_at is null
+-- 			and s_antenna.value like @antenna
+-- 			and pi.start between COALESCE(pi_antenna.start, @past) and COALESCE (pi_antenna.end, @refdate)
+-- 			and p.deleted_at is null
+-- 			and s.path_string like "/patient/fiche/statut-du-suivi/post-suivi" 
+-- 			and pi.deleted_at is null
+-- 			and pi.start < @nextyear0101  
+-- 			and coalesce(pi.end, @refdate) >= concat(@refyear, "-01-01")
+-- 		group by 
+-- 			p.pati_id
+-- ) r;
 
 	
 select "Tableau 1.D.2. – Nombre de personnes passées par le post-suivi en cours d'année - liste nominative";
 
-SELECT 
-	p.pati_id,
-    p.hash,
-    p.firstname,
-    p.lastname,
-	pi.start,
-	pi.end
-FROM 
-	patients p 
-	inner join patients_information pi on p.pati_id = pi.pati_id 
-	inner join suggestions s on s.sugg_id = pi.sugg_id
-	inner join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id 
-	inner join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id 
-where 
-	s_antenna.path_string like "/patient/suivi/antenne/%"
-	and pi_antenna.deleted_at is null
-	and s_antenna.value like @antenna
-	and pi.start between COALESCE(pi_antenna.start, @past) and COALESCE (pi_antenna.end, @refdate)
-	and p.deleted_at is null
-	and s.path_string like "/patient/fiche/statut-du-suivi/post-suivi" 
-	and pi.deleted_at is null
-	and pi.start < @nextyear0101  
-	and coalesce(pi.end, @refdate) >= concat(@refyear, "-01-01")
-	and p.pati_id in 
-	(
-		SELECT 
-			p.pati_id
-		FROM 
-			patients p 
-			inner join patients_information pi on p.pati_id = pi.pati_id 
-			inner join suggestions s on s.sugg_id = pi.sugg_id
-			inner join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id 
-			inner join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id 
-		where 
-			s_antenna.path_string like "/patient/suivi/antenne/%"
-			and pi_antenna.deleted_at is null
-			and s_antenna.value like @antenna
-			and pi.start between COALESCE(pi_antenna.start, @past) and COALESCE (pi_antenna.end, @refdate)
-			and p.deleted_at is null
-			and s.path_string like "/patient/fiche/statut-du-suivi/post-suivi" 
-			and pi.deleted_at is null
-			and pi.start < @nextyear0101  
-			and coalesce(pi.end, @refdate) >= concat(@refyear, "-01-01")
-		group by 
-			p.pati_id
-	);
+-- SELECT 
+-- 	p.pati_id,
+--     p.hash,
+--     p.firstname,
+--     p.lastname,
+-- 	pi.start,
+-- 	pi.end
+-- FROM 
+-- 	patients p 
+-- 	inner join patients_information pi on p.pati_id = pi.pati_id 
+-- 	inner join suggestions s on s.sugg_id = pi.sugg_id
+-- 	inner join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id 
+-- 	inner join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id 
+-- where 
+-- 	s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 	and pi_antenna.deleted_at is null
+-- 	and s_antenna.value like @antenna
+-- 	and pi.start between COALESCE(pi_antenna.start, @past) and COALESCE (pi_antenna.end, @refdate)
+-- 	and p.deleted_at is null
+-- 	and s.path_string like "/patient/fiche/statut-du-suivi/post-suivi" 
+-- 	and pi.deleted_at is null
+-- 	and pi.start < @nextyear0101  
+-- 	and coalesce(pi.end, @refdate) >= concat(@refyear, "-01-01")
+-- 	and p.pati_id in 
+-- 	(
+-- 		SELECT 
+-- 			p.pati_id
+-- 		FROM 
+-- 			patients p 
+-- 			inner join patients_information pi on p.pati_id = pi.pati_id 
+-- 			inner join suggestions s on s.sugg_id = pi.sugg_id
+-- 			inner join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id 
+-- 			inner join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id 
+-- 		where 
+-- 			s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 			and pi_antenna.deleted_at is null
+-- 			and s_antenna.value like @antenna
+-- 			and pi.start between COALESCE(pi_antenna.start, @past) and COALESCE (pi_antenna.end, @refdate)
+-- 			and p.deleted_at is null
+-- 			and s.path_string like "/patient/fiche/statut-du-suivi/post-suivi" 
+-- 			and pi.deleted_at is null
+-- 			and pi.start < @nextyear0101  
+-- 			and coalesce(pi.end, @refdate) >= concat(@refyear, "-01-01")
+-- 		group by 
+-- 			p.pati_id
+-- 	);
 
 
 
 
 select 'Tableau 1.E. - Nombre total de personnes signalées, en pré-suivi actif, suivi et post-suivi';
-select 	
-	value, count(hash) as c 
-from 
-	(
-		SELECT 
-			p.hash, 
-			s.value, 
-			p.firstname, 
-			p.lastname, 
-			pi.start, 
-			pi.end 
-		FROM 
-			patients as p 
-			inner join patients_information as pi on p.pati_id = pi.pati_id 
-			inner join suggestions as s on s.sugg_id = pi.sugg_id 
-			inner join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id 
-			inner join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id 
-		where 
-			(
-				s.path_string like "/patient/fiche/statut-du-suivi/signalement%" 
-				or s.path_string like "/patient/fiche/statut-du-suivi/pre-suivi%" 
-				or s.path_string like "/patient/fiche/statut-du-suivi/6" 
-				or s.path_string like "/patient/fiche/statut-du-suivi/en-suivi" 
-				or s.path_string like "/patient/fiche/statut-du-suivi/post-suivi" 
-				or (
-					s.path_string like "/patient/fiche/statut-du-suivi/disparu" 
-					and pi.start like @refyearwc
-				) 
-				or (
-					s.path_string like "/patient/fiche/statut-du-suivi/decede" 
-					and pi.start like @refyearwc
-				)
-			) 
-			and (
-				@refdate BETWEEN pi.start 
-				and COALESCE(
-					pi.end, 
-					@nextyear0101
-				)
-			) 
-			and pi.deleted_at is null 
-			and p.deleted_at is null 
+-- select 	
+-- 	value, count(hash) as c 
+-- from 
+-- 	(
+-- 		SELECT 
+-- 			p.hash, 
+-- 			s.value, 
+-- 			p.firstname, 
+-- 			p.lastname, 
+-- 			pi.start, 
+-- 			pi.end 
+-- 		FROM 
+-- 			patients as p 
+-- 			inner join patients_information as pi on p.pati_id = pi.pati_id 
+-- 			inner join suggestions as s on s.sugg_id = pi.sugg_id 
+-- 			inner join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id 
+-- 			inner join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id 
+-- 		where 
+-- 			(
+-- 				s.path_string like "/patient/fiche/statut-du-suivi/signalement%" 
+-- 				or s.path_string like "/patient/fiche/statut-du-suivi/pre-suivi%" 
+-- 				or s.path_string like "/patient/fiche/statut-du-suivi/6" 
+-- 				or s.path_string like "/patient/fiche/statut-du-suivi/en-suivi" 
+-- 				or s.path_string like "/patient/fiche/statut-du-suivi/post-suivi" 
+-- 				or (
+-- 					s.path_string like "/patient/fiche/statut-du-suivi/disparu" 
+-- 					and pi.start like @refyearwc
+-- 				) 
+-- 				or (
+-- 					s.path_string like "/patient/fiche/statut-du-suivi/decede" 
+-- 					and pi.start like @refyearwc
+-- 				)
+-- 			) 
+-- 			and (
+-- 				@refdate BETWEEN pi.start 
+-- 				and COALESCE(
+-- 					pi.end, 
+-- 					@nextyear0101
+-- 				)
+-- 			) 
+-- 			and pi.deleted_at is null 
+-- 			and p.deleted_at is null 
 			
-			and s_antenna.path_string like "/patient/suivi/antenne/%"
-			and pi_antenna.deleted_at is null
-			and s_antenna.value like @antenna
-			and pi.start <= COALESCE (pi_antenna.end, @refdate)
-			and coalesce(pi.end, @refdate) >= coalesce(pi_antenna.start, @past) 
+-- 			and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 			and pi_antenna.deleted_at is null
+-- 			and s_antenna.value like @antenna
+-- 			and pi.start <= COALESCE (pi_antenna.end, @refdate)
+-- 			and coalesce(pi.end, @refdate) >= coalesce(pi_antenna.start, @past) 
 
-		order by 
-			s.value, 
-			p.firstname, 
-			p.lastname, 
-			pi.start
-	) q 
-group by value;
+-- 		order by 
+-- 			s.value, 
+-- 			p.firstname, 
+-- 			p.lastname, 
+-- 			pi.start
+-- 	) q 
+-- group by value;
 
 
 select 'Tableau 1.E. - Nombre total de personnes signalées, en pré-suivi actif, suivi et post-suivi - liste nominative';
-select 
-	value, 
-	firstname, 
-	lastname, 
-	hash, 
-	start as debut, 
-	COALESCE(end, "en cours") as fin 
-from 
-	(
-		SELECT 
-			p.hash, 
-			s.value, 
-			p.firstname, 
-			p.lastname, 
-			pi.start, 
-			pi.end 
-		FROM 
-			patients as p 
-			inner join patients_information as pi on p.pati_id = pi.pati_id 
-			inner join suggestions as s on s.sugg_id = pi.sugg_id 
-			inner join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id 
-			inner join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id 
-		where 
-			(
-				s.path_string like "/patient/fiche/statut-du-suivi/signalement%" 
-				or s.path_string like "/patient/fiche/statut-du-suivi/pre-suivi%" 
-				or s.path_string like "/patient/fiche/statut-du-suivi/6" 
-				or s.path_string like "/patient/fiche/statut-du-suivi/en-suivi" 
-				or s.path_string like "/patient/fiche/statut-du-suivi/post-suivi" 
-				or (
-					s.path_string like "/patient/fiche/statut-du-suivi/disparu" 
-					and pi.start like @refyearwc
-				) 
-				or (
-					s.path_string like "/patient/fiche/statut-du-suivi/decede" 
-					and pi.start like @refyearwc
-				)
-			) 
-			and (
-				@refdate BETWEEN pi.start 
-				and COALESCE(
-					pi.end, 
-					@nextyear0101
-				)
-			) 
-			and pi.deleted_at is null 
-			and p.deleted_at is null 
+-- select 
+-- 	value, 
+-- 	firstname, 
+-- 	lastname, 
+-- 	hash, 
+-- 	start as debut, 
+-- 	COALESCE(end, "en cours") as fin 
+-- from 
+-- 	(
+-- 		SELECT 
+-- 			p.hash, 
+-- 			s.value, 
+-- 			p.firstname, 
+-- 			p.lastname, 
+-- 			pi.start, 
+-- 			pi.end 
+-- 		FROM 
+-- 			patients as p 
+-- 			inner join patients_information as pi on p.pati_id = pi.pati_id 
+-- 			inner join suggestions as s on s.sugg_id = pi.sugg_id 
+-- 			inner join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id 
+-- 			inner join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id 
+-- 		where 
+-- 			(
+-- 				s.path_string like "/patient/fiche/statut-du-suivi/signalement%" 
+-- 				or s.path_string like "/patient/fiche/statut-du-suivi/pre-suivi%" 
+-- 				or s.path_string like "/patient/fiche/statut-du-suivi/6" 
+-- 				or s.path_string like "/patient/fiche/statut-du-suivi/en-suivi" 
+-- 				or s.path_string like "/patient/fiche/statut-du-suivi/post-suivi" 
+-- 				or (
+-- 					s.path_string like "/patient/fiche/statut-du-suivi/disparu" 
+-- 					and pi.start like @refyearwc
+-- 				) 
+-- 				or (
+-- 					s.path_string like "/patient/fiche/statut-du-suivi/decede" 
+-- 					and pi.start like @refyearwc
+-- 				)
+-- 			) 
+-- 			and (
+-- 				@refdate BETWEEN pi.start 
+-- 				and COALESCE(
+-- 					pi.end, 
+-- 					@nextyear0101
+-- 				)
+-- 			) 
+-- 			and pi.deleted_at is null 
+-- 			and p.deleted_at is null 
 			
-			and s_antenna.path_string like "/patient/suivi/antenne/%"
-			and pi_antenna.deleted_at is null
-			and s_antenna.value like @antenna			
-			and pi.start <= COALESCE (pi_antenna.end, @refdate)
-			and coalesce(pi.end, @refdate) >= coalesce(pi_antenna.start, @past) 
+-- 			and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 			and pi_antenna.deleted_at is null
+-- 			and s_antenna.value like @antenna			
+-- 			and pi.start <= COALESCE (pi_antenna.end, @refdate)
+-- 			and coalesce(pi.end, @refdate) >= coalesce(pi_antenna.start, @past) 
 
-	) q 
-order by 
-	value, 
-	firstname, 
-	lastname, 
-	debut;
+-- 	) q 
+-- order by 
+-- 	value, 
+-- 	firstname, 
+-- 	lastname, 
+-- 	debut;
 
 					
 					
 					
 
 select 'Tableau 1.F/G. – Nombre de nouveaux patients Housing First au cours de l’année';
-select 
-	r.programme, count(hash) as nombre
-from 
-(
-	select  
-		s.value as programme,
-		p.hash,
-		p.firstname,
-		p.lastname,
-		pi.start
-	from 
-	(
-		select
-			p.pati_id,
-			min(pi.start) as minstart
-		FROM
-			patients as p
-			inner join patients_information as pi on p.pati_id = pi.pati_id
-			inner join suggestions as s on s.sugg_id = pi.sugg_id
-			inner  join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id 
-			inner  join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id 
-		where
-			s.path_string like "/patient/suivi/programme/housing-%"
-			and pi.deleted_at is null
-			and p.deleted_at is null
+-- select 
+-- 	r.programme, count(hash) as nombre
+-- from 
+-- (
+-- 	select  
+-- 		s.value as programme,
+-- 		p.hash,
+-- 		p.firstname,
+-- 		p.lastname,
+-- 		pi.start
+-- 	from 
+-- 	(
+-- 		select
+-- 			p.pati_id,
+-- 			min(pi.start) as minstart
+-- 		FROM
+-- 			patients as p
+-- 			inner join patients_information as pi on p.pati_id = pi.pati_id
+-- 			inner join suggestions as s on s.sugg_id = pi.sugg_id
+-- 			inner  join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id 
+-- 			inner  join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id 
+-- 		where
+-- 			s.path_string like "/patient/suivi/programme/housing-%"
+-- 			and pi.deleted_at is null
+-- 			and p.deleted_at is null
 			
-			and s_antenna.path_string like "/patient/suivi/antenne/%"
-			and pi_antenna.deleted_at is null
-			and s_antenna.value like @antenna 
-			and pi.start <= COALESCE (pi_antenna.end, @refdate)
-			and coalesce(pi.end, @refdate) >= coalesce(pi_antenna.start, @past) 
+-- 			and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 			and pi_antenna.deleted_at is null
+-- 			and s_antenna.value like @antenna 
+-- 			and pi.start <= COALESCE (pi_antenna.end, @refdate)
+-- 			and coalesce(pi.end, @refdate) >= coalesce(pi_antenna.start, @past) 
 
-		group by p.pati_id
-	) q 
-	inner join patients as p on p.pati_id = q.pati_id
-	inner join patients_information as pi on p.pati_id = pi.pati_id and pi.start = q.minstart
-	inner join suggestions as s on s.sugg_id = pi.sugg_id
+-- 		group by p.pati_id
+-- 	) q 
+-- 	inner join patients as p on p.pati_id = q.pati_id
+-- 	inner join patients_information as pi on p.pati_id = pi.pati_id and pi.start = q.minstart
+-- 	inner join suggestions as s on s.sugg_id = pi.sugg_id
 
-	where 
-		s.path_string like "/patient/suivi/programme/housing-%"
-		and pi.deleted_at is null
-		and left(pi.start,4) = @refyear
-	order by s.value, hash
-) r 
-group by programme;
+-- 	where 
+-- 		s.path_string like "/patient/suivi/programme/housing-%"
+-- 		and pi.deleted_at is null
+-- 		and left(pi.start,4) = @refyear
+-- 	order by s.value, hash
+-- ) r 
+-- group by programme;
 
 
 
@@ -1659,45 +1660,45 @@ select "Tableau 1.F/G. – Nombre de nouveaux patients Housing First au cours de
 
 
 
-select  
-	s.value as programme,
-	p.hash,
-	p.firstname,
-	p.lastname,
-	pi.start
-from 
-(
-	select
-		p.pati_id,
-		min(pi.start) as minstart
-	FROM
-		patients as p
-		inner join patients_information as pi on p.pati_id = pi.pati_id
-		inner join suggestions as s on s.sugg_id = pi.sugg_id
-		inner  join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id 
-		inner  join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id 
-	where
-		s.path_string like "/patient/suivi/programme/housing-%"
-		and pi.deleted_at is null
-		and p.deleted_at is null
+-- select  
+-- 	s.value as programme,
+-- 	p.hash,
+-- 	p.firstname,
+-- 	p.lastname,
+-- 	pi.start
+-- from 
+-- (
+-- 	select
+-- 		p.pati_id,
+-- 		min(pi.start) as minstart
+-- 	FROM
+-- 		patients as p
+-- 		inner join patients_information as pi on p.pati_id = pi.pati_id
+-- 		inner join suggestions as s on s.sugg_id = pi.sugg_id
+-- 		inner  join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id 
+-- 		inner  join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id 
+-- 	where
+-- 		s.path_string like "/patient/suivi/programme/housing-%"
+-- 		and pi.deleted_at is null
+-- 		and p.deleted_at is null
 		
-		and s_antenna.path_string like "/patient/suivi/antenne/%"
-		and pi_antenna.deleted_at is null
-		and s_antenna.value like @antenna 
-		and pi.start <= COALESCE (pi_antenna.end, @refdate)
-		and coalesce(pi.end, @refdate) >= coalesce(pi_antenna.start, @past) 
+-- 		and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 		and pi_antenna.deleted_at is null
+-- 		and s_antenna.value like @antenna 
+-- 		and pi.start <= COALESCE (pi_antenna.end, @refdate)
+-- 		and coalesce(pi.end, @refdate) >= coalesce(pi_antenna.start, @past) 
 
-	group by p.pati_id
-) q 
-inner join patients as p on p.pati_id = q.pati_id
-inner join patients_information as pi on p.pati_id = pi.pati_id and pi.start = q.minstart
-inner join suggestions as s on s.sugg_id = pi.sugg_id
+-- 	group by p.pati_id
+-- ) q 
+-- inner join patients as p on p.pati_id = q.pati_id
+-- inner join patients_information as pi on p.pati_id = pi.pati_id and pi.start = q.minstart
+-- inner join suggestions as s on s.sugg_id = pi.sugg_id
 
-where 
-	s.path_string like "/patient/suivi/programme/housing-%"
-	and pi.deleted_at is null
-	and left(pi.start,4) = @refyear
-order by s.value, hash;
+-- where 
+-- 	s.path_string like "/patient/suivi/programme/housing-%"
+-- 	and pi.deleted_at is null
+-- 	and left(pi.start,4) = @refyear
+-- order by s.value, hash;
 
 
 

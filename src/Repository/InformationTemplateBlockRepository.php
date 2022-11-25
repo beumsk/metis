@@ -71,20 +71,21 @@ class InformationTemplateBlockRepository extends ServiceEntityRepository
         return $query->getResult();
     }
 
-    //    /**
-    //     * @return InformationTemplateBlock[] Returns an array of InformationTemplateBlock objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('i')
-    //            ->andWhere('i.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('i.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    /**
+     * @return InformationTemplateBlock[] Returns an array of InformationTemplateBlock objects
+     */
+    public function findByExampleField(): array
+    {
+
+        $value = 'patient';
+        return $this->createQueryBuilder('i')
+            ->andWhere('i.block_type = :val')
+            ->setParameter('val', $value)
+            ->orderBy('i.block_order', 'ASC')
+            //    ->setMaxResults(10)
+            ->getQuery()
+            ->getResult();
+    }
 
     //    public function findOneBySomeField($value): ?InformationTemplateBlock
     //    {

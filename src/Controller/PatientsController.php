@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\FollowupGoals;
 use App\Entity\FollowupReports;
+use App\Entity\InformationTemplateBlock;
 use App\Entity\InformationTemplateElement;
 use App\Entity\Medias;
 use App\Entity\Patients;
@@ -156,6 +157,8 @@ class PatientsController extends AbstractController
         return $this->json($patient);
     }
 
+
+
     #[Route('/api/patientsInformationByPatients', name: 'app_patientsInformationByPatients')]
     public function getPatientsInformationByPatients(ManagerRegistry $doctrine, Request $request,  SerializerInterface $serializer)
     {
@@ -174,12 +177,15 @@ class PatientsController extends AbstractController
         // dd($val);
         foreach ($templateElement as $key) {
             $te = $key->getId();
-            foreach ($patientInfo as $pati) {
-                if ($pati->getItel()->getId() === $key->getId()) {
-                    $test[] = $pati;
-                    // dd($pati);
-                    if ($pati->getDeletedAt() === null) {
-                        $key->setPatientInformation($pati);
+            // dd(count($patientInfo));
+            if (count($patientInfo) > 0) {
+                foreach ($patientInfo as $pati) {
+                    if ($pati->getItel()->getId() === $key->getId()) {
+                        $test[] = $pati;
+                        // dd($pati);
+                        if ($pati->getDeletedAt() === null) {
+                            $key->setPatientInformation($pati);
+                        }
                     }
                 }
             }
@@ -192,7 +198,7 @@ class PatientsController extends AbstractController
 
             foreach ($suggestionElement as $sugg) {
 
-                $test[] = $pati;
+                // $test[] = $pati;
                 if ($sugg->getParentSugg() !== null && $sugg->getId() === $key->getSuge()->getId()) {
                     $s = $doctrine->getRepository(Suggestions::class)->findBy(["parentSugg" => $sugg->getId()]);
 

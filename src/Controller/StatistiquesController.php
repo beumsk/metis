@@ -24,31 +24,33 @@ class StatistiquesController extends AbstractController
     public $initDate;
     public $currentDate;
     public $refDate;
-    public $refYear;
     public $antennainit;
     public $antenna;
     public $current_quarter;
     public $quarterenddate;
     public $query_date;
     public $startDate;
+    public $nextyear0101;
+    public $refYear;
 
     public function __construct(
         $quarterstartdate = null,
         $initDate = null,
         $currentDate = null,
         $refDate = null,
-        $refYear = null,
         $antennainit = 'Bruxelles',
         $antenna = null,
         $current_quarter = null,
         $quarterenddate = null,
         $query_date = null,
-        $startDate = null
+        $startDate = null,
+        $nextyear0101 = null,
+        $refYear = null
     ) {
         $initDate = 'referencedatesh';
         $currentDate = '2022-11-24';
-        $refDate = ($initDate === 'referencedatesh') ? date('Y-m-d') : $initDate;
-        $refYear = date('Y');
+        $refDate = ($initDate === 'referencedatesh') ? date('Y-m-d') : '2021-01-01';
+
         $antennainit = 'Bruxelles';
         $antenna = ($initDate === 'Liège') ? 'Liège' : 'Bruxelles';
         $current_quarter = ceil(date('n') / 3);
@@ -56,16 +58,17 @@ class StatistiquesController extends AbstractController
         $quarterenddate = date('Y-m-t', strtotime(date('Y') . '-' . (($current_quarter * 3)) . '-1'));
         $query_date = '2021-01-10';
         $startDate = date('Y-m-01', strtotime($query_date));
-        $a_date = "2022-01-30";
+        $a_date = "2021-01-30";
         $endDate = date("Y-m-t", strtotime($a_date));
         $nextYear = date('Y', strtotime('+1 year'));
+
         $previousYear = date("Y", strtotime("-1 year"));
         $refyearwc = date('Y') . "%";
         $past = "1901-01-01";
         $nextyear0101 = $nextYear . "-01-01";
+        $refYear = date('Y');
 
-
-
+        // dd($refDate);
 
         $this->antennainit = $antennainit;
         $this->startDate = $startDate;
@@ -74,7 +77,1009 @@ class StatistiquesController extends AbstractController
         $this->past = $past;
         $this->refDate = $refDate;
         $this->refyearwc = $refyearwc;
+        $this->nextyear0101 = $nextyear0101;
+        $this->refYear = $refYear;
     }
+
+    #[Route('/api/statistiques28', name: 'app_statistiques28')]
+    public function request28()
+    {
+
+        // modifiée
+        $conn = new mysqli(StatistiquesController::SERVERNAME, StatistiquesController::USERNAME, StatistiquesController::PASSWORD, StatistiquesController::DBNAME);
+
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+
+
+        // dd($this->refYear);
+
+        // $sql = "SELECT * FROM patients WHERE antenna = '" . $this->antennainit . "'";
+        $sql = "SELECT
+                    s.value as programme,
+                    count(p.id) as nombre
+                FROM 
+                    patients as p
+                    inner join patients_information as pi on p.id = pi.pati_id
+                    inner join suggestions as s on s.id = pi.sugg_id
+                    inner join patients_information pi_antenna on pi_antenna.pati_id = p.id
+                    inner join suggestions s_antenna on s_antenna.id = pi_antenna.sugg_id
+                    inner join patients_information pi_status on pi_status.pati_id = p.id
+                    inner join suggestions s_status on s_status.id = pi_status.id
+                where
+                    s.path_string like '/patient/suivi/programme/housing-%'
+                    and '" . $this->refDate . "' BETWEEN pi.start and COALESCE(pi.end, '" . $this->nextyear0101 . "')
+                    and pi.deleted_at is null
+                    and p.deleted_at is null
+                    and s_antenna.path_string like '/patient/suivi/antenne/%'
+                    and pi_antenna.deleted_at is null
+                    and s_antenna.value like '" . $this->antenna . "'
+                    and pi.start <= COALESCE (pi_antenna.end, '" . $this->refDate . "')
+                    and coalesce(pi.end, '" . $this->refDate . "') >= coalesce(pi_antenna.start, '" . $this->past . "') 
+                    and s_status.path_string like '/patient/fiche/statut-du-suivi/%'
+                    and '" . $this->refDate . "' BETWEEN pi_status.start and COALESCE(pi_status.end, '" . $this->nextyear0101 . "')
+                    and pi_status.deleted_at is null
+                    and s_status.path_string not like '/patient/fiche/statut-du-suivi/decede'
+                    and s_status.path_string not like '/patient/fiche/statut-du-suivi/disparu'
+                group by 
+                    s.value;
+                ";
+
+        $result = $conn->query($sql);
+
+
+        if ($result->num_rows > 0) {
+            $resultJson = [];
+            while ($row = $result->fetch_assoc()) {
+                header("Content-type: application/json; charset=utf-8");
+                array_push($resultJson, $row);
+            }
+            // dd($this->json($resultJson));
+            return $this->json($resultJson);
+        } else {
+            return $this->json("Pas de résultats pour l'instant");
+        }
+        $conn->close();
+    }
+
+    #[Route('/api/statistiques27', name: 'app_statistiques27')]
+    public function request27()
+    {
+
+        // modifiée
+        $conn = new mysqli(StatistiquesController::SERVERNAME, StatistiquesController::USERNAME, StatistiquesController::PASSWORD, StatistiquesController::DBNAME);
+
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+
+
+        // dd($this->refYear);
+
+        // $sql = "SELECT * FROM patients WHERE antenna = '" . $this->antennainit . "'";
+        $sql = "select  
+                    s.value as programme,
+                    p.hash,
+                    p.firstname,
+                    p.lastname,
+                    pi.start
+                from 
+                (
+                    select
+                        p.id,
+                        min(pi.start) as minstart
+                    FROM
+                        patients as p
+                        inner join patients_information as pi on p.id = pi.pati_id
+                        inner join suggestions as s on s.id = pi.sugg_id
+                        inner  join patients_information pi_antenna on pi_antenna.pati_id = p.id 
+                        inner  join suggestions s_antenna on s_antenna.id = pi_antenna.sugg_id 
+                    where
+                        s.path_string like '/patient/suivi/programme/housing-%'
+                        and pi.deleted_at is null
+                        and p.deleted_at is null
+                        
+                        and s_antenna.path_string like '/patient/suivi/antenne/%'
+                        and pi_antenna.deleted_at is null
+                        and s_antenna.value like '" . $this->antenna . "' 
+                        and pi.start <= COALESCE (pi_antenna.end, '" . $this->refDate . "')
+                        and coalesce(pi.end, '" . $this->refDate . "') >= coalesce(pi_antenna.start, '" . $this->past . "') 
+                
+                    group by p.id
+                ) q 
+                inner join patients as p on p.id = q.id
+                inner join patients_information as pi on p.id = pi.pati_id and pi.start = q.minstart
+                inner join suggestions as s on s.id = pi.sugg_id
+                
+                where 
+                    s.path_string like '/patient/suivi/programme/housing-%'
+                    and pi.deleted_at is null
+                    and left(pi.start,4) = '" . $this->refYear . "'
+                order by s.value, hash";
+
+        $result = $conn->query($sql);
+
+
+        if ($result->num_rows > 0) {
+            $resultJson = [];
+            while ($row = $result->fetch_assoc()) {
+                header("Content-type: application/json; charset=utf-8");
+                array_push($resultJson, $row);
+            }
+            // dd($this->json($resultJson));
+            return $this->json($resultJson);
+        } else {
+            return $this->json("Pas de résultats pour l'instant");
+        }
+        $conn->close();
+    }
+
+
+    #[Route('/api/statistiques26', name: 'app_statistiques26')]
+    public function request26()
+    {
+
+        // modifiée
+        $conn = new mysqli(StatistiquesController::SERVERNAME, StatistiquesController::USERNAME, StatistiquesController::PASSWORD, StatistiquesController::DBNAME);
+
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+
+
+        // dd($this->refYear);
+
+        // $sql = "SELECT * FROM patients WHERE antenna = '" . $this->antennainit . "'";
+        $sql = "select 
+                    r.programme, count(id) as nombre
+                from 
+                (
+                    select  
+                        s.value as programme,
+                        p.id,
+                        p.firstname,
+                        p.lastname,
+                        pi.start
+                    from 
+                    (
+                        select
+                            p.id,
+                            min(pi.start) as minstart
+                        FROM
+                            patients as p
+                            inner join patients_information as pi on p.id = pi.pati_id
+                            inner join suggestions as s on s.id = pi.sugg_id
+                            inner join patients_information pi_antenna on pi_antenna.pati_id = p.id 
+                            inner join suggestions s_antenna on s_antenna.id = pi_antenna.sugg_id 
+                        where
+                            s.path_string like '/patient/suivi/programme/housing-%'
+                            and pi.deleted_at is null
+                            and p.deleted_at is null
+                            
+                            and s_antenna.path_string like '/patient/suivi/antenne/%'
+                            and pi_antenna.deleted_at is null
+                            and s_antenna.value like '" . $this->antenna . "' 
+                            and pi.start <= COALESCE (pi_antenna.end, '" . $this->refDate . "')
+                            and coalesce(pi.end, '" . $this->refDate . "') >= coalesce(pi_antenna.start, '" . $this->past . "') 
+                
+                        group by p.id
+                    ) q 
+                    inner join patients as p on p.id = q.id
+                    inner join patients_information as pi on p.id = pi.pati_id and pi.start = q.minstart
+                    inner join suggestions as s on s.id = pi.sugg_id
+                
+                    where 
+                        s.path_string like '/patient/suivi/programme/housing-%'
+                        and pi.deleted_at is null
+                        and left(pi.start,4) = '" . $this->refYear . "'
+                    order by s.value, id
+                ) r 
+                group by programme;
+                ";
+
+        $result = $conn->query($sql);
+
+
+        if ($result->num_rows > 0) {
+            $resultJson = [];
+            while ($row = $result->fetch_assoc()) {
+                header("Content-type: application/json; charset=utf-8");
+                array_push($resultJson, $row);
+            }
+            // dd($this->json($resultJson));
+            return $this->json($resultJson);
+        } else {
+            return $this->json("Pas de résultats pour l'instant");
+        }
+        $conn->close();
+    }
+
+
+    #[Route('/api/statistiques25', name: 'app_statistiques25')]
+    public function request25()
+    {
+
+        // modifiée
+        $conn = new mysqli(StatistiquesController::SERVERNAME, StatistiquesController::USERNAME, StatistiquesController::PASSWORD, StatistiquesController::DBNAME);
+
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+
+
+        // dd($this->refYear);
+
+        // $sql = "SELECT * FROM patients WHERE antenna = '" . $this->antennainit . "'";
+        $sql = "select 
+                    value, 
+                    firstname, 
+                    lastname, 
+                    hash, 
+                    start as debut, 
+                    COALESCE(end, 'en cours') as fin 
+                from 
+                    (
+                        SELECT 
+                            p.hash, 
+                            s.value, 
+                            p.firstname, 
+                            p.lastname, 
+                            pi.start, 
+                            pi.end 
+                        FROM 
+                            patients as p 
+                            inner join patients_information as pi on p.id = pi.pati_id 
+                            inner join suggestions as s on s.id = pi.sugg_id 
+                            inner join patients_information pi_antenna on pi_antenna.pati_id = p.id 
+                            inner join suggestions s_antenna on s_antenna.id = pi_antenna.sugg_id 
+                        where 
+                            (
+                                s.path_string like '/patient/fiche/statut-du-suivi/signalement%'
+                                or s.path_string like '/patient/fiche/statut-du-suivi/pre-suivi%'
+                                or s.path_string like '/patient/fiche/statut-du-suivi/6'
+                                or s.path_string like '/patient/fiche/statut-du-suivi/en-suivi'
+                                or s.path_string like '/patient/fiche/statut-du-suivi/post-suivi'
+                                or (
+                                    s.path_string like '/patient/fiche/statut-du-suivi/disparu'
+                                    and pi.start like '" . $this->refyearwc . "'
+                                ) 
+                                or (
+                                    s.path_string like '/patient/fiche/statut-du-suivi/decede' 
+                                    and pi.start like '" . $this->refyearwc . "'
+                                )
+                            ) 
+                            and (
+                                '" . $this->refDate . "' BETWEEN pi.start 
+                                and COALESCE(
+                                    pi.end, 
+                                    '" . $this->nextyear0101 . "'
+                                )
+                            ) 
+                            and pi.deleted_at is null 
+                            and p.deleted_at is null 
+                            
+                            and s_antenna.path_string like '/patient/suivi/antenne/%'
+                            and pi_antenna.deleted_at is null
+                            and s_antenna.value like '" . $this->antenna . "'			
+                            and pi.start <= COALESCE (pi_antenna.end, '" . $this->refDate . "')
+                            and coalesce(pi.end, '" . $this->refDate . "') >= coalesce(pi_antenna.start, '" . $this->past . "') 
+                
+                    ) q 
+                order by 
+                    value, 
+                    firstname, 
+                    lastname, 
+                    debut";
+
+        $result = $conn->query($sql);
+
+
+        if ($result->num_rows > 0) {
+            $resultJson = [];
+            while ($row = $result->fetch_assoc()) {
+                header("Content-type: application/json; charset=utf-8");
+                array_push($resultJson, $row);
+            }
+            // dd($this->json($resultJson));
+            return $this->json($resultJson);
+        } else {
+            return $this->json("Pas de résultats pour l'instant");
+        }
+        $conn->close();
+    }
+
+
+    #[Route('/api/statistiques24', name: 'app_statistiques24')]
+    public function request24()
+    {
+
+        // modifiée
+        $conn = new mysqli(StatistiquesController::SERVERNAME, StatistiquesController::USERNAME, StatistiquesController::PASSWORD, StatistiquesController::DBNAME);
+
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+
+
+        // dd($this->refYear);
+
+        // $sql = "SELECT * FROM patients WHERE antenna = '" . $this->antennainit . "'";
+        $sql = "select 	
+                    value, count(hash) as c 
+                from 
+                    (
+                        SELECT 
+                            p.hash, 
+                            s.value, 
+                            p.firstname, 
+                            p.lastname, 
+                            pi.start, 
+                            pi.end 
+                        FROM 
+                            patients as p 
+                            inner join patients_information as pi on p.id = pi.pati_id 
+                            inner join suggestions as s on s.id = pi.sugg_id 
+                            inner join patients_information pi_antenna on pi_antenna.pati_id = p.id 
+                            inner join suggestions s_antenna on s_antenna.id = pi_antenna.sugg_id 
+                        where 
+                            (
+                                s.path_string like '/patient/fiche/statut-du-suivi/signalement%'
+                                or s.path_string like '/patient/fiche/statut-du-suivi/pre-suivi%'
+                                or s.path_string like '/patient/fiche/statut-du-suivi/6' 
+                                or s.path_string like '/patient/fiche/statut-du-suivi/en-suivi' 
+                                or s.path_string like '/patient/fiche/statut-du-suivi/post-suivi' 
+                                or (
+                                    s.path_string like '/patient/fiche/statut-du-suivi/disparu' 
+                                    and pi.start like '" . $this->refyearwc . "'
+                                ) 
+                                or (
+                                    s.path_string like '/patient/fiche/statut-du-suivi/decede'
+                                    and pi.start like '" . $this->refyearwc . "'
+                                )
+                            ) 
+                            and (
+                                '" . $this->refDate . "' BETWEEN pi.start 
+                                and COALESCE(
+                                    pi.end, 
+                                    '" . $this->nextyear0101 . "'
+                                )
+                            ) 
+                            and pi.deleted_at is null 
+                            and p.deleted_at is null 
+                            
+                            and s_antenna.path_string like '/patient/suivi/antenne/%'
+                            and pi_antenna.deleted_at is null
+                            and s_antenna.value like '" . $this->antenna . "'
+                            and pi.start <= COALESCE (pi_antenna.end, '" . $this->refDate . "')
+                            and coalesce(pi.end, '" . $this->refDate . "') >= coalesce(pi_antenna.start, '" . $this->past . "') 
+                
+                        order by 
+                            s.value, 
+                            p.firstname, 
+                            p.lastname, 
+                            pi.start
+                    ) q 
+                group by value";
+
+        $result = $conn->query($sql);
+
+
+        if ($result->num_rows > 0) {
+            $resultJson = [];
+            while ($row = $result->fetch_assoc()) {
+                header("Content-type: application/json; charset=utf-8");
+                array_push($resultJson, $row);
+            }
+            // dd($this->json($resultJson));
+            return $this->json($resultJson);
+        } else {
+            return $this->json("Pas de résultats pour l'instant");
+        }
+        $conn->close();
+    }
+
+    #[Route('/api/statistiques23', name: 'app_statistiques23')]
+    public function request23()
+    {
+
+        // modifiée
+        $conn = new mysqli(StatistiquesController::SERVERNAME, StatistiquesController::USERNAME, StatistiquesController::PASSWORD, StatistiquesController::DBNAME);
+
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+
+
+        // dd($this->refYear);
+
+        // $sql = "SELECT * FROM patients WHERE antenna = '" . $this->antennainit . "'";
+        $sql = "SELECT 
+                    p.id,
+                    p.hash,
+                    p.firstname,
+                    p.lastname,
+                    pi.start,
+                    pi.end
+                FROM 
+                    patients p 
+                    inner join patients_information pi on p.id = pi.pati_id 
+                    inner join suggestions s on s.id = pi.sugg_id
+                    inner join patients_information pi_antenna on pi_antenna.pati_id = p.id 
+                    inner join suggestions s_antenna on s_antenna.id = pi_antenna.sugg_id 
+                where 
+                    s_antenna.path_string like '/patient/suivi/antenne/%'
+                    and pi_antenna.deleted_at is null
+                    and s_antenna.value like '" . $this->antenna . "'
+                    and pi.start between COALESCE(pi_antenna.start, '" . $this->past . "') and COALESCE (pi_antenna.end, '" . $this->refDate . "')
+                    and p.deleted_at is null
+                    and s.path_string like '/patient/fiche/statut-du-suivi/post-suivi'
+                    and pi.deleted_at is null
+                    and pi.start < '" . $this->nextyear0101 . "'  
+                    and coalesce(pi.end, '" . $this->refDate . "') >= concat('" . $this->refYear . "', '-01-01')
+                    and p.id in 
+                    (
+                        SELECT 
+                            p.id
+                        FROM 
+                            patients p 
+                            inner join patients_information pi on p.id = pi.pati_id 
+                            inner join suggestions s on s.id = pi.sugg_id
+                            inner join patients_information pi_antenna on pi_antenna.pati_id = p.id 
+                            inner join suggestions s_antenna on s_antenna.id = pi_antenna.sugg_id 
+                        where 
+                            s_antenna.path_string like '/patient/suivi/antenne/%'
+                            and pi_antenna.deleted_at is null
+                            and s_antenna.value like '" . $this->antenna . "'
+                            and pi.start between COALESCE(pi_antenna.start, '" . $this->past . "') and COALESCE (pi_antenna.end, '" . $this->refDate . "')
+                            and p.deleted_at is null
+                            and s.path_string like '/patient/fiche/statut-du-suivi/post-suivi'
+                            and pi.deleted_at is null
+                            and pi.start < '" . $this->nextyear0101 . "'  
+                            and coalesce(pi.end, '" . $this->refDate . "') >= concat('" . $this->refYear . "', '-01-01')
+                        group by 
+                            p.id
+                    )";
+
+        $result = $conn->query($sql);
+
+
+        if ($result->num_rows > 0) {
+            $resultJson = [];
+            while ($row = $result->fetch_assoc()) {
+                header("Content-type: application/json; charset=utf-8");
+                array_push($resultJson, $row);
+            }
+            // dd($this->json($resultJson));
+            return $this->json($resultJson);
+        } else {
+            return $this->json("Pas de résultats pour l'instant");
+        }
+        $conn->close();
+    }
+
+
+    #[Route('/api/statistiques22', name: 'app_statistiques22')]
+    public function request22()
+    {
+
+        // modifiée
+        $conn = new mysqli(StatistiquesController::SERVERNAME, StatistiquesController::USERNAME, StatistiquesController::PASSWORD, StatistiquesController::DBNAME);
+
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+
+
+        // dd($this->refYear);
+
+        // $sql = "SELECT * FROM patients WHERE antenna = '" . $this->antennainit . "'";
+        $sql = "SELECT 
+                    count(id) as 'Nombre de personnes passées par le post-suivi en cours d annee'
+                from 
+                (
+                        SELECT 
+                            p.id
+                        FROM 
+                            patients p 
+                            inner join patients_information pi on p.id = pi.pati_id 
+                            inner join suggestions s on s.id = pi.sugg_id
+                            inner join patients_information pi_antenna on pi_antenna.pati_id = p.id 
+                            inner join suggestions s_antenna on s_antenna.id = pi_antenna.sugg_id 
+                        where 
+                            s_antenna.path_string like '/patient/suivi/antenne/%'
+                            and pi_antenna.deleted_at is null
+                            and s_antenna.value like '" . $this->antenna . "'
+                            and pi.start between COALESCE(pi_antenna.start, '" . $this->past . "') and COALESCE (pi_antenna.end, '" . $this->refDate . "')
+                            and p.deleted_at is null
+                            and s.path_string like '/patient/fiche/statut-du-suivi/post-suivi'
+                            and pi.deleted_at is null
+                            and pi.start < '" . $this->nextyear0101 . "'  
+                            and coalesce(pi.end, '" . $this->refDate . "') >= concat('" . $this->refYear . "', '-01-01')
+                        group by 
+                            p.id
+                ) r;";
+
+        $result = $conn->query($sql);
+
+
+        if ($result->num_rows > 0) {
+            $resultJson = [];
+            while ($row = $result->fetch_assoc()) {
+                header("Content-type: application/json; charset=utf-8");
+                array_push($resultJson, $row);
+            }
+            // dd($this->json($resultJson));
+            return $this->json($resultJson);
+        } else {
+            return $this->json("Pas de résultats pour l'instant");
+        }
+        $conn->close();
+    }
+
+    #[Route('/api/statistiques21', name: 'app_statistiques21')]
+    public function request21()
+    {
+
+        // modifiée
+        $conn = new mysqli(StatistiquesController::SERVERNAME, StatistiquesController::USERNAME, StatistiquesController::PASSWORD, StatistiquesController::DBNAME);
+
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+
+
+        // dd($this->refYear);
+
+        // $sql = "SELECT * FROM patients WHERE antenna = '" . $this->antennainit . "'";
+        $sql = "SELECT 
+                    p.id,
+                    p.hash,
+                    p.firstname,
+                    p.lastname,
+                    pi.start,
+                    pi.end
+                FROM 
+                    patients p 
+                    inner join patients_information pi on p.id = pi.pati_id 
+                    inner join suggestions s on s.id = pi.sugg_id
+                    inner join patients_information pi_antenna on pi_antenna.pati_id = p.id 
+                    inner join suggestions s_antenna on s_antenna.id = pi_antenna.sugg_id 
+                where 
+                    s_antenna.path_string like '/patient/suivi/antenne/%'
+                    and pi_antenna.deleted_at is null
+                    and s_antenna.value like '" . $this->antenna . "'
+                    and COALESCE(pi.start, makedate(year('" . $this->refDate . "'), 1)) < COALESCE (pi_antenna.end, makedate(year('" . $this->refDate . "')+1, 1))
+                    and COALESCE(pi.end, makedate(year('" . $this->refDate . "')+1, 1)) > COALESCE (pi_antenna.start, makedate(year('" . $this->refDate . "'), 1))
+                    and p.deleted_at is null
+                    and s.path_string like '/patient/fiche/statut-du-suivi/en-suivi'
+                    and pi.deleted_at is null
+                    and pi.start < makedate(year('" . $this->refDate . "')+1, 1)
+                    and coalesce(pi.end, '" . $this->refDate . "') >= makedate(year('" . $this->refDate . "'), 1)";
+
+        $result = $conn->query($sql);
+
+
+        if ($result->num_rows > 0) {
+            $resultJson = [];
+            while ($row = $result->fetch_assoc()) {
+                header("Content-type: application/json; charset=utf-8");
+                array_push($resultJson, $row);
+            }
+            // dd($this->json($resultJson));
+            return $this->json($resultJson);
+        } else {
+            return $this->json("Pas de résultats pour l'instant");
+        }
+        $conn->close();
+    }
+
+    #[Route('/api/statistiques20', name: 'app_statistiques20')]
+    public function request20()
+    {
+
+        // modifiée
+        $conn = new mysqli(StatistiquesController::SERVERNAME, StatistiquesController::USERNAME, StatistiquesController::PASSWORD, StatistiquesController::DBNAME);
+
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+
+
+        // dd($this->refYear);
+
+        // $sql = "SELECT * FROM patients WHERE antenna = '" . $this->antennainit . "'";
+        $sql = "select 
+                    count(id) as 'Nombre de personnes passées par le suivi en cours d annee'
+                from 
+                (
+                        SELECT 
+                            p.id
+                        FROM 
+                            patients p 
+                            inner join patients_information pi on p.id = pi.pati_id 
+                            inner join suggestions s on s.id = pi.sugg_id
+                            inner join patients_information pi_antenna on pi_antenna.pati_id = p.id 
+                            inner join suggestions s_antenna on s_antenna.id = pi_antenna.sugg_id 
+                        where 
+                            s_antenna.path_string like '/patient/suivi/antenne/%'
+                            and pi_antenna.deleted_at is null
+                            and s_antenna.value like '" . $this->antenna . "'
+                            and pi.start between COALESCE(pi_antenna.start, '" . $this->past . "') and COALESCE (pi_antenna.end, '" . $this->refDate . "')
+                            and p.deleted_at is null
+                            and s.path_string like '/patient/fiche/statut-du-suivi/en-suivi' 
+                            and pi.deleted_at is null
+                            and pi.start < '" . $this->nextyear0101 . "'  
+                            and coalesce(pi.end, '" . $this->refDate . "') >= concat('" . $this->refYear . "', '-01-01')
+                        group by 
+                            p.id
+                ) r";
+
+        $result = $conn->query($sql);
+
+
+        if ($result->num_rows > 0) {
+            $resultJson = [];
+            while ($row = $result->fetch_assoc()) {
+                header("Content-type: application/json; charset=utf-8");
+                array_push($resultJson, $row);
+            }
+            // dd($this->json($resultJson));
+            return $this->json($resultJson);
+        } else {
+            return $this->json("Pas de résultats pour l'instant");
+        }
+        $conn->close();
+    }
+
+    #[Route('/api/statistiques19', name: 'app_statistiques19')]
+    public function request19()
+    {
+
+        // modifiée
+        $conn = new mysqli(StatistiquesController::SERVERNAME, StatistiquesController::USERNAME, StatistiquesController::PASSWORD, StatistiquesController::DBNAME);
+
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+
+
+        // dd($this);
+
+        // $sql = "SELECT * FROM patients WHERE antenna = '" . $this->antennainit . "'";
+        $sql = "select 
+                    s_stat.value as statut, p.hash, p.firstname, p.lastname, pi_stat.start as 'date enregistrement', s_antenna.value as 'antenne'
+                from patients p
+                    inner join 
+                    (
+                        SELECT
+                            p.id, 
+                            min(pi.start) as minstart
+                        FROM
+                            patients as p
+                            inner join patients_information as pi on p.id = pi.pati_id
+                            inner join suggestions as s on s.id = pi.sugg_id
+                        where
+                            s.path_string like '/patient/fiche/statut-du-suivi/en-suivi'
+                            and pi.deleted_at is null
+                            and p.deleted_at is null
+                        group by
+                            p.id
+                    ) q on q.id = p.id 
+                    
+                    inner  join patients_information pi_antenna on pi_antenna.pati_id = p.id 
+                    inner  join suggestions s_antenna on s_antenna.id = pi_antenna.sugg_id 
+                    inner  join patients_information pi_stat on pi_stat.pati_id = p.id 
+                    inner  join suggestions s_stat on s_stat.id = pi_stat.sugg_id 
+                
+                where 
+                    s_antenna.path_string like '/patient/suivi/antenne/%'
+                    and pi_antenna.deleted_at is null
+                    and s_antenna.value like '" . $this->antenna . "' 
+                    and minstart between COALESCE(pi_antenna.start, '" . $this->past . "') and COALESCE (pi_antenna.end, '" . $this->refDate . "')
+                
+                    and s_stat.path_string like '/patient/fiche/statut-du-suivi/en-suivi%'
+                    and minstart = pi_stat.start
+                    and pi_stat.deleted_at is null
+                    and pi_stat.start like '" . $this->refyearwc . "'
+                order by statut, hash";
+
+        $result = $conn->query($sql);
+
+
+        if ($result->num_rows > 0) {
+            $resultJson = [];
+            while ($row = $result->fetch_assoc()) {
+                header("Content-type: application/json; charset=utf-8");
+                array_push($resultJson, $row);
+            }
+            // dd($this->json($resultJson));
+            return $this->json($resultJson);
+        } else {
+            return $this->json("Pas de résultats pour l'instant");
+        }
+        $conn->close();
+    }
+
+    #[Route('/api/statistiques18', name: 'app_statistiques18')]
+    public function request18()
+    {
+
+        // modifiée
+        $conn = new mysqli(StatistiquesController::SERVERNAME, StatistiquesController::USERNAME, StatistiquesController::PASSWORD, StatistiquesController::DBNAME);
+
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+
+
+        // dd($this);
+
+        // $sql = "SELECT * FROM patients WHERE antenna = '" . $this->antennainit . "'";
+        $sql = "select 
+                    s_stat.value as statut, count(p.hash) as nombre
+                from patients p
+                    inner join 
+                    (
+                        SELECT
+                            p.id, 
+                            min(pi.start) as minstart
+                        FROM
+                            patients as p
+                            inner join patients_information as pi on p.id = pi.pati_id
+                            inner join suggestions as s on s.id = pi.sugg_id
+                        where
+                            s.path_string like '/patient/fiche/statut-du-suivi/en-suivi'
+                            and pi.deleted_at is null
+                            and p.deleted_at is null
+                        group by
+                            p.id
+                    ) q on q.id = p.id 
+                    
+                    inner  join patients_information pi_antenna on pi_antenna.pati_id = p.id 
+                    inner  join suggestions s_antenna on s_antenna.id = pi_antenna.sugg_id 
+                    inner  join patients_information pi_stat on pi_stat.pati_id = p.id 
+                    inner  join suggestions s_stat on s_stat.id = pi_stat.sugg_id 
+                
+                where 
+                    s_antenna.path_string like '/patient/suivi/antenne/%'
+                    and pi_antenna.deleted_at is null
+                    and s_antenna.value like '" . $this->antenna . "'  
+                    and minstart between COALESCE(pi_antenna.start, '" . $this->past . "') and COALESCE (pi_antenna.end, '" . $this->refDate . "')
+                
+                    and s_stat.path_string like '/patient/fiche/statut-du-suivi/en-suivi'
+                    and minstart = pi_stat.start
+                    and pi_stat.deleted_at is null
+                    and pi_stat.start like '" . $this->refyearwc . "'
+                group by statut";
+
+        $result = $conn->query($sql);
+
+
+        if ($result->num_rows > 0) {
+            $resultJson = [];
+            while ($row = $result->fetch_assoc()) {
+                header("Content-type: application/json; charset=utf-8");
+                array_push($resultJson, $row);
+            }
+            // dd($this->json($resultJson));
+            return $this->json($resultJson);
+        } else {
+            return $this->json("Pas de résultats pour l'instant");
+        }
+        $conn->close();
+    }
+
+
+    #[Route('/api/statistiques17', name: 'app_statistiques17')]
+    public function request17()
+    {
+
+        // modifiée
+        $conn = new mysqli(StatistiquesController::SERVERNAME, StatistiquesController::USERNAME, StatistiquesController::PASSWORD, StatistiquesController::DBNAME);
+
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+
+
+        // dd($this);
+
+        // $sql = "SELECT * FROM patients WHERE antenna = '" . $this->antennainit . "'";
+        $sql = "select 
+                    s_stat.value as statut, p.hash, p.firstname, p.lastname, pi_stat.start as 'date enregistrement', minstart, s_antenna.value as 'antenne'
+                
+                from patients p
+                    inner join 
+                    (
+                        SELECT
+                                    p.id,
+                                    min(pi.start) as minstart
+                                FROM
+                                    patients as p
+                                    inner join patients_information as pi on p.id = pi.pati_id
+                                    inner join suggestions as s on s.id = pi.sugg_id
+                                where
+                                    s.path_string like '/patient/fiche/statut-du-suivi/pre-suivi-actif%'
+                                    and pi.deleted_at is null
+                                    and p.deleted_at is null
+                                group by
+                                    p.id
+                    ) q on q.id = p.id 
+                    
+                    inner  join patients_information pi_antenna on pi_antenna.pati_id = p.id 
+                    inner  join suggestions s_antenna on s_antenna.id = pi_antenna.sugg_id 
+                    inner  join patients_information pi_stat on pi_stat.pati_id = p.id 
+                    inner  join suggestions s_stat on s_stat.id = pi_stat.sugg_id 
+                
+                where 
+                    q.minstart between COALESCE(pi_antenna.start, '" . $this->past . "') and COALESCE (pi_antenna.end, '" . $this->refDate . "')
+                    and s_antenna.path_string like '/patient/suivi/antenne/%'
+                    and pi_antenna.deleted_at is null
+                    and s_antenna.value like '" . $this->antenna . "' 
+                
+                    and s_stat.path_string like '/patient/fiche/statut-du-suivi/pre-suivi-actif%'
+                    and q.minstart  = pi_stat.start
+                    and pi_stat.deleted_at is null
+                    and pi_stat.start like '" . $this->refyearwc . "'
+                order by statut, hash";
+
+        $result = $conn->query($sql);
+
+
+        if ($result->num_rows > 0) {
+            $resultJson = [];
+            while ($row = $result->fetch_assoc()) {
+                header("Content-type: application/json; charset=utf-8");
+                array_push($resultJson, $row);
+            }
+            // dd($this->json($resultJson));
+            return $this->json($resultJson);
+        } else {
+            return $this->json("Pas de résultats pour l'instant");
+        }
+        $conn->close();
+    }
+
+
+    #[Route('/api/statistiques16', name: 'app_statistiques16')]
+    public function request16()
+    {
+
+        // modifiée
+        $conn = new mysqli(StatistiquesController::SERVERNAME, StatistiquesController::USERNAME, StatistiquesController::PASSWORD, StatistiquesController::DBNAME);
+
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+
+
+        // dd($this);
+
+        // $sql = "SELECT * FROM patients WHERE antenna = '" . $this->antennainit . "'";
+        $sql = "select 
+                    s_stat.value as statut, count(p.hash) as nombre
+                from patients p
+                    inner join 
+                    (
+                        SELECT
+                            p.id, 
+                            min(pi.start) as minstart
+                        FROM
+                            patients as p
+                            inner join patients_information as pi on p.id = pi.pati_id
+                            inner join suggestions as s on s.id = pi.sugg_id
+                        where
+                            s.path_string like '/patient/fiche/statut-du-suivi/pre-suivi-actif%'
+                            and pi.deleted_at is null
+                            and p.deleted_at is null
+                        group by
+                            p.id
+                    ) q on q.id = p.id 
+                    inner  join patients_information pi_antenna on pi_antenna.pati_id = p.id 
+                    inner  join suggestions s_antenna on s_antenna.id = pi_antenna.sugg_id 
+                    inner  join patients_information pi_stat on pi_stat.pati_id = p.id 
+                    inner  join suggestions s_stat on s_stat.id = pi_stat.sugg_id 
+                
+                where 
+                    s_antenna.path_string like '/patient/suivi/antenne/%'
+                    and pi_antenna.deleted_at is null
+                    and s_antenna.value like '" . $this->antenna . "' 
+                    and minstart between COALESCE(pi_antenna.start, '" . $this->past . "') and COALESCE (pi_antenna.end, '" . $this->refDate . "')
+                
+                    and s_stat.path_string like '/patient/fiche/statut-du-suivi/%'
+                    and minstart = pi_stat.start
+                    and pi_stat.deleted_at is null
+                    and pi_stat.start like '" . $this->refyearwc . "'
+                group by s_stat.value";
+
+        $result = $conn->query($sql);
+
+
+        if ($result->num_rows > 0) {
+            $resultJson = [];
+            while ($row = $result->fetch_assoc()) {
+                header("Content-type: application/json; charset=utf-8");
+                array_push($resultJson, $row);
+            }
+            // dd($this->json($resultJson));
+            return $this->json($resultJson);
+        } else {
+            return $this->json("Pas de résultats pour l'instant");
+        }
+        $conn->close();
+    }
+
+    #[Route('/api/statistiques15', name: 'app_statistiques15')]
+    public function request15()
+    {
+
+        // modifiée
+        $conn = new mysqli(StatistiquesController::SERVERNAME, StatistiquesController::USERNAME, StatistiquesController::PASSWORD, StatistiquesController::DBNAME);
+
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+
+
+        // dd($this);
+
+        // $sql = "SELECT * FROM patients WHERE antenna = '" . $this->antennainit . "'";
+        $sql = "select 
+                s_stat.value as statut, p.hash, p.firstname, p.lastname, pi_stat.start as 'date enregistrement', minstart, s_antenna.value as 'antenne'
+            
+                    from patients p
+                        inner join 
+                        (
+                            SELECT
+                                        p.id,
+                                        min(pi.start) as minstart
+                                    FROM
+                                        patients as p
+                                        inner join patients_information as pi on p.id = pi.pati_id
+                                        inner join suggestions as s on s.id = pi.sugg_id
+                                    where
+                                        s.path_string like '/patient/fiche/statut-du-suivi/signalement%'
+                                        and pi.deleted_at is null
+                                        and p.deleted_at is null
+                                    group by
+                                        p.id
+                        ) q on q.id = p.id 
+                        
+                        inner  join patients_information pi_antenna on pi_antenna.pati_id = p.id 
+                        inner  join suggestions s_antenna on s_antenna.id = pi_antenna.sugg_id 
+                        inner  join patients_information pi_stat on pi_stat.pati_id = p.id 
+                        inner  join suggestions s_stat on s_stat.id = pi_stat.sugg_id 
+                    
+                    where 
+                        q.minstart between COALESCE(pi_antenna.start, '" . $this->past . "') and COALESCE (pi_antenna.end, '" . $this->refDate . "')
+                        and s_antenna.path_string like '/patient/suivi/antenne/%'
+                        and pi_antenna.deleted_at is null
+                        and s_antenna.value like '" . $this->antenna . "' 
+                    
+                        and s_stat.path_string like '/patient/fiche/statut-du-suivi/signalement%'
+                        and q.minstart  = pi_stat.start
+                        and pi_stat.deleted_at is null
+                        and pi_stat.start like '" . $this->refyearwc . "'
+                    order by statut, hash";
+
+        $result = $conn->query($sql);
+
+
+        if ($result->num_rows > 0) {
+            $resultJson = [];
+            while ($row = $result->fetch_assoc()) {
+                header("Content-type: application/json; charset=utf-8");
+                array_push($resultJson, $row);
+            }
+            // dd($this->json($resultJson));
+            return $this->json($resultJson);
+        } else {
+            return $this->json("Pas de résultats pour l'instant");
+        }
+        $conn->close();
+    }
+
 
     #[Route('/api/statistiques14', name: 'app_statistiques14')]
     public function request14()
@@ -92,42 +1097,42 @@ class StatistiquesController extends AbstractController
 
         // $sql = "SELECT * FROM patients WHERE antenna = '" . $this->antennainit . "'";
         $sql = "select 
-        s_stat.value as statut, count(p.id) as nombre
-        
-    from patients p
-        inner join 
-        (
-            SELECT
-                        p.id,
-                        min(pi.start) as minstart
-                    FROM
-                        patients as p
-                        inner join patients_information as pi on p.id = pi.pati_id
-                        inner join suggestions as s on s.id = pi.sugg_id
-                    where
-                        s.path_string like '/patient/fiche/statut-du-suivi/signalement%'
-                        and pi.deleted_at is null
-                        and p.deleted_at is null
-                    group by
-                        p.id
-        ) q on q.id = p.id 
-        
-        inner  join patients_information pi_antenna on pi_antenna.pati_id = p.id 
-        inner  join suggestions s_antenna on s_antenna.id = pi_antenna.sugg_id 
-        inner  join patients_information pi_stat on pi_stat.pati_id = p.id 
-        inner  join suggestions s_stat on s_stat.id = pi_stat.sugg_id 
-    
-    where 
-        q.minstart between COALESCE(pi_antenna.start, '" . $this->past . "') and COALESCE (pi_antenna.end, '" . $this->refDate . "')
-        and s_antenna.path_string like '/patient/suivi/antenne/%'
-        and pi_antenna.deleted_at is null
-        and s_antenna.value like '" . $this->antenna . "' 
-    
-        and s_stat.path_string like '/patient/fiche/statut-du-suivi/signalement%'
-        and q.minstart  = pi_stat.start
-        and pi_stat.deleted_at is null
-        and pi_stat.start like '" . $this->refyearwc . "'
-    group by s_stat.value";
+                    s_stat.value as statut, count(p.id) as nombre
+                    
+                    from patients p
+                        inner join 
+                        (
+                            SELECT
+                                        p.id,
+                                        min(pi.start) as minstart
+                                    FROM
+                                        patients as p
+                                        inner join patients_information as pi on p.id = pi.pati_id
+                                        inner join suggestions as s on s.id = pi.sugg_id
+                                    where
+                                        s.path_string like '/patient/fiche/statut-du-suivi/signalement%'
+                                        and pi.deleted_at is null
+                                        and p.deleted_at is null
+                                    group by
+                                        p.id
+                        ) q on q.id = p.id 
+                        
+                        inner  join patients_information pi_antenna on pi_antenna.pati_id = p.id 
+                        inner  join suggestions s_antenna on s_antenna.id = pi_antenna.sugg_id 
+                        inner  join patients_information pi_stat on pi_stat.pati_id = p.id 
+                        inner  join suggestions s_stat on s_stat.id = pi_stat.sugg_id 
+                    
+                    where 
+                        q.minstart between COALESCE(pi_antenna.start, '" . $this->past . "') and COALESCE (pi_antenna.end, '" . $this->refDate . "')
+                        and s_antenna.path_string like '/patient/suivi/antenne/%'
+                        and pi_antenna.deleted_at is null
+                        and s_antenna.value like '" . $this->antenna . "' 
+                    
+                        and s_stat.path_string like '/patient/fiche/statut-du-suivi/signalement%'
+                        and q.minstart  = pi_stat.start
+                        and pi_stat.deleted_at is null
+                        and pi_stat.start like '" . $this->refyearwc . "'
+                    group by s_stat.value";
 
         $result = $conn->query($sql);
 
@@ -135,7 +1140,7 @@ class StatistiquesController extends AbstractController
         if ($result->num_rows > 0) {
             $resultJson = [];
             while ($row = $result->fetch_assoc()) {
-                header('Content-type: application/json');
+                header("Content-type: application/json; charset=utf-8");
                 array_push($resultJson, $row);
             }
             // dd($this->json($resultJson));
@@ -283,7 +1288,7 @@ class StatistiquesController extends AbstractController
         if ($result->num_rows > 0) {
             $resultJson = [];
             while ($row = $result->fetch_assoc()) {
-                header('Content-type: application/json');
+                header("Content-type: application/json; charset=utf-8");
                 array_push($resultJson, $row);
             }
             // dd($this->json($resultJson));
@@ -437,7 +1442,7 @@ class StatistiquesController extends AbstractController
         if ($result->num_rows > 0) {
             $resultJson = [];
             while ($row = $result->fetch_assoc()) {
-                header('Content-type: application/json');
+                header("Content-type: application/json; charset=utf-8");
                 array_push($resultJson, $row);
             }
             // dd($this->json($resultJson));
@@ -688,7 +1693,7 @@ class StatistiquesController extends AbstractController
         if ($result->num_rows > 0) {
             $resultJson = [];
             while ($row = $result->fetch_assoc()) {
-                header('Content-type: application/json');
+                header("Content-type: application/json; charset=utf-8");
                 array_push($resultJson, $row);
             }
             // dd($this->json($resultJson));
@@ -946,7 +1951,7 @@ class StatistiquesController extends AbstractController
         if ($result->num_rows > 0) {
             $resultJson = [];
             while ($row = $result->fetch_assoc()) {
-                header('Content-type: application/json');
+                header("Content-type: application/json; charset=utf-8");
                 array_push($resultJson, $row);
             }
             // dd($this->json($resultJson));
@@ -1011,7 +2016,7 @@ class StatistiquesController extends AbstractController
         if ($result->num_rows > 0) {
             $resultJson = [];
             while ($row = $result->fetch_assoc()) {
-                header('Content-type: application/json');
+                header("Content-type: application/json; charset=utf-8");
                 array_push($resultJson, $row);
             }
             // dd($this->json($resultJson));
@@ -1066,7 +2071,7 @@ class StatistiquesController extends AbstractController
         if ($result->num_rows > 0) {
             $resultJson = [];
             while ($row = $result->fetch_assoc()) {
-                header('Content-type: application/json');
+                header("Content-type: application/json; charset=utf-8");
                 array_push($resultJson, $row);
             }
             // dd($this->json($resultJson));
@@ -1121,7 +2126,7 @@ class StatistiquesController extends AbstractController
         if ($result->num_rows > 0) {
             $resultJson = [];
             while ($row = $result->fetch_assoc()) {
-                header('Content-type: application/json');
+                header("Content-type: application/json; charset=utf-8");
                 array_push($resultJson, $row);
             }
             // dd($this->json($resultJson));
@@ -1152,7 +2157,7 @@ class StatistiquesController extends AbstractController
         if ($result->num_rows > 0) {
             $resultJson = [];
             while ($row = $result->fetch_assoc()) {
-                header('Content-type: application/json');
+                header("Content-type: application/json; charset=utf-8");
                 array_push($resultJson, $row);
             }
             // dd($this->json($resultJson));
@@ -1205,7 +2210,7 @@ class StatistiquesController extends AbstractController
         if ($result->num_rows > 0) {
             $resultJson = [];
             while ($row = $result->fetch_assoc()) {
-                header('Content-type: application/json');
+                header("Content-type: application/json; charset=utf-8");
                 array_push($resultJson, $row);
             }
             // dd($this->json($resultJson));
@@ -1248,7 +2253,7 @@ class StatistiquesController extends AbstractController
         if ($result->num_rows > 0) {
             $resultJson = [];
             while ($row = $result->fetch_assoc()) {
-                header('Content-type: application/json');
+                header("Content-type: application/json; charset=utf-8");
                 array_push($resultJson, $row);
             }
             return $this->json($resultJson);
@@ -1318,7 +2323,7 @@ class StatistiquesController extends AbstractController
         if ($result->num_rows > 0) {
             $resultJson = [];
             while ($row = $result->fetch_assoc()) {
-                header('Content-type: application/json');
+                header("Content-type: application/json; charset=utf-8");
                 array_push($resultJson, $row);
             }
             return $this->json($resultJson);
@@ -1356,7 +2361,7 @@ class StatistiquesController extends AbstractController
         if ($result->num_rows > 0) {
             $resultJson = [];
             while ($row = $result->fetch_assoc()) {
-                header('Content-type: application/json');
+                header("Content-type: application/json; charset=utf-8");
                 array_push($resultJson, $row);
             }
             return $this->json($resultJson);
@@ -1463,7 +2468,7 @@ class StatistiquesController extends AbstractController
         if ($result->num_rows > 0) {
             $resultJson = [];
             while ($row = $result->fetch_assoc()) {
-                header('Content-type: application/json');
+                header("Content-type: application/json; charset=utf-8");
                 array_push($resultJson, $row);
             }
             return $this->json($resultJson);

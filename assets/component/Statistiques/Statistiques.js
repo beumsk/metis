@@ -98,25 +98,69 @@ const Statistiques = () => {
           chronique (inclus assuetude) et pour qui au moins une rencontre a été
           réalisée dans la période de reference
         </option>
+        <option value={11}>
+          Nombre de patients suivi par l'équipe rue au cours de la periode de
+          reference, en suivi ou pre-suivi actif, ayant une pathologie physique
+          chronique (inclus assuetude) et pour qui au moins une rencontre a été
+          réalisée dans la période de reference
+        </option>
+        <option value={12}>
+          Nombre de patients suivi par l'équipe rue au cours de la periode de
+          reference, en suivi ou pre-suivi actif, ayant une pathologie physique
+          chronique (inclus assuetude) mais une rencontre n'a pas été forcement
+          réalisée dans la période de reference
+        </option>
+        <option value={13}>
+          Nombre de patients suivi par l'équipe rue au cours de la periode de
+          reference, en suivi ou pre-suivi actif, ayant une pathologie physique
+          chronique (inclus assuetude) mais une rencontre n'a pas été forcement
+          réalisée dans la période de reference - liste nominative
+        </option>
+        <option value={14}>Nouveaux signalements encodés</option>
+        <option value={15}>
+          Nouveaux signalements encodés - Liste nominative
+        </option>
+        <option value={16}>Nouveaux pré-suivis actifs encodes</option>
+        <option value={17}>
+          Nouveaux pré-suivis actifs encodes - liste nominative
+        </option>
+        <option value={18}>
+          Nombre de nouveaux suivis au cours de l’année
+        </option>
+        <option value={19}>
+          Nombre de nouveaux suivis au cours de l’année - liste nominative
+        </option>
+        <option value={20}>
+          Nombre de personnes passées par le suivi en cours d année
+        </option>
+        <option value={21}>
+          Nombre de personnes passées par le suivi en cours d’année - liste
+          nominative
+        </option>
+        <option value={22}>
+          Nombre de personnes passées par le post-suivi en cours d’année
+        </option>
+        <option value={23}>
+          Nombre de personnes passées par le post-suivi en cours d'année - liste
+          nominative
+        </option>
+        <option value={24}>
+          Nombre total de personnes signalées, en pré-suivi actif, suivi et
+          post-suivi
+        </option>
+        <option value={25}>
+          Tableau 1.E. - Nombre total de personnes signalées, en pré-suivi
+          actif, suivi et post-suivi - liste nominative
+        </option>
+        <option value={26}>
+          Tableau 1.F/G. – Nombre de nouveaux patients Housing First au cours de
+          l’année
+        </option>
+        <option value={27}>
+          Tableau 1.F/G. – Nombre de nouveaux patients Housing First au cours de
+          l’année - liste nominative
+        </option>
       </Form.Select>
-      <option value={11}>
-        Nombre de patients suivi par l'équipe rue au cours de la periode de
-        reference, en suivi ou pre-suivi actif, ayant une pathologie physique
-        chronique (inclus assuetude) et pour qui au moins une rencontre a été
-        réalisée dans la période de reference
-      </option>
-      <option value={12}>
-        Nombre de patients suivi par l'équipe rue au cours de la periode de
-        reference, en suivi ou pre-suivi actif, ayant une pathologie physique
-        chronique (inclus assuetude) mais une rencontre n'a pas été forcement
-        réalisée dans la période de reference
-      </option>
-      <option value={13}>
-        Nombre de patients suivi par l'équipe rue au cours de la periode de
-        reference, en suivi ou pre-suivi actif, ayant une pathologie physique
-        chronique (inclus assuetude) mais une rencontre n'a pas été forcement
-        réalisée dans la période de reference - liste nominative
-      </option>
       <a onClick={exportCSV}>export</a>
     </>
   );
