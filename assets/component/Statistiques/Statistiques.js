@@ -160,6 +160,104 @@ const Statistiques = () => {
           Tableau 1.F/G. – Nombre de nouveaux patients Housing First au cours de
           l’année - liste nominative
         </option>
+
+        <option value={28}>
+          Tableau 1.H. – Nombre total de patients Housing First et Housing Fast
+        </option>
+        <option value={29}>
+          Tableau 1.H. – Nombre total de patients Housing First et Housing Fast
+          - liste nominative
+        </option>
+        <option value={30}>
+          Tableau 1.I. – Nombre total de patients selon l’équipe de suivi
+        </option>
+        <option value={31}>
+          Tableau 1.I. – Nombre total de patients selon l’équipe de suivi -
+          liste nominative
+        </option>
+        <option value={32}>
+          TABLEAU 2A-1 : Nombre de rencontres/appels effectués avec les patients
+          selon leur statut
+        </option>
+        <option value={33}>
+          TABLEAU 2A-2 : Nombre d’activités effectuées avec les patients selon
+          leur statut
+        </option>
+        <option value={34}>
+          TABLEAU 2B-1 : Nombre de rencontres/appels effectués avec les patients
+          selon l’équipe de suivi
+        </option>
+        <option value={35}>
+          TABLEAU 2B-2 : Nombre d’activités effectuées avec les patients selon
+          l’équipe de suivi
+        </option>
+        <option value={36}>
+          TABLEAU 2B-2 : Nombre d’activités effectuées avec les patients selon
+          l’équipe de suivi - liste nominative et activites detaillees
+        </option>
+        <option value={37}>
+          TABLEAU 2B-3 : nombre de patients pour qui un accompagnement a été
+          effectué selon l’équipe de suivi - accompagnements uniquement
+        </option>
+        <option value={38}>
+          TABLEAU 2B-X :liste nominative des patients pour qui un accompagnement
+          a été effectué selon l’équipe de suivi - liste nominative et activites
+          detaillees - accompagnements uniquement
+        </option>
+        <option value={39}>
+          TABLEAU 2C-1 : Nombre de rencontres/appels effectués avec les patients
+          selon l’équipe de suivi
+        </option>
+        <option value={40}>
+          TABLEAU 2C-2 : Nombre d’activités effectuées avec les patients selon
+          le programme de logement
+        </option>
+        <option value={41}>
+          TABLEAU 2D : Durée totale et moyenne des activités effectuées avec les
+          patients selon leur statut
+        </option>
+        <option value={42}>
+          TABLEAU 2E : Durée totale et moyenne des activités effectuées avec les
+          patients selon l’équipe de suivi
+        </option>
+        <option value={43}>
+          TABLEAU 2F : Durée totale et moyenne des activités effectuées avec les
+          patients selon le programme de logement
+        </option>
+        <option value={44}>
+          TABLEAU 3A : Nombre de démarches effectuées pour les patients selon
+          leur statut
+        </option>
+        <option value={45}>
+          TABLEAU 3B : Nombre de démarches effectuées pour les patients selon
+          l’équipe de suivi
+        </option>
+        <option value={46}>
+          TABLEAU 3C : Nombre de démarches effectuées pour les patients selon le
+          programme de logement
+        </option>
+        <option value={47}>
+          TABLEAU 3D : Durée totale et moyenne des démarches effectuées pour les
+          patients selon leur statut
+        </option>
+        <option value={48}>
+          TABLEAU 3E : Durée totale et moyenne des démarches effectuées pour les
+          patients selon l’équipe de suivi
+        </option>
+
+        <option value={49}>
+          TABLEAU 3F : Durée totale et moyenne démarches effectuées pour les
+          patients selon le programme de logement
+        </option>
+
+        <option value={50}>
+          TABLEAU 4 : LES 20 PATIENTS QUI ONT DEMANDE LE PLUS D’ATTENTION
+        </option>
+        <option value={51}>TABLEAU 4B : ACTIVITES PAR PATIENT</option>
+        <option value={52}>
+          Tableau 5 : Répartition des activités et démarches au cours de l’année
+          Tableau 5.A-1 – Répartition des activités
+        </option>
       </Form.Select>
       <a onClick={exportCSV}>export</a>
     </>
