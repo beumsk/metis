@@ -258,6 +258,48 @@ const Statistiques = () => {
           Tableau 5 : Répartition des activités et démarches au cours de l’année
           Tableau 5.A-1 – Répartition des activités
         </option>
+        <option value={53}>Tableau 5.A-2 – Répartition des activités</option>
+        <option value={54}>Tableau 5.B. – Répartition des démarches</option>
+        <option value={55}>
+          Tableau 9.A : Personnes totales en logement durable
+        </option>
+        <option value={56}>
+          Tableau 9.B : Personnes totales en logement durable 2006 par programme
+        </option>
+        <option value={57}>
+          Tableau 9.A/B : Personnes totales en logement durable par programme -
+          liste nominative
+        </option>
+        <option value={58}>
+          Tableau 9.B.2 : Personnes totales en logement durable année en cours
+          par programme - liste nominative
+        </option>
+        <option value={59}>
+          TABLEAU 11 : PERSONNES STABILISEES EN LOGEMENT Tableau 11.A. –
+          Personnes passées en post-suivi en cours d’année
+        </option>
+        <option value={60}>
+          Tableau 11.A. – Personnes passées en post-suivi en cours d’année -
+          liste nominative
+        </option>
+        <option value={61}>
+          Tableau 11.B. – Total des personnes dans le post-suivi
+        </option>
+        <option value={62}>
+          Tableau 11.B. – Total des personnes dans le post-suivi - liste
+          nominative
+        </option>
+        <option value={63}>
+          TABLEAU 22 : NATIONALITES DE NOS PATIENTS Tableau 22.A. - Données
+          chiffrées sur toutes les nationalités
+        </option>
+        <option value={64}>
+          Tableau 22.A. - Données chiffrées sur toutes les nationalités - liste
+          nominative
+        </option>
+        <option value={65}>
+          Tableau 22.B. - Pourcentages de nationalités belges et étrangères
+        </option>
       </Form.Select>
       <a onClick={exportCSV}>export</a>
     </>
