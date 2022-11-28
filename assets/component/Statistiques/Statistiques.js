@@ -300,6 +300,59 @@ const Statistiques = () => {
         <option value={65}>
           Tableau 22.B. - Pourcentages de nationalités belges et étrangères
         </option>
+        <option value={66}>
+          Tableau 22.C. - Données chiffrées sur toutes les nationalités selon le
+          programme de logement des patients
+        </option>
+        <option value={67}>
+          Tableau 22.C. - Données chiffrées sur toutes les nationalités selon le
+          programme de logement des patients - liste nominative
+        </option>
+        <option value={68}>
+          TABLEAU 23 : SEXE DE NOS PATIENTS Tableau 23.A. - Données chiffrées
+          sur le sexe
+        </option>
+        <option value={69}>
+          Tableau 23.A. - Données chiffrées sur le sexe - liste nominative
+        </option>
+        <option value={70}>
+          Tableau 23.C. - Données chiffrées sur le sexe selon le programme de
+          logement des patients
+        </option>
+        <option value={71}>
+          Tableau 23.C. - Données chiffrées sur le sexe selon le programme de
+          logement des patients - liste nominative
+        </option>
+        <option value={72}>
+          TABLEAU 24 : AGE MOYEN DE NOS PATIENTS'; Tableau 24.A.1 – Age des
+          personnes dans le suivi - Ages moyen, min et max par type de suivi et
+          genre - par genre
+        </option>
+        <option value={73}>
+          Tableau 24.A.1 – Age des personnes dans le suivi - Ages moyen, min et
+          max par type de suivi et genre - par genre - liste nominative
+        </option>
+        <option value={74}>
+          Tableau 24.A.1 – Age des personnes dans le suivi/post-suivi - Ages
+          moyen, min et max par type de suivi - global
+        </option>
+        <option value={75}>
+          Tableau 24.A. et 24.B. – Age des personnes dans le suivi - Ages moyen,
+          min et max par type de suivi et genre - liste nominative incluant les
+          date de naissance nulles
+        </option>
+        <option value={76}>
+          Tableau 24.C/D.1 – Age des personnes dans le housing first/ housing
+          first - Ages moyen, min et max par type de suivi et genre - global
+        </option>
+        <option value={77}>
+          Tableau 24.C/D.1 – Age des personnes dans le housing first/ housing
+          first - Ages moyen, min et max par type de suivi et genre - global -
+          liste nominative
+        </option>
+        <option value={78}>
+          Tableau 25.A. – Problèmes de santé et assuétudes des patients en suivi
+        </option>
       </Form.Select>
       <a onClick={exportCSV}>export</a>
     </>
