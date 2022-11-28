@@ -353,6 +353,33 @@ const Statistiques = () => {
         <option value={78}>
           Tableau 25.A. – Problèmes de santé et assuétudes des patients en suivi
         </option>
+        <option value={79}>
+          Tableau 25.A. – Problèmes de santé et assuétudes des patients en suivi
+          - liste nominative
+        </option>
+        <option value={80}>
+          tableau 25.A - nombre de personnes ayant 2 problemes sur 3
+        </option>
+        <option value={81}>
+          Tableau 25.B. – Problèmes de santé et assuétudes des patients en
+          Housing First
+        </option>
+        <option value={82}>
+          tableau 25.B - nombre de personnes ayant 2 problemes sur 3 en housing
+          first
+        </option>
+        <option value={83}>
+          Tableau 25.B. – Problèmes de santé et assuétudes des patients en
+          Housing First - liste nominative
+        </option>
+        <option value={84}>
+          Tableau 25.C. – Problèmes de santé et assuétudes des patients en
+          Housing Fast
+        </option>
+        <option value={85}>
+          tableau 25.C - nombre de personnes ayant 2 problemes sur 3 en housing
+          Fast
+        </option>
       </Form.Select>
       <a onClick={exportCSV}>export</a>
     </>
