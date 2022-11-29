@@ -380,6 +380,129 @@ const Statistiques = () => {
           tableau 25.C - nombre de personnes ayant 2 problemes sur 3 en housing
           Fast
         </option>
+        <option value={86}>
+          Tableau 25.C. – Problèmes de santé et assuétudes des patients en
+          Housing Fast - liste nominative
+        </option>
+        <option value={87}>
+          Tableau 26.A. – Absence de problème de santé physique chronique des
+          patients en suivi
+        </option>
+        <option value={88}>
+          Tableau 26.A. – Absence de problème de santé physique chronique des
+          patients en suivi - liste nominative
+        </option>
+        <option value={89}>
+          Tableau 26.B. – Identification des problèmes de santé physique
+          chronique des patients en suivi
+        </option>
+        <option value={90}>
+          Tableau 26.B. – Identification des problèmes de santé physique
+          chronique des patients en suivi - liste nominative
+        </option>
+        <option value={91}>
+          Tableau 26.C. – Absence de problème de santé physique chronique des
+          patients en Housing First
+        </option>
+        <option value={92}>
+          Tableau 26.C. – Absence de problème de santé physique chronique des
+          patients en Housing First - liste nominative
+        </option>
+        <option value={93}>
+          Tableau 26.D. – Identification des problèmes de santé physique
+          chronique des patients Housing First
+        </option>
+        <option value={94}>
+          Tableau 26.D. – Identification des problèmes de santé physique
+          chronique des patients Housing First - liste nominative
+        </option>
+        <option value={95}>
+          Tableau 27 : Identification des problèmes de santé mentale Tableau
+          27.A : Absence de problèmes de santé mentale chez les patients en
+          suivi
+        </option>
+        <option value={96}>
+          Tableau 27.A : Absence de problèmes de santé mentale chez les patients
+          en suivi - liste nominative
+        </option>
+        <option value={97}>
+          Tableau 27.B. – Identification des problèmes de santé mentale chez les
+          patients en suivi
+        </option>
+        <option value={98}>
+          Tableau 27.B. – Identification des problèmes de santé mentale chez les
+          patients en suivi - liste nominative
+        </option>
+        <option value={99}>
+          Tableau 27.C. : Absence de problèmes de santé mentale chez les
+          patients Housing First
+        </option>
+        <option value={100}>
+          Tableau 27.C. – Absence de problème de santé mentale des patients en
+          Housing First - liste nominative
+        </option>
+        <option value={101}>
+          Tableau 27.D. – Identification des problèmes de santé mentale des
+          patients Housing First
+        </option>
+        <option value={102}>
+          Tableau 27.D. – Identification des problèmes de santé mentale des
+          patients Housing First - liste nominative
+        </option>
+        <option value={103}>
+          Tableau 28 : Identification des assuétudes déclarées' Tableau 28.A. –
+          Absence d’assuétude déclarée chez les patients en suivi
+        </option>
+        <option value={104}>
+          Tableau 28.A. – Absence d’assuétude déclarée chez les patients en
+          suivi - liste nominative
+        </option>
+        <option value={105}>
+          Tableau 28.B. – Identification des assuétudes déclarées chez les
+          patients en suivi
+        </option>
+        <option value={106}>
+          Tableau 28.B. – Identification des assuétudes déclarées chez les
+          patients en suivi - liste nominative
+        </option>
+        <option value={107}>
+          Tableau 28.C. – Absence d’assuétude déclarée chez les patients Housing
+          First
+        </option>
+        <option value={108}>
+          Tableau 28.C. – Absence d’assuétude déclarée chez les patients Housing
+          First - liste nominative
+        </option>
+        <option value={108}>
+          Tableau 28.C. – Absence d’assuétude déclarée chez les patients Housing
+          First - liste nominative
+        </option>
+        <option value={109}>
+          Tableau 28.D. – Identification des assuétudes déclarées chez les
+          patients Housing First
+        </option>
+        <option value={110}>
+          Tableau 28.D. – Identification des assuétudes déclarées chez les
+          patients Housing First - liste nominative
+        </option>
+        <option value={111}>
+          TABLEAU 29 : PERSONNES DECEDEES TABLEAU 29.A : PERSONNES DECEDEES
+          selon le suivi
+        </option>
+        <option value={112}>
+          TABLEAU 29.A : PERSONNES DECEDEES selon le suivi - liste nominative
+          avec statut précédent (n\'inclut pas les personnes uniquement encodées
+          comme décédées)
+        </option>
+        <option value={113}>
+          TABLEAU 29.B : PERSONNES DECEDEES selon l\'équipe (inclut les
+          personnes uniquement encodées comme décédées)
+        </option>
+        <option value={114}>
+          TABLEAU 29.B : PERSONNES DECEDEES selon l\'equipe - liste nominative
+          avec statut précédent (inclut les personnes uniquement encodées comme
+          décédées, n\'inclut pas les personnes sans equipe)
+        </option>
       </Form.Select>
       <a onClick={exportCSV}>export</a>
     </>

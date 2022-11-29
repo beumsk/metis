@@ -81,6 +81,2810 @@ class StatistiquesController extends AbstractController
         $this->refYear = $refYear;
     }
 
+    #[Route('/api/statistiques115', name: 'app_statistiques115')]
+    public function request115()
+    {
+        //    ne fonctionne pas, ou rentre pas dans la case ?
+
+        // modifiée
+        $conn = new mysqli(StatistiquesController::SERVERNAME, StatistiquesController::USERNAME, StatistiquesController::PASSWORD, StatistiquesController::DBNAME);
+
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+
+
+        // dd($this->refYear);
+
+        // $sql = "SELECT * FROM patients WHERE antenna = '" . $this->antennainit . "'";
+        $sql = "select
+                    dcd.patientsId,
+                    dcd.hash as h,
+                    dcd.firstname,
+                    dcd.lastname,
+                    dcd.start as dcdstart,
+                    coalesce(team.value, '--inconnue--') as equipe,
+                    team.start as team_start,
+                    coalesce(team.end, dcd.start) as team_end,
+                    ( to_days(dcd.start) - to_days(coalesce(team.end, dcd.start) ) ) 
+                from
+                    (
+                        SELECT
+                            p.id as 'patientsId',
+                            p.hash,
+                            p.firstname,
+                            p.lastname,
+                            pi.start,
+                            pi.id as 'patientsInfosId'
+                        FROM
+                            patients as p
+                            inner join patients_information as pi on p.id = pi.pati_id
+                            inner join suggestions as s on s.id = pi.sugg_id
+                            left join patients_information pi_antenna on pi_antenna.pati_id = p.id 
+                            left join suggestions s_antenna on s_antenna.id = pi_antenna.sugg_id 
+                        where
+                            s.path_string like '/patient/fiche/statut-du-suivi/decede'
+                            and pi.start is not null
+                            and pi.start like '" . $this->refyearwc . "'
+                            and pi.end is null
+                            and pi.deleted_at is null
+                            and p.deleted_at is null
+                            and '" . $this->refDate . "' between coalesce(pi_antenna.start, '" . $this->past . "') and COALESCE (pi_antenna.end, '" . $this->refDate . "')
+                            and s_antenna.path_string like '/patient/suivi/antenne/%'
+                            and s_antenna.value like '" . $this->antenna . "'
+                    ) dcd
+                    left join 
+                    (
+                        select
+                            p.id, pi_team.start, pi_team.end, s_team.value
+                        from 
+                            patients as p
+                            left join patients_information as pi_team on p.id = pi_team.id
+                            left join suggestions as s_team on s_team.id = pi_team.sugg_id
+                        where
+                            s_team.path_string like '/patient/suivi/equipe%'
+                            and pi_team.start is not null
+                            and pi_team.deleted_at is null
+                            and p.deleted_at is null
+                    ) team on team.id = dcd.patientsId
+                where 
+                    team.value is null or 
+                    (to_days(dcd.start) - to_days(coalesce(team.end, dcd.start))) < 7";
+
+        $result = $conn->query($sql);
+
+
+
+
+        if ($result->num_rows > 0) {
+            $resultJson = [];
+            while ($row = $result->fetch_assoc()) {
+                header("Content-type: application/json; charset=utf-8");
+                array_push($resultJson, $row);
+            }
+            // dd($this->json($resultJson));
+            return $this->json($resultJson);
+        } else {
+            return $this->json("Pas de résultats pour l'instant");
+        }
+        $conn->close();
+    }
+
+    #[Route('/api/statistiques114', name: 'app_statistiques114')]
+    public function request114()
+    {
+        //    ne fonctionne pas, ou rentre pas dans la case ?
+
+        // modifiée
+        $conn = new mysqli(StatistiquesController::SERVERNAME, StatistiquesController::USERNAME, StatistiquesController::PASSWORD, StatistiquesController::DBNAME);
+
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+
+
+        // dd($this->refYear);
+
+        // $sql = "SELECT * FROM patients WHERE antenna = '" . $this->antennainit . "'";
+        $sql = "select
+                    dcd.patientsId,
+                    dcd.hash as h,
+                    dcd.firstname,
+                    dcd.lastname,
+                    dcd.start as dcdstart,
+                    coalesce(team.value, '--inconnue--') as equipe,
+                    team.start as team_start,
+                    coalesce(team.end, dcd.start) as team_end,
+                    ( to_days(dcd.start) - to_days(coalesce(team.end, dcd.start) ) ) 
+                from
+                    (
+                        SELECT
+                            p.id as 'patientsId',
+                            p.hash,
+                            p.firstname,
+                            p.lastname,
+                            pi.start,
+                            pi.id as 'patientsInfosId'
+                        FROM
+                            patients as p
+                            inner join patients_information as pi on p.id = pi.pati_id
+                            inner join suggestions as s on s.id = pi.sugg_id
+                            left join patients_information pi_antenna on pi_antenna.pati_id = p.id 
+                            left join suggestions s_antenna on s_antenna.id = pi_antenna.sugg_id 
+                        where
+                            s.path_string like '/patient/fiche/statut-du-suivi/decede'
+                            and pi.start is not null
+                            and pi.start like '" . $this->refyearwc . "'
+                            and pi.end is null
+                            and pi.deleted_at is null
+                            and p.deleted_at is null
+                            and '" . $this->refDate . "' between coalesce(pi_antenna.start, '" . $this->past . "') and COALESCE (pi_antenna.end, '" . $this->refDate . "')
+                            and s_antenna.path_string like '/patient/suivi/antenne/%'
+                            and s_antenna.value like '" . $this->antenna . "'
+                    ) dcd
+                    left join 
+                    (
+                        select
+                            p.id, pi_team.start, pi_team.end, s_team.value
+                        from 
+                            patients as p
+                            left join patients_information as pi_team on p.id = pi_team.id
+                            left join suggestions as s_team on s_team.id = pi_team.sugg_id
+                        where
+                            s_team.path_string like '/patient/suivi/equipe%'
+                            and pi_team.start is not null
+                            and pi_team.deleted_at is null
+                            and p.deleted_at is null
+                    ) team on team.id = dcd.patientsId
+                where 
+                    team.value is null or 
+                    (to_days(dcd.start) - to_days(coalesce(team.end, dcd.start))) < 7";
+
+        $result = $conn->query($sql);
+
+
+
+
+        if ($result->num_rows > 0) {
+            $resultJson = [];
+            while ($row = $result->fetch_assoc()) {
+                header("Content-type: application/json; charset=utf-8");
+                array_push($resultJson, $row);
+            }
+            // dd($this->json($resultJson));
+            return $this->json($resultJson);
+        } else {
+            return $this->json("Pas de résultats pour l'instant");
+        }
+        $conn->close();
+    }
+
+    #[Route('/api/statistiques113', name: 'app_statistiques113')]
+    public function request113()
+    {
+        //    ne fonctionne pas, ou rentre pas dans la case ?
+
+        // modifiée
+        $conn = new mysqli(StatistiquesController::SERVERNAME, StatistiquesController::USERNAME, StatistiquesController::PASSWORD, StatistiquesController::DBNAME);
+
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+
+
+        // dd($this->refYear);
+
+        // $sql = "SELECT * FROM patients WHERE antenna = '" . $this->antennainit . "'";
+        $sql = "select
+                    coalesce(team.value, '--inconnue--') as equipe,
+                    count(dcd.patientId) as nombre
+                from
+                    (
+                        SELECT
+                            p.id as 'patientId',
+                            p.hash,
+                            p.firstname,
+                            p.lastname,
+                            pi.start,
+                            pi.id as 'patientInfoId'
+                        FROM
+                            patients as p
+                            inner join patients_information as pi on p.id = pi.pati_id
+                            inner join suggestions as s on s.id = pi.sugg_id
+                            left join patients_information pi_antenna on pi_antenna.pati_id = p.id 
+                            left join suggestions s_antenna on s_antenna.id = pi_antenna.sugg_id 
+                        where
+                            s.path_string like '/patient/fiche/statut-du-suivi/decede'
+                            and pi.start is not null
+                            and pi.start like '" . $this->refyearwc . "'
+                            and pi.end is null
+                            and pi.deleted_at is null
+                            and p.deleted_at is null
+                            and '" . $this->refDate . "' between coalesce(pi_antenna.start, '" . $this->past . "') and COALESCE (pi_antenna.end, '" . $this->refDate . "')
+                            and s_antenna.path_string like '/patient/suivi/antenne/%'
+                            and s_antenna.value like '" . $this->antenna . "'
+                    ) dcd
+                    left join 
+                    (
+                        select
+                            p.id, pi_team.start, pi_team.end, s_team.value
+                        from 
+                            patients as p
+                            left join patients_information as pi_team on p.id = pi_team.id
+                            left join suggestions as s_team on s_team.id = pi_team.sugg_id
+                        where
+                            s_team.path_string like '/patient/suivi/equipe%'
+                            and pi_team.start is not null
+                            and pi_team.deleted_at is null
+                            and p.deleted_at is null
+                    ) team on team.id = dcd.patientId
+                where 
+                    team.value is null or 
+                    (to_days(dcd.start) - to_days(coalesce(team.end, dcd.start))) < 7
+                group by equipe";
+
+        $result = $conn->query($sql);
+
+
+
+
+        if ($result->num_rows > 0) {
+            $resultJson = [];
+            while ($row = $result->fetch_assoc()) {
+                header("Content-type: application/json; charset=utf-8");
+                array_push($resultJson, $row);
+            }
+            // dd($this->json($resultJson));
+            return $this->json($resultJson);
+        } else {
+            return $this->json("Pas de résultats pour l'instant");
+        }
+        $conn->close();
+    }
+
+    #[Route('/api/statistiques112', name: 'app_statistiques112')]
+    public function request112()
+    {
+        //    ne fonctionne pas, ou rentre pas dans la case ?
+
+        // modifiée
+        $conn = new mysqli(StatistiquesController::SERVERNAME, StatistiquesController::USERNAME, StatistiquesController::PASSWORD, StatistiquesController::DBNAME);
+
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+
+
+        // dd($this->refYear);
+
+        // $sql = "SELECT * FROM patients WHERE antenna = '" . $this->antennainit . "'";
+        $sql = "select
+                    dcd.patientsId,
+                    dcd.hash as h,
+                    dcd.firstname,
+                    dcd.lastname,
+                    dcd.start as dcdstart,
+                    coalesce(laststate.value, '--inconnue--') as equipe,
+                    laststate.start as laststate_start,
+                    coalesce(laststate.end, dcd.start) as laststate_end,
+                    ( to_days(dcd.start) - to_days(coalesce(laststate.end, dcd.start) ) ) 
+                from
+                    (
+                        SELECT
+                            p.id as 'patientsId',
+                            p.hash,
+                            p.firstname,
+                            p.lastname,
+                            pi.start,
+                            pi.id as 'patientsInfosId'
+                        FROM
+                            patients as p
+                            inner join patients_information as pi on p.id = pi.pati_id
+                            inner join suggestions as s on s.id = pi.sugg_id
+                            left join patients_information pi_antenna on pi_antenna.pati_id = p.id 
+                            left join suggestions s_antenna on s_antenna.id = pi_antenna.sugg_id 
+                        where
+                            s.path_string like '/patient/fiche/statut-du-suivi/decede'
+                            and pi.start is not null
+                            and pi.start like '" . $this->refyearwc . "'
+                            and pi.end is null
+                            and pi.deleted_at is null
+                            and p.deleted_at is null
+                            and '" . $this->refDate . "' between coalesce(pi_antenna.start, '" . $this->past . "') and COALESCE (pi_antenna.end, '" . $this->refDate . "')
+                            and s_antenna.path_string like '/patient/suivi/antenne/%'
+                            and s_antenna.value like '" . $this->antenna . "'
+                    ) dcd
+                    left join 
+                    (
+                        select
+                            p.id, pi_laststate.start, pi_laststate.end, s_laststate.value
+                        from 
+                            patients as p
+                            left join patients_information as pi_laststate on p.id = pi_laststate.id
+                            left join suggestions as s_laststate on s_laststate.id = pi_laststate.sugg_id
+                        where
+                            s_laststate.path_string like '/patient/fiche/statut-du-suivi/%'
+                            and s_laststate.path_string not like '/patient/fiche/statut-du-suivi/decede'
+                            and pi_laststate.start is not null
+                            and pi_laststate.deleted_at is null
+                            and p.deleted_at is null
+                    ) laststate on laststate.id = dcd.patientsId
+                where 
+                    laststate.value is null or 
+                    (to_days(dcd.start) - to_days(coalesce(laststate.end, dcd.start))) < 7";
+
+        $result = $conn->query($sql);
+
+
+
+
+        if ($result->num_rows > 0) {
+            $resultJson = [];
+            while ($row = $result->fetch_assoc()) {
+                header("Content-type: application/json; charset=utf-8");
+                array_push($resultJson, $row);
+            }
+            // dd($this->json($resultJson));
+            return $this->json($resultJson);
+        } else {
+            return $this->json("Pas de résultats pour l'instant");
+        }
+        $conn->close();
+    }
+
+    #[Route('/api/statistiques111', name: 'app_statistiques111')]
+    public function request111()
+    {
+        //    ne fonctionne pas, ou rentre pas dans la case ?
+
+        // modifiée
+        $conn = new mysqli(StatistiquesController::SERVERNAME, StatistiquesController::USERNAME, StatistiquesController::PASSWORD, StatistiquesController::DBNAME);
+
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+
+
+        // dd($this->refYear);
+
+        // $sql = "SELECT * FROM patients WHERE antenna = '" . $this->antennainit . "'";
+        $sql = "select
+                    coalesce(laststate.value, '--inconnue--') as dernierstatut,
+                    count(dcd.patientId) as nombre
+                from
+                    (
+                        SELECT
+                            p.id as 'patientId',
+                            p.hash,
+                            p.firstname,
+                            p.lastname,
+                            pi.start,
+                            pi.id as 'patientInfosId'
+                        FROM
+                            patients as p
+                            inner join patients_information as pi on p.id = pi.pati_id
+                            inner join suggestions as s on s.id = pi.sugg_id
+                            left join patients_information pi_antenna on pi_antenna.pati_id = p.id 
+                            left join suggestions s_antenna on s_antenna.id = pi_antenna.sugg_id 
+                        where
+                            s.path_string like '/patient/fiche/statut-du-suivi/decede'
+                            and pi.start is not null
+                            and pi.start like '" . $this->refyearwc . "'
+                            and pi.end is null
+                            and pi.deleted_at is null
+                            and p.deleted_at is null
+                            and '" . $this->refDate . "' between coalesce(pi_antenna.start, '" . $this->past . "') and COALESCE (pi_antenna.end, '" . $this->refDate . "')
+                            and s_antenna.path_string like '/patient/suivi/antenne/%'
+                            and s_antenna.value like '" . $this->antenna . "'
+                    ) dcd
+                    left join 
+                    (
+                        select
+                            p.id, pi_laststate.start, pi_laststate.end, s_laststate.value
+                        from 
+                            patients as p
+                            left join patients_information as pi_laststate on p.id = pi_laststate.id
+                            left join suggestions as s_laststate on s_laststate.id = pi_laststate.sugg_id
+                        where
+                            s_laststate.path_string like '/patient/fiche/statut-du-suivi/%'
+                            and s_laststate.path_string not like '/patient/fiche/statut-du-suivi/decede'
+                            and pi_laststate.start is not null
+                            and pi_laststate.deleted_at is null
+                            and p.deleted_at is null
+                    ) laststate on laststate.id = dcd.patientId
+                where 
+                    laststate.value is null or 
+                    (to_days(dcd.start) - to_days(coalesce(laststate.end, dcd.start))) < 7
+                group by dernierstatut";
+
+        $result = $conn->query($sql);
+
+
+
+
+        if ($result->num_rows > 0) {
+            $resultJson = [];
+            while ($row = $result->fetch_assoc()) {
+                header("Content-type: application/json; charset=utf-8");
+                array_push($resultJson, $row);
+            }
+            // dd($this->json($resultJson));
+            return $this->json($resultJson);
+        } else {
+            return $this->json("Pas de résultats pour l'instant");
+        }
+        $conn->close();
+    }
+
+    #[Route('/api/statistiques110', name: 'app_statistiques110')]
+    public function request110()
+    {
+        //    ne fonctionne pas, ou rentre pas dans la case ?
+
+        // modifiée
+        $conn = new mysqli(StatistiquesController::SERVERNAME, StatistiquesController::USERNAME, StatistiquesController::PASSWORD, StatistiquesController::DBNAME);
+
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+
+
+        // dd($this->refYear);
+
+        // $sql = "SELECT * FROM patients WHERE antenna = '" . $this->antennainit . "'";
+        $sql = "select 
+                    coalesce(path.category, '--inconnu--') as category,
+                    coalesce(path.problem, '--inconnu--') as problem,
+                    p.hash
+                from 
+                    patients p 
+                    inner join 
+                    (
+                        select
+                            p.id,
+                            s.value as programme
+                        FROM
+                            patients as p
+                            inner join patients_information as pi on p.id = pi.pati_id
+                            inner join suggestions as s on s.id = pi.sugg_id
+                            inner  join patients_information pi_antenna on pi_antenna.pati_id = p.id 
+                            inner  join suggestions s_antenna on s_antenna.id = pi_antenna.sugg_id 
+                            inner join patients_information as pi_stat on p.id = pi_stat.pati_id 
+                            inner join suggestions as s_stat on s_stat.id = pi_stat.sugg_id 
+                        where
+                            s.path_string like '/patient/suivi/programme/housing-first'
+                            and pi.deleted_at is null
+                            and p.deleted_at is null
+                            and '" . $this->refDate . "' BETWEEN coalesce(pi.start, '" . $this->past . "') and COALESCE(pi.end, '" . $this->refDate . "')
+                            
+                            and s_antenna.path_string like '/patient/suivi/antenne/%'
+                            and pi_antenna.deleted_at is null
+                            and s_antenna.value like '" . $this->antenna . "' 
+                            and pi.start <= COALESCE (pi_antenna.end, '" . $this->refDate . "')
+                            and coalesce(pi.end, '" . $this->refDate . "') >= coalesce(pi_antenna.start, '" . $this->past . "') 
+                
+                            and s_stat.path_string like '/patient/fiche/statut-du-suivi/%'
+                            and s_stat.path_string not like '/patient/fiche/statut-du-suivi/decede'
+                            and '" . $this->refDate . "' between COALESCE(pi_stat.start, '" . $this->past . "') and COALESCE (pi_stat.end, '" . $this->nextyear0101 . "')
+                            and pi_stat.deleted_at is null
+                    ) hf on hf.id = p.id	
+                    left join 
+                    (	
+                        select 
+                            pi_path.pati_id ,
+                            if(stel.value like '%Déclarée%', 'Assuétude', stel.value) as category,
+                            s2.value as problem
+                        from patients_information pi_path  
+                                inner join suggestions as s2 on s2.id = pi_path.sugg_id 
+                                inner join patients_information_template_element pitel on pitel.id = pi_path.itel_id 
+                                inner join suggestions stel on stel.id = pitel.suge_id 
+                            where 
+                                stel.path_string like '/patient/fiche/assuetude/declaree%' 
+                                and pi_path.deleted_at is null 
+                                and '" . $this->refDate . "' BETWEEN coalesce(pi_path.start, '" . $this->past . "') and COALESCE(pi_path.end, '" . $this->refDate . "')
+                            group by 
+                                pi_path.pati_id,
+                                stel.value,
+                                s2.value
+                    ) path
+                    on path.pati_id = p.id
+                order by 
+                    path.category,
+                    path.problem";
+
+        $result = $conn->query($sql);
+
+
+
+
+        if ($result->num_rows > 0) {
+            $resultJson = [];
+            while ($row = $result->fetch_assoc()) {
+                header("Content-type: application/json; charset=utf-8");
+                array_push($resultJson, $row);
+            }
+            // dd($this->json($resultJson));
+            return $this->json($resultJson);
+        } else {
+            return $this->json("Pas de résultats pour l'instant");
+        }
+        $conn->close();
+    }
+
+
+    #[Route('/api/statistiques109', name: 'app_statistiques109')]
+    public function request109()
+    {
+        //    ne fonctionne pas, ou rentre pas dans la case ?
+
+        // modifiée
+        $conn = new mysqli(StatistiquesController::SERVERNAME, StatistiquesController::USERNAME, StatistiquesController::PASSWORD, StatistiquesController::DBNAME);
+
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+
+
+        // dd($this->refYear);
+
+        // $sql = "SELECT * FROM patients WHERE antenna = '" . $this->antennainit . "'";
+        $sql = "select 
+                    path.category,
+                    path.problem,
+                    count(p.hash) as nombre
+                from 
+                    patients p 
+                    inner join 
+                    (
+                        select
+                            p.id,
+                            s.value as programme
+                        FROM
+                            patients as p
+                            inner join patients_information as pi on p.id = pi.pati_id
+                            inner join suggestions as s on s.id = pi.sugg_id
+                            inner  join patients_information pi_antenna on pi_antenna.pati_id = p.id 
+                            inner  join suggestions s_antenna on s_antenna.id = pi_antenna.sugg_id 
+                            inner join patients_information as pi_stat on p.id = pi_stat.pati_id 
+                            inner join suggestions as s_stat on s_stat.id = pi_stat.sugg_id 
+                        where
+                            s.path_string like '/patient/suivi/programme/housing-first'
+                            and pi.deleted_at is null
+                            and p.deleted_at is null
+                            and '" . $this->refDate . "' BETWEEN coalesce(pi.start, '" . $this->past . "') and COALESCE(pi.end, '" . $this->refDate . "')
+                            
+                            and s_antenna.path_string like '/patient/suivi/antenne/%'
+                            and pi_antenna.deleted_at is null
+                            and s_antenna.value like '" . $this->antenna . "' 
+                            and pi.start <= COALESCE (pi_antenna.end, '" . $this->refDate . "')
+                            and coalesce(pi.end, '" . $this->refDate . "') >= coalesce(pi_antenna.start, '" . $this->past . "') 
+                
+                            and s_stat.path_string like '/patient/fiche/statut-du-suivi/%' 
+                            and s_stat.path_string not like '/patient/fiche/statut-du-suivi/decede' 
+                            and '" . $this->refDate . "' between COALESCE(pi_stat.start, '" . $this->past . "') and COALESCE (pi_stat.end, '" . $this->nextyear0101 . "')
+                            and pi_stat.deleted_at is null
+                    ) hf on hf.id = p.id	
+                    left join 
+                    (	
+                        select 
+                            pi_path.pati_id ,
+                            stel.value as category,
+                            s2.value as problem
+                        from patients_information pi_path  
+                                inner join suggestions as s2 on s2.id = pi_path.sugg_id 
+                                inner join patients_information_template_element pitel on pitel.id = pi_path.itel_id 
+                                inner join suggestions stel on stel.id = pitel.suge_id 
+                            where 
+                                stel.path_string like '/patient/fiche/assuetude/declaree%' 
+                                and pi_path.deleted_at is null 
+                                and '" . $this->refDate . "' BETWEEN coalesce(pi_path.start, '" . $this->past . "') and COALESCE(pi_path.end, '" . $this->refDate . "')
+                            group by 
+                                pi_path.pati_id,
+                                stel.value,
+                                s2.value
+                    ) path
+                    on path.pati_id = p.id
+                group by 
+                    path.category,
+                    path.problem
+                order by 
+                    path.category,
+                    path.problem";
+
+        $result = $conn->query($sql);
+
+
+
+
+        if ($result->num_rows > 0) {
+            $resultJson = [];
+            while ($row = $result->fetch_assoc()) {
+                header("Content-type: application/json; charset=utf-8");
+                array_push($resultJson, $row);
+            }
+            // dd($this->json($resultJson));
+            return $this->json($resultJson);
+        } else {
+            return $this->json("Pas de résultats pour l'instant");
+        }
+        $conn->close();
+    }
+
+    #[Route('/api/statistiques108', name: 'app_statistiques108')]
+    public function request108()
+    {
+        //    ne fonctionne pas, ou rentre pas dans la case ?
+
+        // modifiée
+        $conn = new mysqli(StatistiquesController::SERVERNAME, StatistiquesController::USERNAME, StatistiquesController::PASSWORD, StatistiquesController::DBNAME);
+
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+
+
+        // dd($this->refYear);
+
+        // $sql = "SELECT * FROM patients WHERE antenna = '" . $this->antennainit . "'";
+        $sql = "select 
+                    p.hash,
+                    p.firstname,
+                    p.lastname,
+                        sum(
+                        if (path.problem like '%declarée%', 1, 0)
+                    ) as assuetude
+                from 
+                    patients p 
+                    inner join 
+                    (
+                        select
+                            p.id,
+                            s.value as programme
+                        FROM
+                            patients as p
+                            inner join patients_information as pi on p.id = pi.pati_id
+                            inner join suggestions as s on s.id = pi.sugg_id
+                            inner  join patients_information pi_antenna on pi_antenna.pati_id = p.id 
+                            inner  join suggestions s_antenna on s_antenna.id = pi_antenna.sugg_id 
+                            inner join patients_information as pi_stat on p.id = pi_stat.pati_id 
+                            inner join suggestions as s_stat on s_stat.id = pi_stat.sugg_id 
+                        where
+                            s.path_string like '/patient/suivi/programme/housing-first'
+                            and pi.deleted_at is null
+                            and p.deleted_at is null
+                            and '" . $this->refDate . "' BETWEEN coalesce(pi.start, '" . $this->past . "') and COALESCE(pi.end, '" . $this->refDate . "')
+                            
+                            and s_antenna.path_string like '/patient/suivi/antenne/%'
+                            and pi_antenna.deleted_at is null
+                            and s_antenna.value like '" . $this->antenna . "' 
+                            and pi.start <= COALESCE (pi_antenna.end, '" . $this->refDate . "')
+                            and coalesce(pi.end, '" . $this->refDate . "') >= coalesce(pi_antenna.start, '" . $this->past . "') 
+
+                            and s_stat.path_string like '/patient/fiche/statut-du-suivi/%' 
+                            and s_stat.path_string not like '/patient/fiche/statut-du-suivi/decede'
+                            and s_stat.path_string not like '/patient/fiche/statut-du-suivi/disparu'
+                            and '" . $this->refDate . "' between COALESCE(pi_stat.start, '" . $this->past . "') and COALESCE (pi_stat.end, '" . $this->nextyear0101 . "')
+                            and pi_stat.deleted_at is null
+                    ) hf on hf.id = p.id	
+                    left join 
+                    (	
+                        select 
+                            pi_path.pati_id ,
+                            stel.value as problem
+                        from patients_information pi_path  
+                                inner join suggestions as s2 on s2.id = pi_path.sugg_id 
+                                inner join patients_information_template_element pitel on pitel.id = pi_path.itel_id 
+                                inner join suggestions stel on stel.id = pitel.suge_id 
+                        where 
+                                (
+                                    stel.path_string like '/patient/fiche/assuetude/declaree%' 
+                                    or s2.path_string like '/patient/medical/patholo%'
+                                ) 
+                                and pi_path.deleted_at is null 
+                                and '" . $this->refDate . "' BETWEEN coalesce(pi_path.start, '" . $this->past . "') and COALESCE(pi_path.end, '" . $this->refDate . "')
+                        group by 
+                                pi_path.pati_id,
+                                stel.value
+                    ) path on path.pati_id = p.id
+                where programme is not null
+            group by 
+                hash, firstname, lastname
+            order by hash";
+
+        $result = $conn->query($sql);
+
+
+
+
+        if ($result->num_rows > 0) {
+            $resultJson = [];
+            while ($row = $result->fetch_assoc()) {
+                header("Content-type: application/json; charset=utf-8");
+                array_push($resultJson, $row);
+            }
+            // dd($this->json($resultJson));
+            return $this->json($resultJson);
+        } else {
+            return $this->json("Pas de résultats pour l'instant");
+        }
+        $conn->close();
+    }
+
+    #[Route('/api/statistiques107', name: 'app_statistiques107')]
+    public function request107()
+    {
+        //    ne fonctionne pas, ou rentre pas dans la case ?
+
+        // modifiée
+        $conn = new mysqli(StatistiquesController::SERVERNAME, StatistiquesController::USERNAME, StatistiquesController::PASSWORD, StatistiquesController::DBNAME);
+
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+
+
+        // dd($this->refYear);
+
+        // $sql = "SELECT * FROM patients WHERE antenna = '" . $this->antennainit . "'";
+        $sql = "select 
+                    sum(if (assuetude = 0, 1, 0)) as 'absence d\'assuetude',
+                    sum(if (assuetude > 0, 1, 0)) as 'avec assuetude',
+                    count(assuetude) as 'nombre de patients dans le programme'
+                from 
+                (
+                select 
+                            p.hash,
+                            p.firstname,
+                            p.lastname,
+                                sum(
+                                if (path.category like '%déclarée%', 1, 0)
+                            ) as assuetude
+                        from 
+                            patients p 
+                            inner join 
+                            (
+                                select
+                                    p.id,
+                                    s.value as programme
+                                FROM
+                                    patients as p
+                                    inner join patients_information as pi on p.id = pi.pati_id
+                                    inner join suggestions as s on s.id = pi.sugg_id
+                                    inner  join patients_information pi_antenna on pi_antenna.pati_id = p.id 
+                                    inner  join suggestions s_antenna on s_antenna.id = pi_antenna.sugg_id 
+                                    inner join patients_information as pi_stat on p.id = pi_stat.pati_id 
+                                    inner join suggestions as s_stat on s_stat.id = pi_stat.sugg_id 
+                                where
+                                    s.path_string like '/patient/suivi/programme/housing-first'
+                                    and pi.deleted_at is null
+                                    and p.deleted_at is null
+                                    and '" . $this->refDate . "' BETWEEN coalesce(pi.start, '" . $this->past . "') and COALESCE(pi.end, '" . $this->refDate . "')
+                                    
+                                    and s_antenna.path_string like '/patient/suivi/antenne/%'
+                                    and pi_antenna.deleted_at is null
+                                    and s_antenna.value like '" . $this->antenna . "' 
+                                    and pi.start <= COALESCE (pi_antenna.end, '" . $this->refDate . "')
+                                    and coalesce(pi.end, '" . $this->refDate . "') >= coalesce(pi_antenna.start, '" . $this->past . "') 
+                
+                                    and s_stat.path_string like '/patient/fiche/statut-du-suivi/%' 
+                                    and s_stat.path_string not like '/patient/fiche/statut-du-suivi/decede'
+                                    and s_stat.path_string not like '/patient/fiche/statut-du-suivi/disparu'
+                                    and '" . $this->refDate . "' between COALESCE(pi_stat.start, '" . $this->past . "') and COALESCE (pi_stat.end, '" . $this->nextyear0101 . "')
+                                    and pi_stat.deleted_at is null
+                            ) hf on hf.id = p.id	
+                            left join 
+                            (	
+                                select 
+                                    pi_path.pati_id ,
+                                    stel.value as category
+                                from patients_information pi_path  
+                                        inner join suggestions as s2 on s2.id = pi_path.sugg_id 
+                                        inner join patients_information_template_element pitel on pitel.id = pi_path.itel_id 
+                                        inner join suggestions stel on stel.id = pitel.suge_id 
+                                where 
+                                        (
+                                            stel.path_string like '/patient/fiche/assuetude/declaree%' 
+                                            or s2.path_string like '/patient/medical/patholo%'
+                                        ) 
+                                        and pi_path.deleted_at is null 
+                                        and '" . $this->refDate . "' BETWEEN coalesce(pi_path.start, '" . $this->past . "') and COALESCE(pi_path.end, '" . $this->refDate . "')
+                                group by 
+                                        pi_path.pati_id,
+                                        stel.value
+                            ) path on path.pati_id = p.id
+                        where programme is not null
+                    group by 
+                        hash, firstname, lastname
+                    order by hash
+                ) s";
+
+        $result = $conn->query($sql);
+
+
+
+
+        if ($result->num_rows > 0) {
+            $resultJson = [];
+            while ($row = $result->fetch_assoc()) {
+                header("Content-type: application/json; charset=utf-8");
+                array_push($resultJson, $row);
+            }
+            // dd($this->json($resultJson));
+            return $this->json($resultJson);
+        } else {
+            return $this->json("Pas de résultats pour l'instant");
+        }
+        $conn->close();
+    }
+
+
+    #[Route('/api/statistiques106', name: 'app_statistiques106')]
+    public function request106()
+    {
+        //    ne fonctionne pas, ou rentre pas dans la case ?
+
+        // modifiée
+        $conn = new mysqli(StatistiquesController::SERVERNAME, StatistiquesController::USERNAME, StatistiquesController::PASSWORD, StatistiquesController::DBNAME);
+
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+
+
+        // dd($this->refYear);
+
+        // $sql = "SELECT * FROM patients WHERE antenna = '" . $this->antennainit . "'";
+        $sql = "select 
+                    coalesce(path.category, 'Assuétude') as category,
+                    p.hash,
+                    coalesce(path.problem, 'aucune assuétude') as probleme
+                from 
+                    patients p 
+                    inner join 
+                    (
+                        select
+                            p.id
+                        FROM
+                            patients as p
+                            inner  join patients_information pi_antenna on pi_antenna.pati_id = p.id 
+                            inner  join suggestions s_antenna on s_antenna.id = pi_antenna.sugg_id 
+                            inner join patients_information as pi_stat on p.id = pi_stat.pati_id 
+                            inner join suggestions as s_stat on s_stat.id = pi_stat.sugg_id 
+                        where
+                            s_antenna.path_string like '/patient/suivi/antenne/%'
+                            and pi_antenna.deleted_at is null
+                            and s_antenna.value like '" . $this->antenna . "' 
+                            and pi_stat.start <= COALESCE (pi_antenna.end, '" . $this->refDate . "')
+                            and coalesce(pi_stat.end, '" . $this->refDate . "') >= coalesce(pi_antenna.start, '" . $this->past . "') 
+                
+                            and s_stat.path_string like '/patient/fiche/statut-du-suivi/en-suivi'
+                            and '" . $this->refDate . "' between COALESCE(pi_stat.start, '" . $this->past . "') and COALESCE (pi_stat.end, '" . $this->nextyear0101 . "')
+                            and pi_stat.deleted_at is null
+                    ) suivi on suivi.id = p.id	
+                    left join 
+                    (	
+                        select 
+                            pi_path.pati_id ,
+                            stel.value as category,
+                            s2.value as problem
+                        from patients_information pi_path  
+                                inner join suggestions as s2 on s2.id = pi_path.sugg_id 
+                                inner join patients_information_template_element pitel on pitel.id = pi_path.itel_id 
+                                inner join suggestions stel on stel.id = pitel.suge_id 
+                            where 
+                                stel.path_string like '/patient/fiche/assuetude/declaree%' 
+                                and pi_path.deleted_at is null 
+                                and '" . $this->refDate . "' BETWEEN coalesce(pi_path.start, '" . $this->past . "') and COALESCE(pi_path.end, '" . $this->refDate . "')
+                            group by 
+                                pi_path.pati_id,
+                                stel.value,
+                                s2.value
+                    ) path
+                    on path.pati_id = p.id
+                order by 
+                    path.category,
+                    p.hash";
+
+        $result = $conn->query($sql);
+
+
+
+
+        if ($result->num_rows > 0) {
+            $resultJson = [];
+            while ($row = $result->fetch_assoc()) {
+                header("Content-type: application/json; charset=utf-8");
+                array_push($resultJson, $row);
+            }
+            // dd($this->json($resultJson));
+            return $this->json($resultJson);
+        } else {
+            return $this->json("Pas de résultats pour l'instant");
+        }
+        $conn->close();
+    }
+
+    #[Route('/api/statistiques105', name: 'app_statistiques105')]
+    public function request105()
+    {
+        //    ne fonctionne pas, ou rentre pas dans la case ?
+
+        // modifiée
+        $conn = new mysqli(StatistiquesController::SERVERNAME, StatistiquesController::USERNAME, StatistiquesController::PASSWORD, StatistiquesController::DBNAME);
+
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+
+
+        // dd($this->refYear);
+
+        // $sql = "SELECT * FROM patients WHERE antenna = '" . $this->antennainit . "'";
+        $sql = "select 
+                    coalesce(path.category, 'Assuétude') as category,
+                    coalesce(path.problem, 'aucune assuétude') as probleme,
+                    count(p.hash) as nombre
+                from 
+                    patients p 
+                    inner join 
+                    (
+                        select
+                            p.id
+                        FROM
+                            patients as p
+                            inner  join patients_information pi_antenna on pi_antenna.pati_id = p.id 
+                            inner  join suggestions s_antenna on s_antenna.id = pi_antenna.sugg_id 
+                            inner join patients_information as pi_stat on p.id = pi_stat.pati_id 
+                            inner join suggestions as s_stat on s_stat.id = pi_stat.sugg_id 
+                        where
+                            s_antenna.path_string like '/patient/suivi/antenne/%'
+                            and pi_antenna.deleted_at is null
+                            and s_antenna.value like '" . $this->antenna . "' 
+                            and pi_stat.start <= COALESCE (pi_antenna.end, '" . $this->refDate . "')
+                            and coalesce(pi_stat.end, '" . $this->refDate . "') >= coalesce(pi_antenna.start, '" . $this->past . "') 
+                
+                            and s_stat.path_string like '/patient/fiche/statut-du-suivi/en-suivi'
+                            and '" . $this->refDate . "' between COALESCE(pi_stat.start, '" . $this->past . "') and COALESCE (pi_stat.end, '" . $this->nextyear0101 . "')
+                            and pi_stat.deleted_at is null
+                    ) suivi on suivi.id = p.id	
+                    left join 
+                    (	
+                        select 
+                            pi_path.pati_id ,
+                            stel.value as category,
+                            s2.value as problem
+                        from patients_information pi_path  
+                                inner join suggestions as s2 on s2.id = pi_path.sugg_id 
+                                inner join patients_information_template_element pitel on pitel.id = pi_path.itel_id 
+                                inner join suggestions stel on stel.id = pitel.suge_id 
+                            where 
+                                stel.path_string like '/patient/fiche/assuetude/declaree%' 
+                                and pi_path.deleted_at is null 
+                                and '" . $this->refDate . "' BETWEEN coalesce(pi_path.start, '" . $this->past . "') and COALESCE(pi_path.end, '" . $this->refDate . "')
+                            group by 
+                                pi_path.pati_id,
+                                stel.value,
+                                s2.value
+                    ) path
+                    on path.pati_id = p.id
+                group by 
+                    path.category,
+                    path.problem
+                order by 
+                    path.category,
+                    path.problem";
+
+        $result = $conn->query($sql);
+
+
+
+
+        if ($result->num_rows > 0) {
+            $resultJson = [];
+            while ($row = $result->fetch_assoc()) {
+                header("Content-type: application/json; charset=utf-8");
+                array_push($resultJson, $row);
+            }
+            // dd($this->json($resultJson));
+            return $this->json($resultJson);
+        } else {
+            return $this->json("Pas de résultats pour l'instant");
+        }
+        $conn->close();
+    }
+
+    #[Route('/api/statistiques104', name: 'app_statistiques104')]
+    public function request104()
+    {
+        //    ne fonctionne pas, ou rentre pas dans la case ?
+
+        // modifiée
+        $conn = new mysqli(StatistiquesController::SERVERNAME, StatistiquesController::USERNAME, StatistiquesController::PASSWORD, StatistiquesController::DBNAME);
+
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+
+
+        // dd($this->refYear);
+
+        // $sql = "SELECT * FROM patients WHERE antenna = '" . $this->antennainit . "'";
+        $sql = "select 
+                    p.hash,
+                    coalesce(path.problem, '--aucun--') as probleme
+                from 
+                    patients p 
+                    inner join 
+                    (
+                        select
+                            p.id
+                        FROM
+                            patients as p
+                            inner  join patients_information pi_antenna on pi_antenna.pati_id = p.id 
+                            inner  join suggestions s_antenna on s_antenna.id = pi_antenna.sugg_id 
+                            inner join patients_information as pi_stat on p.id = pi_stat.pati_id 
+                            inner join suggestions as s_stat on s_stat.id = pi_stat.sugg_id 
+                        where
+                            s_antenna.path_string like '/patient/suivi/antenne/%'
+                            and pi_antenna.deleted_at is null
+                            and s_antenna.value like '" . $this->antenna . "' 
+                            and pi_stat.start <= COALESCE (pi_antenna.end, '" . $this->refDate . "')
+                            and coalesce(pi_stat.end, '" . $this->refDate . "') >= coalesce(pi_antenna.start, '" . $this->past . "') 
+                
+                            and s_stat.path_string like '/patient/fiche/statut-du-suivi/en-suivi' 
+                            and '" . $this->refDate . "' between COALESCE(pi_stat.start, '" . $this->past . "') and COALESCE (pi_stat.end, '" . $this->nextyear0101 . "')
+                            and pi_stat.deleted_at is null
+                
+                    ) hf on hf.id = p.id	
+                    left join 
+                    (	
+                        select 
+                            pi_path.pati_id ,
+                            stel.value as category,
+                            s2.value as problem
+                        from patients_information pi_path  
+                                inner join suggestions as s2 on s2.id = pi_path.sugg_id 
+                                inner join patients_information_template_element pitel on pitel.id = pi_path.itel_id 
+                                inner join suggestions stel on stel.id = pitel.suge_id 
+                            where 
+                                stel.path_string like '/patient/fiche/assuetude/declaree%' 
+                                and pi_path.deleted_at is null 
+                                and '" . $this->refDate . "' BETWEEN coalesce(pi_path.start, '" . $this->past . "') and COALESCE(pi_path.end, '" . $this->refDate . "')
+                            group by 
+                                pi_path.pati_id,
+                                stel.value,
+                                s2.value
+                    ) path
+                    on path.pati_id = p.id
+                order by hash";
+
+        $result = $conn->query($sql);
+
+
+
+
+        if ($result->num_rows > 0) {
+            $resultJson = [];
+            while ($row = $result->fetch_assoc()) {
+                header("Content-type: application/json; charset=utf-8");
+                array_push($resultJson, $row);
+            }
+            // dd($this->json($resultJson));
+            return $this->json($resultJson);
+        } else {
+            return $this->json("Pas de résultats pour l'instant");
+        }
+        $conn->close();
+    }
+
+    #[Route('/api/statistiques103', name: 'app_statistiques103')]
+    public function request103()
+    {
+        //    ne fonctionne pas, ou rentre pas dans la case ?
+
+        // modifiée
+        $conn = new mysqli(StatistiquesController::SERVERNAME, StatistiquesController::USERNAME, StatistiquesController::PASSWORD, StatistiquesController::DBNAME);
+
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+
+
+        // dd($this->refYear);
+
+        // $sql = "SELECT * FROM patients WHERE antenna = '" . $this->antennainit . "'";
+        $sql = "select 
+                    coalesce(path.category, '--inconnu--') as category,
+                    coalesce(path.problem, '--inconnu--') as problem,
+                    p.hash
+                from 
+                    patients p 
+                    inner join 
+                    (
+                        select
+                            p.id,
+                            s.value as programme
+                        FROM
+                            patients as p
+                            inner join patients_information as pi on p.id = pi.pati_id
+                            inner join suggestions as s on s.id = pi.sugg_id
+                            inner  join patients_information pi_antenna on pi_antenna.pati_id = p.id 
+                            inner  join suggestions s_antenna on s_antenna.id = pi_antenna.sugg_id 
+                            inner join patients_information as pi_stat on p.id = pi_stat.pati_id 
+                            inner join suggestions as s_stat on s_stat.id = pi_stat.sugg_id 
+                        where
+                            s.path_string like '/patient/suivi/programme/housing-first'
+                            and pi.deleted_at is null
+                            and p.deleted_at is null
+                            and '" . $this->refDate . "' BETWEEN coalesce(pi.start, '" . $this->past . "') and COALESCE(pi.end, '" . $this->refDate . "')
+                            
+                            and s_antenna.path_string like '/patient/suivi/antenne/%'
+                            and pi_antenna.deleted_at is null
+                            and s_antenna.value like '" . $this->antenna . "' 
+                            and pi.start <= COALESCE (pi_antenna.end, '" . $this->refDate . "')
+                            and coalesce(pi.end, '" . $this->refDate . "') >= coalesce(pi_antenna.start, '" . $this->past . "') 
+                
+                            and s_stat.path_string like '/patient/fiche/statut-du-suivi/%'
+                            and s_stat.path_string not like '/patient/fiche/statut-du-suivi/decede'
+                            and '" . $this->refDate . "' between COALESCE(pi_stat.start, '" . $this->past . "') and COALESCE (pi_stat.end, '" . $this->nextyear0101 . "')
+                            and pi_stat.deleted_at is null
+                    ) hf on hf.id = p.id	
+                    left join 
+                    (	
+                        select 
+                            pi_path.pati_id ,
+                            stel.value as category,
+                            s2.value as problem
+                        from patients_information pi_path  
+                                inner join suggestions as s2 on s2.id = pi_path.sugg_id 
+                                inner join patients_information_template_element pitel on pitel.id = pi_path.itel_id 
+                                inner join suggestions stel on stel.id = pitel.suge_id 
+                            where 
+                                s2.path_string like '/patient/medical/pathologies/pathologies-mentale%'
+                                and pi_path.deleted_at is null 
+                                and '" . $this->refDate . "' BETWEEN coalesce(pi_path.start, '" . $this->past . "') and COALESCE(pi_path.end, '" . $this->refDate . "')
+                            group by 
+                                pi_path.pati_id,
+                                stel.value,
+                                s2.value
+                    ) path
+                    on path.pati_id = p.id
+                order by 
+                    path.category,
+                    path.problem";
+
+        $result = $conn->query($sql);
+
+
+
+
+        if ($result->num_rows > 0) {
+            $resultJson = [];
+            while ($row = $result->fetch_assoc()) {
+                header("Content-type: application/json; charset=utf-8");
+                array_push($resultJson, $row);
+            }
+            // dd($this->json($resultJson));
+            return $this->json($resultJson);
+        } else {
+            return $this->json("Pas de résultats pour l'instant");
+        }
+        $conn->close();
+    }
+
+
+    #[Route('/api/statistiques102', name: 'app_statistiques102')]
+    public function request102()
+    {
+        //    ne fonctionne pas, ou rentre pas dans la case ?
+
+        // modifiée
+        $conn = new mysqli(StatistiquesController::SERVERNAME, StatistiquesController::USERNAME, StatistiquesController::PASSWORD, StatistiquesController::DBNAME);
+
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+
+
+        // dd($this->refYear);
+
+        // $sql = "SELECT * FROM patients WHERE antenna = '" . $this->antennainit . "'";
+        $sql = "select 
+                    path.category,
+                    path.problem,
+                    count(p.hash) as nombre
+                from 
+                    patients p 
+                    inner join 
+                    (
+                        select
+                            p.id,
+                            s.value as programme
+                        FROM
+                            patients as p
+                            inner join patients_information as pi on p.id = pi.pati_id
+                            inner join suggestions as s on s.id = pi.sugg_id
+                            inner  join patients_information pi_antenna on pi_antenna.pati_id = p.id 
+                            inner  join suggestions s_antenna on s_antenna.id = pi_antenna.sugg_id 
+                            inner join patients_information as pi_stat on p.id = pi_stat.pati_id 
+                            inner join suggestions as s_stat on s_stat.id = pi_stat.sugg_id 
+                        where
+                            s.path_string like '/patient/suivi/programme/housing-first'
+                            and pi.deleted_at is null
+                            and p.deleted_at is null
+                            and '" . $this->refDate . "' BETWEEN coalesce(pi.start, '" . $this->past . "') and COALESCE(pi.end, '" . $this->refDate . "')
+                            
+                            and s_antenna.path_string like '/patient/suivi/antenne/%'
+                            and pi_antenna.deleted_at is null
+                            and s_antenna.value like '" . $this->antenna . "' 
+                            and pi.start <= COALESCE (pi_antenna.end, '" . $this->refDate . "')
+                            and coalesce(pi.end, '" . $this->refDate . "') >= coalesce(pi_antenna.start, '" . $this->past . "') 
+                
+                            and s_stat.path_string like '/patient/fiche/statut-du-suivi/%' 
+                            and s_stat.path_string not like '/patient/fiche/statut-du-suivi/decede'
+                            and '" . $this->refDate . "' between COALESCE(pi_stat.start, '" . $this->past . "') and COALESCE (pi_stat.end, '" . $this->nextyear0101 . "')
+                            and pi_stat.deleted_at is null
+                    ) hf on hf.id = p.id	
+                    left join 
+                    (	
+                        select 
+                            pi_path.pati_id ,
+                            stel.value as category,
+                            s2.value as problem
+                        from patients_information pi_path  
+                                inner join suggestions as s2 on s2.id = pi_path.sugg_id 
+                                inner join patients_information_template_element pitel on pitel.id = pi_path.itel_id 
+                                inner join suggestions stel on stel.id = pitel.suge_id 
+                            where 
+                                s2.path_string like '/patient/medical/pathologies/pathologies-mentale%'
+                                and pi_path.deleted_at is null 
+                                and '" . $this->refDate . "' BETWEEN coalesce(pi_path.start, '" . $this->past . "') and COALESCE(pi_path.end, '" . $this->refDate . "')
+                            group by 
+                                pi_path.pati_id,
+                                stel.value,
+                                s2.value
+                    ) path
+                    on path.pati_id = p.id
+                group by 
+                    path.category,
+                    path.problem
+                order by 
+                    path.category,
+                    path.problem";
+
+        $result = $conn->query($sql);
+
+
+
+
+        if ($result->num_rows > 0) {
+            $resultJson = [];
+            while ($row = $result->fetch_assoc()) {
+                header("Content-type: application/json; charset=utf-8");
+                array_push($resultJson, $row);
+            }
+            // dd($this->json($resultJson));
+            return $this->json($resultJson);
+        } else {
+            return $this->json("Pas de résultats pour l'instant");
+        }
+        $conn->close();
+    }
+
+    #[Route('/api/statistiques101', name: 'app_statistiques101')]
+    public function request101()
+    {
+        //    ne fonctionne pas, ou rentre pas dans la case ?
+
+        // modifiée
+        $conn = new mysqli(StatistiquesController::SERVERNAME, StatistiquesController::USERNAME, StatistiquesController::PASSWORD, StatistiquesController::DBNAME);
+
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+
+
+        // dd($this->refYear);
+
+        // $sql = "SELECT * FROM patients WHERE antenna = '" . $this->antennainit . "'";
+        $sql = "select 
+                    path.category,
+                    path.problem,
+                    count(p.hash) as nombre
+                from 
+                    patients p 
+                    inner join 
+                    (
+                        select
+                            p.id,
+                            s.value as programme
+                        FROM
+                            patients as p
+                            inner join patients_information as pi on p.id = pi.pati_id
+                            inner join suggestions as s on s.id = pi.sugg_id
+                            inner  join patients_information pi_antenna on pi_antenna.pati_id = p.id 
+                            inner  join suggestions s_antenna on s_antenna.id = pi_antenna.sugg_id 
+                            inner join patients_information as pi_stat on p.id = pi_stat.pati_id 
+                            inner join suggestions as s_stat on s_stat.id = pi_stat.sugg_id 
+                        where
+                            s.path_string like '/patient/suivi/programme/housing-first'
+                            and pi.deleted_at is null
+                            and p.deleted_at is null
+                            and '" . $this->refDate . "' BETWEEN coalesce(pi.start, '" . $this->past . "') and COALESCE(pi.end, '" . $this->refDate . "')
+                            
+                            and s_antenna.path_string like '/patient/suivi/antenne/%'
+                            and pi_antenna.deleted_at is null
+                            and s_antenna.value like '" . $this->antenna . "' 
+                            and pi.start <= COALESCE (pi_antenna.end, '" . $this->refDate . "')
+                            and coalesce(pi.end, '" . $this->refDate . "') >= coalesce(pi_antenna.start, '" . $this->past . "') 
+                
+                            and s_stat.path_string like '/patient/fiche/statut-du-suivi/%' 
+                            and s_stat.path_string not like '/patient/fiche/statut-du-suivi/decede'
+                            and '" . $this->refDate . "' between COALESCE(pi_stat.start, '" . $this->past . "') and COALESCE (pi_stat.end, '" . $this->nextyear0101 . "')
+                            and pi_stat.deleted_at is null
+                    ) hf on hf.id = p.id	
+                    left join 
+                    (	
+                        select 
+                            pi_path.pati_id ,
+                            stel.value as category,
+                            s2.value as problem
+                        from patients_information pi_path  
+                                inner join suggestions as s2 on s2.id = pi_path.sugg_id 
+                                inner join patients_information_template_element pitel on pitel.id = pi_path.itel_id 
+                                inner join suggestions stel on stel.id = pitel.suge_id 
+                            where 
+                                s2.path_string like '/patient/medical/pathologies/pathologies-mentale%'
+                                and pi_path.deleted_at is null 
+                                and '" . $this->refDate . "' BETWEEN coalesce(pi_path.start, '" . $this->past . "') and COALESCE(pi_path.end, '" . $this->refDate . "')
+                            group by 
+                                pi_path.pati_id,
+                                stel.value,
+                                s2.value
+                    ) path
+                    on path.pati_id = p.id
+                group by 
+                    path.category,
+                    path.problem
+                order by 
+                    path.category,
+                    path.problem";
+
+        $result = $conn->query($sql);
+
+
+
+
+        if ($result->num_rows > 0) {
+            $resultJson = [];
+            while ($row = $result->fetch_assoc()) {
+                header("Content-type: application/json; charset=utf-8");
+                array_push($resultJson, $row);
+            }
+            // dd($this->json($resultJson));
+            return $this->json($resultJson);
+        } else {
+            return $this->json("Pas de résultats pour l'instant");
+        }
+        $conn->close();
+    }
+
+
+
+    #[Route('/api/statistiques100', name: 'app_statistiques100')]
+    public function request100()
+    {
+        //    ne fonctionne pas, ou rentre pas dans la case ?
+
+        // modifiée
+        $conn = new mysqli(StatistiquesController::SERVERNAME, StatistiquesController::USERNAME, StatistiquesController::PASSWORD, StatistiquesController::DBNAME);
+
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+
+
+        // dd($this->refYear);
+
+        // $sql = "SELECT * FROM patients WHERE antenna = '" . $this->antennainit . "'";
+        $sql = "select 
+                    p.hash,
+                    p.firstname,
+                    p.lastname,
+                        sum(
+                        if (path.problem like '%mentale%', 1, 0)
+                    ) as mentale
+                from 
+                    patients p 
+                    inner join 
+                    (
+                        select
+                            p.id,
+                            s.value as programme
+                        FROM
+                            patients as p
+                            inner join patients_information as pi on p.id = pi.pati_id
+                            inner join suggestions as s on s.id = pi.sugg_id
+                            inner  join patients_information pi_antenna on pi_antenna.pati_id = p.id 
+                            inner  join suggestions s_antenna on s_antenna.id = pi_antenna.sugg_id 
+                            inner join patients_information as pi_stat on p.id = pi_stat.pati_id 
+                            inner join suggestions as s_stat on s_stat.id = pi_stat.sugg_id 
+                        where
+                            s.path_string like '/patient/suivi/programme/housing-first'
+                            and pi.deleted_at is null
+                            and p.deleted_at is null
+                            and '" . $this->refDate . "' BETWEEN coalesce(pi.start, '" . $this->past . "') and COALESCE(pi.end, '" . $this->refDate . "')
+                            
+                            and s_antenna.path_string like '/patient/suivi/antenne/%'
+                            and pi_antenna.deleted_at is null
+                            and s_antenna.value like '" . $this->antenna . "' 
+                            and pi.start <= COALESCE (pi_antenna.end, '" . $this->refDate . "')
+                            and coalesce(pi.end, '" . $this->refDate . "') >= coalesce(pi_antenna.start, '" . $this->past . "') 
+
+                            and s_stat.path_string like '/patient/fiche/statut-du-suivi/%' 
+                            and s_stat.path_string not like '/patient/fiche/statut-du-suivi/decede' 
+                            and '" . $this->refDate . "' between COALESCE(pi_stat.start, '" . $this->past . "') and COALESCE (pi_stat.end, '" . $this->nextyear0101 . "')
+                            and pi_stat.deleted_at is null
+                    ) hf on hf.id = p.id	
+                    left join 
+                    (	
+                        select 
+                            pi_path.pati_id ,
+                            stel.value as problem
+                        from patients_information pi_path  
+                                inner join suggestions as s2 on s2.id = pi_path.sugg_id 
+                                inner join patients_information_template_element pitel on pitel.id = pi_path.itel_id 
+                                inner join suggestions stel on stel.id = pitel.suge_id 
+                        where 
+                                (
+                                    stel.path_string like '/patient/fiche/assuetude/declaree%' 
+                                    or s2.path_string like '/patient/medical/patholo%'
+                                ) 
+                                and pi_path.deleted_at is null 
+                                and '" . $this->refDate . "' BETWEEN coalesce(pi_path.start, '" . $this->past . "') and COALESCE(pi_path.end, '" . $this->refDate . "')
+                        group by 
+                                pi_path.pati_id,
+                                stel.value
+                    ) path on path.pati_id = p.id
+                where programme is not null
+            group by 
+                hash, firstname, lastname
+            order by hash";
+
+        $result = $conn->query($sql);
+
+
+
+
+        if ($result->num_rows > 0) {
+            $resultJson = [];
+            while ($row = $result->fetch_assoc()) {
+                header("Content-type: application/json; charset=utf-8");
+                array_push($resultJson, $row);
+            }
+            // dd($this->json($resultJson));
+            return $this->json($resultJson);
+        } else {
+            return $this->json("Pas de résultats pour l'instant");
+        }
+        $conn->close();
+    }
+
+    #[Route('/api/statistiques99', name: 'app_statistiques99')]
+    public function request99()
+    {
+        //    ne fonctionne pas, ou rentre pas dans la case ?
+
+        // modifiée
+        $conn = new mysqli(StatistiquesController::SERVERNAME, StatistiquesController::USERNAME, StatistiquesController::PASSWORD, StatistiquesController::DBNAME);
+
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+
+
+        // dd($this->refYear);
+
+        // $sql = "SELECT * FROM patients WHERE antenna = '" . $this->antennainit . "'";
+        $sql = "select 
+                    sum(if (mentale = 0, 1, 0)) as 'absence de pathologie mentale',
+                    sum(if (mentale > 0, 1, 0)) as 'avec pathologie mentale',
+                    count(mentale) as 'nombre de patients dans le suivi' 
+                from 
+                (
+                select 
+                            p.hash,
+                            p.firstname,
+                            p.lastname,
+                                sum(
+                                if (path.problem like '%mentale%', 1, 0)
+                            ) as mentale
+                        from 
+                            patients p 
+                            inner join 
+                            (
+                                select
+                                    p.id,
+                                    s.value as programme
+                                FROM
+                                    patients as p
+                                    inner join patients_information as pi on p.id = pi.pati_id
+                                    inner join suggestions as s on s.id = pi.sugg_id
+                                    inner  join patients_information pi_antenna on pi_antenna.pati_id = p.id 
+                                    inner  join suggestions s_antenna on s_antenna.id = pi_antenna.sugg_id 
+                                    inner join patients_information as pi_stat on p.id = pi_stat.pati_id 
+                                    inner join suggestions as s_stat on s_stat.id = pi_stat.sugg_id 
+                                where
+                                    s.path_string like '/patient/suivi/programme/housing-first'
+                                    and pi.deleted_at is null
+                                    and p.deleted_at is null
+                                    and '" . $this->refDate . "' BETWEEN coalesce(pi.start, '" . $this->past . "') and COALESCE(pi.end, '" . $this->refDate . "')
+                                    
+                                    and s_antenna.path_string like '/patient/suivi/antenne/%'
+                                    and pi_antenna.deleted_at is null
+                                    and s_antenna.value like '" . $this->antenna . "' 
+                                    and pi.start <= COALESCE (pi_antenna.end, '" . $this->refDate . "')
+                                    and coalesce(pi.end, '" . $this->refDate . "') >= coalesce(pi_antenna.start, '" . $this->past . "') 
+                
+                                    and s_stat.path_string like '/patient/fiche/statut-du-suivi/%'
+                                    and s_stat.path_string not like '/patient/fiche/statut-du-suivi/decede'
+                                    and '" . $this->refDate . "' between COALESCE(pi_stat.start, '" . $this->past . "') and COALESCE (pi_stat.end, '" . $this->nextyear0101 . "')
+                                    and pi_stat.deleted_at is null
+                            ) hf on hf.id = p.id	
+                            left join 
+                            (	
+                                select 
+                                    pi_path.pati_id ,
+                                    stel.value as problem
+                                from patients_information pi_path  
+                                        inner join suggestions as s2 on s2.id = pi_path.sugg_id 
+                                        inner join patients_information_template_element pitel on pitel.id = pi_path.itel_id 
+                                        inner join suggestions stel on stel.id = pitel.suge_id 
+                                where 
+                                        (
+                                            stel.path_string like '/patient/fiche/assuetude/declaree%' 
+                                            or s2.path_string like '/patient/medical/patholo%'
+                                        ) 
+                                        and pi_path.deleted_at is null 
+                                        and '" . $this->refDate . "' BETWEEN coalesce(pi_path.start, '" . $this->past . "') and COALESCE(pi_path.end, '" . $this->refDate . "')
+                                group by 
+                                        pi_path.pati_id,
+                                        stel.value
+                            ) path on path.pati_id = p.id
+                        where programme is not null
+                    group by 
+                        hash, firstname, lastname
+                    order by hash
+                ) s";
+
+        $result = $conn->query($sql);
+
+
+
+
+        if ($result->num_rows > 0) {
+            $resultJson = [];
+            while ($row = $result->fetch_assoc()) {
+                header("Content-type: application/json; charset=utf-8");
+                array_push($resultJson, $row);
+            }
+            // dd($this->json($resultJson));
+            return $this->json($resultJson);
+        } else {
+            return $this->json("Pas de résultats pour l'instant");
+        }
+        $conn->close();
+    }
+
+
+    #[Route('/api/statistiques98', name: 'app_statistiques98')]
+    public function request98()
+    {
+        //    ne fonctionne pas, ou rentre pas dans la case ?
+
+        // modifiée
+        $conn = new mysqli(StatistiquesController::SERVERNAME, StatistiquesController::USERNAME, StatistiquesController::PASSWORD, StatistiquesController::DBNAME);
+
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+
+
+        // dd($this->refYear);
+
+        // $sql = "SELECT * FROM patients WHERE antenna = '" . $this->antennainit . "'";
+        $sql = "select 
+                    coalesce(path.category, 'Pathologies mentales') as category,
+                    p.hash,
+                    coalesce(path.problem, 'aucune pathologie mentale') as probleme
+                from 
+                    patients p 
+                    inner join 
+                    (
+                        select
+                            p.id
+                        FROM
+                            patients as p
+                            inner  join patients_information pi_antenna on pi_antenna.pati_id = p.id 
+                            inner  join suggestions s_antenna on s_antenna.id = pi_antenna.sugg_id 
+                            inner join patients_information as pi_stat on p.id = pi_stat.pati_id 
+                            inner join suggestions as s_stat on s_stat.id = pi_stat.sugg_id 
+                        where
+                            s_antenna.path_string like '/patient/suivi/antenne/%'
+                            and pi_antenna.deleted_at is null
+                            and s_antenna.value like '" . $this->antenna . "' 
+                            and pi_stat.start <= COALESCE (pi_antenna.end, '" . $this->refDate . "')
+                            and coalesce(pi_stat.end, '" . $this->refDate . "') >= coalesce(pi_antenna.start, '" . $this->past . "') 
+                
+                            and s_stat.path_string like '/patient/fiche/statut-du-suivi/en-suivi' 
+                            and '" . $this->refDate . "' between COALESCE(pi_stat.start, '" . $this->past . "') and COALESCE (pi_stat.end, '" . $this->nextyear0101 . "')
+                            and pi_stat.deleted_at is null
+                    ) suivi on suivi.id = p.id	
+                    left join 
+                    (	
+                        select 
+                            pi_path.pati_id ,
+                            stel.value as category,
+                            s2.value as problem
+                        from patients_information pi_path  
+                                inner join suggestions as s2 on s2.id = pi_path.sugg_id 
+                                inner join patients_information_template_element pitel on pitel.id = pi_path.itel_id 
+                                inner join suggestions stel on stel.id = pitel.suge_id 
+                            where 
+                                s2.path_string like '/patient/medical/pathologies/pathologies-mentale%'
+                                and pi_path.deleted_at is null 
+                                and '" . $this->refDate . "' BETWEEN coalesce(pi_path.start, '" . $this->past . "') and COALESCE(pi_path.end, '" . $this->refDate . "')
+                            group by 
+                                pi_path.pati_id,
+                                stel.value,
+                                s2.value
+                    ) path
+                    on path.pati_id = p.id
+                order by 
+                    path.category,
+                    p.hash";
+
+        $result = $conn->query($sql);
+
+
+
+
+        if ($result->num_rows > 0) {
+            $resultJson = [];
+            while ($row = $result->fetch_assoc()) {
+                header("Content-type: application/json; charset=utf-8");
+                array_push($resultJson, $row);
+            }
+            // dd($this->json($resultJson));
+            return $this->json($resultJson);
+        } else {
+            return $this->json("Pas de résultats pour l'instant");
+        }
+        $conn->close();
+    }
+
+    #[Route('/api/statistiques97', name: 'app_statistiques97')]
+    public function request97()
+    {
+        //    ne fonctionne pas, ou rentre pas dans la case ?
+
+        // modifiée
+        $conn = new mysqli(StatistiquesController::SERVERNAME, StatistiquesController::USERNAME, StatistiquesController::PASSWORD, StatistiquesController::DBNAME);
+
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+
+
+        // dd($this->refYear);
+
+        // $sql = "SELECT * FROM patients WHERE antenna = '" . $this->antennainit . "'";
+        $sql = "select 
+                    coalesce(path.category, 'Pathologies mentales') as category,
+                    coalesce(path.problem, 'aucune pathologie mentale') as probleme,
+                    count(p.hash) as nombre
+                from 
+                    patients p 
+                    inner join 
+                    (
+                        select
+                            p.id
+                        FROM
+                            patients as p
+                            inner  join patients_information pi_antenna on pi_antenna.pati_id = p.id 
+                            inner  join suggestions s_antenna on s_antenna.id = pi_antenna.sugg_id 
+                            inner join patients_information as pi_stat on p.id = pi_stat.pati_id 
+                            inner join suggestions as s_stat on s_stat.id = pi_stat.sugg_id 
+                        where
+                            s_antenna.path_string like '/patient/suivi/antenne/%'
+                            and pi_antenna.deleted_at is null
+                            and s_antenna.value like '" . $this->antenna . "' 
+                            and pi_stat.start <= COALESCE (pi_antenna.end, '" . $this->refDate . "')
+                            and coalesce(pi_stat.end, '" . $this->refDate . "') >= coalesce(pi_antenna.start, '" . $this->past . "') 
+                
+                            and s_stat.path_string like '/patient/fiche/statut-du-suivi/en-suivi'
+                            and '" . $this->refDate . "' between COALESCE(pi_stat.start, '" . $this->past . "') and COALESCE (pi_stat.end, '" . $this->nextyear0101 . "')
+                            and pi_stat.deleted_at is null
+                    ) suivi on suivi.id = p.id	
+                    left join 
+                    (	
+                        select 
+                            pi_path.pati_id ,
+                            stel.value as category,
+                            s2.value as problem
+                        from patients_information pi_path  
+                                inner join suggestions as s2 on s2.id = pi_path.sugg_id 
+                                inner join patients_information_template_element pitel on pitel.id = pi_path.itel_id 
+                                inner join suggestions stel on stel.id = pitel.suge_id 
+                            where 
+                                s2.path_string like '/patient/medical/pathologies/pathologies-mentale%'
+                                and pi_path.deleted_at is null 
+                                and '" . $this->refDate . "' BETWEEN coalesce(pi_path.start, '" . $this->past . "') and COALESCE(pi_path.end, '" . $this->refDate . "')
+                            group by 
+                                pi_path.pati_id,
+                                stel.value,
+                                s2.value
+                    ) path
+                    on path.pati_id = p.id
+                group by 
+                    path.category,
+                    path.problem
+                order by 
+                    path.category,
+                    path.problem";
+
+        $result = $conn->query($sql);
+
+
+
+
+        if ($result->num_rows > 0) {
+            $resultJson = [];
+            while ($row = $result->fetch_assoc()) {
+                header("Content-type: application/json; charset=utf-8");
+                array_push($resultJson, $row);
+            }
+            // dd($this->json($resultJson));
+            return $this->json($resultJson);
+        } else {
+            return $this->json("Pas de résultats pour l'instant");
+        }
+        $conn->close();
+    }
+
+    #[Route('/api/statistiques96', name: 'app_statistiques96')]
+    public function request96()
+    {
+        //    ne fonctionne pas, ou rentre pas dans la case ?
+
+        // modifiée
+        $conn = new mysqli(StatistiquesController::SERVERNAME, StatistiquesController::USERNAME, StatistiquesController::PASSWORD, StatistiquesController::DBNAME);
+
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+
+
+        // dd($this->refYear);
+
+        // $sql = "SELECT * FROM patients WHERE antenna = '" . $this->antennainit . "'";
+        $sql = "select 
+                    p.hash,
+                    coalesce(path.problem, '--aucun--') as probleme
+                from 
+                    patients p 
+                    inner join 
+                    (
+                        select
+                            p.id,
+                            s.value as programme
+                        FROM
+                            patients as p
+                            inner join patients_information as pi on p.id = pi.pati_id
+                            inner join suggestions as s on s.id = pi.sugg_id
+                            inner  join patients_information pi_antenna on pi_antenna.pati_id = p.id 
+                            inner  join suggestions s_antenna on s_antenna.id = pi_antenna.sugg_id 
+                            inner join patients_information as pi_stat on p.id = pi_stat.pati_id 
+                            inner join suggestions as s_stat on s_stat.id = pi_stat.sugg_id 
+                        where
+                            s.path_string like '/patient/suivi/programme/housing-first'
+                            and pi.deleted_at is null
+                            and p.deleted_at is null
+                            and '" . $this->refDate . "' BETWEEN coalesce(pi.start, '" . $this->past . "') and COALESCE(pi.end, '" . $this->refDate . "')
+                            
+                            and s_antenna.path_string like '/patient/suivi/antenne/%'
+                            and pi_antenna.deleted_at is null
+                            and s_antenna.value like '" . $this->antenna . "' 
+                            and pi.start <= COALESCE (pi_antenna.end, '" . $this->refDate . "')
+                            and coalesce(pi.end, '" . $this->refDate . "') >= coalesce(pi_antenna.start, '" . $this->past . "') 
+                
+                            and s_stat.path_string like '/patient/fiche/statut-du-suivi/%'
+                            and s_stat.path_string not like '/patient/fiche/statut-du-suivi/decede'
+                            and '" . $this->refDate . "' between COALESCE(pi_stat.start, '" . $this->past . "') and COALESCE (pi_stat.end, '" . $this->nextyear0101 . "')
+                            and pi_stat.deleted_at is null
+                    ) hf on hf.id = p.id	
+                    left join 
+                    (	
+                        select 
+                            pi_path.pati_id ,
+                            stel.value as category,
+                            s2.value as problem
+                        from patients_information pi_path  
+                                inner join suggestions as s2 on s2.id = pi_path.sugg_id 
+                                inner join patients_information_template_element pitel on pitel.id = pi_path.itel_id 
+                                inner join suggestions stel on stel.id = pitel.suge_id 
+                            where 
+                                s2.path_string like '/patient/medical/pathologies/pathologies-mentale%'
+                                and pi_path.deleted_at is null 
+                                and '" . $this->refDate . "' BETWEEN coalesce(pi_path.start, '" . $this->past . "') and COALESCE(pi_path.end, '" . $this->refDate . "')
+                            group by 
+                                pi_path.pati_id,
+                                stel.value,
+                                s2.value
+                    ) path
+                    on path.pati_id = p.id
+                order by hash";
+
+        $result = $conn->query($sql);
+
+
+
+
+        if ($result->num_rows > 0) {
+            $resultJson = [];
+            while ($row = $result->fetch_assoc()) {
+                header("Content-type: application/json; charset=utf-8");
+                array_push($resultJson, $row);
+            }
+            // dd($this->json($resultJson));
+            return $this->json($resultJson);
+        } else {
+            return $this->json("Pas de résultats pour l'instant");
+        }
+        $conn->close();
+    }
+
+    #[Route('/api/statistiques95', name: 'app_statistiques95')]
+    public function request95()
+    {
+        //    ne fonctionne pas, ou rentre pas dans la case ?
+
+        // modifiée
+        $conn = new mysqli(StatistiquesController::SERVERNAME, StatistiquesController::USERNAME, StatistiquesController::PASSWORD, StatistiquesController::DBNAME);
+
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+
+
+        // dd($this->refYear);
+
+        // $sql = "SELECT * FROM patients WHERE antenna = '" . $this->antennainit . "'";
+        $sql = "select 
+                    sum(if (mentale = 0, 1, 0)) as 'Nombre de personnes sans problème de santé mentale',
+                    sum(if (mentale > 0, 1, 0)) as 'Nombre de personnes avec problème de santé mentale',
+                    count(mentale) as 'nombre de patients dans le suivi' 
+                from 
+                (
+                    select 
+                        p.hash,
+                        sum(
+                            if (path.category like '%mentale%', 1, 0)
+                        ) as mentale
+                    from 
+                        patients p 
+                    inner join 
+                    (
+                        select
+                            p.id,
+                            s.value as programme
+                        FROM
+                            patients as p
+                            inner join patients_information as pi on p.id = pi.pati_id
+                            inner join suggestions as s on s.id = pi.sugg_id
+                            inner  join patients_information pi_antenna on pi_antenna.pati_id = p.id 
+                            inner  join suggestions s_antenna on s_antenna.id = pi_antenna.sugg_id 
+                            inner join patients_information as pi_stat on p.id = pi_stat.pati_id 
+                            inner join suggestions as s_stat on s_stat.id = pi_stat.sugg_id 
+                        where
+                            s.path_string like '/patient/suivi/programme/housing-first'
+                            and pi.deleted_at is null
+                            and p.deleted_at is null
+                            and '" . $this->refDate . "' BETWEEN coalesce(pi.start, '" . $this->past . "') and COALESCE(pi.end, '" . $this->refDate . "')
+                            
+                            and s_antenna.path_string like '/patient/suivi/antenne/%'
+                            and pi_antenna.deleted_at is null
+                            and s_antenna.value like '" . $this->antenna . "' 
+                            and pi.start <= COALESCE (pi_antenna.end, '" . $this->refDate . "')
+                            and coalesce(pi.end, '" . $this->refDate . "') >= coalesce(pi_antenna.start, '" . $this->past . "') 
+                
+                            and s_stat.path_string like '/patient/fiche/statut-du-suivi/%'
+                            and s_stat.path_string not like '/patient/fiche/statut-du-suivi/decede' 
+                            and '" . $this->refDate . "' between COALESCE(pi_stat.start, '" . $this->past . "') and COALESCE (pi_stat.end, '" . $this->nextyear0101 . "')
+                            and pi_stat.deleted_at is null
+                    ) hf on hf.id = p.id	
+                    left join 
+                    (	
+                        select 
+                            pi_path.pati_id ,
+                            stel.value as category,
+                            s2.value as problem
+                        from patients_information pi_path  
+                                inner join suggestions as s2 on s2.id = pi_path.sugg_id 
+                                inner join patients_information_template_element pitel on pitel.id = pi_path.itel_id 
+                                inner join suggestions stel on stel.id = pitel.suge_id 
+                            where 
+                                s2.path_string like '/patient/medical/pathologies/pathologies-mentale%'
+                                and pi_path.deleted_at is null 
+                                and '" . $this->refDate . "' BETWEEN coalesce(pi_path.start, '" . $this->past . "') and COALESCE(pi_path.end, '" . $this->refDate . "')
+                            group by 
+                                pi_path.pati_id,
+                                stel.value,
+                                s2.value
+                    ) path
+                    on path.pati_id = p.id
+                    group by hash
+                ) s";
+
+        $result = $conn->query($sql);
+
+
+
+
+        if ($result->num_rows > 0) {
+            $resultJson = [];
+            while ($row = $result->fetch_assoc()) {
+                header("Content-type: application/json; charset=utf-8");
+                array_push($resultJson, $row);
+            }
+            // dd($this->json($resultJson));
+            return $this->json($resultJson);
+        } else {
+            return $this->json("Pas de résultats pour l'instant");
+        }
+        $conn->close();
+    }
+
+
+    #[Route('/api/statistiques94', name: 'app_statistiques94')]
+    public function request94()
+    {
+        //    ne fonctionne pas, ou rentre pas dans la case ?
+
+        // modifiée
+        $conn = new mysqli(StatistiquesController::SERVERNAME, StatistiquesController::USERNAME, StatistiquesController::PASSWORD, StatistiquesController::DBNAME);
+
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+
+
+        // dd($this->refYear);
+
+        // $sql = "SELECT * FROM patients WHERE antenna = '" . $this->antennainit . "'";
+        $sql = "select 
+                    p.hash,
+                    coalesce(path.category, '--inconnu--') as category,
+                    coalesce(path.problem, '--inconnu--') as problem
+                from 
+                    patients p 
+                    inner join 
+                    (
+                        select
+                            p.id,
+                            s.value as programme
+                        FROM
+                            patients as p
+                            inner join patients_information as pi on p.id = pi.pati_id
+                            inner join suggestions as s on s.id = pi.sugg_id
+                            inner  join patients_information pi_antenna on pi_antenna.pati_id = p.id 
+                            inner  join suggestions s_antenna on s_antenna.id = pi_antenna.sugg_id 
+                            inner join patients_information as pi_stat on p.id = pi_stat.pati_id 
+                            inner join suggestions as s_stat on s_stat.id = pi_stat.sugg_id 
+                        where
+                            s.path_string like '/patient/suivi/programme/housing-first'
+                            and pi.deleted_at is null
+                            and p.deleted_at is null
+                            and '" . $this->refDate . "' BETWEEN coalesce(pi.start, '" . $this->past . "') and COALESCE(pi.end, '" . $this->refDate . "')
+                            
+                            and s_antenna.path_string like '/patient/suivi/antenne/%'
+                            and pi_antenna.deleted_at is null
+                            and s_antenna.value like '" . $this->antenna . "' 
+                            and pi.start <= COALESCE (pi_antenna.end, '" . $this->refDate . "')
+                            and coalesce(pi.end, '" . $this->refDate . "') >= coalesce(pi_antenna.start, '" . $this->past . "') 
+                
+                            and s_stat.path_string like '/patient/fiche/statut-du-suivi/%'
+                            and s_stat.path_string not like '/patient/fiche/statut-du-suivi/decede'
+                            and '" . $this->refDate . "' between COALESCE(pi_stat.start, '" . $this->past . "') and COALESCE (pi_stat.end, '" . $this->nextyear0101 . "')
+                            and pi_stat.deleted_at is null
+                    ) hf on hf.id = p.id	
+                    left join 
+                    (	
+                        select 
+                            pi_path.pati_id ,
+                            stel.value as category,
+                            s2.value as problem
+                        from patients_information pi_path  
+                                inner join suggestions as s2 on s2.id = pi_path.sugg_id 
+                                inner join patients_information_template_element pitel on pitel.id = pi_path.itel_id 
+                                inner join suggestions stel on stel.id = pitel.suge_id 
+                            where 
+                                s2.path_string like '/patient/medical/pathologies/pathologies-physiques%'
+                                and pi_path.deleted_at is null 
+                                and '" . $this->refDate . "' BETWEEN coalesce(pi_path.start, '" . $this->past . "') and COALESCE(pi_path.end, '" . $this->refDate . "')
+                            group by 
+                                pi_path.pati_id,
+                                stel.value,
+                                s2.value
+                    ) path
+                    on path.pati_id = p.id
+                order by 
+                    path.category,
+                    path.problem";
+
+        $result = $conn->query($sql);
+
+
+
+
+        if ($result->num_rows > 0) {
+            $resultJson = [];
+            while ($row = $result->fetch_assoc()) {
+                header("Content-type: application/json; charset=utf-8");
+                array_push($resultJson, $row);
+            }
+            // dd($this->json($resultJson));
+            return $this->json($resultJson);
+        } else {
+            return $this->json("Pas de résultats pour l'instant");
+        }
+        $conn->close();
+    }
+
+    #[Route('/api/statistiques93', name: 'app_statistiques93')]
+    public function request93()
+    {
+        //    ne fonctionne pas, ou rentre pas dans la case ?
+
+        // modifiée
+        $conn = new mysqli(StatistiquesController::SERVERNAME, StatistiquesController::USERNAME, StatistiquesController::PASSWORD, StatistiquesController::DBNAME);
+
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+
+
+        // dd($this->refYear);
+
+        // $sql = "SELECT * FROM patients WHERE antenna = '" . $this->antennainit . "'";
+        $sql = "select 
+                    path.category,
+                    path.problem,
+                    count(p.hash) as nombre
+                from 
+                    patients p 
+                    inner join 
+                    (
+                        select
+                            p.id,
+                            s.value as programme
+                        FROM
+                            patients as p
+                            inner join patients_information as pi on p.id = pi.pati_id
+                            inner join suggestions as s on s.id = pi.sugg_id
+                            inner  join patients_information pi_antenna on pi_antenna.pati_id = p.id 
+                            inner  join suggestions s_antenna on s_antenna.id = pi_antenna.sugg_id 
+                            inner join patients_information as pi_stat on p.id = pi_stat.pati_id 
+                            inner join suggestions as s_stat on s_stat.id = pi_stat.sugg_id 
+                        where
+                            s.path_string like '/patient/suivi/programme/housing-first'
+                            and pi.deleted_at is null
+                            and p.deleted_at is null
+                            and '" . $this->refDate . "' BETWEEN coalesce(pi.start, '" . $this->past . "') and COALESCE(pi.end, '" . $this->refDate . "')
+                            
+                            and s_antenna.path_string like '/patient/suivi/antenne/%'
+                            and pi_antenna.deleted_at is null
+                            and s_antenna.value like '" . $this->antenna . "' 
+                            and pi.start <= COALESCE (pi_antenna.end, '" . $this->refDate . "')
+                            and coalesce(pi.end, '" . $this->refDate . "') >= coalesce(pi_antenna.start, '" . $this->past . "') 
+                
+                            and s_stat.path_string like '/patient/fiche/statut-du-suivi/%'
+                            and s_stat.path_string not like '/patient/fiche/statut-du-suivi/decede' 
+                            and '" . $this->refDate . "' between COALESCE(pi_stat.start, '" . $this->past . "') and COALESCE (pi_stat.end, '" . $this->nextyear0101 . "')
+                            and pi_stat.deleted_at is null
+                    ) hf on hf.id = p.id	
+                    left join 
+                    (	
+                        select 
+                            pi_path.pati_id ,
+                            stel.value as category,
+                            s2.value as problem
+                        from patients_information pi_path  
+                                inner join suggestions as s2 on s2.id = pi_path.sugg_id 
+                                inner join patients_information_template_element pitel on pitel.id = pi_path.itel_id 
+                                inner join suggestions stel on stel.id = pitel.suge_id 
+                            where 
+                                s2.path_string like '/patient/medical/pathologies/pathologies-physiques%'
+                                and pi_path.deleted_at is null 
+                                and '" . $this->refDate . "' BETWEEN coalesce(pi_path.start, '" . $this->past . "') and COALESCE(pi_path.end, '" . $this->refDate . "')
+                            group by 
+                                pi_path.pati_id,
+                                stel.value,
+                                s2.value
+                    ) path
+                    on path.pati_id = p.id
+                group by 
+                    path.category,
+                    path.problem
+                order by 
+                    path.category,
+                    path.problem";
+
+        $result = $conn->query($sql);
+
+
+
+
+        if ($result->num_rows > 0) {
+            $resultJson = [];
+            while ($row = $result->fetch_assoc()) {
+                header("Content-type: application/json; charset=utf-8");
+                array_push($resultJson, $row);
+            }
+            // dd($this->json($resultJson));
+            return $this->json($resultJson);
+        } else {
+            return $this->json("Pas de résultats pour l'instant");
+        }
+        $conn->close();
+    }
+
+    #[Route('/api/statistiques92', name: 'app_statistiques92')]
+    public function request92()
+    {
+        //    ne fonctionne pas, ou rentre pas dans la case ?
+
+        // modifiée
+        $conn = new mysqli(StatistiquesController::SERVERNAME, StatistiquesController::USERNAME, StatistiquesController::PASSWORD, StatistiquesController::DBNAME);
+
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+
+
+        // dd($this->refYear);
+
+        // $sql = "SELECT * FROM patients WHERE antenna = '" . $this->antennainit . "'";
+        $sql = "select 
+                    p.hash,
+                    p.firstname,
+                    p.lastname,
+                        sum(
+                        if (path.problem like '%physique%', 1, 0)
+                    ) as physique
+                from 
+                    patients p 
+                    inner join 
+                    (
+                        select
+                            p.id,
+                            s.value as programme
+                        FROM
+                            patients as p
+                            inner join patients_information as pi on p.id = pi.pati_id
+                            inner join suggestions as s on s.id = pi.sugg_id
+                            inner  join patients_information pi_antenna on pi_antenna.pati_id = p.id 
+                            inner  join suggestions s_antenna on s_antenna.id = pi_antenna.sugg_id 
+                            inner join patients_information as pi_stat on p.id = pi_stat.pati_id 
+                            inner join suggestions as s_stat on s_stat.id = pi_stat.sugg_id 
+                        where
+                            s.path_string like '/patient/suivi/programme/housing-first'
+                            and pi.deleted_at is null
+                            and p.deleted_at is null
+                            and '" . $this->refDate . "' BETWEEN coalesce(pi.start, '" . $this->past . "') and COALESCE(pi.end, '" . $this->refDate . "')
+                            
+                            and s_antenna.path_string like '/patient/suivi/antenne/%'
+                            and pi_antenna.deleted_at is null
+                            and s_antenna.value like '" . $this->antenna . "' 
+                            and pi.start <= COALESCE (pi_antenna.end, '" . $this->refDate . "')
+                            and coalesce(pi.end, '" . $this->refDate . "') >= coalesce(pi_antenna.start, '" . $this->past . "') 
+
+                            and s_stat.path_string like '/patient/fiche/statut-du-suivi/%'
+                            and s_stat.path_string not like '/patient/fiche/statut-du-suivi/decede'
+                            and '" . $this->refDate . "' between COALESCE(pi_stat.start, '" . $this->past . "') and COALESCE (pi_stat.end, '" . $this->nextyear0101 . "')
+                            and pi_stat.deleted_at is null
+                    ) hf on hf.id = p.id	
+                    left join 
+                    (	
+                        select 
+                            pi_path.pati_id ,
+                            stel.value as problem
+                        from patients_information pi_path  
+                                inner join suggestions as s2 on s2.id = pi_path.sugg_id 
+                                inner join patients_information_template_element pitel on pitel.id = pi_path.itel_id 
+                                inner join suggestions stel on stel.id = pitel.suge_id 
+                        where 
+                                (
+                                    stel.path_string like '/patient/fiche/assuetude/declaree%' 
+                                    or s2.path_string like '/patient/medical/patholo%'
+                                ) 
+                                and pi_path.deleted_at is null 
+                                and '" . $this->refDate . "' BETWEEN coalesce(pi_path.start, '" . $this->past . "') and COALESCE(pi_path.end, '" . $this->refDate . "')
+                        group by 
+                                pi_path.pati_id,
+                                stel.value
+                    ) path on path.pati_id = p.id
+                where programme is not null
+            group by 
+                hash, firstname, lastname
+            order by hash";
+
+        $result = $conn->query($sql);
+
+
+
+
+        if ($result->num_rows > 0) {
+            $resultJson = [];
+            while ($row = $result->fetch_assoc()) {
+                header("Content-type: application/json; charset=utf-8");
+                array_push($resultJson, $row);
+            }
+            // dd($this->json($resultJson));
+            return $this->json($resultJson);
+        } else {
+            return $this->json("Pas de résultats pour l'instant");
+        }
+        $conn->close();
+    }
+
+    #[Route('/api/statistiques91', name: 'app_statistiques91')]
+    public function request91()
+    {
+        //    ne fonctionne pas, ou rentre pas dans la case ?
+
+        // modifiée
+        $conn = new mysqli(StatistiquesController::SERVERNAME, StatistiquesController::USERNAME, StatistiquesController::PASSWORD, StatistiquesController::DBNAME);
+
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+
+
+        // dd($this->refYear);
+
+        // $sql = "SELECT * FROM patients WHERE antenna = '" . $this->antennainit . "'";
+        $sql = "select 
+                    sum(if (physique = 0, 1, 0)) as 'Nombre de personnes sans problème de santé physique chronique',
+                    sum(if (physique > 0, 1, 0)) as 'Nombre de personnes avec problème de santé physique chronique',
+                    count(physique) as 'nombre de patients dans le programme housing first' 
+                from 
+                (
+                
+                select 
+                            p.hash,
+                            p.firstname,
+                            p.lastname,
+                                sum(
+                                if (path.problem like '%physique%', 1, 0)
+                            ) as physique
+                        from 
+                            patients p 
+                            inner join 
+                            (
+                                select
+                                    p.id,
+                                    s.value as programme
+                                FROM
+                                    patients as p
+                                    inner join patients_information as pi on p.id = pi.pati_id
+                                    inner join suggestions as s on s.id = pi.sugg_id
+                                    inner  join patients_information pi_antenna on pi_antenna.pati_id = p.id 
+                                    inner  join suggestions s_antenna on s_antenna.id = pi_antenna.sugg_id 
+                                    inner join patients_information as pi_stat on p.id = pi_stat.pati_id 
+                                    inner join suggestions as s_stat on s_stat.id = pi_stat.sugg_id 
+                                where
+                                    s.path_string like '/patient/suivi/programme/housing-first'
+                                    and pi.deleted_at is null
+                                    and p.deleted_at is null
+                                    and '" . $this->refDate . "' BETWEEN coalesce(pi.start, '" . $this->past . "') and COALESCE(pi.end, '" . $this->refDate . "')
+                                    
+                                    and s_antenna.path_string like '/patient/suivi/antenne/%'
+                                    and pi_antenna.deleted_at is null
+                                    and s_antenna.value like '" . $this->antenna . "' 
+                                    and pi.start <= COALESCE (pi_antenna.end, '" . $this->refDate . "')
+                                    and coalesce(pi.end, '" . $this->refDate . "') >= coalesce(pi_antenna.start, '" . $this->past . "') 
+                
+                                    and s_stat.path_string like '/patient/fiche/statut-du-suivi/%'
+                                    and s_stat.path_string not like '/patient/fiche/statut-du-suivi/decede' 
+                                    and '" . $this->refDate . "' between COALESCE(pi_stat.start, '" . $this->past . "') and COALESCE (pi_stat.end, '" . $this->nextyear0101 . "')
+                                    and pi_stat.deleted_at is null
+                            ) hf on hf.id = p.id	
+                            left join 
+                            (	
+                                select 
+                                    pi_path.pati_id ,
+                                    stel.value as problem
+                                from patients_information pi_path  
+                                        inner join suggestions as s2 on s2.id = pi_path.sugg_id 
+                                        inner join patients_information_template_element pitel on pitel.id = pi_path.itel_id 
+                                        inner join suggestions stel on stel.id = pitel.suge_id 
+                                where 
+                                        (
+                                            stel.path_string like '/patient/fiche/assuetude/declaree%' 
+                                            or s2.path_string like '/patient/medical/patholo%'
+                                        ) 
+                                        and pi_path.deleted_at is null 
+                                        and '" . $this->refDate . "' BETWEEN coalesce(pi_path.start, '" . $this->past . "') and COALESCE(pi_path.end, '" . $this->refDate . "')
+                                group by 
+                                        pi_path.pati_id,
+                                        stel.value
+                            ) path on path.pati_id = p.id
+                        where programme is not null
+                    group by 
+                        hash, firstname, lastname
+                    order by hash
+                ) s";
+
+        $result = $conn->query($sql);
+
+
+
+
+        if ($result->num_rows > 0) {
+            $resultJson = [];
+            while ($row = $result->fetch_assoc()) {
+                header("Content-type: application/json; charset=utf-8");
+                array_push($resultJson, $row);
+            }
+            // dd($this->json($resultJson));
+            return $this->json($resultJson);
+        } else {
+            return $this->json("Pas de résultats pour l'instant");
+        }
+        $conn->close();
+    }
+
+    #[Route('/api/statistiques90', name: 'app_statistiques90')]
+    public function request90()
+    {
+        //    ne fonctionne pas, ou rentre pas dans la case ?
+
+        // modifiée
+        $conn = new mysqli(StatistiquesController::SERVERNAME, StatistiquesController::USERNAME, StatistiquesController::PASSWORD, StatistiquesController::DBNAME);
+
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+
+
+        // dd($this->refYear);
+
+        // $sql = "SELECT * FROM patients WHERE antenna = '" . $this->antennainit . "'";
+        $sql = "select 
+                    path.category,
+                    path.problem,
+                    p.hash
+                from 
+                    patients p 
+                    inner join 
+                    (	
+                        select 
+                            pi_path.pati_id ,
+                            stel.value as category,
+                            s2.value as problem
+                        from patients_information pi_path  
+                                inner join suggestions as s2 on s2.id = pi_path.sugg_id 
+                                inner join patients_information_template_element pitel on pitel.id = pi_path.itel_id 
+                                inner join suggestions stel on stel.id = pitel.suge_id 
+                            where 
+                                s2.path_string like '/patient/medical/pathologies/pathologies-physiques%'
+                                and pi_path.deleted_at is null 
+                                and '" . $this->refDate . "' BETWEEN coalesce(pi_path.start, '" . $this->past . "') and COALESCE(pi_path.end, '" . $this->refDate . "')
+                            group by 
+                                pi_path.pati_id,
+                                stel.value,
+                                s2.value
+                    ) path
+                    on path.pati_id = p.id
+                    inner join patients_information as pi on p.id = pi.pati_id 
+                    inner join suggestions as s on s.id = pi.sugg_id 
+                    left join patients_information pi_antenna on pi_antenna.pati_id = p.id 
+                    left join suggestions s_antenna on s_antenna.id = pi_antenna.sugg_id 
+                where 
+                    s.path_string like '/patient/fiche/statut-du-suivi/en-suivi'
+                    and '" . $this->refDate . "' between COALESCE(pi.start, '" . $this->past . "') and COALESCE (pi.end, '" . $this->refDate . "' )
+                    and pi.deleted_at is null 
+                    and p.deleted_at is null 
+                    and '" . $this->refDate . "' between coalesce(pi_antenna.start, '" . $this->past . "') and COALESCE (pi_antenna.end, '" . $this->refDate . "')
+                    and s_antenna.path_string like '/patient/suivi/antenne/%'
+                    and s_antenna.value like '" . $this->antenna . "'
+                order by 
+                    path.category,
+                    path.problem";
+
+        $result = $conn->query($sql);
+
+
+
+
+        if ($result->num_rows > 0) {
+            $resultJson = [];
+            while ($row = $result->fetch_assoc()) {
+                header("Content-type: application/json; charset=utf-8");
+                array_push($resultJson, $row);
+            }
+            // dd($this->json($resultJson));
+            return $this->json($resultJson);
+        } else {
+            return $this->json("Pas de résultats pour l'instant");
+        }
+        $conn->close();
+    }
+
+
+    #[Route('/api/statistiques89', name: 'app_statistiques89')]
+    public function request89()
+    {
+        //    ne fonctionne pas, ou rentre pas dans la case ?
+
+        // modifiée
+        $conn = new mysqli(StatistiquesController::SERVERNAME, StatistiquesController::USERNAME, StatistiquesController::PASSWORD, StatistiquesController::DBNAME);
+
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+
+
+        // dd($this->refYear);
+
+        // $sql = "SELECT * FROM patients WHERE antenna = '" . $this->antennainit . "'";
+        $sql = "select 
+                    path.category,
+                    path.problem,
+                    count(p.hash) as nombre
+                from 
+                    patients p 
+                    inner join 
+                    (	
+                        select 
+                            pi_path.pati_id ,
+                            stel.value as category,
+                            s2.value as problem
+                        from patients_information pi_path  
+                                inner join suggestions as s2 on s2.id = pi_path.sugg_id 
+                                inner join patients_information_template_element pitel on pitel.id = pi_path.itel_id 
+                                inner join suggestions stel on stel.id = pitel.suge_id 
+                            where 
+                                s2.path_string like '/patient/medical/pathologies/pathologies-physiques%'
+                                and pi_path.deleted_at is null 
+                                and '" . $this->refDate . "' BETWEEN coalesce(pi_path.start, '" . $this->past . "') and COALESCE(pi_path.end, '" . $this->refDate . "')
+                            group by 
+                                pi_path.pati_id,
+                                stel.value,
+                                s2.value
+                    ) path
+                    on path.pati_id = p.id
+                    inner join patients_information as pi on p.id = pi.pati_id 
+                    inner join suggestions as s on s.id = pi.sugg_id 
+                    left join patients_information pi_antenna on pi_antenna.pati_id = p.id 
+                    left join suggestions s_antenna on s_antenna.id = pi_antenna.sugg_id 
+                where 
+                    s.path_string like '/patient/fiche/statut-du-suivi/en-suivi'
+                    and '" . $this->refDate . "' between COALESCE(pi.start, '" . $this->past . "') and COALESCE (pi.end, '" . $this->refDate . "' )
+                    and pi.deleted_at is null 
+                    and p.deleted_at is null 
+                    and '" . $this->refDate . "' between coalesce(pi_antenna.start, '" . $this->past . "') and COALESCE (pi_antenna.end, '" . $this->refDate . "')
+                    and s_antenna.path_string like '/patient/suivi/antenne/%'
+                    and s_antenna.value like '" . $this->antenna . "'
+                group by 
+                    path.category,
+                    path.problem
+                order by 
+                    path.category,
+                    path.problem";
+
+        $result = $conn->query($sql);
+
+
+
+
+        if ($result->num_rows > 0) {
+            $resultJson = [];
+            while ($row = $result->fetch_assoc()) {
+                header("Content-type: application/json; charset=utf-8");
+                array_push($resultJson, $row);
+            }
+            // dd($this->json($resultJson));
+            return $this->json($resultJson);
+        } else {
+            return $this->json("Pas de résultats pour l'instant");
+        }
+        $conn->close();
+    }
+
+    #[Route('/api/statistiques88', name: 'app_statistiques88')]
+    public function request88()
+    {
+        //    ne fonctionne pas, ou rentre pas dans la case ?
+
+        // modifiée
+        $conn = new mysqli(StatistiquesController::SERVERNAME, StatistiquesController::USERNAME, StatistiquesController::PASSWORD, StatistiquesController::DBNAME);
+
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+
+
+        // dd($this->refYear);
+
+        // $sql = "SELECT * FROM patients WHERE antenna = '" . $this->antennainit . "'";
+        $sql = "select 
+                    p.hash,
+                    p.firstname,
+                    p.lastname,
+                    sum(
+                        if (path.problem like '%physique%', 1, 0)
+                    ) as physique
+                
+                from 
+                    patients p 
+                    inner join 
+                    (	
+                        select 
+                            pi_path.pati_id ,
+                            stel.value as problem
+                        from patients_information pi_path  
+                                inner join suggestions as s2 on s2.id = pi_path.sugg_id 
+                                inner join patients_information_template_element pitel on pitel.id = pi_path.itel_id 
+                                inner join suggestions stel on stel.id = pitel.suge_id 
+                            where 
+                                (
+                                    stel.path_string like '/patient/fiche/assuetude/declaree%' 
+                                    or s2.path_string like '/patient/medical/patholo%'
+                                ) 
+                                and pi_path.deleted_at is null 
+                                and '" . $this->refDate . "' BETWEEN coalesce(pi_path.start, '" . $this->past . "') and COALESCE(pi_path.end, '" . $this->refDate . "')
+                            group by 
+                                pi_path.pati_id,
+                                stel.value
+                    ) path
+                    on path.pati_id = p.id
+                    inner join patients_information as pi on p.id = pi.pati_id 
+                    inner join suggestions as s on s.id = pi.sugg_id 
+                    left join patients_information pi_antenna on pi_antenna.pati_id = p.id 
+                    left join suggestions s_antenna on s_antenna.id = pi_antenna.sugg_id 
+                where 
+                    s.path_string like '/patient/fiche/statut-du-suivi/en-suivi'
+                    and '" . $this->refDate . "' between COALESCE(pi.start, '" . $this->past . "') and COALESCE (pi.end, '" . $this->refDate . "' )
+                    and pi.deleted_at is null 
+                    and p.deleted_at is null 
+                    and '" . $this->refDate . "' between coalesce(pi_antenna.start, '" . $this->past . "') and COALESCE (pi_antenna.end, '" . $this->refDate . "')
+                    and s_antenna.path_string like '/patient/suivi/antenne/%'
+                    and s_antenna.value like '" . $this->antenna . "'
+                group by 
+                    hash,
+                    p.firstname,
+                    p.lastname
+                order by hash";
+
+        $result = $conn->query($sql);
+
+
+
+
+        if ($result->num_rows > 0) {
+            $resultJson = [];
+            while ($row = $result->fetch_assoc()) {
+                header("Content-type: application/json; charset=utf-8");
+                array_push($resultJson, $row);
+            }
+            // dd($this->json($resultJson));
+            return $this->json($resultJson);
+        } else {
+            return $this->json("Pas de résultats pour l'instant");
+        }
+        $conn->close();
+    }
+
+    #[Route('/api/statistiques87', name: 'app_statistiques87')]
+    public function request87()
+    {
+        //    ne fonctionne pas, ou rentre pas dans la case ?
+
+        // modifiée
+        $conn = new mysqli(StatistiquesController::SERVERNAME, StatistiquesController::USERNAME, StatistiquesController::PASSWORD, StatistiquesController::DBNAME);
+
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+
+
+        // dd($this->refYear);
+
+        // $sql = "SELECT * FROM patients WHERE antenna = '" . $this->antennainit . "'";
+        $sql = "select 
+                    sum(if (physique = 0, 1, 0)) as 'absence de pathologie physique',
+                    sum(if (physique > 0, 1, 0)) as 'pathologie physique',
+                    count(physique) as 'nombre de patients dans le suivi' 
+                from 
+                (
+                    select 
+                        p.hash,
+                        sum(
+                            if (path.problem like '%physique%', 1, 0)
+                        ) as physique, 
+                        sum(
+                            if (path.problem like '%mentale%', 1, 0)
+                        ) as mentale, 
+                        sum(
+                            if (path.problem like '%declaree%', 1, 0)
+                        ) as assuetude
+                
+                    from 
+                        patients p 
+                        inner join 
+                        (	
+                            select 
+                                pi_path.pati_id ,
+                                stel.value as problem
+                            from patients_information pi_path  
+                                    inner join suggestions as s2 on s2.id = pi_path.sugg_id 
+                                    inner join patients_information_template_element pitel on pitel.id = pi_path.itel_id 
+                                    inner join suggestions stel on stel.id = pitel.suge_id 
+                                where 
+                                    (
+                                        stel.path_string like '/patient/fiche/assuetude/declaree%' 
+                                        or s2.path_string like '/patient/medical/patholo%'
+                                    ) 
+                                    and pi_path.deleted_at is null 
+                                    and '" . $this->refDate . "' BETWEEN coalesce(pi_path.start, '" . $this->past . "') and COALESCE(pi_path.end, '" . $this->refDate . "')
+                                group by 
+                                    pi_path.pati_id,
+                                    stel.value
+                        ) path
+                        on path.pati_id = p.id
+                        inner join patients_information as pi on p.id = pi.pati_id 
+                        inner join suggestions as s on s.id = pi.sugg_id 
+                        left join patients_information pi_antenna on pi_antenna.pati_id = p.id 
+                        left join suggestions s_antenna on s_antenna.id = pi_antenna.sugg_id 
+                    where 
+                        s.path_string like '/patient/fiche/statut-du-suivi/en-suivi'
+                        and '" . $this->refDate . "' between COALESCE(pi.start, '" . $this->past . "') and COALESCE (pi.end, '" . $this->refDate . "' )
+                        and pi.deleted_at is null 
+                        and p.deleted_at is null 
+                        and '" . $this->refDate . "' between coalesce(pi_antenna.start, '" . $this->past . "') and COALESCE (pi_antenna.end, '" . $this->refDate . "')
+                        and s_antenna.path_string like '/patient/suivi/antenne/%'
+                        and s_antenna.value like '" . $this->antenna . "'
+                    group by 
+                        hash
+                ) s";
+
+        $result = $conn->query($sql);
+
+
+
+
+        if ($result->num_rows > 0) {
+            $resultJson = [];
+            while ($row = $result->fetch_assoc()) {
+                header("Content-type: application/json; charset=utf-8");
+                array_push($resultJson, $row);
+            }
+            // dd($this->json($resultJson));
+            return $this->json($resultJson);
+        } else {
+            return $this->json("Pas de résultats pour l'instant");
+        }
+        $conn->close();
+    }
+
+    #[Route('/api/statistiques86', name: 'app_statistiques86')]
+    public function request86()
+    {
+        //    ne fonctionne pas, ou rentre pas dans la case ?
+
+        // modifiée
+        $conn = new mysqli(StatistiquesController::SERVERNAME, StatistiquesController::USERNAME, StatistiquesController::PASSWORD, StatistiquesController::DBNAME);
+
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+
+
+        // dd($this->refYear);
+
+        // $sql = "SELECT * FROM patients WHERE antenna = '" . $this->antennainit . "'";
+        $sql = "select 
+                    p.hash,
+                    p.firstname,
+                    p.lastname,
+                    sum(
+                        if (path.problem like '%physique%', 1, 0)
+                    ) as physique, 
+                    sum(
+                        if (path.problem like '%mentale%', 1, 0)
+                    ) as mentale, 
+                    sum(
+                        if (path.problem like '%declaree%', 1, 0)
+                    ) as assuetude,
+                    hf.programme
+                from 
+                    patients p 
+                    inner join 
+                    (
+                        select
+                            p.id,
+                            s.value as programme
+                        FROM
+                            patients as p
+                            inner join patients_information as pi on p.id = pi.pati_id
+                            inner join suggestions as s on s.id = pi.sugg_id
+                            inner  join patients_information pi_antenna on pi_antenna.pati_id = p.id 
+                            inner  join suggestions s_antenna on s_antenna.id = pi_antenna.sugg_id 
+                            inner join patients_information as pi_stat on p.id = pi_stat.pati_id 
+                            inner join suggestions as s_stat on s_stat.id = pi_stat.sugg_id 
+                        where
+                            s.path_string like '/patient/suivi/programme/housing-fast'
+                            and pi.deleted_at is null
+                            and p.deleted_at is null
+                            and '" . $this->refDate . "' BETWEEN coalesce(pi.start, '" . $this->past . "') and COALESCE(pi.end, '" . $this->refDate . "')
+                            
+                            and s_antenna.path_string like '/patient/suivi/antenne/%'
+                            and pi_antenna.deleted_at is null
+                            and s_antenna.value like '" . $this->antenna . "' 
+                            and pi.start <= COALESCE (pi_antenna.end, '" . $this->refDate . "')
+                            and coalesce(pi.end, '" . $this->refDate . "') >= coalesce(pi_antenna.start, '" . $this->past . "') 
+                
+                            and s_stat.path_string like '/patient/fiche/statut-du-suivi/%'
+                            and s_stat.path_string not like '/patient/fiche/statut-du-suivi/decede'
+                            and '" . $this->refDate . "' between COALESCE(pi_stat.start, '" . $this->past . "') and COALESCE (pi_stat.end, '" . $this->nextyear0101 . "')
+                            and pi_stat.deleted_at is null
+                    ) hf on hf.id = p.id	
+                    left join 
+                    (	
+                        select 
+                            pi_path.pati_id ,
+                            stel.value as problem
+                        from patients_information pi_path  
+                                inner join suggestions as s2 on s2.id = pi_path.sugg_id 
+                                inner join patients_information_template_element pitel on pitel.id = pi_path.itel_id 
+                                inner join suggestions stel on stel.id = pitel.suge_id 
+                        where 
+                                (
+                                    stel.path_string like '/patient/fiche/assuetude/declaree%' 
+                                    or s2.path_string like '/patient/medical/patholo%'
+                                ) 
+                                and pi_path.deleted_at is null 
+                                and '" . $this->refDate . "' BETWEEN coalesce(pi_path.start, '" . $this->past . "') and COALESCE(pi_path.end, '" . $this->refDate . "')
+                        group by 
+                                pi_path.pati_id,
+                                stel.value
+                    ) path on path.pati_id = p.id
+                where programme is not null
+                group by
+                    programme, p.hash, p.firstname, p.lastname";
+
+        $result = $conn->query($sql);
+
+
+
+
+        if ($result->num_rows > 0) {
+            $resultJson = [];
+            while ($row = $result->fetch_assoc()) {
+                header("Content-type: application/json; charset=utf-8");
+                array_push($resultJson, $row);
+            }
+            // dd($this->json($resultJson));
+            return $this->json($resultJson);
+        } else {
+            return $this->json("Pas de résultats pour l'instant");
+        }
+        $conn->close();
+    }
+
+
     #[Route('/api/statistiques85', name: 'app_statistiques85')]
     public function request85()
     {
@@ -2685,8 +5489,8 @@ class StatistiquesController extends AbstractController
                                     and s_antenna.path_string like '/patient/suivi/antenne/%'
                                     and s_antenna.value like '" . $this->antenna . "'
                             ) dcd
-                            left join patients as p2 on p2.id = dcd.id
-                            left join patients_information as pi2 on dcd.id = pi2.pati_id
+                            left join patients as p2 on p2.id = dcd.patientsId
+                            left join patients_information as pi2 on dcd.patientsId = pi2.pati_id
                             left join suggestions as s2 on s2.id = pi2.sugg_id
                         where
                             ( s2.path_string like '/patient/fiche/statut-du-suivi/en-suivi' or s2.path_string like '/patient/fiche/statut-du-suivi/post-suivi')
@@ -2697,7 +5501,7 @@ class StatistiquesController extends AbstractController
                             and
                             (
                                 ( to_days(dcd.start) - to_days(pi2.end) < 7 )
-                                or (dcd.id = pi2.id and s2.path_string like '/patient/fiche/statut-du-suivi/decede')
+                                or (dcd.patientsId = pi2.id and s2.path_string like '/patient/fiche/statut-du-suivi/decede')
                             )
                         
                     ) dd on dd.patientInfos2PatiId = nn.patientsid
@@ -2872,8 +5676,8 @@ class StatistiquesController extends AbstractController
                                         and s_antenna.path_string like '/patient/suivi/antenne/%'
                                         and s_antenna.value like '" . $this->antenna . "'
                                 ) dcd 
-                                left join patients as p2 on p2.id = dcd.id
-                                left join patients_information as pi2 on dcd.id = pi2.pati_id
+                                left join patients as p2 on p2.id = dcd.patientsId
+                                left join patients_information as pi2 on dcd.patientsId = pi2.pati_id
                                 left join suggestions as s2 on s2.id = pi2.sugg_id
                             where
                                 ( s2.path_string like '/patient/fiche/statut-du-suivi/en-suivi' or s2.path_string like '/patient/fiche/statut-du-suivi/post-suivi')
@@ -2884,7 +5688,7 @@ class StatistiquesController extends AbstractController
                                 and 
                                 ( 
                                 ( to_days(dcd.start) - to_days(pi2.end) < 7 ) 
-                                or (dcd.id = pi2.id and s2.path_string like '/patient/fiche/statut-du-suivi/decede')
+                                or (dcd.patientsId = pi2.id and s2.path_string like '/patient/fiche/statut-du-suivi/decede')
                                 )
                         
                         ) dd on dd.id = nn.patientsid
@@ -3192,8 +5996,8 @@ class StatistiquesController extends AbstractController
                                         and s_antenna.path_string like '/patient/suivi/antenne/%'
                                         and s_antenna.value like '" . $this->antenna . "'
                                 ) dcd 
-                                left join patients as p2 on p2.id = dcd.id
-                                left join patients_information as pi2 on dcd.id = pi2.id
+                                left join patients as p2 on p2.id = dcd.patientsId
+                                left join patients_information as pi2 on dcd.patientsId = pi2.id
                                 left join suggestions as s2 on s2.id = pi2.sugg_id
                             where
                                 ( s2.path_string like '/patient/fiche/statut-du-suivi/en-suivi' or s2.path_string like '/patient/fiche/statut-du-suivi/post-suivi')
@@ -3204,7 +6008,7 @@ class StatistiquesController extends AbstractController
                                 and 
                                 ( 
                                 ( to_days(dcd.start) - to_days(pi2.end) < 7 ) 
-                                or (dcd.id = pi2.id and s2.path_string like '/patient/fiche/statut-du-suivi/decede')
+                                or (dcd.patientsId = pi2.id and s2.path_string like '/patient/fiche/statut-du-suivi/decede')
                                 )
                         
                         ) dd on dd.id = nn.id
@@ -7626,7 +10430,7 @@ class StatistiquesController extends AbstractController
                     and pi.deleted_at is null
                     and coalesce(pi.start, '" . $this->startDate . "') <= '" . $this->endDate . "'
                     and coalesce(pi.end, '" . $this->endDate . "') >= '" . $this->startDate . "' 
-            ) as suivi on p.id = suivi.pati_id
+            ) as suivi on p.id = suivi.id
             and COALESCE(suivi.start, '" . $this->startDate . "') <= COALESCE(equipe.end, '" . $this->endDate . "')
             and COALESCE(suivi.end, '" . $this->endDate . "') >= COALESCE(equipe.start, '" . $this->startDate . "')
             
@@ -7779,7 +10583,7 @@ class StatistiquesController extends AbstractController
                     and pi.deleted_at is null
                     and coalesce(pi.start, '" . $this->startDate . "') <= '" . $this->endDate . "'
                     and coalesce(pi.end, '" . $this->endDate . "') >= '" . $this->startDate . "' 
-            ) as suivi on p.id = suivi.pati_id
+            ) as suivi on p.id = suivi.id
             and COALESCE(suivi.start, '" . $this->startDate . "') <= COALESCE(equipe.end, '" . $this->endDate . "')
             and COALESCE(suivi.end, '" . $this->endDate . "') >= COALESCE(equipe.start, '" . $this->startDate . "')
             
@@ -7928,7 +10732,7 @@ class StatistiquesController extends AbstractController
                     and pi.deleted_at is null
                     and coalesce(pi.start, '" . $this->startDate . "') <= '" . $this->endDate . "'
                     and coalesce(pi.end, '" . $this->endDate . "') >= '" . $this->startDate . "' 
-            ) as suivi on p.id = suivi.pati_id
+            ) as suivi on p.id = suivi.id
             and COALESCE(suivi.start, '" . $this->startDate . "') <= COALESCE(equipe.end, '" . $this->endDate . "')
             and COALESCE(suivi.end, '" . $this->endDate . "') >= COALESCE(equipe.start, '" . $this->startDate . "')
             
@@ -8184,7 +10988,7 @@ class StatistiquesController extends AbstractController
                                 and pi.deleted_at is null
                                 and coalesce(pi.start, '" . $this->startDate . "') <= '" . $this->endDate . "'
                                 and coalesce(pi.end, '" . $this->endDate . "') >= '" . $this->startDate . "' 
-                        ) as suivi on p.id = suivi.pati_id
+                        ) as suivi on p.id = suivi.id
                         and COALESCE(suivi.start, '" . $this->startDate . "') <= COALESCE(equipe.end, '" . $this->endDate . "')
                         and COALESCE(suivi.end, '" . $this->endDate . "') >= COALESCE(equipe.start, '" . $this->startDate . "')
                         
@@ -8462,7 +11266,7 @@ class StatistiquesController extends AbstractController
                             team.start,
                             team.end,
                             team.id,
-                            team.pati_id
+                            team.id
                             
                         from patients_information as team  
                         left join suggestions as team_s on team_s.id = team.sugg_id 
@@ -8471,9 +11275,9 @@ class StatistiquesController extends AbstractController
                             and team_s.path_string like "/patient/suivi/equipe%" 
                             and if(right("2022-12-31", 6) = "datesh", CURDATE(), str_to_date("2022-12-31", "%Y-%m-%d")) between COALESCE(team.start, if(right("2022-12-31", 6) = "datesh", CURDATE(), str_to_date("2022-12-31", "%Y-%m-%d"))) and COALESCE (team.end, if(right("2022-12-31", 6) = "datesh", CURDATE(), str_to_date("2022-12-31", "%Y-%m-%d")))
                     ) team
-                    on team.pati_id = p.id
+                    on team.id = p.id
                 
-                    where team.pati_id is null and p.deleted_at is null';
+                    where team.id is null and p.deleted_at is null';
 
         $result = $conn->query($sql);
 
@@ -8526,7 +11330,7 @@ class StatistiquesController extends AbstractController
                     and pstatus_s.path_string like "/patient/fiche/statut-du-suivi/%" 
                     and if(right("2022-12-31", 6) = "datesh", CURDATE(), str_to_date("2022-12-31", "%Y-%m-%d")) between COALESCE(pstatus.start, if(right("2022-12-31", 6) = "datesh", CURDATE(), str_to_date("2022-12-31", "%Y-%m-%d"))) and COALESCE (pstatus.end, if(right("2022-12-31", 6) = "datesh", CURDATE(), str_to_date("2022-12-31", "%Y-%m-%d")))
             ) statutsuivi
-            on statutsuivi.pati_id = p.id
+            on statutsuivi.id = p.id
         
             where statutsuivi.id is null and p.deleted_at is null';
 
@@ -8860,7 +11664,7 @@ class StatistiquesController extends AbstractController
                 stel.path_string like '/patient/suivi/equipes%'
                 and '2020-12-31' between COALESCE(pi.start, '1901-01-01' COLLATE utf8mb4_unicode_ci) and COALESCE (pi.end, '2020-12-31')
                 and pi.deleted_at is null
-            ) team on p.id = team.pati_id
+            ) team on p.id = team.id
 
             WHERE p.deleted_at is null
 
