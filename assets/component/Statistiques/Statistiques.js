@@ -536,6 +536,65 @@ const Statistiques = () => {
           Tableau 32.C. - Nombre de personnes ayant rechuté en rue - liste
           nominative
         </option>
+        <option value={124}>
+          Tableau 33.A.1 - Durée moyenne du post-suivi, pour ceux qui ont quitté
+          ces catégories
+        </option>
+        <option value={125}>
+          Tableau 33.A.1 - Durée moyenne du post-suivi, pour ceux qui ont quitté
+          ces catégories - liste nominative
+        </option>
+        <option value={126}>
+          Tableau 33.A.2 - Durée moyenne du suivi pour ceux qui ont quitté ces
+          catégories
+        </option>
+        <option value={127}>
+          Tableau 33.A.2 - Durée moyenne du suivi pour ceux qui ont quitté ces
+          catégories - liste nominative
+        </option>
+        <option value={128}>
+          Tableau 33.A.3 - Durée moyenne du pré-suivi pour ceux qui ont quitté
+          ces catégories
+        </option>
+        <option value={129}>
+          Tableau 33.A.3 - Durée moyenne du pré-suivi pour ceux qui ont quitté
+          ces catégories - liste nominative
+        </option>
+        <option value={130}>
+          Tableau 33.B. - Durée moyenne du pré-suivi pour ceux qui y sont
+          toujours
+        </option>
+        <option value={131}>
+          Tableau 33.B. - Durée moyenne du pré-suivi pour ceux qui y sont
+          toujours - liste nominative
+        </option>
+        <option value={132}>
+          Tableau 33.C. - Durée moyenne du suivi pour ceux qui y sont toujours
+        </option>
+        <option value={133}>
+          Tableau 33.C. - Durée moyenne du suivi pour ceux qui y sont toujours -
+          liste nominative
+        </option>
+        <option value={134}>
+          Tableau 33.D. – Durée moyenne du suivi rue et du suivi logement';
+          select 'Suivi : moyenne, ecart type et taille echantillon
+        </option>
+        <option value={135}>
+          Tableau 33.D. - Durée moyenne du suivi rue et suivi logement - liste
+          nominative
+        </option>
+        <option value={136}>
+          TABLEAU XX : REPARTITION DES PATIENTS DANS L’EQUIPE RUE ET L’EQUIPE
+          LOGEMENT
+        </option>
+        <option value={137}>
+          TABLEAU XX : REPARTITION DES PATIENTS DANS L’EQUIPE RUE ET L’EQUIPE
+          LOGEMENT - liste nominative
+        </option>
+
+        <option value={140}>
+          Valeurs "autres" pour les pathologies physiques
+        </option>
       </Form.Select>
       <a onClick={exportCSV}>export</a>
     </>
