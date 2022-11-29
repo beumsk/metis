@@ -503,6 +503,39 @@ const Statistiques = () => {
           avec statut précédent (inclut les personnes uniquement encodées comme
           décédées, n\'inclut pas les personnes sans equipe)
         </option>
+        <option value={115}>
+          TABLEAU 29.C : PERSONNES DECEDEES selon le programme de logement
+        </option>
+        <option value={116}>
+          TABLEAU 29.C : PERSONNES DECEDEES selon le programme de logement -
+          liste nominative
+        </option>
+        <option value={117}>
+          TABLEAU 31 : COLLABORATION AVEC D’AUTRES ASSOCIATIONS
+        </option>
+        <option value={118}>
+          TABLEAU 32 : NOMBRE DE PERSONNES DU POST-SUIVI VERS LE SUIVI Tableau
+          32.A. - Nombre de personnes du post-suivi ayant fait une rechute vers
+          le suivi
+        </option>
+        <option value={119}>
+          Tableau 32.A. - Nombre de personnes du post-suivi ayant fait une
+          rechute vers le suivi - liste nominative
+        </option>
+        <option value={120}>
+          Tableau 32.A. - Nombre de personnes du post-suivi ayant fait une
+          rechute vers un autre statut - liste nominative
+        </option>
+        <option value={121}>
+          Tableau 32.B. - Nombre de patient par nombre de rechutes vers le suivi
+        </option>
+        <option value={122}>
+          Tableau 32.C. - Nombre de personnes ayant rechuté en rue
+        </option>
+        <option value={123}>
+          Tableau 32.C. - Nombre de personnes ayant rechuté en rue - liste
+          nominative
+        </option>
       </Form.Select>
       <a onClick={exportCSV}>export</a>
     </>
