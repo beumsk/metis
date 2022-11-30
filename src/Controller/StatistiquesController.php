@@ -3373,7 +3373,7 @@ class StatistiquesController extends AbstractController
                     inner join 
                     (
                         select
-                            p.id
+                            p.id as 'patientsId'
                         FROM
                             patients as p
                             inner  join patients_information pi_antenna on pi_antenna.pati_id = p.id 
@@ -3390,7 +3390,7 @@ class StatistiquesController extends AbstractController
                             and s_stat.path_string like '/patient/fiche/statut-du-suivi/en-suivi'
                             and '" . $this->refDate . "' between COALESCE(pi_stat.start, '" . $this->past . "') and COALESCE (pi_stat.end, '" . $this->nextyear0101 . "')
                             and pi_stat.deleted_at is null
-                    ) suivi on suivi.id = p.id	
+                    ) suivi on suivi.patientsId = p.id	
                     left join 
                     (	
                         select 
@@ -6998,7 +6998,7 @@ class StatistiquesController extends AbstractController
                 (
                     select 
                         distinct
-                        patients.id as 'patientsid', 
+                        patients.id, 
                         patients.firstname, 
                         patients.lastname, 
                         patients.hash,
@@ -7036,9 +7036,9 @@ class StatistiquesController extends AbstractController
                     from
                         (
                             SELECT
-                                p.id as 'patientId',
+                                p.id as 'patientsId',
                                 pi.start,
-                                pi.id as 'patientInfosId'
+                                pi.id as 'patientsInformationsId'
                             FROM
                                 patients as p
                                 inner join patients_information as pi on p.id = pi.pati_id
@@ -7056,8 +7056,8 @@ class StatistiquesController extends AbstractController
                                 and s_antenna.path_string like '/patient/suivi/antenne/%'
                                 and s_antenna.value like '" . $this->antenna . "'
                         ) dcd
-                        left join patients as p2 on p2.id = dcd.patientId
-                        left join patients_information as pi2 on dcd.patientId = pi2.pati_id
+                        left join patients as p2 on p2.id = dcd.patientsId
+                        left join patients_information as pi2 on dcd.patientsId = pi2.pati_id
                         left join suggestions as s2 on s2.id = pi2.sugg_id
                     where
                         ( s2.path_string like '/patient/fiche/statut-du-suivi/en-suivi' or s2.path_string like '/patient/fiche/statut-du-suivi/post-suivi')
@@ -7068,18 +7068,18 @@ class StatistiquesController extends AbstractController
                         and
                         (
                             ( to_days(dcd.start) - to_days(pi2.end) < 7 )
-                            or (dcd.patientInfosId = pi2.id and s2.path_string like '/patient/fiche/statut-du-suivi/decede')
+                            or (dcd.patientsInformationsId = pi2.id and s2.path_string like '/patient/fiche/statut-du-suivi/decede')
                         )
                     
-                ) dd on dd.id = nn.patientsid
+                ) dd on dd.id = nn.id
                 
-                inner join patients_information as programme on nn.patientsid = programme.id
+                inner join patients_information as programme on nn.id = programme.pati_id
                 inner join suggestions as programme_s on programme_s.id = programme.sugg_id
                 
-                inner join patients_information as pi_stat on nn.patientsid = pi_stat.pati_id
+                inner join patients_information as pi_stat on nn.id = pi_stat.pati_id
                 inner join suggestions as s_stat on s_stat.id = pi_stat.sugg_id
                 
-                left join patients_information pi_antenna on pi_antenna.pati_id = nn.patientsid
+                left join patients_information pi_antenna on pi_antenna.pati_id = nn.id
                 left join suggestions s_antenna on s_antenna.id = pi_antenna.sugg_id
 
                 where
@@ -7157,7 +7157,7 @@ class StatistiquesController extends AbstractController
                     sum(if (programme like '/patient/suivi/programme/housing-first' and exstatut is null, 1, 0)) as housingfirst, 
                     sum(if (programme like '/patient/suivi/programme/housing-%' and exstatut is null, 1, 0)) as total,
                     sum(if (programme like '/patient/suivi/programme/housing-%' and pstatus like '/patient/fiche/statut-du-suivi/decede' and year(pstatus_start) like year('" . $this->refDate . "'), 1, 0)) as decedes, 
-                    sum(if (programme like '/patient/suivi/programme/housing-%' and pstatus like '/patient/fiche/statut-du-suivi/disparu' and year(pstatus_start) like year('" . $this->refyear . "'), 1, 0)) as disparus 
+                    sum(if (programme like '/patient/suivi/programme/housing-%' and pstatus like '/patient/fiche/statut-du-suivi/disparu' and year(pstatus_start) like year('" . $this->refYear . "'), 1, 0)) as disparus 
                 
                 from 
                 (
@@ -7177,7 +7177,7 @@ class StatistiquesController extends AbstractController
                     (
                         select 
                             distinct
-                            patients.id as 'patientsId', 
+                            patients.id, 
                             patients.firstname, 
                             patients.lastname, 
                             patients.hash,
@@ -7188,7 +7188,7 @@ class StatistiquesController extends AbstractController
                                 select 
                                     s.id as si, 
                                     s.value, 
-                                    pi.pati_id as 'patientsInfosId'
+                                    pi.pati_id 
                                 from 
                                     patients_information pi 
                                     inner join information_template_element pitel on pitel.id = pi.itel_id 
@@ -7198,7 +7198,7 @@ class StatistiquesController extends AbstractController
                                     stel.path_string like '/patient/fiche/information-generale/genre%'
                                     and '" . $this->refDate . "' between COALESCE(pi.start, '" . $this->refDate . "') and COALESCE (pi.end, '" . $this->refDate . "')
                                     and pi.deleted_at is null
-                            ) n on patients.id = n.patientsInfosId 
+                            ) n on patients.id = n.pati_id 
                         where patients.deleted_at is null
                         group by
                             patients.id,
@@ -7250,15 +7250,15 @@ class StatistiquesController extends AbstractController
                                 or (dcd.patientsInfosId = pi2.id and s2.path_string like '/patient/fiche/statut-du-suivi/decede')
                             )
                         
-                    ) dd on dd.id = nn.patientsId
+                    ) dd on dd.id = nn.id
                     
-                    inner join patients_information as programme on nn.patientsId = programme.id
+                    inner join patients_information as programme on nn.id = programme.pati_id
                     inner join suggestions as programme_s on programme_s.id = programme.sugg_id
                     
-                    inner join patients_information as pi_stat on nn.patientsId = pi_stat.pati_id
+                    inner join patients_information as pi_stat on nn.id = pi_stat.pati_id
                     inner join suggestions as s_stat on s_stat.id = pi_stat.sugg_id
                     
-                    left join patients_information pi_antenna on pi_antenna.pati_id = nn.patientsId
+                    left join patients_information pi_antenna on pi_antenna.pati_id = nn.id
                     left join suggestions s_antenna on s_antenna.id = pi_antenna.sugg_id
                 
                     where
@@ -7672,12 +7672,12 @@ class StatistiquesController extends AbstractController
                 (
                     select 
                         distinct
-                        patients.id as 'patientsId', 
+                        patients.id, 
                         patients.firstname, 
                         patients.lastname, 
                         patients.hash,
                         if (
-                            n.value != 'Belgique'
+                            n.value != 'Belgique' 
                             and n.value is not null, 
                             'Etranger', 
                             COALESCE(n.value, 'Inconnu')
@@ -7688,7 +7688,7 @@ class StatistiquesController extends AbstractController
                             select
                                 s.id as si,
                                 s.value,
-                                pi.pati_id as 'patiInfosPatientsId'
+                                pi.pati_id
                             from
                                 patients_information pi
                                 inner JOIN suggestions s on s.id = pi.sugg_id
@@ -7698,7 +7698,7 @@ class StatistiquesController extends AbstractController
                                 stel.path_string like '/patient/fiche/information-generale/nationalite'
                                 and '" . $this->refDate . "' between COALESCE(pi.start, '" . $this->refDate . "') and COALESCE (pi.end, '" . $this->refDate . "')
                                 and pi.deleted_at is null
-                        ) n on patients.id = n.patiInfosPatientsId
+                        ) n on patients.id = n.pati_id
                     where patients.deleted_at is null
                     group by
                         patients.id,
@@ -7750,15 +7750,15 @@ class StatistiquesController extends AbstractController
                             or (dcd.patientsInfosId = pi2.id and s2.path_string like '/patient/fiche/statut-du-suivi/decede')
                         )
                     
-                ) dd on dd.id = nn.patientsId
+                ) dd on dd.id = nn.id
                 
-                inner join patients_information as programme on nn.patientsId = programme.id
+                inner join patients_information as programme on nn.id = programme.pati_id
                 inner join suggestions as programme_s on programme_s.id = programme.sugg_id
                 
-                inner join patients_information as pi_stat on nn.patientsId = pi_stat.pati_id
+                inner join patients_information as pi_stat on nn.id = pi_stat.pati_id
                 inner join suggestions as s_stat on s_stat.id = pi_stat.sugg_id
                 
-                left join patients_information pi_antenna on pi_antenna.pati_id = nn.patientsId
+                left join patients_information pi_antenna on pi_antenna.pati_id = nn.id
                 left join suggestions s_antenna on s_antenna.id = pi_antenna.sugg_id
 
                 where
@@ -7856,7 +7856,7 @@ class StatistiquesController extends AbstractController
                     (
                         select 
                             distinct
-                            patients.id as 'patientsid', 
+                            patients.id, 
                             patients.firstname, 
                             patients.lastname, 
                             patients.hash,
@@ -7872,7 +7872,7 @@ class StatistiquesController extends AbstractController
                                 select
                                     s.id as si,
                                     s.value,
-                                    pi.pati_id as 'patientsInfoPatiId'
+                                    pi.pati_id
                                 from
                                     patients_information pi
                                     inner JOIN suggestions s on s.id = pi.sugg_id
@@ -7882,7 +7882,7 @@ class StatistiquesController extends AbstractController
                                     stel.path_string like '/patient/fiche/information-generale/nationalite'
                                     and '" . $this->refDate . "' between COALESCE(pi.start, '" . $this->refDate . "') and COALESCE (pi.end, '" . $this->refDate . "')
                                     and pi.deleted_at is null
-                            ) n on patients.id = n.patientsInfoPatiId
+                            ) n on patients.id = n.pati_id
                         where patients.deleted_at is null
                         group by
                             patients.id,
@@ -7894,14 +7894,14 @@ class StatistiquesController extends AbstractController
                     ( /* only deceased and missing coming from suivi and post-suivi*/
                         select
                             distinct
-                            p2.id as 'patientInfos2PatiId',
+                            p2.id,
                             s2.value as status
                         from
                             (
                                 SELECT
-                                    p.id as 'patients_Id',
+                                    p.id as 'patientsId',
                                     pi.start,
-                                    pi.id
+                                    pi.id as 'patientsInfosId'
                                 FROM
                                     patients as p
                                     inner join patients_information as pi on p.id = pi.pati_id
@@ -7931,18 +7931,18 @@ class StatistiquesController extends AbstractController
                             and
                             (
                                 ( to_days(dcd.start) - to_days(pi2.end) < 7 )
-                                or (dcd.patientsId = pi2.id and s2.path_string like '/patient/fiche/statut-du-suivi/decede')
+                                or (dcd.patientsInfosId = pi2.id and s2.path_string like '/patient/fiche/statut-du-suivi/decede')
                             )
                         
-                    ) dd on dd.patientInfos2PatiId = nn.patientsid
+                    ) dd on dd.id = nn.id
                     
-                    inner join patients_information as programme on nn.patientsid = programme.id
+                    inner join patients_information as programme on nn.id = programme.pati_id
                     inner join suggestions as programme_s on programme_s.id = programme.sugg_id
                     
-                    inner join patients_information as pi_stat on nn.patientsid = pi_stat.pati_id
+                    inner join patients_information as pi_stat on nn.id = pi_stat.pati_id
                     inner join suggestions as s_stat on s_stat.id = pi_stat.sugg_id
                     
-                    left join patients_information pi_antenna on pi_antenna.pati_id = nn.patientsid
+                    left join patients_information pi_antenna on pi_antenna.pati_id = nn.id
                     left join suggestions s_antenna on s_antenna.id = pi_antenna.sugg_id
                 
                     where
@@ -8426,8 +8426,8 @@ class StatistiquesController extends AbstractController
                                         and s_antenna.path_string like '/patient/suivi/antenne/%'
                                         and s_antenna.value like '" . $this->antenna . "'
                                 ) dcd 
-                                left join patients as p2 on p2.id = dcd.patientsId
-                                left join patients_information as pi2 on dcd.patientsId = pi2.id
+                                left join patients as p2 on p2.id = dcd.id
+                                left join patients_information as pi2 on dcd.id = pi2.id
                                 left join suggestions as s2 on s2.id = pi2.sugg_id
                             where
                                 ( s2.path_string like '/patient/fiche/statut-du-suivi/en-suivi' or s2.path_string like '/patient/fiche/statut-du-suivi/post-suivi')
@@ -8438,7 +8438,7 @@ class StatistiquesController extends AbstractController
                                 and 
                                 ( 
                                 ( to_days(dcd.start) - to_days(pi2.end) < 7 ) 
-                                or (dcd.patientsId = pi2.id and s2.path_string like '/patient/fiche/statut-du-suivi/decede')
+                                or (dcd.id = pi2.id and s2.path_string like '/patient/fiche/statut-du-suivi/decede')
                                 )
                         
                         ) dd on dd.id = nn.id
@@ -10800,35 +10800,35 @@ class StatistiquesController extends AbstractController
 
         // $sql = "SELECT * FROM patients WHERE antenna = '" . $this->antennainit . "'";
         $sql = " SELECT
-                    left(followup_reports.report_date, 4) as period,
-                    s.value as categoriesuivi,
-                    p.hash,
-                    count(sa.value) as nombre_accompagnements
-                FROM
-                    patients p
-                    inner join followup_reports on followup_reports.pati_id = p.id
-                    inner join patients_information pi_antenna on pi_antenna.pati_id = p.id 
-                    inner join suggestions s_antenna on s_antenna.id = pi_antenna.sugg_id 
-                    inner join patients_information as pi on p.id = pi.pati_id 
-                    inner join suggestions as s on s.id = pi.sugg_id 
-                    left JOIN followup_reports_activities on followup_reports_activities.fore_id = followup_reports.id
-                    left join suggestions as sa on sa.id = followup_reports_activities.id
-                where
-                    s.path_string like '/patient/suivi/equipe%'
-                    and followup_reports.report_date between COALESCE(pi.start, followup_reports.report_date) and COALESCE (pi.end, followup_reports.report_date)
-                    and pi.deleted_at is null 
-                    and p.deleted_at is null
-                    and followup_reports.deleted_at is null
-                    and year(followup_reports.report_date) in ('" . $this->refYear . "', '" . $this->refYear . "'-1)
-                    and followup_reports.activity_type = 1 -- uniquement les rencontres
-                    and followup_reports.report_date between coalesce(pi_antenna.start, followup_reports.report_date) and COALESCE (pi_antenna.end, followup_reports.report_date)
-                    and s_antenna.path_string like '/patient/suivi/antenne/%'
-                    and s_antenna.value like '" . $this->antenna . "'
-                    and sa.path_string like '%accomp%'
-                group by 
-                    period, categoriesuivi, hash 
-                order by
-                    period, categoriesuivi, hash";
+                        left(followup_reports.report_date, 4) as period,
+                        s.value as categoriesuivi,
+                        p.hash,
+                        count(sa.value) as nombre_accompagnements
+                    FROM
+                        patients p
+                        inner join followup_reports on followup_reports.pati_id = p.id
+                        inner join patients_information pi_antenna on pi_antenna.pati_id = p.id 
+                        inner join suggestions s_antenna on s_antenna.id = pi_antenna.sugg_id 
+                        inner join patients_information as pi on p.id = pi.pati_id 
+                        inner join suggestions as s on s.id = pi.sugg_id 
+                        left JOIN followup_reports_activities on followup_reports_activities.fore_id = followup_reports.id
+                        left join suggestions as sa on sa.id = followup_reports_activities.sugg_id
+                    where
+                        s.path_string like '/patient/suivi/equipe%' 
+                        and followup_reports.report_date between COALESCE(pi.start, followup_reports.report_date) and COALESCE (pi.end, followup_reports.report_date)
+                        and pi.deleted_at is null 
+                        and p.deleted_at is null
+                        and followup_reports.deleted_at is null
+                        and year(followup_reports.report_date) in ('" . $this->refYear . "', '" . $this->refYear . "'-1)
+                        and followup_reports.activity_type = 1 -- uniquement les rencontres
+                        and followup_reports.report_date between coalesce(pi_antenna.start, followup_reports.report_date) and COALESCE (pi_antenna.end, followup_reports.report_date)
+                        and s_antenna.path_string like '/patient/suivi/antenne/%'
+                        and s_antenna.value like '" . $this->antenna . "'
+                        and sa.path_string like '%accomp%'
+                    group by 
+                        period, categoriesuivi, hash 
+                    order by
+                        period, categoriesuivi, hash";
 
         $result = $conn->query($sql);
 
@@ -10882,9 +10882,9 @@ class StatistiquesController extends AbstractController
                             inner join patients_information as pi on p.id = pi.pati_id 
                             inner join suggestions as s on s.id = pi.sugg_id 
                             left JOIN followup_reports_activities on followup_reports_activities.fore_id = followup_reports.id
-                            left join suggestions as sa on sa.id = followup_reports_activities.id
+                            left join suggestions as sa on sa.id = followup_reports_activities.sugg_id
                         where
-                            s.path_string like '/patient/suivi/equipe%' 
+                            s.path_string like '/patient/suivi/equipe%'
                             and followup_reports.report_date between COALESCE(pi.start, followup_reports.report_date) and COALESCE (pi.end, followup_reports.report_date)
                             and pi.deleted_at is null 
                             and p.deleted_at is null
@@ -12859,7 +12859,7 @@ class StatistiquesController extends AbstractController
                     and pi.deleted_at is null
                     and coalesce(pi.start, '" . $this->startDate . "') <= '" . $this->endDate . "'
                     and coalesce(pi.end, '" . $this->endDate . "') >= '" . $this->startDate . "' 
-            ) as suivi on p.id = suivi.id
+            ) as suivi on p.id = suivi.pati_id
             and COALESCE(suivi.start, '" . $this->startDate . "') <= COALESCE(equipe.end, '" . $this->endDate . "')
             and COALESCE(suivi.end, '" . $this->endDate . "') >= COALESCE(equipe.start, '" . $this->startDate . "')
             
@@ -13012,7 +13012,7 @@ class StatistiquesController extends AbstractController
                     and pi.deleted_at is null
                     and coalesce(pi.start, '" . $this->startDate . "') <= '" . $this->endDate . "'
                     and coalesce(pi.end, '" . $this->endDate . "') >= '" . $this->startDate . "' 
-            ) as suivi on p.id = suivi.id
+            ) as suivi on p.id = suivi.pati_id
             and COALESCE(suivi.start, '" . $this->startDate . "') <= COALESCE(equipe.end, '" . $this->endDate . "')
             and COALESCE(suivi.end, '" . $this->endDate . "') >= COALESCE(equipe.start, '" . $this->startDate . "')
             
@@ -13161,7 +13161,7 @@ class StatistiquesController extends AbstractController
                     and pi.deleted_at is null
                     and coalesce(pi.start, '" . $this->startDate . "') <= '" . $this->endDate . "'
                     and coalesce(pi.end, '" . $this->endDate . "') >= '" . $this->startDate . "' 
-            ) as suivi on p.id = suivi.id
+            ) as suivi on p.id = suivi.pati_id
             and COALESCE(suivi.start, '" . $this->startDate . "') <= COALESCE(equipe.end, '" . $this->endDate . "')
             and COALESCE(suivi.end, '" . $this->endDate . "') >= COALESCE(equipe.start, '" . $this->startDate . "')
             
@@ -13417,7 +13417,7 @@ class StatistiquesController extends AbstractController
                                 and pi.deleted_at is null
                                 and coalesce(pi.start, '" . $this->startDate . "') <= '" . $this->endDate . "'
                                 and coalesce(pi.end, '" . $this->endDate . "') >= '" . $this->startDate . "' 
-                        ) as suivi on p.id = suivi.id
+                        ) as suivi on p.id = suivi.pati_id
                         and COALESCE(suivi.start, '" . $this->startDate . "') <= COALESCE(equipe.end, '" . $this->endDate . "')
                         and COALESCE(suivi.end, '" . $this->endDate . "') >= COALESCE(equipe.start, '" . $this->startDate . "')
                         
@@ -13791,7 +13791,7 @@ class StatistiquesController extends AbstractController
             die("Connection failed: " . $conn->connect_error);
         }
 
-        $sql = 'SELECT antenna, id, count(status) as c from patients group by antenna, id having c > 1';
+        $sql = 'SELECT antenna, id, count(status) as numberEtats from patients group by antenna, id having numberEtats > 0';
 
         $result = $conn->query($sql);
 
@@ -13820,7 +13820,7 @@ class StatistiquesController extends AbstractController
         }
 
         $sql = 'SELECT 
-                    p.id, 
+                    p.hash, 
                     p.firstname, 
                     p.lastname, 
                     s.value, 

@@ -25,9 +25,9 @@ select @quarterstartdate, @quarterenddate;
 SET @nextyear=@refyear+1;
 SET @prevyear=@refyear-1;
 
-SET @refyearwc=concat(left(@refdate,4),"%");
-SET @past="1901-01-01" COLLATE utf8mb4_unicode_ci;
-SET @nextyear0101= concat(@nextyear,"-01-01");
+SET @refyearwc=concat(left(@refdate,4),'%');
+SET @past='1901-01-01' COLLATE utf8mb4_unicode_ci;
+SET @nextyear0101= concat(@nextyear,'-01-01');
 
 
 DROP FUNCTION IF EXISTS refdate;
@@ -59,10 +59,10 @@ select
 	p.pati_id, 
 	p.hash, 
     s_stat.value as statut, 
-    COALESCE(g.genre, "--inconnu--") as genre, 
-    COALESCE(n.nationalite, "--inconnu--") as nationalite, 
-    COALESCE(prog.programme, "--inconnu--") as programme, 
-    COALESCE(team.team, "--inconnu--") as team
+    COALESCE(g.genre, '--inconnu--') as genre, 
+    COALESCE(n.nationalite, '--inconnu--') as nationalite, 
+    COALESCE(prog.programme, '--inconnu--') as programme, 
+    COALESCE(team.team, '--inconnu--') as team
     
     from patients p 
 	left join patients_information pi_stat on pi_stat.pati_id = p.pati_id 
@@ -136,11 +136,11 @@ select
 	where 
             p.deleted_at is null
 
-			and s_stat.path_string like "/patient/fiche/statut-du-suivi/%"
+			and s_stat.path_string like '/patient/fiche/statut-du-suivi/%'
 			and @refdate between coalesce(pi_stat.start, @past) and coalesce(pi_stat.end, @refdate)
             and pi_stat.deleted_at is null
 
-			and s_antenna.path_string like "/patient/suivi/antenne/%"
+			and s_antenna.path_string like '/patient/suivi/antenne/%'
 			and @refdate between coalesce(pi_antenna.start, @past) and coalesce(pi_antenna.end, @refdate)
             and pi_antenna.deleted_at is null;
 
@@ -156,7 +156,7 @@ select
 -- where 
 -- 	pi.end is null 
 -- 	and pi.deleted_at is null 
--- 	and s.path_string like "/patient/fiche/statut-du-suivi%" 
+-- 	and s.path_string like '/patient/fiche/statut-du-suivi%' 
 -- 	and p.status != s.value;
 
 
@@ -179,17 +179,17 @@ select 	h, 	ln, fn, ch, val from
 					inner join suggestions as s on s.sugg_id = pi.sugg_id 
 				where 
 					(
-						s.path_string like "/patient/fiche/statut-du-suivi/signalement%" 
-						or s.path_string like "/patient/fiche/statut-du-suivi/6" 
-						or s.path_string like "/patient/fiche/statut-du-suivi/pre-suivi%" 
-						or s.path_string like "/patient/fiche/statut-du-suivi/en-suivi" 
-						or s.path_string like "/patient/fiche/statut-du-suivi/post-suivi" 
+						s.path_string like '/patient/fiche/statut-du-suivi/signalement%' 
+						or s.path_string like '/patient/fiche/statut-du-suivi/6' 
+						or s.path_string like '/patient/fiche/statut-du-suivi/pre-suivi%' 
+						or s.path_string like '/patient/fiche/statut-du-suivi/en-suivi' 
+						or s.path_string like '/patient/fiche/statut-du-suivi/post-suivi' 
 						or (
-							s.path_string like "/patient/fiche/statut-du-suivi/disparu" 
+							s.path_string like '/patient/fiche/statut-du-suivi/disparu' 
 							and year(pi.start) like year(@refdate)
 						) 
 						or (
-							s.path_string like "/patient/fiche/statut-du-suivi/decede" 
+							s.path_string like '/patient/fiche/statut-du-suivi/decede' 
 							and year(pi.start) like year(@refdate)
 						)
 					) 
@@ -223,7 +223,7 @@ select 'PRE-TESTS 2. patients decedes sans date de décès : doit retourner 0 ro
 -- 	inner join patients_information as pi on p.pati_id = pi.pati_id 
 -- 	inner join suggestions as s on s.sugg_id = pi.sugg_id 
 -- where 
--- 	s.path_string like "/patient/fiche/statut-du-suivi/decede" 
+-- 	s.path_string like '/patient/fiche/statut-du-suivi/decede' 
 -- 	and pi.start is null 
 -- 	and pi.deleted_at is null;
 	
@@ -232,32 +232,32 @@ select 'PRE-TESTS 2. patients decedes sans date de décès : doit retourner 0 ro
 select 'PRE-TESTS 3. Lister les patients ayant 2 états simultanés : doit retourner 0 rows (chevauchement de statuts)';
 
 -- Statistiques 5
--- SELECT 
--- 		p.hash, 
--- 		p.firstname, 
--- 		p.lastname, 
--- 		s.value, 
--- 		pi.end, 
--- 		pi2.start, 
--- 		s2.value
--- 	FROM 
--- 		patients as p 
--- 		inner join patients_information as pi on p.pati_id = pi.pati_id 
--- 		inner join suggestions as s on s.sugg_id = pi.sugg_id 
--- 		inner join patients_information as pi2 on p.pati_id = pi2.pati_id 
--- 		inner join suggestions as s2 on s2.sugg_id = pi2.sugg_id 
--- 	where 
--- 		s.path_string like "/patient/fiche/statut-du-suivi/%" 
--- 		and s2.path_string like "/patient/fiche/statut-du-suivi/%" 
--- 		and (pi2.start < pi.end) 
--- 		and (pi.start < pi2.start) 
--- 		and pi.paif_id != pi2.paif_id 
--- 		and pi.deleted_at is null 
--- 		and pi2.deleted_at is null 
--- order by 
--- 	p.firstname, 
--- 	p.lastname, 
--- 	pi.start;
+SELECT 
+		p.hash, 
+		p.firstname, 
+		p.lastname, 
+		s.value, 
+		pi.end, 
+		pi2.start, 
+		s2.value
+	FROM 
+		patients as p 
+		inner join patients_information as pi on p.pati_id = pi.pati_id 
+		inner join suggestions as s on s.sugg_id = pi.sugg_id 
+		inner join patients_information as pi2 on p.pati_id = pi2.pati_id 
+		inner join suggestions as s2 on s2.sugg_id = pi2.sugg_id 
+	where 
+		s.path_string like '/patient/fiche/statut-du-suivi/%' 
+		and s2.path_string like '/patient/fiche/statut-du-suivi/%' 
+		and (pi2.start < pi.end) 
+		and (pi.start < pi2.start) 
+		and pi.paif_id != pi2.paif_id 
+		and pi.deleted_at is null 
+		and pi2.deleted_at is null 
+order by 
+	p.firstname, 
+	p.lastname, 
+	pi.start;
     
 -- Ne fonctionne pas, besoin de faire un join pour statistique 6
 select antenna, hash, count(statut) as c from p_summary group by antenna, hash having c > 1;
@@ -297,7 +297,7 @@ select 'PRE-TESTS 6. patients without status at reference date';
 -- 		left join suggestions as pstatus_s on pstatus_s.sugg_id = pstatus.sugg_id 
 -- 		where 
 -- 			pstatus.deleted_at is null
---             and pstatus_s.path_string like "/patient/fiche/statut-du-suivi/%" 
+--             and pstatus_s.path_string like '/patient/fiche/statut-du-suivi/%' 
 -- 			and @refdate between COALESCE(pstatus.start, @refdate) and COALESCE (pstatus.end, @refdate)
 -- 	) statutsuivi
 -- 	on statutsuivi.pati_id = p.pati_id
@@ -329,7 +329,7 @@ select 'PRE-TESTS 7. patients without team at reference date';
 -- 		left join suggestions as team_s on team_s.sugg_id = team.sugg_id 
 -- 		where 
 -- 			team.deleted_at is null
---             and team_s.path_string like "/patient/suivi/equipe%" 
+--             and team_s.path_string like '/patient/suivi/equipe%' 
 -- 			and @refdate between COALESCE(team.start, @refdate) and COALESCE (team.end, @refdate)
 -- 	) team
 -- 	on team.pati_id = p.pati_id
@@ -354,7 +354,7 @@ select 'PRE-TESTS 8. patients without birthdate';
 -- 			patients_information as team 
 -- 			left join suggestions as team_s on team_s.sugg_id = team.sugg_id
 -- 		where
--- 			team_s.path_string like "/patient/suivi/equipe%"
+-- 			team_s.path_string like '/patient/suivi/equipe%'
 -- 			and team.deleted_at is null
 -- 			and @refdate between COALESCE(team.start, @refdate) and COALESCE (team.end, @refdate)
 --     ) t on t.pati_id = p.pati_id
@@ -368,7 +368,7 @@ select 'PRE-TESTS 8. patients without birthdate';
 -- 			patients_information as statut 
 -- 			left join suggestions as statut_s on statut_s.sugg_id = statut.sugg_id
 -- 		where
--- 			statut_s.path_string like  "/patient/fiche/statut-du-suivi/%"
+-- 			statut_s.path_string like  '/patient/fiche/statut-du-suivi/%'
 --             and statut.deleted_at is null
 -- 			and @refdate between COALESCE(statut.start, @refdate) and COALESCE (statut.end, @refdate)
 -- 	) s on s.pati_id = p.pati_id
@@ -380,11 +380,11 @@ select 'PRE-TESTS 8. patients without birthdate';
 
 
 
-select "Tableaux hors protocole ------------------------------";
+select 'Tableaux hors protocole ------------------------------';
 
 
 
-select "Tableau xx - Nombre de patients suivi par l'équipe rue au cours de la periode de reference, en suivi ou pre-suivi actif, ayant une pathologie physique chronique (inclus assuetude) et pour qui au moins une rencontre a été réalisée dans la période de reference";
+select 'Tableau xx - Nombre de patients suivi par l'équipe rue au cours de la periode de reference, en suivi ou pre-suivi actif, ayant une pathologie physique chronique (inclus assuetude) et pour qui au moins une rencontre a été réalisée dans la période de reference';
 -- statistiques 10
 -- select 
 -- 	problem,
@@ -423,7 +423,7 @@ select "Tableau xx - Nombre de patients suivi par l'équipe rue au cours de la p
 -- 			from patients_information pi
 -- 				inner join suggestions as s on s.sugg_id = pi.sugg_id 
 -- 			where 
--- 				s.path_string like "/patient/suivi/equipes/equipe-rue" 
+-- 				s.path_string like '/patient/suivi/equipes/equipe-rue' 
 -- 				and pi.deleted_at is null
 -- 				and coalesce(pi.start, @startdate) <= @enddate
 -- 				and coalesce(pi.end, @enddate) >= @startdate 
@@ -439,7 +439,7 @@ select "Tableau xx - Nombre de patients suivi par l'équipe rue au cours de la p
 -- 			from patients_information pi
 -- 				inner join suggestions as s on s.sugg_id = pi.sugg_id 
 -- 			where 
--- 				s.path_string in ("/patient/fiche/statut-du-suivi/en-suivi", "/patient/fiche/statut-du-suivi/pre-suivi-actif")
+-- 				s.path_string in ('/patient/fiche/statut-du-suivi/en-suivi', '/patient/fiche/statut-du-suivi/pre-suivi-actif')
 -- 				and pi.deleted_at is null
 -- 				and coalesce(pi.start, @startdate) <= @enddate
 -- 				and coalesce(pi.end, @enddate) >= @startdate 
@@ -458,7 +458,7 @@ select "Tableau xx - Nombre de patients suivi par l'équipe rue au cours de la p
 -- 			from patients_information pi
 -- 				inner join suggestions s on s.sugg_id = pi.sugg_id 
 -- 			where 
--- 				s.path_string like "/patient/suivi/antenne/%"
+-- 				s.path_string like '/patient/suivi/antenne/%'
 -- 				and pi.deleted_at is null
 -- 				and s.value like @antenna 
 -- 				and coalesce(pi.start, @startdate) <= @enddate
@@ -474,7 +474,7 @@ select "Tableau xx - Nombre de patients suivi par l'équipe rue au cours de la p
 -- 		(
 -- 			select 
 -- 				pi.pati_id,
--- 				if (s2.path_string  like "%mental%", "pathologie mentale", "pathologie physique chronique ou assuetude") as problem,
+-- 				if (s2.path_string  like '%mental%', 'pathologie mentale', 'pathologie physique chronique ou assuetude') as problem,
 -- 				pi.start,
 -- 				pi.end
 -- 			from patients_information pi
@@ -528,7 +528,7 @@ select "Tableau xx - Nombre de patients suivi par l'équipe rue au cours de la p
 -- 								SUM(
 -- 									if (
 -- 										followup_reports.activity_type = 1
--- 										and sa.path_string like "%conseil%",
+-- 										and sa.path_string like '%conseil%',
 -- 										1,
 -- 										0
 -- 									)
@@ -536,7 +536,7 @@ select "Tableau xx - Nombre de patients suivi par l'équipe rue au cours de la p
 -- 								SUM(
 -- 									if (
 -- 										followup_reports.activity_type = 1
--- 										and sa.path_string like "%transfert%",
+-- 										and sa.path_string like '%transfert%',
 -- 										1,
 -- 										0
 -- 									)
@@ -544,7 +544,7 @@ select "Tableau xx - Nombre de patients suivi par l'équipe rue au cours de la p
 -- 								SUM(
 -- 									if (
 -- 										followup_reports.activity_type = 1
--- 										and sa.path_string like "%soin%",
+-- 										and sa.path_string like '%soin%',
 -- 										1,
 -- 										0
 -- 									)
@@ -552,7 +552,7 @@ select "Tableau xx - Nombre de patients suivi par l'équipe rue au cours de la p
 -- 								SUM(
 -- 									if (
 -- 										followup_reports.activity_type = 1
--- 										and sa.path_string like "%accomp%",
+-- 										and sa.path_string like '%accomp%',
 -- 										1,
 -- 										0
 -- 									)
@@ -586,14 +586,14 @@ select "Tableau xx - Nombre de patients suivi par l'équipe rue au cours de la p
 -- 								left JOIN followup_reports_activities on followup_reports_activities.fore_id = followup_reports.fore_id
 -- 								left join suggestions as sa on sa.sugg_id = followup_reports_activities.sugg_id
 -- 							where
--- 								s.path_string like "/patient/suivi/equipes/equipe-rue%" 
+-- 								s.path_string like '/patient/suivi/equipes/equipe-rue%' 
 -- 								and followup_reports.report_date between COALESCE(pi.start, @startdate ) and COALESCE (pi.end, @enddate	)
 -- 								and pi.deleted_at is null 
 -- 								and p.deleted_at is null
 -- 								and followup_reports.deleted_at is null
 -- 								and followup_reports.report_date between @startdate and @enddate
 -- 								and followup_reports.report_date between coalesce(pi_antenna.start, @start_date) and COALESCE (pi_antenna.end, @enddate)
--- 								and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 								and s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 								and s_antenna.value like @antenna
 
 -- 							group by
@@ -617,7 +617,7 @@ select "Tableau xx - Nombre de patients suivi par l'équipe rue au cours de la p
 
 
 
-select "Tableau xx - Nombre de patients suivi par l'équipe rue au cours de la periode de reference, en suivi ou pre-suivi actif, ayant une pathologie physique chronique (inclus assuetude) et pour qui au moins une rencontre a été réalisée dans la période de reference - liste nominative ";
+select 'Tableau xx - Nombre de patients suivi par l'équipe rue au cours de la periode de reference, en suivi ou pre-suivi actif, ayant une pathologie physique chronique (inclus assuetude) et pour qui au moins une rencontre a été réalisée dans la période de reference - liste nominative ';
 -- statistiques 11
 
 -- select 
@@ -651,7 +651,7 @@ select "Tableau xx - Nombre de patients suivi par l'équipe rue au cours de la p
 --         from patients_information pi
 -- 			inner join suggestions as s on s.sugg_id = pi.sugg_id 
 -- 		where 
--- 			s.path_string like "/patient/suivi/equipes/equipe-rue" 
+-- 			s.path_string like '/patient/suivi/equipes/equipe-rue' 
 -- 			and pi.deleted_at is null
 -- 			and coalesce(pi.start, @startdate) <= @enddate
 -- 			and coalesce(pi.end, @enddate) >= @startdate 
@@ -667,7 +667,7 @@ select "Tableau xx - Nombre de patients suivi par l'équipe rue au cours de la p
 --         from patients_information pi
 -- 			inner join suggestions as s on s.sugg_id = pi.sugg_id 
 -- 		where 
---             s.path_string in ("/patient/fiche/statut-du-suivi/en-suivi", "/patient/fiche/statut-du-suivi/pre-suivi-actif")
+--             s.path_string in ('/patient/fiche/statut-du-suivi/en-suivi', '/patient/fiche/statut-du-suivi/pre-suivi-actif')
 -- 			and pi.deleted_at is null
 -- 			and coalesce(pi.start, @startdate) <= @enddate
 -- 			and coalesce(pi.end, @enddate) >= @startdate 
@@ -686,7 +686,7 @@ select "Tableau xx - Nombre de patients suivi par l'équipe rue au cours de la p
 -- 		from patients_information pi
 -- 			inner join suggestions s on s.sugg_id = pi.sugg_id 
 -- 		where 
--- 			s.path_string like "/patient/suivi/antenne/%"
+-- 			s.path_string like '/patient/suivi/antenne/%'
 -- 			and pi.deleted_at is null
 -- 			and s.value like @antenna 
 -- 			and coalesce(pi.start, @startdate) <= @enddate
@@ -702,7 +702,7 @@ select "Tableau xx - Nombre de patients suivi par l'équipe rue au cours de la p
 -- 	(
 -- 		select 
 -- 			pi.pati_id,
---             if (s2.path_string  like "%mental%", "pathologie mentale", "pathologie physique chronique ou assuetude") as problem,
+--             if (s2.path_string  like '%mental%', 'pathologie mentale', 'pathologie physique chronique ou assuetude') as problem,
 --             pi.start,
 --             pi.end
 --  		from patients_information pi
@@ -756,7 +756,7 @@ select "Tableau xx - Nombre de patients suivi par l'équipe rue au cours de la p
 -- 							SUM(
 -- 								if (
 -- 									followup_reports.activity_type = 1
--- 									and sa.path_string like "%conseil%",
+-- 									and sa.path_string like '%conseil%',
 -- 									1,
 -- 									0
 -- 								)
@@ -764,7 +764,7 @@ select "Tableau xx - Nombre de patients suivi par l'équipe rue au cours de la p
 -- 							SUM(
 -- 								if (
 -- 									followup_reports.activity_type = 1
--- 									and sa.path_string like "%transfert%",
+-- 									and sa.path_string like '%transfert%',
 -- 									1,
 -- 									0
 -- 								)
@@ -772,7 +772,7 @@ select "Tableau xx - Nombre de patients suivi par l'équipe rue au cours de la p
 -- 							SUM(
 -- 								if (
 -- 									followup_reports.activity_type = 1
--- 									and sa.path_string like "%soin%",
+-- 									and sa.path_string like '%soin%',
 -- 									1,
 -- 									0
 -- 								)
@@ -780,7 +780,7 @@ select "Tableau xx - Nombre de patients suivi par l'équipe rue au cours de la p
 -- 							SUM(
 -- 								if (
 -- 									followup_reports.activity_type = 1
--- 									and sa.path_string like "%accomp%",
+-- 									and sa.path_string like '%accomp%',
 -- 									1,
 -- 									0
 -- 								)
@@ -814,14 +814,14 @@ select "Tableau xx - Nombre de patients suivi par l'équipe rue au cours de la p
 -- 							left JOIN followup_reports_activities on followup_reports_activities.fore_id = followup_reports.fore_id
 -- 							left join suggestions as sa on sa.sugg_id = followup_reports_activities.sugg_id
 -- 						where
--- 							s.path_string like "/patient/suivi/equipes/equipe-rue%" 
+-- 							s.path_string like '/patient/suivi/equipes/equipe-rue%' 
 -- 							and followup_reports.report_date between COALESCE(pi.start, @startdate ) and COALESCE (pi.end, @enddate	)
 -- 							and pi.deleted_at is null 
 -- 							and p.deleted_at is null
 -- 							and followup_reports.deleted_at is null
 -- 							and followup_reports.report_date between @startdate and @enddate
 -- 							and followup_reports.report_date between coalesce(pi_antenna.start, @start_date) and COALESCE (pi_antenna.end, @enddate)
--- 							and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 							and s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 							and s_antenna.value like @antenna
 
 -- 						group by
@@ -844,7 +844,7 @@ select "Tableau xx - Nombre de patients suivi par l'équipe rue au cours de la p
 
 
 
-select "Tableau xx - Nombre de patients suivi par l'équipe rue au cours de la periode de reference, en suivi ou pre-suivi actif, ayant une pathologie physique chronique (inclus assuetude) mais une rencontre n'a pas été forcement réalisée dans la période de reference ";
+select 'Tableau xx - Nombre de patients suivi par l'équipe rue au cours de la periode de reference, en suivi ou pre-suivi actif, ayant une pathologie physique chronique (inclus assuetude) mais une rencontre n'a pas été forcement réalisée dans la période de reference ';
 -- statistiques 12
 -- select 
 -- 	problem,
@@ -883,7 +883,7 @@ select "Tableau xx - Nombre de patients suivi par l'équipe rue au cours de la p
 -- 			from patients_information pi
 -- 				inner join suggestions as s on s.sugg_id = pi.sugg_id 
 -- 			where 
--- 				s.path_string like "/patient/suivi/equipes/equipe-rue" 
+-- 				s.path_string like '/patient/suivi/equipes/equipe-rue' 
 -- 				and pi.deleted_at is null
 -- 				and coalesce(pi.start, @startdate) <= @enddate
 -- 				and coalesce(pi.end, @enddate) >= @startdate 
@@ -899,7 +899,7 @@ select "Tableau xx - Nombre de patients suivi par l'équipe rue au cours de la p
 -- 			from patients_information pi
 -- 				inner join suggestions as s on s.sugg_id = pi.sugg_id 
 -- 			where 
--- 				s.path_string in ("/patient/fiche/statut-du-suivi/en-suivi", "/patient/fiche/statut-du-suivi/pre-suivi-actif")
+-- 				s.path_string in ('/patient/fiche/statut-du-suivi/en-suivi', '/patient/fiche/statut-du-suivi/pre-suivi-actif')
 -- 				and pi.deleted_at is null
 -- 				and coalesce(pi.start, @startdate) <= @enddate
 -- 				and coalesce(pi.end, @enddate) >= @startdate 
@@ -918,7 +918,7 @@ select "Tableau xx - Nombre de patients suivi par l'équipe rue au cours de la p
 -- 			from patients_information pi
 -- 				inner join suggestions s on s.sugg_id = pi.sugg_id 
 -- 			where 
--- 				s.path_string like "/patient/suivi/antenne/%"
+-- 				s.path_string like '/patient/suivi/antenne/%'
 -- 				and pi.deleted_at is null
 -- 				and s.value like @antenna 
 -- 				and coalesce(pi.start, @startdate) <= @enddate
@@ -934,7 +934,7 @@ select "Tableau xx - Nombre de patients suivi par l'équipe rue au cours de la p
 -- 		(
 -- 			select 
 -- 				pi.pati_id,
--- 				if (s2.path_string  like "%mental%", "pathologie mentale", "pathologie physique chronique ou assuetude") as problem,
+-- 				if (s2.path_string  like '%mental%', 'pathologie mentale', 'pathologie physique chronique ou assuetude') as problem,
 -- 				pi.start,
 -- 				pi.end
 -- 			from patients_information pi
@@ -973,7 +973,7 @@ select "Tableau xx - Nombre de patients suivi par l'équipe rue au cours de la p
 
 
 
-select "Tableau xx - Nombre de patients suivi par l'équipe rue au cours de la periode de reference, en suivi ou pre-suivi actif, ayant une pathologie physique chronique (inclus assuetude) mais une rencontre n'a pas été forcement réalisée dans la période de reference - liste nominative ";
+select 'Tableau xx - Nombre de patients suivi par l'équipe rue au cours de la periode de reference, en suivi ou pre-suivi actif, ayant une pathologie physique chronique (inclus assuetude) mais une rencontre n'a pas été forcement réalisée dans la période de reference - liste nominative ';
 
 -- statistiques 13
 -- select 
@@ -1007,7 +1007,7 @@ select "Tableau xx - Nombre de patients suivi par l'équipe rue au cours de la p
 --         from patients_information pi
 -- 			inner join suggestions as s on s.sugg_id = pi.sugg_id 
 -- 		where 
--- 			s.path_string like "/patient/suivi/equipes/equipe-rue" 
+-- 			s.path_string like '/patient/suivi/equipes/equipe-rue' 
 -- 			and pi.deleted_at is null
 -- 			and coalesce(pi.start, @startdate) <= @enddate
 -- 			and coalesce(pi.end, @enddate) >= @startdate 
@@ -1023,7 +1023,7 @@ select "Tableau xx - Nombre de patients suivi par l'équipe rue au cours de la p
 --         from patients_information pi
 -- 			inner join suggestions as s on s.sugg_id = pi.sugg_id 
 -- 		where 
---             s.path_string in ("/patient/fiche/statut-du-suivi/en-suivi", "/patient/fiche/statut-du-suivi/pre-suivi-actif")
+--             s.path_string in ('/patient/fiche/statut-du-suivi/en-suivi', '/patient/fiche/statut-du-suivi/pre-suivi-actif')
 -- 			and pi.deleted_at is null
 -- 			and coalesce(pi.start, @startdate) <= @enddate
 -- 			and coalesce(pi.end, @enddate) >= @startdate 
@@ -1042,7 +1042,7 @@ select "Tableau xx - Nombre de patients suivi par l'équipe rue au cours de la p
 -- 		from patients_information pi
 -- 			inner join suggestions s on s.sugg_id = pi.sugg_id 
 -- 		where 
--- 			s.path_string like "/patient/suivi/antenne/%"
+-- 			s.path_string like '/patient/suivi/antenne/%'
 -- 			and pi.deleted_at is null
 -- 			and s.value like @antenna 
 -- 			and coalesce(pi.start, @startdate) <= @enddate
@@ -1058,7 +1058,7 @@ select "Tableau xx - Nombre de patients suivi par l'équipe rue au cours de la p
 -- 	(
 -- 		select 
 -- 			pi.pati_id,
---             if (s2.path_string  like "%mental%", "pathologie mentale", "pathologie physique chronique ou assuetude") as problem,
+--             if (s2.path_string  like '%mental%', 'pathologie mentale', 'pathologie physique chronique ou assuetude') as problem,
 --             pi.start,
 --             pi.end
 --  		from patients_information pi
@@ -1117,7 +1117,7 @@ select 'Tableau 1.A. – Nouveaux signalements encodés';
 -- 					inner join patients_information as pi on p.pati_id = pi.pati_id
 -- 					inner join suggestions as s on s.sugg_id = pi.sugg_id
 -- 				where
--- 					s.path_string like "/patient/fiche/statut-du-suivi/signalement%"
+-- 					s.path_string like '/patient/fiche/statut-du-suivi/signalement%'
 -- 					and pi.deleted_at is null
 -- 					and p.deleted_at is null
 -- 				group by
@@ -1131,11 +1131,11 @@ select 'Tableau 1.A. – Nouveaux signalements encodés';
 
 -- where 
 -- 	q.minstart between COALESCE(pi_antenna.start, @past) and COALESCE (pi_antenna.end, @refdate)
--- 	and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 	and s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 	and pi_antenna.deleted_at is null
 -- 	and s_antenna.value like @antenna 
 
--- 	and s_stat.path_string like "/patient/fiche/statut-du-suivi/signalement%"
+-- 	and s_stat.path_string like '/patient/fiche/statut-du-suivi/signalement%'
 -- 	and q.minstart  = pi_stat.start
 -- 	and pi_stat.deleted_at is null
 --     and pi_stat.start like @refyearwc
@@ -1158,7 +1158,7 @@ select 'Tableau 1.A. – Nouveaux signalements encodés - Liste nominative';
 -- 					inner join patients_information as pi on p.pati_id = pi.pati_id
 -- 					inner join suggestions as s on s.sugg_id = pi.sugg_id
 -- 				where
--- 					s.path_string like "/patient/fiche/statut-du-suivi/signalement%"
+-- 					s.path_string like '/patient/fiche/statut-du-suivi/signalement%'
 -- 					and pi.deleted_at is null
 -- 					and p.deleted_at is null
 -- 				group by
@@ -1172,11 +1172,11 @@ select 'Tableau 1.A. – Nouveaux signalements encodés - Liste nominative';
 
 -- where 
 -- 	q.minstart between COALESCE(pi_antenna.start, @past) and COALESCE (pi_antenna.end, @refdate)
--- 	and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 	and s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 	and pi_antenna.deleted_at is null
 -- 	and s_antenna.value like @antenna 
 
--- 	and s_stat.path_string like "/patient/fiche/statut-du-suivi/signalement%"
+-- 	and s_stat.path_string like '/patient/fiche/statut-du-suivi/signalement%'
 -- 	and q.minstart  = pi_stat.start
 -- 	and pi_stat.deleted_at is null
 --     and pi_stat.start like @refyearwc
@@ -1197,7 +1197,7 @@ select 'Tableau 1.B. Nouveaux pré-suivis actifs encodes';
 -- 			inner join patients_information as pi on p.pati_id = pi.pati_id
 -- 			inner join suggestions as s on s.sugg_id = pi.sugg_id
 -- 		where
--- 			s.path_string like "/patient/fiche/statut-du-suivi/pre-suivi-actif%"
+-- 			s.path_string like '/patient/fiche/statut-du-suivi/pre-suivi-actif%'
 -- 			and pi.deleted_at is null
 -- 			and p.deleted_at is null
 -- 		group by
@@ -1209,12 +1209,12 @@ select 'Tableau 1.B. Nouveaux pré-suivis actifs encodes';
 -- 	inner  join suggestions s_stat on s_stat.sugg_id = pi_stat.sugg_id 
 
 -- where 
--- 	s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 	s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 	and pi_antenna.deleted_at is null
 -- 	and s_antenna.value like @antenna 
 -- 	and minstart between COALESCE(pi_antenna.start, @past) and COALESCE (pi_antenna.end, @refdate)
 
--- 	and s_stat.path_string like "/patient/fiche/statut-du-suivi/%"
+-- 	and s_stat.path_string like '/patient/fiche/statut-du-suivi/%'
 -- 	and minstart = pi_stat.start
 -- 	and pi_stat.deleted_at is null
 --     and pi_stat.start like @refyearwc
@@ -1237,7 +1237,7 @@ select 'Tableau 1.B. Nouveaux pré-suivis actifs encodes - liste nominative';
 -- 					inner join patients_information as pi on p.pati_id = pi.pati_id
 -- 					inner join suggestions as s on s.sugg_id = pi.sugg_id
 -- 				where
--- 					s.path_string like "/patient/fiche/statut-du-suivi/pre-suivi-actif%"
+-- 					s.path_string like '/patient/fiche/statut-du-suivi/pre-suivi-actif%'
 -- 					and pi.deleted_at is null
 -- 					and p.deleted_at is null
 -- 				group by
@@ -1251,11 +1251,11 @@ select 'Tableau 1.B. Nouveaux pré-suivis actifs encodes - liste nominative';
 
 -- where 
 -- 	q.minstart between COALESCE(pi_antenna.start, @past) and COALESCE (pi_antenna.end, @refdate)
--- 	and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 	and s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 	and pi_antenna.deleted_at is null
 -- 	and s_antenna.value like @antenna 
 
--- 	and s_stat.path_string like "/patient/fiche/statut-du-suivi/pre-suivi-actif%"
+-- 	and s_stat.path_string like '/patient/fiche/statut-du-suivi/pre-suivi-actif%'
 -- 	and q.minstart  = pi_stat.start
 -- 	and pi_stat.deleted_at is null
 --     and pi_stat.start like @refyearwc
@@ -1279,7 +1279,7 @@ select 'Tableau 1.C. – Nombre de nouveaux suivis au cours de l’année';
 -- 			inner join patients_information as pi on p.pati_id = pi.pati_id
 -- 			inner join suggestions as s on s.sugg_id = pi.sugg_id
 -- 		where
--- 			s.path_string like "/patient/fiche/statut-du-suivi/en-suivi"
+-- 			s.path_string like '/patient/fiche/statut-du-suivi/en-suivi'
 -- 			and pi.deleted_at is null
 -- 			and p.deleted_at is null
 -- 		group by
@@ -1292,19 +1292,19 @@ select 'Tableau 1.C. – Nombre de nouveaux suivis au cours de l’année';
 -- 	inner  join suggestions s_stat on s_stat.sugg_id = pi_stat.sugg_id 
 
 -- where 
--- 	s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 	s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 	and pi_antenna.deleted_at is null
 -- 	and s_antenna.value like @antenna 
 -- 	and minstart between COALESCE(pi_antenna.start, @past) and COALESCE (pi_antenna.end, @refdate)
 
--- 	and s_stat.path_string like "/patient/fiche/statut-du-suivi/en-suivi"
+-- 	and s_stat.path_string like '/patient/fiche/statut-du-suivi/en-suivi'
 -- 	and minstart = pi_stat.start
 -- 	and pi_stat.deleted_at is null
 --     and pi_stat.start like @refyearwc
 -- group by statut;
 
 
-select "Tableau 1.C. – Nombre de nouveaux suivis au cours de l’année - liste nominative";
+select 'Tableau 1.C. – Nombre de nouveaux suivis au cours de l’année - liste nominative';
 -- select 
 -- 	s_stat.value as statut, p.hash, p.firstname, p.lastname, pi_stat.start as 'date enregistrement', s_antenna.value as 'antenne'
 -- from patients p
@@ -1318,7 +1318,7 @@ select "Tableau 1.C. – Nombre de nouveaux suivis au cours de l’année - list
 -- 			inner join patients_information as pi on p.pati_id = pi.pati_id
 -- 			inner join suggestions as s on s.sugg_id = pi.sugg_id
 -- 		where
--- 			s.path_string like "/patient/fiche/statut-du-suivi/en-suivi"
+-- 			s.path_string like '/patient/fiche/statut-du-suivi/en-suivi'
 -- 			and pi.deleted_at is null
 -- 			and p.deleted_at is null
 -- 		group by
@@ -1331,12 +1331,12 @@ select "Tableau 1.C. – Nombre de nouveaux suivis au cours de l’année - list
 -- 	inner  join suggestions s_stat on s_stat.sugg_id = pi_stat.sugg_id 
 
 -- where 
--- 	s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 	s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 	and pi_antenna.deleted_at is null
 -- 	and s_antenna.value like @antenna 
 -- 	and minstart between COALESCE(pi_antenna.start, @past) and COALESCE (pi_antenna.end, @refdate)
 
--- 	and s_stat.path_string like "/patient/fiche/statut-du-suivi/en-suivi%"
+-- 	and s_stat.path_string like '/patient/fiche/statut-du-suivi/en-suivi%'
 -- 	and minstart = pi_stat.start
 -- 	and pi_stat.deleted_at is null
 --     and pi_stat.start like @refyearwc
@@ -1344,7 +1344,7 @@ select "Tableau 1.C. – Nombre de nouveaux suivis au cours de l’année - list
 
 
 
-select "Tableau 1.D. – Nombre de personnes passées par le suivi en cours d année";
+select 'Tableau 1.D. – Nombre de personnes passées par le suivi en cours d année';
 
 -- select 
 -- 	count(pati_id) as 'Nombre de personnes passées par le suivi en cours d année'
@@ -1359,21 +1359,21 @@ select "Tableau 1.D. – Nombre de personnes passées par le suivi en cours d an
 -- 			inner join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id 
 -- 			inner join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id 
 --         where 
--- 			s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 			s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 			and pi_antenna.deleted_at is null
 -- 			and s_antenna.value like @antenna
 -- 			and pi.start between COALESCE(pi_antenna.start, @past) and COALESCE (pi_antenna.end, @refdate)
 -- 			and p.deleted_at is null
--- 			and s.path_string like "/patient/fiche/statut-du-suivi/en-suivi" 
+-- 			and s.path_string like '/patient/fiche/statut-du-suivi/en-suivi' 
 -- 			and pi.deleted_at is null
 -- 			and pi.start < @nextyear0101  
--- 			and coalesce(pi.end, @refdate) >= concat(@refyear, "-01-01")
+-- 			and coalesce(pi.end, @refdate) >= concat(@refyear, '-01-01')
 -- 		group by 
 -- 			p.pati_id
 -- ) r;
 
 
-select "Tableau 1.D. – Nombre de personnes passées par le suivi en cours d’année - liste nominative";
+select 'Tableau 1.D. – Nombre de personnes passées par le suivi en cours d’année - liste nominative';
 
 -- SELECT 
 -- 	p.pati_id,
@@ -1389,21 +1389,21 @@ select "Tableau 1.D. – Nombre de personnes passées par le suivi en cours d’
 -- 	inner join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id 
 -- 	inner join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id 
 -- where 
--- 	s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 	s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 	and pi_antenna.deleted_at is null
 -- 	and s_antenna.value like @antenna
 -- 	and COALESCE(pi.start, makedate(year(@refdate), 1)) < COALESCE (pi_antenna.end, makedate(year(@refdate)+1, 1))
 -- 	and COALESCE(pi.end, makedate(year(@refdate)+1, 1)) > COALESCE (pi_antenna.start, makedate(year(@refdate), 1))
 -- 	and p.deleted_at is null
--- 	and s.path_string like "/patient/fiche/statut-du-suivi/en-suivi" 
+-- 	and s.path_string like '/patient/fiche/statut-du-suivi/en-suivi' 
 -- 	and pi.deleted_at is null
 -- 	and pi.start < makedate(year(@refdate)+1, 1)
 -- 	and coalesce(pi.end, @refdate) >= makedate(year(@refdate), 1);
 
 
-select "Tableau 1.D.2. – Nombre de personnes passées par le post-suivi en cours d’année";
+select 'Tableau 1.D.2. – Nombre de personnes passées par le post-suivi en cours d’année';
 -- Select 
--- 	count(pati_id) as "Nombre de personnes passées par le post-suivi en cours d'année"
+-- 	count(pati_id) as 'Nombre de personnes passées par le post-suivi en cours d'année'
 -- from 
 -- (
 -- 		SELECT 
@@ -1415,21 +1415,21 @@ select "Tableau 1.D.2. – Nombre de personnes passées par le post-suivi en cou
 -- 			inner join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id 
 -- 			inner join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id 
 --         where 
--- 			s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 			s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 			and pi_antenna.deleted_at is null
 -- 			and s_antenna.value like @antenna
 -- 			and pi.start between COALESCE(pi_antenna.start, @past) and COALESCE (pi_antenna.end, @refdate)
 -- 			and p.deleted_at is null
--- 			and s.path_string like "/patient/fiche/statut-du-suivi/post-suivi" 
+-- 			and s.path_string like '/patient/fiche/statut-du-suivi/post-suivi' 
 -- 			and pi.deleted_at is null
 -- 			and pi.start < @nextyear0101  
--- 			and coalesce(pi.end, @refdate) >= concat(@refyear, "-01-01")
+-- 			and coalesce(pi.end, @refdate) >= concat(@refyear, '-01-01')
 -- 		group by 
 -- 			p.pati_id
 -- ) r;
 
 	
-select "Tableau 1.D.2. – Nombre de personnes passées par le post-suivi en cours d'année - liste nominative";
+select 'Tableau 1.D.2. – Nombre de personnes passées par le post-suivi en cours d'année - liste nominative';
 
 -- SELECT 
 -- 	p.pati_id,
@@ -1445,15 +1445,15 @@ select "Tableau 1.D.2. – Nombre de personnes passées par le post-suivi en cou
 -- 	inner join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id 
 -- 	inner join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id 
 -- where 
--- 	s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 	s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 	and pi_antenna.deleted_at is null
 -- 	and s_antenna.value like @antenna
 -- 	and pi.start between COALESCE(pi_antenna.start, @past) and COALESCE (pi_antenna.end, @refdate)
 -- 	and p.deleted_at is null
--- 	and s.path_string like "/patient/fiche/statut-du-suivi/post-suivi" 
+-- 	and s.path_string like '/patient/fiche/statut-du-suivi/post-suivi' 
 -- 	and pi.deleted_at is null
 -- 	and pi.start < @nextyear0101  
--- 	and coalesce(pi.end, @refdate) >= concat(@refyear, "-01-01")
+-- 	and coalesce(pi.end, @refdate) >= concat(@refyear, '-01-01')
 -- 	and p.pati_id in 
 -- 	(
 -- 		SELECT 
@@ -1465,15 +1465,15 @@ select "Tableau 1.D.2. – Nombre de personnes passées par le post-suivi en cou
 -- 			inner join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id 
 -- 			inner join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id 
 -- 		where 
--- 			s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 			s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 			and pi_antenna.deleted_at is null
 -- 			and s_antenna.value like @antenna
 -- 			and pi.start between COALESCE(pi_antenna.start, @past) and COALESCE (pi_antenna.end, @refdate)
 -- 			and p.deleted_at is null
--- 			and s.path_string like "/patient/fiche/statut-du-suivi/post-suivi" 
+-- 			and s.path_string like '/patient/fiche/statut-du-suivi/post-suivi' 
 -- 			and pi.deleted_at is null
 -- 			and pi.start < @nextyear0101  
--- 			and coalesce(pi.end, @refdate) >= concat(@refyear, "-01-01")
+-- 			and coalesce(pi.end, @refdate) >= concat(@refyear, '-01-01')
 -- 		group by 
 -- 			p.pati_id
 -- 	);
@@ -1501,17 +1501,17 @@ select 'Tableau 1.E. - Nombre total de personnes signalées, en pré-suivi actif
 -- 			inner join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id 
 -- 		where 
 -- 			(
--- 				s.path_string like "/patient/fiche/statut-du-suivi/signalement%" 
--- 				or s.path_string like "/patient/fiche/statut-du-suivi/pre-suivi%" 
--- 				or s.path_string like "/patient/fiche/statut-du-suivi/6" 
--- 				or s.path_string like "/patient/fiche/statut-du-suivi/en-suivi" 
--- 				or s.path_string like "/patient/fiche/statut-du-suivi/post-suivi" 
+-- 				s.path_string like '/patient/fiche/statut-du-suivi/signalement%' 
+-- 				or s.path_string like '/patient/fiche/statut-du-suivi/pre-suivi%' 
+-- 				or s.path_string like '/patient/fiche/statut-du-suivi/6' 
+-- 				or s.path_string like '/patient/fiche/statut-du-suivi/en-suivi' 
+-- 				or s.path_string like '/patient/fiche/statut-du-suivi/post-suivi' 
 -- 				or (
--- 					s.path_string like "/patient/fiche/statut-du-suivi/disparu" 
+-- 					s.path_string like '/patient/fiche/statut-du-suivi/disparu' 
 -- 					and pi.start like @refyearwc
 -- 				) 
 -- 				or (
--- 					s.path_string like "/patient/fiche/statut-du-suivi/decede" 
+-- 					s.path_string like '/patient/fiche/statut-du-suivi/decede' 
 -- 					and pi.start like @refyearwc
 -- 				)
 -- 			) 
@@ -1525,7 +1525,7 @@ select 'Tableau 1.E. - Nombre total de personnes signalées, en pré-suivi actif
 -- 			and pi.deleted_at is null 
 -- 			and p.deleted_at is null 
 			
--- 			and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 			and s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 			and pi_antenna.deleted_at is null
 -- 			and s_antenna.value like @antenna
 -- 			and pi.start <= COALESCE (pi_antenna.end, @refdate)
@@ -1547,7 +1547,7 @@ select 'Tableau 1.E. - Nombre total de personnes signalées, en pré-suivi actif
 -- 	lastname, 
 -- 	hash, 
 -- 	start as debut, 
--- 	COALESCE(end, "en cours") as fin 
+-- 	COALESCE(end, 'en cours') as fin 
 -- from 
 -- 	(
 -- 		SELECT 
@@ -1565,17 +1565,17 @@ select 'Tableau 1.E. - Nombre total de personnes signalées, en pré-suivi actif
 -- 			inner join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id 
 -- 		where 
 -- 			(
--- 				s.path_string like "/patient/fiche/statut-du-suivi/signalement%" 
--- 				or s.path_string like "/patient/fiche/statut-du-suivi/pre-suivi%" 
--- 				or s.path_string like "/patient/fiche/statut-du-suivi/6" 
--- 				or s.path_string like "/patient/fiche/statut-du-suivi/en-suivi" 
--- 				or s.path_string like "/patient/fiche/statut-du-suivi/post-suivi" 
+-- 				s.path_string like '/patient/fiche/statut-du-suivi/signalement%' 
+-- 				or s.path_string like '/patient/fiche/statut-du-suivi/pre-suivi%' 
+-- 				or s.path_string like '/patient/fiche/statut-du-suivi/6' 
+-- 				or s.path_string like '/patient/fiche/statut-du-suivi/en-suivi' 
+-- 				or s.path_string like '/patient/fiche/statut-du-suivi/post-suivi' 
 -- 				or (
--- 					s.path_string like "/patient/fiche/statut-du-suivi/disparu" 
+-- 					s.path_string like '/patient/fiche/statut-du-suivi/disparu' 
 -- 					and pi.start like @refyearwc
 -- 				) 
 -- 				or (
--- 					s.path_string like "/patient/fiche/statut-du-suivi/decede" 
+-- 					s.path_string like '/patient/fiche/statut-du-suivi/decede' 
 -- 					and pi.start like @refyearwc
 -- 				)
 -- 			) 
@@ -1589,7 +1589,7 @@ select 'Tableau 1.E. - Nombre total de personnes signalées, en pré-suivi actif
 -- 			and pi.deleted_at is null 
 -- 			and p.deleted_at is null 
 			
--- 			and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 			and s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 			and pi_antenna.deleted_at is null
 -- 			and s_antenna.value like @antenna			
 -- 			and pi.start <= COALESCE (pi_antenna.end, @refdate)
@@ -1629,11 +1629,11 @@ select 'Tableau 1.F/G. – Nombre de nouveaux patients Housing First au cours de
 -- 			inner  join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id 
 -- 			inner  join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id 
 -- 		where
--- 			s.path_string like "/patient/suivi/programme/housing-%"
+-- 			s.path_string like '/patient/suivi/programme/housing-%'
 -- 			and pi.deleted_at is null
 -- 			and p.deleted_at is null
 			
--- 			and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 			and s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 			and pi_antenna.deleted_at is null
 -- 			and s_antenna.value like @antenna 
 -- 			and pi.start <= COALESCE (pi_antenna.end, @refdate)
@@ -1646,7 +1646,7 @@ select 'Tableau 1.F/G. – Nombre de nouveaux patients Housing First au cours de
 -- 	inner join suggestions as s on s.sugg_id = pi.sugg_id
 
 -- 	where 
--- 		s.path_string like "/patient/suivi/programme/housing-%"
+-- 		s.path_string like '/patient/suivi/programme/housing-%'
 -- 		and pi.deleted_at is null
 -- 		and left(pi.start,4) = @refyear
 -- 	order by s.value, hash
@@ -1656,7 +1656,7 @@ select 'Tableau 1.F/G. – Nombre de nouveaux patients Housing First au cours de
 
 
 
-select "Tableau 1.F/G. – Nombre de nouveaux patients Housing First au cours de l’année - liste nominative";
+select 'Tableau 1.F/G. – Nombre de nouveaux patients Housing First au cours de l’année - liste nominative';
 
 
 
@@ -1678,11 +1678,11 @@ select "Tableau 1.F/G. – Nombre de nouveaux patients Housing First au cours de
 -- 		inner  join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id 
 -- 		inner  join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id 
 -- 	where
--- 		s.path_string like "/patient/suivi/programme/housing-%"
+-- 		s.path_string like '/patient/suivi/programme/housing-%'
 -- 		and pi.deleted_at is null
 -- 		and p.deleted_at is null
 		
--- 		and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 		and s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 		and pi_antenna.deleted_at is null
 -- 		and s_antenna.value like @antenna 
 -- 		and pi.start <= COALESCE (pi_antenna.end, @refdate)
@@ -1695,7 +1695,7 @@ select "Tableau 1.F/G. – Nombre de nouveaux patients Housing First au cours de
 -- inner join suggestions as s on s.sugg_id = pi.sugg_id
 
 -- where 
--- 	s.path_string like "/patient/suivi/programme/housing-%"
+-- 	s.path_string like '/patient/suivi/programme/housing-%'
 -- 	and pi.deleted_at is null
 -- 	and left(pi.start,4) = @refyear
 -- order by s.value, hash;
@@ -1708,7 +1708,7 @@ select "Tableau 1.F/G. – Nombre de nouveaux patients Housing First au cours de
 
 
 
-select "Tableau 1.H. – Nombre total de patients Housing First et Housing Fast";
+select 'Tableau 1.H. – Nombre total de patients Housing First et Housing Fast';
 
 -- SELECT
 -- 	s.value as programme,
@@ -1722,27 +1722,27 @@ select "Tableau 1.H. – Nombre total de patients Housing First et Housing Fast"
 -- 	inner join patients_information pi_status on pi_status.pati_id = p.pati_id
 -- 	inner join suggestions s_status on s_status.sugg_id = pi_status.sugg_id
 -- where
--- 	s.path_string like "/patient/suivi/programme/housing-%"
+-- 	s.path_string like '/patient/suivi/programme/housing-%'
 -- 	and @refdate BETWEEN pi.start and COALESCE(pi.end, @nextyear0101)
 -- 	and pi.deleted_at is null
 -- 	and p.deleted_at is null
--- 	and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 	and s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 	and pi_antenna.deleted_at is null
 -- 	and s_antenna.value like @antenna
 -- 	and pi.start <= COALESCE (pi_antenna.end, @refdate)
 -- 	and coalesce(pi.end, @refdate) >= coalesce(pi_antenna.start, @past) 
--- 	and s_status.path_string like "/patient/fiche/statut-du-suivi/%"
+-- 	and s_status.path_string like '/patient/fiche/statut-du-suivi/%'
 -- 	and @refdate BETWEEN pi_status.start and COALESCE(pi_status.end, @nextyear0101)
 -- 	and pi_status.deleted_at is null
---     and s_status.path_string not like "/patient/fiche/statut-du-suivi/decede"
---     and s_status.path_string not like "/patient/fiche/statut-du-suivi/disparu"
+--     and s_status.path_string not like '/patient/fiche/statut-du-suivi/decede'
+--     and s_status.path_string not like '/patient/fiche/statut-du-suivi/disparu'
 -- group by 
 -- 	s.value;
 
 
 
 
-select "Tableau 1.H. – Nombre total de patients Housing First et Housing Fast - liste nominative";
+select 'Tableau 1.H. – Nombre total de patients Housing First et Housing Fast - liste nominative';
 
 -- SELECT
 -- 	p.hash,
@@ -1761,20 +1761,20 @@ select "Tableau 1.H. – Nombre total de patients Housing First et Housing Fast 
 -- 	inner join patients_information pi_status on pi_status.pati_id = p.pati_id
 -- 	inner join suggestions s_status on s_status.sugg_id = pi_status.sugg_id
 -- where
--- 	s.path_string like "/patient/suivi/programme/housing-%"
+-- 	s.path_string like '/patient/suivi/programme/housing-%'
 -- 	and @refdate BETWEEN pi.start and COALESCE(pi.end, @nextyear0101)
 -- 	and pi.deleted_at is null
 -- 	and p.deleted_at is null
--- 	and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 	and s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 	and pi_antenna.deleted_at is null
 -- 	and s_antenna.value like @antenna
 -- 	and pi.start <= COALESCE (pi_antenna.end, @refdate)
 -- 	and coalesce(pi.end, @refdate) >= coalesce(pi_antenna.start, @past) 
--- 	and s_status.path_string like "/patient/fiche/statut-du-suivi/%"
+-- 	and s_status.path_string like '/patient/fiche/statut-du-suivi/%'
 -- 	and @refdate BETWEEN pi_status.start and COALESCE(pi_status.end, @nextyear0101)
 -- 	and pi_status.deleted_at is null
---     and s_status.path_string not like "/patient/fiche/statut-du-suivi/decede"
---     and s_status.path_string not like "/patient/fiche/statut-du-suivi/disparu"
+--     and s_status.path_string not like '/patient/fiche/statut-du-suivi/decede'
+--     and s_status.path_string not like '/patient/fiche/statut-du-suivi/disparu'
 -- order by 
 -- 	s.value, 
 -- 	p.firstname, 
@@ -1784,7 +1784,7 @@ select "Tableau 1.H. – Nombre total de patients Housing First et Housing Fast 
 
 
 
-select "Tableau 1.I. – Nombre total de patients selon l’équipe de suivi";
+select 'Tableau 1.I. – Nombre total de patients selon l’équipe de suivi';
 -- select 
 -- 	value, 
 --     status,
@@ -1809,7 +1809,7 @@ select "Tableau 1.I. – Nombre total de patients selon l’équipe de suivi";
 -- 			inner join suggestions s_status on s_status.sugg_id = pi_status.sugg_id
 -- 		where 
 -- 			(
--- 				s.path_string like "/patient/suivi/equipe%" 
+-- 				s.path_string like '/patient/suivi/equipe%' 
 -- 			) 
 -- 			and (
 -- 				@refdate BETWEEN pi.start 
@@ -1821,27 +1821,27 @@ select "Tableau 1.I. – Nombre total de patients selon l’équipe de suivi";
 -- 			and pi.deleted_at is null 
 -- 			and p.deleted_at is null 
 			
--- 			and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 			and s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 			and pi_antenna.deleted_at is null
 -- 			and s_antenna.value like @antenna			
 -- 			and pi.start <= COALESCE (pi_antenna.end, @refdate)
 -- 			and coalesce(pi.end, @refdate) >= coalesce(pi_antenna.start, @past) 
 
--- 			and s_status.path_string like "/patient/fiche/statut-du-suivi/%"
+-- 			and s_status.path_string like '/patient/fiche/statut-du-suivi/%'
 -- 			and @refdate BETWEEN pi_status.start and COALESCE(pi_status.end, @nextyear0101)
 -- 			and pi_status.deleted_at is null
--- 			and s_status.path_string not like "/patient/fiche/statut-du-suivi/decede"
+-- 			and s_status.path_string not like '/patient/fiche/statut-du-suivi/decede'
 -- 			and 
 --             ( 
--- 				s_status.path_string like "/patient/fiche/statut-du-suivi/pre-suivi%" 
--- 				or s_status.path_string like "/patient/fiche/statut-du-suivi/en-suivi" 
--- 				or s_status.path_string like "/patient/fiche/statut-du-suivi/post-suivi" 
+-- 				s_status.path_string like '/patient/fiche/statut-du-suivi/pre-suivi%' 
+-- 				or s_status.path_string like '/patient/fiche/statut-du-suivi/en-suivi' 
+-- 				or s_status.path_string like '/patient/fiche/statut-du-suivi/post-suivi' 
 -- 				or (
--- 					s_status.path_string like "/patient/fiche/statut-du-suivi/6" 
+-- 					s_status.path_string like '/patient/fiche/statut-du-suivi/6' 
 -- 					and pi.start like @refyearwc
 -- 				) 
 -- 				or (
--- 					s_status.path_string like "/patient/fiche/statut-du-suivi/signalement%" 
+-- 					s_status.path_string like '/patient/fiche/statut-du-suivi/signalement%' 
 -- 					and pi.start like @refyearwc
 -- 				)			
 -- 			)
@@ -1852,7 +1852,7 @@ select "Tableau 1.I. – Nombre total de patients selon l’équipe de suivi";
 --     status;
 
 
-select "Tableau 1.I. – Nombre total de patients selon l’équipe de suivi - liste nominative";
+select 'Tableau 1.I. – Nombre total de patients selon l’équipe de suivi - liste nominative';
 
 select 
 	value, 
@@ -1860,7 +1860,7 @@ select
 	firstname, 
 	lastname, 
 	start as debut, 
-	COALESCE(end, "en cours") as fin ,
+	COALESCE(end, 'en cours') as fin ,
     status
 from 
 	(
@@ -1882,7 +1882,7 @@ from
 			inner join suggestions s_status on s_status.sugg_id = pi_status.sugg_id
 		where 
 			(
-				s.path_string like "/patient/suivi/equipe%" 
+				s.path_string like '/patient/suivi/equipe%' 
 			) 
 			and (
 				@refdate BETWEEN pi.start 
@@ -1894,27 +1894,27 @@ from
 			and pi.deleted_at is null 
 			and p.deleted_at is null 
 			
-			and s_antenna.path_string like "/patient/suivi/antenne/%"
+			and s_antenna.path_string like '/patient/suivi/antenne/%'
 			and pi_antenna.deleted_at is null
 			and s_antenna.value like @antenna			
 			and pi.start <= COALESCE (pi_antenna.end, @refdate)
 			and coalesce(pi.end, @refdate) >= coalesce(pi_antenna.start, @past) 
 
-			and s_status.path_string like "/patient/fiche/statut-du-suivi/%"
+			and s_status.path_string like '/patient/fiche/statut-du-suivi/%'
 			and @refdate BETWEEN pi_status.start and COALESCE(pi_status.end, @nextyear0101)
 			and pi_status.deleted_at is null
-			and s_status.path_string not like "/patient/fiche/statut-du-suivi/decede" 
+			and s_status.path_string not like '/patient/fiche/statut-du-suivi/decede' 
             and 
             ( 
-				s_status.path_string like "/patient/fiche/statut-du-suivi/pre-suivi%" 
-				or s_status.path_string like "/patient/fiche/statut-du-suivi/en-suivi" 
-				or s_status.path_string like "/patient/fiche/statut-du-suivi/post-suivi" 
+				s_status.path_string like '/patient/fiche/statut-du-suivi/pre-suivi%' 
+				or s_status.path_string like '/patient/fiche/statut-du-suivi/en-suivi' 
+				or s_status.path_string like '/patient/fiche/statut-du-suivi/post-suivi' 
 				or (
-					s_status.path_string like "/patient/fiche/statut-du-suivi/6" 
+					s_status.path_string like '/patient/fiche/statut-du-suivi/6' 
 					and pi.start like @refyearwc
 				) 
 				or (
-					s_status.path_string like "/patient/fiche/statut-du-suivi/signalement%" 
+					s_status.path_string like '/patient/fiche/statut-du-suivi/signalement%' 
 					and pi.start like @refyearwc
 				)			
 			)
@@ -2005,17 +2005,17 @@ select 'TABLEAU 2A-1 : Nombre de rencontres/appels effectués avec les patients 
 -- 			inner join suggestions as s on s.sugg_id = pi.sugg_id 
 --         where
 --             (
--- 				s.path_string like "/patient/fiche/statut-du-suivi/signalement%" 
--- 				or s.path_string like "/patient/fiche/statut-du-suivi/pre-suivi%" 
--- 				or s.path_string like "/patient/fiche/statut-du-suivi/6" 
--- 				or s.path_string like "/patient/fiche/statut-du-suivi/en-suivi" 
--- 				or s.path_string like "/patient/fiche/statut-du-suivi/post-suivi" 
+-- 				s.path_string like '/patient/fiche/statut-du-suivi/signalement%' 
+-- 				or s.path_string like '/patient/fiche/statut-du-suivi/pre-suivi%' 
+-- 				or s.path_string like '/patient/fiche/statut-du-suivi/6' 
+-- 				or s.path_string like '/patient/fiche/statut-du-suivi/en-suivi' 
+-- 				or s.path_string like '/patient/fiche/statut-du-suivi/post-suivi' 
 -- 				or (
--- 					s.path_string like "/patient/fiche/statut-du-suivi/disparu" 
+-- 					s.path_string like '/patient/fiche/statut-du-suivi/disparu' 
 -- 					and year(pi.start) = year(@refdate)
 -- 				) 
 -- 				or (
--- 					s.path_string like "/patient/fiche/statut-du-suivi/decede" 
+-- 					s.path_string like '/patient/fiche/statut-du-suivi/decede' 
 -- 					and year(pi.start) = year(@refdate)
 -- 				)
 -- 			)
@@ -2026,7 +2026,7 @@ select 'TABLEAU 2A-1 : Nombre de rencontres/appels effectués avec les patients 
 --             and followup_reports.deleted_at is null
 -- 			and year(followup_reports.report_date) in (@refyear, @refyear-1)
 -- 			and followup_reports.report_date between coalesce(pi_antenna.start, followup_reports.report_date) and COALESCE (pi_antenna.end, followup_reports.report_date)
--- 			and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 			and s_antenna.path_string like '/patient/suivi/antenne/%'
 --             and s_antenna.value like @antenna
 
 
@@ -2067,7 +2067,7 @@ select 'TABLEAU 2A-2 : Nombre d’activités effectuées avec les patients selon
 --             SUM(
 --                 if (
 --                     followup_reports.activity_type = 1
---                     and sa.path_string like "%conseil%",
+--                     and sa.path_string like '%conseil%',
 --                     1,
 --                     0
 --                 )
@@ -2075,7 +2075,7 @@ select 'TABLEAU 2A-2 : Nombre d’activités effectuées avec les patients selon
 --             SUM(
 --                 if (
 --                     followup_reports.activity_type = 1
---                     and sa.path_string like "%transfert%",
+--                     and sa.path_string like '%transfert%',
 --                     1,
 --                     0
 --                 )
@@ -2083,7 +2083,7 @@ select 'TABLEAU 2A-2 : Nombre d’activités effectuées avec les patients selon
 --             SUM(
 --                 if (
 --                     followup_reports.activity_type = 1
---                     and sa.path_string like "%soin%",
+--                     and sa.path_string like '%soin%',
 --                     1,
 --                     0
 --                 )
@@ -2091,7 +2091,7 @@ select 'TABLEAU 2A-2 : Nombre d’activités effectuées avec les patients selon
 --             SUM(
 --                 if (
 --                     followup_reports.activity_type = 1
---                     and sa.path_string like "%accomp%",
+--                     and sa.path_string like '%accomp%',
 --                     1,
 --                     0
 --                 )
@@ -2107,17 +2107,17 @@ select 'TABLEAU 2A-2 : Nombre d’activités effectuées avec les patients selon
 --             left join suggestions as sa on sa.sugg_id = followup_reports_activities.sugg_id
 --         where
 --             (
--- 				s.path_string like "/patient/fiche/statut-du-suivi/signalement%" 
--- 				or s.path_string like "/patient/fiche/statut-du-suivi/pre-suivi%" 
--- 				or s.path_string like "/patient/fiche/statut-du-suivi/6" 
--- 				or s.path_string like "/patient/fiche/statut-du-suivi/en-suivi" 
--- 				or s.path_string like "/patient/fiche/statut-du-suivi/post-suivi" 
+-- 				s.path_string like '/patient/fiche/statut-du-suivi/signalement%' 
+-- 				or s.path_string like '/patient/fiche/statut-du-suivi/pre-suivi%' 
+-- 				or s.path_string like '/patient/fiche/statut-du-suivi/6' 
+-- 				or s.path_string like '/patient/fiche/statut-du-suivi/en-suivi' 
+-- 				or s.path_string like '/patient/fiche/statut-du-suivi/post-suivi' 
 -- 				or (
--- 					s.path_string like "/patient/fiche/statut-du-suivi/disparu" 
+-- 					s.path_string like '/patient/fiche/statut-du-suivi/disparu' 
 -- 					and pi.start like @refyearwc
 -- 				) 
 -- 				or (
--- 					s.path_string like "/patient/fiche/statut-du-suivi/decede" 
+-- 					s.path_string like '/patient/fiche/statut-du-suivi/decede' 
 -- 					and pi.start like @refyearwc
 -- 				)
 -- 			)
@@ -2128,7 +2128,7 @@ select 'TABLEAU 2A-2 : Nombre d’activités effectuées avec les patients selon
 --             and followup_reports.deleted_at is null
 -- 			and year(followup_reports.report_date) in (@refyear, @refyear-1)
 -- 			and followup_reports.report_date between coalesce(pi_antenna.start, followup_reports.report_date) and COALESCE (pi_antenna.end, followup_reports.report_date)
--- 			and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 			and s_antenna.path_string like '/patient/suivi/antenne/%'
 --             and s_antenna.value like @antenna
             
 --         group by
@@ -2201,7 +2201,7 @@ select 'TABLEAU 2B-1 : Nombre de rencontres/appels effectués avec les patients 
 -- 			inner join patients_information as pi on p.pati_id = pi.pati_id 
 -- 			inner join suggestions as s on s.sugg_id = pi.sugg_id 
 --         where
--- 			s.path_string like "/patient/suivi/equipe%" 
+-- 			s.path_string like '/patient/suivi/equipe%' 
 
 -- 			and followup_reports.report_date between COALESCE(pi.start, followup_reports.report_date) and COALESCE (pi.end, followup_reports.report_date)
 -- 			and pi.deleted_at is null 
@@ -2209,7 +2209,7 @@ select 'TABLEAU 2B-1 : Nombre de rencontres/appels effectués avec les patients 
 --             and followup_reports.deleted_at is null
 -- 			and year(followup_reports.report_date) in (@refyear, @refyear-1)
 -- 			and followup_reports.report_date between coalesce(pi_antenna.start, followup_reports.report_date) and COALESCE (pi_antenna.end, followup_reports.report_date)
--- 			and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 			and s_antenna.path_string like '/patient/suivi/antenne/%'
 --             and s_antenna.value like @antenna
 
 --         group by
@@ -2240,7 +2240,7 @@ select 'TABLEAU 2B-2 : Nombre d’activités effectuées avec les patients selon
 --             SUM(
 --                 if (
 --                     followup_reports.activity_type = 1
---                     and sa.path_string like "%conseil%",
+--                     and sa.path_string like '%conseil%',
 --                     1,
 --                     0
 --                 )
@@ -2248,7 +2248,7 @@ select 'TABLEAU 2B-2 : Nombre d’activités effectuées avec les patients selon
 --             SUM(
 --                 if (
 --                     followup_reports.activity_type = 1
---                     and sa.path_string like "%transfert%",
+--                     and sa.path_string like '%transfert%',
 --                     1,
 --                     0
 --                 )
@@ -2256,7 +2256,7 @@ select 'TABLEAU 2B-2 : Nombre d’activités effectuées avec les patients selon
 --             SUM(
 --                 if (
 --                     followup_reports.activity_type = 1
---                     and sa.path_string like "%soin%",
+--                     and sa.path_string like '%soin%',
 --                     1,
 --                     0
 --                 )
@@ -2264,7 +2264,7 @@ select 'TABLEAU 2B-2 : Nombre d’activités effectuées avec les patients selon
 --             SUM(
 --                 if (
 --                     followup_reports.activity_type = 1
---                     and sa.path_string like "%accomp%",
+--                     and sa.path_string like '%accomp%',
 --                     1,
 --                     0
 --                 )
@@ -2279,14 +2279,14 @@ select 'TABLEAU 2B-2 : Nombre d’activités effectuées avec les patients selon
 -- 			left JOIN followup_reports_activities on followup_reports_activities.fore_id = followup_reports.fore_id
 --             left join suggestions as sa on sa.sugg_id = followup_reports_activities.sugg_id
 --         where
--- 			s.path_string like "/patient/suivi/equipe%" 
+-- 			s.path_string like '/patient/suivi/equipe%' 
 -- 			and followup_reports.report_date between COALESCE(pi.start, followup_reports.report_date) and COALESCE (pi.end, followup_reports.report_date)
 -- 			and pi.deleted_at is null 
 -- 			and p.deleted_at is null
 --             and followup_reports.deleted_at is null
 -- 			and year(followup_reports.report_date) in (@refyear, @refyear-1)
 -- 			and followup_reports.report_date between coalesce(pi_antenna.start, followup_reports.report_date) and COALESCE (pi_antenna.end, followup_reports.report_date)
--- 			and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 			and s_antenna.path_string like '/patient/suivi/antenne/%'
 --             and s_antenna.value like @antenna
 --         group by
 --             period, categoriesuivi
@@ -2320,7 +2320,7 @@ select 'TABLEAU 2B-2 : Nombre d’activités effectuées avec les patients selon
 		-- 	left JOIN followup_reports_activities on followup_reports_activities.fore_id = followup_reports.fore_id
         --     left join suggestions as sa on sa.sugg_id = followup_reports_activities.sugg_id
         -- where
-		-- 	s.path_string like "/patient/suivi/equipe%" 
+		-- 	s.path_string like '/patient/suivi/equipe%' 
 		-- 	and followup_reports.report_date between COALESCE(pi.start, followup_reports.report_date) and COALESCE (pi.end, followup_reports.report_date)
 		-- 	and pi.deleted_at is null 
 		-- 	and p.deleted_at is null
@@ -2328,7 +2328,7 @@ select 'TABLEAU 2B-2 : Nombre d’activités effectuées avec les patients selon
 		-- 	and year(followup_reports.report_date) in (@refyear, @refyear-1)
         --     and followup_reports.activity_type = 1 -- uniquement les rencontres
 		-- 	and followup_reports.report_date between coalesce(pi_antenna.start, followup_reports.report_date) and COALESCE (pi_antenna.end, followup_reports.report_date)
-		-- 	and s_antenna.path_string like "/patient/suivi/antenne/%"
+		-- 	and s_antenna.path_string like '/patient/suivi/antenne/%'
         --     and s_antenna.value like @antenna
         --     and sa.value is not null
         -- order by
@@ -2336,78 +2336,78 @@ select 'TABLEAU 2B-2 : Nombre d’activités effectuées avec les patients selon
 
 
 select 'TABLEAU 2B-3 : nombre de patients pour qui un accompagnement a été effectué selon l’équipe de suivi - accompagnements uniquement';	
--- select
--- 	period,
---     categoriesuivi,
---     count(hash) as "nombre de patients"
--- from
--- (
---         SELECT
---             left(followup_reports.report_date, 4) as period,
---             s.value as categoriesuivi,
--- 			p.hash,
---             count(sa.value) as nombre_accompagnements
---         FROM
---             patients p
---             inner join followup_reports on followup_reports.pati_id = p.pati_id
--- 			inner join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id 
--- 			inner join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id 
--- 			inner join patients_information as pi on p.pati_id = pi.pati_id 
--- 			inner join suggestions as s on s.sugg_id = pi.sugg_id 
--- 			left JOIN followup_reports_activities on followup_reports_activities.fore_id = followup_reports.fore_id
---             left join suggestions as sa on sa.sugg_id = followup_reports_activities.sugg_id
---         where
--- 			s.path_string like "/patient/suivi/equipe%" 
--- 			and followup_reports.report_date between COALESCE(pi.start, followup_reports.report_date) and COALESCE (pi.end, followup_reports.report_date)
--- 			and pi.deleted_at is null 
--- 			and p.deleted_at is null
---             and followup_reports.deleted_at is null
--- 			and year(followup_reports.report_date) in (@refyear, @refyear-1)
---             and followup_reports.activity_type = 1 -- uniquement les rencontres
--- 			and followup_reports.report_date between coalesce(pi_antenna.start, followup_reports.report_date) and COALESCE (pi_antenna.end, followup_reports.report_date)
--- 			and s_antenna.path_string like "/patient/suivi/antenne/%"
---             and s_antenna.value like @antenna
---             and sa.path_string like '%accomp%'
---         group by 
--- 			period, categoriesuivi, hash 
---         order by
---             period, categoriesuivi, hash 
--- ) k group by period,
---     categoriesuivi;
+select
+	period,
+    categoriesuivi,
+    count(hash) as 'nombre de patients'
+from
+(
+        SELECT
+            left(followup_reports.report_date, 4) as period,
+            s.value as categoriesuivi,
+			p.hash,
+            count(sa.value) as nombre_accompagnements
+        FROM
+            patients p
+            inner join followup_reports on followup_reports.pati_id = p.pati_id
+			inner join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id 
+			inner join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id 
+			inner join patients_information as pi on p.pati_id = pi.pati_id 
+			inner join suggestions as s on s.sugg_id = pi.sugg_id 
+			left JOIN followup_reports_activities on followup_reports_activities.fore_id = followup_reports.fore_id
+            left join suggestions as sa on sa.sugg_id = followup_reports_activities.sugg_id
+        where
+			s.path_string like '/patient/suivi/equipe%' 
+			and followup_reports.report_date between COALESCE(pi.start, followup_reports.report_date) and COALESCE (pi.end, followup_reports.report_date)
+			and pi.deleted_at is null 
+			and p.deleted_at is null
+            and followup_reports.deleted_at is null
+			and year(followup_reports.report_date) in (@refyear, @refyear-1)
+            and followup_reports.activity_type = 1 -- uniquement les rencontres
+			and followup_reports.report_date between coalesce(pi_antenna.start, followup_reports.report_date) and COALESCE (pi_antenna.end, followup_reports.report_date)
+			and s_antenna.path_string like '/patient/suivi/antenne/%'
+            and s_antenna.value like @antenna
+            and sa.path_string like '%accomp%'
+        group by 
+			period, categoriesuivi, hash 
+        order by
+            period, categoriesuivi, hash 
+) k group by period,
+    categoriesuivi;
 
 
 select 'TABLEAU 2B-X :liste nominative des patients pour qui un accompagnement a été effectué selon l’équipe de suivi - liste nominative et activites detaillees - accompagnements uniquement';	
 
-        -- SELECT
-        --     left(followup_reports.report_date, 4) as period,
-        --     s.value as categoriesuivi,
-		-- 	p.hash,
-        --     count(sa.value) as nombre_accompagnements
-        -- FROM
-        --     patients p
-        --     inner join followup_reports on followup_reports.pati_id = p.pati_id
-		-- 	inner join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id 
-		-- 	inner join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id 
-		-- 	inner join patients_information as pi on p.pati_id = pi.pati_id 
-		-- 	inner join suggestions as s on s.sugg_id = pi.sugg_id 
-		-- 	left JOIN followup_reports_activities on followup_reports_activities.fore_id = followup_reports.fore_id
-        --     left join suggestions as sa on sa.sugg_id = followup_reports_activities.sugg_id
-        -- where
-		-- 	s.path_string like "/patient/suivi/equipe%" 
-		-- 	and followup_reports.report_date between COALESCE(pi.start, followup_reports.report_date) and COALESCE (pi.end, followup_reports.report_date)
-		-- 	and pi.deleted_at is null 
-		-- 	and p.deleted_at is null
-        --     and followup_reports.deleted_at is null
-		-- 	and year(followup_reports.report_date) in (@refyear, @refyear-1)
-        --     and followup_reports.activity_type = 1 -- uniquement les rencontres
-		-- 	and followup_reports.report_date between coalesce(pi_antenna.start, followup_reports.report_date) and COALESCE (pi_antenna.end, followup_reports.report_date)
-		-- 	and s_antenna.path_string like "/patient/suivi/antenne/%"
-        --     and s_antenna.value like @antenna
-        --     and sa.path_string like '%accomp%'
-        -- group by 
-		-- 	period, categoriesuivi, hash 
-        -- order by
-        --     period, categoriesuivi, hash ;
+        SELECT
+            left(followup_reports.report_date, 4) as period,
+            s.value as categoriesuivi,
+			p.hash,
+            count(sa.value) as nombre_accompagnements
+        FROM
+            patients p
+            inner join followup_reports on followup_reports.pati_id = p.pati_id
+			inner join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id 
+			inner join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id 
+			inner join patients_information as pi on p.pati_id = pi.pati_id 
+			inner join suggestions as s on s.sugg_id = pi.sugg_id 
+			left JOIN followup_reports_activities on followup_reports_activities.fore_id = followup_reports.fore_id
+            left join suggestions as sa on sa.sugg_id = followup_reports_activities.sugg_id
+        where
+			s.path_string like '/patient/suivi/equipe%' 
+			and followup_reports.report_date between COALESCE(pi.start, followup_reports.report_date) and COALESCE (pi.end, followup_reports.report_date)
+			and pi.deleted_at is null 
+			and p.deleted_at is null
+            and followup_reports.deleted_at is null
+			and year(followup_reports.report_date) in (@refyear, @refyear-1)
+            and followup_reports.activity_type = 1 -- uniquement les rencontres
+			and followup_reports.report_date between coalesce(pi_antenna.start, followup_reports.report_date) and COALESCE (pi_antenna.end, followup_reports.report_date)
+			and s_antenna.path_string like '/patient/suivi/antenne/%'
+            and s_antenna.value like @antenna
+            and sa.path_string like '%accomp%'
+        group by 
+			period, categoriesuivi, hash 
+        order by
+            period, categoriesuivi, hash ;
 	
 
 
@@ -2474,14 +2474,14 @@ select 'TABLEAU 2C-1 : Nombre de rencontres/appels effectués avec les patients 
 -- 			inner join patients_information as pi on p.pati_id = pi.pati_id 
 -- 			inner join suggestions as s on s.sugg_id = pi.sugg_id 
 --         where
--- 			s.path_string like "/patient/suivi/programme%" 
+-- 			s.path_string like '/patient/suivi/programme%' 
 -- 			and followup_reports.report_date between COALESCE(pi.start, followup_reports.report_date) and COALESCE (pi.end, followup_reports.report_date)
 -- 			and pi.deleted_at is null 
 -- 			and p.deleted_at is null
 --             and followup_reports.deleted_at is null
 -- 			and year(followup_reports.report_date) in (@refyear, @refyear-1)
 -- 			and followup_reports.report_date between coalesce(pi_antenna.start, followup_reports.report_date) and COALESCE (pi_antenna.end, followup_reports.report_date)
--- 			and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 			and s_antenna.path_string like '/patient/suivi/antenne/%'
 --             and s_antenna.value like @antenna
 --         group by
 --             period, categoriesuivi
@@ -2507,7 +2507,7 @@ select 'TABLEAU 2C-2 : Nombre d’activités effectuées avec les patients selon
 --             SUM(
 --                 if (
 --                     followup_reports.activity_type = 1
---                     and sa.path_string like "%conseil%",
+--                     and sa.path_string like '%conseil%',
 --                     1,
 --                     0
 --                 )
@@ -2515,7 +2515,7 @@ select 'TABLEAU 2C-2 : Nombre d’activités effectuées avec les patients selon
 --             SUM(
 --                 if (
 --                     followup_reports.activity_type = 1
---                     and sa.path_string like "%transfert%",
+--                     and sa.path_string like '%transfert%',
 --                     1,
 --                     0
 --                 )
@@ -2523,7 +2523,7 @@ select 'TABLEAU 2C-2 : Nombre d’activités effectuées avec les patients selon
 --             SUM(
 --                 if (
 --                     followup_reports.activity_type = 1
---                     and sa.path_string like "%soin%",
+--                     and sa.path_string like '%soin%',
 --                     1,
 --                     0
 --                 )
@@ -2531,7 +2531,7 @@ select 'TABLEAU 2C-2 : Nombre d’activités effectuées avec les patients selon
 --             SUM(
 --                 if (
 --                     followup_reports.activity_type = 1
---                     and sa.path_string like "%accomp%",
+--                     and sa.path_string like '%accomp%',
 --                     1,
 --                     0
 --                 )
@@ -2547,14 +2547,14 @@ select 'TABLEAU 2C-2 : Nombre d’activités effectuées avec les patients selon
 -- 			left JOIN followup_reports_activities on followup_reports_activities.fore_id = followup_reports.fore_id
 --             left join suggestions as sa on sa.sugg_id = followup_reports_activities.sugg_id
 --         where
--- 			s.path_string like "/patient/suivi/programme%" 
+-- 			s.path_string like '/patient/suivi/programme%' 
 -- 			and followup_reports.report_date between COALESCE(pi.start, followup_reports.report_date) and COALESCE (pi.end, followup_reports.report_date)
 -- 			and pi.deleted_at is null 
 -- 			and p.deleted_at is null
 --             and followup_reports.deleted_at is null
 -- 			and year(followup_reports.report_date) in (@refyear, @refyear-1)
 -- 			and followup_reports.report_date between coalesce(pi_antenna.start, followup_reports.report_date) and COALESCE (pi_antenna.end, followup_reports.report_date)
--- 			and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 			and s_antenna.path_string like '/patient/suivi/antenne/%'
 --             and s_antenna.value like @antenna
 --         group by
 --             period, categoriesuivi
@@ -2611,17 +2611,17 @@ select 'TABLEAU 2D : Durée totale et moyenne des activités effectuées avec le
 -- 			inner join suggestions as s on s.sugg_id = pi.sugg_id 
 --         where
 --             (
--- 				s.path_string like "/patient/fiche/statut-du-suivi/signalement%" 
--- 				or s.path_string like "/patient/fiche/statut-du-suivi/pre-suivi%" 
--- 				or s.path_string like "/patient/fiche/statut-du-suivi/6" 
--- 				or s.path_string like "/patient/fiche/statut-du-suivi/en-suivi" 
--- 				or s.path_string like "/patient/fiche/statut-du-suivi/post-suivi" 
+-- 				s.path_string like '/patient/fiche/statut-du-suivi/signalement%' 
+-- 				or s.path_string like '/patient/fiche/statut-du-suivi/pre-suivi%' 
+-- 				or s.path_string like '/patient/fiche/statut-du-suivi/6' 
+-- 				or s.path_string like '/patient/fiche/statut-du-suivi/en-suivi' 
+-- 				or s.path_string like '/patient/fiche/statut-du-suivi/post-suivi' 
 -- 				or (
--- 					s.path_string like "/patient/fiche/statut-du-suivi/disparu" 
+-- 					s.path_string like '/patient/fiche/statut-du-suivi/disparu' 
 -- 					and pi.start like @refyearwc
 -- 				) 
 -- 				or (
--- 					s.path_string like "/patient/fiche/statut-du-suivi/decede" 
+-- 					s.path_string like '/patient/fiche/statut-du-suivi/decede' 
 -- 					and pi.start like @refyearwc
 -- 				)
 -- 			)
@@ -2631,7 +2631,7 @@ select 'TABLEAU 2D : Durée totale et moyenne des activités effectuées avec le
 --             and followup_reports.deleted_at is null
 -- 			and year(followup_reports.report_date) in (@refyear, @refyear-1)
 -- 			and followup_reports.report_date between coalesce(pi_antenna.start, followup_reports.report_date) and COALESCE (pi_antenna.end, followup_reports.report_date)
--- 			and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 			and s_antenna.path_string like '/patient/suivi/antenne/%'
 --             and s_antenna.value like @antenna
 
 --         group by
@@ -2686,14 +2686,14 @@ select 'TABLEAU 2E : Durée totale et moyenne des activités effectuées avec le
 -- 			inner join patients_information as pi on p.pati_id = pi.pati_id 
 -- 			inner join suggestions as s on s.sugg_id = pi.sugg_id 
 --         where
--- 			s.path_string like  "/patient/suivi/equipe%"  
+-- 			s.path_string like  '/patient/suivi/equipe%'  
 -- 			and followup_reports.report_date between COALESCE(pi.start, followup_reports.report_date) and COALESCE (pi.end, followup_reports.report_date)
 -- 			and pi.deleted_at is null 
 -- 			and p.deleted_at is null
 --             and followup_reports.deleted_at is null
 -- 			and year(followup_reports.report_date) in (@refyear, @refyear-1)
 -- 			and followup_reports.report_date between coalesce(pi_antenna.start, followup_reports.report_date) and COALESCE (pi_antenna.end, followup_reports.report_date)
--- 			and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 			and s_antenna.path_string like '/patient/suivi/antenne/%'
 --             and s_antenna.value like @antenna
 --         group by
 --             period, categoriesuivi
@@ -2747,14 +2747,14 @@ select 'TABLEAU 2F : Durée totale et moyenne des activités effectuées avec le
 -- 			inner join patients_information as pi on p.pati_id = pi.pati_id 
 -- 			inner join suggestions as s on s.sugg_id = pi.sugg_id 
 --         where
--- 			s.path_string like  "/patient/suivi/programme%"  
+-- 			s.path_string like  '/patient/suivi/programme%'  
 -- 			and followup_reports.report_date between COALESCE(pi.start, followup_reports.report_date) and COALESCE (pi.end, followup_reports.report_date)
 -- 			and pi.deleted_at is null 
 -- 			and p.deleted_at is null
 --             and followup_reports.deleted_at is null
 -- 			and year(followup_reports.report_date) in (@refyear, @refyear-1)
 -- 			and followup_reports.report_date between coalesce(pi_antenna.start, followup_reports.report_date) and COALESCE (pi_antenna.end, followup_reports.report_date)
--- 			and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 			and s_antenna.path_string like '/patient/suivi/antenne/%'
 --             and s_antenna.value like @antenna
 --         group by
 --             period, categoriesuivi
@@ -2821,17 +2821,17 @@ select 'TABLEAU 3A : Nombre de démarches effectuées pour les patients selon le
 --             left join suggestions as sa on sa.sugg_id = followup_reports_activities.sugg_id
 --         where
 --             (
--- 				s.path_string like "/patient/fiche/statut-du-suivi/signalement%" 
--- 				or s.path_string like "/patient/fiche/statut-du-suivi/pre-suivi%" 
--- 				or s.path_string like "/patient/fiche/statut-du-suivi/6" 
--- 				or s.path_string like "/patient/fiche/statut-du-suivi/en-suivi" 
--- 				or s.path_string like "/patient/fiche/statut-du-suivi/post-suivi" 
+-- 				s.path_string like '/patient/fiche/statut-du-suivi/signalement%' 
+-- 				or s.path_string like '/patient/fiche/statut-du-suivi/pre-suivi%' 
+-- 				or s.path_string like '/patient/fiche/statut-du-suivi/6' 
+-- 				or s.path_string like '/patient/fiche/statut-du-suivi/en-suivi' 
+-- 				or s.path_string like '/patient/fiche/statut-du-suivi/post-suivi' 
 -- 				or (
--- 					s.path_string like "/patient/fiche/statut-du-suivi/disparu" 
+-- 					s.path_string like '/patient/fiche/statut-du-suivi/disparu' 
 -- 					and pi.start like @refyearwc
 -- 				) 
 -- 				or (
--- 					s.path_string like "/patient/fiche/statut-du-suivi/decede" 
+-- 					s.path_string like '/patient/fiche/statut-du-suivi/decede' 
 -- 					and pi.start like @refyearwc
 -- 				)
 -- 			)
@@ -2841,7 +2841,7 @@ select 'TABLEAU 3A : Nombre de démarches effectuées pour les patients selon le
 --             and followup_reports.deleted_at is null
 -- 			and year(followup_reports.report_date) in (@refyear, @refyear-1)
 -- 			and followup_reports.report_date between coalesce(pi_antenna.start, @past) and COALESCE (pi_antenna.end, @refdate)
--- 			and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 			and s_antenna.path_string like '/patient/suivi/antenne/%'
 --             and s_antenna.value like @antenna
 --         group by
 --             period, categoriesuivi
@@ -2895,14 +2895,14 @@ select 'TABLEAU 3B : Nombre de démarches effectuées pour les patients selon l�
 -- 			left JOIN followup_reports_activities on followup_reports_activities.fore_id = followup_reports.fore_id
 --             left join suggestions as sa on sa.sugg_id = followup_reports_activities.sugg_id
 --         where
--- 			s.path_string like "/patient/suivi/equipe%" 
+-- 			s.path_string like '/patient/suivi/equipe%' 
 -- 			and followup_reports.report_date between COALESCE(pi.start, @past) and COALESCE (pi.end, @nextyear0101	)
 -- 			and pi.deleted_at is null 
 -- 			and p.deleted_at is null
 --             and followup_reports.deleted_at is null
 -- 			and year(followup_reports.report_date) in (@refyear, @refyear-1)
 -- 			and followup_reports.report_date between coalesce(pi_antenna.start, @past) and COALESCE (pi_antenna.end, @refdate)
--- 			and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 			and s_antenna.path_string like '/patient/suivi/antenne/%'
 --             and s_antenna.value like @antenna
 --         group by
 --             period, categoriesuivi
@@ -2956,14 +2956,14 @@ select 'TABLEAU 3C : Nombre de démarches effectuées pour les patients selon le
 -- 			left JOIN followup_reports_activities on followup_reports_activities.fore_id = followup_reports.fore_id
 --             left join suggestions as sa on sa.sugg_id = followup_reports_activities.sugg_id
 --         where
--- 			s.path_string like "/patient/suivi/programme%" 
+-- 			s.path_string like '/patient/suivi/programme%' 
 -- 			and followup_reports.report_date between COALESCE(pi.start, @past) and COALESCE (pi.end, @nextyear0101	)
 -- 			and pi.deleted_at is null 
 -- 			and p.deleted_at is null
 --             and followup_reports.deleted_at is null
 -- 			and year(followup_reports.report_date) in (@refyear, @refyear-1)
 -- 			and followup_reports.report_date between coalesce(pi_antenna.start, @past) and COALESCE (pi_antenna.end, @refdate)
--- 			and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 			and s_antenna.path_string like '/patient/suivi/antenne/%'
 --             and s_antenna.value like @antenna
 --         group by
 --             period, categoriesuivi
@@ -3049,17 +3049,17 @@ select 'TABLEAU 3D : Durée totale et moyenne des démarches effectuées pour le
 --             left join suggestions as sa on sa.sugg_id = followup_reports_activities.sugg_id
 --         where
 --             (
--- 				s.path_string like "/patient/fiche/statut-du-suivi/signalement%" 
--- 				or s.path_string like "/patient/fiche/statut-du-suivi/pre-suivi%" 
--- 				or s.path_string like "/patient/fiche/statut-du-suivi/6" 
--- 				or s.path_string like "/patient/fiche/statut-du-suivi/en-suivi" 
--- 				or s.path_string like "/patient/fiche/statut-du-suivi/post-suivi" 
+-- 				s.path_string like '/patient/fiche/statut-du-suivi/signalement%' 
+-- 				or s.path_string like '/patient/fiche/statut-du-suivi/pre-suivi%' 
+-- 				or s.path_string like '/patient/fiche/statut-du-suivi/6' 
+-- 				or s.path_string like '/patient/fiche/statut-du-suivi/en-suivi' 
+-- 				or s.path_string like '/patient/fiche/statut-du-suivi/post-suivi' 
 -- 				or (
--- 					s.path_string like "/patient/fiche/statut-du-suivi/disparu" 
+-- 					s.path_string like '/patient/fiche/statut-du-suivi/disparu' 
 -- 					and pi.start like @refyearwc
 -- 				) 
 -- 				or (
--- 					s.path_string like "/patient/fiche/statut-du-suivi/decede" 
+-- 					s.path_string like '/patient/fiche/statut-du-suivi/decede' 
 -- 					and pi.start like @refyearwc
 -- 				)
 -- 			)
@@ -3069,7 +3069,7 @@ select 'TABLEAU 3D : Durée totale et moyenne des démarches effectuées pour le
 --             and followup_reports.deleted_at is null
 -- 			and year(followup_reports.report_date) in (@refyear, @refyear-1)
 -- 			and followup_reports.report_date between coalesce(pi_antenna.start, @past) and COALESCE (pi_antenna.end, @refdate)
--- 			and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 			and s_antenna.path_string like '/patient/suivi/antenne/%'
 --             and s_antenna.value like @antenna
 --         group by
 --             period, categoriesuivi
@@ -3155,14 +3155,14 @@ select 'TABLEAU 3E : Durée totale et moyenne des démarches effectuées pour le
 -- 			left JOIN followup_reports_activities on followup_reports_activities.fore_id = followup_reports.fore_id
 --             left join suggestions as sa on sa.sugg_id = followup_reports_activities.sugg_id
 --         where
--- 			s.path_string like  "/patient/suivi/equipe%"  
+-- 			s.path_string like  '/patient/suivi/equipe%'  
 -- 			and followup_reports.report_date between COALESCE(pi.start, @past) and COALESCE (pi.end, @nextyear0101	)
 -- 			and pi.deleted_at is null 
 -- 			and p.deleted_at is null
 --             and followup_reports.deleted_at is null
 -- 			and year(followup_reports.report_date) in (@refyear, @refyear-1)
 -- 			and followup_reports.report_date between coalesce(pi_antenna.start, @past) and COALESCE (pi_antenna.end, @refdate)
--- 			and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 			and s_antenna.path_string like '/patient/suivi/antenne/%'
 --             and s_antenna.value like @antenna
 --         group by
 --             period, categoriesuivi
@@ -3247,14 +3247,14 @@ select 'TABLEAU 3F : Durée totale et moyenne démarches effectuées pour les pa
 -- 			left JOIN followup_reports_activities on followup_reports_activities.fore_id = followup_reports.fore_id
 --             left join suggestions as sa on sa.sugg_id = followup_reports_activities.sugg_id
 --         where
--- 			s.path_string like  "/patient/suivi/programme%"  
+-- 			s.path_string like  '/patient/suivi/programme%'  
 -- 			and followup_reports.report_date between COALESCE(pi.start, @past) and COALESCE (pi.end, @nextyear0101	)
 -- 			and pi.deleted_at is null 
 -- 			and p.deleted_at is null
 --             and followup_reports.deleted_at is null
 -- 			and year(followup_reports.report_date) in (@refyear, @refyear-1)
 -- 			and followup_reports.report_date between coalesce(pi_antenna.start, @past) and COALESCE (pi_antenna.end, @refdate)
--- 			and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 			and s_antenna.path_string like '/patient/suivi/antenne/%'
 --             and s_antenna.value like @antenna
 --         group by
 --             period, categoriesuivi
@@ -3304,7 +3304,7 @@ select 'TABLEAU 4 : LES 20 PATIENTS QUI ONT DEMANDE LE PLUS D’ATTENTION';
 --             SUM(
 --                 if (
 --                     followup_reports.activity_type = 1
---                     and suggestions.path_string like "%conseil%",
+--                     and suggestions.path_string like '%conseil%',
 --                     1,
 --                     0
 --                 )
@@ -3312,7 +3312,7 @@ select 'TABLEAU 4 : LES 20 PATIENTS QUI ONT DEMANDE LE PLUS D’ATTENTION';
 --             SUM(
 --                 if (
 --                     followup_reports.activity_type = 1
---                     and suggestions.path_string like "%transfert%",
+--                     and suggestions.path_string like '%transfert%',
 --                     1,
 --                     0
 --                 )
@@ -3320,7 +3320,7 @@ select 'TABLEAU 4 : LES 20 PATIENTS QUI ONT DEMANDE LE PLUS D’ATTENTION';
 --             SUM(
 --                 if (
 --                     followup_reports.activity_type = 1
---                     and suggestions.path_string like "%soin%",
+--                     and suggestions.path_string like '%soin%',
 --                     1,
 --                     0
 --                 )
@@ -3328,7 +3328,7 @@ select 'TABLEAU 4 : LES 20 PATIENTS QUI ONT DEMANDE LE PLUS D’ATTENTION';
 --             SUM(
 --                 if (
 --                     followup_reports.activity_type = 1
---                     and suggestions.path_string like "%accomp%",
+--                     and suggestions.path_string like '%accomp%',
 --                     1,
 --                     0
 --                 )
@@ -3363,7 +3363,7 @@ select 'TABLEAU 4 : LES 20 PATIENTS QUI ONT DEMANDE LE PLUS D’ATTENTION';
 --             and followup_reports.deleted_at is null
 --             and followup_reports.report_date like @refyearwc
 -- 			and followup_reports.report_date between coalesce(pi_antenna.start, followup_reports.report_date) and COALESCE (pi_antenna.end, followup_reports.report_date)
--- 			and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 			and s_antenna.path_string like '/patient/suivi/antenne/%'
 --             and s_antenna.value like @antenna
 --         group by
 --             hash, firstname, lastname
@@ -3411,7 +3411,7 @@ select 'TABLEAU 4B : ACTIVITES PAR PATIENT';
 --             SUM(
 --                 if (
 --                     followup_reports.activity_type = 1
---                     and suggestions.path_string like "%conseil%",
+--                     and suggestions.path_string like '%conseil%',
 --                     1,
 --                     0
 --                 )
@@ -3419,7 +3419,7 @@ select 'TABLEAU 4B : ACTIVITES PAR PATIENT';
 --             SUM(
 --                 if (
 --                     followup_reports.activity_type = 1
---                     and suggestions.path_string like "%transfert%",
+--                     and suggestions.path_string like '%transfert%',
 --                     1,
 --                     0
 --                 )
@@ -3427,7 +3427,7 @@ select 'TABLEAU 4B : ACTIVITES PAR PATIENT';
 --             SUM(
 --                 if (
 --                     followup_reports.activity_type = 1
---                     and suggestions.path_string like "%soin%",
+--                     and suggestions.path_string like '%soin%',
 --                     1,
 --                     0
 --                 )
@@ -3435,7 +3435,7 @@ select 'TABLEAU 4B : ACTIVITES PAR PATIENT';
 --             SUM(
 --                 if (
 --                     followup_reports.activity_type = 1
---                     and suggestions.path_string like "%accomp%",
+--                     and suggestions.path_string like '%accomp%',
 --                     1,
 --                     0
 --                 )
@@ -3469,7 +3469,7 @@ select 'TABLEAU 4B : ACTIVITES PAR PATIENT';
 --             p.deleted_at is null
 --             and followup_reports.deleted_at is null
 -- 			and followup_reports.report_date between coalesce(pi_antenna.start, followup_reports.report_date) and COALESCE (pi_antenna.end, followup_reports.report_date)
--- 			and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 			and s_antenna.path_string like '/patient/suivi/antenne/%'
 --             and s_antenna.value like @antenna
 --         group by
 --             hash, left(followup_reports.report_date, 7), firstname, lastname
@@ -3543,17 +3543,17 @@ select 'Tableau 5.A-1 – Répartition des activités';
 -- 			inner join suggestions as s on s.sugg_id = pi.sugg_id 
 --         where
 --             (
--- 				s.path_string like "/patient/fiche/statut-du-suivi/signalement%" 
--- 				or s.path_string like "/patient/fiche/statut-du-suivi/pre-suivi%" 
--- 				or s.path_string like "/patient/fiche/statut-du-suivi/6" 
--- 				or s.path_string like "/patient/fiche/statut-du-suivi/en-suivi" 
--- 				or s.path_string like "/patient/fiche/statut-du-suivi/post-suivi" 
+-- 				s.path_string like '/patient/fiche/statut-du-suivi/signalement%' 
+-- 				or s.path_string like '/patient/fiche/statut-du-suivi/pre-suivi%' 
+-- 				or s.path_string like '/patient/fiche/statut-du-suivi/6' 
+-- 				or s.path_string like '/patient/fiche/statut-du-suivi/en-suivi' 
+-- 				or s.path_string like '/patient/fiche/statut-du-suivi/post-suivi' 
 -- 				or (
--- 					s.path_string like "/patient/fiche/statut-du-suivi/disparu" 
+-- 					s.path_string like '/patient/fiche/statut-du-suivi/disparu' 
 -- 					and year(pi.start) = year(@refdate)
 -- 				) 
 -- 				or (
--- 					s.path_string like "/patient/fiche/statut-du-suivi/decede" 
+-- 					s.path_string like '/patient/fiche/statut-du-suivi/decede' 
 -- 					and year(pi.start) = year(@refdate)
 -- 				)
 -- 			)
@@ -3564,7 +3564,7 @@ select 'Tableau 5.A-1 – Répartition des activités';
 --             and followup_reports.deleted_at is null
 -- 			and year(followup_reports.report_date) in (@refyear, @refyear-1)
 -- 			and followup_reports.report_date between coalesce(pi_antenna.start, followup_reports.report_date) and COALESCE (pi_antenna.end, followup_reports.report_date)
--- 			and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 			and s_antenna.path_string like '/patient/suivi/antenne/%'
 --             and s_antenna.value like @antenna
 
 
@@ -3591,7 +3591,7 @@ select 'Tableau 5.A-2 – Répartition des activités';
 --             SUM(
 --                 if (
 --                     followup_reports.activity_type = 1
---                     and sa.path_string like "%conseil%",
+--                     and sa.path_string like '%conseil%',
 --                     1,
 --                     0
 --                 )
@@ -3599,7 +3599,7 @@ select 'Tableau 5.A-2 – Répartition des activités';
 --             SUM(
 --                 if (
 --                     followup_reports.activity_type = 1
---                     and sa.path_string like "%transfert%",
+--                     and sa.path_string like '%transfert%',
 --                     1,
 --                     0
 --                 )
@@ -3607,7 +3607,7 @@ select 'Tableau 5.A-2 – Répartition des activités';
 --             SUM(
 --                 if (
 --                     followup_reports.activity_type = 1
---                     and sa.path_string like "%soin%",
+--                     and sa.path_string like '%soin%',
 --                     1,
 --                     0
 --                 )
@@ -3615,7 +3615,7 @@ select 'Tableau 5.A-2 – Répartition des activités';
 --             SUM(
 --                 if (
 --                     followup_reports.activity_type = 1
---                     and sa.path_string like "%accomp%",
+--                     and sa.path_string like '%accomp%',
 --                     1,
 --                     0
 --                 )
@@ -3631,17 +3631,17 @@ select 'Tableau 5.A-2 – Répartition des activités';
 --             left join suggestions as sa on sa.sugg_id = followup_reports_activities.sugg_id
 --         where
 --             (
--- 				s.path_string like "/patient/fiche/statut-du-suivi/signalement%" 
--- 				or s.path_string like "/patient/fiche/statut-du-suivi/pre-suivi%" 
--- 				or s.path_string like "/patient/fiche/statut-du-suivi/6" 
--- 				or s.path_string like "/patient/fiche/statut-du-suivi/en-suivi" 
--- 				or s.path_string like "/patient/fiche/statut-du-suivi/post-suivi" 
+-- 				s.path_string like '/patient/fiche/statut-du-suivi/signalement%' 
+-- 				or s.path_string like '/patient/fiche/statut-du-suivi/pre-suivi%' 
+-- 				or s.path_string like '/patient/fiche/statut-du-suivi/6' 
+-- 				or s.path_string like '/patient/fiche/statut-du-suivi/en-suivi' 
+-- 				or s.path_string like '/patient/fiche/statut-du-suivi/post-suivi' 
 -- 				or (
--- 					s.path_string like "/patient/fiche/statut-du-suivi/disparu" 
+-- 					s.path_string like '/patient/fiche/statut-du-suivi/disparu' 
 -- 					and year(pi.start) = year(@refdate)
 -- 				) 
 -- 				or (
--- 					s.path_string like "/patient/fiche/statut-du-suivi/decede" 
+-- 					s.path_string like '/patient/fiche/statut-du-suivi/decede' 
 -- 					and year(pi.start) = year(@refdate)
 -- 				)
 -- 			)
@@ -3652,7 +3652,7 @@ select 'Tableau 5.A-2 – Répartition des activités';
 --             and followup_reports.deleted_at is null
 -- 			and year(followup_reports.report_date) in (@refyear, @refyear-1)
 -- 			and followup_reports.report_date between coalesce(pi_antenna.start, followup_reports.report_date) and COALESCE (pi_antenna.end, followup_reports.report_date)
--- 			and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 			and s_antenna.path_string like '/patient/suivi/antenne/%'
 --             and s_antenna.value like @antenna
             
 --         group by
@@ -3704,7 +3704,7 @@ select 'Tableau 5.B. – Répartition des démarches';
 --             and followup_reports.deleted_at is null
 -- 			and year(followup_reports.report_date) in (@refyear, @refyear-1)
 -- 			and followup_reports.report_date between coalesce(pi_antenna.start, followup_reports.report_date) and COALESCE (pi_antenna.end, followup_reports.report_date)
--- 			and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 			and s_antenna.path_string like '/patient/suivi/antenne/%'
 --             and s_antenna.value like @antenna
 --         group by
 --             left(followup_reports.report_date, 7)
@@ -3744,12 +3744,12 @@ Select 'Tableau 9.A : Personnes totales en logement durable ';
 -- 			inner  join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id 
 -- 			inner  join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id 
 -- 		where
--- 			s.path_string like "/patient/suivi/programme/housing-%"
+-- 			s.path_string like '/patient/suivi/programme/housing-%'
 -- 			and pi.deleted_at is null
 -- 			and p.deleted_at is null
--- 			and left(pi.start,4) >= "2006"
+-- 			and left(pi.start,4) >= '2006'
 			
--- 			and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 			and s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 			and pi_antenna.deleted_at is null
 -- 			and s_antenna.value like @antenna 
 -- 			and pi.start <= COALESCE (pi_antenna.end, @refdate)
@@ -3761,7 +3761,7 @@ Select 'Tableau 9.A : Personnes totales en logement durable ';
 -- 	inner join patients_information as pi on p.pati_id = pi.pati_id and pi.start = q.minstart
 -- 	inner join suggestions as s on s.sugg_id = pi.sugg_id
 -- 	where 
--- 		s.path_string like "/patient/suivi/programme/housing-%"
+-- 		s.path_string like '/patient/suivi/programme/housing-%'
 -- 		and pi.deleted_at is null
 -- 	order by s.value, start
 -- ) r;
@@ -3794,12 +3794,12 @@ Select 'Tableau 9.B : Personnes totales en logement durable 2006 par programme';
 -- 			inner  join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id 
 -- 			inner  join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id 
 -- 		where
--- 			s.path_string like "/patient/suivi/programme/housing-%"
+-- 			s.path_string like '/patient/suivi/programme/housing-%'
 -- 			and pi.deleted_at is null
 -- 			and p.deleted_at is null
--- 			and left(pi.start,4) >= "2006"
+-- 			and left(pi.start,4) >= '2006'
 			
--- 			and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 			and s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 			and pi_antenna.deleted_at is null
 -- 			and s_antenna.value like @antenna 
 -- 			and pi.start <= COALESCE (pi_antenna.end, @refdate)
@@ -3811,7 +3811,7 @@ Select 'Tableau 9.B : Personnes totales en logement durable 2006 par programme';
 -- 	inner join patients_information as pi on p.pati_id = pi.pati_id and pi.start = q.minstart
 -- 	inner join suggestions as s on s.sugg_id = pi.sugg_id
 -- 	where 
--- 		s.path_string like "/patient/suivi/programme/housing-%"
+-- 		s.path_string like '/patient/suivi/programme/housing-%'
 -- 		and pi.deleted_at is null
 -- 	order by s.value, start
 -- ) r
@@ -3841,12 +3841,12 @@ Select 'Tableau 9.A/B : Personnes totales en logement durable par programme - li
 -- 		inner  join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id 
 -- 		inner  join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id 
 -- 	where
--- 		s.path_string like "/patient/suivi/programme/housing-%"
+-- 		s.path_string like '/patient/suivi/programme/housing-%'
 -- 		and pi.deleted_at is null
 -- 		and p.deleted_at is null
--- 		and left(pi.start,4) >= "2006"
+-- 		and left(pi.start,4) >= '2006'
 		
--- 		and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 		and s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 		and pi_antenna.deleted_at is null
 -- 		and s_antenna.value like @antenna 
 -- 		and pi.start <= COALESCE (pi_antenna.end, @refdate)
@@ -3858,7 +3858,7 @@ Select 'Tableau 9.A/B : Personnes totales en logement durable par programme - li
 -- inner join patients_information as pi on p.pati_id = pi.pati_id and pi.start = q.minstart
 -- inner join suggestions as s on s.sugg_id = pi.sugg_id
 -- where 
--- 	s.path_string like "/patient/suivi/programme/housing-%"
+-- 	s.path_string like '/patient/suivi/programme/housing-%'
 --     and pi.deleted_at is null
 -- order by s.value, start;
 
@@ -3887,18 +3887,18 @@ Select 'Tableau 9.B.2 : Personnes totales en logement durable année en cours pa
 -- 		inner  join patients_information pi_stat on pi_stat.pati_id = p.pati_id 
 -- 		inner  join suggestions s_stat on s_stat.sugg_id = pi_stat.sugg_id 
 -- 	where
--- 		s.path_string like "/patient/suivi/programme/housing-%"
+-- 		s.path_string like '/patient/suivi/programme/housing-%'
 -- 		and pi.deleted_at is null
 -- 		and p.deleted_at is null
 		
--- 		and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 		and s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 		and pi_antenna.deleted_at is null
 -- 		and s_antenna.value like @antenna 
 
 -- 		and pi.start <= COALESCE (pi_antenna.end, @refdate)
 -- 		and coalesce(pi.end, @refdate) >= coalesce(pi_antenna.start, @past) 
 
--- 		and s_stat.path_string like "/patient/fiche/statut-du-suivi/%"
+-- 		and s_stat.path_string like '/patient/fiche/statut-du-suivi/%'
 -- 		and pi_stat.deleted_at is null
 -- 	group by p.pati_id, s.value
 -- ) q
@@ -3922,13 +3922,13 @@ Select 'Tableau 9.B.2 : Personnes totales en logement durable année en cours pa
 -- 	inner join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id 
 -- 	inner join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id 
 -- where
---     s.path_string like "/patient/fiche/statut-du-suivi/post-suivi"
+--     s.path_string like '/patient/fiche/statut-du-suivi/post-suivi'
 --     and pi.start like @refyearwc
 --     and (pi.end is null or pi.end > @refdate)
 --     and pi.deleted_at is null
 --     and p.deleted_at is null
 -- 	and pi.start between coalesce(pi_antenna.start, @past) and COALESCE (pi_antenna.end, @refdate)
--- 	and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 	and s_antenna.path_string like '/patient/suivi/antenne/%'
 --     and s_antenna.value like @antenna;
 
 
@@ -3947,13 +3947,13 @@ Select 'Tableau 11.A. – Personnes passées en post-suivi en cours d’année -
 -- 	inner join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id 
 -- 	inner join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id 
 -- where
---     s.path_string like "/patient/fiche/statut-du-suivi/post-suivi"
+--     s.path_string like '/patient/fiche/statut-du-suivi/post-suivi'
 --     and pi.start like @refyearwc
 --     and (pi.end is null or pi.end > @refdate)
 --     and pi.deleted_at is null
 --     and p.deleted_at is null
 -- 	and pi.start between coalesce(pi_antenna.start, @past) and COALESCE (pi_antenna.end, @refdate)
--- 	and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 	and s_antenna.path_string like '/patient/suivi/antenne/%'
 --     and s_antenna.value like @antenna;
 
 
@@ -3967,13 +3967,13 @@ select 'Tableau 11.B. – Total des personnes dans le post-suivi';
 -- 	inner join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id 
 -- 	inner join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id 
 -- where 
--- 	s.path_string like "/patient/fiche/statut-du-suivi/post-suivi"
+-- 	s.path_string like '/patient/fiche/statut-du-suivi/post-suivi'
 -- 	and @refdate between COALESCE(pi.start, @past) and COALESCE (pi.end, @nextyear0101	)								
 -- 	and pi.deleted_at is null 
 -- 	and p.deleted_at is null
 -- 	and pi.start <= COALESCE (pi_antenna.end, @refdate)
 -- 	and coalesce(pi.end, @refdate) >= coalesce(pi_antenna.start, @past) 
--- 	and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 	and s_antenna.path_string like '/patient/suivi/antenne/%'
 --     and s_antenna.value like @antenna;
 
 
@@ -3992,12 +3992,12 @@ select 'Tableau 11.B. – Total des personnes dans le post-suivi - liste nominat
 -- 	inner join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id 
 -- 	inner join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id 
 -- where 
--- 	s.path_string like "/patient/fiche/statut-du-suivi/post-suivi"
+-- 	s.path_string like '/patient/fiche/statut-du-suivi/post-suivi'
 -- 	and @refdate between COALESCE(pi.start, @past) and COALESCE (pi.end, @nextyear0101	)								
 -- 	and pi.deleted_at is null
 -- 	and p.deleted_at is null
 -- 	and pi.start between coalesce(pi_antenna.start, @past) and COALESCE (pi_antenna.end, @refdate)
--- 	and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 	and s_antenna.path_string like '/patient/suivi/antenne/%'
 --     and s_antenna.value like @antenna
 -- order by
 -- 	lastname;
@@ -4028,11 +4028,11 @@ select 'Tableau 22.A. - Données chiffrées sur toutes les nationalités';
 
 -- select 
 -- 	nationalite, 
--- 	sum(if (path_string like "/patient/fiche/statut-du-suivi/en-suivi" and exstatut is null, 1, 0)) as ensuivi, 
--- 	sum(if (path_string like "/patient/fiche/statut-du-suivi/post-suivi" and exstatut is null, 1, 0)) as postsuivi, 
--- 	sum(if (path_string like "/patient/fiche/statut-du-suivi/post-suivi" or path_string like "/patient/fiche/statut-du-suivi/en-suivi", 1, 0)	) as postsuivietensuivi, 
--- 	sum(if (path_string like "/patient/fiche/statut-du-suivi/decede" , 1, 0)) as decedes, 
--- 	sum(if (path_string like "/patient/fiche/statut-du-suivi/disparu" , 1, 0)	) as disparus 
+-- 	sum(if (path_string like '/patient/fiche/statut-du-suivi/en-suivi' and exstatut is null, 1, 0)) as ensuivi, 
+-- 	sum(if (path_string like '/patient/fiche/statut-du-suivi/post-suivi' and exstatut is null, 1, 0)) as postsuivi, 
+-- 	sum(if (path_string like '/patient/fiche/statut-du-suivi/post-suivi' or path_string like '/patient/fiche/statut-du-suivi/en-suivi', 1, 0)	) as postsuivietensuivi, 
+-- 	sum(if (path_string like '/patient/fiche/statut-du-suivi/decede' , 1, 0)) as decedes, 
+-- 	sum(if (path_string like '/patient/fiche/statut-du-suivi/disparu' , 1, 0)	) as disparus 
 -- from 
 -- (
 -- 	select 
@@ -4053,7 +4053,7 @@ select 'Tableau 22.A. - Données chiffrées sur toutes les nationalités';
 -- 				patients.firstname, 
 -- 				patients.lastname, 
 -- 				patients.hash, 
--- 				max(COALESCE(n.value, "--inconnu--")) as nationalite
+-- 				max(COALESCE(n.value, '--inconnu--')) as nationalite
 -- 			from 
 -- 				patients 
 -- 				left join (
@@ -4097,29 +4097,29 @@ select 'Tableau 22.A. - Données chiffrées sur toutes les nationalités';
 -- 						left join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id 
 -- 						left join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id 
 -- 					where
--- 						s.path_string like "/patient/fiche/statut-du-suivi/decede"
+-- 						s.path_string like '/patient/fiche/statut-du-suivi/decede'
 -- 						and pi.start is not null
 -- 						and year(pi.start) = year(@refdate)
 -- 						and pi.end is null
 -- 						and pi.deleted_at is null
 -- 						and p.deleted_at is null
 -- 						and @refdate between coalesce(pi_antenna.start, @refdate) and COALESCE (pi_antenna.end, @refdate)
--- 						and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 						and s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 						and s_antenna.value like @antenna
 -- 				) dcd 
 -- 				left join patients as p2 on p2.pati_id = dcd.pati_id
 -- 				left join patients_information as pi2 on dcd.pati_id = pi2.pati_id
 -- 				left join suggestions as s2 on s2.sugg_id = pi2.sugg_id
 -- 			where
--- 				( s2.path_string like "/patient/fiche/statut-du-suivi/en-suivi" or s2.path_string like "/patient/fiche/statut-du-suivi/post-suivi")
--- 				and s2.path_string not like "/patient/fiche/statut-du-suivi/decede" 
+-- 				( s2.path_string like '/patient/fiche/statut-du-suivi/en-suivi' or s2.path_string like '/patient/fiche/statut-du-suivi/post-suivi')
+-- 				and s2.path_string not like '/patient/fiche/statut-du-suivi/decede' 
 -- 				and pi2.start is not null
 -- 				and pi2.deleted_at is null
 -- 				and p2.deleted_at is null
 -- 				and 
 -- 				( 
 -- 				( to_days(dcd.start) - to_days(pi2.end) < 7 ) 
--- 				or (dcd.paif_id = pi2.paif_id and s2.path_string like "/patient/fiche/statut-du-suivi/decede")
+-- 				or (dcd.paif_id = pi2.paif_id and s2.path_string like '/patient/fiche/statut-du-suivi/decede')
 -- 				)
 		
 -- 		) dd on dd.pati_id = nn.pati_id
@@ -4131,18 +4131,18 @@ select 'Tableau 22.A. - Données chiffrées sur toutes les nationalités';
 -- 	where 
 -- 		(	
 -- 			(
--- 				s2.path_string like "/patient/fiche/statut-du-suivi/en-suivi" 
+-- 				s2.path_string like '/patient/fiche/statut-du-suivi/en-suivi' 
 -- 			) 
 -- 			or (
--- 				s2.path_string like "/patient/fiche/statut-du-suivi/post-suivi" 
+-- 				s2.path_string like '/patient/fiche/statut-du-suivi/post-suivi' 
 -- 			) 
 -- 			or (
--- 				s2.path_string like "/patient/fiche/statut-du-suivi/decede" 
+-- 				s2.path_string like '/patient/fiche/statut-du-suivi/decede' 
 -- 				and year(pi2.start) = year(@refdate)
 -- 				and dd.status is not null
 -- 			) 
 -- 			or (
--- 				s2.path_string like "/patient/fiche/statut-du-suivi/disparu" 
+-- 				s2.path_string like '/patient/fiche/statut-du-suivi/disparu' 
 -- 				and year(pi2.start) = year(@refdate)
 -- 				and dd.status is not null
 -- 			)
@@ -4150,7 +4150,7 @@ select 'Tableau 22.A. - Données chiffrées sur toutes les nationalités';
 -- 		and @refdate between COALESCE(pi2.start, @refdate) and COALESCE (pi2.end, @refdate)
 -- 		and pi2.deleted_at is null 
 -- 		and @refdate between coalesce(pi_antenna.start, @refdate) and COALESCE (pi_antenna.end, @refdate)
--- 		and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 		and s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 		and s_antenna.value like @antenna
 
 -- 	order by nationalite, hash
@@ -4180,7 +4180,7 @@ select 'Tableau 22.A. - Données chiffrées sur toutes les nationalités - liste
 	-- 			patients.firstname, 
 	-- 			patients.lastname, 
 	-- 			patients.hash, 
-	-- 			max(COALESCE(n.value, "--inconnu--")) as nationalite
+	-- 			max(COALESCE(n.value, '--inconnu--')) as nationalite
 	-- 		from 
 	-- 			patients 
 	-- 			left join (
@@ -4224,29 +4224,29 @@ select 'Tableau 22.A. - Données chiffrées sur toutes les nationalités - liste
 	-- 					left join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id 
 	-- 					left join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id 
 	-- 				where
-	-- 					s.path_string like "/patient/fiche/statut-du-suivi/decede"
+	-- 					s.path_string like '/patient/fiche/statut-du-suivi/decede'
 	-- 					and pi.start is not null
 	-- 					and year(pi.start) = year(@refdate)
 	-- 					and pi.end is null
 	-- 					and pi.deleted_at is null
 	-- 					and p.deleted_at is null
 	-- 					and @refdate between coalesce(pi_antenna.start, @refdate) and COALESCE (pi_antenna.end, @refdate)
-	-- 					and s_antenna.path_string like "/patient/suivi/antenne/%"
+	-- 					and s_antenna.path_string like '/patient/suivi/antenne/%'
 	-- 					and s_antenna.value like @antenna
 	-- 			) dcd 
 	-- 			left join patients as p2 on p2.pati_id = dcd.pati_id
 	-- 			left join patients_information as pi2 on dcd.pati_id = pi2.pati_id
 	-- 			left join suggestions as s2 on s2.sugg_id = pi2.sugg_id
 	-- 		where
-	-- 			( s2.path_string like "/patient/fiche/statut-du-suivi/en-suivi" or s2.path_string like "/patient/fiche/statut-du-suivi/post-suivi")
-	-- 			and s2.path_string not like "/patient/fiche/statut-du-suivi/decede" 
+	-- 			( s2.path_string like '/patient/fiche/statut-du-suivi/en-suivi' or s2.path_string like '/patient/fiche/statut-du-suivi/post-suivi')
+	-- 			and s2.path_string not like '/patient/fiche/statut-du-suivi/decede' 
 	-- 			and pi2.start is not null
 	-- 			and pi2.deleted_at is null
 	-- 			and p2.deleted_at is null
 	-- 			and 
 	-- 			( 
 	-- 			( to_days(dcd.start) - to_days(pi2.end) < 7 ) 
-	-- 			or (dcd.paif_id = pi2.paif_id and s2.path_string like "/patient/fiche/statut-du-suivi/decede")
+	-- 			or (dcd.paif_id = pi2.paif_id and s2.path_string like '/patient/fiche/statut-du-suivi/decede')
 	-- 			)
 		
 	-- 	) dd on dd.pati_id = nn.pati_id
@@ -4258,18 +4258,18 @@ select 'Tableau 22.A. - Données chiffrées sur toutes les nationalités - liste
 	-- where 
 	-- 	(	
 	-- 		(
-	-- 			s2.path_string like "/patient/fiche/statut-du-suivi/en-suivi" 
+	-- 			s2.path_string like '/patient/fiche/statut-du-suivi/en-suivi' 
 	-- 		) 
 	-- 		or (
-	-- 			s2.path_string like "/patient/fiche/statut-du-suivi/post-suivi" 
+	-- 			s2.path_string like '/patient/fiche/statut-du-suivi/post-suivi' 
 	-- 		) 
 	-- 		or (
-	-- 			s2.path_string like "/patient/fiche/statut-du-suivi/decede" 
+	-- 			s2.path_string like '/patient/fiche/statut-du-suivi/decede' 
 	-- 			and year(pi2.start) = year(@refdate)
 	-- 			and dd.status is not null
 	-- 		) 
 	-- 		or (
-	-- 			s2.path_string like "/patient/fiche/statut-du-suivi/disparu" 
+	-- 			s2.path_string like '/patient/fiche/statut-du-suivi/disparu' 
 	-- 			and year(pi2.start) = year(@refdate)
 	-- 			and dd.status is not null
 	-- 		)
@@ -4277,7 +4277,7 @@ select 'Tableau 22.A. - Données chiffrées sur toutes les nationalités - liste
 	-- 	and @refdate between COALESCE(pi2.start, @refdate) and COALESCE (pi2.end, @refdate)
 	-- 	and pi2.deleted_at is null 
 	-- 	and @refdate between coalesce(pi_antenna.start, @refdate) and COALESCE (pi_antenna.end, @refdate)
-	-- 	and s_antenna.path_string like "/patient/suivi/antenne/%"
+	-- 	and s_antenna.path_string like '/patient/suivi/antenne/%'
 	-- 	and s_antenna.value like @antenna
 
 	-- order by nationalite, hash;
@@ -4288,11 +4288,11 @@ select 'Tableau 22.B. - Pourcentages de nationalités belges et étrangères';
 
 -- select 
 -- 	nationalite, 
--- 	sum(if (path_string like "/patient/fiche/statut-du-suivi/en-suivi" and exstatut is null, 1, 0)) as ensuivi, 
--- 	sum(if (path_string like "/patient/fiche/statut-du-suivi/post-suivi" and exstatut is null, 1, 0)) as postsuivi, 
--- 	sum(if (path_string like "/patient/fiche/statut-du-suivi/post-suivi" or path_string like "/patient/fiche/statut-du-suivi/en-suivi", 1, 0)	) as postsuivietensuivi, 
--- 	sum(if (path_string like "/patient/fiche/statut-du-suivi/decede" , 1, 0)) as decedes, 
--- 	sum(if (path_string like "/patient/fiche/statut-du-suivi/disparu" , 1, 0)	) as disparus 
+-- 	sum(if (path_string like '/patient/fiche/statut-du-suivi/en-suivi' and exstatut is null, 1, 0)) as ensuivi, 
+-- 	sum(if (path_string like '/patient/fiche/statut-du-suivi/post-suivi' and exstatut is null, 1, 0)) as postsuivi, 
+-- 	sum(if (path_string like '/patient/fiche/statut-du-suivi/post-suivi' or path_string like '/patient/fiche/statut-du-suivi/en-suivi', 1, 0)	) as postsuivietensuivi, 
+-- 	sum(if (path_string like '/patient/fiche/statut-du-suivi/decede' , 1, 0)) as decedes, 
+-- 	sum(if (path_string like '/patient/fiche/statut-du-suivi/disparu' , 1, 0)	) as disparus 
 -- from 
 -- (
 -- 	select 
@@ -4314,10 +4314,10 @@ select 'Tableau 22.B. - Pourcentages de nationalités belges et étrangères';
 -- 				patients.lastname, 
 -- 				patients.hash, 
 -- 				if (
--- 					n.value != "Belgique" 
+-- 					n.value != 'Belgique' 
 -- 					and n.value is not null, 
--- 					"Etranger", 
--- 					COALESCE(n.value, "Inconnu")
+-- 					'Etranger', 
+-- 					COALESCE(n.value, 'Inconnu')
 -- 				) as nationalite 
 -- 			from 
 -- 				patients 
@@ -4362,29 +4362,29 @@ select 'Tableau 22.B. - Pourcentages de nationalités belges et étrangères';
 -- 						left join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id 
 -- 						left join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id 
 -- 					where
--- 						s.path_string like "/patient/fiche/statut-du-suivi/decede"
+-- 						s.path_string like '/patient/fiche/statut-du-suivi/decede'
 -- 						and pi.start is not null
 -- 						and year(pi.start) = year(@refdate)
 -- 						and pi.end is null
 -- 						and pi.deleted_at is null
 -- 						and p.deleted_at is null
 -- 						and @refdate between coalesce(pi_antenna.start, @refdate) and COALESCE (pi_antenna.end, @refdate)
--- 						and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 						and s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 						and s_antenna.value like @antenna
 -- 				) dcd 
 -- 				left join patients as p2 on p2.pati_id = dcd.pati_id
 -- 				left join patients_information as pi2 on dcd.pati_id = pi2.pati_id
 -- 				left join suggestions as s2 on s2.sugg_id = pi2.sugg_id
 -- 			where
--- 				( s2.path_string like "/patient/fiche/statut-du-suivi/en-suivi" or s2.path_string like "/patient/fiche/statut-du-suivi/post-suivi")
--- 				and s2.path_string not like "/patient/fiche/statut-du-suivi/decede" 
+-- 				( s2.path_string like '/patient/fiche/statut-du-suivi/en-suivi' or s2.path_string like '/patient/fiche/statut-du-suivi/post-suivi')
+-- 				and s2.path_string not like '/patient/fiche/statut-du-suivi/decede' 
 -- 				and pi2.start is not null
 -- 				and pi2.deleted_at is null
 -- 				and p2.deleted_at is null
 -- 				and 
 -- 				( 
 -- 				( to_days(dcd.start) - to_days(pi2.end) < 7 ) 
--- 				or (dcd.paif_id = pi2.paif_id and s2.path_string like "/patient/fiche/statut-du-suivi/decede")
+-- 				or (dcd.paif_id = pi2.paif_id and s2.path_string like '/patient/fiche/statut-du-suivi/decede')
 -- 				)
 		
 -- 		) dd on dd.pati_id = nn.pati_id
@@ -4396,18 +4396,18 @@ select 'Tableau 22.B. - Pourcentages de nationalités belges et étrangères';
 -- 	where 
 -- 		(	
 -- 			(
--- 				s2.path_string like "/patient/fiche/statut-du-suivi/en-suivi" 
+-- 				s2.path_string like '/patient/fiche/statut-du-suivi/en-suivi' 
 -- 			) 
 -- 			or (
--- 				s2.path_string like "/patient/fiche/statut-du-suivi/post-suivi" 
+-- 				s2.path_string like '/patient/fiche/statut-du-suivi/post-suivi' 
 -- 			) 
 -- 			or (
--- 				s2.path_string like "/patient/fiche/statut-du-suivi/decede" 
+-- 				s2.path_string like '/patient/fiche/statut-du-suivi/decede' 
 -- 				and year(pi2.start) = year(@refdate)
 -- 				and dd.status is not null
 -- 			) 
 -- 			or (
--- 				s2.path_string like "/patient/fiche/statut-du-suivi/disparu" 
+-- 				s2.path_string like '/patient/fiche/statut-du-suivi/disparu' 
 -- 				and year(pi2.start) = year(@refdate)
 -- 				and dd.status is not null
 -- 			)
@@ -4415,7 +4415,7 @@ select 'Tableau 22.B. - Pourcentages de nationalités belges et étrangères';
 -- 		and @refdate between COALESCE(pi2.start, @refdate) and COALESCE (pi2.end, @refdate)
 -- 		and pi2.deleted_at is null 
 -- 		and @refdate between coalesce(pi_antenna.start, @refdate) and COALESCE (pi_antenna.end, @refdate)
--- 		and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 		and s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 		and s_antenna.value like @antenna
 
 -- 	order by nationalite, hash
@@ -4431,161 +4431,161 @@ select 'Tableau 22.B. - Pourcentages de nationalités belges et étrangères';
 
 select 'Tableau 22.C. - Données chiffrées sur toutes les nationalités selon le programme de logement des patients';
 
--- select 
--- 	nationalite, 
--- 	sum(if (programme like "/patient/suivi/programme/housing-fast" and exstatut is null, 1, 0)) as housingfast, 
--- 	sum(if (programme like "/patient/suivi/programme/housing-first" and exstatut is null, 1, 0)) as housingfirst, 
--- 	sum(if (programme like "/patient/suivi/programme/housing-%" and exstatut is null, 1, 0)) as total,
--- 	sum(if (programme like "/patient/suivi/programme/housing-%" and pstatus like "/patient/fiche/statut-du-suivi/decede" and year(pstatus_start) like year(@refdate), 1, 0)) as decedes, 
--- 	sum(if (programme like "/patient/suivi/programme/housing-%" and pstatus like "/patient/fiche/statut-du-suivi/disparu" and year(pstatus_start) like year(@refyear), 1, 0)) as disparus 
+select 
+	nationalite, 
+	sum(if (programme like '/patient/suivi/programme/housing-fast' and exstatut is null, 1, 0)) as housingfast, 
+	sum(if (programme like '/patient/suivi/programme/housing-first' and exstatut is null, 1, 0)) as housingfirst, 
+	sum(if (programme like '/patient/suivi/programme/housing-%' and exstatut is null, 1, 0)) as total,
+	sum(if (programme like '/patient/suivi/programme/housing-%' and pstatus like '/patient/fiche/statut-du-suivi/decede' and year(pstatus_start) like year(@refdate), 1, 0)) as decedes, 
+	sum(if (programme like '/patient/suivi/programme/housing-%' and pstatus like '/patient/fiche/statut-du-suivi/disparu' and year(pstatus_start) like year(@refyear), 1, 0)) as disparus 
 
--- from 
--- (
+from 
+(
 
 
--- 	select 
--- 		distinct
--- 		hash,
--- 		firstname,
--- 		lastname,
--- 		nationalite,
--- 		s_stat.value,
---         pi_stat.start as pstatus_start,
--- 		dd.status as 'exstatut',
---         programme_s.path_string as programme,
---         s_stat.path_string as pstatus
--- 	from
--- 	(
--- 		select 
--- 			distinct
--- 			patients.pati_id, 
--- 			patients.firstname, 
--- 			patients.lastname, 
--- 			patients.hash,
--- 			if (
--- 				n.value != "Belgique" 
--- 				and n.value is not null, 
--- 				"Etranger", 
--- 				COALESCE(n.value, "--Inconnu--")
--- 			) as nationalite 
--- 		from 
--- 			patients
--- 			left join (
--- 				select
--- 					s.sugg_id as si,
--- 					s.value,
--- 					pi.pati_id
--- 				from
--- 					patients_information pi
--- 					inner JOIN suggestions s on s.sugg_id = pi.sugg_id
--- 					inner join patients_information_template_element pitel on pitel.pite_id = pi.itel_id
--- 					inner join suggestions stel on stel.sugg_id = pitel.suge_id
--- 				where
--- 					stel.path_string like '/patient/fiche/information-generale/nationalite'
--- 					and @refdate between COALESCE(pi.start, @refdate) and COALESCE (pi.end, @refdate)
--- 					and pi.deleted_at is null
--- 			) n on patients.pati_id = n.pati_id
--- 		where patients.deleted_at is null
--- 		group by
--- 			patients.pati_id,
--- 			patients.hash,
--- 			patients.firstname,
--- 			patients.lastname
--- 	) nn
--- 	left join
--- 	( /* only deceased and missing coming from suivi and post-suivi*/
--- 		select
--- 			distinct
--- 			p2.pati_id,
--- 			s2.value as status
--- 		from
--- 			(
--- 				SELECT
--- 					p.pati_id,
--- 					pi.start,
--- 					pi.paif_id
--- 				FROM
--- 					patients as p
--- 					inner join patients_information as pi on p.pati_id = pi.pati_id
--- 					inner join suggestions as s on s.sugg_id = pi.sugg_id
--- 					left join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id
--- 					left join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id
--- 				where
--- 					s.path_string like "/patient/fiche/statut-du-suivi/decede"
--- 					and pi.start is not null
--- 					and year(pi.start) = year(@refdate)
--- 					and pi.end is null
--- 					and pi.deleted_at is null
--- 					and p.deleted_at is null
--- 					and @refdate between coalesce(pi_antenna.start, @refdate) and COALESCE (pi_antenna.end, @refdate)
--- 					and s_antenna.path_string like "/patient/suivi/antenne/%"
--- 					and s_antenna.value like @antenna
--- 			) dcd
--- 			left join patients as p2 on p2.pati_id = dcd.pati_id
--- 			left join patients_information as pi2 on dcd.pati_id = pi2.pati_id
--- 			left join suggestions as s2 on s2.sugg_id = pi2.sugg_id
--- 		where
--- 			( s2.path_string like "/patient/fiche/statut-du-suivi/en-suivi" or s2.path_string like "/patient/fiche/statut-du-suivi/post-suivi")
--- 			and s2.path_string not like "/patient/fiche/statut-du-suivi/decede"
--- 			and pi2.start is not null
--- 			and pi2.deleted_at is null
--- 			and p2.deleted_at is null
--- 			and
--- 			(
--- 				( to_days(dcd.start) - to_days(pi2.end) < 7 )
--- 				or (dcd.paif_id = pi2.paif_id and s2.path_string like "/patient/fiche/statut-du-suivi/decede")
--- 			)
+	select 
+		distinct
+		hash,
+		firstname,
+		lastname,
+		nationalite,
+		s_stat.value,
+        pi_stat.start as pstatus_start,
+		dd.status as 'exstatut',
+        programme_s.path_string as programme,
+        s_stat.path_string as pstatus
+	from
+	(
+		select 
+			distinct
+			patients.pati_id, 
+			patients.firstname, 
+			patients.lastname, 
+			patients.hash,
+			if (
+				n.value != 'Belgique' 
+				and n.value is not null, 
+				'Etranger', 
+				COALESCE(n.value, '--Inconnu--')
+			) as nationalite 
+		from 
+			patients
+			left join (
+				select
+					s.sugg_id as si,
+					s.value,
+					pi.pati_id
+				from
+					patients_information pi
+					inner JOIN suggestions s on s.sugg_id = pi.sugg_id
+					inner join patients_information_template_element pitel on pitel.pite_id = pi.itel_id
+					inner join suggestions stel on stel.sugg_id = pitel.suge_id
+				where
+					stel.path_string like '/patient/fiche/information-generale/nationalite'
+					and @refdate between COALESCE(pi.start, @refdate) and COALESCE (pi.end, @refdate)
+					and pi.deleted_at is null
+			) n on patients.pati_id = n.pati_id
+		where patients.deleted_at is null
+		group by
+			patients.pati_id,
+			patients.hash,
+			patients.firstname,
+			patients.lastname
+	) nn
+	left join
+	( /* only deceased and missing coming from suivi and post-suivi*/
+		select
+			distinct
+			p2.pati_id,
+			s2.value as status
+		from
+			(
+				SELECT
+					p.pati_id,
+					pi.start,
+					pi.paif_id
+				FROM
+					patients as p
+					inner join patients_information as pi on p.pati_id = pi.pati_id
+					inner join suggestions as s on s.sugg_id = pi.sugg_id
+					left join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id
+					left join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id
+				where
+					s.path_string like '/patient/fiche/statut-du-suivi/decede'
+					and pi.start is not null
+					and year(pi.start) = year(@refdate)
+					and pi.end is null
+					and pi.deleted_at is null
+					and p.deleted_at is null
+					and @refdate between coalesce(pi_antenna.start, @refdate) and COALESCE (pi_antenna.end, @refdate)
+					and s_antenna.path_string like '/patient/suivi/antenne/%'
+					and s_antenna.value like @antenna
+			) dcd
+			left join patients as p2 on p2.pati_id = dcd.pati_id
+			left join patients_information as pi2 on dcd.pati_id = pi2.pati_id
+			left join suggestions as s2 on s2.sugg_id = pi2.sugg_id
+		where
+			( s2.path_string like '/patient/fiche/statut-du-suivi/en-suivi' or s2.path_string like '/patient/fiche/statut-du-suivi/post-suivi')
+			and s2.path_string not like '/patient/fiche/statut-du-suivi/decede'
+			and pi2.start is not null
+			and pi2.deleted_at is null
+			and p2.deleted_at is null
+			and
+			(
+				( to_days(dcd.start) - to_days(pi2.end) < 7 )
+				or (dcd.paif_id = pi2.paif_id and s2.path_string like '/patient/fiche/statut-du-suivi/decede')
+			)
 		
--- 	) dd on dd.pati_id = nn.pati_id
+	) dd on dd.pati_id = nn.pati_id
 	
---     inner join patients_information as programme on nn.pati_id = programme.pati_id
--- 	inner join suggestions as programme_s on programme_s.sugg_id = programme.sugg_id
+    inner join patients_information as programme on nn.pati_id = programme.pati_id
+	inner join suggestions as programme_s on programme_s.sugg_id = programme.sugg_id
 	
---     inner join patients_information as pi_stat on nn.pati_id = pi_stat.pati_id
--- 	inner join suggestions as s_stat on s_stat.sugg_id = pi_stat.sugg_id
+    inner join patients_information as pi_stat on nn.pati_id = pi_stat.pati_id
+	inner join suggestions as s_stat on s_stat.sugg_id = pi_stat.sugg_id
 	
---     left join patients_information pi_antenna on pi_antenna.pati_id = nn.pati_id
--- 	left join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id
+    left join patients_information pi_antenna on pi_antenna.pati_id = nn.pati_id
+	left join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id
 
--- 	where
--- 		programme_s.path_string like "/patient/suivi/programme/housing-%"
--- 		and @refdate between COALESCE(programme.start, @refdate) and COALESCE (programme.end, @refdate)
--- 		and
--- 		(	
--- 			(
--- 				s_stat.path_string like "/patient/fiche/statut-du-suivi/en-suivi"
--- 				and @refdate between COALESCE(pi_stat.start, @refdate) and COALESCE (pi_stat.end, @refdate)
--- 			)
--- 			or (
--- 				s_stat.path_string like "/patient/fiche/statut-du-suivi/post-suivi"
--- 				and @refdate between COALESCE(pi_stat.start, @refdate) and COALESCE (pi_stat.end, @refdate)
--- 			)
--- 			or (
--- 				s_stat.path_string like "/patient/fiche/statut-du-suivi/decede"
--- 				and year(pi_stat.start) = year(@refdate)
--- 				and dd.status is not null
--- 			)
--- 			or (
--- 				s_stat.path_string like "/patient/fiche/statut-du-suivi/disparu"
--- 				and year(pi_stat.start) = year(@refdate)
--- 				and dd.status is not null
--- 			)
--- 		)
--- 		and programme.deleted_at is null
--- 		and @refdate between coalesce(pi_antenna.start, @refdate) and COALESCE (pi_antenna.end, @refdate)
--- 		and s_antenna.path_string like "/patient/suivi/antenne/%"
--- 		and s_antenna.value like @antenna
---     	and pi_antenna.deleted_at is null
---     	and pi_stat.deleted_at is null
+	where
+		programme_s.path_string like '/patient/suivi/programme/housing-%'
+		and @refdate between COALESCE(programme.start, @refdate) and COALESCE (programme.end, @refdate)
+		and
+		(	
+			(
+				s_stat.path_string like '/patient/fiche/statut-du-suivi/en-suivi'
+				and @refdate between COALESCE(pi_stat.start, @refdate) and COALESCE (pi_stat.end, @refdate)
+			)
+			or (
+				s_stat.path_string like '/patient/fiche/statut-du-suivi/post-suivi'
+				and @refdate between COALESCE(pi_stat.start, @refdate) and COALESCE (pi_stat.end, @refdate)
+			)
+			or (
+				s_stat.path_string like '/patient/fiche/statut-du-suivi/decede'
+				and year(pi_stat.start) = year(@refdate)
+				and dd.status is not null
+			)
+			or (
+				s_stat.path_string like '/patient/fiche/statut-du-suivi/disparu'
+				and year(pi_stat.start) = year(@refdate)
+				and dd.status is not null
+			)
+		)
+		and programme.deleted_at is null
+		and @refdate between coalesce(pi_antenna.start, @refdate) and COALESCE (pi_antenna.end, @refdate)
+		and s_antenna.path_string like '/patient/suivi/antenne/%'
+		and s_antenna.value like @antenna
+    	and pi_antenna.deleted_at is null
+    	and pi_stat.deleted_at is null
 
--- 	order by programme, pstatus, nationalite, hash
+	order by programme, pstatus, nationalite, hash
 
 
--- ) f
--- group by 
--- 	nationalite 
--- order by 
--- 	total desc;
+) f
+group by 
+	nationalite 
+order by 
+	total desc;
 
 
 
@@ -4594,142 +4594,142 @@ select 'Tableau 22.C. - Données chiffrées sur toutes les nationalités selon l
 	
 select 'Tableau 22.C. - Données chiffrées sur toutes les nationalités selon le programme de logement des patients - liste nominative';
 
-	-- select 
-	-- 	distinct
-	-- 	hash,
-	-- 	firstname,
-	-- 	lastname,
-	-- 	nationalite,
-	-- 	s_stat.value,
-    --     pi_stat.start as pstatus_start,
-	-- 	dd.status as 'exstatut',
-    --     programme_s.path_string as programme,
-    --     s_stat.path_string as pstatus
-	-- from
-	-- (
-	-- 	select 
-	-- 		distinct
-	-- 		patients.pati_id, 
-	-- 		patients.firstname, 
-	-- 		patients.lastname, 
-	-- 		patients.hash,
-	-- 		if (
-	-- 			n.value != "Belgique" 
-	-- 			and n.value is not null, 
-	-- 			"Etranger", 
-	-- 			COALESCE(n.value, "Inconnu")
-	-- 		) as nationalite 
-	-- 	from 
-	-- 		patients
-	-- 		left join (
-	-- 			select
-	-- 				s.sugg_id as si,
-	-- 				s.value,
-	-- 				pi.pati_id
-	-- 			from
-	-- 				patients_information pi
-	-- 				inner JOIN suggestions s on s.sugg_id = pi.sugg_id
-	-- 				inner join patients_information_template_element pitel on pitel.pite_id = pi.itel_id
-	-- 				inner join suggestions stel on stel.sugg_id = pitel.suge_id
-	-- 			where
-	-- 				stel.path_string like '/patient/fiche/information-generale/nationalite'
-	-- 				and @refdate between COALESCE(pi.start, @refdate) and COALESCE (pi.end, @refdate)
-	-- 				and pi.deleted_at is null
-	-- 		) n on patients.pati_id = n.pati_id
-	-- 	where patients.deleted_at is null
-	-- 	group by
-	-- 		patients.pati_id,
-	-- 		patients.hash,
-	-- 		patients.firstname,
-	-- 		patients.lastname
-	-- ) nn
-	-- left join
-	-- ( /* only deceased and missing coming from suivi and post-suivi*/
-	-- 	select
-	-- 		distinct
-	-- 		p2.pati_id,
-	-- 		s2.value as status
-	-- 	from
-	-- 		(
-	-- 			SELECT
-	-- 				p.pati_id,
-	-- 				pi.start,
-	-- 				pi.paif_id
-	-- 			FROM
-	-- 				patients as p
-	-- 				inner join patients_information as pi on p.pati_id = pi.pati_id
-	-- 				inner join suggestions as s on s.sugg_id = pi.sugg_id
-	-- 				left join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id
-	-- 				left join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id
-	-- 			where
-	-- 				s.path_string like "/patient/fiche/statut-du-suivi/decede"
-	-- 				and pi.start is not null
-	-- 				and year(pi.start) = year(@refdate)
-	-- 				and pi.end is null
-	-- 				and pi.deleted_at is null
-	-- 				and p.deleted_at is null
-	-- 				and @refdate between coalesce(pi_antenna.start, @refdate) and COALESCE (pi_antenna.end, @refdate)
-	-- 				and s_antenna.path_string like "/patient/suivi/antenne/%"
-	-- 				and s_antenna.value like @antenna
-	-- 		) dcd
-	-- 		left join patients as p2 on p2.pati_id = dcd.pati_id
-	-- 		left join patients_information as pi2 on dcd.pati_id = pi2.pati_id
-	-- 		left join suggestions as s2 on s2.sugg_id = pi2.sugg_id
-	-- 	where
-	-- 		( s2.path_string like "/patient/fiche/statut-du-suivi/en-suivi" or s2.path_string like "/patient/fiche/statut-du-suivi/post-suivi")
-	-- 		and s2.path_string not like "/patient/fiche/statut-du-suivi/decede"
-	-- 		and pi2.start is not null
-	-- 		and pi2.deleted_at is null
-	-- 		and p2.deleted_at is null
-	-- 		and
-	-- 		(
-	-- 			( to_days(dcd.start) - to_days(pi2.end) < 7 )
-	-- 			or (dcd.paif_id = pi2.paif_id and s2.path_string like "/patient/fiche/statut-du-suivi/decede")
-	-- 		)
+	select 
+		distinct
+		hash,
+		firstname,
+		lastname,
+		nationalite,
+		s_stat.value,
+        pi_stat.start as pstatus_start,
+		dd.status as 'exstatut',
+        programme_s.path_string as programme,
+        s_stat.path_string as pstatus
+	from
+	(
+		select 
+			distinct
+			patients.pati_id, 
+			patients.firstname, 
+			patients.lastname, 
+			patients.hash,
+			if (
+				n.value != 'Belgique' 
+				and n.value is not null, 
+				'Etranger', 
+				COALESCE(n.value, 'Inconnu')
+			) as nationalite 
+		from 
+			patients
+			left join (
+				select
+					s.sugg_id as si,
+					s.value,
+					pi.pati_id
+				from
+					patients_information pi
+					inner JOIN suggestions s on s.sugg_id = pi.sugg_id
+					inner join patients_information_template_element pitel on pitel.pite_id = pi.itel_id
+					inner join suggestions stel on stel.sugg_id = pitel.suge_id
+				where
+					stel.path_string like '/patient/fiche/information-generale/nationalite'
+					and @refdate between COALESCE(pi.start, @refdate) and COALESCE (pi.end, @refdate)
+					and pi.deleted_at is null
+			) n on patients.pati_id = n.pati_id
+		where patients.deleted_at is null
+		group by
+			patients.pati_id,
+			patients.hash,
+			patients.firstname,
+			patients.lastname
+	) nn
+	left join
+	( /* only deceased and missing coming from suivi and post-suivi*/
+		select
+			distinct
+			p2.pati_id,
+			s2.value as status
+		from
+			(
+				SELECT
+					p.pati_id,
+					pi.start,
+					pi.paif_id
+				FROM
+					patients as p
+					inner join patients_information as pi on p.pati_id = pi.pati_id
+					inner join suggestions as s on s.sugg_id = pi.sugg_id
+					left join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id
+					left join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id
+				where
+					s.path_string like '/patient/fiche/statut-du-suivi/decede'
+					and pi.start is not null
+					and year(pi.start) = year(@refdate)
+					and pi.end is null
+					and pi.deleted_at is null
+					and p.deleted_at is null
+					and @refdate between coalesce(pi_antenna.start, @refdate) and COALESCE (pi_antenna.end, @refdate)
+					and s_antenna.path_string like '/patient/suivi/antenne/%'
+					and s_antenna.value like @antenna
+			) dcd
+			left join patients as p2 on p2.pati_id = dcd.pati_id
+			left join patients_information as pi2 on dcd.pati_id = pi2.pati_id
+			left join suggestions as s2 on s2.sugg_id = pi2.sugg_id
+		where
+			( s2.path_string like '/patient/fiche/statut-du-suivi/en-suivi' or s2.path_string like '/patient/fiche/statut-du-suivi/post-suivi')
+			and s2.path_string not like '/patient/fiche/statut-du-suivi/decede'
+			and pi2.start is not null
+			and pi2.deleted_at is null
+			and p2.deleted_at is null
+			and
+			(
+				( to_days(dcd.start) - to_days(pi2.end) < 7 )
+				or (dcd.paif_id = pi2.paif_id and s2.path_string like '/patient/fiche/statut-du-suivi/decede')
+			)
 		
-	-- ) dd on dd.pati_id = nn.pati_id
+	) dd on dd.pati_id = nn.pati_id
 	
-    -- inner join patients_information as programme on nn.pati_id = programme.pati_id
-	-- inner join suggestions as programme_s on programme_s.sugg_id = programme.sugg_id
+    inner join patients_information as programme on nn.pati_id = programme.pati_id
+	inner join suggestions as programme_s on programme_s.sugg_id = programme.sugg_id
 	
-    -- inner join patients_information as pi_stat on nn.pati_id = pi_stat.pati_id
-	-- inner join suggestions as s_stat on s_stat.sugg_id = pi_stat.sugg_id
+    inner join patients_information as pi_stat on nn.pati_id = pi_stat.pati_id
+	inner join suggestions as s_stat on s_stat.sugg_id = pi_stat.sugg_id
 	
-    -- left join patients_information pi_antenna on pi_antenna.pati_id = nn.pati_id
-	-- left join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id
+    left join patients_information pi_antenna on pi_antenna.pati_id = nn.pati_id
+	left join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id
 
-	-- where
-	-- 	programme_s.path_string like "/patient/suivi/programme/housing-%"
-	-- 	and @refdate between COALESCE(programme.start, @refdate) and COALESCE (programme.end, @refdate)
-	-- 	and
-	-- 	(	
-	-- 		(
-	-- 			s_stat.path_string like "/patient/fiche/statut-du-suivi/en-suivi"
-	-- 			and @refdate between COALESCE(pi_stat.start, @refdate) and COALESCE (pi_stat.end, @refdate)
-	-- 		)
-	-- 		or (
-	-- 			s_stat.path_string like "/patient/fiche/statut-du-suivi/post-suivi"
-	-- 			and @refdate between COALESCE(pi_stat.start, @refdate) and COALESCE (pi_stat.end, @refdate)
-	-- 		)
-	-- 		or (
-	-- 			s_stat.path_string like "/patient/fiche/statut-du-suivi/decede"
-	-- 			and year(pi_stat.start) = year(@refdate)
-	-- 			and dd.status is not null
-	-- 		)
-	-- 		or (
-	-- 			s_stat.path_string like "/patient/fiche/statut-du-suivi/disparu"
-	-- 			and year(pi_stat.start) = year(@refdate)
-	-- 			and dd.status is not null
-	-- 		)
-	-- 	)
-	-- 	and programme.deleted_at is null
-	-- 	and @refdate between coalesce(pi_antenna.start, @refdate) and COALESCE (pi_antenna.end, @refdate)
-	-- 	and s_antenna.path_string like "/patient/suivi/antenne/%"
-	-- 	and s_antenna.value like @antenna
-    -- 	and pi_antenna.deleted_at is null
-    -- 	and pi_stat.deleted_at is null
+	where
+		programme_s.path_string like '/patient/suivi/programme/housing-%'
+		and @refdate between COALESCE(programme.start, @refdate) and COALESCE (programme.end, @refdate)
+		and
+		(	
+			(
+				s_stat.path_string like '/patient/fiche/statut-du-suivi/en-suivi'
+				and @refdate between COALESCE(pi_stat.start, @refdate) and COALESCE (pi_stat.end, @refdate)
+			)
+			or (
+				s_stat.path_string like '/patient/fiche/statut-du-suivi/post-suivi'
+				and @refdate between COALESCE(pi_stat.start, @refdate) and COALESCE (pi_stat.end, @refdate)
+			)
+			or (
+				s_stat.path_string like '/patient/fiche/statut-du-suivi/decede'
+				and year(pi_stat.start) = year(@refdate)
+				and dd.status is not null
+			)
+			or (
+				s_stat.path_string like '/patient/fiche/statut-du-suivi/disparu'
+				and year(pi_stat.start) = year(@refdate)
+				and dd.status is not null
+			)
+		)
+		and programme.deleted_at is null
+		and @refdate between coalesce(pi_antenna.start, @refdate) and COALESCE (pi_antenna.end, @refdate)
+		and s_antenna.path_string like '/patient/suivi/antenne/%'
+		and s_antenna.value like @antenna
+    	and pi_antenna.deleted_at is null
+    	and pi_stat.deleted_at is null
 
-	-- order by programme, pstatus, nationalite, hash;
+	order by programme, pstatus, nationalite, hash;
 
 	
 
@@ -4742,11 +4742,11 @@ select 'Tableau 23.A. - Données chiffrées sur le sexe';
 
 -- select 
 -- 	genre, 
--- 	sum(if (statut_ps like "/patient/fiche/statut-du-suivi/en-suivi" and exstatut is null, 1, 0)) as ensuivi, 
--- 	sum(if (statut_ps like "/patient/fiche/statut-du-suivi/post-suivi" and exstatut is null, 1, 0)) as postsuivi, 
--- 	sum(if (statut_ps like "/patient/fiche/statut-du-suivi/post-suivi" or statut_ps like "/patient/fiche/statut-du-suivi/en-suivi", 1, 0)	) as postsuivietensuivi, 
--- 	sum(if (statut_ps like "/patient/fiche/statut-du-suivi/decede" , 1, 0)) as decedes, 
--- 	sum(if (statut_ps like "/patient/fiche/statut-du-suivi/disparu" , 1, 0)	) as disparus 
+-- 	sum(if (statut_ps like '/patient/fiche/statut-du-suivi/en-suivi' and exstatut is null, 1, 0)) as ensuivi, 
+-- 	sum(if (statut_ps like '/patient/fiche/statut-du-suivi/post-suivi' and exstatut is null, 1, 0)) as postsuivi, 
+-- 	sum(if (statut_ps like '/patient/fiche/statut-du-suivi/post-suivi' or statut_ps like '/patient/fiche/statut-du-suivi/en-suivi', 1, 0)	) as postsuivietensuivi, 
+-- 	sum(if (statut_ps like '/patient/fiche/statut-du-suivi/decede' , 1, 0)) as decedes, 
+-- 	sum(if (statut_ps like '/patient/fiche/statut-du-suivi/disparu' , 1, 0)	) as disparus 
 -- from 
 -- (
 -- 	select 
@@ -4767,7 +4767,7 @@ select 'Tableau 23.A. - Données chiffrées sur le sexe';
 -- 				patients.firstname, 
 -- 				patients.lastname, 
 -- 				patients.hash, 
--- 				max(COALESCE(n.value, "--inconnu--")) as genre
+-- 				max(COALESCE(n.value, '--inconnu--')) as genre
 -- 			from 
 -- 				patients 
 --                 left join (
@@ -4811,29 +4811,29 @@ select 'Tableau 23.A. - Données chiffrées sur le sexe';
 -- 						left join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id 
 -- 						left join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id 
 -- 					where
--- 						s.path_string like "/patient/fiche/statut-du-suivi/decede"
+-- 						s.path_string like '/patient/fiche/statut-du-suivi/decede'
 -- 						and pi.start is not null
 -- 						and year(pi.start) = year(@refdate)
 -- 						and pi.end is null
 -- 						and pi.deleted_at is null
 -- 						and p.deleted_at is null
 -- 						and @refdate between coalesce(pi_antenna.start, @refdate) and COALESCE (pi_antenna.end, @refdate)
--- 						and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 						and s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 						and s_antenna.value like @antenna
 -- 				) dcd 
 -- 				left join patients as p2 on p2.pati_id = dcd.pati_id
 -- 				left join patients_information as pi2 on dcd.pati_id = pi2.pati_id
 -- 				left join suggestions as s2 on s2.sugg_id = pi2.sugg_id
 -- 			where
--- 				( s2.path_string like "/patient/fiche/statut-du-suivi/en-suivi" or s2.path_string like "/patient/fiche/statut-du-suivi/post-suivi")
--- 				and s2.path_string not like "/patient/fiche/statut-du-suivi/decede" 
+-- 				( s2.path_string like '/patient/fiche/statut-du-suivi/en-suivi' or s2.path_string like '/patient/fiche/statut-du-suivi/post-suivi')
+-- 				and s2.path_string not like '/patient/fiche/statut-du-suivi/decede' 
 -- 				and pi2.start is not null
 -- 				and pi2.deleted_at is null
 -- 				and p2.deleted_at is null
 -- 				and 
 -- 				( 
 -- 				( to_days(dcd.start) - to_days(pi2.end) < 7 ) 
--- 				or (dcd.paif_id = pi2.paif_id and s2.path_string like "/patient/fiche/statut-du-suivi/decede")
+-- 				or (dcd.paif_id = pi2.paif_id and s2.path_string like '/patient/fiche/statut-du-suivi/decede')
 -- 				)
 		
 -- 		) dd on dd.pati_id = nn.pati_id
@@ -4845,18 +4845,18 @@ select 'Tableau 23.A. - Données chiffrées sur le sexe';
 -- 	where 
 -- 		(	
 -- 			(
--- 				s2.path_string like "/patient/fiche/statut-du-suivi/en-suivi" 
+-- 				s2.path_string like '/patient/fiche/statut-du-suivi/en-suivi' 
 -- 			) 
 -- 			or (
--- 				s2.path_string like "/patient/fiche/statut-du-suivi/post-suivi" 
+-- 				s2.path_string like '/patient/fiche/statut-du-suivi/post-suivi' 
 -- 			) 
 -- 			or (
--- 				s2.path_string like "/patient/fiche/statut-du-suivi/decede" 
+-- 				s2.path_string like '/patient/fiche/statut-du-suivi/decede' 
 -- 				and year(pi2.start) = year(@refdate)
 -- 				and dd.status is not null
 -- 			) 
 -- 			or (
--- 				s2.path_string like "/patient/fiche/statut-du-suivi/disparu" 
+-- 				s2.path_string like '/patient/fiche/statut-du-suivi/disparu' 
 -- 				and year(pi2.start) = year(@refdate)
 -- 				and dd.status is not null
 -- 			)
@@ -4864,7 +4864,7 @@ select 'Tableau 23.A. - Données chiffrées sur le sexe';
 -- 		and @refdate between COALESCE(pi2.start, @refdate) and COALESCE (pi2.end, @refdate)
 -- 		and pi2.deleted_at is null 
 -- 		and @refdate between coalesce(pi_antenna.start, @refdate) and COALESCE (pi_antenna.end, @refdate)
--- 		and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 		and s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 		and s_antenna.value like @antenna
 
 -- 	order by genre, hash
@@ -4896,7 +4896,7 @@ select 'Tableau 23.A. - Données chiffrées sur le sexe - liste nominative';
     --         patients.firstname,
     --         patients.lastname,
     --         patients.hash,
-    --         COALESCE(n.value, "--inconnu--") as genre
+    --         COALESCE(n.value, '--inconnu--') as genre
     --     from
     --         patients
     --         left join (
@@ -4940,29 +4940,29 @@ select 'Tableau 23.A. - Données chiffrées sur le sexe - liste nominative';
 	-- 					left join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id 
 	-- 					left join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id 
 	-- 				where
-	-- 					s.path_string like "/patient/fiche/statut-du-suivi/decede"
+	-- 					s.path_string like '/patient/fiche/statut-du-suivi/decede'
 	-- 					and pi.start is not null
 	-- 					and year(pi.start) = year(@refdate)
 	-- 					and pi.end is null
 	-- 					and pi.deleted_at is null
 	-- 					and p.deleted_at is null
 	-- 					and @refdate between coalesce(pi_antenna.start, @refdate) and COALESCE (pi_antenna.end, @refdate)
-	-- 					and s_antenna.path_string like "/patient/suivi/antenne/%"
+	-- 					and s_antenna.path_string like '/patient/suivi/antenne/%'
 	-- 					and s_antenna.value like @antenna
 	-- 			) dcd 
 	-- 			left join patients as p2 on p2.pati_id = dcd.pati_id
 	-- 			left join patients_information as pi2 on dcd.pati_id = pi2.pati_id
 	-- 			left join suggestions as s2 on s2.sugg_id = pi2.sugg_id
 	-- 		where
-	-- 			( s2.path_string like "/patient/fiche/statut-du-suivi/en-suivi" or s2.path_string like "/patient/fiche/statut-du-suivi/post-suivi")
-	-- 			and s2.path_string not like "/patient/fiche/statut-du-suivi/decede" 
+	-- 			( s2.path_string like '/patient/fiche/statut-du-suivi/en-suivi' or s2.path_string like '/patient/fiche/statut-du-suivi/post-suivi')
+	-- 			and s2.path_string not like '/patient/fiche/statut-du-suivi/decede' 
 	-- 			and pi2.start is not null
 	-- 			and pi2.deleted_at is null
 	-- 			and p2.deleted_at is null
 	-- 			and 
 	-- 			( 
 	-- 			( to_days(dcd.start) - to_days(pi2.end) < 7 ) 
-	-- 			or (dcd.paif_id = pi2.paif_id and s2.path_string like "/patient/fiche/statut-du-suivi/decede")
+	-- 			or (dcd.paif_id = pi2.paif_id and s2.path_string like '/patient/fiche/statut-du-suivi/decede')
 	-- 			)
 		
 	-- 	) dd on dd.pati_id = nn.pati_id
@@ -4974,18 +4974,18 @@ select 'Tableau 23.A. - Données chiffrées sur le sexe - liste nominative';
 	-- where 
 	-- 	(	
 	-- 		(
-	-- 			s2.path_string like "/patient/fiche/statut-du-suivi/en-suivi" 
+	-- 			s2.path_string like '/patient/fiche/statut-du-suivi/en-suivi' 
 	-- 		) 
 	-- 		or (
-	-- 			s2.path_string like "/patient/fiche/statut-du-suivi/post-suivi" 
+	-- 			s2.path_string like '/patient/fiche/statut-du-suivi/post-suivi' 
 	-- 		) 
 	-- 		or (
-	-- 			s2.path_string like "/patient/fiche/statut-du-suivi/decede" 
+	-- 			s2.path_string like '/patient/fiche/statut-du-suivi/decede' 
 	-- 			and year(pi2.start) = year(@refdate)
 	-- 			and dd.status is not null
 	-- 		) 
 	-- 		or (
-	-- 			s2.path_string like "/patient/fiche/statut-du-suivi/disparu" 
+	-- 			s2.path_string like '/patient/fiche/statut-du-suivi/disparu' 
 	-- 			and year(pi2.start) = year(@refdate)
 	-- 			and dd.status is not null
 	-- 		)
@@ -4993,7 +4993,7 @@ select 'Tableau 23.A. - Données chiffrées sur le sexe - liste nominative';
 	-- 	and @refdate between COALESCE(pi2.start, @refdate) and COALESCE (pi2.end, @refdate)
 	-- 	and pi2.deleted_at is null 
 	-- 	and @refdate between coalesce(pi_antenna.start, @refdate) and COALESCE (pi_antenna.end, @refdate)
-	-- 	and s_antenna.path_string like "/patient/suivi/antenne/%"
+	-- 	and s_antenna.path_string like '/patient/suivi/antenne/%'
 	-- 	and s_antenna.value like @antenna
 
 	-- order by genre, statut, hash;
@@ -5003,290 +5003,290 @@ select 'Tableau 23.A. - Données chiffrées sur le sexe - liste nominative';
 select 'Tableau 23.C. - Données chiffrées sur le sexe selon le programme de logement des patients';
 
 
--- select 
--- 	genre, 
--- 	sum(if (programme like "/patient/suivi/programme/housing-fast" and exstatut is null, 1, 0)) as housingfast, 
--- 	sum(if (programme like "/patient/suivi/programme/housing-first" and exstatut is null, 1, 0)) as housingfirst, 
--- 	sum(if (programme like "/patient/suivi/programme/housing-%" and exstatut is null, 1, 0)) as total,
--- 	sum(if (programme like "/patient/suivi/programme/housing-%" and pstatus like "/patient/fiche/statut-du-suivi/decede" and year(pstatus_start) like year(@refdate), 1, 0)) as decedes, 
--- 	sum(if (programme like "/patient/suivi/programme/housing-%" and pstatus like "/patient/fiche/statut-du-suivi/disparu" and year(pstatus_start) like year(@refyear), 1, 0)) as disparus 
+select 
+	genre, 
+	sum(if (programme like '/patient/suivi/programme/housing-fast' and exstatut is null, 1, 0)) as housingfast, 
+	sum(if (programme like '/patient/suivi/programme/housing-first' and exstatut is null, 1, 0)) as housingfirst, 
+	sum(if (programme like '/patient/suivi/programme/housing-%' and exstatut is null, 1, 0)) as total,
+	sum(if (programme like '/patient/suivi/programme/housing-%' and pstatus like '/patient/fiche/statut-du-suivi/decede' and year(pstatus_start) like year(@refdate), 1, 0)) as decedes, 
+	sum(if (programme like '/patient/suivi/programme/housing-%' and pstatus like '/patient/fiche/statut-du-suivi/disparu' and year(pstatus_start) like year(@refyear), 1, 0)) as disparus 
 
--- from 
--- (
+from 
+(
 
--- 	select 
--- 		distinct
--- 		hash,
--- 		firstname,
--- 		lastname,
--- 		genre,
--- 		s_stat.value,
---         pi_stat.start as pstatus_start,
--- 		dd.status as 'exstatut',
---         programme_s.path_string as programme,
---         s_stat.path_string as pstatus
--- 	from
--- 	(
--- 		select 
--- 			distinct
--- 			patients.pati_id, 
--- 			patients.firstname, 
--- 			patients.lastname, 
--- 			patients.hash,
--- 			max(COALESCE(n.value, "--inconnu--")) as genre
--- 		from 
--- 			patients 
--- 			left join (
--- 				select 
--- 					s.sugg_id as si, 
--- 					s.value, 
--- 					pi.pati_id 
--- 				from 
--- 					patients_information pi 
--- 					inner join information_template_element pitel on pitel.itel_id = pi.itel_id 
--- 					inner join suggestions stel on stel.sugg_id = pitel.suge_id 
--- 					inner JOIN suggestions s on s.sugg_id = pi.sugg_id 
--- 				where 
--- 					stel.path_string like '/patient/fiche/information-generale/genre%'
--- 					and @refdate between COALESCE(pi.start, @refdate) and COALESCE (pi.end, @refdate)
--- 					and pi.deleted_at is null
--- 			) n on patients.pati_id = n.pati_id 
--- 		where patients.deleted_at is null
--- 		group by
--- 			patients.pati_id,
--- 			patients.hash,
--- 			patients.firstname,
--- 			patients.lastname
--- 	) nn
--- 	left join
--- 	( /* only deceased and missing coming from suivi and post-suivi*/
--- 		select
--- 			distinct
--- 			p2.pati_id,
--- 			s2.value as status
--- 		from
--- 			(
--- 				SELECT
--- 					p.pati_id,
--- 					pi.start,
--- 					pi.paif_id
--- 				FROM
--- 					patients as p
--- 					inner join patients_information as pi on p.pati_id = pi.pati_id
--- 					inner join suggestions as s on s.sugg_id = pi.sugg_id
--- 					left join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id
--- 					left join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id
--- 				where
--- 					s.path_string like "/patient/fiche/statut-du-suivi/decede"
--- 					and pi.start is not null
--- 					and year(pi.start) = year(@refdate)
--- 					and pi.end is null
--- 					and pi.deleted_at is null
--- 					and p.deleted_at is null
--- 					and @refdate between coalesce(pi_antenna.start, @refdate) and COALESCE (pi_antenna.end, @refdate)
--- 					and s_antenna.path_string like "/patient/suivi/antenne/%"
--- 					and s_antenna.value like @antenna
--- 			) dcd
--- 			left join patients as p2 on p2.pati_id = dcd.pati_id
--- 			left join patients_information as pi2 on dcd.pati_id = pi2.pati_id
--- 			left join suggestions as s2 on s2.sugg_id = pi2.sugg_id
--- 		where
--- 			( s2.path_string like "/patient/fiche/statut-du-suivi/en-suivi" or s2.path_string like "/patient/fiche/statut-du-suivi/post-suivi")
--- 			and s2.path_string not like "/patient/fiche/statut-du-suivi/decede"
--- 			and pi2.start is not null
--- 			and pi2.deleted_at is null
--- 			and p2.deleted_at is null
--- 			and
--- 			(
--- 				( to_days(dcd.start) - to_days(pi2.end) < 7 )
--- 				or (dcd.paif_id = pi2.paif_id and s2.path_string like "/patient/fiche/statut-du-suivi/decede")
--- 			)
+	select 
+		distinct
+		hash,
+		firstname,
+		lastname,
+		genre,
+		s_stat.value,
+        pi_stat.start as pstatus_start,
+		dd.status as 'exstatut',
+        programme_s.path_string as programme,
+        s_stat.path_string as pstatus
+	from
+	(
+		select 
+			distinct
+			patients.pati_id, 
+			patients.firstname, 
+			patients.lastname, 
+			patients.hash,
+			max(COALESCE(n.value, '--inconnu--')) as genre
+		from 
+			patients 
+			left join (
+				select 
+					s.sugg_id as si, 
+					s.value, 
+					pi.pati_id 
+				from 
+					patients_information pi 
+					inner join information_template_element pitel on pitel.itel_id = pi.itel_id 
+					inner join suggestions stel on stel.sugg_id = pitel.suge_id 
+					inner JOIN suggestions s on s.sugg_id = pi.sugg_id 
+				where 
+					stel.path_string like '/patient/fiche/information-generale/genre%'
+					and @refdate between COALESCE(pi.start, @refdate) and COALESCE (pi.end, @refdate)
+					and pi.deleted_at is null
+			) n on patients.pati_id = n.pati_id 
+		where patients.deleted_at is null
+		group by
+			patients.pati_id,
+			patients.hash,
+			patients.firstname,
+			patients.lastname
+	) nn
+	left join
+	( /* only deceased and missing coming from suivi and post-suivi*/
+		select
+			distinct
+			p2.pati_id,
+			s2.value as status
+		from
+			(
+				SELECT
+					p.pati_id,
+					pi.start,
+					pi.paif_id
+				FROM
+					patients as p
+					inner join patients_information as pi on p.pati_id = pi.pati_id
+					inner join suggestions as s on s.sugg_id = pi.sugg_id
+					left join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id
+					left join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id
+				where
+					s.path_string like '/patient/fiche/statut-du-suivi/decede'
+					and pi.start is not null
+					and year(pi.start) = year(@refdate)
+					and pi.end is null
+					and pi.deleted_at is null
+					and p.deleted_at is null
+					and @refdate between coalesce(pi_antenna.start, @refdate) and COALESCE (pi_antenna.end, @refdate)
+					and s_antenna.path_string like '/patient/suivi/antenne/%'
+					and s_antenna.value like @antenna
+			) dcd
+			left join patients as p2 on p2.pati_id = dcd.pati_id
+			left join patients_information as pi2 on dcd.pati_id = pi2.pati_id
+			left join suggestions as s2 on s2.sugg_id = pi2.sugg_id
+		where
+			( s2.path_string like '/patient/fiche/statut-du-suivi/en-suivi' or s2.path_string like '/patient/fiche/statut-du-suivi/post-suivi')
+			and s2.path_string not like '/patient/fiche/statut-du-suivi/decede'
+			and pi2.start is not null
+			and pi2.deleted_at is null
+			and p2.deleted_at is null
+			and
+			(
+				( to_days(dcd.start) - to_days(pi2.end) < 7 )
+				or (dcd.paif_id = pi2.paif_id and s2.path_string like '/patient/fiche/statut-du-suivi/decede')
+			)
 		
--- 	) dd on dd.pati_id = nn.pati_id
+	) dd on dd.pati_id = nn.pati_id
 	
---     inner join patients_information as programme on nn.pati_id = programme.pati_id
--- 	inner join suggestions as programme_s on programme_s.sugg_id = programme.sugg_id
+    inner join patients_information as programme on nn.pati_id = programme.pati_id
+	inner join suggestions as programme_s on programme_s.sugg_id = programme.sugg_id
 	
---     inner join patients_information as pi_stat on nn.pati_id = pi_stat.pati_id
--- 	inner join suggestions as s_stat on s_stat.sugg_id = pi_stat.sugg_id
+    inner join patients_information as pi_stat on nn.pati_id = pi_stat.pati_id
+	inner join suggestions as s_stat on s_stat.sugg_id = pi_stat.sugg_id
 	
---     left join patients_information pi_antenna on pi_antenna.pati_id = nn.pati_id
--- 	left join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id
+    left join patients_information pi_antenna on pi_antenna.pati_id = nn.pati_id
+	left join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id
 
--- 	where
--- 		programme_s.path_string like "/patient/suivi/programme/housing-%"
--- 		and @refdate between COALESCE(programme.start, @refdate) and COALESCE (programme.end, @refdate)
--- 		and
--- 		(	
--- 			(
--- 				s_stat.path_string like "/patient/fiche/statut-du-suivi/en-suivi"
--- 				and @refdate between COALESCE(pi_stat.start, @refdate) and COALESCE (pi_stat.end, @refdate)
--- 			)
--- 			or (
--- 				s_stat.path_string like "/patient/fiche/statut-du-suivi/post-suivi"
--- 				and @refdate between COALESCE(pi_stat.start, @refdate) and COALESCE (pi_stat.end, @refdate)
--- 			)
--- 			or (
--- 				s_stat.path_string like "/patient/fiche/statut-du-suivi/decede"
--- 				and year(pi_stat.start) = year(@refdate)
--- 				and dd.status is not null
--- 			)
--- 			or (
--- 				s_stat.path_string like "/patient/fiche/statut-du-suivi/disparu"
--- 				and year(pi_stat.start) = year(@refdate)
--- 				and dd.status is not null
--- 			)
--- 		)
--- 		and programme.deleted_at is null
--- 		and @refdate between coalesce(pi_antenna.start, @refdate) and COALESCE (pi_antenna.end, @refdate)
--- 		and s_antenna.path_string like "/patient/suivi/antenne/%"
--- 		and s_antenna.value like @antenna
---     	and pi_antenna.deleted_at is null
---     	and pi_stat.deleted_at is null
+	where
+		programme_s.path_string like '/patient/suivi/programme/housing-%'
+		and @refdate between COALESCE(programme.start, @refdate) and COALESCE (programme.end, @refdate)
+		and
+		(	
+			(
+				s_stat.path_string like '/patient/fiche/statut-du-suivi/en-suivi'
+				and @refdate between COALESCE(pi_stat.start, @refdate) and COALESCE (pi_stat.end, @refdate)
+			)
+			or (
+				s_stat.path_string like '/patient/fiche/statut-du-suivi/post-suivi'
+				and @refdate between COALESCE(pi_stat.start, @refdate) and COALESCE (pi_stat.end, @refdate)
+			)
+			or (
+				s_stat.path_string like '/patient/fiche/statut-du-suivi/decede'
+				and year(pi_stat.start) = year(@refdate)
+				and dd.status is not null
+			)
+			or (
+				s_stat.path_string like '/patient/fiche/statut-du-suivi/disparu'
+				and year(pi_stat.start) = year(@refdate)
+				and dd.status is not null
+			)
+		)
+		and programme.deleted_at is null
+		and @refdate between coalesce(pi_antenna.start, @refdate) and COALESCE (pi_antenna.end, @refdate)
+		and s_antenna.path_string like '/patient/suivi/antenne/%'
+		and s_antenna.value like @antenna
+    	and pi_antenna.deleted_at is null
+    	and pi_stat.deleted_at is null
 
--- 	order by programme, pstatus, genre, hash
+	order by programme, pstatus, genre, hash
 
--- ) f
--- group by 
--- 	genre 
--- order by 
--- 	total desc;
+) f
+group by 
+	genre 
+order by 
+	total desc;
 
 
 	
 select 'Tableau 23.C. - Données chiffrées sur le sexe selon le programme de logement des patients - liste nominative';
 
-	-- select 
-	-- 	distinct
-	-- 	hash,
-	-- 	firstname,
-	-- 	lastname,
-	-- 	genre,
-	-- 	s_stat.value,
-    --     pi_stat.start as pstatus_start,
-	-- 	dd.status as 'exstatut',
-    --     programme_s.path_string as programme,
-    --     s_stat.path_string as pstatus
-	-- from
-	-- (
-	-- 	select 
-	-- 		distinct
-	-- 		patients.pati_id, 
-	-- 		patients.firstname, 
-	-- 		patients.lastname, 
-	-- 		patients.hash,
-	-- 		max(COALESCE(n.value, "--inconnu--")) as genre
-	-- 	from 
-	-- 		patients 
-	-- 		left join (
-	-- 			select 
-	-- 				s.sugg_id as si, 
-	-- 				s.value, 
-	-- 				pi.pati_id 
-	-- 			from 
-	-- 				patients_information pi 
-	-- 				inner join information_template_element pitel on pitel.itel_id = pi.itel_id 
-	-- 				inner join suggestions stel on stel.sugg_id = pitel.suge_id 
-	-- 				inner JOIN suggestions s on s.sugg_id = pi.sugg_id 
-	-- 			where 
-	-- 				stel.path_string like '/patient/fiche/information-generale/genre%'
-	-- 				and @refdate between COALESCE(pi.start, @refdate) and COALESCE (pi.end, @refdate)
-	-- 				and pi.deleted_at is null
-	-- 		) n on patients.pati_id = n.pati_id 
-	-- 	where patients.deleted_at is null
-	-- 	group by
-	-- 		patients.pati_id,
-	-- 		patients.hash,
-	-- 		patients.firstname,
-	-- 		patients.lastname
-	-- ) nn
-	-- left join
-	-- ( /* only deceased and missing coming from suivi and post-suivi*/
-	-- 	select
-	-- 		distinct
-	-- 		p2.pati_id,
-	-- 		s2.value as status
-	-- 	from
-	-- 		(
-	-- 			SELECT
-	-- 				p.pati_id,
-	-- 				pi.start,
-	-- 				pi.paif_id
-	-- 			FROM
-	-- 				patients as p
-	-- 				inner join patients_information as pi on p.pati_id = pi.pati_id
-	-- 				inner join suggestions as s on s.sugg_id = pi.sugg_id
-	-- 				left join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id
-	-- 				left join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id
-	-- 			where
-	-- 				s.path_string like "/patient/fiche/statut-du-suivi/decede"
-	-- 				and pi.start is not null
-	-- 				and year(pi.start) = year(@refdate)
-	-- 				and pi.end is null
-	-- 				and pi.deleted_at is null
-	-- 				and p.deleted_at is null
-	-- 				and @refdate between coalesce(pi_antenna.start, @refdate) and COALESCE (pi_antenna.end, @refdate)
-	-- 				and s_antenna.path_string like "/patient/suivi/antenne/%"
-	-- 				and s_antenna.value like @antenna
-	-- 		) dcd
-	-- 		left join patients as p2 on p2.pati_id = dcd.pati_id
-	-- 		left join patients_information as pi2 on dcd.pati_id = pi2.pati_id
-	-- 		left join suggestions as s2 on s2.sugg_id = pi2.sugg_id
-	-- 	where
-	-- 		( s2.path_string like "/patient/fiche/statut-du-suivi/en-suivi" or s2.path_string like "/patient/fiche/statut-du-suivi/post-suivi")
-	-- 		and s2.path_string not like "/patient/fiche/statut-du-suivi/decede"
-	-- 		and pi2.start is not null
-	-- 		and pi2.deleted_at is null
-	-- 		and p2.deleted_at is null
-	-- 		and
-	-- 		(
-	-- 			( to_days(dcd.start) - to_days(pi2.end) < 7 )
-	-- 			or (dcd.paif_id = pi2.paif_id and s2.path_string like "/patient/fiche/statut-du-suivi/decede")
-	-- 		)
+	select 
+		distinct
+		hash,
+		firstname,
+		lastname,
+		genre,
+		s_stat.value,
+        pi_stat.start as pstatus_start,
+		dd.status as 'exstatut',
+        programme_s.path_string as programme,
+        s_stat.path_string as pstatus
+	from
+	(
+		select 
+			distinct
+			patients.pati_id, 
+			patients.firstname, 
+			patients.lastname, 
+			patients.hash,
+			max(COALESCE(n.value, '--inconnu--')) as genre
+		from 
+			patients 
+			left join (
+				select 
+					s.sugg_id as si, 
+					s.value, 
+					pi.pati_id 
+				from 
+					patients_information pi 
+					inner join information_template_element pitel on pitel.itel_id = pi.itel_id 
+					inner join suggestions stel on stel.sugg_id = pitel.suge_id 
+					inner JOIN suggestions s on s.sugg_id = pi.sugg_id 
+				where 
+					stel.path_string like '/patient/fiche/information-generale/genre%'
+					and @refdate between COALESCE(pi.start, @refdate) and COALESCE (pi.end, @refdate)
+					and pi.deleted_at is null
+			) n on patients.pati_id = n.pati_id 
+		where patients.deleted_at is null
+		group by
+			patients.pati_id,
+			patients.hash,
+			patients.firstname,
+			patients.lastname
+	) nn
+	left join
+	( /* only deceased and missing coming from suivi and post-suivi*/
+		select
+			distinct
+			p2.pati_id,
+			s2.value as status
+		from
+			(
+				SELECT
+					p.pati_id,
+					pi.start,
+					pi.paif_id
+				FROM
+					patients as p
+					inner join patients_information as pi on p.pati_id = pi.pati_id
+					inner join suggestions as s on s.sugg_id = pi.sugg_id
+					left join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id
+					left join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id
+				where
+					s.path_string like '/patient/fiche/statut-du-suivi/decede'
+					and pi.start is not null
+					and year(pi.start) = year(@refdate)
+					and pi.end is null
+					and pi.deleted_at is null
+					and p.deleted_at is null
+					and @refdate between coalesce(pi_antenna.start, @refdate) and COALESCE (pi_antenna.end, @refdate)
+					and s_antenna.path_string like '/patient/suivi/antenne/%'
+					and s_antenna.value like @antenna
+			) dcd
+			left join patients as p2 on p2.pati_id = dcd.pati_id
+			left join patients_information as pi2 on dcd.pati_id = pi2.pati_id
+			left join suggestions as s2 on s2.sugg_id = pi2.sugg_id
+		where
+			( s2.path_string like '/patient/fiche/statut-du-suivi/en-suivi' or s2.path_string like '/patient/fiche/statut-du-suivi/post-suivi')
+			and s2.path_string not like '/patient/fiche/statut-du-suivi/decede'
+			and pi2.start is not null
+			and pi2.deleted_at is null
+			and p2.deleted_at is null
+			and
+			(
+				( to_days(dcd.start) - to_days(pi2.end) < 7 )
+				or (dcd.paif_id = pi2.paif_id and s2.path_string like '/patient/fiche/statut-du-suivi/decede')
+			)
 		
-	-- ) dd on dd.pati_id = nn.pati_id
+	) dd on dd.pati_id = nn.pati_id
 	
-    -- inner join patients_information as programme on nn.pati_id = programme.pati_id
-	-- inner join suggestions as programme_s on programme_s.sugg_id = programme.sugg_id
+    inner join patients_information as programme on nn.pati_id = programme.pati_id
+	inner join suggestions as programme_s on programme_s.sugg_id = programme.sugg_id
 	
-    -- inner join patients_information as pi_stat on nn.pati_id = pi_stat.pati_id
-	-- inner join suggestions as s_stat on s_stat.sugg_id = pi_stat.sugg_id
+    inner join patients_information as pi_stat on nn.pati_id = pi_stat.pati_id
+	inner join suggestions as s_stat on s_stat.sugg_id = pi_stat.sugg_id
 	
-    -- left join patients_information pi_antenna on pi_antenna.pati_id = nn.pati_id
-	-- left join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id
+    left join patients_information pi_antenna on pi_antenna.pati_id = nn.pati_id
+	left join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id
 
-	-- where
-	-- 	programme_s.path_string like "/patient/suivi/programme/housing-%"
-	-- 	and @refdate between COALESCE(programme.start, @refdate) and COALESCE (programme.end, @refdate)
-	-- 	and
-	-- 	(	
-	-- 		(
-	-- 			s_stat.path_string like "/patient/fiche/statut-du-suivi/en-suivi"
-	-- 			and @refdate between COALESCE(pi_stat.start, @refdate) and COALESCE (pi_stat.end, @refdate)
-	-- 		)
-	-- 		or (
-	-- 			s_stat.path_string like "/patient/fiche/statut-du-suivi/post-suivi"
-	-- 			and @refdate between COALESCE(pi_stat.start, @refdate) and COALESCE (pi_stat.end, @refdate)
-	-- 		)
-	-- 		or (
-	-- 			s_stat.path_string like "/patient/fiche/statut-du-suivi/decede"
-	-- 			and year(pi_stat.start) = year(@refdate)
-	-- 			and dd.status is not null
-	-- 		)
-	-- 		or (
-	-- 			s_stat.path_string like "/patient/fiche/statut-du-suivi/disparu"
-	-- 			and year(pi_stat.start) = year(@refdate)
-	-- 			and dd.status is not null
-	-- 		)
-	-- 	)
-	-- 	and programme.deleted_at is null
-	-- 	and @refdate between coalesce(pi_antenna.start, @refdate) and COALESCE (pi_antenna.end, @refdate)
-	-- 	and s_antenna.path_string like "/patient/suivi/antenne/%"
-	-- 	and s_antenna.value like @antenna
-    -- 	and pi_antenna.deleted_at is null
-    -- 	and pi_stat.deleted_at is null
+	where
+		programme_s.path_string like '/patient/suivi/programme/housing-%'
+		and @refdate between COALESCE(programme.start, @refdate) and COALESCE (programme.end, @refdate)
+		and
+		(	
+			(
+				s_stat.path_string like '/patient/fiche/statut-du-suivi/en-suivi'
+				and @refdate between COALESCE(pi_stat.start, @refdate) and COALESCE (pi_stat.end, @refdate)
+			)
+			or (
+				s_stat.path_string like '/patient/fiche/statut-du-suivi/post-suivi'
+				and @refdate between COALESCE(pi_stat.start, @refdate) and COALESCE (pi_stat.end, @refdate)
+			)
+			or (
+				s_stat.path_string like '/patient/fiche/statut-du-suivi/decede'
+				and year(pi_stat.start) = year(@refdate)
+				and dd.status is not null
+			)
+			or (
+				s_stat.path_string like '/patient/fiche/statut-du-suivi/disparu'
+				and year(pi_stat.start) = year(@refdate)
+				and dd.status is not null
+			)
+		)
+		and programme.deleted_at is null
+		and @refdate between coalesce(pi_antenna.start, @refdate) and COALESCE (pi_antenna.end, @refdate)
+		and s_antenna.path_string like '/patient/suivi/antenne/%'
+		and s_antenna.value like @antenna
+    	and pi_antenna.deleted_at is null
+    	and pi_stat.deleted_at is null
 
-	-- order by programme, pstatus, genre, hash;
+	order by programme, pstatus, genre, hash;
 
 
 select 'TABLEAU 24 : AGE MOYEN DE NOS PATIENTS';
@@ -5302,7 +5302,7 @@ select 'Tableau 24.A.1 – Age des personnes dans le suivi - Ages moyen, min et 
 -- 				FROM_DAYS(
 -- 					DATEDIFF(@refdate, birth)
 -- 				), 
--- 				"%Y"
+-- 				'%Y'
 -- 			)+ 0
 -- 		) AS SIGNED
 -- 	) AS 'Age moyen', 
@@ -5312,7 +5312,7 @@ select 'Tableau 24.A.1 – Age des personnes dans le suivi - Ages moyen, min et 
 -- 				FROM_DAYS(
 -- 					DATEDIFF(@refdate, birth)
 -- 				), 
--- 				"%Y"
+-- 				'%Y'
 -- 			)+ 0
 -- 		) AS SIGNED
 -- 	) as 'Age maximum', 
@@ -5322,7 +5322,7 @@ select 'Tableau 24.A.1 – Age des personnes dans le suivi - Ages moyen, min et 
 -- 				FROM_DAYS(
 -- 					DATEDIFF(@refdate, birth)
 -- 				), 
--- 				"%Y"
+-- 				'%Y'
 -- 			)+ 0
 -- 		) AS SIGNED
 -- 	) as 'Age minimum' 
@@ -5349,17 +5349,17 @@ select 'Tableau 24.A.1 – Age des personnes dans le suivi - Ages moyen, min et 
 -- 		where 
 -- 			(
 -- 				(
--- 					s.path_string like "/patient/fiche/statut-du-suivi/en-suivi" 
+-- 					s.path_string like '/patient/fiche/statut-du-suivi/en-suivi' 
 -- 				) 
 -- 				or (
--- 					s.path_string like "/patient/fiche/statut-du-suivi/post-suivi" 
+-- 					s.path_string like '/patient/fiche/statut-du-suivi/post-suivi' 
 -- 				) 
 -- 				or (
--- 					s.path_string like "/patient/fiche/statut-du-suivi/decede" 
+-- 					s.path_string like '/patient/fiche/statut-du-suivi/decede' 
 -- 					and year(pi.start) like year(@refdate)
 -- 				) 
 -- 				or (
--- 					s.path_string like "/patient/fiche/statut-du-suivi/disparu" 
+-- 					s.path_string like '/patient/fiche/statut-du-suivi/disparu' 
 -- 					and year(pi.start) like year(@refdate)
 -- 				)
 -- 			) 
@@ -5367,7 +5367,7 @@ select 'Tableau 24.A.1 – Age des personnes dans le suivi - Ages moyen, min et 
 -- 			and pi.deleted_at is null 
 -- 			and p.deleted_at is null 
 -- 			and @refdate between coalesce(pi_antenna.start, @refdate) and COALESCE (pi_antenna.end, @refdate)
--- 			and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 			and s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 			and s_antenna.value like @antenna
 -- 		order by 
 -- 			s.value, 
@@ -5394,29 +5394,29 @@ select 'Tableau 24.A.1 – Age des personnes dans le suivi - Ages moyen, min et 
 -- 					left join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id 
 -- 					left join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id 
 -- 				where
--- 					s.path_string like "/patient/fiche/statut-du-suivi/decede"
+-- 					s.path_string like '/patient/fiche/statut-du-suivi/decede'
 -- 					and pi.start is not null
 -- 					and year(pi.start) like year(@refdate)
 -- 					and pi.end is null
 -- 					and pi.deleted_at is null
 -- 					and p.deleted_at is null
 -- 					and @refdate between coalesce(pi_antenna.start, @refdate) and COALESCE (pi_antenna.end, @refdate)
--- 					and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 					and s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 					and s_antenna.value like @antenna
 -- 			) dcd 
 -- 			left join patients as p2 on p2.pati_id = dcd.pati_id
 -- 			left join patients_information as pi2 on dcd.pati_id = pi2.pati_id
 -- 			left join suggestions as s2 on s2.sugg_id = pi2.sugg_id
 -- 		where
--- 			( s2.path_string like "/patient/fiche/statut-du-suivi/en-suivi" or s2.path_string like "/patient/fiche/statut-du-suivi/post-suivi")
--- 			and s2.path_string not like "/patient/fiche/statut-du-suivi/decede" 
+-- 			( s2.path_string like '/patient/fiche/statut-du-suivi/en-suivi' or s2.path_string like '/patient/fiche/statut-du-suivi/post-suivi')
+-- 			and s2.path_string not like '/patient/fiche/statut-du-suivi/decede' 
 -- 			and pi2.start is not null
 -- 			and pi2.deleted_at is null
 -- 			and p2.deleted_at is null
 -- 			and 
 -- 			( 
 -- 			( to_days(dcd.start) - to_days(pi2.end) < 7 ) 
--- 			or (dcd.paif_id = pi2.paif_id and s2.path_string like "/patient/fiche/statut-du-suivi/decede")
+-- 			or (dcd.paif_id = pi2.paif_id and s2.path_string like '/patient/fiche/statut-du-suivi/decede')
 -- 			)
 	
 -- 	) dd on dd.pati_id = q.pati_id
@@ -5426,13 +5426,13 @@ select 'Tableau 24.A.1 – Age des personnes dans le suivi - Ages moyen, min et 
 -- 	s.path_string like '/patient/fiche/information-generale/genre%'
 --     and (
 -- 		(
--- 			q.path_string like "/patient/fiche/statut-du-suivi/en-suivi" 
---             or q.path_string like "/patient/fiche/statut-du-suivi/post-suivi"
+-- 			q.path_string like '/patient/fiche/statut-du-suivi/en-suivi' 
+--             or q.path_string like '/patient/fiche/statut-du-suivi/post-suivi'
 -- 		)
 --         or
 --         (
--- 			( q.path_string like "/patient/fiche/statut-du-suivi/decede" or 
---             q.path_string like "/patient/fiche/statut-du-suivi/post-suivi"
+-- 			( q.path_string like '/patient/fiche/statut-du-suivi/decede' or 
+--             q.path_string like '/patient/fiche/statut-du-suivi/post-suivi'
 --             )
 --             and dd.status is not null
 --         )
@@ -5465,7 +5465,7 @@ select 'Tableau 24.A.1 – Age des personnes dans le suivi - Ages moyen, min et 
 -- 				FROM_DAYS(
 -- 					DATEDIFF(@refdate, birth)
 -- 				), 
--- 				"%Y"
+-- 				'%Y'
 -- 			)+ 0
 -- 		AS SIGNED
 -- 	) AS 'Age '
@@ -5492,17 +5492,17 @@ select 'Tableau 24.A.1 – Age des personnes dans le suivi - Ages moyen, min et 
 -- 		where 
 -- 			(
 -- 				(
--- 					s.path_string like "/patient/fiche/statut-du-suivi/en-suivi" 
+-- 					s.path_string like '/patient/fiche/statut-du-suivi/en-suivi' 
 -- 				) 
 -- 				or (
--- 					s.path_string like "/patient/fiche/statut-du-suivi/post-suivi" 
+-- 					s.path_string like '/patient/fiche/statut-du-suivi/post-suivi' 
 -- 				) 
 -- 				or (
--- 					s.path_string like "/patient/fiche/statut-du-suivi/decede" 
+-- 					s.path_string like '/patient/fiche/statut-du-suivi/decede' 
 -- 					and year(pi.start) like year(@refdate)
 -- 				) 
 -- 				or (
--- 					s.path_string like "/patient/fiche/statut-du-suivi/disparu" 
+-- 					s.path_string like '/patient/fiche/statut-du-suivi/disparu' 
 -- 					and year(pi.start) like year(@refdate)
 -- 				)
 -- 			) 
@@ -5510,7 +5510,7 @@ select 'Tableau 24.A.1 – Age des personnes dans le suivi - Ages moyen, min et 
 -- 			and pi.deleted_at is null 
 -- 			and p.deleted_at is null 
 -- 			and @refdate between coalesce(pi_antenna.start, @refdate) and COALESCE (pi_antenna.end, @refdate)
--- 			and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 			and s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 			and s_antenna.value like @antenna
 -- 		order by 
 -- 			s.value, 
@@ -5537,29 +5537,29 @@ select 'Tableau 24.A.1 – Age des personnes dans le suivi - Ages moyen, min et 
 -- 					left join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id 
 -- 					left join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id 
 -- 				where
--- 					s.path_string like "/patient/fiche/statut-du-suivi/decede"
+-- 					s.path_string like '/patient/fiche/statut-du-suivi/decede'
 -- 					and pi.start is not null
 -- 					and year(pi.start) like year(@refdate)
 -- 					and pi.end is null
 -- 					and pi.deleted_at is null
 -- 					and p.deleted_at is null
 -- 					and @refdate between coalesce(pi_antenna.start, @refdate) and COALESCE (pi_antenna.end, @refdate)
--- 					and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 					and s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 					and s_antenna.value like @antenna
 -- 			) dcd 
 -- 			left join patients as p2 on p2.pati_id = dcd.pati_id
 -- 			left join patients_information as pi2 on dcd.pati_id = pi2.pati_id
 -- 			left join suggestions as s2 on s2.sugg_id = pi2.sugg_id
 -- 		where
--- 			( s2.path_string like "/patient/fiche/statut-du-suivi/en-suivi" or s2.path_string like "/patient/fiche/statut-du-suivi/post-suivi")
--- 			and s2.path_string not like "/patient/fiche/statut-du-suivi/decede" 
+-- 			( s2.path_string like '/patient/fiche/statut-du-suivi/en-suivi' or s2.path_string like '/patient/fiche/statut-du-suivi/post-suivi')
+-- 			and s2.path_string not like '/patient/fiche/statut-du-suivi/decede' 
 -- 			and pi2.start is not null
 -- 			and pi2.deleted_at is null
 -- 			and p2.deleted_at is null
 -- 			and 
 -- 			( 
 -- 			( to_days(dcd.start) - to_days(pi2.end) < 7 ) 
--- 			or (dcd.paif_id = pi2.paif_id and s2.path_string like "/patient/fiche/statut-du-suivi/decede")
+-- 			or (dcd.paif_id = pi2.paif_id and s2.path_string like '/patient/fiche/statut-du-suivi/decede')
 -- 			)
 	
 -- 	) dd on dd.pati_id = q.pati_id
@@ -5569,13 +5569,13 @@ select 'Tableau 24.A.1 – Age des personnes dans le suivi - Ages moyen, min et 
 -- 	s.path_string like '/patient/fiche/information-generale/genre%'
 --     and (
 -- 		(
--- 			q.path_string like "/patient/fiche/statut-du-suivi/en-suivi" 
---             or q.path_string like "/patient/fiche/statut-du-suivi/post-suivi"
+-- 			q.path_string like '/patient/fiche/statut-du-suivi/en-suivi' 
+--             or q.path_string like '/patient/fiche/statut-du-suivi/post-suivi'
 -- 		)
 --         or
 --         (
--- 			( q.path_string like "/patient/fiche/statut-du-suivi/decede" or 
---             q.path_string like "/patient/fiche/statut-du-suivi/post-suivi"
+-- 			( q.path_string like '/patient/fiche/statut-du-suivi/decede' or 
+--             q.path_string like '/patient/fiche/statut-du-suivi/post-suivi'
 --             )
 --             and dd.status is not null
 --         )
@@ -5603,7 +5603,7 @@ select 'Tableau 24.A.1 – Age des personnes dans le suivi/post-suivi - Ages moy
 -- 				FROM_DAYS(
 -- 					DATEDIFF(@refdate, birth)
 -- 				), 
--- 				"%Y"
+-- 				'%Y'
 -- 			)+ 0
 -- 		) AS SIGNED
 -- 	) AS 'Age moyen', 
@@ -5613,7 +5613,7 @@ select 'Tableau 24.A.1 – Age des personnes dans le suivi/post-suivi - Ages moy
 -- 				FROM_DAYS(
 -- 					DATEDIFF(@refdate, birth)
 -- 				), 
--- 				"%Y"
+-- 				'%Y'
 -- 			)+ 0
 -- 		) AS SIGNED
 -- 	) as 'Age maximum', 
@@ -5623,7 +5623,7 @@ select 'Tableau 24.A.1 – Age des personnes dans le suivi/post-suivi - Ages moy
 -- 				FROM_DAYS(
 -- 					DATEDIFF(@refdate, birth)
 -- 				), 
--- 				"%Y"
+-- 				'%Y'
 -- 			)+ 0
 -- 		) AS SIGNED
 -- 	) as 'Age minimum' 
@@ -5649,17 +5649,17 @@ select 'Tableau 24.A.1 – Age des personnes dans le suivi/post-suivi - Ages moy
 -- 		where 
 -- 			(
 -- 				(
--- 					s.path_string like "/patient/fiche/statut-du-suivi/en-suivi" 
+-- 					s.path_string like '/patient/fiche/statut-du-suivi/en-suivi' 
 -- 				) 
 -- 				or (
--- 					s.path_string like "/patient/fiche/statut-du-suivi/post-suivi" 
+-- 					s.path_string like '/patient/fiche/statut-du-suivi/post-suivi' 
 -- 				) 
 -- 				or (
--- 					s.path_string like "/patient/fiche/statut-du-suivi/decede" 
+-- 					s.path_string like '/patient/fiche/statut-du-suivi/decede' 
 -- 					and year(pi.start) like year(@refdate)
 -- 				) 
 -- 				or (
--- 					s.path_string like "/patient/fiche/statut-du-suivi/disparu" 
+-- 					s.path_string like '/patient/fiche/statut-du-suivi/disparu' 
 -- 					and year(pi.start) like year(@refdate)
 -- 				)
 -- 			) 
@@ -5667,7 +5667,7 @@ select 'Tableau 24.A.1 – Age des personnes dans le suivi/post-suivi - Ages moy
 -- 			and pi.deleted_at is null 
 -- 			and p.deleted_at is null 
 -- 			and @refdate between coalesce(pi_antenna.start, @refdate) and COALESCE (pi_antenna.end, @refdate)
--- 			and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 			and s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 			and s_antenna.value like @antenna
 -- 		order by 
 -- 			s.value, 
@@ -5705,7 +5705,7 @@ select 'Tableau 24.A.1 – Age des personnes dans le suivi/post-suivi - Ages moy
 -- 				FROM_DAYS(
 -- 					DATEDIFF(@refdate, birth)
 -- 				), 
--- 				"%Y"
+-- 				'%Y'
 -- 			)+ 0
 -- 		) AS SIGNED
 -- 	) AS 'Age moyen', 
@@ -5715,7 +5715,7 @@ select 'Tableau 24.A.1 – Age des personnes dans le suivi/post-suivi - Ages moy
 -- 				FROM_DAYS(
 -- 					DATEDIFF(@refdate, birth)
 -- 				), 
--- 				"%Y"
+-- 				'%Y'
 -- 			)+ 0
 -- 		) AS SIGNED
 -- 	) as 'Age maximum', 
@@ -5725,7 +5725,7 @@ select 'Tableau 24.A.1 – Age des personnes dans le suivi/post-suivi - Ages moy
 -- 				FROM_DAYS(
 -- 					DATEDIFF(@refdate, birth)
 -- 				), 
--- 				"%Y"
+-- 				'%Y'
 -- 			)+ 0
 -- 		) AS SIGNED
 -- 	) as 'Age minimum' 
@@ -5751,17 +5751,17 @@ select 'Tableau 24.A.1 – Age des personnes dans le suivi/post-suivi - Ages moy
 -- 		where 
 -- 			(
 -- 				(
--- 					s.path_string like "/patient/fiche/statut-du-suivi/en-suivi" 
+-- 					s.path_string like '/patient/fiche/statut-du-suivi/en-suivi' 
 -- 				) 
 -- 				or (
--- 					s.path_string like "/patient/fiche/statut-du-suivi/post-suivi" 
+-- 					s.path_string like '/patient/fiche/statut-du-suivi/post-suivi' 
 -- 				) 
 -- 				or (
--- 					s.path_string like "/patient/fiche/statut-du-suivi/decede" 
+-- 					s.path_string like '/patient/fiche/statut-du-suivi/decede' 
 -- 					and year(pi.start) like year(@refdate)
 -- 				) 
 -- 				or (
--- 					s.path_string like "/patient/fiche/statut-du-suivi/disparu" 
+-- 					s.path_string like '/patient/fiche/statut-du-suivi/disparu' 
 -- 					and year(pi.start) like year(@refdate)
 
 -- 				)
@@ -5770,7 +5770,7 @@ select 'Tableau 24.A.1 – Age des personnes dans le suivi/post-suivi - Ages moy
 -- 			and pi.deleted_at is null 
 -- 			and p.deleted_at is null 
 -- 			and @refdate between coalesce(pi_antenna.start, @past) and COALESCE (pi_antenna.end, @refdate)
--- 			and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 			and s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 			and s_antenna.value like @antenna
 -- 		order by 
 -- 			s.value, 
@@ -5811,7 +5811,7 @@ select 'Tableau 24.A. et 24.B. – Age des personnes dans le suivi - Ages moyen,
 -- 			FROM_DAYS(
 -- 				DATEDIFF(@refdate, birth)
 -- 			), 
--- 			"%Y"
+-- 			'%Y'
 -- 		) as signed
 -- 	) AS age, 
 -- 	p_unknown_year 
@@ -5837,17 +5837,17 @@ select 'Tableau 24.A. et 24.B. – Age des personnes dans le suivi - Ages moyen,
 -- 		where 
 -- 			(
 -- 				(
--- 					s.path_string like "/patient/fiche/statut-du-suivi/en-suivi" 
+-- 					s.path_string like '/patient/fiche/statut-du-suivi/en-suivi' 
 -- 				) 
 -- 				or (
--- 					s.path_string like "/patient/fiche/statut-du-suivi/post-suivi" 
+-- 					s.path_string like '/patient/fiche/statut-du-suivi/post-suivi' 
 -- 				) 
 -- 				or (
--- 					s.path_string like "/patient/fiche/statut-du-suivi/decede" 
+-- 					s.path_string like '/patient/fiche/statut-du-suivi/decede' 
 -- 					and year(pi.start) like year(@refdate)
 -- 				) 
 -- 				or (
--- 					s.path_string like "/patient/fiche/statut-du-suivi/disparu" 
+-- 					s.path_string like '/patient/fiche/statut-du-suivi/disparu' 
 -- 					and year(pi.start) like year(@refdate)
 -- 				)
 -- 			) 
@@ -5855,7 +5855,7 @@ select 'Tableau 24.A. et 24.B. – Age des personnes dans le suivi - Ages moyen,
 -- 			and pi.deleted_at is null 
 -- 			and p.deleted_at is null 
 -- 			and @refdate between coalesce(pi_antenna.start, @refdate) and COALESCE (pi_antenna.end, @refdate)
--- 			and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 			and s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 			and s_antenna.value like @antenna
 -- 		order by 
 -- 			s.value, 
@@ -5889,7 +5889,7 @@ select 'Tableau 24.C/D.1 – Age des personnes dans le housing first/ housing fi
 -- 				FROM_DAYS(
 -- 					DATEDIFF(@refdate, birth)
 -- 				), 
--- 				"%Y"
+-- 				'%Y'
 -- 			)+ 0
 -- 		) AS SIGNED
 -- 	) AS 'Age moyen', 
@@ -5899,7 +5899,7 @@ select 'Tableau 24.C/D.1 – Age des personnes dans le housing first/ housing fi
 -- 				FROM_DAYS(
 -- 					DATEDIFF(@refdate, birth)
 -- 				), 
--- 				"%Y"
+-- 				'%Y'
 -- 			)+ 0
 -- 		) AS SIGNED
 -- 	) as 'Age maximum', 
@@ -5909,7 +5909,7 @@ select 'Tableau 24.C/D.1 – Age des personnes dans le housing first/ housing fi
 -- 				FROM_DAYS(
 -- 					DATEDIFF(@refdate, birth)
 -- 				), 
--- 				"%Y"
+-- 				'%Y'
 -- 			)+ 0
 -- 		) AS SIGNED
 -- 	) as 'Age minimum' 
@@ -5935,17 +5935,17 @@ select 'Tableau 24.C/D.1 – Age des personnes dans le housing first/ housing fi
 -- 		where 
 -- 			(
 -- 				(
--- 					s.path_string like "/patient/fiche/statut-du-suivi/en-suivi" 
+-- 					s.path_string like '/patient/fiche/statut-du-suivi/en-suivi' 
 -- 				) 
 -- 				or (
--- 					s.path_string like "/patient/fiche/statut-du-suivi/post-suivi" 
+-- 					s.path_string like '/patient/fiche/statut-du-suivi/post-suivi' 
 -- 				) 
 -- 			) 
 -- 			and @refdate between COALESCE(pi.start, @refdate) and COALESCE (pi.end, @refdate)
 -- 			and pi.deleted_at is null 
 -- 			and p.deleted_at is null 
 -- 			and @refdate between coalesce(pi_antenna.start, @refdate) and COALESCE (pi_antenna.end, @refdate)
--- 			and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 			and s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 			and s_antenna.value like @antenna
 -- 		order by 
 -- 			s.value, 
@@ -5986,7 +5986,7 @@ select 'Tableau 24.C/D.1 – Age des personnes dans le housing first/ housing fi
 -- 			FROM_DAYS(
 -- 				DATEDIFF(@refdate, birth)
 -- 			), 
--- 			"%Y"
+-- 			'%Y'
 -- 		) as signed
 -- 	) AS age, 
 -- 	p_unknown_year 
@@ -6012,17 +6012,17 @@ select 'Tableau 24.C/D.1 – Age des personnes dans le housing first/ housing fi
 -- 		where 
 -- 			(
 -- 				(
--- 					s.path_string like "/patient/fiche/statut-du-suivi/en-suivi" 
+-- 					s.path_string like '/patient/fiche/statut-du-suivi/en-suivi' 
 -- 				) 
 -- 				or (
--- 					s.path_string like "/patient/fiche/statut-du-suivi/post-suivi" 
+-- 					s.path_string like '/patient/fiche/statut-du-suivi/post-suivi' 
 -- 				) 
 -- 			) 
 -- 			and @refdate between COALESCE(pi.start, @refdate) and COALESCE (pi.end, @refdate	)
 -- 			and pi.deleted_at is null 
 -- 			and p.deleted_at is null 
 -- 			and @refdate between coalesce(pi_antenna.start, @refdate) and COALESCE (pi_antenna.end, @refdate)
--- 			and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 			and s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 			and s_antenna.value like @antenna
 -- 		order by 
 -- 			s.value, 
@@ -6053,13 +6053,13 @@ select 'Tableau 25.A. – Problèmes de santé et assuétudes des patients en su
 -- 	(
 -- 	select 
 -- 		sum(
--- 			if (path.problem like "%physique%", 1, 0)
+-- 			if (path.problem like '%physique%', 1, 0)
 -- 		) as physique, 
 -- 		sum(
--- 			if (path.problem like "%mentale%", 1, 0)
+-- 			if (path.problem like '%mentale%', 1, 0)
 -- 		) as mentale, 
 -- 		sum(
--- 			if (path.problem like "%declaree%", 1, 0)
+-- 			if (path.problem like '%declaree%', 1, 0)
 -- 		) as assuetude
 
 -- 	from 
@@ -6090,12 +6090,12 @@ select 'Tableau 25.A. – Problèmes de santé et assuétudes des patients en su
 -- 		left join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id 
 -- 		left join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id 
 -- 	where 
--- 		s.path_string like "/patient/fiche/statut-du-suivi/en-suivi" 
+-- 		s.path_string like '/patient/fiche/statut-du-suivi/en-suivi' 
 -- 		and @refdate between COALESCE(pi.start, @refdate) and COALESCE (pi.end, @refdate )
 -- 		and pi.deleted_at is null 
 -- 		and p.deleted_at is null 
 -- 		and @refdate between coalesce(pi_antenna.start, @refdate) and COALESCE (pi_antenna.end, @refdate)
--- 		and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 		and s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 		and s_antenna.value like @antenna
 
 -- ) s;
@@ -6108,13 +6108,13 @@ select 'Tableau 25.A. – Problèmes de santé et assuétudes des patients en su
 --     p.firstname,
 --     p.lastname,
 -- 	sum(
--- 		if (path.problem like "%physique%", 1, 0)
+-- 		if (path.problem like '%physique%', 1, 0)
 -- 	) as physique, 
 -- 	sum(
--- 		if (path.problem like "%mentale%", 1, 0)
+-- 		if (path.problem like '%mentale%', 1, 0)
 -- 	) as mentale, 
 -- 	sum(
--- 		if (path.problem like "%declaree%", 1, 0)
+-- 		if (path.problem like '%declaree%', 1, 0)
 -- 	) as assuetude
 
 -- from 
@@ -6146,12 +6146,12 @@ select 'Tableau 25.A. – Problèmes de santé et assuétudes des patients en su
 -- 	left join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id 
 -- 	left join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id 
 -- where 
--- 	s.path_string like "/patient/fiche/statut-du-suivi/en-suivi" 
+-- 	s.path_string like '/patient/fiche/statut-du-suivi/en-suivi' 
 -- 	and @refdate between COALESCE(pi.start, @past) and COALESCE (pi.end, @refdate )
 -- 	and pi.deleted_at is null 
 -- 	and p.deleted_at is null 
 -- 	and @refdate between coalesce(pi_antenna.start, @past) and COALESCE (pi_antenna.end, @refdate)
--- 	and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 	and s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 	and s_antenna.value like @antenna
 -- group by
 -- 	p.hash, p.firstname, p.lastname;
@@ -6168,13 +6168,13 @@ select 'tableau 25.A - nombre de personnes ayant 2 problemes sur 3';
 --     p.firstname,
 --     p.lastname,
 -- 	sum(
--- 		if (path.problem like "%physique%", 1, 0)
+-- 		if (path.problem like '%physique%', 1, 0)
 -- 	) as physique, 
 -- 	sum(
--- 		if (path.problem like "%mentale%", 1, 0)
+-- 		if (path.problem like '%mentale%', 1, 0)
 -- 	) as mentale, 
 -- 	sum(
--- 		if (path.problem like "%declaree%", 1, 0)
+-- 		if (path.problem like '%declaree%', 1, 0)
 -- 	) as assuetude
 
 -- from 
@@ -6205,12 +6205,12 @@ select 'tableau 25.A - nombre de personnes ayant 2 problemes sur 3';
 -- 	left join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id 
 -- 	left join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id 
 -- where 
--- 	s.path_string like "/patient/fiche/statut-du-suivi/en-suivi" 
+-- 	s.path_string like '/patient/fiche/statut-du-suivi/en-suivi' 
 -- 	and @refdate between COALESCE(pi.start, @past) and COALESCE (pi.end, @refdate )
 -- 	and pi.deleted_at is null 
 -- 	and p.deleted_at is null 
 -- 	and @refdate between coalesce(pi_antenna.start, @past) and COALESCE (pi_antenna.end, @refdate)
--- 	and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 	and s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 	and s_antenna.value like @antenna
 -- group by
 -- 	p.hash, p.firstname, p.lastname
@@ -6232,13 +6232,13 @@ select 'Tableau 25.B. – Problèmes de santé et assuétudes des patients en Ho
 -- (
 -- 		select 
 -- 			sum(
--- 				if (path.problem like "%physique%", 1, 0)
+-- 				if (path.problem like '%physique%', 1, 0)
 -- 			) as physique, 
 -- 			sum(
--- 				if (path.problem like "%mentale%", 1, 0)
+-- 				if (path.problem like '%mentale%', 1, 0)
 -- 			) as mentale, 
 -- 			sum(
--- 				if (path.problem like "%declaree%", 1, 0)
+-- 				if (path.problem like '%declaree%', 1, 0)
 -- 			) as assuetude
 -- 		from 
 -- 			patients p 
@@ -6256,19 +6256,19 @@ select 'Tableau 25.B. – Problèmes de santé et assuétudes des patients en Ho
 -- 					inner join patients_information as pi_stat on p.pati_id = pi_stat.pati_id 
 -- 					inner join suggestions as s_stat on s_stat.sugg_id = pi_stat.sugg_id 
 -- 				where
--- 					s.path_string like "/patient/suivi/programme/housing-first"
+-- 					s.path_string like '/patient/suivi/programme/housing-first'
 -- 					and pi.deleted_at is null
 -- 					and p.deleted_at is null
 -- 					and @refdate BETWEEN coalesce(pi.start, @past) and COALESCE(pi.end, @refdate)
 					
--- 					and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 					and s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 					and pi_antenna.deleted_at is null
 -- 					and s_antenna.value like @antenna 
 -- 					and pi.start <= COALESCE (pi_antenna.end, @refdate)
 -- 					and coalesce(pi.end, @refdate) >= coalesce(pi_antenna.start, @past) 
 
--- 					and s_stat.path_string like "/patient/fiche/statut-du-suivi/%" 
--- 					and s_stat.path_string not like "/patient/fiche/statut-du-suivi/decede" 
+-- 					and s_stat.path_string like '/patient/fiche/statut-du-suivi/%' 
+-- 					and s_stat.path_string not like '/patient/fiche/statut-du-suivi/decede' 
 -- 					and @refdate between COALESCE(pi_stat.start, @past) and COALESCE (pi_stat.end, @nextyear0101)
 -- 					and pi_stat.deleted_at is null
 -- 			) hf on hf.pati_id = p.pati_id	
@@ -6311,13 +6311,13 @@ select 'tableau 25.B - nombre de personnes ayant 2 problemes sur 3 en housing fi
 -- 		p.firstname,
 -- 		p.lastname,
 -- 		sum(
--- 			if (path.problem like "%physique%", 1, 0)
+-- 			if (path.problem like '%physique%', 1, 0)
 -- 		) as physique, 
 -- 		sum(
--- 			if (path.problem like "%mentale%", 1, 0)
+-- 			if (path.problem like '%mentale%', 1, 0)
 -- 		) as mentale, 
 -- 		sum(
--- 			if (path.problem like "%declaree%", 1, 0)
+-- 			if (path.problem like '%declaree%', 1, 0)
 -- 		) as assuetude,
 -- 		hf.programme
 -- 	from 
@@ -6336,19 +6336,19 @@ select 'tableau 25.B - nombre de personnes ayant 2 problemes sur 3 en housing fi
 -- 				inner join patients_information as pi_stat on p.pati_id = pi_stat.pati_id 
 -- 				inner join suggestions as s_stat on s_stat.sugg_id = pi_stat.sugg_id 
 -- 			where
--- 				s.path_string like "/patient/suivi/programme/housing-first"
+-- 				s.path_string like '/patient/suivi/programme/housing-first'
 -- 				and pi.deleted_at is null
 -- 				and p.deleted_at is null
 -- 				and @refdate BETWEEN coalesce(pi.start, @past) and COALESCE(pi.end, @refdate)
 				
--- 				and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 				and s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 				and pi_antenna.deleted_at is null
 -- 				and s_antenna.value like @antenna 
 -- 				and pi.start <= COALESCE (pi_antenna.end, @refdate)
 -- 				and coalesce(pi.end, @refdate) >= coalesce(pi_antenna.start, @past) 
 
--- 				and s_stat.path_string like "/patient/fiche/statut-du-suivi/%" 
--- 				and s_stat.path_string not like "/patient/fiche/statut-du-suivi/decede" 
+-- 				and s_stat.path_string like '/patient/fiche/statut-du-suivi/%' 
+-- 				and s_stat.path_string not like '/patient/fiche/statut-du-suivi/decede' 
 -- 				and @refdate between COALESCE(pi_stat.start, @past) and COALESCE (pi_stat.end, @nextyear0101)
 -- 				and pi_stat.deleted_at is null
 -- 		) hf on hf.pati_id = p.pati_id	
@@ -6384,13 +6384,13 @@ select 'Tableau 25.B. – Problèmes de santé et assuétudes des patients en Ho
 --     p.firstname,
 --     p.lastname,
 -- 	sum(
--- 		if (path.problem like "%physique%", 1, 0)
+-- 		if (path.problem like '%physique%', 1, 0)
 -- 	) as physique, 
 -- 	sum(
--- 		if (path.problem like "%mentale%", 1, 0)
+-- 		if (path.problem like '%mentale%', 1, 0)
 -- 	) as mentale, 
 -- 	sum(
--- 		if (path.problem like "%declaree%", 1, 0)
+-- 		if (path.problem like '%declaree%', 1, 0)
 -- 	) as assuetude,
 -- 	hf.programme
 -- from 
@@ -6409,19 +6409,19 @@ select 'Tableau 25.B. – Problèmes de santé et assuétudes des patients en Ho
 -- 			inner join patients_information as pi_stat on p.pati_id = pi_stat.pati_id 
 -- 			inner join suggestions as s_stat on s_stat.sugg_id = pi_stat.sugg_id 
 -- 		where
--- 			s.path_string like "/patient/suivi/programme/housing-first"
+-- 			s.path_string like '/patient/suivi/programme/housing-first'
 -- 			and pi.deleted_at is null
 -- 			and p.deleted_at is null
 -- 			and @refdate BETWEEN coalesce(pi.start, @past) and COALESCE(pi.end, @refdate)
 			
--- 			and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 			and s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 			and pi_antenna.deleted_at is null
 -- 			and s_antenna.value like @antenna 
 -- 			and pi.start <= COALESCE (pi_antenna.end, @refdate)
 -- 			and coalesce(pi.end, @refdate) >= coalesce(pi_antenna.start, @past) 
 
--- 			and s_stat.path_string like "/patient/fiche/statut-du-suivi/%" 
--- 			and s_stat.path_string not like "/patient/fiche/statut-du-suivi/decede" 
+-- 			and s_stat.path_string like '/patient/fiche/statut-du-suivi/%' 
+-- 			and s_stat.path_string not like '/patient/fiche/statut-du-suivi/decede' 
 -- 			and @refdate between COALESCE(pi_stat.start, @past) and COALESCE (pi_stat.end, @nextyear0101)
 --             and pi_stat.deleted_at is null
 --     ) hf on hf.pati_id = p.pati_id	
@@ -6463,13 +6463,13 @@ select 'Tableau 25.C. – Problèmes de santé et assuétudes des patients en Ho
 -- (
 -- 		select 
 -- 			sum(
--- 				if (path.problem like "%physique%", 1, 0)
+-- 				if (path.problem like '%physique%', 1, 0)
 -- 			) as physique, 
 -- 			sum(
--- 				if (path.problem like "%mentale%", 1, 0)
+-- 				if (path.problem like '%mentale%', 1, 0)
 -- 			) as mentale, 
 -- 			sum(
--- 				if (path.problem like "%declaree%", 1, 0)
+-- 				if (path.problem like '%declaree%', 1, 0)
 -- 			) as assuetude
 -- 		from 
 -- 			patients p 
@@ -6487,20 +6487,20 @@ select 'Tableau 25.C. – Problèmes de santé et assuétudes des patients en Ho
 -- 					inner join patients_information as pi_stat on p.pati_id = pi_stat.pati_id 
 -- 					inner join suggestions as s_stat on s_stat.sugg_id = pi_stat.sugg_id 
 -- 				where
--- 					s.path_string like "/patient/suivi/programme/housing-fast"
+-- 					s.path_string like '/patient/suivi/programme/housing-fast'
 -- 					and pi.deleted_at is null
 -- 					and p.deleted_at is null
 -- 					and @refdate BETWEEN coalesce(pi.start, @past) and COALESCE(pi.end, @refdate)
 					
--- 					and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 					and s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 					and pi_antenna.deleted_at is null
 -- 					and s_antenna.value like @antenna 
 -- 					and pi.start <= COALESCE (pi_antenna.end, @refdate)
 -- 					and coalesce(pi.end, @refdate) >= coalesce(pi_antenna.start, @past) 
 
--- 					and s_stat.path_string like "/patient/fiche/statut-du-suivi/%" 
--- 					and s_stat.path_string not like "/patient/fiche/statut-du-suivi/decede" 
--- 					and s_stat.path_string not like "/patient/fiche/statut-du-suivi/disparu"
+-- 					and s_stat.path_string like '/patient/fiche/statut-du-suivi/%' 
+-- 					and s_stat.path_string not like '/patient/fiche/statut-du-suivi/decede' 
+-- 					and s_stat.path_string not like '/patient/fiche/statut-du-suivi/disparu'
 -- 					and @refdate between COALESCE(pi_stat.start, @past) and COALESCE (pi_stat.end, @nextyear0101)
 -- 					and pi_stat.deleted_at is null
 -- 			) hf on hf.pati_id = p.pati_id	
@@ -6543,13 +6543,13 @@ select 'tableau 25.C - nombre de personnes ayant 2 problemes sur 3 en housing Fa
 -- 		p.firstname,
 -- 		p.lastname,
 -- 		sum(
--- 			if (path.problem like "%physique%", 1, 0)
+-- 			if (path.problem like '%physique%', 1, 0)
 -- 		) as physique, 
 -- 		sum(
--- 			if (path.problem like "%mentale%", 1, 0)
+-- 			if (path.problem like '%mentale%', 1, 0)
 -- 		) as mentale, 
 -- 		sum(
--- 			if (path.problem like "%declaree%", 1, 0)
+-- 			if (path.problem like '%declaree%', 1, 0)
 -- 		) as assuetude,
 -- 		hf.programme
 -- 	from 
@@ -6568,20 +6568,20 @@ select 'tableau 25.C - nombre de personnes ayant 2 problemes sur 3 en housing Fa
 -- 				inner join patients_information as pi_stat on p.pati_id = pi_stat.pati_id 
 -- 				inner join suggestions as s_stat on s_stat.sugg_id = pi_stat.sugg_id 
 -- 			where
--- 				s.path_string like "/patient/suivi/programme/housing-fast"
+-- 				s.path_string like '/patient/suivi/programme/housing-fast'
 -- 				and pi.deleted_at is null
 -- 				and p.deleted_at is null
 -- 				and @refdate BETWEEN coalesce(pi.start, @past) and COALESCE(pi.end, @refdate)
 				
--- 				and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 				and s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 				and pi_antenna.deleted_at is null
 -- 				and s_antenna.value like @antenna 
 -- 				and pi.start <= COALESCE (pi_antenna.end, @refdate)
 -- 				and coalesce(pi.end, @refdate) >= coalesce(pi_antenna.start, @past) 
 
--- 				and s_stat.path_string like "/patient/fiche/statut-du-suivi/%" 
--- 				and s_stat.path_string not like "/patient/fiche/statut-du-suivi/decede" 
--- 				and s_stat.path_string not like "/patient/fiche/statut-du-suivi/disparu"
+-- 				and s_stat.path_string like '/patient/fiche/statut-du-suivi/%' 
+-- 				and s_stat.path_string not like '/patient/fiche/statut-du-suivi/decede' 
+-- 				and s_stat.path_string not like '/patient/fiche/statut-du-suivi/disparu'
 -- 				and @refdate between COALESCE(pi_stat.start, @past) and COALESCE (pi_stat.end, @nextyear0101)
 -- 				and pi_stat.deleted_at is null
 -- 		) hf on hf.pati_id = p.pati_id	
@@ -6617,13 +6617,13 @@ select 'Tableau 25.C. – Problèmes de santé et assuétudes des patients en Ho
 --     p.firstname,
 --     p.lastname,
 -- 	sum(
--- 		if (path.problem like "%physique%", 1, 0)
+-- 		if (path.problem like '%physique%', 1, 0)
 -- 	) as physique, 
 -- 	sum(
--- 		if (path.problem like "%mentale%", 1, 0)
+-- 		if (path.problem like '%mentale%', 1, 0)
 -- 	) as mentale, 
 -- 	sum(
--- 		if (path.problem like "%declaree%", 1, 0)
+-- 		if (path.problem like '%declaree%', 1, 0)
 -- 	) as assuetude,
 -- 	hf.programme
 -- from 
@@ -6642,19 +6642,19 @@ select 'Tableau 25.C. – Problèmes de santé et assuétudes des patients en Ho
 -- 			inner join patients_information as pi_stat on p.pati_id = pi_stat.pati_id 
 -- 			inner join suggestions as s_stat on s_stat.sugg_id = pi_stat.sugg_id 
 -- 		where
--- 			s.path_string like "/patient/suivi/programme/housing-fast"
+-- 			s.path_string like '/patient/suivi/programme/housing-fast'
 -- 			and pi.deleted_at is null
 -- 			and p.deleted_at is null
 -- 			and @refdate BETWEEN coalesce(pi.start, @past) and COALESCE(pi.end, @refdate)
 			
--- 			and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 			and s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 			and pi_antenna.deleted_at is null
 -- 			and s_antenna.value like @antenna 
 -- 			and pi.start <= COALESCE (pi_antenna.end, @refdate)
 -- 			and coalesce(pi.end, @refdate) >= coalesce(pi_antenna.start, @past) 
 
--- 			and s_stat.path_string like "/patient/fiche/statut-du-suivi/%" 
--- 			and s_stat.path_string not like "/patient/fiche/statut-du-suivi/decede" 
+-- 			and s_stat.path_string like '/patient/fiche/statut-du-suivi/%' 
+-- 			and s_stat.path_string not like '/patient/fiche/statut-du-suivi/decede' 
 -- 			and @refdate between COALESCE(pi_stat.start, @past) and COALESCE (pi_stat.end, @nextyear0101)
 --             and pi_stat.deleted_at is null
 --     ) hf on hf.pati_id = p.pati_id	
@@ -6701,13 +6701,13 @@ select 'Tableau 26.A. – Absence de problème de santé physique chronique des 
 --     select 
 -- 		p.hash,
 -- 		sum(
--- 			if (path.problem like "%physique%", 1, 0)
+-- 			if (path.problem like '%physique%', 1, 0)
 -- 		) as physique, 
 -- 		sum(
--- 			if (path.problem like "%mentale%", 1, 0)
+-- 			if (path.problem like '%mentale%', 1, 0)
 -- 		) as mentale, 
 -- 		sum(
--- 			if (path.problem like "%declaree%", 1, 0)
+-- 			if (path.problem like '%declaree%', 1, 0)
 -- 		) as assuetude
 
 -- 	from 
@@ -6738,12 +6738,12 @@ select 'Tableau 26.A. – Absence de problème de santé physique chronique des 
 -- 		left join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id 
 -- 		left join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id 
 -- 	where 
--- 		s.path_string like "/patient/fiche/statut-du-suivi/en-suivi" 
+-- 		s.path_string like '/patient/fiche/statut-du-suivi/en-suivi' 
 -- 		and @refdate between COALESCE(pi.start, @past) and COALESCE (pi.end, @refdate )
 -- 		and pi.deleted_at is null 
 -- 		and p.deleted_at is null 
 -- 		and @refdate between coalesce(pi_antenna.start, @past) and COALESCE (pi_antenna.end, @refdate)
--- 		and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 		and s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 		and s_antenna.value like @antenna
 -- 	group by 
 -- 		hash
@@ -6759,7 +6759,7 @@ select 'Tableau 26.A. – Absence de problème de santé physique chronique des 
 -- 	p.firstname,
 -- 	p.lastname,
 -- 	sum(
--- 		if (path.problem like "%physique%", 1, 0)
+-- 		if (path.problem like '%physique%', 1, 0)
 -- 	) as physique
 
 -- from 
@@ -6790,12 +6790,12 @@ select 'Tableau 26.A. – Absence de problème de santé physique chronique des 
 -- 	left join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id 
 -- 	left join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id 
 -- where 
--- 	s.path_string like "/patient/fiche/statut-du-suivi/en-suivi" 
+-- 	s.path_string like '/patient/fiche/statut-du-suivi/en-suivi' 
 -- 	and @refdate between COALESCE(pi.start, @past) and COALESCE (pi.end, @refdate )
 -- 	and pi.deleted_at is null 
 -- 	and p.deleted_at is null 
 -- 	and @refdate between coalesce(pi_antenna.start, @past) and COALESCE (pi_antenna.end, @refdate)
--- 	and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 	and s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 	and s_antenna.value like @antenna
 -- group by 
 -- 	hash,
@@ -6836,12 +6836,12 @@ select 'Tableau 26.B. – Identification des problèmes de santé physique chron
 -- 	left join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id 
 -- 	left join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id 
 -- where 
--- 	s.path_string like "/patient/fiche/statut-du-suivi/en-suivi" 
+-- 	s.path_string like '/patient/fiche/statut-du-suivi/en-suivi' 
 -- 	and @refdate between COALESCE(pi.start, @past) and COALESCE (pi.end, @refdate )
 -- 	and pi.deleted_at is null 
 -- 	and p.deleted_at is null 
 -- 	and @refdate between coalesce(pi_antenna.start, @past) and COALESCE (pi_antenna.end, @refdate)
--- 	and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 	and s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 	and s_antenna.value like @antenna
 -- group by 
 --     path.category,
@@ -6884,12 +6884,12 @@ select 'Tableau 26.B. – Identification des problèmes de santé physique chron
 -- 	left join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id 
 -- 	left join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id 
 -- where 
--- 	s.path_string like "/patient/fiche/statut-du-suivi/en-suivi"
+-- 	s.path_string like '/patient/fiche/statut-du-suivi/en-suivi'
 -- 	and @refdate between COALESCE(pi.start, @past) and COALESCE (pi.end, @refdate )
 -- 	and pi.deleted_at is null 
 -- 	and p.deleted_at is null 
 -- 	and @refdate between coalesce(pi_antenna.start, @past) and COALESCE (pi_antenna.end, @refdate)
--- 	and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 	and s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 	and s_antenna.value like @antenna
 -- order by 
 --     path.category,
@@ -6910,7 +6910,7 @@ select 'Tableau 26.C. – Absence de problème de santé physique chronique des 
 -- 			p.firstname,
 -- 			p.lastname,
 -- 				sum(
--- 				if (path.problem like "%physique%", 1, 0)
+-- 				if (path.problem like '%physique%', 1, 0)
 -- 			) as physique
 -- 		from 
 -- 			patients p 
@@ -6928,19 +6928,19 @@ select 'Tableau 26.C. – Absence de problème de santé physique chronique des 
 -- 					inner join patients_information as pi_stat on p.pati_id = pi_stat.pati_id 
 -- 					inner join suggestions as s_stat on s_stat.sugg_id = pi_stat.sugg_id 
 -- 				where
--- 					s.path_string like "/patient/suivi/programme/housing-first"
+-- 					s.path_string like '/patient/suivi/programme/housing-first'
 -- 					and pi.deleted_at is null
 -- 					and p.deleted_at is null
 -- 					and @refdate BETWEEN coalesce(pi.start, @past) and COALESCE(pi.end, @refdate)
 					
--- 					and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 					and s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 					and pi_antenna.deleted_at is null
 -- 					and s_antenna.value like @antenna 
 -- 					and pi.start <= COALESCE (pi_antenna.end, @refdate)
 -- 					and coalesce(pi.end, @refdate) >= coalesce(pi_antenna.start, @past) 
 
--- 					and s_stat.path_string like "/patient/fiche/statut-du-suivi/%" 
--- 					and s_stat.path_string not like "/patient/fiche/statut-du-suivi/decede" 
+-- 					and s_stat.path_string like '/patient/fiche/statut-du-suivi/%' 
+-- 					and s_stat.path_string not like '/patient/fiche/statut-du-suivi/decede' 
 -- 					and @refdate between COALESCE(pi_stat.start, @past) and COALESCE (pi_stat.end, @nextyear0101)
 -- 					and pi_stat.deleted_at is null
 -- 			) hf on hf.pati_id = p.pati_id	
@@ -6978,7 +6978,7 @@ select 'Tableau 26.C. – Absence de problème de santé physique chronique des 
 -- 			p.firstname,
 -- 			p.lastname,
 -- 				sum(
--- 				if (path.problem like "%physique%", 1, 0)
+-- 				if (path.problem like '%physique%', 1, 0)
 -- 			) as physique
 -- 		from 
 -- 			patients p 
@@ -6996,19 +6996,19 @@ select 'Tableau 26.C. – Absence de problème de santé physique chronique des 
 -- 					inner join patients_information as pi_stat on p.pati_id = pi_stat.pati_id 
 -- 					inner join suggestions as s_stat on s_stat.sugg_id = pi_stat.sugg_id 
 -- 				where
--- 					s.path_string like "/patient/suivi/programme/housing-first"
+-- 					s.path_string like '/patient/suivi/programme/housing-first'
 -- 					and pi.deleted_at is null
 -- 					and p.deleted_at is null
 -- 					and @refdate BETWEEN coalesce(pi.start, @past) and COALESCE(pi.end, @refdate)
 					
--- 					and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 					and s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 					and pi_antenna.deleted_at is null
 -- 					and s_antenna.value like @antenna 
 -- 					and pi.start <= COALESCE (pi_antenna.end, @refdate)
 -- 					and coalesce(pi.end, @refdate) >= coalesce(pi_antenna.start, @past) 
 
--- 					and s_stat.path_string like "/patient/fiche/statut-du-suivi/%" 
--- 					and s_stat.path_string not like "/patient/fiche/statut-du-suivi/decede" 
+-- 					and s_stat.path_string like '/patient/fiche/statut-du-suivi/%' 
+-- 					and s_stat.path_string not like '/patient/fiche/statut-du-suivi/decede' 
 -- 					and @refdate between COALESCE(pi_stat.start, @past) and COALESCE (pi_stat.end, @nextyear0101)
 -- 					and pi_stat.deleted_at is null
 -- 			) hf on hf.pati_id = p.pati_id	
@@ -7060,19 +7060,19 @@ select 'Tableau 26.D. – Identification des problèmes de santé physique chron
 -- 			inner join patients_information as pi_stat on p.pati_id = pi_stat.pati_id 
 -- 			inner join suggestions as s_stat on s_stat.sugg_id = pi_stat.sugg_id 
 -- 		where
--- 			s.path_string like "/patient/suivi/programme/housing-first"
+-- 			s.path_string like '/patient/suivi/programme/housing-first'
 -- 			and pi.deleted_at is null
 -- 			and p.deleted_at is null
 -- 			and @refdate BETWEEN coalesce(pi.start, @past) and COALESCE(pi.end, @refdate)
 			
--- 			and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 			and s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 			and pi_antenna.deleted_at is null
 -- 			and s_antenna.value like @antenna 
 -- 			and pi.start <= COALESCE (pi_antenna.end, @refdate)
 -- 			and coalesce(pi.end, @refdate) >= coalesce(pi_antenna.start, @past) 
 
--- 			and s_stat.path_string like "/patient/fiche/statut-du-suivi/%" 
--- 			and s_stat.path_string not like "/patient/fiche/statut-du-suivi/decede" 
+-- 			and s_stat.path_string like '/patient/fiche/statut-du-suivi/%' 
+-- 			and s_stat.path_string not like '/patient/fiche/statut-du-suivi/decede' 
 -- 			and @refdate between COALESCE(pi_stat.start, @past) and COALESCE (pi_stat.end, @nextyear0101)
 -- 			and pi_stat.deleted_at is null
 -- 	) hf on hf.pati_id = p.pati_id	
@@ -7109,8 +7109,8 @@ select 'Tableau 26.D. – Identification des problèmes de santé physique chron
 
 -- select 
 -- 	p.hash,
---     coalesce(path.category, "--inconnu--") as category,
--- 	coalesce(path.problem, "--inconnu--") as problem
+--     coalesce(path.category, '--inconnu--') as category,
+-- 	coalesce(path.problem, '--inconnu--') as problem
 -- from 
 -- 	patients p 
 -- 	inner join 
@@ -7127,19 +7127,19 @@ select 'Tableau 26.D. – Identification des problèmes de santé physique chron
 -- 			inner join patients_information as pi_stat on p.pati_id = pi_stat.pati_id 
 -- 			inner join suggestions as s_stat on s_stat.sugg_id = pi_stat.sugg_id 
 -- 		where
--- 			s.path_string like "/patient/suivi/programme/housing-first"
+-- 			s.path_string like '/patient/suivi/programme/housing-first'
 -- 			and pi.deleted_at is null
 -- 			and p.deleted_at is null
 -- 			and @refdate BETWEEN coalesce(pi.start, @past) and COALESCE(pi.end, @refdate)
 			
--- 			and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 			and s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 			and pi_antenna.deleted_at is null
 -- 			and s_antenna.value like @antenna 
 -- 			and pi.start <= COALESCE (pi_antenna.end, @refdate)
 -- 			and coalesce(pi.end, @refdate) >= coalesce(pi_antenna.start, @past) 
 
--- 			and s_stat.path_string like "/patient/fiche/statut-du-suivi/%" 
--- 			and s_stat.path_string not like "/patient/fiche/statut-du-suivi/decede" 
+-- 			and s_stat.path_string like '/patient/fiche/statut-du-suivi/%' 
+-- 			and s_stat.path_string not like '/patient/fiche/statut-du-suivi/decede' 
 -- 			and @refdate between COALESCE(pi_stat.start, @past) and COALESCE (pi_stat.end, @nextyear0101)
 -- 			and pi_stat.deleted_at is null
 -- 	) hf on hf.pati_id = p.pati_id	
@@ -7181,7 +7181,7 @@ select 'Tableau 27.A : Absence de problèmes de santé mentale chez les patients
 --     select 
 -- 		p.hash,
 -- 		sum(
--- 			if (path.category like "%mentale%", 1, 0)
+-- 			if (path.category like '%mentale%', 1, 0)
 -- 		) as mentale
 -- 	from 
 -- 		patients p 
@@ -7199,19 +7199,19 @@ select 'Tableau 27.A : Absence de problèmes de santé mentale chez les patients
 -- 			inner join patients_information as pi_stat on p.pati_id = pi_stat.pati_id 
 -- 			inner join suggestions as s_stat on s_stat.sugg_id = pi_stat.sugg_id 
 -- 		where
--- 			s.path_string like "/patient/suivi/programme/housing-first"
+-- 			s.path_string like '/patient/suivi/programme/housing-first'
 -- 			and pi.deleted_at is null
 -- 			and p.deleted_at is null
 -- 			and @refdate BETWEEN coalesce(pi.start, @past) and COALESCE(pi.end, @refdate)
 			
--- 			and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 			and s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 			and pi_antenna.deleted_at is null
 -- 			and s_antenna.value like @antenna 
 -- 			and pi.start <= COALESCE (pi_antenna.end, @refdate)
 -- 			and coalesce(pi.end, @refdate) >= coalesce(pi_antenna.start, @past) 
 
--- 			and s_stat.path_string like "/patient/fiche/statut-du-suivi/%" 
--- 			and s_stat.path_string not like "/patient/fiche/statut-du-suivi/decede" 
+-- 			and s_stat.path_string like '/patient/fiche/statut-du-suivi/%' 
+-- 			and s_stat.path_string not like '/patient/fiche/statut-du-suivi/decede' 
 -- 			and @refdate between COALESCE(pi_stat.start, @past) and COALESCE (pi_stat.end, @nextyear0101)
 -- 			and pi_stat.deleted_at is null
 -- 	) hf on hf.pati_id = p.pati_id	
@@ -7262,19 +7262,19 @@ select 'Tableau 27.A : Absence de problèmes de santé mentale chez les patients
 -- 			inner join patients_information as pi_stat on p.pati_id = pi_stat.pati_id 
 -- 			inner join suggestions as s_stat on s_stat.sugg_id = pi_stat.sugg_id 
 -- 		where
--- 			s.path_string like "/patient/suivi/programme/housing-first"
+-- 			s.path_string like '/patient/suivi/programme/housing-first'
 -- 			and pi.deleted_at is null
 -- 			and p.deleted_at is null
 -- 			and @refdate BETWEEN coalesce(pi.start, @past) and COALESCE(pi.end, @refdate)
 			
--- 			and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 			and s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 			and pi_antenna.deleted_at is null
 -- 			and s_antenna.value like @antenna 
 -- 			and pi.start <= COALESCE (pi_antenna.end, @refdate)
 -- 			and coalesce(pi.end, @refdate) >= coalesce(pi_antenna.start, @past) 
 
--- 			and s_stat.path_string like "/patient/fiche/statut-du-suivi/%" 
--- 			and s_stat.path_string not like "/patient/fiche/statut-du-suivi/decede" 
+-- 			and s_stat.path_string like '/patient/fiche/statut-du-suivi/%' 
+-- 			and s_stat.path_string not like '/patient/fiche/statut-du-suivi/decede' 
 -- 			and @refdate between COALESCE(pi_stat.start, @past) and COALESCE (pi_stat.end, @nextyear0101)
 -- 			and pi_stat.deleted_at is null
 -- 	) hf on hf.pati_id = p.pati_id	
@@ -7319,13 +7319,13 @@ select 'Tableau 27.B. – Identification des problèmes de santé mentale chez l
 -- 			inner join patients_information as pi_stat on p.pati_id = pi_stat.pati_id 
 -- 			inner join suggestions as s_stat on s_stat.sugg_id = pi_stat.sugg_id 
 -- 		where
--- 			s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 			s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 			and pi_antenna.deleted_at is null
 -- 			and s_antenna.value like @antenna 
 -- 			and pi_stat.start <= COALESCE (pi_antenna.end, @refdate)
 -- 			and coalesce(pi_stat.end, @refdate) >= coalesce(pi_antenna.start, @past) 
 
--- 			and s_stat.path_string like "/patient/fiche/statut-du-suivi/en-suivi" 
+-- 			and s_stat.path_string like '/patient/fiche/statut-du-suivi/en-suivi' 
 -- 			and @refdate between COALESCE(pi_stat.start, @past) and COALESCE (pi_stat.end, @nextyear0101)
 -- 			and pi_stat.deleted_at is null
 -- 	) suivi on suivi.pati_id = p.pati_id	
@@ -7376,13 +7376,13 @@ select 'Tableau 27.B. – Identification des problèmes de santé mentale chez l
 -- 			inner join patients_information as pi_stat on p.pati_id = pi_stat.pati_id 
 -- 			inner join suggestions as s_stat on s_stat.sugg_id = pi_stat.sugg_id 
 -- 		where
--- 			s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 			s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 			and pi_antenna.deleted_at is null
 -- 			and s_antenna.value like @antenna 
 -- 			and pi_stat.start <= COALESCE (pi_antenna.end, @refdate)
 -- 			and coalesce(pi_stat.end, @refdate) >= coalesce(pi_antenna.start, @past) 
 
--- 			and s_stat.path_string like "/patient/fiche/statut-du-suivi/en-suivi" 
+-- 			and s_stat.path_string like '/patient/fiche/statut-du-suivi/en-suivi' 
 -- 			and @refdate between COALESCE(pi_stat.start, @past) and COALESCE (pi_stat.end, @nextyear0101)
 -- 			and pi_stat.deleted_at is null
 -- 	) suivi on suivi.pati_id = p.pati_id	
@@ -7425,7 +7425,7 @@ select 'Tableau 27.C. : Absence de problèmes de santé mentale chez les patient
 -- 			p.firstname,
 -- 			p.lastname,
 -- 				sum(
--- 				if (path.problem like "%mentale%", 1, 0)
+-- 				if (path.problem like '%mentale%', 1, 0)
 -- 			) as mentale
 -- 		from 
 -- 			patients p 
@@ -7443,19 +7443,19 @@ select 'Tableau 27.C. : Absence de problèmes de santé mentale chez les patient
 -- 					inner join patients_information as pi_stat on p.pati_id = pi_stat.pati_id 
 -- 					inner join suggestions as s_stat on s_stat.sugg_id = pi_stat.sugg_id 
 -- 				where
--- 					s.path_string like "/patient/suivi/programme/housing-first"
+-- 					s.path_string like '/patient/suivi/programme/housing-first'
 -- 					and pi.deleted_at is null
 -- 					and p.deleted_at is null
 -- 					and @refdate BETWEEN coalesce(pi.start, @past) and COALESCE(pi.end, @refdate)
 					
--- 					and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 					and s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 					and pi_antenna.deleted_at is null
 -- 					and s_antenna.value like @antenna 
 -- 					and pi.start <= COALESCE (pi_antenna.end, @refdate)
 -- 					and coalesce(pi.end, @refdate) >= coalesce(pi_antenna.start, @past) 
 
--- 					and s_stat.path_string like "/patient/fiche/statut-du-suivi/%" 
--- 					and s_stat.path_string not like "/patient/fiche/statut-du-suivi/decede" 
+-- 					and s_stat.path_string like '/patient/fiche/statut-du-suivi/%' 
+-- 					and s_stat.path_string not like '/patient/fiche/statut-du-suivi/decede' 
 -- 					and @refdate between COALESCE(pi_stat.start, @past) and COALESCE (pi_stat.end, @nextyear0101)
 -- 					and pi_stat.deleted_at is null
 -- 			) hf on hf.pati_id = p.pati_id	
@@ -7493,7 +7493,7 @@ select 'Tableau 27.C. – Absence de problème de santé mentale des patients en
 -- 			p.firstname,
 -- 			p.lastname,
 -- 				sum(
--- 				if (path.problem like "%mentale%", 1, 0)
+-- 				if (path.problem like '%mentale%', 1, 0)
 -- 			) as mentale
 -- 		from 
 -- 			patients p 
@@ -7511,19 +7511,19 @@ select 'Tableau 27.C. – Absence de problème de santé mentale des patients en
 -- 					inner join patients_information as pi_stat on p.pati_id = pi_stat.pati_id 
 -- 					inner join suggestions as s_stat on s_stat.sugg_id = pi_stat.sugg_id 
 -- 				where
--- 					s.path_string like "/patient/suivi/programme/housing-first"
+-- 					s.path_string like '/patient/suivi/programme/housing-first'
 -- 					and pi.deleted_at is null
 -- 					and p.deleted_at is null
 -- 					and @refdate BETWEEN coalesce(pi.start, @past) and COALESCE(pi.end, @refdate)
 					
--- 					and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 					and s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 					and pi_antenna.deleted_at is null
 -- 					and s_antenna.value like @antenna 
 -- 					and pi.start <= COALESCE (pi_antenna.end, @refdate)
 -- 					and coalesce(pi.end, @refdate) >= coalesce(pi_antenna.start, @past) 
 
--- 					and s_stat.path_string like "/patient/fiche/statut-du-suivi/%" 
--- 					and s_stat.path_string not like "/patient/fiche/statut-du-suivi/decede" 
+-- 					and s_stat.path_string like '/patient/fiche/statut-du-suivi/%' 
+-- 					and s_stat.path_string not like '/patient/fiche/statut-du-suivi/decede' 
 -- 					and @refdate between COALESCE(pi_stat.start, @past) and COALESCE (pi_stat.end, @nextyear0101)
 -- 					and pi_stat.deleted_at is null
 -- 			) hf on hf.pati_id = p.pati_id	
@@ -7578,19 +7578,19 @@ select 'Tableau 27.D. – Identification des problèmes de santé mentale des pa
 -- 			inner join patients_information as pi_stat on p.pati_id = pi_stat.pati_id 
 -- 			inner join suggestions as s_stat on s_stat.sugg_id = pi_stat.sugg_id 
 -- 		where
--- 			s.path_string like "/patient/suivi/programme/housing-first"
+-- 			s.path_string like '/patient/suivi/programme/housing-first'
 -- 			and pi.deleted_at is null
 -- 			and p.deleted_at is null
 -- 			and @refdate BETWEEN coalesce(pi.start, @past) and COALESCE(pi.end, @refdate)
 			
--- 			and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 			and s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 			and pi_antenna.deleted_at is null
 -- 			and s_antenna.value like @antenna 
 -- 			and pi.start <= COALESCE (pi_antenna.end, @refdate)
 -- 			and coalesce(pi.end, @refdate) >= coalesce(pi_antenna.start, @past) 
 
--- 			and s_stat.path_string like "/patient/fiche/statut-du-suivi/%" 
--- 			and s_stat.path_string not like "/patient/fiche/statut-du-suivi/decede" 
+-- 			and s_stat.path_string like '/patient/fiche/statut-du-suivi/%' 
+-- 			and s_stat.path_string not like '/patient/fiche/statut-du-suivi/decede' 
 -- 			and @refdate between COALESCE(pi_stat.start, @past) and COALESCE (pi_stat.end, @nextyear0101)
 -- 			and pi_stat.deleted_at is null
 -- 	) hf on hf.pati_id = p.pati_id	
@@ -7626,8 +7626,8 @@ select 'Tableau 27.D. – Identification des problèmes de santé mentale des pa
 select 'Tableau 27.D. – Identification des problèmes de santé mentale des patients Housing First - liste nominative';
 
 -- select 
---     coalesce(path.category, "--inconnu--") as category,
--- 	coalesce(path.problem, "--inconnu--") as problem,
+--     coalesce(path.category, '--inconnu--') as category,
+-- 	coalesce(path.problem, '--inconnu--') as problem,
 -- 	p.hash
 -- from 
 -- 	patients p 
@@ -7645,19 +7645,19 @@ select 'Tableau 27.D. – Identification des problèmes de santé mentale des pa
 -- 			inner join patients_information as pi_stat on p.pati_id = pi_stat.pati_id 
 -- 			inner join suggestions as s_stat on s_stat.sugg_id = pi_stat.sugg_id 
 -- 		where
--- 			s.path_string like "/patient/suivi/programme/housing-first"
+-- 			s.path_string like '/patient/suivi/programme/housing-first'
 -- 			and pi.deleted_at is null
 -- 			and p.deleted_at is null
 -- 			and @refdate BETWEEN coalesce(pi.start, @past) and COALESCE(pi.end, @refdate)
 			
--- 			and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 			and s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 			and pi_antenna.deleted_at is null
 -- 			and s_antenna.value like @antenna 
 -- 			and pi.start <= COALESCE (pi_antenna.end, @refdate)
 -- 			and coalesce(pi.end, @refdate) >= coalesce(pi_antenna.start, @past) 
 
--- 			and s_stat.path_string like "/patient/fiche/statut-du-suivi/%" 
--- 			and s_stat.path_string not like "/patient/fiche/statut-du-suivi/decede" 
+-- 			and s_stat.path_string like '/patient/fiche/statut-du-suivi/%' 
+-- 			and s_stat.path_string not like '/patient/fiche/statut-du-suivi/decede' 
 -- 			and @refdate between COALESCE(pi_stat.start, @past) and COALESCE (pi_stat.end, @nextyear0101)
 -- 			and pi_stat.deleted_at is null
 -- 	) hf on hf.pati_id = p.pati_id	
@@ -7700,7 +7700,7 @@ select 'Tableau 28.A. – Absence d’assuétude déclarée chez les patients en
 --     select 
 -- 		p.hash,
 -- 		sum(
--- 			if (path.category like "%mentale%", 1, 0)
+-- 			if (path.category like '%mentale%', 1, 0)
 -- 		) as assuetude
 -- 	from 
 -- 		patients p 
@@ -7715,13 +7715,13 @@ select 'Tableau 28.A. – Absence d’assuétude déclarée chez les patients en
 -- 			inner join patients_information as pi_stat on p.pati_id = pi_stat.pati_id 
 -- 			inner join suggestions as s_stat on s_stat.sugg_id = pi_stat.sugg_id 
 -- 		where
--- 			s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 			s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 			and pi_antenna.deleted_at is null
 -- 			and s_antenna.value like @antenna 
 -- 			and pi_stat.start <= COALESCE (pi_antenna.end, @refdate)
 -- 			and coalesce(pi_stat.end, @refdate) >= coalesce(pi_antenna.start, @past) 
 
--- 			and s_stat.path_string like "/patient/fiche/statut-du-suivi/en-suivi" 
+-- 			and s_stat.path_string like '/patient/fiche/statut-du-suivi/en-suivi' 
 -- 			and @refdate between COALESCE(pi_stat.start, @past) and COALESCE (pi_stat.end, @nextyear0101)
 -- 			and pi_stat.deleted_at is null
 -- 	) hf on hf.pati_id = p.pati_id	
@@ -7768,13 +7768,13 @@ select 'Tableau 28.A. – Absence d’assuétude déclarée chez les patients en
 -- 			inner join patients_information as pi_stat on p.pati_id = pi_stat.pati_id 
 -- 			inner join suggestions as s_stat on s_stat.sugg_id = pi_stat.sugg_id 
 -- 		where
--- 			s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 			s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 			and pi_antenna.deleted_at is null
 -- 			and s_antenna.value like @antenna 
 -- 			and pi_stat.start <= COALESCE (pi_antenna.end, @refdate)
 -- 			and coalesce(pi_stat.end, @refdate) >= coalesce(pi_antenna.start, @past) 
 
--- 			and s_stat.path_string like "/patient/fiche/statut-du-suivi/en-suivi" 
+-- 			and s_stat.path_string like '/patient/fiche/statut-du-suivi/en-suivi' 
 -- 			and @refdate between COALESCE(pi_stat.start, @past) and COALESCE (pi_stat.end, @nextyear0101)
 -- 			and pi_stat.deleted_at is null
 
@@ -7820,13 +7820,13 @@ select 'Tableau 28.B. – Identification des assuétudes déclarées chez les pa
 -- 			inner join patients_information as pi_stat on p.pati_id = pi_stat.pati_id 
 -- 			inner join suggestions as s_stat on s_stat.sugg_id = pi_stat.sugg_id 
 -- 		where
--- 			s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 			s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 			and pi_antenna.deleted_at is null
 -- 			and s_antenna.value like @antenna 
 -- 			and pi_stat.start <= COALESCE (pi_antenna.end, @refdate)
 -- 			and coalesce(pi_stat.end, @refdate) >= coalesce(pi_antenna.start, @past) 
 
--- 			and s_stat.path_string like "/patient/fiche/statut-du-suivi/en-suivi" 
+-- 			and s_stat.path_string like '/patient/fiche/statut-du-suivi/en-suivi' 
 -- 			and @refdate between COALESCE(pi_stat.start, @past) and COALESCE (pi_stat.end, @nextyear0101)
 -- 			and pi_stat.deleted_at is null
 -- 	) suivi on suivi.pati_id = p.pati_id	
@@ -7879,13 +7879,13 @@ select 'Tableau 28.B. – Identification des assuétudes déclarées chez les pa
 -- 			inner join patients_information as pi_stat on p.pati_id = pi_stat.pati_id 
 -- 			inner join suggestions as s_stat on s_stat.sugg_id = pi_stat.sugg_id 
 -- 		where
--- 			s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 			s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 			and pi_antenna.deleted_at is null
 -- 			and s_antenna.value like @antenna 
 -- 			and pi_stat.start <= COALESCE (pi_antenna.end, @refdate)
 -- 			and coalesce(pi_stat.end, @refdate) >= coalesce(pi_antenna.start, @past) 
 
--- 			and s_stat.path_string like "/patient/fiche/statut-du-suivi/en-suivi" 
+-- 			and s_stat.path_string like '/patient/fiche/statut-du-suivi/en-suivi' 
 -- 			and @refdate between COALESCE(pi_stat.start, @past) and COALESCE (pi_stat.end, @nextyear0101)
 -- 			and pi_stat.deleted_at is null
 -- 	) suivi on suivi.pati_id = p.pati_id	
@@ -7929,7 +7929,7 @@ select 'Tableau 28.C. – Absence d’assuétude déclarée chez les patients Ho
 -- 			p.firstname,
 -- 			p.lastname,
 -- 				sum(
--- 				if (path.category like "%déclarée%", 1, 0)
+-- 				if (path.category like '%déclarée%', 1, 0)
 -- 			) as assuetude
 -- 		from 
 -- 			patients p 
@@ -7947,20 +7947,20 @@ select 'Tableau 28.C. – Absence d’assuétude déclarée chez les patients Ho
 -- 					inner join patients_information as pi_stat on p.pati_id = pi_stat.pati_id 
 -- 					inner join suggestions as s_stat on s_stat.sugg_id = pi_stat.sugg_id 
 -- 				where
--- 					s.path_string like "/patient/suivi/programme/housing-first"
+-- 					s.path_string like '/patient/suivi/programme/housing-first'
 -- 					and pi.deleted_at is null
 -- 					and p.deleted_at is null
 -- 					and @refdate BETWEEN coalesce(pi.start, @past) and COALESCE(pi.end, @refdate)
 					
--- 					and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 					and s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 					and pi_antenna.deleted_at is null
 -- 					and s_antenna.value like @antenna 
 -- 					and pi.start <= COALESCE (pi_antenna.end, @refdate)
 -- 					and coalesce(pi.end, @refdate) >= coalesce(pi_antenna.start, @past) 
 
--- 					and s_stat.path_string like "/patient/fiche/statut-du-suivi/%" 
--- 					and s_stat.path_string not like "/patient/fiche/statut-du-suivi/decede" 
--- 					and s_stat.path_string not like "/patient/fiche/statut-du-suivi/disparu"
+-- 					and s_stat.path_string like '/patient/fiche/statut-du-suivi/%' 
+-- 					and s_stat.path_string not like '/patient/fiche/statut-du-suivi/decede' 
+-- 					and s_stat.path_string not like '/patient/fiche/statut-du-suivi/disparu'
 -- 					and @refdate between COALESCE(pi_stat.start, @past) and COALESCE (pi_stat.end, @nextyear0101)
 -- 					and pi_stat.deleted_at is null
 -- 			) hf on hf.pati_id = p.pati_id	
@@ -7999,7 +7999,7 @@ select 'Tableau 28.C. – Absence d’assuétude déclarée chez les patients Ho
 -- 			p.firstname,
 -- 			p.lastname,
 -- 				sum(
--- 				if (path.problem like "%declarée%", 1, 0)
+-- 				if (path.problem like '%declarée%', 1, 0)
 -- 			) as assuetude
 -- 		from 
 -- 			patients p 
@@ -8017,20 +8017,20 @@ select 'Tableau 28.C. – Absence d’assuétude déclarée chez les patients Ho
 -- 					inner join patients_information as pi_stat on p.pati_id = pi_stat.pati_id 
 -- 					inner join suggestions as s_stat on s_stat.sugg_id = pi_stat.sugg_id 
 -- 				where
--- 					s.path_string like "/patient/suivi/programme/housing-first"
+-- 					s.path_string like '/patient/suivi/programme/housing-first'
 -- 					and pi.deleted_at is null
 -- 					and p.deleted_at is null
 -- 					and @refdate BETWEEN coalesce(pi.start, @past) and COALESCE(pi.end, @refdate)
 					
--- 					and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 					and s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 					and pi_antenna.deleted_at is null
 -- 					and s_antenna.value like @antenna 
 -- 					and pi.start <= COALESCE (pi_antenna.end, @refdate)
 -- 					and coalesce(pi.end, @refdate) >= coalesce(pi_antenna.start, @past) 
 
--- 					and s_stat.path_string like "/patient/fiche/statut-du-suivi/%" 
--- 					and s_stat.path_string not like "/patient/fiche/statut-du-suivi/decede" 
--- 					and s_stat.path_string not like "/patient/fiche/statut-du-suivi/disparu"
+-- 					and s_stat.path_string like '/patient/fiche/statut-du-suivi/%' 
+-- 					and s_stat.path_string not like '/patient/fiche/statut-du-suivi/decede' 
+-- 					and s_stat.path_string not like '/patient/fiche/statut-du-suivi/disparu'
 -- 					and @refdate between COALESCE(pi_stat.start, @past) and COALESCE (pi_stat.end, @nextyear0101)
 -- 					and pi_stat.deleted_at is null
 -- 			) hf on hf.pati_id = p.pati_id	
@@ -8086,19 +8086,19 @@ select 'Tableau 28.D. – Identification des assuétudes déclarées chez les pa
 -- 			inner join patients_information as pi_stat on p.pati_id = pi_stat.pati_id 
 -- 			inner join suggestions as s_stat on s_stat.sugg_id = pi_stat.sugg_id 
 -- 		where
--- 			s.path_string like "/patient/suivi/programme/housing-first"
+-- 			s.path_string like '/patient/suivi/programme/housing-first'
 -- 			and pi.deleted_at is null
 -- 			and p.deleted_at is null
 -- 			and @refdate BETWEEN coalesce(pi.start, @past) and COALESCE(pi.end, @refdate)
 			
--- 			and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 			and s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 			and pi_antenna.deleted_at is null
 -- 			and s_antenna.value like @antenna 
 -- 			and pi.start <= COALESCE (pi_antenna.end, @refdate)
 -- 			and coalesce(pi.end, @refdate) >= coalesce(pi_antenna.start, @past) 
 
--- 			and s_stat.path_string like "/patient/fiche/statut-du-suivi/%" 
--- 			and s_stat.path_string not like "/patient/fiche/statut-du-suivi/decede" 
+-- 			and s_stat.path_string like '/patient/fiche/statut-du-suivi/%' 
+-- 			and s_stat.path_string not like '/patient/fiche/statut-du-suivi/decede' 
 -- 			and @refdate between COALESCE(pi_stat.start, @past) and COALESCE (pi_stat.end, @nextyear0101)
 -- 			and pi_stat.deleted_at is null
 -- 	) hf on hf.pati_id = p.pati_id	
@@ -8134,8 +8134,8 @@ select 'Tableau 28.D. – Identification des assuétudes déclarées chez les pa
 select 'Tableau 28.D. – Identification des assuétudes déclarées chez les patients Housing First - liste nominative';
 
 -- select 
---     coalesce(path.category, "--inconnu--") as category,
--- 	coalesce(path.problem, "--inconnu--") as problem,
+--     coalesce(path.category, '--inconnu--') as category,
+-- 	coalesce(path.problem, '--inconnu--') as problem,
 -- 	p.hash
 -- from 
 -- 	patients p 
@@ -8153,19 +8153,19 @@ select 'Tableau 28.D. – Identification des assuétudes déclarées chez les pa
 -- 			inner join patients_information as pi_stat on p.pati_id = pi_stat.pati_id 
 -- 			inner join suggestions as s_stat on s_stat.sugg_id = pi_stat.sugg_id 
 -- 		where
--- 			s.path_string like "/patient/suivi/programme/housing-first"
+-- 			s.path_string like '/patient/suivi/programme/housing-first'
 -- 			and pi.deleted_at is null
 -- 			and p.deleted_at is null
 -- 			and @refdate BETWEEN coalesce(pi.start, @past) and COALESCE(pi.end, @refdate)
 			
--- 			and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 			and s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 			and pi_antenna.deleted_at is null
 -- 			and s_antenna.value like @antenna 
 -- 			and pi.start <= COALESCE (pi_antenna.end, @refdate)
 -- 			and coalesce(pi.end, @refdate) >= coalesce(pi_antenna.start, @past) 
 
--- 			and s_stat.path_string like "/patient/fiche/statut-du-suivi/%" 
--- 			and s_stat.path_string not like "/patient/fiche/statut-du-suivi/decede" 
+-- 			and s_stat.path_string like '/patient/fiche/statut-du-suivi/%' 
+-- 			and s_stat.path_string not like '/patient/fiche/statut-du-suivi/decede' 
 -- 			and @refdate between COALESCE(pi_stat.start, @past) and COALESCE (pi_stat.end, @nextyear0101)
 -- 			and pi_stat.deleted_at is null
 -- 	) hf on hf.pati_id = p.pati_id	
@@ -8173,7 +8173,7 @@ select 'Tableau 28.D. – Identification des assuétudes déclarées chez les pa
 -- 	(	
 -- 		select 
 -- 			pi_path.pati_id ,
--- 			if(stel.value like "%Déclarée%", "Assuétude", stel.value) as category,
+-- 			if(stel.value like '%Déclarée%', 'Assuétude', stel.value) as category,
 --             s2.value as problem
 -- 		from patients_information pi_path  
 -- 				inner join suggestions as s2 on s2.sugg_id = pi_path.sugg_id 
@@ -8204,7 +8204,7 @@ select 'TABLEAU 29 : PERSONNES DECEDEES';
 select 'TABLEAU 29.A : PERSONNES DECEDEES selon le suivi';
 
 -- select
---     coalesce(laststate.value, "--inconnue--") as dernierstatut,
+--     coalesce(laststate.value, '--inconnue--') as dernierstatut,
 --     count(dcd.pati_id) as nombre
 -- from
 --     (
@@ -8222,14 +8222,14 @@ select 'TABLEAU 29.A : PERSONNES DECEDEES selon le suivi';
 -- 			left join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id 
 -- 			left join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id 
 --         where
---             s.path_string like "/patient/fiche/statut-du-suivi/decede"
+--             s.path_string like '/patient/fiche/statut-du-suivi/decede'
 --             and pi.start is not null
 --             and pi.start like @refyearwc
 --             and pi.end is null
 --             and pi.deleted_at is null
 --             and p.deleted_at is null
 -- 			and @refdate between coalesce(pi_antenna.start, @past) and COALESCE (pi_antenna.end, @refdate)
--- 			and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 			and s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 			and s_antenna.value like @antenna
 --     ) dcd
 --     left join 
@@ -8241,8 +8241,8 @@ select 'TABLEAU 29.A : PERSONNES DECEDEES selon le suivi';
 -- 			left join patients_information as pi_laststate on p.pati_id = pi_laststate.pati_id
 -- 			left join suggestions as s_laststate on s_laststate.sugg_id = pi_laststate.sugg_id
 -- 		where
--- 			s_laststate.path_string like "/patient/fiche/statut-du-suivi/%" 
---             and s_laststate.path_string not like "/patient/fiche/statut-du-suivi/decede" 
+-- 			s_laststate.path_string like '/patient/fiche/statut-du-suivi/%' 
+--             and s_laststate.path_string not like '/patient/fiche/statut-du-suivi/decede' 
 -- 			and pi_laststate.start is not null
 -- 			and pi_laststate.deleted_at is null
 -- 			and p.deleted_at is null
@@ -8263,7 +8263,7 @@ select 'TABLEAU 29.A : PERSONNES DECEDEES selon le suivi - liste nominative avec
 -- 	dcd.firstname,
 --     dcd.lastname,
 --     dcd.start as dcdstart,
---     coalesce(laststate.value, "--inconnue--") as equipe,
+--     coalesce(laststate.value, '--inconnue--') as equipe,
 --     laststate.start as laststate_start,
 --     coalesce(laststate.end, dcd.start) as laststate_end,
 --     ( to_days(dcd.start) - to_days(coalesce(laststate.end, dcd.start) ) ) 
@@ -8283,14 +8283,14 @@ select 'TABLEAU 29.A : PERSONNES DECEDEES selon le suivi - liste nominative avec
 -- 			left join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id 
 -- 			left join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id 
 --         where
---             s.path_string like "/patient/fiche/statut-du-suivi/decede"
+--             s.path_string like '/patient/fiche/statut-du-suivi/decede'
 --             and pi.start is not null
 --             and pi.start like @refyearwc
 --             and pi.end is null
 --             and pi.deleted_at is null
 --             and p.deleted_at is null
 -- 			and @refdate between coalesce(pi_antenna.start, @past) and COALESCE (pi_antenna.end, @refdate)
--- 			and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 			and s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 			and s_antenna.value like @antenna
 --     ) dcd
 --     left join 
@@ -8302,8 +8302,8 @@ select 'TABLEAU 29.A : PERSONNES DECEDEES selon le suivi - liste nominative avec
 -- 			left join patients_information as pi_laststate on p.pati_id = pi_laststate.pati_id
 -- 			left join suggestions as s_laststate on s_laststate.sugg_id = pi_laststate.sugg_id
 -- 		where
--- 			s_laststate.path_string like "/patient/fiche/statut-du-suivi/%" 
---             and s_laststate.path_string not like "/patient/fiche/statut-du-suivi/decede" 
+-- 			s_laststate.path_string like '/patient/fiche/statut-du-suivi/%' 
+--             and s_laststate.path_string not like '/patient/fiche/statut-du-suivi/decede' 
 -- 			and pi_laststate.start is not null
 -- 			and pi_laststate.deleted_at is null
 -- 			and p.deleted_at is null
@@ -8317,7 +8317,7 @@ select 'TABLEAU 29.B : PERSONNES DECEDEES selon l\'équipe (inclut les personnes
 
 
 -- select
---     coalesce(team.value, "--inconnue--") as equipe,
+--     coalesce(team.value, '--inconnue--') as equipe,
 --     count(dcd.pati_id) as nombre
 -- from
 --     (
@@ -8335,14 +8335,14 @@ select 'TABLEAU 29.B : PERSONNES DECEDEES selon l\'équipe (inclut les personnes
 -- 			left join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id 
 -- 			left join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id 
 --         where
---             s.path_string like "/patient/fiche/statut-du-suivi/decede"
+--             s.path_string like '/patient/fiche/statut-du-suivi/decede'
 --             and pi.start is not null
 --             and pi.start like @refyearwc
 --             and pi.end is null
 --             and pi.deleted_at is null
 --             and p.deleted_at is null
 -- 			and @refdate between coalesce(pi_antenna.start, @past) and COALESCE (pi_antenna.end, @refdate)
--- 			and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 			and s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 			and s_antenna.value like @antenna
 --     ) dcd
 --     left join 
@@ -8354,7 +8354,7 @@ select 'TABLEAU 29.B : PERSONNES DECEDEES selon l\'équipe (inclut les personnes
 -- 			left join patients_information as pi_team on p.pati_id = pi_team.pati_id
 -- 			left join suggestions as s_team on s_team.sugg_id = pi_team.sugg_id
 -- 		where
--- 			s_team.path_string like "/patient/suivi/equipe%" 
+-- 			s_team.path_string like '/patient/suivi/equipe%' 
 -- 			and pi_team.start is not null
 -- 			and pi_team.deleted_at is null
 -- 			and p.deleted_at is null
@@ -8375,7 +8375,7 @@ select 'TABLEAU 29.B : PERSONNES DECEDEES selon l\'equipe - liste nominative ave
 -- 	dcd.firstname,
 --     dcd.lastname,
 --     dcd.start as dcdstart,
---     coalesce(team.value, "--inconnue--") as equipe,
+--     coalesce(team.value, '--inconnue--') as equipe,
 --     team.start as team_start,
 --     coalesce(team.end, dcd.start) as team_end,
 --     ( to_days(dcd.start) - to_days(coalesce(team.end, dcd.start) ) ) 
@@ -8395,14 +8395,14 @@ select 'TABLEAU 29.B : PERSONNES DECEDEES selon l\'equipe - liste nominative ave
 -- 			left join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id 
 -- 			left join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id 
 --         where
---             s.path_string like "/patient/fiche/statut-du-suivi/decede"
+--             s.path_string like '/patient/fiche/statut-du-suivi/decede'
 --             and pi.start is not null
 --             and pi.start like @refyearwc
 --             and pi.end is null
 --             and pi.deleted_at is null
 --             and p.deleted_at is null
 -- 			and @refdate between coalesce(pi_antenna.start, @past) and COALESCE (pi_antenna.end, @refdate)
--- 			and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 			and s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 			and s_antenna.value like @antenna
 --     ) dcd
 --     left join 
@@ -8414,7 +8414,7 @@ select 'TABLEAU 29.B : PERSONNES DECEDEES selon l\'equipe - liste nominative ave
 -- 			left join patients_information as pi_team on p.pati_id = pi_team.pati_id
 -- 			left join suggestions as s_team on s_team.sugg_id = pi_team.sugg_id
 -- 		where
--- 			s_team.path_string like "/patient/suivi/equipe%" 
+-- 			s_team.path_string like '/patient/suivi/equipe%' 
 -- 			and pi_team.start is not null
 -- 			and pi_team.deleted_at is null
 -- 			and p.deleted_at is null
@@ -8432,7 +8432,7 @@ select 'TABLEAU 29.C : PERSONNES DECEDEES selon le programme de logement';
 
 
 -- select
---     coalesce(programme.value, "--inconnue--") as progr,
+--     coalesce(programme.value, '--inconnue--') as progr,
 --     count(dcd.pati_id) as nombre
 -- from
 --     (
@@ -8450,14 +8450,14 @@ select 'TABLEAU 29.C : PERSONNES DECEDEES selon le programme de logement';
 -- 			left join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id 
 -- 			left join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id 
 --         where
---             s.path_string like "/patient/fiche/statut-du-suivi/decede"
+--             s.path_string like '/patient/fiche/statut-du-suivi/decede'
 --             and pi.start is not null
 --             and pi.start like @refyearwc
 --             and pi.end is null
 --             and pi.deleted_at is null
 --             and p.deleted_at is null
 -- 			and @refdate between coalesce(pi_antenna.start, @past) and COALESCE (pi_antenna.end, @refdate)
--- 			and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 			and s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 			and s_antenna.value like @antenna
 --     ) dcd
 --     left join 
@@ -8469,7 +8469,7 @@ select 'TABLEAU 29.C : PERSONNES DECEDEES selon le programme de logement';
 -- 			left join patients_information as pi_programme on p.pati_id = pi_programme.pati_id
 -- 			left join suggestions as s_programme on s_programme.sugg_id = pi_programme.sugg_id
 -- 		where
--- 			s_programme.path_string like "/patient/suivi/programme%" 
+-- 			s_programme.path_string like '/patient/suivi/programme%' 
 -- 			and pi_programme.start is not null
 -- 			and pi_programme.deleted_at is null
 -- 			and p.deleted_at is null
@@ -8488,7 +8488,7 @@ select 'TABLEAU 29.C : PERSONNES DECEDEES selon le programme de logement - liste
 -- 	dcd.firstname,
 --     dcd.lastname,
 --     dcd.start as dcdstart,
---     coalesce(programme.value, "--inconnue--") as equipe,
+--     coalesce(programme.value, '--inconnue--') as equipe,
 --     programme.start as programme_start,
 --     coalesce(programme.end, dcd.start) as programme_end,
 --     ( to_days(dcd.start) - to_days(coalesce(programme.end, dcd.start) ) ) 
@@ -8508,14 +8508,14 @@ select 'TABLEAU 29.C : PERSONNES DECEDEES selon le programme de logement - liste
 -- 			left join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id 
 -- 			left join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id 
 --         where
---             s.path_string like "/patient/fiche/statut-du-suivi/decede"
+--             s.path_string like '/patient/fiche/statut-du-suivi/decede'
 --             and pi.start is not null
 --             and pi.start like @refyearwc
 --             and pi.end is null
 --             and pi.deleted_at is null
 --             and p.deleted_at is null
 -- 			and @refdate between coalesce(pi_antenna.start, @past) and COALESCE (pi_antenna.end, @refdate)
--- 			and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 			and s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 			and s_antenna.value like @antenna
 --     ) dcd
 --     left join 
@@ -8527,7 +8527,7 @@ select 'TABLEAU 29.C : PERSONNES DECEDEES selon le programme de logement - liste
 -- 			left join patients_information as pi_programme on p.pati_id = pi_programme.pati_id
 -- 			left join suggestions as s_programme on s_programme.sugg_id = pi_programme.sugg_id
 -- 		where
--- 			s_programme.path_string like "/patient/suivi/programme%" 
+-- 			s_programme.path_string like '/patient/suivi/programme%' 
 -- 			and pi_programme.start is not null
 -- 			and pi_programme.deleted_at is null
 -- 			and p.deleted_at is null
@@ -8567,31 +8567,31 @@ select 'TABLEAU 31 : COLLABORATION AVEC D’AUTRES ASSOCIATIONS';
 --             if (contacts.orga_id is null,
 -- 					concat(
 -- 						trim(
--- 							COALESCE(contacts.firstname, "")
+-- 							COALESCE(contacts.firstname, '')
 -- 						),
--- 						if ( trim(COALESCE(contacts.firstname, "")) = "", "", " "),
+-- 						if ( trim(COALESCE(contacts.firstname, '')) = '', '', ' '),
 -- 						trim(
--- 							COALESCE(contacts.lastname, "")
+-- 							COALESCE(contacts.lastname, '')
 -- 						)
 -- 					),
 -- 					concat(
 -- 						trim(
--- 							COALESCE(orga.firstname, "")
+-- 							COALESCE(orga.firstname, '')
 -- 						),
--- 						if ( trim(COALESCE(orga.firstname, "")) = "", "", " "),
+-- 						if ( trim(COALESCE(orga.firstname, '')) = '', '', ' '),
 -- 						trim(
--- 							COALESCE(orga.lastname, "")
+-- 							COALESCE(orga.lastname, '')
 -- 						)
 -- 					)
 --             ) as travaillepour,
 --             case contacts.type when 1 then 'Personne morale' when 2 then 'Personne physique' end as activite,
 --             concat(
 --                 trim(
---                     COALESCE(contacts.firstname, "")
+--                     COALESCE(contacts.firstname, '')
 --                 ),
---                 if ( trim(COALESCE(contacts.firstname, "")) = "", "", " "),
+--                 if ( trim(COALESCE(contacts.firstname, '')) = '', '', ' '),
 --                 trim(
---                     COALESCE(contacts.lastname, "")
+--                     COALESCE(contacts.lastname, '')
 --                 )
 --             ) as nom,
 --             contacts.cont_id as agent_id,
@@ -8623,7 +8623,7 @@ select 'TABLEAU 31 : COLLABORATION AVEC D’AUTRES ASSOCIATIONS';
 --             and followup_reports.report_date like @refyearwc
 					
 -- 			and @refdate between coalesce(pi_antenna.start, @past) and COALESCE (pi_antenna.end, @refdate)
--- 			and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 			and s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 			and s_antenna.value like @antenna
 --     ) r
 --     group by travaillepour, nom
@@ -8658,15 +8658,15 @@ select 'Tableau 32.A. - Nombre de personnes du post-suivi ayant fait une rechute
 -- 			left join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id 
 -- 			left join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id 
 -- 		where 
--- 			s.path_string like "/patient/fiche/statut-du-suivi/post-suivi" 
+-- 			s.path_string like '/patient/fiche/statut-du-suivi/post-suivi' 
 -- 			and pi.start is not null 
 -- 			and pi.start < @nextyear0101 
--- 			and coalesce(pi.end, @refdate) >= concat(@refyear, "-01-01") 
+-- 			and coalesce(pi.end, @refdate) >= concat(@refyear, '-01-01') 
 -- 			and pi.deleted_at is null 
 -- 			and p.deleted_at is null 
 
 -- 			and @refdate between coalesce(pi_antenna.start, @past) and COALESCE (pi_antenna.end, @refdate)
--- 			and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 			and s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 			and s_antenna.value like @antenna
 			
 -- 		order by 
@@ -8679,7 +8679,7 @@ select 'Tableau 32.A. - Nombre de personnes du post-suivi ayant fait une rechute
 -- 	inner join patients_information as pi2 on q.pati_id = pi2.pati_id 
 -- 	inner join suggestions as s2 on s2.sugg_id = pi2.sugg_id 
 -- where 
--- 	s2.path_string like "/patient/fiche/statut-du-suivi/en-suivi%" 
+-- 	s2.path_string like '/patient/fiche/statut-du-suivi/en-suivi%' 
 -- 	and pi2.deleted_at is null 
 -- 	and p2.deleted_at is null 
 --     and ABS(to_days(pi2.start) - to_days(q.end)) < 2
@@ -8713,15 +8713,15 @@ select 'Tableau 32.A. - Nombre de personnes du post-suivi ayant fait une rechute
 -- 			left join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id 
 -- 			left join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id 
 -- 		where 
--- 			s.path_string like "/patient/fiche/statut-du-suivi/post-suivi" 
+-- 			s.path_string like '/patient/fiche/statut-du-suivi/post-suivi' 
 -- 			and pi.start is not null 
 -- 			and pi.start < @nextyear0101 
--- 			and coalesce(pi.end, @refdate) >= concat(@refyear, "-01-01") 
+-- 			and coalesce(pi.end, @refdate) >= concat(@refyear, '-01-01') 
 -- 			and pi.deleted_at is null 
 -- 			and p.deleted_at is null 
 
 -- 			and @refdate between coalesce(pi_antenna.start, @past) and COALESCE (pi_antenna.end, @refdate)
--- 			and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 			and s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 			and s_antenna.value like @antenna
 			
 -- 		order by 
@@ -8734,7 +8734,7 @@ select 'Tableau 32.A. - Nombre de personnes du post-suivi ayant fait une rechute
 -- 	inner join patients_information as pi2 on q.pati_id = pi2.pati_id 
 -- 	inner join suggestions as s2 on s2.sugg_id = pi2.sugg_id 
 -- where 
--- 	s2.path_string like "/patient/fiche/statut-du-suivi/en-suivi%" 
+-- 	s2.path_string like '/patient/fiche/statut-du-suivi/en-suivi%' 
 -- 	and pi2.deleted_at is null 
 -- 	and p2.deleted_at is null 
 --     and ABS(to_days(pi2.start) - to_days(q.end)) < 2
@@ -8769,15 +8769,15 @@ select 'Tableau 32.A. - Nombre de personnes du post-suivi ayant fait une rechute
 -- 			left join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id 
 -- 			left join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id 
 -- 		where 
--- 			s.path_string like "/patient/fiche/statut-du-suivi/post-suivi" 
+-- 			s.path_string like '/patient/fiche/statut-du-suivi/post-suivi' 
 -- 			and pi.start is not null 
 -- 			and pi.start < @nextyear0101 
--- 			and coalesce(pi.end, @refdate) >= concat(@refyear, "-01-01") 
+-- 			and coalesce(pi.end, @refdate) >= concat(@refyear, '-01-01') 
 -- 			and pi.deleted_at is null 
 -- 			and p.deleted_at is null 
 
 -- 			and @refdate between coalesce(pi_antenna.start, @past) and COALESCE (pi_antenna.end, @refdate)
--- 			and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 			and s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 			and s_antenna.value like @antenna
 			
 -- 		order by 
@@ -8790,7 +8790,7 @@ select 'Tableau 32.A. - Nombre de personnes du post-suivi ayant fait une rechute
 -- 	inner join patients_information as pi2 on q.pati_id = pi2.pati_id 
 -- 	inner join suggestions as s2 on s2.sugg_id = pi2.sugg_id 
 -- where 
--- 	s2.path_string like "/patient/fiche/statut-du-suivi/%" 
+-- 	s2.path_string like '/patient/fiche/statut-du-suivi/%' 
 -- 	and pi2.deleted_at is null 
 -- 	and p2.deleted_at is null 
 --     and ABS(to_days(pi2.start) - to_days(q.end)) < 2
@@ -8826,15 +8826,15 @@ select 'Tableau 32.B. - Nombre de patient par nombre de rechutes vers le suivi';
 -- 				left join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id 
 -- 				left join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id 
 -- 			where 
--- 				s.path_string like "/patient/fiche/statut-du-suivi/post-suivi" 
+-- 				s.path_string like '/patient/fiche/statut-du-suivi/post-suivi' 
 -- 				and pi.start is not null 
 -- 				and pi.start < @nextyear0101 
--- 				and coalesce(pi.end, @refdate) >= concat(@refyear, "-01-01") 
+-- 				and coalesce(pi.end, @refdate) >= concat(@refyear, '-01-01') 
 -- 				and pi.deleted_at is null 
 -- 				and p.deleted_at is null 
 
 -- 				and @refdate between coalesce(pi_antenna.start, @past) and COALESCE (pi_antenna.end, @refdate)
--- 				and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 				and s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 				and s_antenna.value like @antenna
 				
 -- 			order by 
@@ -8847,7 +8847,7 @@ select 'Tableau 32.B. - Nombre de patient par nombre de rechutes vers le suivi';
 -- 		inner join patients_information as pi2 on q.pati_id = pi2.pati_id 
 -- 		inner join suggestions as s2 on s2.sugg_id = pi2.sugg_id 
 -- 	where 
--- 		s2.path_string like "/patient/fiche/statut-du-suivi/en-suivi%" 
+-- 		s2.path_string like '/patient/fiche/statut-du-suivi/en-suivi%' 
 -- 		and pi2.deleted_at is null 
 -- 		and p2.deleted_at is null 
 -- 		and ABS(to_days(pi2.start) - to_days(q.end)) < 2
@@ -8892,15 +8892,15 @@ select 'Tableau 32.C. - Nombre de personnes ayant rechuté en rue';
 -- 				and pi_team.start is not null 
 -- 				and pi_team.start like @refyearwc
 
--- 				and (s.path_string like "/patient/fiche/statut-du-suivi/post-suivi" or s.path_string like "/patient/fiche/statut-du-suivi/en-suivi")
+-- 				and (s.path_string like '/patient/fiche/statut-du-suivi/post-suivi' or s.path_string like '/patient/fiche/statut-du-suivi/en-suivi')
 -- 				and pi.start is not null 
 -- 				and pi.start < @nextyear0101 
--- 				and coalesce(pi.end, @refdate) >= concat(@refyear, "-01-01") 
+-- 				and coalesce(pi.end, @refdate) >= concat(@refyear, '-01-01') 
 -- 				and pi.deleted_at is null 
 -- 				and p.deleted_at is null 
 
 -- 				and @refdate between coalesce(pi_antenna.start, @past) and COALESCE (pi_antenna.end, @refdate)
--- 				and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 				and s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 				and s_antenna.value like @antenna
 				
 -- 			order by 
@@ -8913,7 +8913,7 @@ select 'Tableau 32.C. - Nombre de personnes ayant rechuté en rue';
 -- 		inner join patients_information as pi_teamlog on q.pati_id = pi_teamlog.pati_id 
 -- 		inner join suggestions as s_teamlog on s_teamlog.sugg_id = pi_teamlog.sugg_id 
 -- 	where 
--- 		s_teamlog.path_string like "/patient/suivi/equipes/equipe-log%" 
+-- 		s_teamlog.path_string like '/patient/suivi/equipes/equipe-log%' 
 -- 		and pi_teamlog.deleted_at is null 
 -- 		and pi_teamlog.deleted_at is null 
 -- 		and ABS(to_days(pi_teamlog.end) - to_days(q.startofteamrue)) < 2
@@ -8960,15 +8960,15 @@ select 'Tableau 32.C. - Nombre de personnes ayant rechuté en rue - liste nomina
 	-- 			and pi_team.start is not null 
 	-- 			and pi_team.start like @refyearwc
 
-	-- 			and (s.path_string like "/patient/fiche/statut-du-suivi/post-suivi" or s.path_string like "/patient/fiche/statut-du-suivi/en-suivi")
+	-- 			and (s.path_string like '/patient/fiche/statut-du-suivi/post-suivi' or s.path_string like '/patient/fiche/statut-du-suivi/en-suivi')
 	-- 			and pi.start is not null 
 	-- 			and pi.start < @nextyear0101 
-	-- 			and coalesce(pi.end, @refdate) >= concat(@refyear, "-01-01") 
+	-- 			and coalesce(pi.end, @refdate) >= concat(@refyear, '-01-01') 
 	-- 			and pi.deleted_at is null 
 	-- 			and p.deleted_at is null 
 
 	-- 			and @refdate between coalesce(pi_antenna.start, @past) and COALESCE (pi_antenna.end, @refdate)
-	-- 			and s_antenna.path_string like "/patient/suivi/antenne/%"
+	-- 			and s_antenna.path_string like '/patient/suivi/antenne/%'
 	-- 			and s_antenna.value like @antenna
 				
 	-- 		order by 
@@ -8981,7 +8981,7 @@ select 'Tableau 32.C. - Nombre de personnes ayant rechuté en rue - liste nomina
 	-- 	inner join patients_information as pi_teamlog on q.pati_id = pi_teamlog.pati_id 
 	-- 	inner join suggestions as s_teamlog on s_teamlog.sugg_id = pi_teamlog.sugg_id 
 	-- where 
-	-- 	s_teamlog.path_string like "/patient/suivi/equipes/equipe-log%" 
+	-- 	s_teamlog.path_string like '/patient/suivi/equipes/equipe-log%' 
 	-- 	and pi_teamlog.deleted_at is null 
 	-- 	and pi_teamlog.deleted_at is null 
 	-- 	and ABS(to_days(pi_teamlog.end) - to_days(q.startofteamrue)) < 2
@@ -9034,7 +9034,7 @@ select 'Tableau 33.A.1 - Durée moyenne du post-suivi, pour ceux qui ont quitté
 -- 					left join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id 
 -- 					left join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id 
 -- 				where 
--- 					s.path_string like "/patient/fiche/statut-du-suivi/decede"
+-- 					s.path_string like '/patient/fiche/statut-du-suivi/decede'
 -- 					and pi.start is not null 
 -- 					and @refdate BETWEEN pi.start 
 -- 					and COALESCE(
@@ -9045,7 +9045,7 @@ select 'Tableau 33.A.1 - Durée moyenne du post-suivi, pour ceux qui ont quitté
 -- 					and p.deleted_at is null 
 
 -- 					and @refdate between coalesce(pi_antenna.start, @past) and COALESCE (pi_antenna.end, @refdate)
--- 					and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 					and s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 					and s_antenna.value like @antenna
 
 -- 				order by 
@@ -9058,7 +9058,7 @@ select 'Tableau 33.A.1 - Durée moyenne du post-suivi, pour ceux qui ont quitté
 -- 			inner join patients_information as pi2 on q.pati_id = pi2.pati_id 
 -- 			inner join suggestions as s2 on s2.sugg_id = pi2.sugg_id 
 -- 		where 
--- 			s2.path_string like "/patient/fiche/statut-du-suivi/post-suivi"
+-- 			s2.path_string like '/patient/fiche/statut-du-suivi/post-suivi'
 -- 			and pi2.start is not null 
 -- 			and pi2.deleted_at is null 
 -- 			and p2.deleted_at is null 
@@ -9104,7 +9104,7 @@ select 'Tableau 33.A.1 - Durée moyenne du post-suivi, pour ceux qui ont quitté
 -- 			left join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id 
 -- 			left join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id 
 -- 		where 
--- 			s.path_string like "/patient/fiche/statut-du-suivi/decede"
+-- 			s.path_string like '/patient/fiche/statut-du-suivi/decede'
 -- 			and pi.start is not null 
 -- 			and @refdate BETWEEN pi.start 
 -- 			and COALESCE(
@@ -9115,7 +9115,7 @@ select 'Tableau 33.A.1 - Durée moyenne du post-suivi, pour ceux qui ont quitté
 -- 			and p.deleted_at is null 
 
 -- 			and @refdate between coalesce(pi_antenna.start, @past) and COALESCE (pi_antenna.end, @refdate)
--- 			and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 			and s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 			and s_antenna.value like @antenna
 
 -- 		order by 
@@ -9128,7 +9128,7 @@ select 'Tableau 33.A.1 - Durée moyenne du post-suivi, pour ceux qui ont quitté
 -- 	inner join patients_information as pi2 on q.pati_id = pi2.pati_id 
 -- 	inner join suggestions as s2 on s2.sugg_id = pi2.sugg_id 
 -- where 
--- 	s2.path_string like "/patient/fiche/statut-du-suivi/post-suivi"
+-- 	s2.path_string like '/patient/fiche/statut-du-suivi/post-suivi'
 -- 	and pi2.start is not null 
 -- 	and pi2.deleted_at is null 
 -- 	and p2.deleted_at is null 
@@ -9190,7 +9190,7 @@ select 'Tableau 33.A.2 - Durée moyenne du suivi pour ceux qui ont quitté ces c
 -- 					left join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id 
 -- 					left join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id 
 -- 				where 
--- 					s.path_string like "/patient/fiche/statut-du-suivi/post-suivi"
+-- 					s.path_string like '/patient/fiche/statut-du-suivi/post-suivi'
 -- 					and pi.start is not null 
 -- 					and @refdate BETWEEN pi.start 
 -- 					and COALESCE(
@@ -9201,7 +9201,7 @@ select 'Tableau 33.A.2 - Durée moyenne du suivi pour ceux qui ont quitté ces c
 -- 					and p.deleted_at is null 
 
 -- 					and @refdate between coalesce(pi_antenna.start, @past) and COALESCE (pi_antenna.end, @refdate)
--- 					and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 					and s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 					and s_antenna.value like @antenna
 
 -- 				order by 
@@ -9214,7 +9214,7 @@ select 'Tableau 33.A.2 - Durée moyenne du suivi pour ceux qui ont quitté ces c
 -- 			inner join patients_information as pi2 on q.pati_id = pi2.pati_id 
 -- 			inner join suggestions as s2 on s2.sugg_id = pi2.sugg_id 
 -- 		where 
--- 			s2.path_string like "/patient/fiche/statut-du-suivi/en-suivi"
+-- 			s2.path_string like '/patient/fiche/statut-du-suivi/en-suivi'
 -- 			and pi2.start is not null 
 -- 			and pi2.deleted_at is null 
 -- 			and p2.deleted_at is null 
@@ -9259,7 +9259,7 @@ select 'Tableau 33.A.2 - Durée moyenne du suivi pour ceux qui ont quitté ces c
 -- 			left join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id 
 -- 			left join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id 
 -- 		where 
--- 			s.path_string like "/patient/fiche/statut-du-suivi/post-suivi"
+-- 			s.path_string like '/patient/fiche/statut-du-suivi/post-suivi'
 -- 			and pi.start is not null 
 -- 			and @refdate BETWEEN pi.start 
 -- 			and COALESCE(
@@ -9270,7 +9270,7 @@ select 'Tableau 33.A.2 - Durée moyenne du suivi pour ceux qui ont quitté ces c
 -- 			and p.deleted_at is null 
 
 -- 			and @refdate between coalesce(pi_antenna.start, @past) and COALESCE (pi_antenna.end, @refdate)
--- 			and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 			and s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 			and s_antenna.value like @antenna
 
 -- 		order by 
@@ -9283,7 +9283,7 @@ select 'Tableau 33.A.2 - Durée moyenne du suivi pour ceux qui ont quitté ces c
 -- 	inner join patients_information as pi2 on q.pati_id = pi2.pati_id 
 -- 	inner join suggestions as s2 on s2.sugg_id = pi2.sugg_id 
 -- where 
--- 	s2.path_string like "/patient/fiche/statut-du-suivi/en-suivi"
+-- 	s2.path_string like '/patient/fiche/statut-du-suivi/en-suivi'
 -- 	and pi2.start is not null 
 -- 	and pi2.deleted_at is null 
 -- 	and p2.deleted_at is null 
@@ -9346,7 +9346,7 @@ select 'Tableau 33.A.3 - Durée moyenne du pré-suivi pour ceux qui ont quitté 
 -- 					left join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id 
 -- 					left join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id 
 -- 				where 
--- 					s.path_string like "/patient/fiche/statut-du-suivi/en-suivi"
+-- 					s.path_string like '/patient/fiche/statut-du-suivi/en-suivi'
 -- 					and pi.start is not null 
 -- 					and @refdate BETWEEN pi.start 
 -- 					and COALESCE(
@@ -9357,7 +9357,7 @@ select 'Tableau 33.A.3 - Durée moyenne du pré-suivi pour ceux qui ont quitté 
 -- 					and p.deleted_at is null 
 
 -- 					and @refdate between coalesce(pi_antenna.start, @past) and COALESCE (pi_antenna.end, @refdate)
--- 					and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 					and s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 					and s_antenna.value like @antenna
 
 -- 				order by 
@@ -9370,7 +9370,7 @@ select 'Tableau 33.A.3 - Durée moyenne du pré-suivi pour ceux qui ont quitté 
 -- 			inner join patients_information as pi2 on q.pati_id = pi2.pati_id 
 -- 			inner join suggestions as s2 on s2.sugg_id = pi2.sugg_id 
 -- 		where 
--- 			s2.path_string like "/patient/fiche/statut-du-suivi/pre-suivi-actif"
+-- 			s2.path_string like '/patient/fiche/statut-du-suivi/pre-suivi-actif'
 -- 			and pi2.start is not null 
 -- 			and pi2.deleted_at is null 
 -- 			and p2.deleted_at is null 
@@ -9416,7 +9416,7 @@ select 'Tableau 33.A.3 - Durée moyenne du pré-suivi pour ceux qui ont quitté 
 -- 			left join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id 
 -- 			left join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id 
 -- 		where 
--- 			s.path_string like "/patient/fiche/statut-du-suivi/en-suivi"
+-- 			s.path_string like '/patient/fiche/statut-du-suivi/en-suivi'
 -- 			and pi.start is not null 
 -- 			and @refdate BETWEEN pi.start 
 -- 			and COALESCE(
@@ -9427,7 +9427,7 @@ select 'Tableau 33.A.3 - Durée moyenne du pré-suivi pour ceux qui ont quitté 
 -- 			and p.deleted_at is null 
 
 -- 			and @refdate between coalesce(pi_antenna.start, @past) and COALESCE (pi_antenna.end, @refdate)
--- 			and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 			and s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 			and s_antenna.value like @antenna
 
 -- 		order by 
@@ -9440,7 +9440,7 @@ select 'Tableau 33.A.3 - Durée moyenne du pré-suivi pour ceux qui ont quitté 
 -- 	inner join patients_information as pi2 on q.pati_id = pi2.pati_id 
 -- 	inner join suggestions as s2 on s2.sugg_id = pi2.sugg_id 
 -- where 
--- 	s2.path_string like "/patient/fiche/statut-du-suivi/pre-suivi-actif"
+-- 	s2.path_string like '/patient/fiche/statut-du-suivi/pre-suivi-actif'
 -- 	and pi2.start is not null 
 -- 	and pi2.deleted_at is null 
 -- 	and p2.deleted_at is null 
@@ -9523,7 +9523,7 @@ select 'Tableau 33.B. - Durée moyenne du pré-suivi pour ceux qui y sont toujou
 -- 					left join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id 
 -- 					left join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id 
 --                 where
--- 					s.path_string like "/patient/fiche/statut-du-suivi/pre-suivi-actif"
+-- 					s.path_string like '/patient/fiche/statut-du-suivi/pre-suivi-actif'
 --                     and pi.start is not null
 -- 					and @refdate BETWEEN pi.start 
 -- 					and COALESCE(
@@ -9534,7 +9534,7 @@ select 'Tableau 33.B. - Durée moyenne du pré-suivi pour ceux qui y sont toujou
 --                     and p.deleted_at is null
 
 -- 					and @refdate between coalesce(pi_antenna.start, @past) and COALESCE (pi_antenna.end, @refdate)
--- 					and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 					and s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 					and s_antenna.value like @antenna
 
 --                 order by
@@ -9600,7 +9600,7 @@ select 'Tableau 33.B. - Durée moyenne du pré-suivi pour ceux qui y sont toujou
         --             inner join patients_information as pi on p.pati_id = pi.pati_id
         --             inner join suggestions as s on s.sugg_id = pi.sugg_id
         --         where
-		-- 			s.path_string like "/patient/fiche/statut-du-suivi/pre-suivi-actif"
+		-- 			s.path_string like '/patient/fiche/statut-du-suivi/pre-suivi-actif'
         --             and pi.start is not null
 		-- 			and @refdate BETWEEN pi.start 
 		-- 			and COALESCE(
@@ -9689,7 +9689,7 @@ select 'Tableau 33.C. - Durée moyenne du suivi pour ceux qui y sont toujours';
 -- 					left join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id 
 -- 					left join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id 
 --                 where
--- 					s.path_string like "/patient/fiche/statut-du-suivi/en-suivi"
+-- 					s.path_string like '/patient/fiche/statut-du-suivi/en-suivi'
 --                     and pi.start is not null
 -- 					and @refdate BETWEEN pi.start 
 -- 					and COALESCE(
@@ -9700,7 +9700,7 @@ select 'Tableau 33.C. - Durée moyenne du suivi pour ceux qui y sont toujours';
 --                     and p.deleted_at is null
 
 -- 					and @refdate between coalesce(pi_antenna.start, @past) and COALESCE (pi_antenna.end, @refdate)
--- 					and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 					and s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 					and s_antenna.value like @antenna
 
 --                 order by
@@ -9776,7 +9776,7 @@ select 'Tableau 33.C. - Durée moyenne du suivi pour ceux qui y sont toujours - 
                     
                     
     --             where
-	-- 				s.path_string like "/patient/fiche/statut-du-suivi/en-suivi"
+	-- 				s.path_string like '/patient/fiche/statut-du-suivi/en-suivi'
     --                 and pi.start is not null
 	-- 				and @refdate BETWEEN pi.start 
 	-- 				and COALESCE(
@@ -9787,7 +9787,7 @@ select 'Tableau 33.C. - Durée moyenne du suivi pour ceux qui y sont toujours - 
     --                 and p.deleted_at is null
 
 	-- 				and @refdate between coalesce(pi_antenna.start, @past) and COALESCE (pi_antenna.end, @refdate)
-	-- 				and s_antenna.path_string like "/patient/suivi/antenne/%"
+	-- 				and s_antenna.path_string like '/patient/suivi/antenne/%'
 	-- 				and s_antenna.value like @antenna
 
     --             order by
@@ -9855,7 +9855,7 @@ select 'Suivi : moyenne, ecart type et taille echantillon';
 -- 					left join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id 
 -- 					left join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id 
 -- 				where 
--- 					s.path_string like "/patient/fiche/statut-du-suivi/post-suivi"
+-- 					s.path_string like '/patient/fiche/statut-du-suivi/post-suivi'
 -- 					and pi.start is not null 
 -- 					and @refdate BETWEEN pi.start 
 -- 					and COALESCE(
@@ -9866,7 +9866,7 @@ select 'Suivi : moyenne, ecart type et taille echantillon';
 -- 					and p.deleted_at is null 
 
 -- 					and @refdate between coalesce(pi_antenna.start, @past) and COALESCE (pi_antenna.end, @refdate)
--- 					and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 					and s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 					and s_antenna.value like @antenna
 -- 				order by 
 -- 					s.value, 
@@ -9878,7 +9878,7 @@ select 'Suivi : moyenne, ecart type et taille echantillon';
 -- 			inner join patients_information as pi2 on q.pati_id = pi2.pati_id 
 -- 			inner join suggestions as s2 on s2.sugg_id = pi2.sugg_id 
 -- 		where 
--- 			s2.path_string like "/patient/fiche/statut-du-suivi/en-suivi"
+-- 			s2.path_string like '/patient/fiche/statut-du-suivi/en-suivi'
 -- 			and pi2.start is not null 
 -- 			and pi2.deleted_at is null 
 -- 			and p2.deleted_at is null 
@@ -9916,7 +9916,7 @@ select 'Tableau 33.D. - Durée moyenne du suivi rue et suivi logement - liste no
 		-- 			left join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id 
 		-- 			left join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id 
 		-- 		where 
-		-- 			s.path_string like "/patient/fiche/statut-du-suivi/post-suivi"
+		-- 			s.path_string like '/patient/fiche/statut-du-suivi/post-suivi'
 		-- 			and pi.start is not null 
 		-- 			and @refdate BETWEEN pi.start 
 		-- 			and COALESCE(
@@ -9927,7 +9927,7 @@ select 'Tableau 33.D. - Durée moyenne du suivi rue et suivi logement - liste no
 		-- 			and p.deleted_at is null 
 
 		-- 			and @refdate between coalesce(pi_antenna.start, @past) and COALESCE (pi_antenna.end, @refdate)
-		-- 			and s_antenna.path_string like "/patient/suivi/antenne/%"
+		-- 			and s_antenna.path_string like '/patient/suivi/antenne/%'
 		-- 			and s_antenna.value like @antenna
 		-- 		order by 
 		-- 			s.value, 
@@ -9939,7 +9939,7 @@ select 'Tableau 33.D. - Durée moyenne du suivi rue et suivi logement - liste no
 		-- 	inner join patients_information as pi2 on q.pati_id = pi2.pati_id 
 		-- 	inner join suggestions as s2 on s2.sugg_id = pi2.sugg_id 
 		-- where 
-		-- 	s2.path_string like "/patient/fiche/statut-du-suivi/en-suivi"
+		-- 	s2.path_string like '/patient/fiche/statut-du-suivi/en-suivi'
 		-- 	and pi2.start is not null 
 		-- 	and pi2.deleted_at is null 
 		-- 	and p2.deleted_at is null 
@@ -9975,9 +9975,9 @@ select 'TABLEAU XX : REPARTITION DES PATIENTS DANS L’EQUIPE RUE ET L’EQUIPE 
 
 -- 		where 
 -- 			(
--- 				s.path_string like "/patient/fiche/statut-du-suivi/pre-suivi-actif"
--- 				or s.path_string like "/patient/fiche/statut-du-suivi/en-suivi"
--- 				or s.path_string like "/patient/fiche/statut-du-suivi/post-suivi"
+-- 				s.path_string like '/patient/fiche/statut-du-suivi/pre-suivi-actif'
+-- 				or s.path_string like '/patient/fiche/statut-du-suivi/en-suivi'
+-- 				or s.path_string like '/patient/fiche/statut-du-suivi/post-suivi'
 -- 			) 
 -- 			and @refdate BETWEEN pi.start 
 -- 				and COALESCE(
@@ -9988,7 +9988,7 @@ select 'TABLEAU XX : REPARTITION DES PATIENTS DANS L’EQUIPE RUE ET L’EQUIPE 
 -- 			and p.deleted_at is null
 
 -- 			and @refdate between coalesce(pi_antenna.start, @past) and COALESCE (pi_antenna.end, @refdate)
--- 			and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 			and s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 			and s_antenna.value like @antenna
 
 -- 		group by 
@@ -10031,9 +10031,9 @@ select 'TABLEAU XX : REPARTITION DES PATIENTS DANS L’EQUIPE RUE ET L’EQUIPE 
 
 -- 		where 
 -- 			(
--- 				s.path_string like "/patient/fiche/statut-du-suivi/pre-suivi-actif"
--- 				or s.path_string like "/patient/fiche/statut-du-suivi/en-suivi"
--- 				or s.path_string like "/patient/fiche/statut-du-suivi/post-suivi"
+-- 				s.path_string like '/patient/fiche/statut-du-suivi/pre-suivi-actif'
+-- 				or s.path_string like '/patient/fiche/statut-du-suivi/en-suivi'
+-- 				or s.path_string like '/patient/fiche/statut-du-suivi/post-suivi'
 -- 			) 
 -- 			and @refdate BETWEEN pi.start 
 -- 				and COALESCE(
@@ -10044,7 +10044,7 @@ select 'TABLEAU XX : REPARTITION DES PATIENTS DANS L’EQUIPE RUE ET L’EQUIPE 
 -- 			and p.deleted_at is null
 
 -- 			and @refdate between coalesce(pi_antenna.start, @past) and COALESCE (pi_antenna.end, @refdate)
--- 			and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 			and s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 			and s_antenna.value like @antenna
 
 -- 		group by 
@@ -10100,9 +10100,9 @@ select 'TABLEAU 34 : PROGRESSION DU CVC - mensuel';
 -- 			p.deleted_at is null 
 -- 			and left(fr.report_date, 4) = @refyear 
 -- 			and (
---                 s.path_string like "/patient/fiche/statut-du-suivi/pre-suivi-actif" 
---                 or s.path_string like "/patient/fiche/statut-du-suivi/en-suivi" 
---                 or s.path_string like "/patient/fiche/statut-du-suivi/post-suivi" 
+--                 s.path_string like '/patient/fiche/statut-du-suivi/pre-suivi-actif' 
+--                 or s.path_string like '/patient/fiche/statut-du-suivi/en-suivi' 
+--                 or s.path_string like '/patient/fiche/statut-du-suivi/post-suivi' 
                 
 -- 			) 
 -- 			and pi.deleted_at is null 
@@ -10113,11 +10113,11 @@ select 'TABLEAU 34 : PROGRESSION DU CVC - mensuel';
 -- 					@refdate
 -- 				)
 -- 			) 
---             and ig.name = "CVC"
+--             and ig.name = 'CVC'
 
 
 -- 			and @refdate between coalesce(pi_antenna.start, @past) and COALESCE (pi_antenna.end, @refdate)
--- 			and s_antenna.path_string like "/patient/suivi/antenne/%"
+-- 			and s_antenna.path_string like '/patient/suivi/antenne/%'
 -- 			and s_antenna.value like @antenna
 
 -- 		group by 
@@ -10167,9 +10167,9 @@ from
 			p.deleted_at is null 
 			and left(fr.report_date, 4) = @refyear 
 			and (
-                s.path_string like "/patient/fiche/statut-du-suivi/pre-suivi-actif" 
-                or s.path_string like "/patient/fiche/statut-du-suivi/en-suivi" 
-                or s.path_string like "/patient/fiche/statut-du-suivi/post-suivi" 
+                s.path_string like '/patient/fiche/statut-du-suivi/pre-suivi-actif' 
+                or s.path_string like '/patient/fiche/statut-du-suivi/en-suivi' 
+                or s.path_string like '/patient/fiche/statut-du-suivi/post-suivi' 
                 
 			) 
 			and pi.deleted_at is null 
@@ -10180,11 +10180,11 @@ from
 					@refdate
 				)
 			) 
-            and ig.name = "CVC"
+            and ig.name = 'CVC'
 
 
 			and @refdate between coalesce(pi_antenna.start, @past) and COALESCE (pi_antenna.end, @refdate)
-			and s_antenna.path_string like "/patient/suivi/antenne/%"
+			and s_antenna.path_string like '/patient/suivi/antenne/%'
 			and s_antenna.value like @antenna
 
 		group by 
@@ -10201,7 +10201,7 @@ order by
 	
 # divers
 
-select 'Valeurs "autres" pour les pathologies physiques';
+select 'Valeurs 'autres' pour les pathologies physiques';
 
 -- SELECT
 --             s.value,
@@ -10216,8 +10216,8 @@ select 'Valeurs "autres" pour les pathologies physiques';
 --             inner join patients_information as pi on p.pati_id = pi.pati_id
 --             inner join suggestions as s on s.sugg_id = pi.sugg_id
 --         where
---             (s.value like "Autre")
---             and s.path_string like "%pathologies-physiques%"
+--             (s.value like 'Autre')
+--             and s.path_string like '%pathologies-physiques%'
 --             and pi.end is null
 --             and pi.deleted_at is null
 -- 			and p.deleted_at is null
@@ -10248,7 +10248,7 @@ select
     q.firstname,
     q.lastname,
     if (
-        status like "Pré-suivi actif",
+        status like 'Pré-suivi actif',
         to_days(
             COALESCE(
                 q.end,
@@ -10258,7 +10258,7 @@ select
         0
     ) as presuiviactif,
     if (
-        status like "Pré-suivi inactif",
+        status like 'Pré-suivi inactif',
         to_days(
             COALESCE(
                 q.end,
@@ -10268,7 +10268,7 @@ select
         0
     ) as presuiviinactif,
     if (
-        status like "en suivi",
+        status like 'en suivi',
         to_days(
             COALESCE(
                 q.end,
@@ -10278,7 +10278,7 @@ select
         0
     ) as ensuivi,
     if (
-        status like "post-suivi",
+        status like 'post-suivi',
         to_days(
             COALESCE(
                 q.end,
@@ -10288,7 +10288,7 @@ select
         0
     ) as postsuivi,
     if (
-        status like "signalement tiers",
+        status like 'signalement tiers',
         to_days(
             COALESCE(
                 q.end,
@@ -10298,7 +10298,7 @@ select
         0
     ) as signalementtiers,
     if (
-        status like "signalement partenaire",
+        status like 'signalement partenaire',
         to_days(
             COALESCE(
                 q.end,
@@ -10308,7 +10308,7 @@ select
         0
     ) as signalementpartenaire,
     if (
-        status like "6&+",
+        status like '6&+',
         to_days(
             COALESCE(
                 q.end,
@@ -10318,7 +10318,7 @@ select
         0
     ) as sixetplus,
     if (
-        status like "disparu",
+        status like 'disparu',
         to_days(
             COALESCE(
                 q.end,
@@ -10328,7 +10328,7 @@ select
         0
     ) as disparu,
     if (
-        status like "Décédé",
+        status like 'Décédé',
         to_days(
             COALESCE(
                 q.end,
@@ -10351,7 +10351,7 @@ from
             inner join patients_information as pi on p.pati_id = pi.pati_id
             inner join suggestions as s on s.sugg_id = pi.sugg_id
         where
-            s.path_string like "/patient/fiche/statut-du-suivi/%"
+            s.path_string like '/patient/fiche/statut-du-suivi/%'
             and pi.start is not null
             and pi.deleted_at is null
             and p.deleted_at is null
@@ -10452,26 +10452,26 @@ from
                     q.firstname,
                     q.lastname,
                     if (
-                        status like "Pré-suivi actif", 1,
+                        status like 'Pré-suivi actif', 1,
                         0
                     ) as presuiviactif,
                     if (
-                        status like "Pré-suivi inactif",
+                        status like 'Pré-suivi inactif',
                         1, 0
                     ) as presuiviinactif,
-                    if (status like "en suivi", 1, 0) as ensuivi,
-                    if (status like "post-suivi", 1, 0) as postsuivi,
+                    if (status like 'en suivi', 1, 0) as ensuivi,
+                    if (status like 'post-suivi', 1, 0) as postsuivi,
                     if (
-                        status like "signalement tiers", 1,
+                        status like 'signalement tiers', 1,
                         0
                     ) as signalementtiers,
                     if (
-                        status like "signalement partenaire",
+                        status like 'signalement partenaire',
                         1, 0
                     ) as signalementpartenaire,
-                    if (status like "6&+", 1, 0) as sixetplus,
-                    if (status like "disparu", 1, 0) as disparu,
-                    if (status like "Décédé", 1, 0) as Decede,
+                    if (status like '6&+', 1, 0) as sixetplus,
+                    if (status like 'disparu', 1, 0) as disparu,
+                    if (status like 'Décédé', 1, 0) as Decede,
                     (
                         to_days(
                             COALESCE(
@@ -10599,10 +10599,10 @@ from
                                             ) AS c
                                     ) a
                                 where
-                                    a.date like "2016%"
+                                    a.date like '2016%'
                             ) qd on qd.d BETWEEN pi.start AND coalesce(pi.end, @refdate)
                         where
-                            s.path_string like "/patient/fiche/statut-du-suivi/%"
+                            s.path_string like '/patient/fiche/statut-du-suivi/%'
                             and (pi.deleted_at is null or pi.deleted_at > qd.d) 
                             and (p.deleted_at is null or p.deleted_at > qd.d)
                         order by
