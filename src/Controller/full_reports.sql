@@ -54,95 +54,95 @@ Select 'SETUP build temp tables';
 DROP TEMPORARY TABLE IF EXISTS p_summary;
 CREATE TEMPORARY TABLE p_summary
 -- STATISTIQUES 1
--- select 
---     s_antenna.value as antenna, 
--- 	p.pati_id, 
--- 	p.hash, 
---     s_stat.value as statut, 
---     COALESCE(g.genre, "--inconnu--") as genre, 
---     COALESCE(n.nationalite, "--inconnu--") as nationalite, 
---     COALESCE(prog.programme, "--inconnu--") as programme, 
---     COALESCE(team.team, "--inconnu--") as team
+select 
+    s_antenna.value as antenna, 
+	p.pati_id, 
+	p.hash, 
+    s_stat.value as statut, 
+    COALESCE(g.genre, "--inconnu--") as genre, 
+    COALESCE(n.nationalite, "--inconnu--") as nationalite, 
+    COALESCE(prog.programme, "--inconnu--") as programme, 
+    COALESCE(team.team, "--inconnu--") as team
     
---     from patients p 
--- 	left join patients_information pi_stat on pi_stat.pati_id = p.pati_id 
--- 	left join suggestions s_stat on s_stat.sugg_id = pi_stat.sugg_id 
--- 	left join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id 
--- 	left join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id 
--- 	left join 
--- 		(
--- 			select 
--- 				s.value as genre,
--- 				pi.pati_id
--- 			from 
--- 				patients_information pi 
--- 				inner join information_template_element pitel on pitel.itel_id = pi.itel_id 
--- 				inner join suggestions stel on stel.sugg_id = pitel.suge_id 
--- 				inner JOIN suggestions s on s.sugg_id = pi.sugg_id 
--- 			where 
--- 				stel.path_string like '/patient/fiche/information-generale/genre%'
--- 				and @refdate between COALESCE(pi.start, @past) and COALESCE (pi.end, @refdate)
--- 				and pi.deleted_at is null
--- 		) g on p.pati_id = g.pati_id 		
+    from patients p 
+	left join patients_information pi_stat on pi_stat.pati_id = p.pati_id 
+	left join suggestions s_stat on s_stat.sugg_id = pi_stat.sugg_id 
+	left join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id 
+	left join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id 
+	left join 
+		(
+			select 
+				s.value as genre,
+				pi.pati_id
+			from 
+				patients_information pi 
+				inner join information_template_element pitel on pitel.itel_id = pi.itel_id 
+				inner join suggestions stel on stel.sugg_id = pitel.suge_id 
+				inner JOIN suggestions s on s.sugg_id = pi.sugg_id 
+			where 
+				stel.path_string like '/patient/fiche/information-generale/genre%'
+				and @refdate between COALESCE(pi.start, @past) and COALESCE (pi.end, @refdate)
+				and pi.deleted_at is null
+		) g on p.pati_id = g.pati_id 		
 		
---         left join 
--- 		(
--- 			select 
--- 				s.value as nationalite,
--- 				pi.pati_id
--- 			from 
--- 				patients_information pi 
--- 				inner join information_template_element pitel on pitel.itel_id = pi.itel_id 
--- 				inner join suggestions stel on stel.sugg_id = pitel.suge_id 
--- 				inner JOIN suggestions s on s.sugg_id = pi.sugg_id 
--- 			where 
--- 				stel.path_string like '/patient/fiche/information-generale/nationalite%'
--- 				and @refdate between COALESCE(pi.start, @past) and COALESCE (pi.end, @refdate)
--- 				and pi.deleted_at is null
--- 		) n on p.pati_id = n.pati_id
+        left join 
+		(
+			select 
+				s.value as nationalite,
+				pi.pati_id
+			from 
+				patients_information pi 
+				inner join information_template_element pitel on pitel.itel_id = pi.itel_id 
+				inner join suggestions stel on stel.sugg_id = pitel.suge_id 
+				inner JOIN suggestions s on s.sugg_id = pi.sugg_id 
+			where 
+				stel.path_string like '/patient/fiche/information-generale/nationalite%'
+				and @refdate between COALESCE(pi.start, @past) and COALESCE (pi.end, @refdate)
+				and pi.deleted_at is null
+		) n on p.pati_id = n.pati_id
 
---         left join 
--- 		(
--- 			select 
--- 				s.value as programme,
--- 				pi.pati_id
--- 			from 
--- 				patients_information pi 
--- 				inner join information_template_element pitel on pitel.itel_id = pi.itel_id 
--- 				inner join suggestions stel on stel.sugg_id = pitel.suge_id 
--- 				inner JOIN suggestions s on s.sugg_id = pi.sugg_id 
--- 			where 
--- 				stel.path_string like '/patient/suivi/programme%'
--- 				and @refdate between COALESCE(pi.start, @past) and COALESCE (pi.end, @refdate)
--- 				and pi.deleted_at is null
--- 		) prog on p.pati_id = prog.pati_id
+        left join 
+		(
+			select 
+				s.value as programme,
+				pi.pati_id
+			from 
+				patients_information pi 
+				inner join information_template_element pitel on pitel.itel_id = pi.itel_id 
+				inner join suggestions stel on stel.sugg_id = pitel.suge_id 
+				inner JOIN suggestions s on s.sugg_id = pi.sugg_id 
+			where 
+				stel.path_string like '/patient/suivi/programme%'
+				and @refdate between COALESCE(pi.start, @past) and COALESCE (pi.end, @refdate)
+				and pi.deleted_at is null
+		) prog on p.pati_id = prog.pati_id
 
---         left join 
--- 		(
--- 			select 
--- 				s.value as team,
--- 				pi.pati_id
--- 			from 
--- 				patients_information pi 
--- 				inner join information_template_element pitel on pitel.itel_id = pi.itel_id 
--- 				inner join suggestions stel on stel.sugg_id = pitel.suge_id 
--- 				inner JOIN suggestions s on s.sugg_id = pi.sugg_id 
--- 			where 
--- 				stel.path_string like '/patient/suivi/equipes%'
--- 				and @refdate between COALESCE(pi.start, @past) and COALESCE (pi.end, @refdate)
--- 				and pi.deleted_at is null
--- 		) team on p.pati_id = team.pati_id
+        left join 
+		(
+			select 
+				s.value as team,
+				pi.pati_id
+			from 
+				patients_information pi 
+				inner join information_template_element pitel on pitel.itel_id = pi.itel_id 
+				inner join suggestions stel on stel.sugg_id = pitel.suge_id 
+				inner JOIN suggestions s on s.sugg_id = pi.sugg_id 
+			where 
+				stel.path_string like '/patient/suivi/equipes%'
+				and @refdate between COALESCE(pi.start, @past) and COALESCE (pi.end, @refdate)
+				and pi.deleted_at is null
+		) team on p.pati_id = team.pati_id
 
--- 	where 
---             p.deleted_at is null
+	where 
+            p.deleted_at is null
 
--- 			and s_stat.path_string like "/patient/fiche/statut-du-suivi/%"
--- 			and @refdate between coalesce(pi_stat.start, @past) and coalesce(pi_stat.end, @refdate)
---             and pi_stat.deleted_at is null
+			and s_stat.path_string like "/patient/fiche/statut-du-suivi/%"
+			and @refdate between coalesce(pi_stat.start, @past) and coalesce(pi_stat.end, @refdate)
+            and pi_stat.deleted_at is null
 
--- 			and s_antenna.path_string like "/patient/suivi/antenne/%"
--- 			and @refdate between coalesce(pi_antenna.start, @past) and coalesce(pi_antenna.end, @refdate)
---             and pi_antenna.deleted_at is null;
+			and s_antenna.path_string like "/patient/suivi/antenne/%"
+			and @refdate between coalesce(pi_antenna.start, @past) and coalesce(pi_antenna.end, @refdate)
+            and pi_antenna.deleted_at is null;
 
 -- STATISTIQUES 2
 -- Select 'PRE-TESTS 1.a. find wrong status  (diff entre patient info et patient.status) : doit retourner 0 rows';
@@ -161,51 +161,51 @@ CREATE TEMPORARY TABLE p_summary
 
 
 -- STATISTIQUES 3
--- Select 'PRE-TESTS 1.b find wrong status  (diff entre patient info et patient.status) : doit retourner 0 rows';
--- select 	h, 	ln, fn, ch, val from 
--- 	(
--- 		select 
--- 			h, count(h) as ch, val, fn, ln 
--- 		from 
--- 			(
--- 				SELECT 
--- 					s.value as val, 
--- 					p.hash as h, 
--- 					p.firstname as fn, 
--- 					p.lastname as ln 
--- 				FROM 
--- 					patients as p 
--- 					inner join patients_information as pi on p.pati_id = pi.pati_id 
--- 					inner join suggestions as s on s.sugg_id = pi.sugg_id 
--- 				where 
--- 					(
--- 						s.path_string like "/patient/fiche/statut-du-suivi/signalement%" 
--- 						or s.path_string like "/patient/fiche/statut-du-suivi/6" 
--- 						or s.path_string like "/patient/fiche/statut-du-suivi/pre-suivi%" 
--- 						or s.path_string like "/patient/fiche/statut-du-suivi/en-suivi" 
--- 						or s.path_string like "/patient/fiche/statut-du-suivi/post-suivi" 
--- 						or (
--- 							s.path_string like "/patient/fiche/statut-du-suivi/disparu" 
--- 							and year(pi.start) like year(@refdate)
--- 						) 
--- 						or (
--- 							s.path_string like "/patient/fiche/statut-du-suivi/decede" 
--- 							and year(pi.start) like year(@refdate)
--- 						)
--- 					) 
--- 					and pi.end is null 
--- 					and pi.deleted_at is null 
--- 					and p.deleted_at is null 
--- 				order by 
--- 					s.value, 
--- 					p.firstname, 
--- 					p.lastname, 
--- 					pi.start
--- 			) q 
--- 		group by h, val, fn, ln 
--- 	) q 
--- where 
--- 	ch > 1;
+Select 'PRE-TESTS 1.b find wrong status  (diff entre patient info et patient.status) : doit retourner 0 rows';
+select 	h, 	ln, fn, ch, val from 
+	(
+		select 
+			h, count(h) as ch, val, fn, ln 
+		from 
+			(
+				SELECT 
+					s.value as val, 
+					p.hash as h, 
+					p.firstname as fn, 
+					p.lastname as ln 
+				FROM 
+					patients as p 
+					inner join patients_information as pi on p.pati_id = pi.pati_id 
+					inner join suggestions as s on s.sugg_id = pi.sugg_id 
+				where 
+					(
+						s.path_string like "/patient/fiche/statut-du-suivi/signalement%" 
+						or s.path_string like "/patient/fiche/statut-du-suivi/6" 
+						or s.path_string like "/patient/fiche/statut-du-suivi/pre-suivi%" 
+						or s.path_string like "/patient/fiche/statut-du-suivi/en-suivi" 
+						or s.path_string like "/patient/fiche/statut-du-suivi/post-suivi" 
+						or (
+							s.path_string like "/patient/fiche/statut-du-suivi/disparu" 
+							and year(pi.start) like year(@refdate)
+						) 
+						or (
+							s.path_string like "/patient/fiche/statut-du-suivi/decede" 
+							and year(pi.start) like year(@refdate)
+						)
+					) 
+					and pi.end is null 
+					and pi.deleted_at is null 
+					and p.deleted_at is null 
+				order by 
+					s.value, 
+					p.firstname, 
+					p.lastname, 
+					pi.start
+			) q 
+		group by h, val, fn, ln 
+	) q 
+where 
+	ch > 1;
 
 	
 
@@ -1854,78 +1854,78 @@ select "Tableau 1.I. – Nombre total de patients selon l’équipe de suivi";
 
 select "Tableau 1.I. – Nombre total de patients selon l’équipe de suivi - liste nominative";
 
--- select 
--- 	value, 
--- 	hash, 
--- 	firstname, 
--- 	lastname, 
--- 	start as debut, 
--- 	COALESCE(end, "en cours") as fin ,
---     status
--- from 
--- 	(
--- 		SELECT 
--- 			p.hash, 
--- 			s.value, 
--- 			p.firstname, 
--- 			p.lastname, 
--- 			pi.start, 
--- 			pi.end,
---             s_status.value as status
--- 		FROM 
--- 			patients as p 
--- 			inner join patients_information as pi on p.pati_id = pi.pati_id 
--- 			inner join suggestions as s on s.sugg_id = pi.sugg_id 
--- 			inner join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id 
--- 			inner join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id 
--- 			inner join patients_information pi_status on pi_status.pati_id = p.pati_id
--- 			inner join suggestions s_status on s_status.sugg_id = pi_status.sugg_id
--- 		where 
--- 			(
--- 				s.path_string like "/patient/suivi/equipe%" 
--- 			) 
--- 			and (
--- 				@refdate BETWEEN pi.start 
--- 				and COALESCE(
--- 					pi.end, 
--- 					@nextyear0101
--- 				)
--- 			) 
--- 			and pi.deleted_at is null 
--- 			and p.deleted_at is null 
+select 
+	value, 
+	hash, 
+	firstname, 
+	lastname, 
+	start as debut, 
+	COALESCE(end, "en cours") as fin ,
+    status
+from 
+	(
+		SELECT 
+			p.hash, 
+			s.value, 
+			p.firstname, 
+			p.lastname, 
+			pi.start, 
+			pi.end,
+            s_status.value as status
+		FROM 
+			patients as p 
+			inner join patients_information as pi on p.pati_id = pi.pati_id 
+			inner join suggestions as s on s.sugg_id = pi.sugg_id 
+			inner join patients_information pi_antenna on pi_antenna.pati_id = p.pati_id 
+			inner join suggestions s_antenna on s_antenna.sugg_id = pi_antenna.sugg_id 
+			inner join patients_information pi_status on pi_status.pati_id = p.pati_id
+			inner join suggestions s_status on s_status.sugg_id = pi_status.sugg_id
+		where 
+			(
+				s.path_string like "/patient/suivi/equipe%" 
+			) 
+			and (
+				@refdate BETWEEN pi.start 
+				and COALESCE(
+					pi.end, 
+					@nextyear0101
+				)
+			) 
+			and pi.deleted_at is null 
+			and p.deleted_at is null 
 			
--- 			and s_antenna.path_string like "/patient/suivi/antenne/%"
--- 			and pi_antenna.deleted_at is null
--- 			and s_antenna.value like @antenna			
--- 			and pi.start <= COALESCE (pi_antenna.end, @refdate)
--- 			and coalesce(pi.end, @refdate) >= coalesce(pi_antenna.start, @past) 
+			and s_antenna.path_string like "/patient/suivi/antenne/%"
+			and pi_antenna.deleted_at is null
+			and s_antenna.value like @antenna			
+			and pi.start <= COALESCE (pi_antenna.end, @refdate)
+			and coalesce(pi.end, @refdate) >= coalesce(pi_antenna.start, @past) 
 
--- 			and s_status.path_string like "/patient/fiche/statut-du-suivi/%"
--- 			and @refdate BETWEEN pi_status.start and COALESCE(pi_status.end, @nextyear0101)
--- 			and pi_status.deleted_at is null
--- 			and s_status.path_string not like "/patient/fiche/statut-du-suivi/decede" 
---             and 
---             ( 
--- 				s_status.path_string like "/patient/fiche/statut-du-suivi/pre-suivi%" 
--- 				or s_status.path_string like "/patient/fiche/statut-du-suivi/en-suivi" 
--- 				or s_status.path_string like "/patient/fiche/statut-du-suivi/post-suivi" 
--- 				or (
--- 					s_status.path_string like "/patient/fiche/statut-du-suivi/6" 
--- 					and pi.start like @refyearwc
--- 				) 
--- 				or (
--- 					s_status.path_string like "/patient/fiche/statut-du-suivi/signalement%" 
--- 					and pi.start like @refyearwc
--- 				)			
--- 			)
+			and s_status.path_string like "/patient/fiche/statut-du-suivi/%"
+			and @refdate BETWEEN pi_status.start and COALESCE(pi_status.end, @nextyear0101)
+			and pi_status.deleted_at is null
+			and s_status.path_string not like "/patient/fiche/statut-du-suivi/decede" 
+            and 
+            ( 
+				s_status.path_string like "/patient/fiche/statut-du-suivi/pre-suivi%" 
+				or s_status.path_string like "/patient/fiche/statut-du-suivi/en-suivi" 
+				or s_status.path_string like "/patient/fiche/statut-du-suivi/post-suivi" 
+				or (
+					s_status.path_string like "/patient/fiche/statut-du-suivi/6" 
+					and pi.start like @refyearwc
+				) 
+				or (
+					s_status.path_string like "/patient/fiche/statut-du-suivi/signalement%" 
+					and pi.start like @refyearwc
+				)			
+			)
             
--- 	) q 
--- order by 
--- 	value, 
---     hash,
--- 	firstname, 
--- 	lastname, 
--- 	start;
+	) q 
+order by 
+	value, 
+    hash,
+	firstname, 
+	lastname, 
+	start;
 
 
 

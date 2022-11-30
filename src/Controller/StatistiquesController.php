@@ -49,10 +49,10 @@ class StatistiquesController extends AbstractController
     ) {
         $initDate = 'referencedatesh';
         $currentDate = '2022-11-24';
-        $refDate = ($initDate !== 'referencedatesh') ? date('Y-m-d') : '2022-01-01';
+        $refDate = ($initDate === 'referencedatesh') ? date('Y-m-d') : '2021-08-10';
 
-        $antennainit = 'Bruxelles';
-        $antenna = ($initDate === 'Liège') ? 'Liège' : 'Bruxelles';
+        $antennainit = 'antennash';
+        $antenna = ($antennainit === 'Liege') ? 'Liege' : 'Bruxelles';
         $current_quarter = ceil(date('n') / 3);
         $quarterstartdate = date('Y-m-d', strtotime(date('Y') . '-' . (($current_quarter * 3) - 2) . '-1'));
         $quarterenddate = date('Y-m-t', strtotime(date('Y') . '-' . (($current_quarter * 3)) . '-1'));
@@ -64,7 +64,7 @@ class StatistiquesController extends AbstractController
 
         $previousYear = date("Y", strtotime("-1 year"));
         $refyearwc = date('Y') . "%";
-        $past = "1901-01-01";
+        $past = "1903-01-01";
         $nextyear0101 = $nextYear . "-01-01";
         $refYear = date('Y');
 
@@ -286,7 +286,7 @@ class StatistiquesController extends AbstractController
                                 and '" . $this->refDate . "' BETWEEN pi.start 
                                     and COALESCE(
                                         pi.end, 
-                                        @nextyear0101
+                                        '" . $this->nextyear0101 . "'
                                     )
                                 and pi.deleted_at is null 
                                 and p.deleted_at is null
@@ -11488,7 +11488,7 @@ class StatistiquesController extends AbstractController
                             inner join patients_information pi_antenna on pi_antenna.pati_id = p.id 
                             inner join suggestions s_antenna on s_antenna.id = pi_antenna.sugg_id 
                             inner join patients_information pi_status on pi_status.pati_id = p.id
-                            inner join suggestions s_status on s_status.id = pi_status.id
+                            inner join suggestions s_status on s_status.id = pi_status.sugg_id
                         where 
                             (
                                 s.path_string like '/patient/suivi/equipe%'
@@ -11512,7 +11512,7 @@ class StatistiquesController extends AbstractController
                             and s_status.path_string like '/patient/fiche/statut-du-suivi/%'
                             and '" . $this->refDate . "' BETWEEN pi_status.start and COALESCE(pi_status.end, '" . $this->nextyear0101 . "')
                             and pi_status.deleted_at is null
-                            and s_status.path_string not like '/patient/fiche/statut-du-suivi/decede'
+                            and s_status.path_string not like '/patient/fiche/statut-du-suivi/decede' 
                             and 
                             ( 
                                 s_status.path_string like '/patient/fiche/statut-du-suivi/pre-suivi%' 
@@ -11572,11 +11572,11 @@ class StatistiquesController extends AbstractController
         $sql = "SELECT 
                     value, 
                     status,
-                    count(id) as nombre
-                FROM 
+                    count(hash) as nombre
+                from 
                     (
                         SELECT 
-                            p.id, 
+                            p.hash, 
                             s.value, 
                             p.firstname, 
                             p.lastname, 
@@ -11590,38 +11590,38 @@ class StatistiquesController extends AbstractController
                             inner join patients_information pi_antenna on pi_antenna.pati_id = p.id 
                             inner join suggestions s_antenna on s_antenna.id = pi_antenna.sugg_id 
                             inner join patients_information pi_status on pi_status.pati_id = p.id
-                            inner join suggestions s_status on s_status.id = pi_status.id
-                        WHERE 
+                            inner join suggestions s_status on s_status.id = pi_status.sugg_id
+                        where 
                             (
-                                s.path_string like '/patient/suivi/equipe%' 
+                                s.path_string like '/patient/suivi/equipe%'
                             ) 
-                            AND (
+                            and (
                                 '" . $this->refDate . "' BETWEEN pi.start 
-                                AND COALESCE(
+                                and COALESCE(
                                     pi.end, 
                                     '" . $this->nextyear0101 . "'
                                 )
                             ) 
-                            AND pi.deleted_at is null 
-                            AND p.deleted_at is null 
+                            and pi.deleted_at is null 
+                            and p.deleted_at is null 
                             
-                            AND s_antenna.path_string like '/patient/suivi/antenne/%'
-                            AND pi_antenna.deleted_at is null
-                            AND s_antenna.value like '" . $this->antenna . "'			
-                            AND pi.start <= COALESCE (pi_antenna.end, '" . $this->refDate . "')
-                            AND coalesce(pi.end, '" . $this->refDate . "') >= coalesce(pi_antenna.start, '" . $this->past . "') 
+                            and s_antenna.path_string like '/patient/suivi/antenne/%'
+                            and pi_antenna.deleted_at is null
+                            and s_antenna.value like '" . $this->antenna . "'			
+                            and pi.start <= COALESCE (pi_antenna.end, '" . $this->refDate . "')
+                            and coalesce(pi.end, '" . $this->refDate . "') >= coalesce(pi_antenna.start, '" . $this->past . "') 
                 
-                            AND s_status.path_string like '/patient/fiche/statut-du-suivi/%'
-                            AND '" . $this->refDate . "' BETWEEN pi_status.start and COALESCE(pi_status.end, '" . $this->nextyear0101 . "')
-                            AND pi_status.deleted_at is null
-                            AND s_status.path_string not like '/patient/fiche/statut-du-suivi/decede'
-                            AND 
+                            and s_status.path_string like '/patient/fiche/statut-du-suivi/%'
+                            and '" . $this->refDate . "' BETWEEN pi_status.start and COALESCE(pi_status.end, '" . $this->nextyear0101 . "')
+                            and pi_status.deleted_at is null
+                            and s_status.path_string not like '/patient/fiche/statut-du-suivi/decede'
+                            and 
                             ( 
                                 s_status.path_string like '/patient/fiche/statut-du-suivi/pre-suivi%'
                                 or s_status.path_string like '/patient/fiche/statut-du-suivi/en-suivi'
-                                or s_status.path_string like '/patient/fiche/statut-du-suivi/post-suivi'
+                                or s_status.path_string like '/patient/fiche/statut-du-suivi/post-suivi' 
                                 or (
-                                    s_status.path_string like '/patient/fiche/statut-du-suivi/6'
+                                    s_status.path_string like '/patient/fiche/statut-du-suivi/6' 
                                     and pi.start like '" . $this->refyearwc . "'
                                 ) 
                                 or (
@@ -11683,7 +11683,7 @@ class StatistiquesController extends AbstractController
                     inner join patients_information pi_antenna on pi_antenna.pati_id = p.id
                     inner join suggestions s_antenna on s_antenna.id = pi_antenna.sugg_id
                     inner join patients_information pi_status on pi_status.pati_id = p.id
-                    inner join suggestions s_status on s_status.id = pi_status.id
+                    inner join suggestions s_status on s_status.id = pi_status.sugg_id
                 where
                     s.path_string like '/patient/suivi/programme/housing-%'
                     and '" . $this->refDate . "' BETWEEN pi.start and COALESCE(pi.end, '" . $this->nextyear0101 . "')
@@ -11703,8 +11703,7 @@ class StatistiquesController extends AbstractController
                     s.value, 
                     p.firstname, 
                     p.lastname, 
-                    pi.start;
-                ";
+                    pi.start";
 
         $result = $conn->query($sql);
 
@@ -11739,9 +11738,10 @@ class StatistiquesController extends AbstractController
         // dd($this->refYear);
 
         // $sql = "SELECT * FROM patients WHERE antenna = '" . $this->antennainit . "'";
+        // dd($this->refDate);
         $sql = "SELECT
                     s.value as programme,
-                    count(p.id) as nombre
+                    count(p.hash) as nombre
                 FROM 
                     patients as p
                     inner join patients_information as pi on p.id = pi.pati_id
@@ -11749,10 +11749,10 @@ class StatistiquesController extends AbstractController
                     inner join patients_information pi_antenna on pi_antenna.pati_id = p.id
                     inner join suggestions s_antenna on s_antenna.id = pi_antenna.sugg_id
                     inner join patients_information pi_status on pi_status.pati_id = p.id
-                    inner join suggestions s_status on s_status.id = pi_status.id
+                    inner join suggestions s_status on s_status.id = pi_status.sugg_id
                 where
                     s.path_string like '/patient/suivi/programme/housing-%'
-                    and '" . $this->refDate . "' BETWEEN pi.start and COALESCE(pi.end, '" . $this->nextyear0101 . "')
+                    and '" . $this->refDate . "' BETWEEN pi.start and COALESCE(pi.end, '" . $this->refDate . "')
                     and pi.deleted_at is null
                     and p.deleted_at is null
                     and s_antenna.path_string like '/patient/suivi/antenne/%'
@@ -11761,13 +11761,12 @@ class StatistiquesController extends AbstractController
                     and pi.start <= COALESCE (pi_antenna.end, '" . $this->refDate . "')
                     and coalesce(pi.end, '" . $this->refDate . "') >= coalesce(pi_antenna.start, '" . $this->past . "') 
                     and s_status.path_string like '/patient/fiche/statut-du-suivi/%'
-                    and '" . $this->refDate . "' BETWEEN pi_status.start and COALESCE(pi_status.end, '" . $this->nextyear0101 . "')
+                    and '" . $this->refDate . "' BETWEEN pi_status.start and COALESCE(pi_status.end, '" . $this->refDate . "')
                     and pi_status.deleted_at is null
                     and s_status.path_string not like '/patient/fiche/statut-du-suivi/decede'
                     and s_status.path_string not like '/patient/fiche/statut-du-suivi/disparu'
                 group by 
-                    s.value;
-                ";
+                    s.value";
 
         $result = $conn->query($sql);
 
@@ -13695,7 +13694,6 @@ class StatistiquesController extends AbstractController
                             team_s.value,
                             team.start,
                             team.end,
-                            team.id,
                             team.id
                             
                         from patients_information as team  
@@ -13916,53 +13914,52 @@ class StatistiquesController extends AbstractController
             die("Connection failed: " . $conn->connect_error);
         }
 
-        $sql = 'select 	h, 	ln, fn, ch, val from 
-        (
-            select 
-                h, count(h) as ch, val, fn, ln 
-            from 
+        $sql = "select 	h, 	ln, fn, ch, val from 
                 (
-                    SELECT 
-                        s.value as val, 
-                        p.id as h, 
-                        p.firstname as fn, 
-                        p.lastname as ln 
-                    FROM 
-                        patients as p 
-                        inner join patients_information as pi on p.id = pi.pati_id 
-                        inner join suggestions as s on s.id = pi.sugg_id 
-                    where 
+                    select 
+                        h, count(h) as ch, val, fn, ln 
+                    from 
                         (
-                            s.path_string like "/patient/fiche/statut-du-suivi/signalement%" 
-                            or s.path_string like "/patient/fiche/statut-du-suivi/6" 
-                            or s.path_string like "/patient/fiche/statut-du-suivi/pre-suivi%" 
-                            or s.path_string like "/patient/fiche/statut-du-suivi/en-suivi" 
-                            or s.path_string like "/patient/fiche/statut-du-suivi/post-suivi" 
-                            or (
-                                s.path_string like "/patient/fiche/statut-du-suivi/disparu" 
-                                and year(pi.start) like year(if(right("2022-12-31", 6) = "datesh", CURDATE(), str_to_date("2022-12-31", "%Y-%m-%d")))
-                            ) 
-                            or (
-                                s.path_string like "/patient/fiche/statut-du-suivi/decede" 
-                                and year(pi.start) like year(if(right("2022-12-31", 6) = "datesh", CURDATE(), str_to_date("2022-12-31", "%Y-%m-%d")))
-                            )
-                        ) 
-                        and pi.end is null 
-                        and pi.deleted_at is null 
-                        and p.deleted_at is null 
-                    order by 
-                        s.value, 
-                        p.firstname, 
-                        p.lastname, 
-                        pi.start
+                            SELECT 
+                                s.value as val, 
+                                p.hash as h, 
+                                p.firstname as fn, 
+                                p.lastname as ln 
+                            FROM 
+                                patients as p 
+                                inner join patients_information as pi on p.id = pi.pati_id 
+                                inner join suggestions as s on s.id = pi.sugg_id 
+                            where 
+                                (
+                                    s.path_string like '/patient/fiche/statut-du-suivi/signalement%' 
+                                    or s.path_string like '/patient/fiche/statut-du-suivi/6' 
+                                    or s.path_string like '/patient/fiche/statut-du-suivi/pre-suivi%'
+                                    or s.path_string like '/patient/fiche/statut-du-suivi/en-suivi' 
+                                    or s.path_string like '/patient/fiche/statut-du-suivi/post-suivi' 
+                                    or (
+                                        s.path_string like '/patient/fiche/statut-du-suivi/disparu' 
+                                        and year(pi.start) like year('" . $this->refDate . "')
+                                    ) 
+                                    or (
+                                        s.path_string like '/patient/fiche/statut-du-suivi/decede' 
+                                        and year(pi.start) like year('" . $this->refDate . "')
+                                    )
+                                ) 
+                                and pi.end is null 
+                                and pi.deleted_at is null 
+                                and p.deleted_at is null 
+                            order by 
+                                s.value, 
+                                p.firstname, 
+                                p.lastname, 
+                                pi.start
+                        ) q 
+                    group by h, val, fn, ln 
                 ) q 
-            group by h, val, fn, ln 
-        ) q 
-    where 
-        ch > 1;
-    ';
+            where 
+                ch > 1";
         $result = $conn->query($sql);
-        dd($result);
+
         if ($result->num_rows > 0) {
             $resultJson = [];
             while ($row = $result->fetch_assoc()) {
@@ -14023,89 +14020,96 @@ class StatistiquesController extends AbstractController
             die("Connection failed: " . $conn->connect_error);
         }
 
-        $sql = "SELECT s_antenna.value AS antenna, p.id,  p.id,  s_stat.value AS statut, 
-            COALESCE(g.genre, '--inconnu--') AS genre, 
-            COALESCE(n.nationalite, '--inconnu--') AS nationalite,  
-            COALESCE(prog.programme, '--inconnu--') AS programme,
-            COALESCE(team.team, '--inconnu--') AS team 
-            FROM patients p
-            LEFT JOIN patients_information pi_stat ON pi_stat.pati_id = p.id
-            LEFT JOIN suggestions s_stat ON s_stat.id = pi_stat.sugg_id 
-            LEFT JOIN patients_information pi_antenna ON pi_antenna.pati_id = p.id 
-            LEFT JOIN suggestions s_antenna ON s_antenna.id = pi_antenna.sugg_id
-            LEFT JOIN 
-            (
-                SELECT 
-                s.value AS genre,
-                pi.pati_id
-                FROM 
-                patients_information pi 
-                INNER JOIN information_template_element pitel ON pitel.id = pi.itel_id 
-                INNER JOIN suggestions stel ON stel.id = pitel.suge_id 
-                INNER JOIN suggestions s ON s.id = pi.sugg_id 
-                WHERE stel.path_string LIKE '/patient/fiche/information-generale/genre%'
-                AND '2020-12-31' BETWEEN COALESCE(pi.start, '1901-01-01' COLLATE utf8mb4_unicode_ci) AND COALESCE (pi.end, '2020-12-31')
-                AND pi.deleted_at IS NULL
-            ) g ON p.id = g.pati_id 		
-
-            left join 
-            (
-                SELECT 
-                s.value as nationalite,
-                pi.pati_id
-                from 
-                patients_information pi 
-                inner join information_template_element pitel on pitel.id = pi.itel_id 
-                inner join suggestions stel on stel.id = pitel.suge_id 
-                inner JOIN suggestions s on s.id = pi.sugg_id 
-                where 
-                stel.path_string like '/patient/fiche/information-generale/nationalite%'
-                and '2020-12-31' between COALESCE(pi.start, '1901-01-01' COLLATE utf8mb4_unicode_ci) and COALESCE (pi.end, '2020-12-31')
-                and pi.deleted_at is null
-            ) n on p.id = n.pati_id
-
-            left join 
-            (
-                SELECT 
-                s.value as programme,
-                pi.pati_id
-                from 
-                patients_information pi 
-                inner join information_template_element pitel on pitel.id = pi.itel_id 
-                inner join suggestions stel on stel.id = pitel.suge_id 
-                inner JOIN suggestions s on s.id = pi.sugg_id 
-                where 
-                stel.path_string like '/patient/suivi/programme%'
-                and '2020-12-31' between COALESCE(pi.start, '1901-01-01' COLLATE utf8mb4_unicode_ci) and COALESCE (pi.end, '2020-12-31')
-                and pi.deleted_at is null
-            ) prog on p.id = prog.pati_id
-
-            left join 
-            (
-                SELECT 
-                s.value as team,
-                pi.pati_id
-                from 
-                patients_information pi 
-                inner join information_template_element pitel on pitel.id = pi.itel_id 
-                inner join suggestions stel on stel.id = pitel.suge_id 
-                inner JOIN suggestions s on s.id = pi.sugg_id 
-                where 
-                stel.path_string like '/patient/suivi/equipes%'
-                and '2020-12-31' between COALESCE(pi.start, '1901-01-01' COLLATE utf8mb4_unicode_ci) and COALESCE (pi.end, '2020-12-31')
-                and pi.deleted_at is null
-            ) team on p.id = team.id
-
-            WHERE p.deleted_at is null
-
-            and s_stat.path_string like '/patient/fiche/statut-du-suivi/%'
-            and '2020-12-31' between coalesce(pi_stat.start, '1901-01-01' COLLATE utf8mb4_unicode_ci) and coalesce(pi_stat.end, '2020-12-31')
-            and pi_stat.deleted_at is null
-
-            and s_antenna.path_string like '/patient/suivi/antenne/%'
-            and '2020-12-31' between coalesce(pi_antenna.start, '1901-01-01' COLLATE utf8mb4_unicode_ci) and coalesce(pi_antenna.end, '2020-12-31')
-            and pi_antenna.deleted_at is null;
-    ";
+        $sql = "select 
+                    s_antenna.value as antenna, 
+                    p.id, 
+                    p.hash, 
+                    s_stat.value as statut, 
+                    COALESCE(g.genre, '--inconnu--') as genre, 
+                    COALESCE(n.nationalite, '--inconnu--') as nationalite, 
+                    COALESCE(prog.programme, '--inconnu--') as programme, 
+                    COALESCE(team.team, '--inconnu--') as team
+                    
+                    from patients p 
+                    left join patients_information pi_stat on pi_stat.pati_id = p.id 
+                    left join suggestions s_stat on s_stat.id = pi_stat.sugg_id 
+                    left join patients_information pi_antenna on pi_antenna.pati_id = p.id 
+                    left join suggestions s_antenna on s_antenna.id = pi_antenna.sugg_id 
+                    left join 
+                        (
+                            select 
+                                s.value as genre,
+                                pi.pati_id
+                            from 
+                                patients_information pi 
+                                inner join information_template_element pitel on pitel.id = pi.itel_id 
+                                inner join suggestions stel on stel.id = pitel.suge_id 
+                                inner JOIN suggestions s on s.id = pi.sugg_id 
+                            where 
+                                stel.path_string like '/patient/fiche/information-generale/genre%'
+                                and '" . $this->refDate . "' between COALESCE(pi.start, '" . $this->past . "') and COALESCE (pi.end, '" . $this->refDate . "')
+                                and pi.deleted_at is null
+                        ) g on p.id = g.pati_id 		
+                        
+                        left join 
+                        (
+                            select 
+                                s.value as nationalite,
+                                pi.pati_id
+                            from 
+                                patients_information pi 
+                                inner join information_template_element pitel on pitel.id = pi.itel_id 
+                                inner join suggestions stel on stel.id = pitel.suge_id 
+                                inner JOIN suggestions s on s.id = pi.sugg_id 
+                            where 
+                                stel.path_string like '/patient/fiche/information-generale/nationalite%'
+                                and '" . $this->refDate . "' between COALESCE(pi.start, '" . $this->past . "') and COALESCE (pi.end, '" . $this->refDate . "')
+                                and pi.deleted_at is null
+                        ) n on p.id = n.pati_id
+                
+                        left join 
+                        (
+                            select 
+                                s.value as programme,
+                                pi.pati_id
+                            from 
+                                patients_information pi 
+                                inner join information_template_element pitel on pitel.id = pi.itel_id 
+                                inner join suggestions stel on stel.id = pitel.suge_id 
+                                inner JOIN suggestions s on s.id = pi.sugg_id 
+                            where 
+                                stel.path_string like '/patient/suivi/programme%'
+                                and '" . $this->refDate . "' between COALESCE(pi.start, '" . $this->past . "') and COALESCE (pi.end, '" . $this->refDate . "')
+                                and pi.deleted_at is null
+                        ) prog on p.id = prog.pati_id
+                
+                        left join 
+                        (
+                            select 
+                                s.value as team,
+                                pi.pati_id
+                            from 
+                                patients_information pi 
+                                inner join information_template_element pitel on pitel.id = pi.itel_id 
+                                inner join suggestions stel on stel.id = pitel.suge_id 
+                                inner JOIN suggestions s on s.id = pi.sugg_id 
+                            where 
+                                stel.path_string like '/patient/suivi/equipes%'
+                                and '" . $this->refDate . "' between COALESCE(pi.start, '" . $this->past . "') and COALESCE (pi.end, '" . $this->refDate . "')
+                                and pi.deleted_at is null
+                        ) team on p.id = team.pati_id
+                
+                    where 
+                            p.deleted_at is null
+                
+                            and s_stat.path_string like '/patient/fiche/statut-du-suivi/%'
+                            and '" . $this->refDate . "' between coalesce(pi_stat.start, '" . $this->past . "') and coalesce(pi_stat.end, '" . $this->refDate . "')
+                            and pi_stat.deleted_at is null
+                
+                            and s_antenna.path_string like '/patient/suivi/antenne/%'
+                            and '" . $this->refDate . "' between coalesce(pi_antenna.start, '" . $this->past . "') and coalesce(pi_antenna.end, '" . $this->refDate . "')
+                            and pi_antenna.deleted_at is null;
+                ";
         $result = $conn->query($sql);
 
         if ($result->num_rows > 0) {
