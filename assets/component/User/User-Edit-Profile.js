@@ -20,7 +20,8 @@ const EditProfile = () => {
   const [auth, setAuth] = useState(useAuth());
   const [username, setUsername] = useState(null);
   const [email, setEmail] = useState(null);
-
+  const [idUser, setIdUser] = useState(null);
+  const [responseBack, setResponseBack] = useState(null);
   useEffect(() => {
     axios({
       method: "get",
@@ -32,6 +33,7 @@ const EditProfile = () => {
     })
       .then(function (response) {
         console.log(response);
+        setIdUser(response.data.user.id);
         setUsername(response.data.user.username);
         setEmail(response.data.user.email);
       })
@@ -40,9 +42,14 @@ const EditProfile = () => {
       });
   }, []);
   const setFormCreation = (e) => {
+    var formData = new FormData();
+    console.log(idUser);
+    formData.append("id", idUser);
+    formData.append("username", username);
+    formData.append("email", email);
     axios({
-      method: "get",
-      url: "/api/getUser",
+      method: "post",
+      url: "/api/editUser",
       data: formData,
       headers: {
         "Content-Type": "application/json",
@@ -51,8 +58,9 @@ const EditProfile = () => {
     })
       .then(function (response) {
         console.log(response);
-        setUsername(response.data.user.username);
-        setEmail(response.data.user.email);
+        setResponseBack(response.data.response);
+        // setUsername(response.data.user.username);
+        // setEmail(response.data.user.email);
       })
       .catch(function (response) {
         console.log(response);
@@ -68,7 +76,7 @@ const EditProfile = () => {
             type="text"
             placeholder="Nom d'utilisateur"
             defaultValue={username}
-            onChange={(e) => setLastName(e.target.value)}
+            onChange={(e) => setUsername(e.target.value)}
           />
         </Form.Group>
 
@@ -77,17 +85,17 @@ const EditProfile = () => {
             type="text"
             placeholder="Adresse e-mail"
             defaultValue={email}
-            onChange={(e) => setFirstName(e.target.value)}
+            onChange={(e) => setEmail(e.target.value)}
           />
         </Form.Group>
 
-        <Form.Group className="mb-3" controlId="formBasicPassword">
+        {/* <Form.Group className="mb-3" controlId="formBasicPassword">
           <Form.Control
             type="text"
-            placeholder="Mot de passe"
+            placeholder="Username"
             onChange={(e) => setFirstName(e.target.value)}
           />
-        </Form.Group>
+        </Form.Group> */}
 
         <Button
           variant="primary"
@@ -96,6 +104,7 @@ const EditProfile = () => {
         >
           Submit
         </Button>
+        {responseBack && responseBack !== null && responseBack}
       </Form>
     </>
   );
