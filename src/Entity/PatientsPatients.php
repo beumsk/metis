@@ -40,6 +40,9 @@ class PatientsPatients
     #[ORM\ManyToOne]
     private ?Suggestions $sugg = null;
 
+    #[ORM\ManyToOne]
+    private ?Suggestions $linkType = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -137,6 +140,18 @@ class PatientsPatients
     public function setSugg(?Suggestions $sugg): self
     {
         $this->sugg = $sugg;
+
+        return $this;
+    }
+
+    public function getLinkType(): ?Suggestions
+    {
+        return $this->linkType;
+    }
+
+    public function setLinkType(?Suggestions $linkType): self
+    {
+        $this->linkType = $linkType;
 
         return $this;
     }

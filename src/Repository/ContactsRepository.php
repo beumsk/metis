@@ -43,6 +43,27 @@ class ContactsRepository extends ServiceEntityRepository
     }
 
 
+    public function findReferents()
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+
+        $qb->select('c')
+            ->distinct()
+            ->from('App:Contacts', 'c')
+            ->leftJoin('c.orga', 'o')
+            ->join('c.patients', 'pc')
+            ->join('pc.linkType', 's')
+            ->join('pc.pati', 'p')
+            ->where('s.path_string = :path1 or s.path_string = :path2')
+            ->andWhere('pc.deleted_at is null and pc.end is null and p.deleted_at is null and c.deleted_at is null')
+            ->setParameters([
+                'path1' => "/patient/contacts/liens/referent-social-idr",
+                'path2' => "/patient/contacts/liens/referent-lgt-idr"
+            ]);
+
+        return $qb->getQuery()->getResult();
+    }
+
     /**
      * @return Contacts[] Returns an array of Contacts objects
      */

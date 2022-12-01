@@ -6,7 +6,10 @@ import { faUser } from "@fortawesome/free-solid-svg-icons";
 import Menu from "../Menu";
 import Accordion from "react-bootstrap/Accordion";
 import { Link } from "react-router-dom";
-// import AppelsOrganisation from "../Appels/Appels-Organisation";
+import SelectFunction from "./Filtres/Select-Fonction";
+import SelectEquipe from "./Filtres/Select-Equipe";
+import SelectLimitHistoric from "./Filtres/Select-LimitHistoric";
+import SelectReferent from "./Filtres/Select-Referent";
 function AppelsOrganisation() {
   const [auth, setAuth] = useState(useAuth());
   const [patientsList, setPatientsList] = useState(null);
@@ -41,7 +44,10 @@ function AppelsOrganisation() {
       <Menu></Menu>
       <div className="container container-patients row mx-auto ">
         <h3>Tous les Appels</h3>
-
+        <SelectFunction></SelectFunction>
+        <SelectEquipe></SelectEquipe>
+        <SelectLimitHistoric></SelectLimitHistoric>
+        <SelectReferent></SelectReferent>
         {patientsList && patientsList.data && patientsList.data.length > 0 && (
           <>
             {patientsList.data.map((patient) => (
