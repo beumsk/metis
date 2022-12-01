@@ -17,13 +17,44 @@ import Form from "react-bootstrap/Form";
 const EditPassword = () => {
   const navigate = useNavigate();
   const logout = useLogout();
-  const [show, setShow] = useState(false);
   const [auth, setAuth] = useState(useAuth());
+  const [username, setUsername] = useState(null);
+  const [email, setEmail] = useState(null);
   const [passwordShown, setPasswordShown] = useState(false);
+  const [passwordVerified, setPasswordVerified] = useState(false);
+  const [passwordNew, setPasswordNew] = useState(null);
+  const [currentPassword, setCurrentPassword] = useState(null);
+  const [userId, setUserId] = useState(null);
+  const [responseBack, setResponseBack] = useState(null);
   const togglePasswordVisiblity = () => {
     setPasswordShown(passwordShown ? false : true);
   };
+
+  useEffect(() => {
+    axios({
+      method: "get",
+      url: "/api/getUser",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    })
+      .then(function (response) {
+        console.log(response);
+        setUserId(response.data.user.id);
+        setUsername(response.data.user.username);
+        setEmail(response.data.user.email);
+      })
+      .catch(function (response) {
+        console.log(response);
+      });
+  }, []);
   const setFormReset = (e) => {
+    var formData = new FormData();
+    formData.append("id", userId);
+    formData.append("password", passwordNew);
+    formData.append("currentPassword", currentPassword);
+
     axios({
       method: "post",
       url: "/api/editPassword",
@@ -35,6 +66,7 @@ const EditPassword = () => {
     })
       .then(function (response) {
         console.log(response);
+        setResponseBack(response.data.response);
       })
       .catch(function (response) {
         console.log(response);
@@ -52,9 +84,11 @@ const EditPassword = () => {
           <Form.Control
             type={passwordShown ? "text" : "password"}
             placeholder="Mot de passe actuel"
-            onChange={(e) => setLastName(e.target.value)}
+            onChange={(e) => setCurrentPassword(e.target.value)}
           />
-          <FontAwesomeIcon icon={faEye} onClick={togglePasswordVisiblity} />
+          <div className="eye-icon">
+            <FontAwesomeIcon icon={faEye} onClick={togglePasswordVisiblity} />
+          </div>
         </Form.Group>
 
         <Form.Group
@@ -64,9 +98,11 @@ const EditPassword = () => {
           <Form.Control
             type={passwordShown ? "text" : "password"}
             placeholder="Nouveau mot de passe"
-            onChange={(e) => setFirstName(e.target.value)}
+            onChange={(e) => setPasswordNew(e.target.value)}
           />
-          <FontAwesomeIcon icon={faEye} onClick={togglePasswordVisiblity} />
+          <div className="eye-icon">
+            <FontAwesomeIcon icon={faEye} onClick={togglePasswordVisiblity} />
+          </div>
         </Form.Group>
 
         <Form.Group
@@ -76,18 +112,26 @@ const EditPassword = () => {
           <Form.Control
             type={passwordShown ? "text" : "password"}
             placeholder="Répéter le nouveau mot de passe"
-            onChange={(e) => setFirstName(e.target.value)}
+            onChange={(e) => setPasswordVerified(e.target.value)}
           />
-          <FontAwesomeIcon icon={faEye} onClick={togglePasswordVisiblity} />
+          <div className="eye-icon">
+            <FontAwesomeIcon icon={faEye} onClick={togglePasswordVisiblity} />
+          </div>
         </Form.Group>
-
         <Button
           variant="primary"
+          disabled={
+            passwordNew !== passwordVerified ||
+            passwordNew === null ||
+            passwordVerified === null ||
+            currentPassword === null
+          }
           onClick={(e) => setFormReset(e)}
           className="btn-metis mt-3"
         >
           Submit
         </Button>
+        {responseBack && responseBack !== null && responseBack}
       </Form>
     </>
   );

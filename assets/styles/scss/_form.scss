@@ -39,3 +39,15 @@ input[type=text], select {
       margin-bottom: 2rem;
     }
   }
+
+  .container-password{
+    position: relative;
+    .eye-icon{
+      cursor: pointer;
+      position: absolute;
+    right: 0;
+    margin: auto;
+    top: 0;
+    bottom: 0;
+    }
+}
