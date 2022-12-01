@@ -49,7 +49,7 @@ class StatistiquesController extends AbstractController
     ) {
         $initDate = 'referencedatesh';
         $currentDate = '2022-11-24';
-        $refDate = ($initDate === 'referencedatesh') ? date('Y-m-d') : '2021-08-10';
+        $refDate = ($initDate === 'referencedatesh') ? date('Y-m-d') : '2014-01-01';
 
         $antennainit = 'antennash';
         $antenna = ($antennainit === 'Liege') ? 'Liege' : 'Bruxelles';
@@ -11396,7 +11396,7 @@ class StatistiquesController extends AbstractController
                             inner join suggestions as s on s.id = pi.sugg_id 
                         where
                             (
-                                s.path_string like '/patient/fiche/statut-du-suivi/signalement%'
+                                s.path_string like '/patient/suivi/equipes/equipe-rue'
                                 or s.path_string like '/patient/fiche/statut-du-suivi/pre-suivi%' 
                                 or s.path_string like '/patient/fiche/statut-du-suivi/6' 
                                 or s.path_string like '/patient/fiche/statut-du-suivi/en-suivi'
@@ -11415,7 +11415,7 @@ class StatistiquesController extends AbstractController
                             and pi.deleted_at is null 
                             and p.deleted_at is null
                             and followup_reports.deleted_at is null
-                            and year(followup_reports.report_date) in ('" . $this->refYear . "', '" . $this->refYear . "'-1)
+                            and year(followup_reports.report_date) in ('" . $this->refYear . "', '" . $this->refYear . "'-1, '" . $this->refYear . "'-2)
                             and followup_reports.report_date between coalesce(pi_antenna.start, followup_reports.report_date) and COALESCE (pi_antenna.end, followup_reports.report_date)
                             and s_antenna.path_string like '/patient/suivi/antenne/%'
                             and s_antenna.value like '" . $this->antenna . "'

@@ -1,8 +1,10 @@
 import React, { useContext, useDebugValue, useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
+import { CSVLink, CSVDownload } from "react-csv";
 import Menu from "../../component/Menu";
 import axios from "axios";
 import { useParams } from "react-router-dom";
+
 import useAuth from "../../hooks/useAuth";
 import Form from "react-bootstrap/Form";
 
@@ -13,6 +15,7 @@ const Statistiques = () => {
   const [auth, setAuth] = useState(useAuth());
   const [resultCsv, setResultCSV] = useState(null);
   const [statValue, setStatsValue] = useState(null);
+  const [nameFileName, setFileName] = useState(null);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -20,6 +23,30 @@ const Statistiques = () => {
   let objPatient = {};
 
   useEffect(() => {}, []);
+
+  async function exportAll() {
+    console.log(statValue);
+    for (let index = 0; index < 5; index++) {
+      let request = "/api/statistiques" + index;
+
+      await axios({
+        method: "get",
+        url: request,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${auth.auth.accessToken}`,
+        },
+      })
+        .then(function (response) {
+          setResultCSV(response.data);
+          if (response.data) {
+            jsonToCsv(response.data);
+          }
+          exportFile();
+        })
+        .catch(function (response) {});
+    }
+  }
 
   function exportCSV() {
     console.log(statValue);
@@ -61,16 +88,18 @@ const Statistiques = () => {
 
     console.log(csv);
 
-    if (csv) {
-      // document.write(csv);
+    // document.write(csv);
 
-      var hiddenElement = document.createElement("a");
-      hiddenElement.href = "data:text/csv;charset=utf8," + encodeURI(csv);
-      hiddenElement.target = "_blank";
+    var hiddenElement = document.createElement("a");
+    hiddenElement.href =
+      "data:text/csv;charset=utf-8,%EF%BB%BF" + encodeURI(csv);
+    hiddenElement.target = "_blank";
 
-      hiddenElement.download = "test.csv";
-      hiddenElement.click();
-    }
+    hiddenElement.download =
+      document.getElementById("selectCsv").options[
+        document.getElementById("selectCsv").value
+      ].text + ".csv";
+    hiddenElement.click();
   }
 
   return (
@@ -80,6 +109,7 @@ const Statistiques = () => {
       <Form.Select
         size="lg"
         value={statValue}
+        id={"selectCsv"}
         onChange={(e) => setStatsValue(e.target.value)}
       >
         <option>Selectionner un stat</option>
@@ -102,7 +132,7 @@ const Statistiques = () => {
           Nombre de patients suivi par l'équipe rue au cours de la periode de
           reference, en suivi ou pre-suivi actif, ayant une pathologie physique
           chronique (inclus assuetude) et pour qui au moins une rencontre a été
-          réalisée dans la période de reference
+          réalisée dans la période de reference - liste nominative
         </option>
         <option value={12}>
           Nombre de patients suivi par l'équipe rue au cours de la periode de
@@ -597,6 +627,7 @@ const Statistiques = () => {
         </option>
       </Form.Select>
       <a onClick={exportCSV}>export</a>
+      <a onClick={exportAll}>exportAll</a>
     </>
   );
 };
