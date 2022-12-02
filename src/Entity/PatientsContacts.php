@@ -18,6 +18,7 @@ class PatientsContacts
     private ?Contacts $cont = null;
 
     #[ORM\ManyToOne]
+    #[ORM\JoinColumn(name: "pati_id", referencedColumnName: "id", nullable: true, onDelete: "SET NULL")]
     private ?Patients $pati = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
@@ -42,8 +43,7 @@ class PatientsContacts
     #[ORM\JoinColumn(name: "cont_id", referencedColumnName: "id", nullable: true, onDelete: "SET NULL")]
     private ?Contacts $contact = null;
 
-    #[ORM\ManyToOne(targetEntity: 'Suggestions', inversedBy: 'id', cascade: ["all"], fetch: "EAGER")]
-    #[ORM\JoinColumn(name: "sugg_id", referencedColumnName: "id", nullable: true, onDelete: "SET NULL")]
+    #[ORM\ManyToOne]
     private ?Suggestions $linkType = null;
 
 
@@ -67,6 +67,7 @@ class PatientsContacts
 
     public function getPati(): ?Patients
     {
+
         return $this->pati;
     }
 

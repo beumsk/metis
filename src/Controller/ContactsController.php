@@ -276,12 +276,14 @@ class ContactsController extends AbstractController
             $nameOfBlocks[] = ["id" => $value->getId(), "value" => $value->getValue(), "obj" => []];
         }
 
+
+
         $blocksEncode = json_encode($nameOfBlocks);
         $blocksDecode = json_decode($blocksEncode);
 
         $patients = [];
 
-        // dd($contact->getPatients());
+
 
         foreach ($blocksDecode as $value) {
             foreach ($contact->getInformations() as $infosCont) {
@@ -291,8 +293,10 @@ class ContactsController extends AbstractController
             }
         }
 
-
+        // dd($blocksDecode);
+        // dd($contact->getPatients()[0]->getCont());
         foreach ($contact->getPatients() as $patient) {
+
             $patients[] = ["id" => $patient->getPati()->getId(), "firstName" => $patient->getPati()->getFirstName(), "lastName" => $patient->getPati()->getLastName()];
         }
 
@@ -310,56 +314,42 @@ class ContactsController extends AbstractController
     {
 
         $request = Request::createFromGlobals();
-
         $antenna = $request->request->get('antenna');
-
+        $referent = $request->request->get('referent');
+        $typeCalls = $request->request->get('typeCalls');
+        $limitHistoric = $request->request->get('limitHistoric');
+        $team = $request->request->get('team');
+        $function = $request->request->get('function');
         $followup = $doctrine->getRepository(FollowupGoals::class)->followupGoalsByAntenna($antenna);
+
+        // if ($referent !== "null") {
+        //     $filter = $doctrine->getRepository(Suggestions::class)->find(intval($referent));
+
+        //     dd($referent);
+        // }
+
         $arrCont = [];
 
-        //dd($followup);
         foreach ($followup as $value) {
-
-
             $arrCont[] = $value->getCont()->getId();
         }
 
-
-        $arrunique = array_unique($arrCont);
-
-
-
-
         $contact = $doctrine->getRepository(Contacts::class)->findBy(array('id' => $arrCont));
-
-
-
-
 
         foreach ($contact as $value) {
             $fogo = $doctrine->getRepository(FollowupGoals::class)->findBy(["cont" => $value->getId(), "deleted_at" => null]);
-            // $value->setGoalsInformation($fogo);
             foreach ($fogo as $fg) {
-                //     // dd($fg);
-                // $value->setGoalsInformation($fogo);
+
                 $value->setGoalsInformation([
-                    "id" => $fg->getId(), "description" => $fg->getDescription(), "type" => $fg->getType(), "creationDate" => $fg->getCreationDate(), "contact" => $fg->getContact(), "patientfirstName" => $fg->getPati()->getFirstName(), "patientLastName" => $fg->getPati()->getLastName(),
+                    "id" => ($fg->getId() !== null) ? $fg->getId() : null, "description" => $fg->getDescription(), "type" => $fg->getType(), "status" => $fg->getStatus(), "func" => ($fg->getFunc() !== null && $fg->getFunc()->getId() !== null) ? $fg->getFunc()->getId() : null, "creationDate" => $fg->getCreationDate(), "patientfirstName" => $fg->getPati()->getFirstName(), "patientLastName" => $fg->getPati()->getLastName(),
                     "fore" =>     array_map(function ($a) {
-                        return $a->getContent();
+                        return ["user" => ($a->getUser() !== null && $a->getUser()->getId() !== null) ? $a->getUser()->getId() : null, "activityType" => $a->getActivityType(), "content" => $a->getContent(), "date" => $a->getCreationDate()];
                     }, [...$fg->getFore()])
                 ]);
             }
         }
 
-
-
-
-
-
         $encoder = new JsonEncoder();
-        // $encoders = [new JsonEncoder()];
-        // $normalizers = [new DateTimeNormalizer(), new ObjectNormalizer()];
-        // $serializer = new Serializer($normalizers, $encoders);
-
         $defaultContext = [
             AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context) {
                 return $object->getId();
@@ -369,10 +359,9 @@ class ContactsController extends AbstractController
         $normalizer = new ObjectNormalizer(null, null, null, null, null, null, $defaultContext);
 
         $serializer = new Serializer([new DateTimeNormalizer(), $normalizer], [$encoder]);
-        // var_dump($serializer->serialize($org, 'json'));
         $data = $serializer->serialize($contact, 'json', [AbstractNormalizer::IGNORED_ATTRIBUTES => ["contacts", "patients", "cont", "orga", "calls", "informations", "sugg", "occupants"]]);
 
-        return $this->json(json_decode($data)); // Output: {"name":"foo"}
+        return $this->json(json_decode($data));
     }
 
     #[Route('/api/getCallsAndOrganisationFinnished', name: 'app_getCallsAndOrganisationFinnished')]

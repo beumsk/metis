@@ -64,7 +64,14 @@ class Contacts
     #[ORM\OneToMany(mappedBy: 'place', targetEntity: PatientsPlaces::class)]
     private $occupants;
 
+    #[ORM\OneToMany(targetEntity: Contacts::class, mappedBy: "orga", orphanRemoval: true, cascade: ["all"])]
+    private $cont;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $antenna = null;
+
+    #[ORM\OneToMany(mappedBy: 'contact', targetEntity: PatientsContacts::class, orphanRemoval: true, cascade: ["all"])]
+    private Collection $patients;
     public function __construct()
     {
         $this->calls = new ArrayCollection();
@@ -75,14 +82,7 @@ class Contacts
     }
 
 
-    #[ORM\OneToMany(targetEntity: Contacts::class, mappedBy: "orga", orphanRemoval: true, cascade: ["all"])]
-    private $cont;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $antenna = null;
-
-    #[ORM\OneToMany(mappedBy: 'contact', targetEntity: PatientsContacts::class)]
-    private Collection $patients;
 
 
     public function addContact(Contacts $cont)
@@ -300,6 +300,7 @@ class Contacts
      */
     public function getPatients(): Collection
     {
+
         return $this->patients;
     }
 

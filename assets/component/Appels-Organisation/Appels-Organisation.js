@@ -5,19 +5,31 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import Menu from "../Menu";
 import Accordion from "react-bootstrap/Accordion";
+import Button from "react-bootstrap/Button";
 import { Link } from "react-router-dom";
 import SelectFunction from "./Filtres/Select-Fonction";
 import SelectEquipe from "./Filtres/Select-Equipe";
 import SelectLimitHistoric from "./Filtres/Select-LimitHistoric";
 import SelectReferent from "./Filtres/Select-Referent";
+import TypeCalls from "./Filtres/Select-TypeCalls";
 function AppelsOrganisation() {
   const [auth, setAuth] = useState(useAuth());
   const [patientsList, setPatientsList] = useState(null);
   const [lengthList, setLengthList] = useState(10);
+  const [functionSelected, setFunctionSelected] = useState(null);
+  const [teamSelected, setTeamSelected] = useState(null);
+  const [limitHistoricSelected, setLimitHistoricSelected] = useState(null);
+  const [referentSelected, setReferentSelected] = useState(null);
+  const [typeCallsSelected, setTypeCallsSelected] = useState(null);
 
   var formData = new FormData();
   formData.append("page", lengthList.toString());
   formData.append("antenna", auth.antenna);
+  formData.append("referent", referentSelected);
+  formData.append("typeCalls", typeCallsSelected);
+  formData.append("limitHistoric", limitHistoricSelected);
+  formData.append("team", teamSelected);
+  formData.append("function", functionSelected);
   useEffect(() => {
     axios({
       method: "post",
@@ -39,15 +51,68 @@ function AppelsOrganisation() {
     setLengthList(lengthList + 10);
   };
 
+  function onChangeFunction(e) {
+    setFunctionSelected(e);
+  }
+
+  function onChangeTeam(e) {
+    setTeamSelected(e);
+  }
+  function onChangeLimitHistoric(e) {
+    setLimitHistoricSelected(e);
+  }
+  function onChangeTypeCalls(e) {
+    setTypeCallsSelected(e);
+  }
+
+  function onClickReferent(e) {
+    setReferentSelected(e);
+  }
+
+  const sentFilters = (e) => {
+    console.log(e);
+    var formData = new FormData();
+    formData.append("referent", referentSelected);
+    formData.append("typeCalls", typeCallsSelected);
+    formData.append("limitHistoric", limitHistoricSelected);
+    formData.append("team", teamSelected);
+    formData.append("function", functionSelected);
+    axios({
+      method: "post",
+      url: "/api/getCallsAndOrganisationRunning",
+      data: formData,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    })
+      .then(function (response) {
+        //handle success
+        setPatientsList(response);
+      })
+      .catch(function (response) {});
+  };
+
   return (
     <>
       <Menu></Menu>
       <div className="container container-patients row mx-auto ">
         <h3>Tous les Appels</h3>
-        <SelectFunction></SelectFunction>
-        <SelectEquipe></SelectEquipe>
-        <SelectLimitHistoric></SelectLimitHistoric>
-        <SelectReferent></SelectReferent>
+        <div className="container-filters">
+          <TypeCalls onChangeTypeCalls={onChangeTypeCalls}></TypeCalls>
+          <SelectFunction
+            onChangeFunction={(e) => onChangeFunction(e)}
+          ></SelectFunction>
+          <SelectEquipe onChangeTeam={(e) => onChangeTeam(e)}></SelectEquipe>
+          <SelectLimitHistoric
+            onChangeLimitHistoric={(e) => onChangeLimitHistoric(e)}
+          ></SelectLimitHistoric>
+          <SelectReferent
+            onClickReferent={(e) => onClickReferent(e)}
+          ></SelectReferent>
+          <button onClick={sentFilters}>Appliquer les filtres</button>
+        </div>
+
         {patientsList && patientsList.data && patientsList.data.length > 0 && (
           <>
             {patientsList.data.map((patient) => (

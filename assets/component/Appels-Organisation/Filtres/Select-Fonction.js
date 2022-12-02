@@ -2,8 +2,9 @@ import React, { useContext, useDebugValue, useState, useEffect } from "react";
 import Form from "react-bootstrap/Form";
 import axios from "axios";
 import useAuth from "../../../hooks/useAuth";
-const SelectFunction = () => {
+const SelectFunction = (props) => {
   const [selectFunction, setFunction] = useState(null);
+  const [selectedFunction, setSelectedFunction] = useState(null);
   const [auth, setAuth] = useState(useAuth());
   const formData = new FormData();
   formData.append("id", 57);
@@ -24,16 +25,21 @@ const SelectFunction = () => {
       })
       .catch(function (response) {});
   }, []);
+
+  props.onChangeFunction(selectedFunction);
   return (
     <>
       {" "}
       <Form.Label>Fonction</Form.Label>
-      <Form.Select>
+      <Form.Select
+        onChange={(e) => setSelectedFunction(e.target.value)}
+        value={selectedFunction}
+      >
         <option>Séléctionnez la fonction</option>
 
         {/* referentList */}
         {selectFunction?.map((func) => (
-          <option>{func.value}</option>
+          <option value={func.id}>{func.value}</option>
         ))}
       </Form.Select>
     </>

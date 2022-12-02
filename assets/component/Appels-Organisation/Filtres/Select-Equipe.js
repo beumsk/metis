@@ -2,8 +2,9 @@ import React, { useContext, useDebugValue, useState, useEffect } from "react";
 import Form from "react-bootstrap/Form";
 import axios from "axios";
 import useAuth from "../../../hooks/useAuth";
-const SelectTeam = () => {
+const SelectTeam = (props) => {
   const [selectTeam, setSelectTeam] = useState(null);
+  const [selectedTeam, setSelectedTeam] = useState(null);
   const [auth, setAuth] = useState(useAuth());
   const formData = new FormData();
   formData.append("id", 655);
@@ -24,15 +25,20 @@ const SelectTeam = () => {
       })
       .catch(function (response) {});
   }, []);
+
+  props.onChangeTeam(selectedTeam);
   return (
     <>
       <Form.Label>Equipe</Form.Label>
-      <Form.Select>
+      <Form.Select
+        onChange={(e) => setSelectedTeam(e.target.value)}
+        value={selectedTeam}
+      >
         <option>Séléctionnez l'équipe</option>
 
         {/* referentList */}
         {selectTeam?.map((team) => (
-          <option>{team.value}</option>
+          <option value={team.id}>{team.value}</option>
         ))}
       </Form.Select>
     </>

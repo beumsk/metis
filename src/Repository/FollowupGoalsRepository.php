@@ -346,9 +346,11 @@ class FollowupGoalsRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('f')
             ->innerJoin('f.pati', 'p')
             ->andWhere('p.antenna = :antenna')
-            ->setParameter('antenna', $antenna)
+            ->setParameters([
+                'antenna' => $antenna
+            ])
             ->innerJoin('f.cont', 'c')
-            ->andWhere('c IS NOT NULL AND f.deleted_at IS NULL AND f.type = 2 AND f.status = 1')
+            ->andWhere('c IS NOT NULL AND f.deleted_at IS NULL AND f.type = 2 AND f.status = 1 AND f.status = 2')
             ->orderBy('f.id', 'ASC')
             ->setMaxResults(10)
             ->getQuery()

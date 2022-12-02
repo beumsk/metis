@@ -2,9 +2,10 @@ import React, { useContext, useDebugValue, useState, useEffect } from "react";
 import Form from "react-bootstrap/Form";
 import axios from "axios";
 import useAuth from "../../../hooks/useAuth";
-const SelectReferent = () => {
+const SelectReferent = (props) => {
   const [referentList, setReferentList] = useState(null);
   const [auth, setAuth] = useState(useAuth());
+  const [refSelected, setReferentSelected] = useState(null);
   useEffect(() => {
     axios({
       method: "get",
@@ -17,16 +18,20 @@ const SelectReferent = () => {
       setReferentList(response.data);
     });
   }, []);
+  props.onClickReferent(refSelected);
   return (
     <>
       {" "}
       <Form.Label>Referent</Form.Label>
-      <Form.Select>
+      <Form.Select
+        onChange={(e) => setReferentSelected(e.target.value)}
+        value={refSelected}
+      >
         <option>Séléctionnez le référent</option>
 
         {/* referentList */}
         {referentList?.map((referent) => (
-          <option>
+          <option value={referent.id}>
             {referent.firstName} {referent.lastName}
           </option>
         ))}
