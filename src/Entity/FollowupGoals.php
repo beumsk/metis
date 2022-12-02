@@ -282,7 +282,7 @@ class FollowupGoals
      *
      * @return array
      */
-    public function getStatusForGroup($group)
+    public static function getStatusForGroup($group)
     {
         switch ($group) {
             default:

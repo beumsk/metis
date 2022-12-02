@@ -320,7 +320,7 @@ class ContactsController extends AbstractController
         $limitHistoric = $request->request->get('limitHistoric');
         $team = $request->request->get('team');
         $function = $request->request->get('function');
-        $followup = $doctrine->getRepository(FollowupGoals::class)->followupGoalsByAntenna($antenna);
+        $followup = $doctrine->getRepository(FollowupGoals::class)->followupGoalsByAntenna($antenna, null, null, null, null, null);
 
         // if ($referent !== "null") {
         //     $filter = $doctrine->getRepository(Suggestions::class)->find(intval($referent));
@@ -330,24 +330,46 @@ class ContactsController extends AbstractController
 
         $arrCont = [];
 
-        foreach ($followup as $value) {
+        foreach ($followup as $key => $value) {
+
             $arrCont[] = $value->getCont()->getId();
         }
 
         $contact = $doctrine->getRepository(Contacts::class)->findBy(array('id' => $arrCont));
 
         foreach ($contact as $value) {
-            $fogo = $doctrine->getRepository(FollowupGoals::class)->findBy(["cont" => $value->getId(), "deleted_at" => null]);
+            // $value->getId()
+
+            $fogo = $doctrine->getRepository(FollowupGoals::class)->followupGoalsByAntenna($antenna, $team, $value->getId(), $function, $referent, $limitHistoric);
+
             foreach ($fogo as $fg) {
+                // dd($fg->getPati()->getTeam());
 
                 $value->setGoalsInformation([
-                    "id" => ($fg->getId() !== null) ? $fg->getId() : null, "description" => $fg->getDescription(), "type" => $fg->getType(), "status" => $fg->getStatus(), "func" => ($fg->getFunc() !== null && $fg->getFunc()->getId() !== null) ? $fg->getFunc()->getId() : null, "creationDate" => $fg->getCreationDate(), "patientfirstName" => $fg->getPati()->getFirstName(), "patientLastName" => $fg->getPati()->getLastName(),
+                    "id" => ($fg->getId() !== null) ? $fg->getId() : null,
+                    "description" => $fg->getDescription(),
+                    "type" => $fg->getType(),
+                    "status" => $fg->getStatus(),
+                    "func" => ($fg->getFunc() !== null && $fg->getFunc()->getId() !== null) ? $fg->getFunc()->getId() : null,
+                    "creationDate" => $fg->getCreationDate(),
+                    "patientfirstName" => $fg->getPati()->getFirstName(),
+                    //  "contacts" => $fg->getPati()->getContacts()[0]->getCont(), 
+                    "contacts" => array_map(function ($a) {
+                        return ["user" => ($a->getContact() !== null && $a->getContact()->getId() !== null) ? $a->getContact()->getId() : null];
+                    }, [...$fg->getPati()->getContacts()]),
+                    "patientLastName" => $fg->getPati()->getLastName(),
+                    "team" => $fg->getPati()->getTeam(),
                     "fore" =>     array_map(function ($a) {
                         return ["user" => ($a->getUser() !== null && $a->getUser()->getId() !== null) ? $a->getUser()->getId() : null, "activityType" => $a->getActivityType(), "content" => $a->getContent(), "date" => $a->getCreationDate()];
                     }, [...$fg->getFore()])
                 ]);
             }
         }
+
+
+
+
+
 
         $encoder = new JsonEncoder();
         $defaultContext = [
@@ -363,6 +385,7 @@ class ContactsController extends AbstractController
 
         return $this->json(json_decode($data));
     }
+
 
     #[Route('/api/getCallsAndOrganisationFinnished', name: 'app_getCallsAndOrganisationFinnished')]
     public function getCallsAndOrganisationFinnished(ManagerRegistry $doctrine, SerializerInterface $serializer)

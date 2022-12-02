@@ -34,11 +34,11 @@ const SelectTeam = (props) => {
         onChange={(e) => setSelectedTeam(e.target.value)}
         value={selectedTeam}
       >
-        <option>Séléctionnez l'équipe</option>
+        <option value={null}>Séléctionnez l'équipe</option>
 
         {/* referentList */}
         {selectTeam?.map((team) => (
-          <option value={team.id}>{team.value}</option>
+          <option value={team.value}>{team.value}</option>
         ))}
       </Form.Select>
     </>

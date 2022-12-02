@@ -44,7 +44,12 @@ class PatientsContacts
     private ?Contacts $contact = null;
 
     #[ORM\ManyToOne]
+    #[ORM\JoinColumn(name: "sugg_id", referencedColumnName: "id", nullable: true, onDelete: "SET NULL")]
     private ?Suggestions $linkType = null;
+
+    #[ORM\ManyToOne(targetEntity: 'Patients', inversedBy: 'contacts')]
+    #[ORM\JoinColumn(name: "pati_id", referencedColumnName: "id", nullable: true, onDelete: "SET NULL")]
+    private ?Patients $patient = null;
 
 
 
@@ -170,6 +175,18 @@ class PatientsContacts
     public function setLinkType(?Suggestions $linkType): self
     {
         $this->linkType = $linkType;
+
+        return $this;
+    }
+
+    public function getPatient(): ?Patients
+    {
+        return $this->patient;
+    }
+
+    public function setPatient(?Patients $patient): self
+    {
+        $this->patient = $patient;
 
         return $this;
     }

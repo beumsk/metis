@@ -71,6 +71,14 @@ class Patients
     #[ORM\Column(length: 50, nullable: true)]
     private ?string $antenna = null;
 
+    #[ORM\OneToMany(mappedBy: 'patient', targetEntity: PatientsContacts::class)]
+    private Collection $contacts;
+
+    public function __construct()
+    {
+        $this->contacts = new ArrayCollection();
+    }
+
 
 
 
@@ -278,6 +286,36 @@ class Patients
     public function setAntenna(?string $antenna): self
     {
         $this->antenna = $antenna;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, PatientsContacts>
+     */
+    public function getContacts(): Collection
+    {
+        return $this->contacts;
+    }
+
+    public function addContact(PatientsContacts $contact): self
+    {
+        if (!$this->contacts->contains($contact)) {
+            $this->contacts->add($contact);
+            $contact->setPatient($this);
+        }
+
+        return $this;
+    }
+
+    public function removeContact(PatientsContacts $contact): self
+    {
+        if ($this->contacts->removeElement($contact)) {
+            // set the owning side to null (unless already changed)
+            if ($contact->getPatient() === $this) {
+                $contact->setPatient(null);
+            }
+        }
 
         return $this;
     }

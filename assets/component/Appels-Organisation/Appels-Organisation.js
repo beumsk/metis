@@ -25,11 +25,6 @@ function AppelsOrganisation() {
   var formData = new FormData();
   formData.append("page", lengthList.toString());
   formData.append("antenna", auth.antenna);
-  formData.append("referent", referentSelected);
-  formData.append("typeCalls", typeCallsSelected);
-  formData.append("limitHistoric", limitHistoricSelected);
-  formData.append("team", teamSelected);
-  formData.append("function", functionSelected);
   useEffect(() => {
     axios({
       method: "post",
@@ -72,11 +67,34 @@ function AppelsOrganisation() {
   const sentFilters = (e) => {
     console.log(e);
     var formData = new FormData();
-    formData.append("referent", referentSelected);
-    formData.append("typeCalls", typeCallsSelected);
-    formData.append("limitHistoric", limitHistoricSelected);
-    formData.append("team", teamSelected);
-    formData.append("function", functionSelected);
+    // formData.append("page", lengthList.toString());
+
+    formData.append("antenna", auth.antenna);
+
+    if (referentSelected !== null) {
+      formData.append("referent", referentSelected);
+    }
+
+    if (typeCallsSelected !== null) {
+      formData.append("typeCalls", typeCallsSelected);
+    }
+
+    console.log(limitHistoricSelected);
+    if (limitHistoricSelected !== null) {
+      formData.append(
+        "limitHistoric",
+        new Date(limitHistoricSelected).toISOString()
+      );
+    }
+
+    if (teamSelected !== null) {
+      formData.append("team", teamSelected);
+    }
+
+    if (functionSelected !== null) {
+      formData.append("function", functionSelected);
+    }
+
     axios({
       method: "post",
       url: "/api/getCallsAndOrganisationRunning",
@@ -92,6 +110,8 @@ function AppelsOrganisation() {
       })
       .catch(function (response) {});
   };
+
+  console.log(patientsList);
 
   return (
     <>
@@ -113,48 +133,48 @@ function AppelsOrganisation() {
           <button onClick={sentFilters}>Appliquer les filtres</button>
         </div>
 
-        {patientsList && patientsList.data && patientsList.data.length > 0 && (
+        {patientsList && patientsList?.data && patientsList?.data?.length > 0 && (
           <>
             {patientsList.data.map((patient) => (
-              <Accordion className="my-3">
-                <Accordion.Item eventKey={patient.id} key={patient.id}>
-                  <Accordion.Header>
-                    <div className="col-sm-1">
-                      <FontAwesomeIcon icon={faUser} />
-                    </div>
-                    <div className="col-sm-4">
-                      {patient.firstname} {patient.lastname}
-                      <Link
-                        className="seeProfil"
-                        from={"/appels-organisation"}
-                        to={"/appels-organisation/" + patient.id}
-                      >
-                        Voir profil
-                      </Link>
-                    </div>
-                    <div className="col-sm-4">{patient.description}</div>
-                    {/* <div className="col-sm-3">{patient.birthLocation}</div> */}
-                    {/* <div className="col-sm-1">
-                      <span className="status">{(patient.type)? Appel}</span>
-                    </div> */}
-                    {/* <div className="col-sm-3">{Date.now()}</div> */}
-                  </Accordion.Header>
-                  <Accordion.Body>
-                    <div className="row body-accordeonitemPatient">
-                      {patient.goalsInformation.map((e) => (
-                        <div className="row">
-                          <div className="col-sm-6">
-                            {e.patientfirstName}
-                            {e.patientLastName}
-                          </div>
-                          <div className="col-sm-6">{e.description}</div>
+              <>
+                {patient?.goalsInformation?.length > 0 && (
+                  <Accordion className="my-3">
+                    <Accordion.Item eventKey={patient.id} key={patient.id}>
+                      <Accordion.Header>
+                        <div className="col-sm-1">
+                          <FontAwesomeIcon icon={faUser} />
                         </div>
-                      ))}
-                    </div>
-                  </Accordion.Body>
-                </Accordion.Item>
-              </Accordion>
+                        <div className="col-sm-4">
+                          {patient.firstname} {patient.lastname}
+                          <Link
+                            className="seeProfil"
+                            from={"/appels-organisation"}
+                            to={"/appels-organisation/" + patient.id}
+                          >
+                            Voir profil
+                          </Link>
+                        </div>
+                        <div className="col-sm-4">{patient.description}</div>
+                      </Accordion.Header>
+                      <Accordion.Body>
+                        <div className="row body-accordeonitemPatient">
+                          {patient.goalsInformation.map((e) => (
+                            <div className="row">
+                              <div className="col-sm-6">
+                                {e.patientfirstName}
+                                {e.patientLastName}
+                              </div>
+                              <div className="col-sm-6">{e.description}</div>
+                            </div>
+                          ))}
+                        </div>
+                      </Accordion.Body>
+                    </Accordion.Item>
+                  </Accordion>
+                )}
+              </>
             ))}
+            {patientsList === null && <p>Loading</p>}
             <button className="btn-metis" onClick={readMore}>
               Read More
             </button>

@@ -40,6 +40,8 @@ class FollowupGoalsRepository extends ServiceEntityRepository
         }
     }
 
+
+
     /**
      * @param Patient $patient
      * @param Datetime $date
@@ -133,7 +135,7 @@ class FollowupGoalsRepository extends ServiceEntityRepository
      *
      * @return array
      */
-    public function findTodo($contact, $status, $type, $func = "", $team, $isHighlight = null, $patient = null, $antenna = null, $referent = null)
+    public function findTodo($contact, $status, $type, $func = "", $team, $patient = null, $antenna = null, $referent = null)
     {
         $query = 'SELECT g
             FROM App:FollowupGoals g ';
@@ -158,9 +160,7 @@ class FollowupGoalsRepository extends ServiceEntityRepository
         if ($patient) {
             $query .= ' AND g.pati = :patient ';
         }
-        if ($isHighlight) {
-            $query .= ' AND g.isHighlight = :isHighlight ';
-        }
+
         if ($antenna) {
             $query .= ' AND p.antenna = :antenna ';
         }
@@ -168,7 +168,7 @@ class FollowupGoalsRepository extends ServiceEntityRepository
             $query .= ' AND pc.cont in (:referent) and pc.end is null';
         }
 
-        if ($contact) {
+        if ($contact !== null) {
             $query .= ' AND g.cont = :contact ';
         } else {
             $query .= ' AND g.cont is NULL ';
@@ -187,9 +187,7 @@ class FollowupGoalsRepository extends ServiceEntityRepository
             $parameters['patient'] = $patient;
         }
 
-        if ($isHighlight) {
-            $parameters['isHighlight'] = $isHighlight;
-        }
+
 
         if ($contact) {
             $parameters['contact'] = $contact;
@@ -207,7 +205,7 @@ class FollowupGoalsRepository extends ServiceEntityRepository
             ->createQuery($query)
             ->setParameters($parameters);
 
-        // dd($query);
+        dd($query);
         return $query->getResult();
     }
 
@@ -338,23 +336,130 @@ class FollowupGoalsRepository extends ServiceEntityRepository
 
         return $qb->getQuery()->getResult();
     }
+
+
+
+
     /**
      * @return FollowupGoals[] Returns an array of FollowupGoals objects
      */
-    public function followupGoalsByAntenna($antenna): array
+    public function followupGoalsByAntenna($antenna, $team = null, $contact = null, $func = "", $referent = null, $date = null): array
     {
-        return $this->createQueryBuilder('f')
-            ->innerJoin('f.pati', 'p')
-            ->andWhere('p.antenna = :antenna')
-            ->setParameters([
-                'antenna' => $antenna
-            ])
-            ->innerJoin('f.cont', 'c')
-            ->andWhere('c IS NOT NULL AND f.deleted_at IS NULL AND f.type = 2 AND f.status = 1 AND f.status = 2')
-            ->orderBy('f.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult();
+        //    dd($referent);
+
+
+        $query = 'SELECT g
+        FROM App:FollowupGoals g ';
+
+        if ($team || $antenna) {
+            $query .= 'INNER JOIN g.pati p ';
+        }
+        if ($referent !== null) {
+            $query .= ' LEFT JOIN p.contacts pc ';
+        }
+
+        $query .= 'WHERE g.status IN (:status) AND g.type = :type ';
+
+        if ($date) {
+            $query .= ' AND g.creation_date IN (:date) ';
+        }
+
+
+        if ($func) {
+            $query .= ' AND g.func IN (:func) ';
+        }
+        if ($team) {
+            $query .= ' AND p.team = :team ';
+        }
+        // if ($patient) {
+        //     $query .= ' AND g.patient = :patient ';
+        // }
+        // if ($isHighlight) {
+        //     $query .= ' AND g.isHighlight = :isHighlight ';
+        // }
+        if ($antenna) {
+            $query .= ' AND p.antenna = :antenna ';
+        }
+        if ($referent !== null) {
+            $query .= ' AND pc.contact IN (:referent)';
+        }
+
+
+        if ($contact !== null) {
+            $query .= ' AND g.contact = :contact ';
+        } else {
+            $query .= ' AND g.contact is NOT NULL ';
+        }
+
+
+        $parameters = [
+            'status' => 1,
+            'type' => 2,
+        ];
+
+        if ($func) {
+            $parameters['func'] = $func;
+        }
+
+        // if ($patient) {
+        //     $parameters['patient'] = $patient;
+        // }
+
+        if ($contact !== null) {
+            $parameters['contact'] = $contact;
+        }
+
+        if ($team) {
+            $parameters['team'] = $team;
+        }
+
+        if ($antenna) {
+            $parameters['antenna'] = $antenna;
+        }
+
+
+        if ($referent !== null) {
+            $parameters['referent'] = $referent;
+        }
+
+        if ($date !== null) {
+            $parameters['date'] = $date;
+        }
+
+
+        $query = $this->getEntityManager()
+            ->createQuery($query)
+            ->setParameters($parameters);
+
+
+        return $query->getResult();
+
+        // $qb = $this->getEntityManager()->createQueryBuilder();
+        // $qb->select('f')
+        //     ->innerJoin('f.pati', 'p')
+
+        //     ->andWhere('p.antenna = :antenna')
+
+
+
+
+        //     ->setParameters([
+        //         'antenna' => $antenna
+        //     ])
+        //     ->innerJoin('f.cont', 'c')
+        //     ->andWhere('c IS NOT NULL AND f.deleted_at IS NULL AND f.type = 2 AND f.status = 1 OR f.status = 2')
+
+        //     ->orderBy('f.id', 'ASC')
+        //     ->setMaxResults(10);
+
+        // if ($team) {
+        //     $parameters['team'] = $team;
+        // }
+        // if ($team) {
+        //     $qb .= ' AND f.team = :team ';
+        // }
+
+        // return $qb->getQuery()->getResult();
     }
 
     //    public function findOneBySomeField($value): ?FollowupGoals
