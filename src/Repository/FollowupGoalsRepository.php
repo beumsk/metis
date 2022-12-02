@@ -135,7 +135,7 @@ class FollowupGoalsRepository extends ServiceEntityRepository
      *
      * @return array
      */
-    public function findTodo($contact, $status, $type, $func = "", $team, $patient = null, $antenna = null, $referent = null)
+    public function findTodo($contact, $status, $type, $func = "", $team, $patient = null, $date, $antenna = null, $referent = null)
     {
         $query = 'SELECT g
             FROM App:FollowupGoals g ';
@@ -163,6 +163,10 @@ class FollowupGoalsRepository extends ServiceEntityRepository
 
         if ($antenna) {
             $query .= ' AND p.antenna = :antenna ';
+        }
+
+        if ($date) {
+            $query .= ' AND g.creation_date = :date ';
         }
         if ($referent) {
             $query .= ' AND pc.cont in (:referent) and pc.end is null';
@@ -201,11 +205,15 @@ class FollowupGoalsRepository extends ServiceEntityRepository
             $parameters['referent'] = $referent;
         }
 
+        if ($date) {
+            $parameters['date'] = $date;
+        }
+
         $query = $this->getEntityManager()
             ->createQuery($query)
             ->setParameters($parameters);
 
-        dd($query);
+
         return $query->getResult();
     }
 
@@ -217,8 +225,18 @@ class FollowupGoalsRepository extends ServiceEntityRepository
      *        
      * @return array
      */
-    public function findClosedByContact($contact, $type, $date, $function, $team, $isHighlight = null, $antenna = null, $referent = null)
+    public function findClosedByContact($contact, $type, $date = null, $function, $team, $antenna = null, $referent = null)
     {
+
+        // dd(
+        //     // $contact, 
+        //     // $type,
+        //     // $date, 
+        //     // $function, 
+        //     // $team, 
+        //     // $antenna = null, 
+        //     // $referent = null
+        // );
         $qb = $this->getEntityManager()->createQueryBuilder();
 
         $qb
@@ -233,23 +251,28 @@ class FollowupGoalsRepository extends ServiceEntityRepository
         }
         if ($referent) {
             $qb
-                ->join('p.cont', 'pc');
+                ->join('p.contacts', 'pc');
         }
 
         $qb
-            ->where('c.id = :contactId AND g.status IN (:status) AND g.type = :type')
-            ->andWhere('r.id IN (' . $this->getLatestReport() . ')');
+            ->where('c.id = :contactId AND g.status IN (:status) AND g.type = :type AND g.deleted_at IS NULL');
+        // ->andWhere('r.id IN (' . $this->getLatestReport() . ')');
         $followUpGoalsEntity = new EntityFollowupGoals();
         $parameters = [
-            'date' => $date,
+            // 'date' => $date,
             'contactId' => $contact,
             'type' => $type,
-            'status' => $followUpGoalsEntity->getStatusForGroup(FollowupGoals::STATUS_GROUP_CLOSED)
+            'status' => FollowupGoals::getStatusForGroup(FollowupGoals::STATUS_GROUP_CLOSED)
         ];
 
         if ($function) {
-            $qb->andWhere('g.function IN (:function)');
+            $qb->andWhere('g.func IN (:function)');
             $parameters['function'] = $function;
+        }
+
+        if ($date !== null) {
+            $qb->andWhere('g.creation_date IN (:date)');
+            $parameters['date'] = $date;
         }
 
         if ($team) {
@@ -261,17 +284,19 @@ class FollowupGoalsRepository extends ServiceEntityRepository
             $parameters['antenna'] = $antenna;
         }
         if ($referent) {
-            $qb->andWhere("pc.contact in (:referent) and pc.end is null");
+            $qb->andWhere("pc.cont in (:referent) and pc.end is null");
             $parameters['referent'] = $referent;
         }
 
-        if ($isHighlight) {
-            $qb->andWhere('g.isHighlight = :isHighlight');
-            $parameters['isHighlight'] = $isHighlight;
-        }
+        // $qb->setMaxResults(10);
+
+        // if ($isHighlight) {
+        //     $qb->andWhere('g.isHighlight = :isHighlight');
+        //     $parameters['isHighlight'] = $isHighlight;
+        // }
 
         $qb->setParameters($parameters);
-
+        // dd($qb->getQuery()->getResult());
         return $qb->getQuery()->getResult();
     }
 
@@ -343,9 +368,9 @@ class FollowupGoalsRepository extends ServiceEntityRepository
     /**
      * @return FollowupGoals[] Returns an array of FollowupGoals objects
      */
-    public function followupGoalsByAntenna($antenna, $team = null, $contact = null, $func = "", $referent = null, $date = null): array
+    public function followupGoalsByAntenna($antenna, $team = null, $contact = null, $func = "", $referent = null, $date = null, $status, $type): array
     {
-        //    dd($referent);
+
 
 
         $query = 'SELECT g
@@ -357,9 +382,7 @@ class FollowupGoalsRepository extends ServiceEntityRepository
         if ($referent !== null) {
             $query .= ' LEFT JOIN p.contacts pc ';
         }
-
-        $query .= 'WHERE g.status IN (:status) AND g.type = :type ';
-
+        $query .= 'WHERE g.status IN (:status) AND g.type = :type AND g.deleted_at IS NULL';
         if ($date) {
             $query .= ' AND g.creation_date IN (:date) ';
         }
@@ -393,8 +416,8 @@ class FollowupGoalsRepository extends ServiceEntityRepository
 
 
         $parameters = [
-            'status' => 1,
-            'type' => 2,
+            'status' => $status,
+            'type' => $type,
         ];
 
         if ($func) {

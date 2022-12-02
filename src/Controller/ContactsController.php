@@ -320,7 +320,16 @@ class ContactsController extends AbstractController
         $limitHistoric = $request->request->get('limitHistoric');
         $team = $request->request->get('team');
         $function = $request->request->get('function');
-        $followup = $doctrine->getRepository(FollowupGoals::class)->followupGoalsByAntenna($antenna, null, null, null, null, null);
+        $followup = $doctrine->getRepository(FollowupGoals::class)->followupGoalsByAntenna(
+            $antenna,
+            null,
+            null,
+            null,
+            null,
+            null,
+            FollowupGoals::getStatusForGroup(FollowupGoals::STATUS_GROUP_RUNNING),
+            FollowupGoals::TYPE_CALL
+        );
 
         // if ($referent !== "null") {
         //     $filter = $doctrine->getRepository(Suggestions::class)->find(intval($referent));
@@ -328,10 +337,11 @@ class ContactsController extends AbstractController
         //     dd($referent);
         // }
 
+
         $arrCont = [];
 
         foreach ($followup as $key => $value) {
-
+            // dd($value);
             $arrCont[] = $value->getCont()->getId();
         }
 
@@ -339,8 +349,26 @@ class ContactsController extends AbstractController
 
         foreach ($contact as $value) {
             // $value->getId()
+            // $fogo = [];
+            if ($typeCalls === "running") {
 
-            $fogo = $doctrine->getRepository(FollowupGoals::class)->followupGoalsByAntenna($antenna, $team, $value->getId(), $function, $referent, $limitHistoric);
+                $fogo = $doctrine->getRepository(FollowupGoals::class)->followupGoalsByAntenna(
+                    $antenna,
+                    $team,
+                    $value->getId(),
+                    $function,
+                    $referent,
+                    $limitHistoric,
+                    FollowupGoals::getStatusForGroup(FollowupGoals::STATUS_GROUP_RUNNING),
+                    FollowupGoals::TYPE_CALL,
+                );
+            }
+
+            if ($typeCalls === "closed") {
+
+                $fogo = $doctrine->getRepository(FollowupGoals::class)->findClosedByContact($value->getId(), FollowupGoals::TYPE_CALL, $limitHistoric, $function, $team, $antenna, $referent);
+            }
+
 
             foreach ($fogo as $fg) {
                 // dd($fg->getPati()->getTeam());
@@ -367,7 +395,7 @@ class ContactsController extends AbstractController
         }
 
 
-
+        // dd($contact);
 
 
 

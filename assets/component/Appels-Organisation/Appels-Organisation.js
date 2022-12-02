@@ -8,6 +8,7 @@ import Accordion from "react-bootstrap/Accordion";
 import Button from "react-bootstrap/Button";
 import { Link } from "react-router-dom";
 import SelectFunction from "./Filtres/Select-Fonction";
+import ReactLoading from "react-loading";
 import SelectEquipe from "./Filtres/Select-Equipe";
 import SelectLimitHistoric from "./Filtres/Select-LimitHistoric";
 import SelectReferent from "./Filtres/Select-Referent";
@@ -25,6 +26,7 @@ function AppelsOrganisation() {
   var formData = new FormData();
   formData.append("page", lengthList.toString());
   formData.append("antenna", auth.antenna);
+  formData.append("typeCalls", "running");
   useEffect(() => {
     axios({
       method: "post",
@@ -78,8 +80,6 @@ function AppelsOrganisation() {
     if (typeCallsSelected !== null) {
       formData.append("typeCalls", typeCallsSelected);
     }
-
-    console.log(limitHistoricSelected);
     if (limitHistoricSelected !== null) {
       formData.append(
         "limitHistoric",
@@ -105,13 +105,10 @@ function AppelsOrganisation() {
       },
     })
       .then(function (response) {
-        //handle success
         setPatientsList(response);
       })
       .catch(function (response) {});
   };
-
-  console.log(patientsList);
 
   return (
     <>
@@ -133,7 +130,9 @@ function AppelsOrganisation() {
           <button onClick={sentFilters}>Appliquer les filtres</button>
         </div>
 
-        {patientsList && patientsList?.data && patientsList?.data?.length > 0 && (
+        {patientsList &&
+        patientsList?.data &&
+        patientsList?.data?.length > 0 ? (
           <>
             {patientsList.data.map((patient) => (
               <>
@@ -174,11 +173,18 @@ function AppelsOrganisation() {
                 )}
               </>
             ))}
-            {patientsList === null && <p>Loading</p>}
+
             <button className="btn-metis" onClick={readMore}>
               Read More
             </button>
           </>
+        ) : (
+          <ReactLoading
+            type={"spin"}
+            color={"#ffffff"}
+            height={"20%"}
+            width={"20%"}
+          />
         )}
       </div>
     </>

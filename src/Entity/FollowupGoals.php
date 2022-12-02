@@ -295,24 +295,24 @@ class FollowupGoals
         }
     }
 
-    /**
-     * @param int $status
-     *
-     * @return int
-     */
-    public function getStatusGroup($status)
-    {
-        switch ($status) {
-            case self::STATUS_NEW:
-            case self::STATUS_OPEN:
-                return self::STATUS_GROUP_RUNNING;
-                break;
-            case self::STATUS_COMPLETED:
-            case self::STATUS_CANCELED:
-                return self::STATUS_GROUP_CLOSED;
-                break;
-            default:
-                return 'wrong status';
-        }
-    }
+    // /**
+    //  * @param int $status
+    //  *
+    //  * @return int
+    //  */
+    // public function getStatusGroup($status)
+    // {
+    //     switch ($status) {
+    //         case self::STATUS_NEW:
+    //         case self::STATUS_OPEN:
+    //             return self::STATUS_GROUP_RUNNING;
+    //             break;
+    //         case self::STATUS_COMPLETED:
+    //         case self::STATUS_CANCELED:
+    //             return self::STATUS_GROUP_CLOSED;
+    //             break;
+    //         default:
+    //             return 'wrong status';
+    //     }
+    // }
 }

@@ -12,6 +12,7 @@ const TypeCalls = (props) => {
   formData.append("id", 655);
 
   useEffect(() => {
+    onChangeType("running");
     // axios({
     //   method: "post",
     //   url: "/api/suggestionsById",
@@ -39,14 +40,18 @@ const TypeCalls = (props) => {
       <InputGroup className="mb-3">
         <Form.Check
           label="En cours"
-          type={"checkbox"}
+          type={"radio"}
+          name="flexRadioDefault"
+          id="flexRadioDefault1"
           onClick={(e) => onChangeType("running")}
         />
       </InputGroup>
       <InputGroup className="mb-3">
         <Form.Check
           label="Fermées"
-          type={"checkbox"}
+          type={"radio"}
+          name="flexRadioDefault"
+          id="flexRadioDefault2"
           onClick={(e) => onChangeType("closed")}
         />
       </InputGroup>
