@@ -281,7 +281,19 @@ class PatientsController extends AbstractController
         $page = $request->request->get('page');
         $antenna = $request->request->get('antenna');
         $patients = $doctrine->getRepository(Patients::class)->listPatientsByAntenna($antenna);
-        return $this->json($patients);
+        $encoder = new JsonEncoder();
+        $defaultContext = [
+            AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context) {
+                return $object->getId();
+            },
+        ];
+
+        $normalizer = new ObjectNormalizer(null, null, null, null, null, null, $defaultContext);
+
+        $serializer = new Serializer([new DateTimeNormalizer(), $normalizer], [$encoder]);
+        $data = $serializer->serialize($patients, 'json', [AbstractNormalizer::IGNORED_ATTRIBUTES => ["contacts", "patients", "cont", "orga", "calls", "informations", "sugg", "occupants"]]);
+
+        return $this->json(json_decode($data));
     }
 
     #[Route('/api/getPatient', name: 'app_getPatient')]

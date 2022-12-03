@@ -3,17 +3,26 @@
 namespace App\Controller;
 
 
-use App\Entity\FollowupReports;
 use App\Entity\Medias;
 use App\Entity\Patients;
 use App\Entity\Suggestions;
+use App\Entity\FollowupReports;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+
+
+use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
+use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+
 
 class MediaController extends AbstractController
 {
@@ -43,13 +52,25 @@ class MediaController extends AbstractController
     }
 
     #[Route('/api/getAllMediasByPatients', name: 'app_getAllMedias')]
-    public function getAllMediasByPatients(ManagerRegistry $doctrine): Response
+    public function getAllMediasByPatients(ManagerRegistry $doctrine, SerializerInterface $serializer): Response
     {
         $request = Request::createFromGlobals();
         $id = $request->request->get("id");
         $medias = $doctrine->getRepository(Medias::class)->findBy(["pati" => $id]);
 
-        return $this->json($medias);
+        $encoder = new JsonEncoder();
+        $defaultContext = [
+            AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context) {
+                return $object->getId();
+            },
+        ];
+
+        $normalizer = new ObjectNormalizer(null, null, null, null, null, null, $defaultContext);
+
+        $serializer = new Serializer([new DateTimeNormalizer(), $normalizer], [$encoder]);
+        $data = $serializer->serialize($medias, 'json', [AbstractNormalizer::IGNORED_ATTRIBUTES => ["contacts"]]);
+
+        return $this->json(json_decode($data));
     }
 
 

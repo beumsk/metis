@@ -41,9 +41,19 @@ class FollowupReportsContactController extends AbstractController
         $cont = $doctrine->getRepository(PatientsContacts::class)->findBy(["pati" => $id]);
         $patientspatients = $doctrine->getRepository(PatientsPatients::class)->findBy(['tapa' => $id]);
 
+        $encoder = new JsonEncoder();
+        $defaultContext = [
+            AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context) {
+                return $object->getId();
+            },
+        ];
 
+        $normalizer = new ObjectNormalizer(null, null, null, null, null, null, $defaultContext);
 
-        return $this->json($patientspatients);
+        $serializer = new Serializer([new DateTimeNormalizer(), $normalizer], [$encoder]);
+        $data = $serializer->serialize($patientspatients, 'json', [AbstractNormalizer::IGNORED_ATTRIBUTES => ["contacts"]]);
+
+        return $this->json(json_decode($data));
     }
 
     #[Route('/api/getContactsByPatients', name: 'app_contactsbypatients')]
