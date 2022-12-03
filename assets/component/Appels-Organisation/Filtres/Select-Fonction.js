@@ -11,11 +11,8 @@ const SelectFunction = (props) => {
   const animatedComponents = makeAnimated();
   const formData = new FormData();
   formData.append("id", 658);
-  const options = [
-    { value: "chocolate", label: "Chocolate" },
-    { value: "strawberry", label: "Strawberry" },
-    { value: "vanilla", label: "Vanilla" },
-  ];
+  let options = [];
+  let selectOptions = [];
   useEffect(() => {
     axios({
       method: "post",
@@ -33,7 +30,26 @@ const SelectFunction = (props) => {
       .catch(function (response) {});
   }, []);
 
-  props.onChangeFunction(selectedFunction);
+  if (selectFunction) {
+    for (let index = 0; index < selectFunction.length; index++) {
+      const element = selectFunction[index];
+      options.push({ value: element.id, label: element.value });
+    }
+  }
+
+  const onChangeTags = (e) => {
+    // options.filter(e => e.value);
+    let optionsValues = [];
+    for (let index = 0; index < e.length; index++) {
+      const element = e[index];
+      optionsValues.push(element.value);
+    }
+    // e.filter((f) => [f.value]);
+    props.onChangeFunction(optionsValues);
+    // console.log(optionsValues);
+    // console.log(e);
+  };
+
   return (
     <>
       {" "}
@@ -41,6 +57,7 @@ const SelectFunction = (props) => {
       <Select
         closeMenuOnSelect={false}
         components={animatedComponents}
+        onChange={(e) => onChangeTags(e)}
         // defaultValue={[colourOptions[4], colourOptions[5]]}
         isMulti
         options={options}

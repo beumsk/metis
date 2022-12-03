@@ -2,7 +2,7 @@
   "build/app.css": "/build/app.css",
   "build/app.js": "/build/app.js",
   "build/runtime.js": "/build/runtime.js",
-  "build/vendors-node_modules_ckeditor_ckeditor5-build-classic_build_ckeditor_js-node_modules_ckeditor-5d1016.js": "/build/vendors-node_modules_ckeditor_ckeditor5-build-classic_build_ckeditor_js-node_modules_ckeditor-5d1016.js",
+  "build/vendors-node_modules_ckeditor_ckeditor5-build-classic_build_ckeditor_js-node_modules_ckeditor-252dc9.js": "/build/vendors-node_modules_ckeditor_ckeditor5-build-classic_build_ckeditor_js-node_modules_ckeditor-252dc9.js",
   "build/assets_styles_app_scss.css": "/build/assets_styles_app_scss.css",
   "build/images/8c56f3ba.jpeg": "/build/images/75892d8312278f9230828b2115fc7f468c56f3ba.jpeg",
   "build/images/20220324_132711-637379b5df786.jpg": "/build/images/20220324_132711-637379b5df786.jpg",
@@ -844,7 +844,5 @@
   "build/images/1ba21299.jpeg": "/build/images/c2869f3ff3c87901865be872f28100e31ba21299.jpeg",
   "build/images/d13dfa1d.jpeg": "/build/images/220b71cd3e0d8d00a02dd5d751a8cc15d13dfa1d.jpeg",
   "build/images/menu.svg": "/build/images/menu.svg",
-  "build/images/dfa87693": "/build/images/a0fb7e4b5f4c0c55562968778cf63f99dfa87693.bin",
-  "build/vendors-node_modules_ckeditor_ckeditor5-build-classic_build_ckeditor_js-node_modules_ckeditor-1fe071.js": "/build/vendors-node_modules_ckeditor_ckeditor5-build-classic_build_ckeditor_js-node_modules_ckeditor-1fe071.js",
-  "build/vendors-node_modules_ckeditor_ckeditor5-build-classic_build_ckeditor_js-node_modules_ckeditor-252dc9.js": "/build/vendors-node_modules_ckeditor_ckeditor5-build-classic_build_ckeditor_js-node_modules_ckeditor-252dc9.js"
+  "build/images/dfa87693": "/build/images/a0fb7e4b5f4c0c55562968778cf63f99dfa87693.bin"
 }
