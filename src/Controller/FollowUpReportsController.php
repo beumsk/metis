@@ -101,7 +101,7 @@ class FollowUpReportsController extends AbstractController
             AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context) {
                 return $object->getId();
             },
-            AbstractNormalizer::IGNORED_ATTRIBUTES => ['pati', 'cont', 'contact', 'func', 'sugg']
+            AbstractNormalizer::IGNORED_ATTRIBUTES => ['pati', 'cont', 'contact', 'func', 'sugg', 'contacts']
         ]);
 
 
@@ -207,7 +207,7 @@ class FollowUpReportsController extends AbstractController
             AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context) {
                 return $object->getId();
             },
-            AbstractNormalizer::IGNORED_ATTRIBUTES => ["pati", "sugg", "user", "informations", "cont", "fore"]
+            AbstractNormalizer::IGNORED_ATTRIBUTES => ["pati", "sugg", "user", "informations", "cont", "fore", "contacts"]
         ]);
 
         $result = array_merge([$jsonObject], [$jsonObject2]);

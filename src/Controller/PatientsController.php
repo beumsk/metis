@@ -217,7 +217,8 @@ class PatientsController extends AbstractController
         $jsonObject = $serializer->serialize($templateElement, 'json', [
             'circular_reference_handler' => function ($object) {
                 return $object->getId();
-            }
+            },
+            AbstractNormalizer::IGNORED_ATTRIBUTES => ["contacts", "pati", "sugg", "orga", "calls", "user", "informations", "fore", "contact"]
         ]);
 
 
@@ -236,7 +237,7 @@ class PatientsController extends AbstractController
         $reports = $doctrine->getRepository(Patients::class)->findLatestSuggestion($patient, "/patient/fiche/statut-du-suivi");
         // return $this->json($reports, Response::HTTP_OK, [], ['groups' =>  'PatientsInformation', 'Patients', 'PatientsInformationTemplateElement']);
 
-        return $this->json($reports);
+        return $this->json(["firstname" => $reports->getFirstName(), "lastname" => $reports->getLastName()]);
     }
 
 
@@ -248,7 +249,28 @@ class PatientsController extends AbstractController
         $page = $request->request->get('page');
         $antenna = $request->request->get('antenna');
         $patients = $doctrine->getRepository(Patients::class)->findByPaquets($page, $antenna);
-        return $this->json($patients);
+        $encoders = [new JsonEncoder()];
+        $normalizers = [new DateTimeNormalizer(), new ObjectNormalizer()];
+        $serializer = new Serializer($normalizers, $encoders);
+
+
+
+
+        // $serializer = SerializerBuilder::create()->build();
+        $jsonObject = $serializer->serialize($patients, 'json', [
+            AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context) {
+                return $object->getId();
+            },
+            AbstractNormalizer::IGNORED_ATTRIBUTES => ["contacts", "pati", "sugg", "orga", "calls", "user", "informations", "fore", "contact"]
+        ]);
+
+
+        // $response = new Response($jsonObject, 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
+
+
+
+        // $response->setSharedMaxAge(3600);
+        return new Response($jsonObject, 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
     }
 
     #[Route('/api/getAllPatients', name: 'app_getPatients')]
@@ -269,7 +291,28 @@ class PatientsController extends AbstractController
 
         $id = $request->request->get('id');
         $patients = $doctrine->getRepository(Patients::class)->find($id);
-        return $this->json($patients);
+        $encoders = [new JsonEncoder()];
+        $normalizers = [new DateTimeNormalizer(), new ObjectNormalizer()];
+        $serializer = new Serializer($normalizers, $encoders);
+
+
+
+
+        // $serializer = SerializerBuilder::create()->build();
+        $jsonObject = $serializer->serialize($patients, 'json', [
+            AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context) {
+                return $object->getId();
+            },
+            AbstractNormalizer::IGNORED_ATTRIBUTES => ["contacts", "pati", "sugg", "orga", "calls", "user", "informations", "fore", "contact"]
+        ]);
+
+
+        // $response = new Response($jsonObject, 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
+
+
+
+        // $response->setSharedMaxAge(3600);
+        return new Response($jsonObject, 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
     }
 
     #[Route('/api/getMedias', name: 'app_allMedias')]
