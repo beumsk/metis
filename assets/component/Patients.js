@@ -15,6 +15,9 @@ function Patients() {
   const [patientsList, setPatientsList] = useState(null);
   const [lengthList, setLengthList] = useState(10);
   const [searchNamePatient, setSearchNamePatient] = useState(null);
+  const [searchDateBirth, setDateBirth] = useState(null);
+  const [typePatient, setTypePatient] = useState(null);
+  const [typeSelectPatient, setTypeSelectPatient] = useState(null);
 
   var formData = new FormData();
   formData.append("page", lengthList.toString());
@@ -35,10 +38,39 @@ function Patients() {
         setPatientsList(response);
       })
       .catch(function (response) {});
+
+    var suggestion = new FormData();
+    suggestion.append("id", 100);
+    axios({
+      method: "post",
+      url: "/api/suggestionsById",
+      data: suggestion,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    })
+      .then(function (response) {
+        //handle success
+        setTypePatient(response.data);
+        console.log(response.data);
+      })
+      .catch(function (response) {});
   }, [lengthList, setLengthList]);
 
   const onSubmitFilter = (e) => {
-    formData.append("searchNamePatient", searchNamePatient);
+    if (searchNamePatient) {
+      formData.append("searchNamePatient", searchNamePatient);
+    }
+
+    if (searchDateBirth) {
+      formData.append("searchDateBirthPatient", searchDateBirth);
+    }
+
+    if (typeSelectPatient) {
+      formData.append("typeSelectPatient", typeSelectPatient);
+    }
+
     axios({
       method: "post",
       url: "/api/getPatients",
@@ -54,6 +86,10 @@ function Patients() {
       })
       .catch(function (response) {});
   };
+
+  if (typePatient) {
+    console.log(typePatient);
+  }
   const readMore = () => {
     setLengthList(lengthList + 10);
   };
@@ -68,6 +104,19 @@ function Patients() {
             type="text"
             onChange={(e) => setSearchNamePatient(e.target.value)}
           />
+          <input type="date" onChange={(e) => setDateBirth(e.target.value)} />
+          <Form.Select
+            onChange={(e) => setTypeSelectPatient(e.target.value)}
+            value={typeSelectPatient}
+          >
+            <option value={null}>Séléctionnez le type de patient</option>
+
+            {/* referentList */}
+            {typePatient?.map((type) => (
+              <option value={type.idvalue}>{type.value}</option>
+            ))}
+          </Form.Select>
+
           <Button onClick={(e) => onSubmitFilter(e)}>Filtrer</Button>
         </div>
 

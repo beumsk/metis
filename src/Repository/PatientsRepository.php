@@ -43,7 +43,7 @@ class PatientsRepository extends ServiceEntityRepository
     //    /**
     //     * @return Patients[] Returns an array of Patients objects
     //     */
-    public function findPatients($numberPage, $antenna, $searchPatient = null): array
+    public function findPatients($numberPage, $antenna, $searchPatient = null, $searchDatePatient = null, $searchTypeForPatient = null): array
     {
 
         $parameters = [];
@@ -57,10 +57,21 @@ class PatientsRepository extends ServiceEntityRepository
             $parameters["searchPatient"] = '%' . $searchPatient . '%';
         }
 
+        if ($searchDatePatient) {
+            $q->andWhere('p.birthdate = :searchDatePatient');
+            $parameters["searchDatePatient"] = $searchDatePatient;
+        }
+
+        if ($searchTypeForPatient) {
+            $q->andWhere('p.status = :searchTypeForPatient');
+            $parameters["searchTypeForPatient"] = $searchTypeForPatient;
+        }
+
         $q->setParameters($parameters)
             ->orderBy('p.id', 'ASC')
             ->setMaxResults($numberPage);
 
+        // dd($q->getQuery());
         return $q->getQuery()->getResult();
     }
 

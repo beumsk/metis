@@ -249,7 +249,9 @@ class PatientsController extends AbstractController
         $page = $request->request->get('page');
         $antenna = $request->request->get('antenna');
         $searchNamePatient = $request->request->get('searchNamePatient');
-        $patients = $doctrine->getRepository(Patients::class)->findPatients($page, $antenna, $searchNamePatient);
+        $searchDatePatient = $request->request->get('searchDateBirthPatient');
+        $searchTypeForPatient = $request->request->get('typeSelectPatient');
+        $patients = $doctrine->getRepository(Patients::class)->findPatients($page, $antenna, $searchNamePatient, $searchDatePatient, $searchTypeForPatient);
         $encoders = [new JsonEncoder()];
         $normalizers = [new DateTimeNormalizer(), new ObjectNormalizer()];
         $serializer = new Serializer($normalizers, $encoders);
