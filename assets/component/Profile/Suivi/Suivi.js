@@ -6,6 +6,7 @@ import React, {
   useEffect,
 } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import ReactLoading from "react-loading";
 import {
   faPlusCircle,
   faCancel,
@@ -176,31 +177,54 @@ const Profile = () => {
           </div>
 
           <h6>Objectifs</h6>
-          {goals?.data.map((g, id) => (
+          {goals ? (
             <>
-              {g && g.type === 1 && (
-                <div className="item-goals" key={id}>
-                  {new Date(g.creationDate).toLocaleString("fr-BE", {
-                    dateStyle: "short",
-                  })}
-                  {g?.func?.value} {g?.description}
-                </div>
-              )}
+              {goals?.data.map((g, id) => (
+                <>
+                  {g && g.type === 1 && (
+                    <div className="item-goals" key={id}>
+                      {new Date(g.creationDate).toLocaleString("fr-BE", {
+                        dateStyle: "short",
+                      })}
+                      {g?.func?.value} {g?.description}
+                    </div>
+                  )}
+                </>
+              ))}
             </>
-          ))}
+          ) : (
+            <ReactLoading
+              type={"spin"}
+              color={"#000"}
+              height={"20%"}
+              width={"20%"}
+            />
+          )}
+
           <h6>Appels</h6>
-          {goals?.data.map((g, id) => (
+          {goals ? (
             <>
-              {g && g?.type === 2 && (
-                <div className="item-goals" key={id}>
-                  {new Date(g.creationDate).toLocaleString("fr-BE", {
-                    dateStyle: "short",
-                  })}
-                  {g?.func?.value} {g?.description}
-                </div>
-              )}
+              {goals?.data.map((g, id) => (
+                <>
+                  {g && g?.type === 2 && (
+                    <div className="item-goals" key={id}>
+                      {new Date(g.creationDate).toLocaleString("fr-BE", {
+                        dateStyle: "short",
+                      })}
+                      {g?.func?.value} {g?.description}
+                    </div>
+                  )}
+                </>
+              ))}
             </>
-          ))}
+          ) : (
+            <ReactLoading
+              type={"spin"}
+              color={"#000"}
+              height={"20%"}
+              width={"20%"}
+            />
+          )}
         </div>
         <div className="col-sm-9">
           <div className="d-flex row-btn mb-4">

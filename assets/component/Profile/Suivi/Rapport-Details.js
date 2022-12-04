@@ -14,6 +14,7 @@ import Table from "react-bootstrap/Table";
 import axios from "axios";
 import Editor from "./Editor-Reports";
 import Form from "react-bootstrap/Form";
+import ReactLoading from "react-loading";
 import AddReportMeet from "./Add-Report-Meet";
 import EditReportMeet from "./Edit-Report-Meet";
 
@@ -155,7 +156,7 @@ function RapportDetails(props) {
       </div>
       <Button onClick={(e) => onChangeRapportFilter(e)}>Filter</Button>
 
-      {informations && informations.data && informations.data.length > 0 && (
+      {informations && informations.data && informations.data.length > 0 ? (
         <>
           {informations.data.map((r, id) => (
             <div key={id} className="report-content">
@@ -274,6 +275,13 @@ function RapportDetails(props) {
             </div>
           ))}
         </>
+      ) : (
+        <ReactLoading
+          type={"spin"}
+          color={"#000"}
+          height={"20%"}
+          width={"20%"}
+        />
       )}
     </>
   );
