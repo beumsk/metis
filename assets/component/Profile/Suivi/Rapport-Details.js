@@ -137,7 +137,7 @@ function RapportDetails(props) {
           <option value={1}>Rapport de rencontre</option>
           <option value={4}>Appel entrant</option>
           <option value={2}>Appel sortant</option>
-          <option value={3}>Objectif</option>
+          {/* <option value={3}>Objectif</option> */}
         </Form.Select>
         {/* <input
           type="text"
