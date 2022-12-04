@@ -43,17 +43,25 @@ class PatientsRepository extends ServiceEntityRepository
     //    /**
     //     * @return Patients[] Returns an array of Patients objects
     //     */
-    public function findByPaquets($numberPage, $antenna): array
+    public function findPatients($numberPage, $antenna, $searchPatient = null): array
     {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.antenna = :antenna')
+
+        $parameters = [];
+        $parameters["antenna"] = $antenna;
+        $q = $this->createQueryBuilder('p')
+            ->andWhere('p.antenna = :antenna');
+
+
+        if ($searchPatient) {
+            $q->andWhere('CONCAT(p.lastname,\' \', p.firstname,\' \', COALESCE(p.nicknames, p.id)) LIKE :searchPatient');
+            $parameters["searchPatient"] = '%' . $searchPatient . '%';
+        }
+
+        $q->setParameters($parameters)
             ->orderBy('p.id', 'ASC')
-            ->setMaxResults($numberPage)
-            ->setParameters([
-                'antenna' => $antenna
-            ])
-            ->getQuery()
-            ->getResult();
+            ->setMaxResults($numberPage);
+
+        return $q->getQuery()->getResult();
     }
 
 

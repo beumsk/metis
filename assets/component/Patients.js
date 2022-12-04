@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Table from "react-bootstrap/Table";
+import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/Button";
 import PersistLogin from "./PersistLogin";
 import useAuth from "../hooks/useAuth";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -12,6 +14,7 @@ function Patients() {
   const [auth, setAuth] = useState(useAuth());
   const [patientsList, setPatientsList] = useState(null);
   const [lengthList, setLengthList] = useState(10);
+  const [searchNamePatient, setSearchNamePatient] = useState(null);
 
   var formData = new FormData();
   formData.append("page", lengthList.toString());
@@ -34,6 +37,23 @@ function Patients() {
       .catch(function (response) {});
   }, [lengthList, setLengthList]);
 
+  const onSubmitFilter = (e) => {
+    formData.append("searchNamePatient", searchNamePatient);
+    axios({
+      method: "post",
+      url: "/api/getPatients",
+      data: formData,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    })
+      .then(function (response) {
+        //handle success
+        setPatientsList(response);
+      })
+      .catch(function (response) {});
+  };
   const readMore = () => {
     setLengthList(lengthList + 10);
   };
@@ -43,6 +63,13 @@ function Patients() {
       <Menu></Menu>
       <div className="container container-patients row mx-auto ">
         <h3>Tous les patients</h3>
+        <div className="container-filter">
+          <input
+            type="text"
+            onChange={(e) => setSearchNamePatient(e.target.value)}
+          />
+          <Button onClick={(e) => onSubmitFilter(e)}>Filtrer</Button>
+        </div>
 
         {patientsList && patientsList.data && patientsList.data.length > 0 && (
           <>
