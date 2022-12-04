@@ -363,6 +363,39 @@ class FollowupGoalsRepository extends ServiceEntityRepository
     }
 
 
+    public function findPatientGoals($patient, $keyword = null, $limit = null, $offset = 0)
+    {
+
+        $query = 'SELECT r
+                FROM App:FollowupGoals r
+                WHERE r.pati = :patient';
+
+        $parameters = array('patient' => $patient);
+
+
+        // OR c.firstName like :keyword OR c.lastName like :keyword
+
+        if (null !== $keyword) {
+            $query .= ' AND (r.content like :keyword OR pl.firstName like :keyword OR pl.lastName like :keyword)';
+            $parameters['keyword'] = '%' . $keyword . '%';
+        }
+
+        $query .= " ORDER BY r.creation_date DESC, r.id DESC ";
+
+        $query = $this->getEntityManager()
+            ->createQuery($query)
+            ->setParameters($parameters);
+
+        if (null != $limit) {
+            $query->setMaxResults($limit)->setFirstResult($offset);
+        }
+
+        try {
+            return $query->getResult();
+        } catch (\Doctrine\ORM\NoResultException $e) {
+            return null;
+        }
+    }
 
 
     /**
@@ -494,4 +527,19 @@ class FollowupGoalsRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+
+    public function mergeFollowUpGoalsAndReports($value)
+    {
+        return $this->createQueryBuilder('f')
+            ->andWhere('f.pati = :idPati')
+            ->leftJoin(
+                'App:FollowupReports',
+                'par',
+                'WITH',
+                ':idPati = par.pati'
+            )
+            ->setParameter('idPati', $value)
+            ->getQuery()
+            ->getResult();
+    }
 }

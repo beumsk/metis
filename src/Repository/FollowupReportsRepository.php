@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\FollowupReports;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Twig\Node\WithNode;
 
 /**
  * @extends ServiceEntityRepository<FollowupReports>
@@ -45,7 +46,7 @@ class FollowupReportsRepository extends ServiceEntityRepository
         $parameters["activityType"] = $activityType;
 
         $q = $this->createQueryBuilder('r')
-            ->leftJoin('r.pati', 'p')
+            ->innerJoin('r.pati', 'p')
             ->andWhere('r.activity_type in (:activityType)');
 
         if (null !== $antenna) {
@@ -90,13 +91,46 @@ class FollowupReportsRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
-    //    public function findOneBySomeField($value): ?FollowupReports
-    //    {
-    //        return $this->createQueryBuilder('f')
-    //            ->andWhere('f.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+    public function mergeFollowUpGoalsAndReports($id, $textSearch = null, $dateSearch = null, $typeSearch = null)
+    {
+
+        $qb = $this->getEntityManager()->createQueryBuilder();
+
+        $qb->select('f')
+            ->from('App:FollowupReports', 'f')
+            ->andWhere('f.pati = :idPati')
+            ->leftJoin(
+                'App:FollowupGoals',
+                'fg',
+                'WITH',
+                'f.pati = fg.pati'
+            );
+        // ->innerJoin(
+        //     'App:User',
+        //     'u',
+        //     'WITH',
+        //     'f.user = u.id'
+        // )
+        $parameters["idPati"] = $id;
+        if (null !== $textSearch) {
+            $qb->andWhere('f.content like :textSearch');
+            $parameters["textSearch"] = '%' . $textSearch . '%';
+        }
+
+        if (null !== $dateSearch) {
+            $qb->andWhere('f.creation_date = :dateSearch');
+            $parameters["dateSearch"] = $dateSearch;
+        }
+
+        if (null !== $typeSearch) {
+            $qb->andWhere('f.activity_type = :typeSearch');
+            $parameters["typeSearch"] = $typeSearch;
+        }
+
+        $qb->setParameters($parameters)
+            ->addOrderBy('f.creation_date', 'ASC');
+
+
+        return $qb->getQuery()->getResult();
+    }
 }

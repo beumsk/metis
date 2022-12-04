@@ -87,7 +87,12 @@ class FollowUpReportsController extends AbstractController
 
         $id = $request->request->get('id');
 
-        $report = $doctrine->getRepository(FollowupGoals::class)->findBy(["pati" => $id]);
+        $textSearch = $request->request->get('setTextRapport');
+        $dateSearch = $request->request->get('setDateRapport');
+        $typeSearch = $request->request->get('setTypeRapport');
+
+        // setTextRapport
+        $report = $doctrine->getRepository(FollowupReports::class)->mergeFollowUpGoalsAndReports($id, $textSearch, $dateSearch, $typeSearch);
 
 
 
@@ -135,16 +140,7 @@ class FollowUpReportsController extends AbstractController
         foreach ($followUpReports as  $value) {
             if ($value->getId()) {
                 $report = $doctrine->getRepository(FollowupReportsActivities::class)->findBy(['fore' => $value->getId()]);
-
-
-
-
                 $indicators = $doctrine->getRepository(FollowupReportsIndicators::class)->findBy(['fore' => $value->getId()]);
-
-
-
-
-
                 if ($report !== []) {
                     foreach ($report as $itemReport) {
                         if ($itemReport->getSugg()->getParentSugg() !== null && $itemReport->getSugg()->getParentSugg()->getValue() === "Soins") {

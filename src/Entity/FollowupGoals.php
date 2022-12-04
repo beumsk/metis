@@ -295,6 +295,27 @@ class FollowupGoals
         }
     }
 
+    /**
+     * @return array
+     */
+    public static function getAllStatus()
+    {
+        return array(
+            self::STATUS_NEW => 'Nouveau',
+            self::STATUS_OPEN => 'En cours',
+            self::STATUS_COMPLETED => 'Accompli',
+            self::STATUS_CANCELED => 'Annulé'
+        );
+    }
+
+    public static function date_compare($element1, $element2)
+    {
+
+        $datetime1 = strtotime($element1->creation_date);
+        $datetime2 = strtotime($element2->creation_date);
+        return $datetime1 - $datetime2;
+    }
+
     // /**
     //  * @param int $status
     //  *

@@ -151,7 +151,7 @@ const Profile = () => {
             >
               Ajouter un rapport
             </button>
-            <button
+            {/* <button
               style={
                 isDahsboardReports
                   ? { borderBottom: "0.3rem solid #ffc107" }
@@ -161,7 +161,7 @@ const Profile = () => {
             >
               {" "}
               Liste de rapports
-            </button>
+            </button> */}
             <button
               style={
                 isReportDetails
