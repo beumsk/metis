@@ -60,6 +60,12 @@ function AddReportMeet(props) {
   const [changeEditor, setChangeEditor] = useState(null);
   const [changeOptions, setChangeOptions] = useState(null);
 
+  let [validationCare, setValidationCare] = useState(null);
+  let [validationHestiaLogement, setValidationHESTIALogement] = useState(null);
+  let [validationHESTIADeces, setValidationHESTIADeces] = useState(null);
+  let [validationCVC, setValidationCVC] = useState(null);
+  let [validationActivities, setValidationActivities] = useState(null);
+
   useEffect(() => {
     axios({
       method: "post",
@@ -316,124 +322,145 @@ function AddReportMeet(props) {
     console.log("validationFormCVC", validationFormCVC);
     // formSoins.every((item) => item.type !== null && item.description !== null);
     // formActivities.every((item) => item.type !== null && item.description !== null);
+    if (
+      validationFormActivities === null &&
+      validationFormCare === null &&
+      (validationFormHESTIALogement === true ||
+        validationFormHESTIALogement === null) &&
+      (validationFormHESTIAdeces === true || validationFormHESTIAdeces === null)
+    ) {
+      axios({
+        method: "post",
+        url: "/api/sendReport",
+        data: formData,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${auth.auth.accessToken}`,
+        },
+      })
+        .then(function (response) {
+          if (response && formSoins) {
+            let endpoints = [];
 
-    // axios({
-    //   method: "post",
-    //   url: "/api/sendReport",
-    //   data: formData,
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //     Authorization: `Bearer ${auth.auth.accessToken}`,
-    //   },
-    // })
-    //   .then(function (response) {
-    //     if (response && formSoins) {
-    //       let endpoints = [];
+            for (let index = 0; index < formSoins.length; index++) {
+              endpoints.push("/api/addCaresToReport");
+            }
 
-    //       for (let index = 0; index < formSoins.length; index++) {
-    //         endpoints.push("/api/addCaresToReport");
-    //       }
+            axios
+              .all(
+                endpoints.map((endpoint, i) => {
+                  let care = formSoins[i];
+                  let formData = new FormData();
 
-    //       axios
-    //         .all(
-    //           endpoints.map((endpoint, i) => {
-    //             let care = formSoins[i];
-    //             let formData = new FormData();
+                  formData.append(
+                    "rapportId",
+                    response.data.id ? response.data.id : null
+                  );
+                  formData.append("value", care.value ? care.value : null);
+                  formData.append(
+                    "description",
+                    care.description ? care.description : null
+                  );
+                  formData.append("formSoins", JSON.stringify(care));
 
-    //             formData.append(
-    //               "rapportId",
-    //               response.data.id ? response.data.id : null
-    //             );
-    //             formData.append("value", care.value ? care.value : null);
-    //             formData.append(
-    //               "description",
-    //               care.description ? care.description : null
-    //             );
-    //             formData.append("formSoins", JSON.stringify(care));
+                  axios({
+                    method: "post",
+                    url: endpoint,
+                    data: formData,
+                    headers: {
+                      "Content-Type": "application/json",
+                      Authorization: `Bearer ${auth.auth.accessToken}`,
+                    },
+                  });
+                })
+              )
+              .then((data) => console.log(data));
+          }
 
-    //             axios({
-    //               method: "post",
-    //               url: endpoint,
-    //               data: formData,
-    //               headers: {
-    //                 "Content-Type": "application/json",
-    //                 Authorization: `Bearer ${auth.auth.accessToken}`,
-    //               },
-    //             });
-    //           })
-    //         )
-    //         .then((data) => console.log(data));
-    //     }
+          if (response && formActivities) {
+            let endpoints = [];
 
-    //     if (response && formActivities) {
-    //       let endpoints = [];
+            for (let index = 0; index < formActivities.length; index++) {
+              endpoints.push("/api/addActivitiesToReport");
+            }
+            axios
+              .all(
+                endpoints.map((endpoint, i) => {
+                  let activities = formActivities[i];
+                  let formData = new FormData();
 
-    //       for (let index = 0; index < formActivities.length; index++) {
-    //         endpoints.push("/api/addActivitiesToReport");
-    //       }
-    //       axios
-    //         .all(
-    //           endpoints.map((endpoint, i) => {
-    //             let activities = formActivities[i];
-    //             let formData = new FormData();
+                  formData.append(
+                    "rapportId",
+                    response.data.id ? response.data.id : null
+                  );
+                  formData.append(
+                    "value",
+                    activities.value ? activities.value : null
+                  );
+                  formData.append(
+                    "description",
+                    activities.description ? activities.description : null
+                  );
+                  formData.append("formActivities", JSON.stringify(activities));
 
-    //             formData.append(
-    //               "rapportId",
-    //               response.data.id ? response.data.id : null
-    //             );
-    //             formData.append(
-    //               "value",
-    //               activities.value ? activities.value : null
-    //             );
-    //             formData.append(
-    //               "description",
-    //               activities.description ? activities.description : null
-    //             );
-    //             formData.append("formActivities", JSON.stringify(activities));
+                  axios({
+                    method: "post",
+                    url: endpoint,
+                    data: formData,
+                    headers: {
+                      "Content-Type": "application/json",
+                      Authorization: `Bearer ${auth.auth.accessToken}`,
+                    },
+                  });
+                })
+              )
+              .then((data) => console.log(data));
+          }
 
-    //             axios({
-    //               method: "post",
-    //               url: endpoint,
-    //               data: formData,
-    //               headers: {
-    //                 "Content-Type": "application/json",
-    //                 Authorization: `Bearer ${auth.auth.accessToken}`,
-    //               },
-    //             });
-    //           })
-    //         )
-    //         .then((data) => console.log(data));
-    //     }
+          if (response && formIndicateurs) {
+            for (let index = 0; index < formIndicateurs.length; index++) {
+              let indi = formIndicateurs[index];
+              formIndicateurs[index].rapportId = response.idRapport;
+              let formData = new FormData();
 
-    //     if (response && formIndicateurs) {
-    //       for (let index = 0; index < formIndicateurs.length; index++) {
-    //         let indi = formIndicateurs[index];
-    //         formIndicateurs[index].rapportId = response.idRapport;
-    //         let formData = new FormData();
+              formData.append(
+                "rapportId",
+                response.data.id ? response.data.id : null
+              );
 
-    //         formData.append(
-    //           "rapportId",
-    //           response.data.id ? response.data.id : null
-    //         );
-
-    //         formData.append("formIndicateurs", JSON.stringify(indi));
-    //         axios({
-    //           method: "post",
-    //           url: "/api/addIndicators",
-    //           data: formData,
-    //           headers: {
-    //             "Content-Type": "application/json",
-    //             Authorization: `Bearer ${auth.auth.accessToken}`,
-    //           },
-    //         });
-    //       }
-    //     }
-    //     // location.replace(window.location.origin + "/" + idPatient);
-    //     document.getElementById("rapport_details-btn").click();
-    //   })
-    //   .catch(function (response) {
-    //     console.log(response);
-    //   });
+              formData.append("formIndicateurs", JSON.stringify(indi));
+              axios({
+                method: "post",
+                url: "/api/addIndicators",
+                data: formData,
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${auth.auth.accessToken}`,
+                },
+              });
+            }
+          }
+          // location.replace(window.location.origin + "/" + idPatient);
+          document.getElementById("rapport_details-btn").click();
+        })
+        .catch(function (response) {
+          console.log(response);
+        });
+    } else {
+      setValidationCare(validationFormCare === false ? true : null);
+      setValidationHESTIALogement(
+        validationFormHESTIALogement === false ? true : null
+      );
+      setValidationHESTIADeces(
+        validationFormHESTIAdeces === false ? true : null
+      );
+      setValidationCVC(validationFormCVC === false ? true : null);
+      setValidationActivities(validationFormActivities === false ? true : null);
+      console.log("validationFormCare", validationFormCare);
+      console.log("validationFormHESTIALogement", validationFormHESTIALogement);
+      console.log("validationFormHESTIAdeces", validationFormHESTIAdeces);
+      console.log("validationFormCVC", validationFormCVC);
+    }
   };
 
   function onChangeValuesByOnCareForm(e) {
@@ -732,7 +759,6 @@ function AddReportMeet(props) {
           )}
         </div>
       </Form.Group>
-
       <Form.Label htmlFor="inputValue">Type de rencontre</Form.Label>
       <Form.Select
         size="lg"
@@ -747,7 +773,6 @@ function AddReportMeet(props) {
           <option value={4}>Recherche</option>
         </>
       </Form.Select>
-
       <Form.Label htmlFor="inputValue">Date de la rencontre</Form.Label>
       <Form.Control
         type="date"
@@ -756,7 +781,6 @@ function AddReportMeet(props) {
         onChange={(e) => onChangeDate(e)}
         id="inputValueSpécifique"
       />
-
       <Form.Label htmlFor="inputValue">Objectifs</Form.Label>
       <Form.Select
         size="lg"
@@ -767,12 +791,15 @@ function AddReportMeet(props) {
           <option>Objectifs non chargées pour l'instant</option>
         </>
       </Form.Select>
-
       <InputContactList contacts={props.contacts} onChange={onChangeContacts} />
       <InputPlaceList places={props.places} onChange={onChangePlaces} />
-
       <Editor onChange={editorChange}></Editor>
 
+      {validationCare && <p>validationCare</p>}
+      {validationHestiaLogement && <p>validationHestiaLogement</p>}
+      {validationHESTIADeces && <p>validationHESTIADeces</p>}
+      {validationCVC && <p>validationCVC</p>}
+      {validationActivities && <p>validationActivities</p>}
       <button onClick={(e) => sentRapport(e)}>Envoyer</button>
     </div>
   );

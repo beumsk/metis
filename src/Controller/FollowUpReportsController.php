@@ -775,7 +775,7 @@ class FollowUpReportsController extends AbstractController
 
             $followUpReportActivities = new FollowupReportsActivities();
             if ($editFollowUpReportCare === null) {
-                $sugg =  $doctrine->getRepository(Suggestions::class)->find($care_jsondecode->value);
+                $sugg =  $doctrine->getRepository(Suggestions::class)->find($care_jsondecode->type);
                 $followUpReportActivities->setActivity($sugg);
 
                 $followUpReportActivities->setDescription($description);
