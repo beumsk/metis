@@ -1025,7 +1025,7 @@ function EditReportMeet(props) {
       )}
 
       <InputGoalsList
-        goals={props?.informationPatient?.followupReportsGoals}
+        goals={props?.goals}
         // defaultValue={props?.informationPatient?.cont[0]?.orga?.id}
         onChange={onChangeContacts}
       />
@@ -1044,7 +1044,7 @@ function EditReportMeet(props) {
       {props?.informationPatient?.hasOwnProperty("type") === true && (
         <InputContactList
           contacts={props.contacts}
-          defaultValue={props?.informationPatient?.cont?.id}
+          defaultValue={props?.informationPatient?.cont[0]?.id}
           onChange={onChangeContacts}
         />
       )}

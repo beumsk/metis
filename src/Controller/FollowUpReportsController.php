@@ -68,8 +68,9 @@ class FollowUpReportsController extends AbstractController
         $followupGoals->setType(1);
         $followupGoals->setSugg($suggestions);
         $followupGoals->setCreationDate(new \DateTime("now"));
+
         $followupGoals->setDescription($description);
-        $followupGoals->setStatus(3);
+        $followupGoals->setStatus(0);
         $followupGoals->setTitle($valueType);
         $entityManager->persist($followupGoals);
 
@@ -92,9 +93,40 @@ class FollowUpReportsController extends AbstractController
         $typeSearch = $request->request->get('setTypeRapport');
 
         // setTextRapport
-        $report = $doctrine->getRepository(FollowupReports::class)->mergeFollowUpGoalsAndReports($id, $textSearch, $dateSearch, $typeSearch);
+        $reportFollowUp = $doctrine->getRepository(FollowupReports::class)->mergeFollowUpGoalsAndReports($id, $textSearch, $dateSearch, $typeSearch);
 
+        foreach ($reportFollowUp as  $value) {
+            if ($value->getId()) {
+                $report = $doctrine->getRepository(FollowupReportsActivities::class)->findBy(['fore' => $value->getId()]);
+                $indicators = $doctrine->getRepository(FollowupReportsIndicators::class)->findBy(['fore' => $value->getId()]);
+                if ($report !== []) {
+                    foreach ($report as $itemReport) {
+                        if ($itemReport->getSugg()->getParentSugg() !== null && $itemReport->getSugg()->getParentSugg()->getValue() === "Soins") {
+                            $value->setFollowupReportsCare($itemReport);
+                        }
 
+                        if ($itemReport->getSugg()->getParentSugg() !== null && $itemReport->getSugg()->getParentSugg()->getValue() === "Activités") {
+
+                            // array_push([$itemReport], ["idFront" => $itemReport->getId()]);
+                            $value->setFollowupReportsActivities($itemReport);
+                        }
+                    }
+                }
+
+                if ($indicators !== []) {
+                    foreach ($indicators as  $indi) {
+                        $value->setFollowupReportsIndicators($indi);
+                    }
+                }
+                // if ($followUpGoals !== []) {
+                //     foreach ($followUpGoals as  $goal) {
+                //         // dd($goal);
+
+                //         $value->setFollowupReportsGoals($goal);
+                //     }
+                // }
+            }
+        }
 
 
         $encoders = [new JsonEncoder()];
@@ -102,11 +134,19 @@ class FollowUpReportsController extends AbstractController
         $serializer = new Serializer($normalizers, $encoders);
 
 
-        $jsonObject = $serializer->serialize($report, 'json', [
+        // $arr = [];
+
+        // foreach ($reportFollowUp as $key => $value) {
+        //     $arr[] = ["test" => ($value->getCont()[0] && $value->getCont()[0]->getId()) ? $value->getCont()[0]->getId() : null];
+        //     array_push($arr, $value);
+        // }
+
+
+        $jsonObject = $serializer->serialize($reportFollowUp, 'json', [
             AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context) {
                 return $object->getId();
             },
-            AbstractNormalizer::IGNORED_ATTRIBUTES => ['pati', 'cont', 'contact', 'func', 'sugg', 'contacts']
+            AbstractNormalizer::IGNORED_ATTRIBUTES => ['pati', 'informations', 'occupants', 'contact', 'func', 'sugg', 'contacts', 'calls', 'patients']
         ]);
 
 
@@ -255,15 +295,11 @@ class FollowUpReportsController extends AbstractController
 
 
         $user = $doctrine->getRepository(User::class)->find($userId);
-        if ($changeContacts !== null) {
-            $contact = $doctrine->getRepository(Contacts::class)->find($changeContacts);
-        } else {
-            $contact = null;
-        }
+
 
         $patient =  $doctrine->getRepository(Patients::class)->find($patiId);
-        $plac =  $doctrine->getRepository(Places::class)->find($changePlaces);
-        $cont =  $doctrine->getRepository(Contacts::class)->find($contId);
+        // $plac =  $doctrine->getRepository(Places::class)->find($changePlaces);
+        // $cont =  $doctrine->getRepository(Contacts::class)->find($contId);
 
         $report = $doctrine->getRepository(FollowupReports::class)->find($rapportId);
 
@@ -271,9 +307,9 @@ class FollowUpReportsController extends AbstractController
         $report->setUser($user);
         $report->setActivityType(1);
         $report->setReportDate($reportDate);
-        $report->setPlac($contact);
+
         $report->setLastUpdate($reportDate);
-        $report->setContent($changeEditor);
+        $report->setContent(($changeEditor === "null") ? FollowupReports::DEFAULT_REPORT_CONTENT : $changeEditor);
         $report->setDeletedAt(null);
         $report->setPati($patient);
         $report->setDuration(null);
@@ -283,19 +319,21 @@ class FollowUpReportsController extends AbstractController
         $report->setNoActivities($no_activities);
         $report->setNoIndicators($no_indicateurs);
         $report->setReportType(1);
-        $report->setPlac($plac);
-        $report->addCont($cont);
+
+
+
+
         $report->setIsHightlight(false);
         $report->setReportDate(new \DateTime($changeDate));
 
 
 
-        if ($changeContacts) {
-            $contact = $doctrine->getRepository(Contacts::class)->find($changeContacts);
+        if ($contId !== "null") {
+            $contact = $doctrine->getRepository(Contacts::class)->find($contId);
             $report->addCont($contact);
         }
 
-        if ($changePlaces) {
+        if ($changePlaces !== "null") {
             $places = $doctrine->getRepository(Contacts::class)->find($changePlaces);
             $report->setPlac($places);
         }
@@ -721,7 +759,7 @@ class FollowUpReportsController extends AbstractController
             $followUpReportActivities = new FollowupReportsActivities();
             if ($editFollowUpReportCare === null) {
 
-                $sugg =  $doctrine->getRepository(Suggestions::class)->find($care_jsondecode->value);
+                $sugg =  $doctrine->getRepository(Suggestions::class)->find($care_jsondecode->type);
                 $followUpReportActivities->setActivity($sugg);
 
                 $followUpReportActivities->setDescription($description);

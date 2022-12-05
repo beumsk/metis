@@ -128,7 +128,7 @@ class FollowupReportsRepository extends ServiceEntityRepository
         }
 
         $qb->setParameters($parameters)
-            ->addOrderBy('f.creation_date', 'ASC');
+            ->addOrderBy('f.creation_date', 'DESC');
 
 
         return $qb->getQuery()->getResult();

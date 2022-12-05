@@ -63,7 +63,7 @@ function RapportDetails(props) {
 
     axios({
       method: "post",
-      url: "/api/getFollowUpReportsWithAnswers",
+      url: "/api/getFollowUpReportsById",
       data: reportData,
       headers: {
         "Content-Type": "application/json",
@@ -206,6 +206,7 @@ function RapportDetails(props) {
                     <EditReportMeet
                       informationPatient={r}
                       type={type}
+                      goals={props?.goals}
                       contacts={props?.contacts}
                       places={props?.places}
                       indicatorsResponse={r.followupReportsIndicators}

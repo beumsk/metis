@@ -312,6 +312,7 @@ const Profile = () => {
             <RapportDetails
               type={type}
               contacts={contacts}
+              goals={goals}
               places={places}
               informationPatient={informationPatient}
             ></RapportDetails>

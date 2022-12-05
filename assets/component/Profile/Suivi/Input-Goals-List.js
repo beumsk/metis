@@ -34,6 +34,7 @@ function InputGoalsList(props) {
   const onChangeContact = (e) => {
     props.onChange(e.target.value);
   };
+  console.log(props?.goals?.data);
 
   return (
     <>
@@ -45,9 +46,9 @@ function InputGoalsList(props) {
         onChange={(e) => onChangeContact(e)}
       >
         <option>Choissisez l'objectif</option>
-        {props?.goals?.map((el, id) => (
+        {props?.goals?.data?.map((el, id) => (
           <>
-            {el && el.deletedAt !== null && (
+            {el.status === 0 && (
               <option
                 value={el?.id}
                 // selected={props.defaultValue === el?.id}
