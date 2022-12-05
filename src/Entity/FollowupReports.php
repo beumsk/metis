@@ -299,6 +299,13 @@ class FollowupReports
         return $this->cont;
     }
 
+    public function setCont(?Contacts $cont): self
+    {
+        $this->cont = $cont;
+
+        return $this;
+    }
+
     public function addCont(Contacts $cont): self
     {
         if (!$this->cont->contains($cont)) {
