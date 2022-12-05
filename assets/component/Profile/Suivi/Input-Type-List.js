@@ -57,6 +57,7 @@ function InputTypeList(props) {
       <Form.Select
         size="lg"
         value={typeValue}
+        required={true}
         onChange={(e) => onChangeType(e)}
       >
         <option>Choissisez le type</option>

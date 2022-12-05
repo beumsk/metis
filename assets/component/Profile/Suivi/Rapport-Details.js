@@ -164,7 +164,11 @@ function RapportDetails(props) {
               {r && r.activityType === 2 && <h6>Appel Sortant</h6>}
               {r && r.activityType === 4 && <h6>Appel Entrant</h6>}
               <div className="row">
-                {r && r.creationDate && <h6>{r.creationDate}</h6>}
+                {r && r.creationDate && (
+                  <h6>
+                    {new Date(r.creationDate).toLocaleString("fr-BE", "short")}
+                  </h6>
+                )}
               </div>
 
               {r && r.deletedAt === null && (
@@ -210,17 +214,74 @@ function RapportDetails(props) {
                   {r.isHightlight === false && (
                     <>
                       <div className="row">
+                        {/* {r.followupReportsCare && (
+                          <>
+                            {r.followupReportsCare.map((item, id) => (
+                              <div className="row">
+                                <h6>Indicateurs</h6>
+                                {item.indi.id === 1 && (
+                                  <div className="indicators-CVC" bg={"green"}>
+                                    CVC
+                                  </div>
+                                )}
+
+                                {item.indi.id === 6 && (
+                                  <div className="indicators-Hestia" bg={"red"}>
+                                    HESTIA Logement
+                                  </div>
+                                )}
+                                {item.indi.id === 7 && (
+                                  <div
+                                    className="indicators-Logement"
+                                    bg={"blue"}
+                                  >
+                                    HESTIA Deces
+                                  </div>
+                                )}
+                                <div className="col-sm-4">
+                                  <b>{item.indi.name}</b>
+                                </div>
+                                <div className="col-sm-8">
+                                  {item.indi.description} ({item.value})
+                                </div>
+                              </div>
+                            ))}
+                          </>
+                        )} */}
+
                         {r.followupReportsIndicators && (
                           <>
+                            <h6>Indicateurs</h6>
                             {r.followupReportsIndicators.map((item, id) => (
                               <div className="row">
-                                <div className="col-sm-4">{item.indi.name}</div>
-                                <div className="col-sm-8">
-                                  {item.indi.description}
-                                </div>
+                                {item.indi.id === 1 && (
+                                  <div className="indicators-CVC" bg={"green"}>
+                                    CVC
+                                  </div>
+                                )}
+
+                                {item.indi.id === 6 && (
+                                  <div className="indicators-Hestia" bg={"red"}>
+                                    HESTIA Logement
+                                  </div>
+                                )}
+                                {item.indi.id === 7 && (
+                                  <div
+                                    className="indicators-Logement"
+                                    bg={"blue"}
+                                  >
+                                    HESTIA Deces
+                                  </div>
+                                )}
                                 <div className="col-sm-4">
-                                  {item.indi.comment}
+                                  <b>{item.indi.name}</b>
                                 </div>
+                                <div className="col-sm-8">
+                                  {item.indi.description} ({item.value})
+                                </div>
+                                {/* <div className="col-sm-4">
+                                  {item.indi.comment}
+                                </div> */}
                               </div>
                             ))}
                           </>
@@ -260,6 +321,7 @@ function RapportDetails(props) {
                           </>
                         )}
                       </div>
+
                       <div
                         className="mt-4"
                         dangerouslySetInnerHTML={{

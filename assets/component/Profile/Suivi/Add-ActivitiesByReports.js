@@ -34,7 +34,7 @@ function AddActivitiesByReport(props) {
   ]);
 
   const [idEditFormActivities, setIdEditFormActivities] = useState([
-    props.formActivitiesEdit.act_id,
+    props?.formActivitiesEdit?.act_id,
   ]);
 
   const [value, setValueForm] = useState(null);
@@ -46,19 +46,36 @@ function AddActivitiesByReport(props) {
   useEffect(() => {}, [idPatient]);
 
   function handleChangeValue(newValue) {
-    setValueForm(newValue);
+    console.log(newValue);
+    if (newValue) {
+      setValueForm(newValue);
+    } else {
+      setValueForm(null);
+    }
   }
 
   function handleChangeContacts(newValue) {
-    setValueContactForm(newValue);
+    if (newValue) {
+      setValueContactForm(newValue);
+    } else {
+      setValueContactForm(null);
+    }
   }
 
   function handleChangePlaces(newValue) {
-    setValuePlaceForm(newValue);
+    if (newValue) {
+      setValuePlaceForm(newValue);
+    } else {
+      setValuePlaceForm(null);
+    }
   }
 
   const onChangeDescription = (e) => {
-    setValueDescription(e.target.value);
+    if (e) {
+      setValueDescription(e.target.value);
+    } else {
+      setValueDescription(null);
+    }
   };
 
   props.onChange([
