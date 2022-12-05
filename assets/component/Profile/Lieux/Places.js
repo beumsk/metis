@@ -6,6 +6,12 @@ import axios from "axios";
 import ModalLierLieux from "./Modal-Lier-Lieux";
 import EditLierLieux from "./Edit-Lieux";
 import ModalDeletePlaces from "./Delete-Lieux";
+import BootstrapTable from "react-bootstrap-table-next";
+import ToolkitProvider, {
+  Search,
+} from "react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit";
+import paginationFactory from "react-bootstrap-table2-paginator";
+import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
 import Table from "react-bootstrap/Table";
 const Places = () => {
   let id = useParams().id;
@@ -76,6 +82,65 @@ const Places = () => {
     setPlaces(e);
   }
 
+  const columns = [
+    {
+      dataField: "lastname",
+      text: "Lieu",
+      formatter: (cell, row, rowIndex, extraData) => (
+        <div>{row.cont[0].lastname}</div>
+      ),
+    },
+    {
+      dataField: "type",
+      text: "Type de lieu",
+      formatter: (cell, row, rowIndex, extraData) => (
+        <div>{row?.sugg[0]?.value}</div>
+      ),
+    },
+    {
+      dataField: "start",
+      text: "Début",
+      formatter: (cell, row, rowIndex, extraData) => (
+        <div>{new Date(row?.start).toLocaleString("fr-BE", "short")}</div>
+      ),
+    },
+    {
+      dataField: "end",
+      text: "Fin",
+      formatter: (cell, row, rowIndex, extraData) => (
+        <div>{new Date(row?.end).toLocaleString("fr-BE", "short")}</div>
+      ),
+    },
+    {
+      dataField: "comment",
+      text: "Comment",
+      formatter: (cell, row, rowIndex, extraData) => (
+        <div>{row.comment === "null" ? "" : row.comment}</div>
+      ),
+    },
+    {
+      formatter: (cell, row, rowIndex, extraData) => (
+        <div className="d-flex">
+          <EditLierLieux
+            lieu={row}
+            type={type}
+            onChangeEditPlaces={(e) => editPlacesResponse(e)}
+            // lieuxList={alllistPlaces}
+            // typeDefault={places.type.lastname}
+            places={row}
+          ></EditLierLieux>
+          <ModalDeletePlaces
+            lieu={row}
+            type={type}
+            onChangeDeletePlace={(e) => onChangeDeletePlace(e)}
+            places={row}
+          ></ModalDeletePlaces>
+        </div>
+      ),
+      text: "Actions",
+    },
+  ];
+
   return (
     <>
       <div className="d-flex mb-4 row-btn">
@@ -83,10 +148,29 @@ const Places = () => {
           lieuxList={alllistPlaces}
           type={type}
           onChangeLierPlaces={(e) => onChangePlaces(e)}
+          striped
+          hover
+          condensed
         ></ModalLierLieux>
       </div>
-
-      {listPlaces && listPlaces.data.length > 0 && (
+      {listPlaces && listPlaces.data.length > 0 ? (
+        <ToolkitProvider
+          keyField="id"
+          data={[...listPlaces.data]}
+          columns={columns}
+          search
+        >
+          {(props) => (
+            <BootstrapTable
+              {...props.baseProps}
+              pagination={paginationFactory()}
+            />
+          )}
+        </ToolkitProvider>
+      ) : (
+        <p>Loading</p>
+      )}
+      {/* {listPlaces && listPlaces.data.length > 0 && (
         <>
           <h6>Lieux</h6>
 
@@ -111,7 +195,7 @@ const Places = () => {
                       {places.cont.lastname}
                     </td>
                     <td>
-                      {/* {new Date(patient.creationDate).toLocaleDateString()} */}
+                      {/* {new Date(patient.creationDate).toLocaleDateString()}
                     </td>
                     <td></td>
                     <td></td>
@@ -139,7 +223,7 @@ const Places = () => {
             ))}
           </Table>
         </>
-      )}
+      )} */}
     </>
   );
 };

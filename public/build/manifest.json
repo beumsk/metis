@@ -649,6 +649,7 @@
   "build/images/0af719b5.png": "/build/images/1136534fe3d30deaf71ea271590797d20af719b5.png",
   "build/images/07630ad8.pdf": "/build/images/c7c6f451762fb34a8dd8e763f4f9727607630ad8.pdf",
   "build/images/78079328.png": "/build/images/74b794b8ca00b351bd77dd72a44af7bf78079328.png",
+  "build/images/Capture-638cf800a38ae.jpg": "/build/images/Capture-638cf800a38ae.jpg",
   "build/images/8ec9876c.pdf": "/build/images/5f8295495c485dacb7ebecc45fedc5028ec9876c.pdf",
   "build/images/71c2de0d.png": "/build/images/aaca9dcfa34056f7a128fe0dae1edc2371c2de0d.png",
   "build/images/c828a19d.png": "/build/images/e93287a40fb686d044b6c80c11596b5cc828a19d.png",
@@ -844,7 +845,5 @@
   "build/images/1ba21299.jpeg": "/build/images/c2869f3ff3c87901865be872f28100e31ba21299.jpeg",
   "build/images/d13dfa1d.jpeg": "/build/images/220b71cd3e0d8d00a02dd5d751a8cc15d13dfa1d.jpeg",
   "build/images/menu.svg": "/build/images/menu.svg",
-  "build/images/dfa87693": "/build/images/a0fb7e4b5f4c0c55562968778cf63f99dfa87693.bin",
-  "build/images/Capture-638cf800a38ae.jpg": "/build/images/Capture-638cf800a38ae.jpg",
-  "build/vendors-node_modules_ckeditor_ckeditor5-build-classic_build_ckeditor_js-node_modules_ckeditor-7f1513.js": "/build/vendors-node_modules_ckeditor_ckeditor5-build-classic_build_ckeditor_js-node_modules_ckeditor-7f1513.js"
+  "build/images/dfa87693": "/build/images/a0fb7e4b5f4c0c55562968778cf63f99dfa87693.bin"
 }

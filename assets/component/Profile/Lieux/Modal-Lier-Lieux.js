@@ -32,6 +32,8 @@ function ModalLierLieux(props) {
   const [valueCommentary, setValueCommentary] = useState(null);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  console.log(props);
   useEffect(() => {
     //   axios({
     //     method: "post",

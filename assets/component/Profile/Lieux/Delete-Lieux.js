@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import moment from "moment";
 import {
   faPlusCircle,
-  faDeleteLeft,
+  faTrash,
   faEdit,
   faCheck,
 } from "@fortawesome/free-solid-svg-icons";
@@ -111,8 +111,8 @@ function ModalDeletePlaces(props) {
   }
   return (
     <>
-      <button onClick={handleShow} className="ml-4">
-        Effacer le lieu
+      <button onClick={handleShow} className="ml-4 btn-metis">
+        <FontAwesomeIcon icon={faTrash} />
       </button>
 
       <Modal show={show} onHide={handleClose}>
