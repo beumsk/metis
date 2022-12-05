@@ -21,7 +21,7 @@ import RapportDetails from "./Rapport-Details";
 import ModalAddObjectifs from "./Modal-Add-Objectifs";
 import AddReportMeet from "./Add-Report-Meet";
 import DashboardReports from "./Dashboard-Reports";
-
+import Accordion from "react-bootstrap/Accordion";
 const Profile = () => {
   let id = useParams().id;
   const [auth, setAuth] = useState(useAuth());
@@ -178,20 +178,50 @@ const Profile = () => {
 
           <h6>Objectifs</h6>
           {goals ? (
-            <>
-              {goals?.data.map((g, id) => (
-                <>
-                  {g && g.type === 1 && (
-                    <div className="item-goals" key={id}>
-                      {new Date(g.creationDate).toLocaleString("fr-BE", {
-                        dateStyle: "short",
-                      })}
-                      {g?.func?.value} {g?.description}
-                    </div>
-                  )}
-                </>
-              ))}
-            </>
+            <Accordion>
+              <Accordion.Item eventKey="0">
+                <Accordion.Header>Ouvertes</Accordion.Header>
+                <Accordion.Body>
+                  {goals?.data.map((g, id) => (
+                    <>
+                      {g &&
+                      g.type === 1 &&
+                      (g.status === 0 || g.status === 1) ? (
+                        <div className="item-goals" key={id}>
+                          {new Date(g.creationDate).toLocaleString("fr-BE", {
+                            dateStyle: "short",
+                          })}
+                          {g?.func?.value} {g?.description}
+                        </div>
+                      ) : (
+                        ""
+                      )}
+                    </>
+                  ))}
+                </Accordion.Body>
+              </Accordion.Item>
+              <Accordion.Item eventKey="1">
+                <Accordion.Header>Fermées</Accordion.Header>
+                <Accordion.Body>
+                  {goals?.data.map((g, id) => (
+                    <>
+                      {g &&
+                      g.type === 1 &&
+                      (g.status === 2 || g.status === 3) ? (
+                        <div className="item-goals" key={id}>
+                          {new Date(g.creationDate).toLocaleString("fr-BE", {
+                            dateStyle: "short",
+                          })}
+                          {g?.func?.value} {g?.description}
+                        </div>
+                      ) : (
+                        ""
+                      )}
+                    </>
+                  ))}
+                </Accordion.Body>
+              </Accordion.Item>
+            </Accordion>
           ) : (
             <ReactLoading
               type={"spin"}
@@ -204,18 +234,51 @@ const Profile = () => {
           <h6>Appels</h6>
           {goals ? (
             <>
-              {goals?.data.map((g, id) => (
-                <>
-                  {g && g?.type === 2 && (
-                    <div className="item-goals" key={id}>
-                      {new Date(g.creationDate).toLocaleString("fr-BE", {
-                        dateStyle: "short",
-                      })}
-                      {g?.func?.value} {g?.description}
-                    </div>
-                  )}
-                </>
-              ))}
+              <Accordion>
+                <Accordion.Item eventKey="0">
+                  <Accordion.Header>Ouvertes</Accordion.Header>
+                  <Accordion.Body>
+                    {goals?.data.map((g, id) => (
+                      <>
+                        {g &&
+                        g?.type === 2 &&
+                        (g.status === 0 || g.status === 1) ? (
+                          <div className="item-goals" key={id}>
+                            {new Date(g.creationDate).toLocaleString("fr-BE", {
+                              dateStyle: "short",
+                            })}
+                            {g?.func?.value} {g?.description}
+                          </div>
+                        ) : (
+                          ""
+                        )}
+                      </>
+                    ))}
+                  </Accordion.Body>
+                </Accordion.Item>
+
+                <Accordion.Item eventKey="1">
+                  <Accordion.Header>Fermées</Accordion.Header>
+                  <Accordion.Body>
+                    {goals?.data.map((g, id) => (
+                      <>
+                        {g &&
+                        g?.type === 2 &&
+                        (g.status === 2 || g.status === 3) ? (
+                          <div className="item-goals" key={id}>
+                            {new Date(g.creationDate).toLocaleString("fr-BE", {
+                              dateStyle: "short",
+                            })}
+                            {g?.func?.value} {g?.description}
+                          </div>
+                        ) : (
+                          ""
+                        )}
+                      </>
+                    ))}
+                  </Accordion.Body>
+                </Accordion.Item>
+              </Accordion>
             </>
           ) : (
             <ReactLoading
