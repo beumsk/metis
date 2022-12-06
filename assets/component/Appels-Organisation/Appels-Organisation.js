@@ -15,6 +15,7 @@ import SelectReferent from "./Filtres/Select-Referent";
 import TypeCalls from "./Filtres/Select-TypeCalls";
 import { FormSelect } from "react-bootstrap";
 import ModalActionsAppels from "./Modal-Actions-Appels/Modal-Actions-Appels";
+import ModalHistorique from "./Modal-Historique/ModalHistorique";
 function AppelsOrganisation() {
   const [auth, setAuth] = useState(useAuth());
   const [patientsList, setPatientsList] = useState(null);
@@ -148,13 +149,13 @@ function AppelsOrganisation() {
                         </div>
                         <div className="col-sm-4">
                           {patient.firstname} {patient.lastname}
-                          <Link
+                          {/* <Link
                             className="seeProfil"
                             from={"/appels-organisation"}
                             to={"/appels-organisation/" + patient.id}
                           >
-                            Voir profil
-                          </Link>
+                            Voir historique
+                          </Link> */}
                         </div>
                         <div className="col-sm-4">{patient.description}</div>
                       </Accordion.Header>
@@ -168,6 +169,7 @@ function AppelsOrganisation() {
                               </div>
                               <div className="col-sm-8 container-appelDescription">
                                 {e.description}
+                                <ModalHistorique foreList={e}></ModalHistorique>
                               </div>
                               <div className="col-sm-2 container-appelDescription">
                                 <select value={typeCallsSelect}>
