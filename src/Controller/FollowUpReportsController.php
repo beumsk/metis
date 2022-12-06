@@ -411,15 +411,17 @@ class FollowUpReportsController extends AbstractController
 
         $followupGoals->setPati($patients);
 
-        if ($isCallsPatients === "false") {
+        if ($isCallsPatients === "true") {
 
-            $followupGoals->setType(2);
+            $followupGoals->setType(1);
         }
 
-        if ($isCallsPatients === "true") {
-            $contact = $doctrine->getRepository(Contacts::class)->find($contact);
-            $followupGoals->setCont($contact);
-            $followupGoals->setType(1);
+        if ($isCallsPatients === "false") {
+            $cont = $doctrine->getRepository(Contacts::class)->find($contact);
+
+            $followupGoals->setCont($cont);
+            $followupGoals->setContact($cont);
+            $followupGoals->setType(2);
         }
         $followupGoals->setFunc($function);
         $followupGoals->setSugg($suggestions);
@@ -430,11 +432,11 @@ class FollowUpReportsController extends AbstractController
         $followupGoals->setDescription($description);
         $followupGoals->setStatus(0);
         $entityManager->persist($followupGoals);
-
+        // dd($followupGoals);
         $entityManager->flush();
         return new JsonResponse([
             'response' => "Sent !",
-            'idAppel' => $followupGoals->getId()
+            'idAppel' => $followupGoals->getCont()->getId()
         ]);
     }
     #[Route('/api/addIndicators', name: 'app_addIndicators')]

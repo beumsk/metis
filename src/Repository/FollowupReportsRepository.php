@@ -97,14 +97,14 @@ class FollowupReportsRepository extends ServiceEntityRepository
         $qb = $this->getEntityManager()->createQueryBuilder();
 
         $qb->select('f')
+            // ->distinct()
             ->from('App:FollowupReports', 'f')
-            ->andWhere('f.pati = :idPati')
-            ->leftJoin(
-                'App:FollowupGoals',
-                'fg',
-                'WITH',
-                'f.pati = fg.pati'
-            );
+
+            // ->join(
+            //     'App:FollowupGoals',
+            //     'fg'
+            // )
+            ->andWhere('f.pati = :idPati ');
         // ->innerJoin(
         //     'App:User',
         //     'u',
@@ -127,8 +127,8 @@ class FollowupReportsRepository extends ServiceEntityRepository
             $parameters["typeSearch"] = $typeSearch;
         }
 
-        $qb->setParameters($parameters)
-            ->addOrderBy('f.creation_date', 'DESC');
+        $qb->setParameters($parameters);
+        // ->addOrderBy('f.creation_date', 'DESC');
 
 
         return $qb->getQuery()->getResult();

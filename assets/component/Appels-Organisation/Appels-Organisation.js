@@ -159,11 +159,13 @@ function AppelsOrganisation() {
                         <div className="row body-accordeonitemPatient">
                           {patient.goalsInformation.map((e) => (
                             <div className="row">
-                              <div className="col-sm-6">
+                              <div className="col-sm-6 container-informationNames">
                                 {e.patientfirstName}
                                 {e.patientLastName}
                               </div>
-                              <div className="col-sm-6">{e.description}</div>
+                              <div className="col-sm-6 container-appelDescription">
+                                {e.description}
+                              </div>
                             </div>
                           ))}
                         </div>

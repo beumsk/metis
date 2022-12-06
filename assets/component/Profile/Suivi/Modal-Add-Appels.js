@@ -118,7 +118,7 @@ function ModalAddAppels(props) {
     formData.append("valueWhatDoinFunction", valueWhatDoinFunction);
     formData.append("patientId", idPatient);
     formData.append("userId", userId);
-
+    // console.log(isCallsPatients);
     axios({
       method: "post",
       url: "/api/setCalls",
@@ -128,7 +128,7 @@ function ModalAddAppels(props) {
         Authorization: `Bearer ${auth.auth.accessToken}`,
       },
     }).then(function (response) {
-      location.replace(window.location.origin + "/" + idPatient);
+      // location.replace(window.location.origin + "/" + idPatient);
       document.querySelectorAll(".btn-close")[0].click();
     });
   }
@@ -179,7 +179,7 @@ function ModalAddAppels(props) {
                 onClick={(e) => setIsCallsPatients(!isCallsPatients)}
               />
             </Form.Group>
-            {isCallsPatients === true && (
+            {isCallsPatients === false && (
               <InputContactList
                 contacts={props.contacts}
                 onChange={(e) => onChangeContacts(e)}
