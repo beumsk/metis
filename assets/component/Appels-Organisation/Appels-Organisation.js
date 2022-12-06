@@ -13,6 +13,8 @@ import SelectEquipe from "./Filtres/Select-Equipe";
 import SelectLimitHistoric from "./Filtres/Select-LimitHistoric";
 import SelectReferent from "./Filtres/Select-Referent";
 import TypeCalls from "./Filtres/Select-TypeCalls";
+import { FormSelect } from "react-bootstrap";
+import ModalActionsAppels from "./Modal-Actions-Appels/Modal-Actions-Appels";
 function AppelsOrganisation() {
   const [auth, setAuth] = useState(useAuth());
   const [patientsList, setPatientsList] = useState(null);
@@ -22,6 +24,7 @@ function AppelsOrganisation() {
   const [limitHistoricSelected, setLimitHistoricSelected] = useState(null);
   const [referentSelected, setReferentSelected] = useState(null);
   const [typeCallsSelected, setTypeCallsSelected] = useState(null);
+  const [typeCallsSelect, setTypeCallsSelect] = useState(null);
 
   var formData = new FormData();
   formData.append("page", lengthList.toString());
@@ -159,12 +162,32 @@ function AppelsOrganisation() {
                         <div className="row body-accordeonitemPatient">
                           {patient.goalsInformation.map((e) => (
                             <div className="row">
-                              <div className="col-sm-6 container-informationNames">
+                              <div className="col-sm-2 container-informationNames">
                                 {e.patientfirstName}
                                 {e.patientLastName}
                               </div>
-                              <div className="col-sm-6 container-appelDescription">
+                              <div className="col-sm-8 container-appelDescription">
                                 {e.description}
+                              </div>
+                              <div className="col-sm-2 container-appelDescription">
+                                <select value={typeCallsSelect}>
+                                  <option value={1}>
+                                    Création rapport appel sortant
+                                  </option>
+                                  <option value={2}>
+                                    Création rapport appel entrant
+                                  </option>
+                                  <option value={3}>Annuler l'appel</option>
+                                  <option value={4}>
+                                    Déclarer l'appel comme absent
+                                  </option>
+                                </select>
+                                <ModalActionsAppels
+                                  listCalls={patient.goalsInformation}
+                                  defaultValueContact={patient}
+                                  listContacts={patientsList?.data}
+                                  defaultValueGoalsValue={e}
+                                ></ModalActionsAppels>
                               </div>
                             </div>
                           ))}
