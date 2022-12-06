@@ -78,7 +78,7 @@ class FollowupGoals
     private ?Contacts $contact = null;
 
     #[MaxDepth(2)]
-    #[ORM\ManyToMany(targetEntity: FollowupReports::class)]
+    #[ORM\ManyToMany(targetEntity: FollowupReports::class, cascade: ["persist"])]
     #[ORM\JoinTable(name: "followup_report_goal")]
     #[ORM\JoinColumn(name: "fogo_id", referencedColumnName: "id", nullable: true)]
     #[ORM\InverseJoinColumn(name: "fore_id", referencedColumnName: "id", nullable: true)]
@@ -234,7 +234,7 @@ class FollowupGoals
         return $this->creation_date;
     }
 
-    public function setCreationDate(?\DateTimeInterface $creation_date): self
+    public function setCreationDate($creation_date): self
     {
         $this->creation_date = $creation_date;
 

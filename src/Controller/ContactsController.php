@@ -381,6 +381,7 @@ class ContactsController extends AbstractController
                     "func" => ($fg->getFunc() !== null && $fg->getFunc()->getId() !== null) ? $fg->getFunc()->getId() : null,
                     "creationDate" => $fg->getCreationDate(),
                     "patientfirstName" => $fg->getPati()->getFirstName(),
+                    "pati_id" => $fg->getPati()->getId(),
                     //  "contacts" => $fg->getPati()->getContacts()[0]->getCont(), 
                     "contacts" => array_map(function ($a) {
                         return ["user" => ($a->getContact() !== null && $a->getContact()->getId() !== null) ? $a->getContact()->getId() : null];

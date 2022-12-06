@@ -2,13 +2,24 @@ import React, { useState, useEffect } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
+import useAuth from "../../../hooks/useAuth";
+import { useParams } from "react-router-dom";
 import EditorReport from "./Editor-Reports";
+import axios from "axios";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
 function ModalActionsAppelsEntrant(props) {
   const [show, setShow] = useState(false);
-  const [contactsSelected, setContactsSelected] = useState(false);
-  const [goalsSelected, setGoalsSelected] = useState(false);
+  const [auth, setAuth] = useState(useAuth());
+  let id = useParams().idContact;
+  const [contactsSelected, setContactsSelected] = useState(
+    props.defaultValueContact.id
+  );
+  const [goalsSelected, setGoalsSelected] = useState(
+    props.defaultValueGoalsValue.id
+  );
+  const [content, setContent] = useState(null);
+  const [dureeValue, setDureeValue] = useState(null);
   const animatedComponents = makeAnimated();
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -71,6 +82,48 @@ function ModalActionsAppelsEntrant(props) {
     // console.log(e);
   };
 
+  function onChangeEditor(e) {
+    console.log(e);
+    setContent(e);
+  }
+
+  const handleSave = (e) => {
+    console.log("content", content);
+    console.log("goalsSelected", goalsSelected);
+    console.log("contactsSelected", contactsSelected);
+    console.log("dureeValue", dureeValue);
+
+    let formGetInfos = new FormData();
+    // value-sugg
+    // $idCont = $request->request->get('idCont');
+    // $idBlock = $request->request->get('idBlock');
+    // $idSugg = $request->request->get('idSugg');
+    console.log("test");
+    formGetInfos.append("content", content);
+    formGetInfos.append("goalsSelected", goalsSelected);
+    formGetInfos.append("contactsSelected", contactsSelected);
+    formGetInfos.append("dureeValue", dureeValue);
+    formGetInfos.append("patiId", 25);
+
+    // formGetInfos.append("idSugg", props?.infosAppels?.id);
+
+    axios({
+      method: "post",
+      url: "/api/sentCallsByContacts",
+      data: formGetInfos,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    }).then(function (response) {
+      console.log(response);
+      // var formData = new FormData();
+      // formData.append("id", response.data.data.id);
+      // if (response) {
+      // }
+    });
+  };
+
   return (
     <>
       <a variant="primary" onClick={handleShow}>
@@ -84,7 +137,7 @@ function ModalActionsAppelsEntrant(props) {
         <Modal.Body>
           <Form>
             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-              <Form.Label>Appel</Form.Label>
+              <Form.Label>Appel Entrant</Form.Label>
               <div className="editor" style={{ "z-index": 555555 }}>
                 <Select
                   closeMenuOnSelect={false}
@@ -117,21 +170,24 @@ function ModalActionsAppelsEntrant(props) {
               <Form.Label>Description</Form.Label>
 
               <div className="editor" style={{ "z-index": -1 }}>
-                <EditorReport></EditorReport>
+                <EditorReport onChange={onChangeEditor}></EditorReport>
               </div>
 
               <Form.Label>Durée</Form.Label>
-              <Form.Select>
-                <option>5</option>
-                <option>10</option>
-                <option>15</option>
-                <option>20</option>
-                <option>25</option>
-                <option>30</option>
-                <option>35</option>
-                <option>40</option>
-                <option>45</option>
-                <option>50</option>
+              <Form.Select
+                defaultValue={dureeValue}
+                onChange={(e) => setDureeValue(e.target.value)}
+              >
+                <option value={5}>5</option>
+                <option value={10}>10</option>
+                <option value={15}>15</option>
+                <option value={20}>20</option>
+                <option value={25}>25</option>
+                <option value={30}>30</option>
+                <option value={35}>35</option>
+                <option value={40}>40</option>
+                <option value={45}>45</option>
+                <option value={50}>50</option>
               </Form.Select>
             </Form.Group>
           </Form>
@@ -140,7 +196,7 @@ function ModalActionsAppelsEntrant(props) {
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-          <Button variant="primary" onClick={handleClose}>
+          <Button variant="primary" onClick={handleSave}>
             Save Changes
           </Button>
         </Modal.Footer>

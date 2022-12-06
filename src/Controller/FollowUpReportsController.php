@@ -401,7 +401,7 @@ class FollowUpReportsController extends AbstractController
         $valueWhatDoinFunction = $request->request->get('valueWhatDoinFunction');
         $patientId = $request->request->get('patientId');
         $userId = $request->request->get('userId');
-
+        // dd($patientId);
 
         $followupGoals = new FollowupGoals();
         $patients = $doctrine->getRepository(Patients::class)->find($patientId);
@@ -439,6 +439,84 @@ class FollowUpReportsController extends AbstractController
             'idAppel' => $followupGoals->getCont()->getId()
         ]);
     }
+
+    #[Route('/api/setCallsByContacts', name: 'app_setCallsByContacts')]
+    public function setCallsByContacts(ManagerRegistry $doctrine, Request $request): JsonResponse
+    {
+        $entityManager = $doctrine->getManager();
+        $request = Request::createFromGlobals();
+
+        $goals = $request->request->get('goals');
+        $contacts = $request->request->get('contacts');
+        $content = $request->request->get('content');
+        $dureevalue = $request->request->get('dureeValue');
+        $patientId = $request->request->get('patientId');
+        $userId = $request->request->get('userId');
+        // dd($dureevalue);
+
+        $followupReports = new FollowupReports();
+        $followupGoals = new FollowupGoals();
+
+        $followupReports->setContent($content);
+        $followupReports->setCreationDate(new \DateTime('now'));
+        $followupReports->setDuration(new \DateTime('now'));
+        $followupReports->setLastUpdate(new \DateTime('now'));
+        // $followupReports->setStatus(0);
+
+        $contactsList = $doctrine->getRepository(Contacts::class)->findBy(array('id' => json_decode($contacts)));
+        $fogo = $doctrine->getRepository(FollowupGoals::class)->findBy(array('id' => json_decode($goals)));
+        $entityManager = $doctrine->getManager();
+        // dd($contactsList);
+
+
+
+
+        foreach ($contactsList as  $contItem) {
+            foreach ($fogo as  $fogoItem) {
+                // dd($fogoItem->getContact() );
+                if ($fogoItem->getContact()->getId() !== $contItem->getId()) {
+                    $fogo1 = $doctrine->getRepository(FollowupGoals::class)->findBy(['cont' => $contItem->getId(), 'status' => 0, 'pati' => $patientId]);
+                    // dd($fogo1);
+
+                    if ($fogo1 === []) {
+                        // dd("test1");
+                        $followupGoals->setDescription($fogoItem->getDescription());
+                        $followupGoals->setPati($fogoItem->getPati());
+                        $contact = $doctrine->getRepository(Contacts::class)->find($contItem->getId());
+                        $followupGoals->setContact($contact);
+                        $followupGoals->setStatus(0);
+                        $followupGoals->setType(2);
+
+                        $followupGoals->addFollowupReport($followupReports);
+                        $entityManager->persist($followupGoals);
+                        $entityManager->flush();
+                    } else {
+                        // dd("test2");
+                        $fogo1[0]->addFollowupReport($followupReports);
+                        // $entityManager->persist($fogo1[0]);
+                        $entityManager->flush();
+                    }
+                } else {
+                    // dd($fogoItem);
+                    $fogoItem->addFollowupReport($followupReports);
+                    $entityManager->persist($fogoItem);
+                    $entityManager->flush();
+                }
+            }
+        }
+        // foreach ($fogo as  $value) {
+        //     $value->addFollowupReport($followupReports);
+        //     $entityManager->persist($value);
+        //     $entityManager->flush();
+        // }
+        return new JsonResponse([
+            'response' => "Sent !",
+            'idAppel' => $followupGoals->getId()
+        ]);
+    }
+
+
+
     #[Route('/api/addIndicators', name: 'app_addIndicators')]
     public function addIndicators(ManagerRegistry $doctrine, Request $request)
     {
