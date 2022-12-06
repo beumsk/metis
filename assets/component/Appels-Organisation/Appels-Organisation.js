@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import Menu from "../Menu";
 import Accordion from "react-bootstrap/Accordion";
+import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import { Link } from "react-router-dom";
 import SelectFunction from "./Filtres/Select-Fonction";
@@ -14,8 +15,11 @@ import SelectLimitHistoric from "./Filtres/Select-LimitHistoric";
 import SelectReferent from "./Filtres/Select-Referent";
 import TypeCalls from "./Filtres/Select-TypeCalls";
 import { FormSelect } from "react-bootstrap";
-import ModalActionsAppels from "./Modal-Actions-Appels/Modal-Actions-Appels";
+import ModalActionsAppelsEntrant from "./Modal-Actions-Appels/Modal-Actions-AppelsEntrant";
+import ModalActionsAppelSortant from "./Modal-Actions-Appels/Modal-Actions-AppelSortant";
 import ModalHistorique from "./Modal-Historique/ModalHistorique";
+import ModalCallCanceled from "./Modal-Actions-Appels/Modal-Call-Canceled";
+import ModalCallMissing from "./Modal-Actions-Appels/Modal-Call-Missing";
 function AppelsOrganisation() {
   const [auth, setAuth] = useState(useAuth());
   const [patientsList, setPatientsList] = useState(null);
@@ -48,6 +52,7 @@ function AppelsOrganisation() {
       .catch(function (response) {});
   }, [lengthList, setLengthList]);
 
+  console.log(typeCallsSelect);
   const readMore = () => {
     setLengthList(lengthList + 10);
   };
@@ -160,7 +165,7 @@ function AppelsOrganisation() {
                         <div className="col-sm-4">{patient.description}</div>
                       </Accordion.Header>
                       <Accordion.Body>
-                        <div className="row body-accordeonitemPatient">
+                        <div className=" body-accordeonitemPatient">
                           {patient.goalsInformation.map((e) => (
                             <div className="row">
                               <div className="col-sm-2 container-informationNames">
@@ -171,25 +176,26 @@ function AppelsOrganisation() {
                                 {e.description}
                                 <ModalHistorique foreList={e}></ModalHistorique>
                               </div>
-                              <div className="col-sm-2 container-appelDescription">
-                                <select value={typeCallsSelect}>
-                                  <option value={1}>
-                                    Création rapport appel sortant
-                                  </option>
-                                  <option value={2}>
-                                    Création rapport appel entrant
-                                  </option>
-                                  <option value={3}>Annuler l'appel</option>
-                                  <option value={4}>
-                                    Déclarer l'appel comme absent
-                                  </option>
-                                </select>
-                                <ModalActionsAppels
+                              <div className="col-sm-2 container-appelActions">
+                                <ModalActionsAppelsEntrant
                                   listCalls={patient.goalsInformation}
                                   defaultValueContact={patient}
+                                  typeCall={typeCallsSelect}
                                   listContacts={patientsList?.data}
                                   defaultValueGoalsValue={e}
-                                ></ModalActionsAppels>
+                                ></ModalActionsAppelsEntrant>
+
+                                <ModalActionsAppelSortant
+                                  listCalls={patient.goalsInformation}
+                                  defaultValueContact={patient}
+                                  typeCall={typeCallsSelect}
+                                  listContacts={patientsList?.data}
+                                  defaultValueGoalsValue={e}
+                                ></ModalActionsAppelSortant>
+
+                                <ModalCallCanceled></ModalCallCanceled>
+
+                                <ModalCallMissing></ModalCallMissing>
                               </div>
                             </div>
                           ))}
