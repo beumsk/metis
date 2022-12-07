@@ -59,7 +59,7 @@ function ModalActionsAppelsEntrant(props) {
       const element = e[index];
       optionsValues.push(element.value);
     }
-    setContactsSelected(optionsValues);
+    setGoalsSelected(optionsValues);
 
     // e.filter((f) => [f.value]);
     // props.onChangeFunction(optionsValues);
@@ -75,7 +75,7 @@ function ModalActionsAppelsEntrant(props) {
       optionsValues.push(element.value);
     }
 
-    setGoalsSelected(optionsValues);
+    setContactsSelected(optionsValues);
     // e.filter((f) => [f.value]);
     // props.onChangeFunction(optionsValues);
     // console.log(optionsValues);
@@ -89,33 +89,39 @@ function ModalActionsAppelsEntrant(props) {
 
   const handleSave = (e) => {
     console.log("content", content);
-    console.log("goalsSelected", goalsSelected);
-    console.log("contactsSelected", contactsSelected);
+    console.log("goalsSelected", JSON.stringify(goalsSelected));
+    console.log("contactsSelected", JSON.stringify(contactsSelected));
     console.log("dureeValue", dureeValue);
+    console.log("patiId", props.defaultValueGoalsValue.pati_id);
 
     let formGetInfos = new FormData();
     // value-sugg
     // $idCont = $request->request->get('idCont');
     // $idBlock = $request->request->get('idBlock');
     // $idSugg = $request->request->get('idSugg');
-    console.log("test");
+    let date = new Date(0);
+    date.setMinutes(dureeValue); // specify value for SECONDS here
+    let timeString = date.toISOString().substring(11, 19);
+    console.log(timeString);
+
     formGetInfos.append("content", content);
-    formGetInfos.append("goalsSelected", goalsSelected);
-    formGetInfos.append("contactsSelected", contactsSelected);
-    formGetInfos.append("dureeValue", dureeValue);
-    formGetInfos.append("patiId", 25);
+    formGetInfos.append("goals", JSON.stringify(goalsSelected));
+    formGetInfos.append("contacts", JSON.stringify(contactsSelected));
+    formGetInfos.append("dureeValue", timeString);
+    formGetInfos.append("patientId", props.defaultValueGoalsValue.pati_id);
 
     // formGetInfos.append("idSugg", props?.infosAppels?.id);
 
     axios({
       method: "post",
-      url: "/api/sentCallsByContacts",
+      url: "/api/setCallsByContacts",
       data: formGetInfos,
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${auth.auth.accessToken}`,
       },
     }).then(function (response) {
+      props.onChangeResponse(response.data);
       console.log(response);
       // var formData = new FormData();
       // formData.append("id", response.data.data.id);

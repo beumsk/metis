@@ -119,6 +119,22 @@ function AppelsOrganisation() {
       .catch(function (response) {});
   };
 
+  function onChangeResponseDatas(e) {
+    console.log(e);
+    axios({
+      method: "post",
+      url: "/api/getCallsAndOrganisationRunning",
+      data: formData,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    })
+      .then(function (response) {
+        setPatientsList(response);
+      })
+      .catch(function (response) {});
+  }
   return (
     <>
       <Menu></Menu>
@@ -180,6 +196,7 @@ function AppelsOrganisation() {
                                 <ModalActionsAppelsEntrant
                                   listCalls={patient.goalsInformation}
                                   defaultValueContact={patient}
+                                  onChangeResponse={onChangeResponseDatas}
                                   typeCall={typeCallsSelect}
                                   listContacts={patientsList?.data}
                                   defaultValueGoalsValue={e}

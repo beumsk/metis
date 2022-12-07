@@ -8,7 +8,7 @@ function ModalHistorique(props) {
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-  console.log(props?.foreList?.fore);
+
   return (
     <>
       <Button variant="primary" onClick={handleShow}>

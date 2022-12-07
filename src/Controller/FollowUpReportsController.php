@@ -453,7 +453,7 @@ class FollowUpReportsController extends AbstractController
         $patientId = $request->request->get('patientId');
         $userId = $request->request->get('userId');
         // dd($dureevalue);
-
+        $patient = $doctrine->getRepository(Patients::class)->find($patientId);
         $followupReports = new FollowupReports();
         $followupGoals = new FollowupGoals();
 
@@ -461,7 +461,8 @@ class FollowUpReportsController extends AbstractController
         $followupReports->setCreationDate(new \DateTime('now'));
         $followupReports->setDuration(new \DateTime('now'));
         $followupReports->setLastUpdate(new \DateTime('now'));
-        // $followupReports->setStatus(0);
+        $followupReports->setPati($patient);
+        // $followUpReports->setDuration($dureevalue);
 
         $contactsList = $doctrine->getRepository(Contacts::class)->findBy(array('id' => json_decode($contacts)));
         $fogo = $doctrine->getRepository(FollowupGoals::class)->findBy(array('id' => json_decode($goals)));
@@ -473,13 +474,13 @@ class FollowUpReportsController extends AbstractController
 
         foreach ($contactsList as  $contItem) {
             foreach ($fogo as  $fogoItem) {
-                // dd($fogoItem->getContact() );
+
                 if ($fogoItem->getContact()->getId() !== $contItem->getId()) {
                     $fogo1 = $doctrine->getRepository(FollowupGoals::class)->findBy(['cont' => $contItem->getId(), 'status' => 0, 'pati' => $patientId]);
                     // dd($fogo1);
 
                     if ($fogo1 === []) {
-                        // dd("test1");
+
                         $followupGoals->setDescription($fogoItem->getDescription());
                         $followupGoals->setPati($fogoItem->getPati());
                         $contact = $doctrine->getRepository(Contacts::class)->find($contItem->getId());
@@ -498,8 +499,9 @@ class FollowUpReportsController extends AbstractController
                     }
                 } else {
                     // dd($fogoItem);
+
                     $fogoItem->addFollowupReport($followupReports);
-                    $entityManager->persist($fogoItem);
+                    // $entityManager->persist($fogoItem);
                     $entityManager->flush();
                 }
             }
