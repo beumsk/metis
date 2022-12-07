@@ -86,8 +86,7 @@ function ModalActionsAppelsSortant(props) {
     console.log(e);
     setContent(e);
   }
-
-  const handleSave = (e) => {
+  const handleSaveComplete = (e) => {
     console.log("content", content);
     console.log("goalsSelected", JSON.stringify(goalsSelected));
     console.log("contactsSelected", JSON.stringify(contactsSelected));
@@ -106,6 +105,42 @@ function ModalActionsAppelsSortant(props) {
     formGetInfos.append("dureeValue", timeString);
     formGetInfos.append("patientId", props.defaultValueGoalsValue.pati_id);
     formGetInfos.append("activity_type", 2);
+    formGetInfos.append("is_completed", 3);
+
+    formGetInfos.append("userId", auth.auth.idUser);
+    axios({
+      method: "post",
+      url: "/api/setCallsByContacts",
+      data: formGetInfos,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    }).then(function (response) {
+      props.onChangeResponse(response.data);
+      setShow(false);
+    });
+  };
+  const handleSaveKeep = (e) => {
+    console.log("content", content);
+    console.log("goalsSelected", JSON.stringify(goalsSelected));
+    console.log("contactsSelected", JSON.stringify(contactsSelected));
+    console.log("dureeValue", dureeValue);
+    console.log("patiId", props.defaultValueGoalsValue.pati_id);
+
+    let formGetInfos = new FormData();
+    let date = new Date(0);
+    date.setMinutes(dureeValue); // specify value for SECONDS here
+    let timeString = date.toISOString().substring(11, 19);
+    console.log(timeString);
+
+    formGetInfos.append("content", content);
+    formGetInfos.append("goals", JSON.stringify(goalsSelected));
+    formGetInfos.append("contacts", JSON.stringify(contactsSelected));
+    formGetInfos.append("dureeValue", timeString);
+    formGetInfos.append("patientId", props.defaultValueGoalsValue.pati_id);
+    formGetInfos.append("activity_type", 2);
+    formGetInfos.append("is_completed", 0);
 
     formGetInfos.append("userId", auth.auth.idUser);
     axios({
@@ -125,7 +160,7 @@ function ModalActionsAppelsSortant(props) {
   return (
     <>
       <a variant="primary" onClick={handleShow}>
-        Ajouter appel entrant
+        Ajouter appel sortant
       </a>
 
       <Modal show={show} onHide={handleClose}>
@@ -194,8 +229,11 @@ function ModalActionsAppelsSortant(props) {
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-          <Button variant="primary" onClick={handleSave}>
-            Save Changes
+          <Button variant="primary" onClick={handleSaveKeep}>
+            Sauver et garder
+          </Button>
+          <Button variant="primary" onClick={handleSaveComplete}>
+            Sauver et compléter
           </Button>
         </Modal.Footer>
       </Modal>

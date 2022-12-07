@@ -529,6 +529,7 @@ class FollowUpReportsController extends AbstractController
         $patientId = $request->request->get('patientId');
         $user_id = $request->request->get('userId');
         $activity_type = $request->request->get('activity_type');
+        $isCompleted = $request->request->get('is_completed');
         // dd($dureevalue);
         $patient = $doctrine->getRepository(Patients::class)->find($patientId);
         $user = $doctrine->getRepository(User::class)->find($user_id);
@@ -565,18 +566,20 @@ class FollowUpReportsController extends AbstractController
                         $followupGoals->setPati($fogoItem->getPati());
                         $contact = $doctrine->getRepository(Contacts::class)->find($contItem->getId());
                         $followupGoals->setContact($contact);
-                        $followupGoals->setStatus(0);
-                        $followupGoals->setType(2);
+                        $followupGoals->setStatus($isCompleted); // appel new 
+                        $followupGoals->setType(2); //si il est de type appel
 
                         $followupGoals->addFollowupReport($followupReports);
                         $entityManager->persist($followupGoals);
                         $entityManager->flush();
                     } else {
                         $fogo1[0]->addFollowupReport($followupReports);
+                        $fogo1[0]->setStatus($isCompleted);
                         $entityManager->flush();
                     }
                 } else {
                     $fogoItem->addFollowupReport($followupReports);
+                    $fogoItem->setStatus($isCompleted);
                     $entityManager->flush();
                 }
             }
