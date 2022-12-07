@@ -95,10 +95,6 @@ function ModalActionsAppelsEntrant(props) {
     console.log("patiId", props.defaultValueGoalsValue.pati_id);
 
     let formGetInfos = new FormData();
-    // value-sugg
-    // $idCont = $request->request->get('idCont');
-    // $idBlock = $request->request->get('idBlock');
-    // $idSugg = $request->request->get('idSugg');
     let date = new Date(0);
     date.setMinutes(dureeValue); // specify value for SECONDS here
     let timeString = date.toISOString().substring(11, 19);
@@ -110,8 +106,8 @@ function ModalActionsAppelsEntrant(props) {
     formGetInfos.append("dureeValue", timeString);
     formGetInfos.append("patientId", props.defaultValueGoalsValue.pati_id);
 
-    // formGetInfos.append("idSugg", props?.infosAppels?.id);
-
+    formGetInfos.append("userId", auth.auth.idUser);
+    formGetInfos.append("activity_type", 1);
     axios({
       method: "post",
       url: "/api/setCallsByContacts",
@@ -122,11 +118,7 @@ function ModalActionsAppelsEntrant(props) {
       },
     }).then(function (response) {
       props.onChangeResponse(response.data);
-      console.log(response);
-      // var formData = new FormData();
-      // formData.append("id", response.data.data.id);
-      // if (response) {
-      // }
+      setShow(false);
     });
   };
 

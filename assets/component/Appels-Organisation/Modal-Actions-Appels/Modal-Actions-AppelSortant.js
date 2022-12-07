@@ -2,11 +2,16 @@ import React, { useState, useEffect } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
+import useAuth from "../../../hooks/useAuth";
+import { useParams } from "react-router-dom";
 import EditorReport from "./Editor-Reports";
+import axios from "axios";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
 function ModalActionsAppelsSortant(props) {
   const [show, setShow] = useState(false);
+  const [auth, setAuth] = useState(useAuth());
+  let id = useParams().idContact;
   const [contactsSelected, setContactsSelected] = useState(
     props.defaultValueContact.id
   );
@@ -54,7 +59,7 @@ function ModalActionsAppelsSortant(props) {
       const element = e[index];
       optionsValues.push(element.value);
     }
-    setContactsSelected(optionsValues);
+    setGoalsSelected(optionsValues);
 
     // e.filter((f) => [f.value]);
     // props.onChangeFunction(optionsValues);
@@ -70,7 +75,7 @@ function ModalActionsAppelsSortant(props) {
       optionsValues.push(element.value);
     }
 
-    setGoalsSelected(optionsValues);
+    setContactsSelected(optionsValues);
     // e.filter((f) => [f.value]);
     // props.onChangeFunction(optionsValues);
     // console.log(optionsValues);
@@ -82,12 +87,40 @@ function ModalActionsAppelsSortant(props) {
     setContent(e);
   }
 
-  function onSave() {
+  const handleSave = (e) => {
     console.log("content", content);
-    console.log("goalsSelected", goalsSelected);
-    console.log("contactsSelected", contactsSelected);
+    console.log("goalsSelected", JSON.stringify(goalsSelected));
+    console.log("contactsSelected", JSON.stringify(contactsSelected));
     console.log("dureeValue", dureeValue);
-  }
+    console.log("patiId", props.defaultValueGoalsValue.pati_id);
+
+    let formGetInfos = new FormData();
+    let date = new Date(0);
+    date.setMinutes(dureeValue); // specify value for SECONDS here
+    let timeString = date.toISOString().substring(11, 19);
+    console.log(timeString);
+
+    formGetInfos.append("content", content);
+    formGetInfos.append("goals", JSON.stringify(goalsSelected));
+    formGetInfos.append("contacts", JSON.stringify(contactsSelected));
+    formGetInfos.append("dureeValue", timeString);
+    formGetInfos.append("patientId", props.defaultValueGoalsValue.pati_id);
+    formGetInfos.append("activity_type", 2);
+
+    formGetInfos.append("userId", auth.auth.idUser);
+    axios({
+      method: "post",
+      url: "/api/setCallsByContacts",
+      data: formGetInfos,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    }).then(function (response) {
+      props.onChangeResponse(response.data);
+      setShow(false);
+    });
+  };
 
   return (
     <>
@@ -161,7 +194,7 @@ function ModalActionsAppelsSortant(props) {
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-          <Button variant="primary" onClick={onSave}>
+          <Button variant="primary" onClick={handleSave}>
             Save Changes
           </Button>
         </Modal.Footer>

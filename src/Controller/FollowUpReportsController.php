@@ -440,6 +440,82 @@ class FollowUpReportsController extends AbstractController
         ]);
     }
 
+    #[Route('/api/setCallsAbsenceByContacts', name: 'app_setCallsAbsenceByContacts')]
+    public function setCallsAbsenceByContacts(ManagerRegistry $doctrine, Request $request): JsonResponse
+    {
+        $entityManager = $doctrine->getManager();
+        $request = Request::createFromGlobals();
+
+        $goal = $request->request->get('goal');
+        $cont_id = $request->request->get('contact');
+        $pati_id = $request->request->get('patientId');
+        $user_id = $request->request->get('user_id');
+
+        $cont = $doctrine->getRepository(Contacts::class)->find($cont_id);
+        $fogo = $doctrine->getRepository(FollowupGoals::class)->find($goal);
+        $pati = $doctrine->getRepository(Patients::class)->find($pati_id);
+        $user = $doctrine->getRepository(User::class)->find($user_id);
+
+        $followupReports = new FollowupReports();
+
+        $followupReports->setContent(FollowupReports::DEFAULT_COMMENT_MISSING_ACTION);
+        $followupReports->setPati($pati);
+        $followupReports->setCreationDate(new \DateTime('now'));
+        $followupReports->setLastUpdate(new \DateTime('now'));
+        $followupReports->setUser($user);
+        $followupReports->addCont($cont);
+
+        $entityManager->persist($followupReports);
+        $entityManager->flush();
+
+
+        $fogo->addFollowupReport($followupReports);
+        $entityManager->persist($fogo);
+        $entityManager->flush();
+        return new JsonResponse([
+            'response' => "Sent !",
+            'idAppel' => $followupReports->getId()
+        ]);
+    }
+
+    #[Route('/api/setCallsCanceledByContacts', name: 'app_setCallsCanceledByContacts')]
+    public function setCallsCanceledByContacts(ManagerRegistry $doctrine, Request $request): JsonResponse
+    {
+        $entityManager = $doctrine->getManager();
+        $request = Request::createFromGlobals();
+
+        $goal = $request->request->get('goal');
+        $cont_id = $request->request->get('contact');
+        $pati_id = $request->request->get('patientId');
+        $user_id = $request->request->get('user_id');
+
+        $cont = $doctrine->getRepository(Contacts::class)->find($cont_id);
+        $fogo = $doctrine->getRepository(FollowupGoals::class)->find($goal);
+        $pati = $doctrine->getRepository(Patients::class)->find($pati_id);
+        $user = $doctrine->getRepository(User::class)->find($user_id);
+
+        $followupReports = new FollowupReports();
+
+        $followupReports->setContent(FollowupReports::DEFAULT_COMMENT_CANCEL_ACTION);
+        $followupReports->setPati($pati);
+        $followupReports->setCreationDate(new \DateTime('now'));
+        $followupReports->setLastUpdate(new \DateTime('now'));
+        $followupReports->setUser($user);
+        $followupReports->addCont($cont);
+
+        $entityManager->persist($followupReports);
+        $entityManager->flush();
+
+        $fogo->setStatus(4);
+        $fogo->addFollowupReport($followupReports);
+        $entityManager->persist($fogo);
+        $entityManager->flush();
+        return new JsonResponse([
+            'response' => "Sent !",
+            'idAppel' => $followupReports->getId()
+        ]);
+    }
+
     #[Route('/api/setCallsByContacts', name: 'app_setCallsByContacts')]
     public function setCallsByContacts(ManagerRegistry $doctrine, Request $request): JsonResponse
     {
@@ -451,18 +527,22 @@ class FollowUpReportsController extends AbstractController
         $content = $request->request->get('content');
         $dureevalue = $request->request->get('dureeValue');
         $patientId = $request->request->get('patientId');
-        $userId = $request->request->get('userId');
+        $user_id = $request->request->get('userId');
+        $activity_type = $request->request->get('activity_type');
         // dd($dureevalue);
         $patient = $doctrine->getRepository(Patients::class)->find($patientId);
+        $user = $doctrine->getRepository(User::class)->find($user_id);
         $followupReports = new FollowupReports();
         $followupGoals = new FollowupGoals();
 
         $followupReports->setContent($content);
         $followupReports->setCreationDate(new \DateTime('now'));
-        $followupReports->setDuration(new \DateTime('now'));
+
         $followupReports->setLastUpdate(new \DateTime('now'));
         $followupReports->setPati($patient);
-        // $followUpReports->setDuration($dureevalue);
+        $followupReports->setDuration(new \DateTime($dureevalue));
+        $followupReports->setUser($user);
+        $followupReports->setActivityType($activity_type);
 
         $contactsList = $doctrine->getRepository(Contacts::class)->findBy(array('id' => json_decode($contacts)));
         $fogo = $doctrine->getRepository(FollowupGoals::class)->findBy(array('id' => json_decode($goals)));
@@ -477,7 +557,7 @@ class FollowUpReportsController extends AbstractController
 
                 if ($fogoItem->getContact()->getId() !== $contItem->getId()) {
                     $fogo1 = $doctrine->getRepository(FollowupGoals::class)->findBy(['cont' => $contItem->getId(), 'status' => 0, 'pati' => $patientId]);
-                    // dd($fogo1);
+
 
                     if ($fogo1 === []) {
 
@@ -492,25 +572,15 @@ class FollowUpReportsController extends AbstractController
                         $entityManager->persist($followupGoals);
                         $entityManager->flush();
                     } else {
-                        // dd("test2");
                         $fogo1[0]->addFollowupReport($followupReports);
-                        // $entityManager->persist($fogo1[0]);
                         $entityManager->flush();
                     }
                 } else {
-                    // dd($fogoItem);
-
                     $fogoItem->addFollowupReport($followupReports);
-                    // $entityManager->persist($fogoItem);
                     $entityManager->flush();
                 }
             }
         }
-        // foreach ($fogo as  $value) {
-        //     $value->addFollowupReport($followupReports);
-        //     $entityManager->persist($value);
-        //     $entityManager->flush();
-        // }
         return new JsonResponse([
             'response' => "Sent !",
             'idAppel' => $followupGoals->getId()

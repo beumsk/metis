@@ -207,12 +207,21 @@ function AppelsOrganisation() {
                                   defaultValueContact={patient}
                                   typeCall={typeCallsSelect}
                                   listContacts={patientsList?.data}
+                                  onChangeResponse={onChangeResponseDatas}
                                   defaultValueGoalsValue={e}
                                 ></ModalActionsAppelSortant>
 
-                                <ModalCallCanceled></ModalCallCanceled>
+                                <ModalCallCanceled
+                                  goal={e}
+                                  onChangeResponse={onChangeResponseDatas}
+                                  contact={patient}
+                                ></ModalCallCanceled>
 
-                                <ModalCallMissing></ModalCallMissing>
+                                <ModalCallMissing
+                                  goal={e}
+                                  onChangeResponse={onChangeResponseDatas}
+                                  contact={patient}
+                                ></ModalCallMissing>
                               </div>
                             </div>
                           ))}

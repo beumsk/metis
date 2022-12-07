@@ -1,12 +1,39 @@
 import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
+import useAuth from "../../../hooks/useAuth";
+import axios from "axios";
 
-function ModalCallMissing() {
+function ModalCallMissing(props) {
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  const [auth, setAuth] = useState(useAuth());
+
+  const handleSave = (e) => {
+    let formGetInfos = new FormData();
+    formGetInfos.append("goal", props.goal.id);
+    formGetInfos.append("contact", props.contact.id);
+
+    formGetInfos.append("patientId", props.goal.pati_id);
+    formGetInfos.append("user_id", auth.auth.idUser);
+    console.log(props);
+    axios({
+      method: "post",
+      url: "/api/setCallsAbsenceByContacts",
+      data: formGetInfos,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    }).then(function (response) {
+      props.onChangeResponse(response.data);
+      console.log(response);
+      setShow(false);
+    });
+  };
   return (
     <>
       <a variant="primary" onClick={handleShow}>
@@ -24,7 +51,7 @@ function ModalCallMissing() {
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-          <Button variant="primary" onClick={handleClose}>
+          <Button variant="primary" onClick={handleSave}>
             Save Changes
           </Button>
         </Modal.Footer>
