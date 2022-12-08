@@ -182,9 +182,10 @@ function IndicateursFormCVC(props) {
             id={`inline-radio-4`}
           />
           <Form.Label htmlFor="inputValue">Commentaire</Form.Label>
-          <Form.Control
+          <textarea
             as="textarea"
             rows={3}
+            class="uk-textarea"
             defaultValue={
               props?.editForm && props?.editForm[0]?.comment
                 ? props?.editForm[0]?.comment
@@ -242,8 +243,9 @@ function IndicateursFormCVC(props) {
             id={`inline-radio-8`}
           />
           <Form.Label htmlFor="inputValue">Commentaire</Form.Label>
-          <Form.Control
+          <textarea
             as="textarea"
+            class="uk-textarea"
             defaultValue={
               props.editForm && props.editForm[1]?.comment
                 ? props.editForm[1]?.comment
@@ -302,8 +304,9 @@ function IndicateursFormCVC(props) {
             id={`inline-radio-12`}
           />
           <Form.Label htmlFor="inputValue">Commentaire</Form.Label>
-          <Form.Control
+          <textarea
             as="textarea"
+            class="uk-textarea"
             rows={3}
             defaultValue={
               props?.editForm && props?.editForm?.length > 0

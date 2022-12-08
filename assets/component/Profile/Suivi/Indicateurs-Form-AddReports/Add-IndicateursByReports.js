@@ -189,35 +189,23 @@ function AddIndicateursByReport(props) {
   return (
     <>
       <div className="addSoins-form">
-        <Form.Label htmlFor="inputValue">Type {typeCVCSelected}</Form.Label>
+        <Form.Label htmlFor="inputValue" class="uk-form-label">
+          Type: {typeCVCSelected}
+        </Form.Label>
         {typeCVCSelected === null && (
           <Form.Select
             size="lg"
             value={typeCVCSelected}
-            // disabled={(typeCVCSelected ) ? true : false}
+            className="uk-select"
             onChange={(e) => choiceTypeCVC(e)}
           >
             <option>Sélectionnez le type d'indicateurs</option>
             {props.options?.map((el, id) => (
-              <>
-                {el && (
-                  <option
-                    // selected={
-                    //   props.form.indicateursEstLeLogement.length > 0 ||
-                    //   props.form.indicateursFormCVC.length > 0 ||
-                    //   props.form.indicateursFormHestiaRisqueDeces.length > 0
-                    // }
-                    value={el}
-                  >
-                    {el}
-                  </option>
-                )}
-              </>
+              <>{el && <option value={el}>{el}</option>}</>
             ))}
           </Form.Select>
         )}
 
-        {typeCVCSelected}
         {isIndicateursLogement && (
           <IndicateursFormHestiaPerteLogement
             id={props.id}

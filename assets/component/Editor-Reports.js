@@ -5,7 +5,7 @@ import { templates } from "suneditor/src/plugins";
 import "suneditor/src/assets/css/suneditor.css";
 const Editor = (props) => {
   const editor = useRef();
-
+  console.log(props);
   const defaultValueRapport =
     "<b><u>Nom(s) du travailleur :</u></b><br><br><b><u>Résumé :</u></b><br><br><b><u>Bien-être :</u></b><br><br><b><u>Logement :</u></b><br><br><b><u>Médical :</u></b><br><br><b><u>Social :</u></b><br>";
   // The sunEditor parameter will be set to the core suneditor instance when this function is called
@@ -30,25 +30,18 @@ const Editor = (props) => {
           buttonList: [
             ["undo", "redo"],
             ["font", "fontSize", "formatBlock"],
-            ["paragraphStyle", "blockquote"],
-            [
-              "bold",
-              "underline",
-              "italic",
-              "strike",
-              "subscript",
-              "superscript",
-            ],
-            ["fontColor", "hiliteColor", "textStyle"],
+            // ["paragraphStyle", "blockquote"],
+            ["bold", "underline", "italic"],
+            // ["fontColor", "hiliteColor", "textStyle"],
             ["removeFormat"],
-            "/", // Line break
+            // "/", // Line break
             ["outdent", "indent"],
             ["align", "horizontalRule", "list", "lineHeight"],
-            ["table", "link", "image", "audio" /** ,'math' */], // You must add the 'katex' library at options to use the 'math' plugin.
+            ["audio" /** ,'math' */], // You must add the 'katex' library at options to use the 'math' plugin.
             /** ['imageGallery'] */ // You must add the "imageGalleryUrl".
-            ["fullScreen"],
-            ["preview", "print"],
-            ["save", "template"],
+            // ["fullScreen"],
+            // ["preview", "print"],
+            // ["save", "template"],
             /** ['dir', 'dir_ltr', 'dir_rtl'] */ // "dir": Toggle text direction, "dir_ltr": Right to Left, "dir_rtl": Left to Right
           ],
         }}

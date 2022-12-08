@@ -96,16 +96,21 @@ function AddActivitiesByReport(props) {
   return (
     <>
       <div className="addSoins-form">
-        <Form.Label htmlFor="inputValue">Type</Form.Label>
+        <Form.Label htmlFor="inputValue" class="uk-form-label">
+          Type
+        </Form.Label>
         <InputTypeList
           type={props?.type}
           onChange={handleChangeValue}
           defaultValue={props.formActivitiesEdit?.value}
         />
-        <Form.Label htmlFor="inputValue">Description</Form.Label>
+        <Form.Label htmlFor="inputValue" class="uk-form-label">
+          Description
+        </Form.Label>
         <Form.Control
           type="text"
           id="inputValueSpécifique"
+          className="uk-input"
           aria-describedby="valueSpécifique"
           defaultValue={props.formActivitiesEdit?.description}
           onChange={(e) => onChangeDescription(e)}

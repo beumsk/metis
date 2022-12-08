@@ -722,7 +722,7 @@ function AddReportMeet(props) {
                 <>
                   <AddIndicateursByReport
                     type={type}
-                    key={idx}
+                    key={form.id}
                     id={idx}
                     form={form}
                     options={options}
@@ -759,11 +759,14 @@ function AddReportMeet(props) {
           )}
         </div>
       </Form.Group>
-      <Form.Label htmlFor="inputValue">Type de rencontre</Form.Label>
+      <Form.Label htmlFor="inputValue" class="uk-form-label">
+        Type de rencontre
+      </Form.Label>
       <Form.Select
         size="lg"
         onChange={(e) => inputChangeTypeMeet(e)}
         value={meetType}
+        className="uk-select"
       >
         <>
           <option>Choissisez votre type de rencontre</option>
@@ -773,17 +776,23 @@ function AddReportMeet(props) {
           <option value={4}>Recherche</option>
         </>
       </Form.Select>
-      <Form.Label htmlFor="inputValue">Date de la rencontre</Form.Label>
+      <Form.Label htmlFor="inputValue" class="uk-form-label">
+        Date de la rencontre
+      </Form.Label>
       <Form.Control
         type="date"
+        className="uk-select"
         defaultValue={new Date("now")}
         placeholder="Here edit the release date"
         onChange={(e) => onChangeDate(e)}
         id="inputValueSpécifique"
       />
-      <Form.Label htmlFor="inputValue">Objectifs</Form.Label>
+      <Form.Label htmlFor="inputValue" class="uk-form-label">
+        Objectifs
+      </Form.Label>
       <Form.Select
         size="lg"
+        className="uk-select"
         onChange={(e) => inputChangeGoals(e)}
         value={goalsInput}
       >

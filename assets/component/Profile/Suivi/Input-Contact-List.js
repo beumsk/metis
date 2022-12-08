@@ -35,14 +35,17 @@ function InputContactList(props) {
     props.onChange(e.target.value);
   };
 
-  console.log(props);
+  // console.log(props);
   return (
     <>
-      <Form.Label htmlFor="inputValue">Contacts</Form.Label>
+      <Form.Label htmlFor="inputValue" className="uk-form-label">
+        Contacts
+      </Form.Label>
 
       <Form.Select
         size="lg"
         value={contactValue}
+        className="uk-select"
         defaultValue={props.defaultValue}
         onChange={(e) => onChangeContact(e)}
       >

@@ -71,7 +71,7 @@ const Home = () => {
           </div>
         </div>
 
-        <div className="col-sm-6 d-flex align-items-center justify-content-center container-repports">
+        <div className="col-sm-6 container-repports">
           <div className="set-repports">
             {reportMeet && <Form_MeetRapports />}
             {reportCalls && <RepportGoals />}

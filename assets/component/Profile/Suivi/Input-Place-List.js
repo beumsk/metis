@@ -39,11 +39,13 @@ function InputPlaceList(props) {
 
   return (
     <>
-      <Form.Label htmlFor="inputValue">Lieu</Form.Label>
+      <Form.Label htmlFor="inputValue" className="uk-form-label">
+        Lieu
+      </Form.Label>
 
       <Form.Select
         size="lg"
-        className="mb-4"
+        className="mb-4 uk-select"
         defaultValue={props.defaultValue || placeValue}
         onChange={(e) => onChangePlaceValue(e)}
       >

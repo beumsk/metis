@@ -97,27 +97,46 @@ function Patients() {
   return (
     <>
       <Menu></Menu>
-      <div className="container container-patients row mx-auto ">
-        <h3>Tous les patients</h3>
+      <div className="container container-patients ">
+        <h5 color="white">Liste des patients</h5>
         <div className="container-filter">
-          <input
-            type="text"
-            onChange={(e) => setSearchNamePatient(e.target.value)}
-          />
-          <input type="date" onChange={(e) => setDateBirth(e.target.value)} />
-          <Form.Select
-            onChange={(e) => setTypeSelectPatient(e.target.value)}
-            value={typeSelectPatient}
-          >
-            <option value={null}>Séléctionnez le type de patient</option>
+          <div className="row">
+            <div className="col-sm-3">
+              <input
+                type="text"
+                className="uk-input"
+                placeholder="Tapez le nom du patient"
+                onChange={(e) => setSearchNamePatient(e.target.value)}
+              />
+            </div>
+            <div className="col-sm-3">
+              <input
+                type="date"
+                className="uk-select"
+                onChange={(e) => setDateBirth(e.target.value)}
+              />
+            </div>
+            <div className="col-sm-3">
+              <Form.Select
+                onChange={(e) => setTypeSelectPatient(e.target.value)}
+                value={typeSelectPatient}
+                className="uk-select"
+              >
+                <option value={null}>Séléctionnez le type de patient</option>
 
-            {/* referentList */}
-            {typePatient?.map((type) => (
-              <option value={type.idvalue}>{type.value}</option>
-            ))}
-          </Form.Select>
+                {/* referentList */}
+                {typePatient?.map((type) => (
+                  <option value={type.idvalue}>{type.value}</option>
+                ))}
+              </Form.Select>
+            </div>
 
-          <Button onClick={(e) => onSubmitFilter(e)}>Filtrer</Button>
+            <div className="col-sm-3">
+              <Button onClick={(e) => onSubmitFilter(e)} className="btn-metis">
+                Filtrer
+              </Button>
+            </div>
+          </div>
         </div>
 
         {patientsList && patientsList.data && patientsList.data.length > 0 && (

@@ -43,6 +43,7 @@ function InputGoalsList(props) {
       <Form.Select
         size="lg"
         value={contactValue}
+        className="uk-select"
         onChange={(e) => onChangeContact(e)}
       >
         <option>Choissisez l'objectif</option>

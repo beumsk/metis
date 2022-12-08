@@ -52,14 +52,14 @@ const Menu = () => {
           <Navbar.Brand href="/">
             <span className="text-uppercase text-white">Métis</span>
           </Navbar.Brand>
+
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="justify-content-end flex-grow-1 pe-3">
-              <Nav.Link href="/patients">Patients</Nav.Link>
+              <Form_AddPatients></Form_AddPatients>
+              <Nav.Link href="/patients">Profil patients</Nav.Link>
 
-              <Nav.Link href="/appels-organisation">
-                Appels/Organisation
-              </Nav.Link>
+              <Nav.Link href="/appels-organisation">Liste d'appels</Nav.Link>
 
               <Nav.Link href="/statistiques">Statistiques</Nav.Link>
 
@@ -75,7 +75,7 @@ const Menu = () => {
 
                 <Dropdown.Menu>
                   <Dropdown.Item href="/contactsorganisation">
-                    Contacts/Organisation
+                    Liste de contacts
                   </Dropdown.Item>
                   <Dropdown.Item href="/lieux">Lieux</Dropdown.Item>
                   <Dropdown.Item href="/anniversaire">
@@ -101,37 +101,12 @@ const Menu = () => {
                   <Dropdown.Menu>{notif}</Dropdown.Menu>
                 ))}
               </Dropdown> */}
-
-              <Form_AddPatients></Form_AddPatients>
-
-              <Dropdown>
-                <Dropdown.Toggle
-                  style={{
-                    backgroundColor: "transparent",
-                    border: "transparent",
-                  }}
-                >
-                  User
-                </Dropdown.Toggle>
-
-                <Dropdown.Menu>
-                  <Dropdown.Item href="/edit-profile">
-                    Editer le profile
-                  </Dropdown.Item>
-                  <Dropdown.Item href="/edit-password">
-                    Editer le mot de passe
-                  </Dropdown.Item>
-                  <Dropdown.Item onClick={signOut}>
-                    Déconnexion <FontAwesomeIcon icon={faSignOut} />{" "}
-                  </Dropdown.Item>
-                </Dropdown.Menu>
-              </Dropdown>
             </Nav>
 
             <Form.Select
               size="lg"
               onChange={(e) => onChangeAntenne(e)}
-              className="select-menu"
+              className="select-menu uk-select"
               defaultValue={antenna}
             >
               <option>Choissisez l'antenne</option>
@@ -140,6 +115,28 @@ const Menu = () => {
             </Form.Select>
 
             <Search></Search>
+            <Dropdown>
+              <Dropdown.Toggle
+                style={{
+                  backgroundColor: "transparent",
+                  border: "transparent",
+                }}
+              >
+                Mon profil
+              </Dropdown.Toggle>
+
+              <Dropdown.Menu>
+                <Dropdown.Item href="/edit-profile">
+                  Editer le profile
+                </Dropdown.Item>
+                <Dropdown.Item href="/edit-password">
+                  Editer le mot de passe
+                </Dropdown.Item>
+                <Dropdown.Item onClick={signOut}>
+                  Déconnexion <FontAwesomeIcon icon={faSignOut} />{" "}
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
           </Navbar.Collapse>
         </Container>
       </Navbar>

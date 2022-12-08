@@ -12,7 +12,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import Form from "react-bootstrap/Form";
 import Nav from "react-bootstrap/Nav";
-import Editor from "../component/Profile/Suivi/Editor-Reports";
+import Editor from "./Editor-Reports";
 import InputPlaceList from "../component/Profile/Suivi/Input-Place-List";
 import InputContactList from "../component/Profile/Suivi/Input-Contact-List";
 import Navbar from "react-bootstrap/Navbar";
@@ -204,10 +204,16 @@ const Form_MeetRapports = () => {
 
   return (
     <>
-      <h3 style={{ color: "white" }}>Rapport de rencontre</h3>
-      <Form className="formMeet-home">
-        <Form.Label htmlFor="inputValue">Patient</Form.Label>
-        <Form.Select size="lg" onChange={(e) => setIdPatient(e.target.value)}>
+      {/* <h5 style={{ color: "white" }}>Rapport de rencontre</h5> */}
+      <Form className="formMeet-home d-flex flex-column uk-form">
+        <Form.Label htmlFor="inputValue" className="uk-form-label">
+          Patient
+        </Form.Label>
+        <Form.Select
+          size="lg"
+          className="uk-select"
+          onChange={(e) => setIdPatient(e.target.value)}
+        >
           {patientsLists?.data?.map((el, id) => (
             <>
               {el?.firstname && el?.lastname && (
@@ -219,13 +225,18 @@ const Form_MeetRapports = () => {
           ))}
         </Form.Select>
 
-        <Form.Label htmlFor="inputValue" style={{ color: "white" }}>
+        <Form.Label
+          htmlFor="inputValue"
+          className="uk-form-label"
+          style={{ color: "white" }}
+        >
           Type de rencontre
         </Form.Label>
         <Form.Select
           size="lg"
           onChange={(e) => inputChangeTypeMeet(e)}
           value={meetType}
+          className="uk-select"
         >
           <>
             <option>Choissisez votre type de rencontre</option>
@@ -236,12 +247,17 @@ const Form_MeetRapports = () => {
           </>
         </Form.Select>
 
-        <Form.Label htmlFor="inputValue" style={{ color: "white" }}>
+        <Form.Label
+          htmlFor="inputValue"
+          className="uk-form-label"
+          style={{ color: "white" }}
+        >
           Date de la rencontre
         </Form.Label>
         <Form.Control
           type="date"
           defaultValue={new Date("now")}
+          className="uk-select"
           placeholder="Here edit the release date"
           onChange={(e) => setChangeDate(e.target.value)}
           id="inputValueSpécifique"

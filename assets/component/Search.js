@@ -75,7 +75,7 @@ const Search = () => {
       <Form.Control
         type="search"
         placeholder="Search"
-        className="me-2"
+        className="me-2 uk-input"
         // onBlur={onBlursetValue}
         onClick={(e) => onClickIfValue()}
         aria-label="Search"

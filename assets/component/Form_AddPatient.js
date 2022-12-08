@@ -61,8 +61,9 @@ const Form_AddPatients = () => {
 
   return (
     <>
-      <Button variant="primary" onClick={handleShow}>
+      <Button className="addPatients-btn" onClick={handleShow}>
         <FontAwesomeIcon icon={faUserPlus} />
+        {/* Ajouter un patient */}
       </Button>
       <Modal show={show} onHide={handleClose}>
         <Modal.Body>

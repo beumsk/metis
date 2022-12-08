@@ -87,7 +87,7 @@ function AddSoinsByReport(props) {
 
     setValueDescription(e.target.value);
   };
-
+  console.log(props);
   props.onChange([
     {
       care_id: idEditFormSoins[0] !== undefined ? idEditFormSoins[0] : null,
@@ -101,17 +101,23 @@ function AddSoinsByReport(props) {
 
   return (
     <>
-      <div className="addSoins-form">
-        <Form.Label htmlFor="inputValue">Type</Form.Label>
+      <div className="addSoins-form" id={props.id}>
+        <Form.Label htmlFor="inputValue" class="uk-form-label">
+          Type
+        </Form.Label>
         <InputTypeList
           type={type}
           onChange={handleChangeType}
           defaultValue={props.formCaresEdit?.value}
         />
-        <Form.Label htmlFor="inputValue">Description</Form.Label>
+
+        <Form.Label htmlFor="inputValue" class="uk-form-label">
+          Description
+        </Form.Label>
         <Form.Control
           type="text"
           id="inputValueSpécifique"
+          className="uk-input"
           aria-describedby="valueSpécifique"
           onChange={(e) => onChangeDescription(e)}
           defaultValue={props.formCaresEdit?.description}

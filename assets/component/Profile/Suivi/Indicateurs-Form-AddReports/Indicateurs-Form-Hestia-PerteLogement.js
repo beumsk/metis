@@ -127,7 +127,7 @@ function IndicateursFormHestiaPerteLogement(props) {
     <>
       <div className="addSoins-form">
         <div key={`inline-radio`} className="mb-3">
-          <Form.Label htmlFor="inputValue" style={{ display: "block" }}>
+          <Form.Label htmlFor="inputValue" className="uk-form-label">
             Voisinage
           </Form.Label>
           <Form.Check
@@ -174,9 +174,12 @@ function IndicateursFormHestiaPerteLogement(props) {
             type={"radio"}
             id={`inline-radio-16`}
           />
-          <Form.Label htmlFor="inputValue">Commentaire</Form.Label>
-          <Form.Control
+          <Form.Label htmlFor="inputValue" class="uk-form-label">
+            Commentaire
+          </Form.Label>
+          <textarea
             as="textarea"
+            class="uk-textarea"
             rows={3}
             defaultValue={
               props?.editForm && props?.editForm[0]?.comment
@@ -187,7 +190,7 @@ function IndicateursFormHestiaPerteLogement(props) {
           />
         </div>
         <div key={`inline-radio`} className="mb-3">
-          <Form.Label htmlFor="inputValue" style={{ display: "block" }}>
+          <Form.Label htmlFor="inputValue" className="uk-form-label">
             Hygiène logement
           </Form.Label>
           <Form.Check
@@ -234,9 +237,12 @@ function IndicateursFormHestiaPerteLogement(props) {
             }
             id={`inline-radio-20`}
           />
-          <Form.Label htmlFor="inputValue">Commentaire</Form.Label>
-          <Form.Control
+          <Form.Label htmlFor="inputValue" class="uk-form-label">
+            Commentaire
+          </Form.Label>
+          <textarea
             as="textarea"
+            class="uk-textarea"
             rows={3}
             defaultValue={
               props.editForm && props.editForm[1]?.comment
@@ -247,7 +253,7 @@ function IndicateursFormHestiaPerteLogement(props) {
           />
         </div>
         <div key={`inline-radio`} className="mb-3">
-          <Form.Label htmlFor="inputValue" style={{ display: "block" }}>
+          <Form.Label htmlFor="inputValue" className="uk-form-label">
             Bailleur
           </Form.Label>
           <Form.Check
@@ -301,11 +307,22 @@ function IndicateursFormHestiaPerteLogement(props) {
                 ? props?.editForm[2]?.comment
                 : ""
             }
+            class="uk-form-label"
             onChange={(e) => onChangeDescriptionBailleur(e)}
           >
             Commentaire
           </Form.Label>
-          <Form.Control as="textarea" rows={3} />
+          <textarea
+            as="textarea"
+            class="uk-textarea"
+            rows={3}
+            defaultValue={
+              props.editForm && props.editForm[2]?.comment
+                ? props.editForm[2]?.comment
+                : ""
+            }
+            onChange={(e) => onChangeDescriptionBailleur(e)}
+          ></textarea>
         </div>
       </div>
     </>

@@ -1,6 +1,6 @@
 .container-home{
     // max-height: 90%;
-    position: absolute;
+    position: relative;
     width: 100%;
     top: 0;
     height: 100%;
@@ -28,11 +28,14 @@
 .formMeet-home{
     label{
         color: white!important;
+        font-size: 0.8rem;
     }
+
+    
 }
     .set-repports{
         background-color: #91bd10;
-        padding: 5rem;
+        padding: 3rem 4rem;
         // color: white;
         border-radius: 24px;
         .send-btn{
