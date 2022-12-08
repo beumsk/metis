@@ -505,8 +505,10 @@ function AddReportMeet(props) {
         e[0].place === undefined ? null : e[0].place;
       formActivities.filter((el) => e[0].id === el.id)[0].description =
         e[0].description === undefined ? null : e[0].description;
+
+      setFormActivities(formActivities);
     }
-    console.log(formActivities);
+    // console.log(formActivities);
   }
 
   const onChangeValuesIndicateursForm = (e) => {
@@ -697,16 +699,24 @@ function AddReportMeet(props) {
                 <>
                   <AddActivitiesByReport
                     type={typeFormActivities}
-                    id={idx}
                     key={form.id}
+                    id={form.id}
+                    formActivitiesEdit={form}
                     contacts={props.contacts}
                     places={props.places}
                     onChange={onChangeValuesByActivitiesForm}
                   ></AddActivitiesByReport>
                   {formActivities && formActivities.length > 1 && (
                     <button
-                      class="uk-button uk-button-default"
-                      onClick={(e) => onClickDeleteActivitiesForm(form.id)}
+                      onClick={(e) => {
+                        const newFormActivities = formActivities.filter(
+                          (x) => x.id !== form.id
+                        );
+
+                        console.log(newFormActivities);
+                        setFormActivities([...newFormActivities]);
+                      }}
+                      className="uk-button uk-button-default"
                     >
                       Supprimer un autre soin
                     </button>

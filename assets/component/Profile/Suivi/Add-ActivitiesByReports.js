@@ -37,37 +37,42 @@ function AddActivitiesByReport(props) {
     props?.formActivitiesEdit?.act_id,
   ]);
 
-  const [value, setValueForm] = useState(null);
-  const [contact, setValueContactForm] = useState(null);
-  const [place, setValuePlaceForm] = useState(null);
-  const [description, setValueDescription] = useState(null);
+  const [value, setValueForm] = useState(props.formActivitiesEdit.type);
+  const [contact, setValueContactForm] = useState(
+    props.formActivitiesEdit.contact
+  );
+  const [place, setValuePlaceForm] = useState(props.formActivitiesEdit.place);
+  const [description, setValueDescription] = useState(
+    props.formActivitiesEdit.description
+  );
 
   const handleShow = () => setShow(true);
-  useEffect(() => {}, [idPatient]);
+  useEffect(() => {
+    axios({
+      method: "post",
+      url: "/api/suggestionsById",
+      data: formData,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    })
+      .then(function (response) {
+        setType(response);
+      })
+      .catch(function (response) {});
+  }, [idPatient]);
 
-  function handleChangeValue(newValue) {
-    console.log(newValue);
-    if (newValue) {
-      setValueForm(newValue);
-    } else {
-      setValueForm(null);
-    }
+  function handleChangeValue(e) {
+    setValueForm(e.target.value);
   }
 
-  function handleChangeContacts(newValue) {
-    if (newValue) {
-      setValueContactForm(newValue);
-    } else {
-      setValueContactForm(null);
-    }
+  function handleChangeContacts(e) {
+    setValueContactForm(e.target.value);
   }
 
-  function handleChangePlaces(newValue) {
-    if (newValue) {
-      setValuePlaceForm(newValue);
-    } else {
-      setValuePlaceForm(null);
-    }
+  function handleChangePlaces(e) {
+    setValuePlaceForm(e.target.value);
   }
 
   const onChangeDescription = (e) => {
@@ -83,7 +88,7 @@ function AddActivitiesByReport(props) {
       act_id:
         idEditFormActivities[0] !== undefined ? idEditFormActivities[0] : null,
       id: props.id,
-      value: value ? value : props.formActivitiesEdit?.value,
+      value: value ? value : props.formActivitiesEdit?.type,
       contact: contact ? contact : props.formActivitiesEdit?.contact,
       place: place ? place : props.formActivitiesEdit?.place,
       description: description
@@ -99,11 +104,32 @@ function AddActivitiesByReport(props) {
         <Form.Label htmlFor="inputValue" class="uk-form-label">
           Type
         </Form.Label>
-        <InputTypeList
+        <select
+          size="lg"
+          className="uk-select"
+          required={true}
+          onChange={(e) => handleChangeValue(e)}
+          value={props.formActivitiesEdit?.type}
+        >
+          <option>Choissisez le type</option>
+          {type?.data?.map((el, id) => (
+            <>
+              {el.value && (
+                <option
+                  selected={el?.id === props.formActivitiesEdit?.type}
+                  value={el?.id}
+                >
+                  {el?.value}
+                </option>
+              )}
+            </>
+          ))}
+        </select>
+        {/* <InputTypeList
           type={props?.type}
           onChange={handleChangeValue}
           defaultValue={props.formActivitiesEdit?.value}
-        />
+        /> */}
         <Form.Label htmlFor="inputValue" class="uk-form-label">
           Description
         </Form.Label>
@@ -115,7 +141,30 @@ function AddActivitiesByReport(props) {
           defaultValue={props.formActivitiesEdit?.description}
           onChange={(e) => onChangeDescription(e)}
         />
-        <InputContactList
+
+        <Form.Label htmlFor="inputValue" class="uk-form-label">
+          Contacts
+        </Form.Label>
+        <select
+          size="lg"
+          className="uk-select"
+          required={true}
+          onChange={(e) => handleChangeContacts(e)}
+          value={props.formActivitiesEdit?.contact}
+        >
+          <option>Choissisez le contact</option>
+          {props?.contacts?.data?.map((el, id) => (
+            <>
+              <option
+                value={el?.id}
+                selected={el?.id === props.formActivitiesEdit?.contact}
+              >
+                {el?.firstname} {el?.lastname}
+              </option>
+            </>
+          ))}
+        </select>
+        {/* <InputContactList
           contacts={props?.contacts}
           onChange={handleChangeContacts}
           defaultValue={
@@ -124,8 +173,8 @@ function AddActivitiesByReport(props) {
               ? props.formActivitiesEdit?.contacts[0]?.orga?.id
               : ""
           }
-        ></InputContactList>
-        <InputPlaceList
+        ></InputContactList> */}
+        {/* <InputPlaceList
           places={props?.places}
           onChange={handleChangePlaces}
           defaultValue={
@@ -134,7 +183,21 @@ function AddActivitiesByReport(props) {
               ? props.formActivitiesEdit?.places[0]?.id
               : ""
           }
-        ></InputPlaceList>
+        ></InputPlaceList> */}
+        <Form.Label htmlFor="inputValue" class="uk-form-label">
+          Lieux
+        </Form.Label>
+        <select
+          size="lg"
+          className="mb-4 uk-select"
+          value={props.formActivitiesEdit?.place}
+          onChange={(e) => handleChangePlaces(e)}
+        >
+          <option>Choissisez le lieu</option>
+          {props?.places?.data?.map((el, id) => (
+            <>{el?.lastname && <option value={el.id}>{el?.lastname}</option>}</>
+          ))}
+        </select>
       </div>
     </>
   );
