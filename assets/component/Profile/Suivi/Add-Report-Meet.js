@@ -184,13 +184,13 @@ function AddReportMeet(props) {
   const onClickDeleteIndicateursForm = (index, id) => {
     if (formActivities.length > 0) {
       let filter = formIndicateurs.filter((el) => el.id !== index);
+      setFormIndicateurs((content) => content.filter((el) => el.id !== index));
+      // for (let index = 0; index < filter.length; index++) {
+      //   const element = filter[index];
+      //   element.id = index;
 
-      for (let index = 0; index < filter.length; index++) {
-        const element = filter[index];
-        element.id = index;
-
-        setFormIndicateurs(filter);
-      }
+      //   setFormIndicateurs(filter);
+      // }
     }
 
     if (formIndicateurs.length === 1) {
