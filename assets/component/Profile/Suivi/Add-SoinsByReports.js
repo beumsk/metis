@@ -27,22 +27,20 @@ function AddSoinsByReport(props) {
       ? props.formCaresEdit.care_id
       : null,
   ]);
-  const [value, setValueTypeForm] = useState(null);
-  const [contact, setValueContactForm] = useState(null);
-  const [place, setValuePlaceForm] = useState(null);
+  const [value, setValueTypeForm] = useState(props.formCaresEdit.type);
+  const [contact, setValueContactForm] = useState(
+    props.formCaresEdit && props.formCaresEdit.contact
+      ? props.formCaresEdit.contact
+      : null
+  );
+  const [place, setValuePlaceForm] = useState(
+    props.formCaresEdit && props.formCaresEdit.place
+      ? props.formCaresEdit.place
+      : null
+  );
   const [idPatient, setIdPatient] = useState(id);
-  const [type, setType] = useState(null);
-  // const [arrValues, setArrValues] = useState(
-  //   useState([
-  //     {
-  //       id: props.id,
-  //       type: null,
-  //       contact: null,
-  //       place: null,
-  //       description: null,
-  //     },
-  //   ])
-  // );
+  const [type, setType] = useState(props.typeValue);
+
   const [description, setValueDescription] = useState(null);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -64,22 +62,23 @@ function AddSoinsByReport(props) {
       .catch(function (response) {});
   }, [idPatient]);
 
-  function handleChangeType(newValue) {
+  function handleChangeType(e) {
     // ObjForm.type = newValue;
     // props.onChange(ObjForm);
-    setValueTypeForm(newValue);
+
+    setValueTypeForm(e.target.value);
   }
 
-  function handleChangeContacts(newValue) {
+  function handleChangeContacts(e) {
     // ObjForm.contact = newValue;
     // props.onChange(ObjForm);
-    setValueContactForm(newValue);
+    setValueContactForm(e.target.value);
   }
 
-  function handleChangePlaces(newValue) {
+  function handleChangePlaces(e) {
     // ObjForm.place = newValue;
     // props.onChange(ObjForm);
-    setValuePlaceForm(newValue);
+    setValuePlaceForm(e.target.value);
   }
 
   const onChangeDescription = (e) => {
@@ -87,12 +86,14 @@ function AddSoinsByReport(props) {
 
     setValueDescription(e.target.value);
   };
-  console.log(props);
+
+  console.log(props.formCaresEdit);
+
   props.onChange([
     {
       care_id: idEditFormSoins[0] !== undefined ? idEditFormSoins[0] : null,
       id: props.id,
-      value: value ? value : props.formCaresEdit?.value,
+      value: value ? value : props.typeValue,
       contact: contact ? contact : props.formCaresEdit?.contact,
       place: place ? place : props.formCaresEdit?.place,
       description: description ? description : props.formCaresEdit?.description,
@@ -105,11 +106,39 @@ function AddSoinsByReport(props) {
         <Form.Label htmlFor="inputValue" class="uk-form-label">
           Type
         </Form.Label>
-        <InputTypeList
+        {/* <InputTypeList
           type={type}
           onChange={handleChangeType}
           defaultValue={props.formCaresEdit?.value}
-        />
+        /> {/* <InputTypeList
+          type={type}
+          onChange={handleChangeType}
+          defaultValue={props.formCaresEdit?.value}
+        /> */}
+        {/* <InputTypeList
+          type={type}
+          onChange={handleChangeType}
+          defaultValue={props.formCaresEdit?.value}
+        /> */}
+
+        <select
+          size="lg"
+          className="uk-select"
+          required={true}
+          onChange={(e) => handleChangeType(e)}
+          value={props.formCaresEdit?.type}
+        >
+          <option>Choissisez le type</option>
+          {type?.data?.map((el, id) => (
+            <>
+              {el.value && (
+                <option selected={el?.id === props.typeValue} value={el?.id}>
+                  {el?.value}
+                </option>
+              )}
+            </>
+          ))}
+        </select>
 
         <Form.Label htmlFor="inputValue" class="uk-form-label">
           Description
@@ -123,25 +152,49 @@ function AddSoinsByReport(props) {
           defaultValue={props.formCaresEdit?.description}
         />
 
-        <InputContactList
+        {/* <InputContactList
           contacts={props?.contacts}
           onChange={handleChangeContacts}
-          defaultValue={
-            props.formCaresEdit?.contacts && props.formCaresEdit?.contacts[0]
-              ? props.formCaresEdit?.contacts[0]?.orga?.id
-              : ""
-          }
-        ></InputContactList>
+          defaultValue={props.formCaresEdit?.contacts}
+        ></InputContactList> */}
+        <Form.Label htmlFor="inputValue" className="uk-form-label">
+          Contacts
+        </Form.Label>
+        <select
+          size="lg"
+          className="uk-select"
+          required={true}
+          onChange={(e) => handleChangeContacts(e)}
+          value={props.formCaresEdit?.contact}
+        >
+          <option>Choissisez le contact</option>
+          {props?.contacts?.data?.map((el, id) => (
+            <>
+              <option
+                value={el?.id}
+                selected={el?.id === props.formCaresEdit?.contact}
+              >
+                {el?.firstname} {el?.lastname}
+              </option>
+            </>
+          ))}
+        </select>
 
-        <InputPlaceList
-          places={props.places}
-          onChange={handleChangePlaces}
-          defaultValue={
-            props.formCaresEdit?.places && props.formCaresEdit?.places[0]
-              ? props.formCaresEdit?.places[0]?.id
-              : ""
-          }
-        ></InputPlaceList>
+        <Form.Label htmlFor="inputValue" className="uk-form-label">
+          Lieu
+        </Form.Label>
+
+        <select
+          size="lg"
+          className="mb-4 uk-select"
+          value={props.formCaresEdit?.place}
+          onChange={(e) => handleChangePlaces(e)}
+        >
+          <option>Choissisez le lieu</option>
+          {props?.places?.data?.map((el, id) => (
+            <>{el?.lastname && <option value={el.id}>{el?.lastname}</option>}</>
+          ))}
+        </select>
       </div>
     </>
   );

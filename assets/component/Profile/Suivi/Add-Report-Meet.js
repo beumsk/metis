@@ -16,6 +16,7 @@ import AddActivitiesByReport from "./Add-ActivitiesByReports";
 import AddIndicateursByReport from "./Indicateurs-Form-AddReports/Add-IndicateursByReports";
 import AddSoinsByReport from "./Add-SoinsByReports";
 import InputPlaceList from "./Input-Place-List";
+import { nanoid } from "nanoid";
 import InputContactList from "./Input-Contact-List";
 function AddReportMeet(props) {
   const [show, setShow] = useState(false);
@@ -28,9 +29,9 @@ function AddReportMeet(props) {
   const [patiId, setPatiId] = useState(null);
   var formActivitiesDatas = new FormData();
   formActivitiesDatas.append("id", 106);
-  const [formSoins, setFormSoins] = useState([{ id: 0 }]);
-  const [formActivities, setFormActivities] = useState([{ id: 0 }]);
-  const [formIndicateurs, setFormIndicateurs] = useState([{ id: 0 }]);
+  const [formSoins, setFormSoins] = useState([{ id: nanoid() }]);
+  const [formActivities, setFormActivities] = useState([{ id: nanoid() }]);
+  const [formIndicateurs, setFormIndicateurs] = useState([{ id: nanoid() }]);
   const [selectedTypeCVC, setSelectedTypeCVC] = useState(null);
   //   formData.append("pathString", props.link);
   const [options, setOptions] = useState([
@@ -96,7 +97,7 @@ function AddReportMeet(props) {
     setPatiId(idPatient);
     setUserId(auth.auth.idUser);
     setOptions(options);
-  }, [options]);
+  }, [options, formSoins]);
 
   const choiceActivities = (e) => {
     //
@@ -462,8 +463,24 @@ function AddReportMeet(props) {
       console.log("validationFormCVC", validationFormCVC);
     }
   };
+  // console.log(formSoins);
+  const onChangeValuesByOnCareForm = (e) => {
+    console.log(type);
+    // formSoins.map((input) => {
+    //   if (input.id === id) {
+    //     return {
+    //       ...input,
+    //       value,
+    //     };
+    //   }
+    //   return input;
+    // });
 
-  function onChangeValuesByOnCareForm(e) {
+    // setFormSoins(formSoins);
+
+    console.log(e);
+    console.log(formSoins);
+
     if (formSoins.filter((el) => e[0].id === el.id)) {
       formSoins.filter((el) => e[0].id === el.id)[0].type =
         e[0].value === undefined ? null : e[0].value;
@@ -473,8 +490,10 @@ function AddReportMeet(props) {
         e[0].place === undefined ? null : e[0].place;
       formSoins.filter((el) => e[0].id === el.id)[0].description =
         e[0].description === undefined ? null : e[0].description;
+
+      setFormSoins(formSoins);
     }
-  }
+  };
 
   function onChangeValuesByActivitiesForm(e) {
     if (formActivities.filter((el) => e[0].id === el.id)) {
@@ -611,21 +630,35 @@ function AddReportMeet(props) {
                 <>
                   <AddSoinsByReport
                     key={form.id}
-                    id={idx}
+                    id={form.id}
+                    typeValue={form.type}
                     type={type}
+                    formCaresEdit={form}
                     contacts={props?.contacts}
                     places={props.places}
                     onChange={onChangeValuesByOnCareForm}
                   ></AddSoinsByReport>
                   {formSoins && formSoins.length > 1 && (
-                    <button onClick={(e) => onClickDeleteOnCare(form.id)}>
+                    <button
+                      onClick={(e) => {
+                        const newFormSoins = formSoins.filter(
+                          (x) => x.id !== form.id
+                        );
+
+                        console.log(newFormSoins);
+                        setFormSoins([...newFormSoins]);
+                      }}
+                      className="uk-button uk-button-default"
+                    >
                       Supprimer un autre soin
                     </button>
                   )}
                 </>
               ))}
-
-              <button onClick={(e) => onClickOnCare({ id: formSoins.length })}>
+              <button
+                onClick={(e) => onClickOnCare({ id: nanoid() })}
+                className="uk-button uk-button-default"
+              >
                 Ajouter un autre soin
               </button>
             </div>
@@ -672,6 +705,7 @@ function AddReportMeet(props) {
                   ></AddActivitiesByReport>
                   {formActivities && formActivities.length > 1 && (
                     <button
+                      class="uk-button uk-button-default"
                       onClick={(e) => onClickDeleteActivitiesForm(form.id)}
                     >
                       Supprimer un autre soin
@@ -680,9 +714,8 @@ function AddReportMeet(props) {
                 </>
               ))}
               <button
-                onClick={(e) =>
-                  onClickAddActivities({ id: formActivities.length })
-                }
+                class="uk-button uk-button-default"
+                onClick={(e) => onClickAddActivities({ id: nanoid() })}
               >
                 Ajouter un autre activitée
               </button>
@@ -736,6 +769,7 @@ function AddReportMeet(props) {
                     formIndicateurs[0].indicateursFormHestiaRisqueDeces !==
                       null) && (
                     <button
+                      class="uk-button uk-button-default"
                       onClick={(e) =>
                         onClickDeleteIndicateursForm(idx, form.id)
                       }
@@ -746,9 +780,8 @@ function AddReportMeet(props) {
 
                   {formIndicateurs && formIndicateurs.length < 3 && (
                     <button
-                      onClick={(e) =>
-                        onClickAddIndicateurs({ id: formIndicateurs.length })
-                      }
+                      class="uk-button uk-button-default"
+                      onClick={(e) => onClickAddIndicateurs({ id: nanoid() })}
                     >
                       Ajouter un autre indicateur
                     </button>

@@ -60,19 +60,11 @@ function InputTypeList(props) {
         className="uk-select"
         required={true}
         onChange={(e) => onChangeType(e)}
+        defaultValue={props.defaultValue}
       >
         <option>Choissisez le type</option>
         {props?.type?.data?.map((el, id) => (
-          <>
-            {el.value && (
-              <option
-                value={el?.id}
-                defaultValue={el.id === props.defaultValue}
-              >
-                {el?.value}
-              </option>
-            )}
-          </>
+          <>{el.value && <option value={el?.id}>{el?.value}</option>}</>
         ))}
       </Form.Select>
     </>
