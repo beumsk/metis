@@ -28,8 +28,128 @@ function EditNoReportMeet(props) {
   const [isSentRepport, setSentRepport] = useState(false);
   var formActivitiesDatas = new FormData();
   formActivitiesDatas.append("id", 106);
+  console.log(props);
+  return (
+    <div className="noEditRepports-container">
+      {props.rapport.followupReportsActivities &&
+        props.rapport.followupReportsActivities.length > 0 && (
+          <div className="row-activities mb-2">
+            <>
+              <h6>Activitées</h6>
+              {props.rapport.followupReportsActivities.map((item, id) => (
+                <div className="row">
+                  <div className="col-sm-4">{item.activity.value}</div>
+                  <div className="col-sm-8">{item.activity.description}</div>
+                </div>
+              ))}
+              <hr class="uk-divider-large"></hr>
+            </>
+          </div>
+        )}
 
-  return <></>;
+      {props.rapport.followupReportsCare &&
+        props.rapport.followupReportsCare.length > 0 && (
+          <div className="row-care mb-2">
+            <>
+              <h6>Soins</h6>
+              {props.rapport.followupReportsCare.map((item, id) => (
+                <div className="row">
+                  <div className="col-sm-4">{item.activity.value}</div>
+                  <div className="col-sm-8">{item.activity.description}</div>
+                </div>
+              ))}
+              <hr class="uk-divider-large"></hr>
+            </>
+          </div>
+        )}
+
+      {props.indicators && props.indicators.length > 0 && (
+        <div className="row-indicateurs mb-2">
+          <>
+            <h6>Indicateurs</h6>
+            {props.indicators.map((item, id) => (
+              <div className="row">
+                {item.indi.id === 1 && (
+                  <div className="indicators-CVC mb-1 mt-2" bg={"green"}>
+                    <b>CVC</b>
+                  </div>
+                )}
+
+                {item.indi.id === 6 && (
+                  <div className="indicators-Hestia mb-1 mt-2" bg={"red"}>
+                    <b>HESTIA Logement</b>
+                  </div>
+                )}
+                {item.indi.id === 7 && (
+                  <div className="indicators-Logement mb-1 mt-2" bg={"blue"}>
+                    <b>HESTIA Deces</b>
+                  </div>
+                )}
+                <div className="col-sm-4">{item.indi.name}</div>
+                <div className="col-sm-8">
+                  {item.indi.description} ({item.value})
+                </div>
+              </div>
+            ))}
+            <hr class="uk-divider-large"></hr>
+          </>
+        </div>
+      )}
+      <div className="contact-row">
+        {props.rapport &&
+          props.rapport.cont &&
+          props.rapport.cont.length > 0 && (
+            <>
+              <h6>Contact: </h6>
+              <span style={{ fontWeight: "normal" }}>
+                {props?.rapport.cont[0].lastname}
+                {props?.rapport.cont[0].firstname}
+              </span>
+            </>
+          )}
+      </div>
+      <div className="place-row">
+        {props.rapport && props.rapport.plac && props.rapport.plac !== null && (
+          <>
+            <h6>Lieu: </h6>
+            <span style={{ fontWeight: "normal" }}>
+              {props.rapport.plac.lastname}
+            </span>
+          </>
+        )}
+      </div>
+
+      <div className="date-row">
+        {props.rapport && props.rapport.creationDate && (
+          <>
+            <h6>Date: </h6>
+            <span style={{ fontWeight: "normal" }}>
+              {new Date(props.rapport.creationDate).toLocaleString(
+                "fr-BE",
+                "short"
+              )}
+            </span>
+          </>
+        )}
+      </div>
+      <div className="description-row">
+        <h6>Description: </h6>
+        <div
+          style={{ padding: "0" }}
+          dangerouslySetInnerHTML={{
+            __html:
+              props.rapport.content ||
+              props.rapport.description ||
+              "Aucune description donnée pour l'instant",
+          }}
+        ></div>
+      </div>
+
+      {props.rapport.content === null && (
+        <p>"Aucune description donnée pour l'instant"</p>
+      )}
+    </div>
+  );
 }
 
 export default EditNoReportMeet;

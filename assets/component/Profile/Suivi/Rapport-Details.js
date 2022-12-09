@@ -18,6 +18,8 @@ import Form from "react-bootstrap/Form";
 import ReactLoading from "react-loading";
 import AddReportMeet from "./Add-Report-Meet";
 import EditReportMeet from "./Edit-Report-Meet";
+import EditNoReportMeet from "./EditNotReportMeet";
+import FilterRapportDetails from "./Filters-RapportsDetails";
 
 function RapportDetails(props) {
   const [show, setShow] = useState(false);
@@ -77,6 +79,9 @@ function RapportDetails(props) {
       .catch(function (response) {});
   }, [idPatient]);
 
+  function onChangeFilter(e) {
+    setInformations(e);
+  }
   const editContent = (e, r) => {
     if (e.target.checked === true) {
       r.isHightlight = true;
@@ -89,81 +94,11 @@ function RapportDetails(props) {
     }
   };
 
-  const onChangeRapportFilter = (e) => {
-    if (filterTextContentRapport) {
-      reportData.append("setTextRapport", filterTextContentRapport);
-    }
-
-    if (filterTypeOfReports) {
-      reportData.append("setTypeRapport", filterTypeOfReports);
-    }
-
-    if (filterDateContentRapport) {
-      reportData.append(
-        "setDateRapport",
-        new Date(filterDateContentRapport).toISOString()
-      );
-    }
-
-    axios({
-      method: "post",
-      url: "/api/getFollowUpReportsById",
-      data: reportData,
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${auth.auth.accessToken}`,
-      },
-    })
-      .then(function (response) {
-        setInformations(response);
-      })
-      .catch(function (response) {});
-  };
   return (
     <>
-      <div className="search-textRapport row">
-        <div className="col-sm-4">
-          <label class="uk-form-label">Description de rapport</label>
-          <input
-            type="text"
-            className="uk-input"
-            defaultValue={filterTextContentRapport}
-            onChange={(e) => setFilterTextContentRapport(e.target.value)}
-          />
-        </div>
-        <div className="search-textRapport col-sm-4">
-          <label class="uk-form-label">Type de rapport</label>
-          <Form.Select
-            defaultValue={filterTypeOfReports}
-            className="uk-select"
-            onChange={(e) => setTypeOfRepports(e.target.value)}
-          >
-            <option>Choissisez le type de rapport</option>
-            <option value={1}>Rapport de rencontre</option>
-            <option value={4}>Appel entrant</option>
-            <option value={2}>Appel sortant</option>
-          </Form.Select>
-        </div>
-        <div className="search-textRapport col-sm-4">
-          <label class="uk-form-label">Rechercher part date</label>
-          <input
-            type="date"
-            className="uk-select"
-            defaultValue={filterDateContentRapport}
-            onChange={(e) => setFilterDateContentRapport(e.target.value)}
-          />
-        </div>
-        <div className="row">
-          <div className="col-sm-6">
-            <button
-              onClick={(e) => onChangeRapportFilter(e)}
-              class="uk-button uk-button-default mt-4"
-            >
-              Filtrer
-            </button>
-          </div>
-        </div>
-      </div>
+      <FilterRapportDetails
+        onChangeFilter={onChangeFilter}
+      ></FilterRapportDetails>
 
       {informations && informations.data && informations.data.length > 0 ? (
         <>
@@ -252,101 +187,21 @@ function RapportDetails(props) {
                   )}
                   {r.isHightlight === false && (
                     <>
-                      <div className="row">
-                        {r.followupReportsIndicators && (
-                          <>
-                            {r.followupReportsIndicators.map((item, id) => (
-                              <div className="row">
-                                <h6>Indicateurs</h6>
-                                {item.indi.id === 1 && (
-                                  <div className="indicators-CVC" bg={"green"}>
-                                    CVC
-                                  </div>
-                                )}
-
-                                {item.indi.id === 6 && (
-                                  <div className="indicators-Hestia" bg={"red"}>
-                                    HESTIA Logement
-                                  </div>
-                                )}
-                                {item.indi.id === 7 && (
-                                  <div
-                                    className="indicators-Logement"
-                                    bg={"blue"}
-                                  >
-                                    HESTIA Deces
-                                  </div>
-                                )}
-                                <div className="col-sm-4">
-                                  <b>{item.indi.name}</b>
-                                </div>
-                                <div className="col-sm-8">
-                                  {item.indi.description} ({item.value})
-                                </div>
-                                {/* <div className="col-sm-4">
-                                  {item.indi.comment}
-                                </div> */}
-                              </div>
-                            ))}
-                          </>
-                        )}
-                      </div>
-                      <div className="row">
-                        {r && r.creationDate && (
-                          <h6>
-                            Date:{" "}
-                            {new Date(r.creationDate).toLocaleString(
-                              "fr-BE",
-                              "short"
-                            )}
-                          </h6>
-                        )}
-                      </div>
-                      Description:
-                      <div
-                        dangerouslySetInnerHTML={{
-                          __html:
-                            r.content ||
-                            r.description ||
-                            "Aucune description donnée pour l'instant",
-                        }}
-                      ></div>
-                      {r.content === null && (
-                        <p>"Aucune description donnée pour l'instant"</p>
-                      )}
+                      <EditNoReportMeet
+                        indicators={r.followupReportsIndicators}
+                        rapport={r}
+                      ></EditNoReportMeet>
                     </>
                   )}
 
                   {r.isHightlight === null && (
                     <>
-                      <div className="row">
-                        {r.followupReportsIndicators && (
-                          <>
-                            {r.followupReportsIndicators.map((item, id) => (
-                              <div className="row">
-                                <div className="col-sm-4">{item.indi.name}</div>
-                                <div className="col-sm-8">
-                                  {item.indi.description}
-                                </div>
-                                <div className="col-sm-4">
-                                  {item.indi.comment}
-                                </div>
-                              </div>
-                            ))}
-                          </>
-                        )}
-                      </div>
-
-                      <div
-                        className="mt-4"
-                        dangerouslySetInnerHTML={{
-                          __html: r.content || r.description,
-                        }}
-                      ></div>
+                      <EditNoReportMeet
+                        indicators={r.followupReportsIndicators}
+                        rapport={r}
+                      ></EditNoReportMeet>
                     </>
                   )}
-
-                  {/* <Editor contentText={r.content}></Editor> */}
                 </>
               )}
             </div>
