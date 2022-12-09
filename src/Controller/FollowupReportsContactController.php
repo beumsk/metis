@@ -64,7 +64,8 @@ class FollowupReportsContactController extends AbstractController
         $id = $request->request->get('id');
 
 
-        $cont = $doctrine->getRepository(PatientsContacts::class)->findBy(["pati" => $id, "deleted_at" => null]);
+        // $cont = $doctrine->getRepository(PatientsContacts::class)->findBy(["pati" => $id, "deleted_at" => null]);
+        $cont = $doctrine->getRepository(PatientsContacts::class)->patientsContactsByDate($id);
 
         $encoders = [new JsonEncoder()];
         $normalizers = [new DateTimeNormalizer(), new ObjectNormalizer()];

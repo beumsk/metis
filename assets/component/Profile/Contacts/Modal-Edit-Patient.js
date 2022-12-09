@@ -118,7 +118,7 @@ function ModalLierPatient(props) {
   return (
     <>
       <Button onClick={handleShow} className="btn-metis">
-        Lier un patient
+        Modifier le patient
       </Button>
 
       <Modal show={show} onHide={handleClose}>

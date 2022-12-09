@@ -53,6 +53,21 @@ class PatientsContactsRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    /**
+     * @return PatientsContacts[] Returns an array of PatientsContacts objects
+     */
+    public function patientsContactsByDate($id): array
+    {
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.pati = :id AND p.deleted_at IS NULL')
+            ->setParameter('id', $id)
+            ->orderBy('p.start', 'DESC')
+            ->orderBy('p.end', 'ASC')
+            // ->setMaxResults(10)
+            ->getQuery()
+            ->getResult();
+    }
+
     //    public function findOneBySomeField($value): ?PatientsContacts
     //    {
     //        return $this->createQueryBuilder('p')

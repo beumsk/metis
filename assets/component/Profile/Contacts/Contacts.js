@@ -126,6 +126,7 @@ const Contacts = () => {
     {
       dataField: "start",
       text: "Début",
+      sort: true,
       formatter: (cell, row, rowIndex, extraData) => (
         <div>
           {row.start === "null"
@@ -137,6 +138,7 @@ const Contacts = () => {
     {
       dataField: "end",
       text: "Fin",
+      sort: true,
       formatter: (cell, row, rowIndex, extraData) => (
         <div>
           {row.end === "null"
@@ -178,7 +180,9 @@ const Contacts = () => {
       dataField: "description",
       text: "Organisation",
       formatter: (cell, row, rowIndex, extraData) => (
-        <div>{row.cont[0].description}</div>
+        <div>
+          {row.cont[0].firstname} {row.cont[0].firstname}
+        </div>
       ),
     },
     {
@@ -198,6 +202,7 @@ const Contacts = () => {
     {
       dataField: "start",
       text: "Début",
+
       formatter: (cell, row, rowIndex, extraData) => (
         <div>
           {row.start === "null"
@@ -234,6 +239,17 @@ const Contacts = () => {
       ),
 
       text: "Actions",
+    },
+  ];
+
+  const defaultSortedBy = [
+    {
+      dataField: "start",
+      order: "desc", // or desc
+    },
+    {
+      dataField: "end",
+      order: "asc", // or desc
     },
   ];
   function onChangePatientsPatients(e) {
@@ -288,6 +304,10 @@ const Contacts = () => {
           keyField="id"
           data={[...listContacts.data]}
           columns={columns}
+          sort={
+            ({ dataField: "end", order: "desc" },
+            { dataField: "start", order: "asc" })
+          }
           search
         >
           {(props) => (
@@ -319,28 +339,6 @@ const Contacts = () => {
       ) : (
         <p>Loading</p>
       )}
-      {/* {listContacts && listContacts.data.length > 0 && (
-        <>
-          <TableContacts
-            data={[...listContacts.data]}
-            rowsPerPage={4}
-            listContacts={contactList}
-            onChangeUpdateContact={(e) => onChangeUpdateContact(e)}
-          />
-        </>
-      )} */}
-
-      {/* <h5>Patients</h5>
-      {patientsLists && patientsLists.data.length > 0 && (
-        <>
-          <TablePatients
-            data={[...patientsLists.data]}
-            rowsPerPage={4}
-            // listPatients={patients}
-            onChangePatientsPatients={(e) => onChangePatientsPatients(e)}
-          />
-        </>
-      )} */}
     </div>
   );
 };
