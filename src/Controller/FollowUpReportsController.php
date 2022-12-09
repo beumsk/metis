@@ -92,7 +92,6 @@ class FollowUpReportsController extends AbstractController
         $dateSearch = $request->request->get('setDateRapport');
         $typeSearch = $request->request->get('setTypeRapport');
 
-        // setTextRapport
         $reportFollowUp = $doctrine->getRepository(FollowupReports::class)->mergeFollowUpGoalsAndReports($id, $textSearch, $dateSearch, $typeSearch);
 
         foreach ($reportFollowUp as  $value) {
@@ -106,8 +105,6 @@ class FollowUpReportsController extends AbstractController
                         }
 
                         if ($itemReport->getSugg()->getParentSugg() !== null && $itemReport->getSugg()->getParentSugg()->getValue() === "Activités") {
-
-                            // array_push([$itemReport], ["idFront" => $itemReport->getId()]);
                             $value->setFollowupReportsActivities($itemReport);
                         }
                     }
@@ -118,13 +115,7 @@ class FollowUpReportsController extends AbstractController
                         $value->setFollowupReportsIndicators($indi);
                     }
                 }
-                // if ($followUpGoals !== []) {
-                //     foreach ($followUpGoals as  $goal) {
-                //         // dd($goal);
-
-                //         $value->setFollowupReportsGoals($goal);
-                //     }
-                // }
+                $value->setIsShow(false);
             }
         }
 
@@ -134,12 +125,7 @@ class FollowUpReportsController extends AbstractController
         $serializer = new Serializer($normalizers, $encoders);
 
 
-        // $arr = [];
 
-        // foreach ($reportFollowUp as $key => $value) {
-        //     $arr[] = ["test" => ($value->getCont()[0] && $value->getCont()[0]->getId()) ? $value->getCont()[0]->getId() : null];
-        //     array_push($arr, $value);
-        // }
 
 
         $jsonObject = $serializer->serialize($reportFollowUp, 'json', [
@@ -150,15 +136,11 @@ class FollowUpReportsController extends AbstractController
         ]);
 
 
-
-        // dd($jsonObject);
         $response = new Response($jsonObject, 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
 
         $response->setSharedMaxAge(3600);
 
         return $response;
-
-        // return new Response($jsonObject, 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
     }
 
 

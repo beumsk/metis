@@ -117,30 +117,32 @@ function RapportDetails(props) {
                   <Form.Check
                     type="switch"
                     className="switcher"
-                    defaultChecked={r.isHightlight === true}
+                    defaultChecked={r.isShow === true}
                     onClick={(e) => {
                       // setToggle(!toggle);
 
                       if (e.target.checked === true) {
-                        setToggle(!toggle);
-                        r.isHightlight = toggle;
+                        setToggle(true);
+                        r.isShow = true;
 
                         setInformations(informations);
+                        console.log(r);
                       }
 
                       if (e.target.checked === false) {
-                        setToggle(!toggle);
-                        r.isHightlight = toggle;
+                        setToggle(false);
+                        r.isShow = false;
 
                         setInformations(informations);
+                        console.log(r);
                       }
 
-                      if (r.isHightlight === false) {
-                        setToggle(!toggle);
-                        r.isHightlight = toggle;
+                      // if (r.isHightlight === false) {
+                      //   setToggle(!toggle);
+                      //   r.isShow = toggle;
 
-                        setInformations(informations);
-                      }
+                      //   setInformations(informations);
+                      // }
                     }}
                     label="Activer le mode édition"
                   />
@@ -175,7 +177,7 @@ function RapportDetails(props) {
                     </h3>
                   )}
 
-                  {r.isHightlight === true && (
+                  {r.isShow === true && (
                     <EditReportMeet
                       informationPatient={r}
                       type={type}
@@ -185,7 +187,7 @@ function RapportDetails(props) {
                       indicatorsResponse={r.followupReportsIndicators}
                     ></EditReportMeet>
                   )}
-                  {r.isHightlight === false && (
+                  {r.isShow === false && (
                     <>
                       <EditNoReportMeet
                         indicators={r.followupReportsIndicators}
@@ -194,14 +196,14 @@ function RapportDetails(props) {
                     </>
                   )}
 
-                  {r.isHightlight === null && (
+                  {/* {r.isShow === null && (
                     <>
                       <EditNoReportMeet
                         indicators={r.followupReportsIndicators}
                         rapport={r}
                       ></EditNoReportMeet>
                     </>
-                  )}
+                  )} */}
                 </>
               )}
             </div>

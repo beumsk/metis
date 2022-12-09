@@ -28,73 +28,88 @@ function EditNoReportMeet(props) {
   const [isSentRepport, setSentRepport] = useState(false);
   var formActivitiesDatas = new FormData();
   formActivitiesDatas.append("id", 106);
-  console.log(props);
+
   return (
     <div className="noEditRepports-container">
-      {props.rapport.followupReportsActivities &&
-        props.rapport.followupReportsActivities.length > 0 && (
+      {props.rapport.activityType === 1 && (
+        <>
           <div className="row-activities mb-2">
-            <>
-              <h6>Activitées</h6>
-              {props.rapport.followupReportsActivities.map((item, id) => (
-                <div className="row">
-                  <div className="col-sm-4">{item.activity.value}</div>
-                  <div className="col-sm-8">{item.activity.description}</div>
-                </div>
-              ))}
-              <hr class="uk-divider-large"></hr>
-            </>
+            <h6>Activitées</h6>
+            {props.rapport.followupReportsActivities &&
+            props.rapport.followupReportsActivities.length > 0 ? (
+              <>
+                {props.rapport.followupReportsActivities.map((item, id) => (
+                  <div className="row">
+                    <div className="col-sm-4">{item.activity.value}</div>
+                    <div className="col-sm-8">{item.activity.description}</div>
+                  </div>
+                ))}
+              </>
+            ) : (
+              <h6>Pas d'activitées</h6>
+            )}
           </div>
-        )}
-
-      {props.rapport.followupReportsCare &&
-        props.rapport.followupReportsCare.length > 0 && (
           <div className="row-care mb-2">
             <>
               <h6>Soins</h6>
-              {props.rapport.followupReportsCare.map((item, id) => (
-                <div className="row">
-                  <div className="col-sm-4">{item.activity.value}</div>
-                  <div className="col-sm-8">{item.activity.description}</div>
-                </div>
-              ))}
-              <hr class="uk-divider-large"></hr>
+              {props.rapport.followupReportsCare &&
+              props.rapport.followupReportsCare.length > 0 ? (
+                <>
+                  {props.rapport.followupReportsCare.map((item, id) => (
+                    <div className="row">
+                      <div className="col-sm-4">{item.activity.value}</div>
+                      <div className="col-sm-8">
+                        {item.activity.description}
+                      </div>
+                    </div>
+                  ))}
+                </>
+              ) : (
+                <p>Pas de soins</p>
+              )}
             </>
           </div>
-        )}
+          <div className="row-indicateurs mb-2">
+            <>
+              <h6>Indicateurs</h6>
+              {props.indicators && props.indicators.length > 0 ? (
+                <>
+                  {props.indicators.map((item, id) => (
+                    <div className="row">
+                      {item.indi.id === 1 && (
+                        <div className="indicators-CVC mb-1 mt-2" bg={"green"}>
+                          <b>CVC</b>
+                        </div>
+                      )}
 
-      {props.indicators && props.indicators.length > 0 && (
-        <div className="row-indicateurs mb-2">
-          <>
-            <h6>Indicateurs</h6>
-            {props.indicators.map((item, id) => (
-              <div className="row">
-                {item.indi.id === 1 && (
-                  <div className="indicators-CVC mb-1 mt-2" bg={"green"}>
-                    <b>CVC</b>
-                  </div>
-                )}
-
-                {item.indi.id === 6 && (
-                  <div className="indicators-Hestia mb-1 mt-2" bg={"red"}>
-                    <b>HESTIA Logement</b>
-                  </div>
-                )}
-                {item.indi.id === 7 && (
-                  <div className="indicators-Logement mb-1 mt-2" bg={"blue"}>
-                    <b>HESTIA Deces</b>
-                  </div>
-                )}
-                <div className="col-sm-4">{item.indi.name}</div>
-                <div className="col-sm-8">
-                  {item.indi.description} ({item.value})
-                </div>
-              </div>
-            ))}
-            <hr class="uk-divider-large"></hr>
-          </>
-        </div>
+                      {item.indi.id === 6 && (
+                        <div className="indicators-Hestia mb-1 mt-2" bg={"red"}>
+                          <b>HESTIA Logement</b>
+                        </div>
+                      )}
+                      {item.indi.id === 7 && (
+                        <div
+                          className="indicators-Logement mb-1 mt-2"
+                          bg={"blue"}
+                        >
+                          <b>HESTIA Deces</b>
+                        </div>
+                      )}
+                      <div className="col-sm-4">{item.indi.name}</div>
+                      <div className="col-sm-8">
+                        {item.indi.description} ({item.value})
+                      </div>
+                    </div>
+                  ))}
+                </>
+              ) : (
+                <p>Pas d'indicateurs</p>
+              )}
+            </>
+          </div>
+        </>
       )}
+
       <div className="contact-row">
         {props.rapport &&
           props.rapport.cont &&

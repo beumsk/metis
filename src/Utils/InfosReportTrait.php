@@ -16,6 +16,12 @@ use Doctrine\Common\Collections\Collection;
 trait InfosReportTrait
 {
     /**
+     * @var bool|null
+     */
+    protected $isShow;
+
+
+    /**
      * @var FollowupReportsActivities|null
      */
     protected $followupReportsCare;
@@ -40,11 +46,31 @@ trait InfosReportTrait
      */
     public function __construct()
     {
+        $this->setIsShow(false);
         $this->setFollowupReportsCare(new FollowupReportsActivities());
         $this->setFollowupReportsActivities(new FollowupReportsActivities());
         $this->setFollowupReportsIndicators(new FollowupReportsIndicators());
         $this->setFollowupReportsGoals(new FollowupGoals());
     }
+
+    /**
+     * @return bool
+     */
+    public function getIsShow(): bool
+    {
+        return $this->isShow;
+    }
+
+    /**
+     * @return $this
+     */
+    public function setIsShow($isShow): self
+    {
+        $this->isShow = $isShow;
+
+        return $this;
+    }
+
 
     /**
      * @return Collection|FollowupReportsActivities[]

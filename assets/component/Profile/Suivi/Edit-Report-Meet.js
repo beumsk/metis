@@ -771,7 +771,7 @@ function EditReportMeet(props) {
 
   return (
     <div className="report-content">
-      {props?.informationPatient?.hasOwnProperty("type") === false && (
+      {props?.informationPatient?.activityType === 1 && (
         <>
           <h5 className="mt-4 mb-4">Ajouter un rapport</h5>
           {/* <Form.Control type="text" id="inputText" className="mt-4" /> */}
@@ -820,7 +820,10 @@ function EditReportMeet(props) {
                         onChange={onChangeValuesByOnCareForm}
                       ></AddSoinsByReport>
                       {formSoins && formSoins.length > 1 && (
-                        <button onClick={(e) => onClickDeleteOnCare(form.id)}>
+                        <button
+                          class="uk-button uk-button-default"
+                          onClick={(e) => onClickDeleteOnCare(form.id)}
+                        >
                           Supprimer un autre soin
                         </button>
                       )}
@@ -828,6 +831,7 @@ function EditReportMeet(props) {
                   ))}
 
                   <button
+                    class="uk-button uk-button-default"
                     onClick={(e) => onClickOnCare({ id: formSoins.length })}
                   >
                     Ajouter un autre soin
@@ -884,6 +888,7 @@ function EditReportMeet(props) {
                       ></AddActivitiesByReport>
                       {formActivities && formActivities.length > 1 && (
                         <button
+                          class="uk-button uk-button-default"
                           onClick={(e) => onClickDeleteActivitiesForm(form.id)}
                         >
                           Supprimer un autre soin
@@ -892,6 +897,7 @@ function EditReportMeet(props) {
                     </>
                   ))}
                   <button
+                    class="uk-button uk-button-default"
                     onClick={(e) =>
                       onClickAddActivities({ id: formActivities.length })
                     }
@@ -905,7 +911,7 @@ function EditReportMeet(props) {
           <Form.Group className="mb-3">
             <div className="d-flex">
               <div key={`inline-radio`}>
-                <Form.Label htmlFor="inputValue" className="mr-4">
+                <Form.Label htmlFor="inputValue" className="mr-4 uk-form-label">
                   Y'a t'il des indicateurs ?
                 </Form.Label>
                 <Form.Check
@@ -957,6 +963,7 @@ function EditReportMeet(props) {
                         formIndicateurs[0].indicateursFormHestiaRisqueDeces !==
                           null) && (
                         <button
+                          class="uk-button uk-button-default"
                           onClick={(e) =>
                             onClickDeleteIndicateursForm(idx, form.id)
                           }
@@ -967,6 +974,7 @@ function EditReportMeet(props) {
 
                       {formIndicateurs && formIndicateurs.length < 3 && (
                         <button
+                          class="uk-button uk-button-default"
                           onClick={(e) =>
                             onClickAddIndicateurs({
                               id: formIndicateurs.length,
@@ -983,9 +991,12 @@ function EditReportMeet(props) {
             </div>
           </Form.Group>
 
-          <Form.Label htmlFor="inputValue">Type de rencontre</Form.Label>
+          <Form.Label htmlFor="inputValue" class="uk-form-label">
+            Type de rencontre
+          </Form.Label>
           <Form.Select
             size="lg"
+            className="uk-select"
             onChange={(e) => inputChangeTypeMeet(e)}
             defaultValue={props?.informationPatient?.reportType}
             // selected={props?.informationPatient?.reportType}
@@ -1000,7 +1011,9 @@ function EditReportMeet(props) {
           </Form.Select>
         </>
       )}
-      <Form.Label htmlFor="inputValue">Date de la rencontre</Form.Label>
+      <Form.Label htmlFor="inputValue" class="uk-form-label">
+        Date de la rencontre
+      </Form.Label>
 
       {reportDate ? (
         <Form.Control
@@ -1010,6 +1023,7 @@ function EditReportMeet(props) {
             .slice(0, 10)}
           placeholder="Here edit the release date"
           onChange={(e) => onChangeDate(e)}
+          className="uk-select"
           id="inputValueSpécifique"
         />
       ) : (
@@ -1020,10 +1034,10 @@ function EditReportMeet(props) {
             .slice(0, 10)}
           placeholder="Here edit the release date"
           onChange={(e) => onChangeDate(e)}
+          className="uk-select"
           id="inputValueSpécifique"
         />
       )}
-
       <InputGoalsList
         goals={props?.goals}
         // defaultValue={props?.informationPatient?.cont[0]?.orga?.id}
@@ -1040,7 +1054,6 @@ function EditReportMeet(props) {
           onChange={onChangeContacts}
         />
       )}
-
       {props?.informationPatient?.hasOwnProperty("type") === true && (
         <InputContactList
           contacts={props.contacts}
@@ -1048,8 +1061,7 @@ function EditReportMeet(props) {
           onChange={onChangeContacts}
         />
       )}
-
-      {props?.informationPatient?.hasOwnProperty("type") === false && (
+      {props?.informationPatient?.activityType === 1 && (
         <>
           <InputPlaceList
             places={props.places}
@@ -1066,29 +1078,34 @@ function EditReportMeet(props) {
           ></Editor>
         </>
       )}
-
-      {props?.informationPatient?.hasOwnProperty("type") === true && (
+      {props?.informationPatient?.activityType !== 1 && (
         <>
           <Form.Label htmlFor="inputValue">Description</Form.Label>
-          <Form.Control
+          <Editor
+            onChange={(e) => setChangeDescriptionGoals(e.target.value)}
+            content={
+              props.informationPatient.content ||
+              props.informationPatient.description
+            }
+          ></Editor>
+          {/* <Form.Control
             as="textarea"
             className="mt-4"
             placeholder="Leave a comment here"
             onChange={(e) => setChangeDescriptionGoals(e.target.value)}
             defaultValue={props.informationPatient.description}
             style={{ height: "100px" }}
-          />
+          /> */}
 
-          <button onClick={(e) => sentCalls(e)} className="mr-4">
+          <button onClick={(e) => sentCalls(e)} className="mt-4 btn-metis">
             Confirmer
           </button>
           {isSentGoals && <FontAwesomeIcon icon={faCheck} />}
         </>
       )}
-
-      {props?.informationPatient?.hasOwnProperty("type") === false && (
+      {props?.informationPatient?.activityType === 1 && (
         <>
-          <button onClick={(e) => sentRapport(e)} className="mr-4">
+          <button onClick={(e) => sentRapport(e)} className="mt-4 btn-metis">
             Confirmer
           </button>
           {isSentRepport && <FontAwesomeIcon icon={faCheck} />}

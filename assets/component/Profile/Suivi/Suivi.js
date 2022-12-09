@@ -225,7 +225,7 @@ const Profile = () => {
           ) : (
             <ReactLoading
               type={"spin"}
-              color={"#000"}
+              color={"#B1B1B1"}
               height={"20%"}
               width={"20%"}
             />
@@ -283,7 +283,7 @@ const Profile = () => {
           ) : (
             <ReactLoading
               type={"spin"}
-              color={"#000"}
+              color={"#B1B1B1"}
               height={"20%"}
               width={"20%"}
             />
