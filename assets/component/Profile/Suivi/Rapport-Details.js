@@ -6,8 +6,9 @@ import useAuth from "../../../hooks/useAuth";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faPlusCircle,
-  faCancel,
-  faEdit,
+  faFilePen,
+  faPhone,
+  faSquarePhoneFlip,
 } from "@fortawesome/free-solid-svg-icons";
 import { useParams } from "react-router-dom";
 import Table from "react-bootstrap/Table";
@@ -120,61 +121,67 @@ function RapportDetails(props) {
   };
   return (
     <>
-      <div className="search-textRapport">
-        <label>Rechercher dans la description de rapport</label>
-        <input
-          type="text"
-          defaultValue={filterTextContentRapport}
-          onChange={(e) => setFilterTextContentRapport(e.target.value)}
-        />
+      <div className="search-textRapport row">
+        <div className="col-sm-4">
+          <label class="uk-form-label">Description de rapport</label>
+          <input
+            type="text"
+            className="uk-input"
+            defaultValue={filterTextContentRapport}
+            onChange={(e) => setFilterTextContentRapport(e.target.value)}
+          />
+        </div>
+        <div className="search-textRapport col-sm-4">
+          <label class="uk-form-label">Type de rapport</label>
+          <Form.Select
+            defaultValue={filterTypeOfReports}
+            className="uk-select"
+            onChange={(e) => setTypeOfRepports(e.target.value)}
+          >
+            <option>Choissisez le type de rapport</option>
+            <option value={1}>Rapport de rencontre</option>
+            <option value={4}>Appel entrant</option>
+            <option value={2}>Appel sortant</option>
+          </Form.Select>
+        </div>
+        <div className="search-textRapport col-sm-4">
+          <label class="uk-form-label">Rechercher part date</label>
+          <input
+            type="date"
+            className="uk-select"
+            defaultValue={filterDateContentRapport}
+            onChange={(e) => setFilterDateContentRapport(e.target.value)}
+          />
+        </div>
+        <div className="row">
+          <div className="col-sm-6">
+            <button
+              onClick={(e) => onChangeRapportFilter(e)}
+              class="uk-button uk-button-default mt-4"
+            >
+              Filtrer
+            </button>
+          </div>
+        </div>
       </div>
-      <div className="search-textRapport">
-        <label>Type de rapport</label>
-        <Form.Select
-          defaultValue={filterTypeOfReports}
-          onChange={(e) => setTypeOfRepports(e.target.value)}
-        >
-          <option>Choissisez le type de rapport</option>
-          <option value={1}>Rapport de rencontre</option>
-          <option value={4}>Appel entrant</option>
-          <option value={2}>Appel sortant</option>
-          {/* <option value={3}>Objectif</option> */}
-        </Form.Select>
-        {/* <input
-          type="text"
-          defaultValue={(e) => setFilterTextContentRapport(e)}
-          onChange={(e) => onChangeRapportFilter(e)}
-        /> */}
-      </div>
-      <div className="search-textRapport">
-        <label>Rechercher part date</label>
-        <input
-          type="date"
-          defaultValue={filterDateContentRapport}
-          onChange={(e) => setFilterDateContentRapport(e.target.value)}
-        />
-      </div>
-      <Button onClick={(e) => onChangeRapportFilter(e)}>Filter</Button>
 
       {informations && informations.data && informations.data.length > 0 ? (
         <>
           {informations.data.map((r, id) => (
-            <div key={id} className="report-content">
-              {r && r.activityType === 1 && <h6>Rapport de rencontre</h6>}
-              {r && r.activityType === 2 && <h6>Appel Sortant</h6>}
-              {r && r.activityType === 4 && <h6>Appel Entrant</h6>}
-              <div className="row">
-                {r && r.creationDate && (
-                  <h6>
-                    {new Date(r.creationDate).toLocaleString("fr-BE", "short")}
-                  </h6>
-                )}
-              </div>
-
+            <div
+              key={id}
+              className="uk-card uk-card-default uk-card-hover uk-card-body mt-4 mb-4"
+              style={
+                r.activityType === 1
+                  ? { border: "4px solid rgb(120 156 13 / 53%)" }
+                  : { border: "4px solid #9c5fb5" }
+              }
+            >
               {r && r.deletedAt === null && (
                 <>
                   <Form.Check
                     type="switch"
+                    className="switcher"
                     defaultChecked={r.isHightlight === true}
                     onClick={(e) => {
                       // setToggle(!toggle);
@@ -202,6 +209,37 @@ function RapportDetails(props) {
                     }}
                     label="Activer le mode édition"
                   />
+                  {r && r.activityType === 1 && (
+                    <h3 class="uk-card-title">
+                      {" "}
+                      <FontAwesomeIcon
+                        icon={faFilePen}
+                        style={{ marginRight: "1rem" }}
+                      />
+                      Rapport de rencontre
+                    </h3>
+                  )}
+
+                  {r && r.activityType === 2 && (
+                    <h3 class="uk-card-title">
+                      <FontAwesomeIcon
+                        icon={faPhone}
+                        style={{ marginRight: "1rem" }}
+                      />
+                      Appel Sortant
+                    </h3>
+                  )}
+
+                  {r && r.activityType === 4 && (
+                    <h3 class="uk-card-title">
+                      <FontAwesomeIcon
+                        icon={faPhone}
+                        style={{ marginRight: "1rem" }}
+                      />
+                      Appel Entrant
+                    </h3>
+                  )}
+
                   {r.isHightlight === true && (
                     <EditReportMeet
                       informationPatient={r}
@@ -215,46 +253,11 @@ function RapportDetails(props) {
                   {r.isHightlight === false && (
                     <>
                       <div className="row">
-                        {/* {r.followupReportsCare && (
-                          <>
-                            {r.followupReportsCare.map((item, id) => (
-                              <div className="row">
-                                <h6>Indicateurs</h6>
-                                {item.indi.id === 1 && (
-                                  <div className="indicators-CVC" bg={"green"}>
-                                    CVC
-                                  </div>
-                                )}
-
-                                {item.indi.id === 6 && (
-                                  <div className="indicators-Hestia" bg={"red"}>
-                                    HESTIA Logement
-                                  </div>
-                                )}
-                                {item.indi.id === 7 && (
-                                  <div
-                                    className="indicators-Logement"
-                                    bg={"blue"}
-                                  >
-                                    HESTIA Deces
-                                  </div>
-                                )}
-                                <div className="col-sm-4">
-                                  <b>{item.indi.name}</b>
-                                </div>
-                                <div className="col-sm-8">
-                                  {item.indi.description} ({item.value})
-                                </div>
-                              </div>
-                            ))}
-                          </>
-                        )} */}
-
                         {r.followupReportsIndicators && (
                           <>
-                            <h6>Indicateurs</h6>
                             {r.followupReportsIndicators.map((item, id) => (
                               <div className="row">
+                                <h6>Indicateurs</h6>
                                 {item.indi.id === 1 && (
                                   <div className="indicators-CVC" bg={"green"}>
                                     CVC
@@ -288,8 +291,19 @@ function RapportDetails(props) {
                           </>
                         )}
                       </div>
+                      <div className="row">
+                        {r && r.creationDate && (
+                          <h6>
+                            Date:{" "}
+                            {new Date(r.creationDate).toLocaleString(
+                              "fr-BE",
+                              "short"
+                            )}
+                          </h6>
+                        )}
+                      </div>
+                      Description:
                       <div
-                        className="mt-4"
                         dangerouslySetInnerHTML={{
                           __html:
                             r.content ||
@@ -341,9 +355,9 @@ function RapportDetails(props) {
       ) : (
         <ReactLoading
           type={"spin"}
-          color={"#000"}
-          height={"20%"}
-          width={"20%"}
+          color={"#B1B1B1"}
+          height={"10%"}
+          width={"10%"}
         />
       )}
     </>

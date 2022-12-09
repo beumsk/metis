@@ -1085,8 +1085,7 @@ function EditReportMeet(props) {
           {isSentGoals && <FontAwesomeIcon icon={faCheck} />}
         </>
       )}
-      {/* const [isSentGoals, setSentGoals] = useState(false);
-  const [isSentRepport, setSentRepport] = useState(false); */}
+
       {props?.informationPatient?.hasOwnProperty("type") === false && (
         <>
           <button onClick={(e) => sentRapport(e)} className="mr-4">

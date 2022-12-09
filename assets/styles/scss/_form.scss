@@ -9,7 +9,11 @@
 //     box-sizing: border-box!important;
 //     font-size: 14px!important;
 //   }
-
+.switcher{
+  display: flex;
+  align-items: center;
+  justify-content: right;
+}
   .btn-metis {
     font-family: "Roboto", sans-serif!important;
     // text-transform: uppercase!important;
