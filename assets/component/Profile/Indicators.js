@@ -32,10 +32,15 @@ export default function App() {
   const [informations, setInformations] = useState();
   const [informationsLogement, setInformationsLogement] = useState();
   const [informationsDeces, setInformationsDeces] = useState();
-  const [options, setOptions] = useState();
+  const [optionsCVC, setOptionsCVC] = useState();
+  const [optionsLogement, setOptionsLogement] = useState();
+  const [optionsDeces, setOptionsDeces] = useState();
   const [filterDates, setFilterDates] = useState();
   const [filterDatesLogement, setFilterDatesLogement] = useState();
   const [filterDatesDeces, setFilterDatesDeces] = useState();
+  const [indicateurCVCShow, setIndicateurCVCShow] = useState(true);
+  const [indicateurLogementShow, setIndicateurLogementShow] = useState(false);
+  const [indicateurDecesShow, setIndicateurDecesShow] = useState(false);
   // const [informationsDeces, setInformationsDeces] = useState();
   useEffect(() => {
     axios({
@@ -78,7 +83,7 @@ export default function App() {
           cor &&
           cor.length > 0
         ) {
-          setOptions({
+          setOptionsCVC({
             plugins: {
               title: {
                 display: true,
@@ -164,7 +169,7 @@ export default function App() {
           cor &&
           cor.length > 0
         ) {
-          setOptions({
+          setOptionsLogement({
             plugins: {
               title: {
                 display: true,
@@ -186,17 +191,17 @@ export default function App() {
             labels: [...filterDates],
             datasets: [
               {
-                label: "Comportement",
+                label: "Sécurité",
                 data: [...com.map((e) => e.value)],
                 backgroundColor: "rgb(255, 99, 132)",
               },
               {
-                label: "Vêtements",
+                label: "Santé",
                 data: [...vet.map((e) => e.value)],
                 backgroundColor: "rgb(75, 192, 192)",
               },
               {
-                label: "Corps",
+                label: "Consommation",
                 data: [...cor.map((e) => e.value)],
                 backgroundColor: "rgb(53, 162, 235)",
               },
@@ -248,7 +253,7 @@ export default function App() {
           cor &&
           cor.length > 0
         ) {
-          setOptions({
+          setOptionsDeces({
             plugins: {
               title: {
                 display: true,
@@ -270,17 +275,17 @@ export default function App() {
             labels: [...filterDates],
             datasets: [
               {
-                label: "Comportement",
+                label: "Sécurité",
                 data: [...com.map((e) => e.value)],
                 backgroundColor: "rgb(255, 99, 132)",
               },
               {
-                label: "Vêtements",
+                label: "Santé",
                 data: [...vet.map((e) => e.value)],
                 backgroundColor: "rgb(75, 192, 192)",
               },
               {
-                label: "Corps",
+                label: "Consommation",
                 data: [...cor.map((e) => e.value)],
                 backgroundColor: "rgb(53, 162, 235)",
               },
@@ -292,25 +297,55 @@ export default function App() {
       })
       .catch(function (response) {});
   }, [idPatient]);
+  const onChangeIndicateurs = (e) => {
+    console.log(e);
 
+    if (e === "1") {
+      setIndicateurCVCShow(true);
+      setIndicateurLogementShow(false);
+      setIndicateurDecesShow(false);
+    }
+
+    if (e === "2") {
+      setIndicateurCVCShow(false);
+      setIndicateurLogementShow(true);
+      setIndicateurDecesShow(false);
+    }
+
+    if (e === "3") {
+      setIndicateurCVCShow(false);
+      setIndicateurLogementShow(false);
+      setIndicateurDecesShow(true);
+    }
+    console.log(indicateurCVCShow, indicateurLogementShow, indicateurDecesShow);
+  };
   return (
     <>
-      {options && informations && (
+      <select
+        onChange={(e) => onChangeIndicateurs(e.target.value)}
+        className="mb-4"
+      >
+        <option value={1}>CVC</option>
+        <option value={2}>Hestia Logement</option>
+        <option value={3}>HESTIA Deces</option>
+      </select>
+
+      {optionsCVC && informations && indicateurCVCShow && (
         <>
-          <h3>CVC évolution</h3>
-          <Bar options={options} data={informations} />
+          <h6>CVC évolution</h6>
+          <Bar options={optionsCVC} data={informations} />
         </>
       )}
-      {options && informationsLogement && (
+      {optionsLogement && informationsLogement && indicateurLogementShow && (
         <>
-          <h3>HESTIA Logement</h3>
-          <Bar options={options} data={informationsLogement} />
+          <h6>HESTIA Logement</h6>
+          <Bar options={optionsLogement} data={informationsLogement} />
         </>
       )}
-      {options && informationsDeces && (
+      {optionsDeces && informationsDeces && indicateurDecesShow && (
         <>
-          <h3>HESTIA Deces</h3>
-          <Bar options={options} data={informationsDeces} />
+          <h6>HESTIA Deces</h6>
+          <Bar options={optionsDeces} data={informationsDeces} />
         </>
       )}
     </>
