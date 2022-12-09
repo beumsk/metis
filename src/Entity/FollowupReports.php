@@ -2,14 +2,13 @@
 
 namespace App\Entity;
 
-use App\Entity\FollowupGoals as EntityFollowupGoals;
+use App\Entity\FollowupGoals;
 use App\Repository\FollowupReportsRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Utils\InfosReportTrait;
-use Proxies\__CG__\App\Entity\FollowupGoals;
 
 #[ORM\Entity(repositoryClass: FollowupReportsRepository::class)]
 class FollowupReports
@@ -97,7 +96,7 @@ class FollowupReports
     #[ORM\InverseJoinColumn(name: "cont_id", referencedColumnName: "id", nullable: true)]
     private Collection $cont;
 
-    #[ORM\ManyToMany(targetEntity: EntityFollowupGoals::class)]
+    #[ORM\ManyToMany(targetEntity: FollowupGoals::class)]
     private Collection $fogo;
 
     public function __construct()

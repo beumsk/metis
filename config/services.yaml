@@ -4,12 +4,12 @@ services:
         autowire: true      
         autoconfigure: true 
     App\:
-        resource: '../src/'
+        resource: '%kernel.project_dir%/src/'
         exclude:
-            - '../src/DependencyInjection/'
-            - '../src/Entity/'
-            - '../src/Kernel.php'
-            - '../src/Tests/'
+            - '%kernel.project_dir%/src/DependencyInjection/'
+            - '%kernel.project_dir%/src/Entity/'
+            - '%kernel.project_dir%/src/Kernel.php'
+            - '%kernel.project_dir%/src/Tests/'
     App\DataFixtures\:
         resource: '%kernel.project_dir%/src/DataFixtures'
         tags: ['doctrine.fixture.orm']
