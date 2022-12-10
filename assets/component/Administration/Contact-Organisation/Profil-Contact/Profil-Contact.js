@@ -108,19 +108,21 @@ const ProfilContact = () => {
                             contInfo.value === "Type de Collaborateur"
                               ? e.sugge.value
                               : e.valueInformations}
-                            <ModalEditContact
-                              selectListCollab={typeCollabList}
-                              selectListTags={tagsList}
-                              infosAppels={e}
-                              contInfo={contInfo}
-                              contact={contactInformation}
-                              idInfo={e.id}
-                              onChange={(e) => informationSaved(e)}
-                            ></ModalEditContact>
-                            <ModalDeleteInfos
-                              infosPatient={e}
-                              onChange={(e) => informationSaved(e)}
-                            ></ModalDeleteInfos>
+                            <span className="btn-group">
+                              <ModalEditContact
+                                selectListCollab={typeCollabList}
+                                selectListTags={tagsList}
+                                infosAppels={e}
+                                contInfo={contInfo}
+                                contact={contactInformation}
+                                idInfo={e.id}
+                                onChange={(e) => informationSaved(e)}
+                              ></ModalEditContact>
+                              <ModalDeleteInfos
+                                infosPatient={e}
+                                onChange={(e) => informationSaved(e)}
+                              ></ModalDeleteInfos>
+                            </span>
                           </span>
                         ))}
                       </>

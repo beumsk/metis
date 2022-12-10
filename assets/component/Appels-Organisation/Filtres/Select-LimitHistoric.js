@@ -11,6 +11,7 @@ const SelectLimitHistoric = (props) => {
       <Form.Control
         type="date"
         placeholder="Normal text"
+        className="uk-select"
         onChange={(e) => setDateHistoric(e.target.value)}
       />
     </>

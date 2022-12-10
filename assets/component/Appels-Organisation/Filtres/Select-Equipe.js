@@ -33,6 +33,7 @@ const SelectTeam = (props) => {
       <Form.Select
         onChange={(e) => setSelectedTeam(e.target.value)}
         value={selectedTeam}
+        className="uk-select"
       >
         <option value={null}>Séléctionnez l'équipe</option>
 

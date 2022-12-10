@@ -67,12 +67,13 @@ const Form_AddPatients = () => {
       </Button>
       <Modal show={show} onHide={handleClose}>
         <Modal.Body>
-          <h3>Ajouter un patient</h3>
+          <h4 className="mb-4">Ajouter un patient</h4>
           <Form>
             <Form.Group className="mb-3" controlId="formBasicEmail">
               <Form.Control
                 type="text"
                 placeholder="Tapez le nom"
+                className="uk-input"
                 onChange={(e) => setLastName(e.target.value)}
               />
             </Form.Group>
@@ -81,6 +82,7 @@ const Form_AddPatients = () => {
               <Form.Control
                 type="text"
                 placeholder="Tapez le prénom"
+                className="uk-input"
                 onChange={(e) => setFirstName(e.target.value)}
               />
             </Form.Group>
@@ -89,6 +91,7 @@ const Form_AddPatients = () => {
               <Form.Control
                 type="text"
                 placeholder="Tapez le surnom"
+                className="uk-input"
                 onChange={(e) => setNickNames(e.target.value)}
               />
             </Form.Group>
@@ -96,6 +99,7 @@ const Form_AddPatients = () => {
             <Form.Select
               aria-label="Default select example"
               defaultValue={localStorage.getItem("antenna")}
+              className="uk-select"
               onChange={(e) => setAntenna(e.target.value)}
             >
               <option>Choissisez votre antenne</option>

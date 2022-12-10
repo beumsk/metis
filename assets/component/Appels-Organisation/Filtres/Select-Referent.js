@@ -26,6 +26,7 @@ const SelectReferent = (props) => {
       <Form.Select
         onChange={(e) => setReferentSelected(e.target.value)}
         value={refSelected}
+        className="uk-select"
       >
         <option>Séléctionnez le référent</option>
 

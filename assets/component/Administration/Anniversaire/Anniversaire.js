@@ -144,21 +144,20 @@ function Anniversaire() {
     <>
       <Menu></Menu>
       <div className="container container-patients row mx-auto ">
-        <h3>Anniversaires</h3>
+        <h4>Anniversaires</h4>
         {birthdayList && birthdayList !== null && (
           <>
             <div className="row coordonnes-body">
               <div>
-                <h6>Infos</h6>
                 {Object.keys(birthdayList).map((keyName, i) => (
                   <div key={i}>
-                    <h3>
+                    <h4>
                       {toPascalCase(
                         new Date(keyName).toLocaleString("fr-FR", {
                           month: "long",
                         })
                       )}
-                    </h3>
+                    </h4>
                     <ToolkitProvider
                       keyField="id"
                       data={[...birthdayList[keyName]]}

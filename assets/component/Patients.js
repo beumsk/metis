@@ -98,7 +98,7 @@ function Patients() {
     <>
       <Menu></Menu>
       <div className="container container-patients ">
-        <h5 color="white">Liste des patients</h5>
+        <h4 color="white">Liste des patients</h4>
         <div className="container-filter">
           <div className="row">
             <div className="col-sm-3">
