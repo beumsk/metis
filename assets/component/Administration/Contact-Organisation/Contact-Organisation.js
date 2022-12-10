@@ -70,7 +70,7 @@ function ContactOrganisations() {
     <>
       <Menu></Menu>
       <div className="container container-patients row mx-auto ">
-        <h3>Contact et organisation</h3>
+        <h4>Liste de contacts</h4>
         {listContacts && listContacts.data && (
           <ToolkitProvider
             keyField="id"
@@ -82,8 +82,9 @@ function ContactOrganisations() {
               <div>
                 <div className="mb-2 mt-2">
                   <SearchBar
+                    className="uk-input"
                     {...props.searchProps}
-                    placeholder="Rechercher le les appels"
+                    placeholder="Rechercher dans les appels"
                   />
                 </div>
 

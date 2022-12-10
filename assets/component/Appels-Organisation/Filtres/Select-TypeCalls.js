@@ -37,24 +37,26 @@ const TypeCalls = (props) => {
   return (
     <>
       <Form.Label>Type d'appel</Form.Label>
-      <InputGroup className="mb-3">
-        <Form.Check
-          label="En cours"
-          type={"radio"}
-          name="flexRadioDefault"
-          id="flexRadioDefault1"
-          onClick={(e) => onChangeType("running")}
-        />
-      </InputGroup>
-      <InputGroup className="mb-3">
-        <Form.Check
-          label="Fermées"
-          type={"radio"}
-          name="flexRadioDefault"
-          id="flexRadioDefault2"
-          onClick={(e) => onChangeType("closed")}
-        />
-      </InputGroup>
+      <div className="row">
+        <InputGroup>
+          <Form.Check
+            label="En cours"
+            type={"radio"}
+            name="flexRadioDefault"
+            id="flexRadioDefault1"
+            onClick={(e) => onChangeType("running")}
+          />
+        </InputGroup>
+        <InputGroup>
+          <Form.Check
+            label="Fermées"
+            type={"radio"}
+            name="flexRadioDefault"
+            id="flexRadioDefault2"
+            onClick={(e) => onChangeType("closed")}
+          />
+        </InputGroup>
+      </div>
     </>
   );
 };

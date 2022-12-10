@@ -3,12 +3,12 @@
     "app": {
       "js": [
         "/build/runtime.dea08fc2.js",
-        "/build/596.cceb2e35.js",
-        "/build/app.2f59b82d.js"
+        "/build/677.61f7ffff.js",
+        "/build/app.ea23cb31.js"
       ],
       "css": [
-        "/build/596.647ccd6f.css",
-        "/build/9.cf79f086.css"
+        "/build/677.647ccd6f.css",
+        "/build/9.eccb759d.css"
       ]
     },
     "global": {
@@ -16,7 +16,7 @@
         "/build/runtime.dea08fc2.js"
       ],
       "css": [
-        "/build/9.cf79f086.css"
+        "/build/9.eccb759d.css"
       ]
     }
   }

@@ -9,7 +9,7 @@ import ToolkitProvider, {
 import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
 import paginationFactory from "react-bootstrap-table2-paginator";
 import ModalAddLieux from "./Modal-Add-Lieux";
-
+import ReactLoading from "react-loading";
 function Lieux() {
   const { SearchBar } = Search;
   const [auth, setAuth] = useState(useAuth());
@@ -75,9 +75,9 @@ function Lieux() {
           <ModalAddLieux></ModalAddLieux>
         </div>
 
-        <h3>Tous les Lieux</h3>
+        <h4>Tous les Lieux</h4>
 
-        {listContacts && listContacts.data && (
+        {listContacts && listContacts.data ? (
           <ToolkitProvider
             keyField="id"
             data={[...listContacts.data]}
@@ -89,6 +89,7 @@ function Lieux() {
                 <div className="mb-2 mt-2">
                   <SearchBar
                     {...props.searchProps}
+                    className="uk-input"
                     placeholder="Rechercher le lieu"
                   />
                 </div>
@@ -100,6 +101,13 @@ function Lieux() {
               </div>
             )}
           </ToolkitProvider>
+        ) : (
+          <ReactLoading
+            type={"spin"}
+            color={"#b1b1b1"}
+            height={"10%"}
+            width={"10%"}
+          />
         )}
       </div>
     </>

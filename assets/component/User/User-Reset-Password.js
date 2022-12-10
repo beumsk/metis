@@ -84,6 +84,7 @@ const EditPassword = () => {
           <Form.Control
             type={passwordShown ? "text" : "password"}
             placeholder="Mot de passe actuel"
+            className="uk-input"
             onChange={(e) => setCurrentPassword(e.target.value)}
           />
           <div className="eye-icon">
@@ -98,6 +99,7 @@ const EditPassword = () => {
           <Form.Control
             type={passwordShown ? "text" : "password"}
             placeholder="Nouveau mot de passe"
+            className="uk-input"
             onChange={(e) => setPasswordNew(e.target.value)}
           />
           <div className="eye-icon">
@@ -112,6 +114,7 @@ const EditPassword = () => {
           <Form.Control
             type={passwordShown ? "text" : "password"}
             placeholder="Répéter le nouveau mot de passe"
+            className="uk-input"
             onChange={(e) => setPasswordVerified(e.target.value)}
           />
           <div className="eye-icon">

@@ -11,11 +11,20 @@ function ModalHistorique(props) {
 
   return (
     <>
-      <Button variant="primary" onClick={handleShow}>
+      <button
+        className="uk-button uk-button-default"
+        style={{ display: "block", marginTop: "1rem" }}
+        onClick={handleShow}
+      >
         Historique
-      </Button>
+      </button>
 
-      <Modal show={show} onHide={handleClose}>
+      <Modal
+        show={show}
+        onHide={handleClose}
+        className="modal-90w"
+        aria-labelledby="example-custom-modal-styling-title"
+      >
         <Modal.Header closeButton>
           <Modal.Title>Historique</Modal.Title>
         </Modal.Header>
@@ -24,17 +33,19 @@ function ModalHistorique(props) {
             {props?.foreList?.fore && props?.foreList?.fore.length > 0 && (
               <>
                 {props?.foreList?.fore?.map((e) => (
-                  <div className="row">
+                  <div className="d-flex" style={{ fontSize: "0.8rem" }}>
                     {/* <td>1</td> */}
+                    <p>
+                      {/* {e?.user.firstName}
+                      {e?.user.lastName} */}
+                    </p>
                     <div
-                      className="col-sm-8"
                       dangerouslySetInnerHTML={{
                         __html: e?.content,
                       }}
                     ></div>
-                    <div className="col-sm-4">
-                      {new Date(e?.date).toISOString("short")}
-                    </div>
+
+                    <p>{new Date(e?.date).toISOString("short")}</p>
                     {/* <td>@mdo</td> */}
                   </div>
                 ))}

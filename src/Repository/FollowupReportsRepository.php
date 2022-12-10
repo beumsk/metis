@@ -97,20 +97,8 @@ class FollowupReportsRepository extends ServiceEntityRepository
         $qb = $this->getEntityManager()->createQueryBuilder();
 
         $qb->select('f')
-            // ->distinct()
             ->from('App:FollowupReports', 'f')
-
-            // ->join(
-            //     'App:FollowupGoals',
-            //     'fg'
-            // )
             ->andWhere('f.pati = :idPati ');
-        // ->innerJoin(
-        //     'App:User',
-        //     'u',
-        //     'WITH',
-        //     'f.user = u.id'
-        // )
         $parameters["idPati"] = $id;
         if (null !== $textSearch) {
             $qb->andWhere('f.content like :textSearch');

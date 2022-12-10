@@ -104,7 +104,7 @@ function ModalEditContact(props) {
   }
   return (
     <>
-      <button onClick={handleShow} className="ml-4">
+      <button onClick={handleShow} className="editCont">
         <FontAwesomeIcon icon={faEdit} />
       </button>
 

@@ -92,6 +92,7 @@ const Login = () => {
           <input
             type="text"
             id="username"
+            className="uk-input"
             // className="my-4"
             ref={userRef}
             placeholder="Tapez votre utilisateur"
@@ -103,7 +104,7 @@ const Login = () => {
 
           <input
             type="password"
-            className="my-4"
+            className="uk-input"
             id="password"
             placeholder="Tapez votre mot de passe"
             onChange={(e) => setPwd(e.target.value)}

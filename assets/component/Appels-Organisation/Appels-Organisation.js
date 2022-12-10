@@ -139,7 +139,7 @@ function AppelsOrganisation() {
     <>
       <Menu></Menu>
       <div className="container container-patients row mx-auto ">
-        <h3>Tous les Appels</h3>
+        <h4 className="mb-4">Tous les Appels</h4>
         <div className="container-filters">
           <TypeCalls onChangeTypeCalls={onChangeTypeCalls}></TypeCalls>
           <SelectFunction
@@ -152,7 +152,9 @@ function AppelsOrganisation() {
           <SelectReferent
             onClickReferent={(e) => onClickReferent(e)}
           ></SelectReferent>
-          <button onClick={sentFilters}>Appliquer les filtres</button>
+          <button className="btn-metis mt-2 mb-4" onClick={sentFilters}>
+            Appliquer les filtres
+          </button>
         </div>
 
         {patientsList &&
@@ -190,7 +192,11 @@ function AppelsOrganisation() {
                               </div>
                               <div className="col-sm-8 container-appelDescription">
                                 {e.description}
-                                <ModalHistorique foreList={e}></ModalHistorique>
+                                {e && e.fore.length > 0 && (
+                                  <ModalHistorique
+                                    foreList={e}
+                                  ></ModalHistorique>
+                                )}
                               </div>
                               <div className="col-sm-2 container-appelActions">
                                 <ModalActionsAppelsEntrant

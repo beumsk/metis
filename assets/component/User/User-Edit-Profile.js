@@ -76,6 +76,7 @@ const EditProfile = () => {
             type="text"
             placeholder="Nom d'utilisateur"
             defaultValue={username}
+            className="uk-input"
             onChange={(e) => setUsername(e.target.value)}
           />
         </Form.Group>
@@ -85,6 +86,7 @@ const EditProfile = () => {
             type="text"
             placeholder="Adresse e-mail"
             defaultValue={email}
+            className="uk-input"
             onChange={(e) => setEmail(e.target.value)}
           />
         </Form.Group>

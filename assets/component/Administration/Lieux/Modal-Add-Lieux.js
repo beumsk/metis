@@ -91,7 +91,7 @@ function ModalAddLieux(props) {
   // }
   return (
     <>
-      <button onClick={handleShow} className="ml-4 btn-modal">
+      <button onClick={handleShow} className="ml-4 btn-metis">
         Ajouter un lieu
       </button>
 
