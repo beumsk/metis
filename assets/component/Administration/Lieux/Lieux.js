@@ -36,7 +36,9 @@ function Lieux() {
       text: "Product Price",
       formatter: (cell, row, rowIndex, extraData) => (
         <div>
-          <a href={"/profil-lieux/" + row.id}>Détails</a>
+          <a href={"/profil-lieux/" + row.id} className="uk-link-muted">
+            Détails
+          </a>
         </div>
       ),
     },

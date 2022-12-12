@@ -160,7 +160,7 @@ function IndicateursFormHestiaRisqueDeces(props) {
           <Form.Label htmlFor="inputValue">Commentaire</Form.Label>
           <textarea
             as="textarea"
-            class="uk-textarea"
+            className="uk-textarea"
             rows={3}
             defaultValue={
               props?.editForm && props?.editForm[0]?.comment
@@ -221,7 +221,7 @@ function IndicateursFormHestiaRisqueDeces(props) {
           <Form.Label htmlFor="inputValue">Commentaire</Form.Label>
           <textarea
             as="textarea"
-            class="uk-textarea"
+            className="uk-textarea"
             rows={3}
             defaultValue={
               props.editForm && props.editForm[1]?.comment
@@ -282,7 +282,7 @@ function IndicateursFormHestiaRisqueDeces(props) {
           <Form.Label htmlFor="inputValue">Commentaire</Form.Label>
           <textarea
             as="textarea"
-            class="uk-textarea"
+            className="uk-textarea"
             rows={3}
             defaultValue={
               props?.editForm && props?.editForm?.length > 0

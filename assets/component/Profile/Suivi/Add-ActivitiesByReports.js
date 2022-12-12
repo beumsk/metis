@@ -101,7 +101,7 @@ function AddActivitiesByReport(props) {
   return (
     <>
       <div className="addSoins-form">
-        <Form.Label htmlFor="inputValue" class="uk-form-label">
+        <Form.Label htmlFor="inputValue" className="uk-form-label">
           Type
         </Form.Label>
         <select
@@ -130,7 +130,7 @@ function AddActivitiesByReport(props) {
           onChange={handleChangeValue}
           defaultValue={props.formActivitiesEdit?.value}
         /> */}
-        <Form.Label htmlFor="inputValue" class="uk-form-label">
+        <Form.Label htmlFor="inputValue" className="uk-form-label">
           Description
         </Form.Label>
         <Form.Control
@@ -142,7 +142,7 @@ function AddActivitiesByReport(props) {
           onChange={(e) => onChangeDescription(e)}
         />
 
-        <Form.Label htmlFor="inputValue" class="uk-form-label">
+        <Form.Label htmlFor="inputValue" className="uk-form-label">
           Contacts
         </Form.Label>
         <select
@@ -184,7 +184,7 @@ function AddActivitiesByReport(props) {
               : ""
           }
         ></InputPlaceList> */}
-        <Form.Label htmlFor="inputValue" class="uk-form-label">
+        <Form.Label htmlFor="inputValue" className="uk-form-label">
           Lieux
         </Form.Label>
         <select

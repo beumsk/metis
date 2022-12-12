@@ -174,12 +174,12 @@ function IndicateursFormHestiaPerteLogement(props) {
             type={"radio"}
             id={`inline-radio-16`}
           />
-          <Form.Label htmlFor="inputValue" class="uk-form-label">
+          <Form.Label htmlFor="inputValue" className="uk-form-label">
             Commentaire
           </Form.Label>
           <textarea
             as="textarea"
-            class="uk-textarea"
+            className="uk-textarea"
             rows={3}
             defaultValue={
               props?.editForm && props?.editForm[0]?.comment
@@ -237,12 +237,12 @@ function IndicateursFormHestiaPerteLogement(props) {
             }
             id={`inline-radio-20`}
           />
-          <Form.Label htmlFor="inputValue" class="uk-form-label">
+          <Form.Label htmlFor="inputValue" className="uk-form-label">
             Commentaire
           </Form.Label>
           <textarea
             as="textarea"
-            class="uk-textarea"
+            className="uk-textarea"
             rows={3}
             defaultValue={
               props.editForm && props.editForm[1]?.comment
@@ -307,14 +307,14 @@ function IndicateursFormHestiaPerteLogement(props) {
                 ? props?.editForm[2]?.comment
                 : ""
             }
-            class="uk-form-label"
+            className="uk-form-label"
             onChange={(e) => onChangeDescriptionBailleur(e)}
           >
             Commentaire
           </Form.Label>
           <textarea
             as="textarea"
-            class="uk-textarea"
+            className="uk-textarea"
             rows={3}
             defaultValue={
               props.editForm && props.editForm[2]?.comment

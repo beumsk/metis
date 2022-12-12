@@ -111,7 +111,9 @@ function ModalEditPatient(props) {
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Modifier une information</Modal.Title>
+          <Modal.Title>
+            <h6>Modifier une information</h6>
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {" "}
@@ -143,6 +145,7 @@ function ModalEditPatient(props) {
             <Form.Label htmlFor="inputValue">Description</Form.Label>
             <Form.Control
               type="text"
+              className="uk-input"
               id="inputValueSpécifique"
               onChange={(e) => setDescription(e.target.value)}
               aria-describedby="valueSpécifique"
@@ -160,15 +163,18 @@ function ModalEditPatient(props) {
               type="date"
               id="inputValueSpécifique"
               onChange={handleInputChange}
+              className="uk-input"
               aria-describedby="valueSpécifique"
             />
             <Form.Label htmlFor="inputValue">Commentaire</Form.Label>
-            <Form.Control as="textarea" rows={3} />
+            <Form.Control as="textarea" rows={3} className="uk-input" s />
           </>
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={handleClose}>Close</Button>
-          <Button onClick={handleSave}>Save Changes</Button>
+          <Button onClick={handleClose}>Fermer</Button>
+          <Button onClick={handleSave} className="btn-metis">
+            Sauver
+          </Button>
         </Modal.Footer>
       </Modal>
     </>

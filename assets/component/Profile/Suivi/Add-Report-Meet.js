@@ -724,7 +724,7 @@ function AddReportMeet(props) {
                 </>
               ))}
               <button
-                class="uk-button uk-button-default"
+                className="uk-button uk-button-default"
                 onClick={(e) => onClickAddActivities({ id: nanoid() })}
               >
                 Ajouter un autre activitée
@@ -779,7 +779,7 @@ function AddReportMeet(props) {
                     formIndicateurs[0].indicateursFormHestiaRisqueDeces !==
                       null) && (
                     <button
-                      class="uk-button uk-button-default"
+                      className="uk-button uk-button-default"
                       onClick={(e) =>
                         onClickDeleteIndicateursForm(idx, form.id)
                       }
@@ -790,7 +790,7 @@ function AddReportMeet(props) {
 
                   {formIndicateurs && formIndicateurs.length < 3 && (
                     <button
-                      class="uk-button uk-button-default"
+                      className="uk-button uk-button-default"
                       onClick={(e) => onClickAddIndicateurs({ id: nanoid() })}
                     >
                       Ajouter un autre indicateur
@@ -802,7 +802,7 @@ function AddReportMeet(props) {
           )}
         </div>
       </Form.Group>
-      <Form.Label htmlFor="inputValue" class="uk-form-label">
+      <Form.Label htmlFor="inputValue" className="uk-form-label">
         Type de rencontre
       </Form.Label>
       <Form.Select
@@ -819,7 +819,7 @@ function AddReportMeet(props) {
           <option value={4}>Recherche</option>
         </>
       </Form.Select>
-      <Form.Label htmlFor="inputValue" class="uk-form-label">
+      <Form.Label htmlFor="inputValue" className="uk-form-label">
         Date de la rencontre
       </Form.Label>
       <Form.Control
@@ -830,7 +830,7 @@ function AddReportMeet(props) {
         onChange={(e) => onChangeDate(e)}
         id="inputValueSpécifique"
       />
-      <Form.Label htmlFor="inputValue" class="uk-form-label">
+      <Form.Label htmlFor="inputValue" className="uk-form-label">
         Objectifs
       </Form.Label>
       <Form.Select

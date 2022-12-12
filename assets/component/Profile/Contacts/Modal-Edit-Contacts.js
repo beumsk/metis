@@ -137,7 +137,9 @@ function ModalEditContacts(props) {
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Modifier une information</Modal.Title>
+          <Modal.Title>
+            <h6>Modifier une information</h6>
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {" "}
@@ -172,6 +174,7 @@ function ModalEditContacts(props) {
             <Form.Control
               as="textarea"
               rows={3}
+              className="uk-input"
               id="inputValueSpécifique"
               defaultValue={props?.infos?.linkDescription}
               aria-describedby="valueSpécifique"
@@ -202,8 +205,10 @@ function ModalEditContacts(props) {
         </Modal.Body>
         <Modal.Footer>
           {isSentRepport && <FontAwesomeIcon icon={faCheck} />}
-          <Button onClick={handleClose}>Close</Button>
-          <Button onClick={handleSave}>Save Changes</Button>
+          <Button onClick={handleClose}>Fermer</Button>
+          <Button onClick={handleSave} className="btn-metis">
+            Sauver
+          </Button>
         </Modal.Footer>
       </Modal>
     </>

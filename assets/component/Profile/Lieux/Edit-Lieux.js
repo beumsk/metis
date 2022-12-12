@@ -177,14 +177,17 @@ function ModalLierLieux(props) {
             <Form.Control
               as="textarea"
               rows={3}
+              className="uk-input"
               defaultValue={props?.lieu?.comment}
               onChange={(e) => setValueCommentary(e.target.value)}
             />
           </>
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={handleClose}>Close</Button>
-          <Button onClick={handleSave}>Save Changes</Button>
+          <Button onClick={handleClose}>Fermer</Button>
+          <Button onClick={handleSave} className="btn-metis">
+            Sauver
+          </Button>
         </Modal.Footer>
       </Modal>
     </>

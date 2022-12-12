@@ -108,6 +108,7 @@ function ModalAddObjectifs(props) {
             <Form.Label htmlFor="inputValue">Description</Form.Label>
             <Form.Control
               type="text"
+              className="uk-input"
               id="inputValueSpécifique"
               aria-describedby="valueSpécifique"
               onChange={(e) => setDescription(e.target.value)}
@@ -115,8 +116,8 @@ function ModalAddObjectifs(props) {
           </>
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={handleClose}>Close</Button>
-          <Button onClick={onSent}>Save Changes</Button>
+          <Button onClick={handleClose}>Fermer</Button>
+          <Button onClick={onSent}>Sauver</Button>
         </Modal.Footer>
       </Modal>
     </>

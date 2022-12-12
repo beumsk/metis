@@ -94,7 +94,7 @@ const ProfilLieux = () => {
           </div>
 
           <div className="row coordonnes-body">
-            <Table>
+            <table class="uk-table uk-table-striped">
               <h6>Infos</h6>
               {contactInformation?.informations.map((contInfo) => (
                 <tr>
@@ -108,19 +108,21 @@ const ProfilLieux = () => {
                             contInfo.value === "Type de Collaborateur"
                               ? e.sugge.value
                               : e.valueInformations}
-                            <ModalEditInfos
-                              selectListCollab={typeCollabList}
-                              selectListTags={tagsList}
-                              infosAppels={e}
-                              contInfo={contInfo}
-                              contact={contactInformation}
-                              idInfo={e.id}
-                              onChange={(e) => informationSaved(e)}
-                            ></ModalEditInfos>
-                            <ModalDeleteInfos
-                              infosPatient={e}
-                              onChange={(e) => informationSaved(e)}
-                            ></ModalDeleteInfos>
+                            <span className="btn-group">
+                              <ModalEditInfos
+                                selectListCollab={typeCollabList}
+                                selectListTags={tagsList}
+                                infosAppels={e}
+                                contInfo={contInfo}
+                                contact={contactInformation}
+                                idInfo={e.id}
+                                onChange={(e) => informationSaved(e)}
+                              ></ModalEditInfos>
+                              <ModalDeleteInfos
+                                infosPatient={e}
+                                onChange={(e) => informationSaved(e)}
+                              ></ModalDeleteInfos>
+                            </span>
                           </span>
                         ))}
                       </>
@@ -143,11 +145,11 @@ const ProfilLieux = () => {
                   <td></td>
                 </tr>
               ))}
-            </Table>
+            </table>
           </div>
 
           <div className="row coordonnes-body">
-            <Table>
+            <table class="uk-table uk-table-striped">
               <h6>Patients liées</h6>
               {contactInformation?.patients.map((e) => (
                 <tr>
@@ -155,11 +157,13 @@ const ProfilLieux = () => {
                     {e.firstName} {e.lastName}
                   </td>
                   <td>
-                    <Link to={"/" + e.id}>Aller au Profil</Link>
+                    <Link className="uk-link-muted" to={"/" + e.id}>
+                      Aller au Profil
+                    </Link>
                   </td>
                 </tr>
               ))}
-            </Table>
+            </table>
           </div>
         </div>
       </section>

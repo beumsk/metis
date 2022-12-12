@@ -110,7 +110,9 @@ function ModalEditLieux(props) {
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Modifier une information</Modal.Title>
+          <Modal.Title>
+            <h6>Modifier une information</h6>
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {" "}
@@ -145,6 +147,7 @@ function ModalEditLieux(props) {
             {props.infosAppels.value === "Date de naissance" ? (
               <input
                 type="date"
+                className="uk-select"
                 id="inputValueSpécifique"
                 onChange={(e) => setSpecificValueInput(e.target.value)}
                 aria-describedby="valueSpécifique"
@@ -156,7 +159,8 @@ function ModalEditLieux(props) {
               />
             ) : (
               <input
-                type="text"
+                type="date"
+                className="uk-select"
                 id="inputValueSpécifique"
                 onChange={(e) => setSpecificValueInput(e.target.value)}
                 defaultValue={
@@ -173,6 +177,7 @@ function ModalEditLieux(props) {
               as="textarea"
               onChange={(e) => setCommentaire(e.target.value)}
               rows={3}
+              className="uk-input"
               id="comment-value"
               defaultValue={
                 props?.infosAppels?.valueDescription !== null
@@ -184,8 +189,10 @@ function ModalEditLieux(props) {
         </Modal.Body>
         <Modal.Footer>
           {isSentRepport && <FontAwesomeIcon icon={faCheck} />}
-          <Button onClick={handleClose}>Close</Button>
-          <Button onClick={handleSave}>Save Changes</Button>
+          <Button onClick={handleClose}>Fermer</Button>
+          <Button onClick={handleSave} className="btn-metis">
+            Sauver
+          </Button>
         </Modal.Footer>
       </Modal>
     </>

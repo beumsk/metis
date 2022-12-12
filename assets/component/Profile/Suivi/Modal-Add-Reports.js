@@ -52,7 +52,9 @@ function ModalAddReports(props) {
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Modifier une information</Modal.Title>
+          <Modal.Title>
+            <h6>Modifier une information</h6>
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <>
@@ -80,12 +82,12 @@ function ModalAddReports(props) {
               aria-describedby="valueSpécifique"
             />
             <Form.Label htmlFor="inputValue">Commentaire</Form.Label>
-            <Form.Control as="textarea" rows={3} />
+            <Form.Control className="uk-input" as="textarea" rows={3} />
           </>
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={handleClose}>Close</Button>
-          <Button onClick={handleClose}>Save Changes</Button>
+          <Button onClick={handleClose}>Fermer</Button>
+          <Button onClick={handleClose}>Sauver</Button>
         </Modal.Footer>
       </Modal>
     </>

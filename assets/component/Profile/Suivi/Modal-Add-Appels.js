@@ -194,13 +194,14 @@ function ModalAddAppels(props) {
             <Form.Control
               as="textarea"
               rows={3}
+              className="uk-input"
               onChange={(e) => onChangeDescription(e)}
             />
           </>
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={handleClose}>Close</Button>
-          <Button onClick={onSent}>Save Changes</Button>
+          <Button onClick={handleClose}>Fermer</Button>
+          <Button onClick={onSent}>Sauver</Button>
         </Modal.Footer>
       </Modal>
     </>

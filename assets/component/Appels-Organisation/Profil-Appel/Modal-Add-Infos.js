@@ -106,7 +106,9 @@ function ModalAddLieux(props) {
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Ajouter une information</Modal.Title>
+          <Modal.Title>
+            <h6>Ajouter une information</h6>
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {" "}
@@ -131,6 +133,7 @@ function ModalAddLieux(props) {
               <input
                 type="date"
                 id="inputValueSpécifique"
+                className="uk-input"
                 onChange={(e) => setSpecificValueInput(e.target.value)}
                 aria-describedby="valueSpécifique"
               />
@@ -138,6 +141,7 @@ function ModalAddLieux(props) {
               <input
                 type="text"
                 id="inputValueSpécifique"
+                className="uk-input"
                 onChange={(e) => setSpecificValueInput(e.target.value)}
                 aria-describedby="valueSpécifique"
               />
@@ -146,6 +150,7 @@ function ModalAddLieux(props) {
             <Form.Label htmlFor="inputValue">Commentaire</Form.Label>
             <Form.Control
               as="textarea"
+              className="uk-input"
               onChange={(e) => setCommentaire(e.target.value)}
               rows={3}
               id="comment-value"
@@ -154,8 +159,10 @@ function ModalAddLieux(props) {
         </Modal.Body>
         <Modal.Footer>
           {isSentRepport && <FontAwesomeIcon icon={faCheck} />}
-          <Button onClick={handleClose}>Close</Button>
-          <Button onClick={handleSave}>Save Changes</Button>
+          <Button onClick={handleClose}>Fermer</Button>
+          <Button onClick={handleSave} className="btn-metis">
+            Sauver
+          </Button>
         </Modal.Footer>
       </Modal>
     </>

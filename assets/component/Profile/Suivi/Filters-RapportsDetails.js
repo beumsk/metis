@@ -73,7 +73,7 @@ function FilterRapportDetails(props) {
     <>
       <div className="search-textRapport row">
         <div className="col-sm-4">
-          <label class="uk-form-label">Description de rapport</label>
+          <label className="uk-form-label">Description de rapport</label>
           <input
             type="text"
             className="uk-input"
@@ -82,7 +82,7 @@ function FilterRapportDetails(props) {
           />
         </div>
         <div className="search-textRapport col-sm-4">
-          <label class="uk-form-label">Type de rapport</label>
+          <label className="uk-form-label">Type de rapport</label>
           <Form.Select
             defaultValue={filterTypeOfReports}
             className="uk-select"
@@ -95,7 +95,7 @@ function FilterRapportDetails(props) {
           </Form.Select>
         </div>
         <div className="search-textRapport col-sm-4">
-          <label class="uk-form-label">Rechercher part date</label>
+          <label className="uk-form-label">Rechercher part date</label>
           <input
             type="date"
             className="uk-select"
@@ -107,7 +107,7 @@ function FilterRapportDetails(props) {
           <div className="col-sm-6">
             <button
               onClick={(e) => onChangeRapportFilter(e)}
-              class="uk-button uk-button-default mt-4"
+              className="uk-button uk-button-default mt-4"
             >
               Filtrer
             </button>

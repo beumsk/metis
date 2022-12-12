@@ -124,7 +124,9 @@ function ModalEditInfos(props) {
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Modifier une information</Modal.Title>
+          <Modal.Title>
+            <h6>Modifier une information</h6>
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {" "}
@@ -145,6 +147,7 @@ function ModalEditInfos(props) {
             <input
               type="text"
               id="inputValueSpécifique"
+              className="uk-input"
               onChange={(e) => setSpecificValueInput(e.target.value)}
               aria-describedby="valueSpécifique"
             />
@@ -193,13 +196,16 @@ function ModalEditInfos(props) {
               as="textarea"
               onChange={(e) => setCommentaire(e.target.value)}
               rows={3}
+              className="uk-input"
               id="comment-value"
             />
           </>
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={handleClose}>Close</Button>
-          <Button onClick={handleSave}>Save Changes</Button>
+          <Button onClick={handleClose}>Fermer</Button>
+          <Button onClick={handleSave} className="btn-metis">
+            Sauver
+          </Button>
         </Modal.Footer>
       </Modal>
     </>

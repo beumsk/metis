@@ -821,7 +821,7 @@ function EditReportMeet(props) {
                       ></AddSoinsByReport>
                       {formSoins && formSoins.length > 1 && (
                         <button
-                          class="uk-button uk-button-default"
+                          className="uk-button uk-button-default"
                           onClick={(e) => onClickDeleteOnCare(form.id)}
                         >
                           Supprimer un autre soin
@@ -831,7 +831,7 @@ function EditReportMeet(props) {
                   ))}
 
                   <button
-                    class="uk-button uk-button-default"
+                    className="uk-button uk-button-default"
                     onClick={(e) => onClickOnCare({ id: formSoins.length })}
                   >
                     Ajouter un autre soin
@@ -888,7 +888,7 @@ function EditReportMeet(props) {
                       ></AddActivitiesByReport>
                       {formActivities && formActivities.length > 1 && (
                         <button
-                          class="uk-button uk-button-default"
+                          className="uk-button uk-button-default"
                           onClick={(e) => onClickDeleteActivitiesForm(form.id)}
                         >
                           Supprimer un autre soin
@@ -897,7 +897,7 @@ function EditReportMeet(props) {
                     </>
                   ))}
                   <button
-                    class="uk-button uk-button-default"
+                    className="uk-button uk-button-default"
                     onClick={(e) =>
                       onClickAddActivities({ id: formActivities.length })
                     }
@@ -963,7 +963,7 @@ function EditReportMeet(props) {
                         formIndicateurs[0].indicateursFormHestiaRisqueDeces !==
                           null) && (
                         <button
-                          class="uk-button uk-button-default"
+                          className="uk-button uk-button-default"
                           onClick={(e) =>
                             onClickDeleteIndicateursForm(idx, form.id)
                           }
@@ -974,7 +974,7 @@ function EditReportMeet(props) {
 
                       {formIndicateurs && formIndicateurs.length < 3 && (
                         <button
-                          class="uk-button uk-button-default"
+                          className="uk-button uk-button-default"
                           onClick={(e) =>
                             onClickAddIndicateurs({
                               id: formIndicateurs.length,
@@ -991,7 +991,7 @@ function EditReportMeet(props) {
             </div>
           </Form.Group>
 
-          <Form.Label htmlFor="inputValue" class="uk-form-label">
+          <Form.Label htmlFor="inputValue" className="uk-form-label">
             Type de rencontre
           </Form.Label>
           <Form.Select
@@ -1011,7 +1011,7 @@ function EditReportMeet(props) {
           </Form.Select>
         </>
       )}
-      <Form.Label htmlFor="inputValue" class="uk-form-label">
+      <Form.Label htmlFor="inputValue" className="uk-form-label">
         Date de la rencontre
       </Form.Label>
 

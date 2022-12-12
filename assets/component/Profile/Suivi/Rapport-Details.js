@@ -147,7 +147,7 @@ function RapportDetails(props) {
                     label="Activer le mode édition"
                   />
                   {r && r.activityType === 1 && (
-                    <h3 class="uk-card-title">
+                    <h3 className="uk-card-title">
                       {" "}
                       <FontAwesomeIcon
                         icon={faFilePen}
@@ -158,7 +158,7 @@ function RapportDetails(props) {
                   )}
 
                   {r && r.activityType === 2 && (
-                    <h3 class="uk-card-title">
+                    <h3 className="uk-card-title">
                       <FontAwesomeIcon
                         icon={faPhone}
                         style={{ marginRight: "1rem" }}
@@ -168,7 +168,7 @@ function RapportDetails(props) {
                   )}
 
                   {r && r.activityType === 4 && (
-                    <h3 class="uk-card-title">
+                    <h3 className="uk-card-title">
                       <FontAwesomeIcon
                         icon={faPhone}
                         style={{ marginRight: "1rem" }}

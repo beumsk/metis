@@ -52,7 +52,7 @@ function ModalCallMissing(props) {
             Close
           </Button>
           <Button variant="primary" onClick={handleSave}>
-            Save Changes
+            Sauver
           </Button>
         </Modal.Footer>
       </Modal>

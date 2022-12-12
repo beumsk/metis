@@ -93,8 +93,8 @@ const ProfilContact = () => {
             <p>{contactInformation?.description}</p>
           </div>
 
-          <div className="row coordonnes-body">
-            <Table>
+          <div className="row coordonnes-body mb-4">
+            <table class="uk-table uk-table-striped">
               <h6>Infos</h6>
               {contactInformation?.informations.map((contInfo) => (
                 <tr>
@@ -145,11 +145,11 @@ const ProfilContact = () => {
                   <td></td>
                 </tr>
               ))}
-            </Table>
+            </table>
           </div>
 
           <div className="row coordonnes-body">
-            <Table>
+            <table class="uk-table uk-table-striped">
               <h6>Patients liées</h6>
               {contactInformation?.patients.map((e) => (
                 <tr>
@@ -157,11 +157,13 @@ const ProfilContact = () => {
                     {e.firstName} {e.lastName}
                   </td>
                   <td>
-                    <Link to={"/" + e.id}>Aller au Profil</Link>
+                    <Link to={"/" + e.id} className="uk-link-muted">
+                      Aller au Profil
+                    </Link>
                   </td>
                 </tr>
               ))}
-            </Table>
+            </table>
           </div>
         </div>
       </section>

@@ -110,7 +110,9 @@ function ModalEditContact(props) {
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Modifier une information</Modal.Title>
+          <Modal.Title>
+            <h6>Modifier une information</h6>
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {" "}
@@ -144,7 +146,8 @@ function ModalEditContact(props) {
 
             {props.infosAppels.value === "Date de naissance" ? (
               <input
-                type="date"
+                type="text"
+                className="uk-input"
                 id="inputValueSpécifique"
                 onChange={(e) => setSpecificValueInput(e.target.value)}
                 aria-describedby="valueSpécifique"
@@ -157,6 +160,7 @@ function ModalEditContact(props) {
             ) : (
               <input
                 type="text"
+                className="uk-input"
                 id="inputValueSpécifique"
                 onChange={(e) => setSpecificValueInput(e.target.value)}
                 defaultValue={
@@ -174,6 +178,7 @@ function ModalEditContact(props) {
               onChange={(e) => setCommentaire(e.target.value)}
               rows={3}
               id="comment-value"
+              className="uk-input"
               defaultValue={
                 props?.infosAppels?.valueDescription !== null
                   ? props?.infosAppels?.valueDescription
@@ -184,8 +189,10 @@ function ModalEditContact(props) {
         </Modal.Body>
         <Modal.Footer>
           {isSentRepport && <FontAwesomeIcon icon={faCheck} />}
-          <Button onClick={handleClose}>Close</Button>
-          <Button onClick={handleSave}>Save Changes</Button>
+          <Button onClick={handleClose}>Fermer</Button>
+          <Button onClick={handleSave} className="btn-metis">
+            Sauver
+          </Button>
         </Modal.Footer>
       </Modal>
     </>

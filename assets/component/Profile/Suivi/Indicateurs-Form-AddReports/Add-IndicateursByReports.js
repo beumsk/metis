@@ -189,7 +189,7 @@ function AddIndicateursByReport(props) {
   return (
     <>
       <div className="addSoins-form">
-        <Form.Label htmlFor="inputValue" class="uk-form-label">
+        <Form.Label htmlFor="inputValue" className="uk-form-label">
           Type: {typeCVCSelected}
         </Form.Label>
         {typeCVCSelected === null && (
