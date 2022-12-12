@@ -36,24 +36,22 @@ class ContactsController extends AbstractController
     #[Route('/api/getContacts', name: 'app_listContacts')]
     public function listContacts(ManagerRegistry $doctrine, SerializerInterface $serializer): Response
     {
-        $contacts = $doctrine->getRepository(Contacts::class)->findAll();
+
+        $entityManager = $doctrine->getManager();
+        $request = Request::createFromGlobals();
+
+
+        $tags = $request->request->get('tags');
+        $contacts = $doctrine->getRepository(Contacts::class)->findAllContacts($tags);
         $encoders = [new JsonEncoder()];
         $normalizers = [new DateTimeNormalizer(), new ObjectNormalizer()];
         $serializer = new Serializer($normalizers, $encoders);
 
         $calls = [];
-        foreach ($contacts as $value) {
-            $calls[] = [
-                "id" => $value->getId(),
-                "firstname" => $value->getFirstName(),
-                "lastname" => $value->getLastName(),
-                "orga" => $value->getOrga()
-            ];
-        }
 
 
 
-        $jsonObject = $serializer->serialize($calls, 'json', [
+        $jsonObject = $serializer->serialize($contacts, 'json', [
             'circular_reference_handler' => function ($object) {
                 return $object->getId();
             },

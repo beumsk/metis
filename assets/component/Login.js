@@ -61,13 +61,13 @@ const Login = () => {
       }
     } catch (err) {
       if (!err?.response) {
-        setErrMsg("No Server Response");
+        setErrMsg("Erreur de serveur");
       } else if (err.response?.status === 400) {
-        setErrMsg("Missing Username or Password");
+        setErrMsg("E-mail et mot de passe manquant");
       } else if (err.response?.status === 401) {
-        setErrMsg("Unauthorized");
+        setErrMsg("Non autorisée");
       } else {
-        setErrMsg("Login Failed");
+        setErrMsg("Mauvais login");
       }
       errRef.current.focus();
     }
@@ -121,14 +121,14 @@ const Login = () => {
             />
             <label htmlFor="persist">Se souvenir de moi</label>
           </div>
+          <p
+            ref={errRef}
+            className={errMsg ? "errmsg" : "offscreen"}
+            aria-live="assertive"
+          >
+            {errMsg}
+          </p>
         </form>
-        <p
-          ref={errRef}
-          className={errMsg ? "errmsg" : "offscreen"}
-          aria-live="assertive"
-        >
-          {errMsg}
-        </p>
       </div>
     </div>
   );

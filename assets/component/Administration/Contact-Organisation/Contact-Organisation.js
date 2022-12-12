@@ -22,18 +22,46 @@ function ContactOrganisations() {
   formData.append("page", lengthList.toString());
   const columns = [
     {
-      dataField: "id",
-      text: "Product ID",
+      dataField: "typeLabel",
+      text: "Type",
       sort: true,
+      formatter: (cell, row, rowIndex, extraData) => <div>{row.typeLabel}</div>,
     },
     {
-      dataField: "lastname",
+      dataField: "lastname + firstname",
       text: "Nom",
       sort: true,
+      formatter: (cell, row, rowIndex, extraData) => (
+        <div>
+          {row.lastname} {row.firstname}
+        </div>
+      ),
+    },
+    {
+      dataField: "organisation",
+      text: "Organisation",
+      sort: true,
+      formatter: (cell, row, rowIndex, extraData) => (
+        <div>{row.organisation}</div>
+      ),
+    },
+    {
+      dataField: "nb_calls",
+      text: "Nombre d'appels",
+      sort: true,
+      formatter: (cell, row, rowIndex, extraData) => <div>{row.nb_calls}</div>,
+    },
+    {
+      dataField: "nb_patients",
+      text: "Nombre de patients",
+      sort: true,
+      formatter: (cell, row, rowIndex, extraData) => (
+        <div>{row.nb_patients}</div>
+      ),
     },
     {
       dataField: "Détails",
-      text: "Product Price",
+      text: "Détails",
       formatter: (cell, row, rowIndex, extraData) => (
         <div>
           <a href={"/profil-contact/" + row.id}>Détails</a>

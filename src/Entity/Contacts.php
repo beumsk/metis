@@ -244,7 +244,6 @@ class Contacts
     public function removeInformation(ContactsInformation $information): self
     {
         if ($this->informations->removeElement($information)) {
-            // set the owning side to null (unless already changed)
             if ($information->getContact() === $this) {
                 $information->setContact(null);
             }

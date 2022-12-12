@@ -3,9 +3,10 @@
 namespace App\Repository;
 
 use App\Entity\Contacts;
+use App\Entity\FollowupReports;
 use App\Entity\ContactsInformation;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @extends ServiceEntityRepository<Contacts>
@@ -99,9 +100,9 @@ class ContactsRepository extends ServiceEntityRepository
      */
     public function findBirthdays($month)
     {
-       
+
         $conn = $this->getEntityManager()->getConnection();
-     
+
         $query = '                      
                 SELECT c.*, ci.value as birthdate
                 FROM contacts c
@@ -115,13 +116,13 @@ class ContactsRepository extends ServiceEntityRepository
                 ORDER BY birthdate 
             ';
 
-        
+
         $stmt = $conn->prepare($query);
         $resultSet = $stmt->executeQuery();
 
-      
 
-       
+
+
         return $resultSet->fetchAllAssociative();
     }
 
@@ -144,5 +145,46 @@ class ContactsRepository extends ServiceEntityRepository
             ]);
 
         return $qb->getQuery()->getResult();
+    }
+
+    public function findAllContacts($tags = null)
+    {
+
+        $conn = $this->getEntityManager()->getConnection();
+        // dd(json_decode($tags));
+        $query_tags = ' ';
+        $join = ' ';
+        if ($tags) {
+            $query_tags = ' AND t.id IN (' . implode(",", json_decode($tags)) . ') ';
+            $join = ' LEFT JOIN ( 
+                                    SELECT ci.cont_id, s.value, s.id
+                                    FROM suggestions s 
+                                    INNER JOIN contacts_information ci ON s.id = ci.sugg_id 
+                                    WHERE s.path_string LIKE "' . Contacts::TAGS_PATH . '%" AND ci.deleted_at is null
+                                ) t ON c.id = t.cont_id';
+        }
+
+        $query = 'SELECT 
+                    CASE c.type WHEN 2 THEN "Physique" ELSE "Morale" END as typeLabel,
+                    (select o.lastname FROM contacts o WHERE o.id = c.orga_id) as organisation,          
+                    c.firstname, c.lastname, c.id as id, c.orga_id,
+                    (select count(r.id) from followup_reports r 
+                    inner join followup_report_contact rc on r.id = rc.fore_id 
+                    where r.activity_type in (' . implode(",", [FollowupReports::ACTIVITY_CALL_OUT, FollowupReports::ACTIVITY_CALL_IN]) . ')' .  ' and r.deleted_at is null and rc.cont_id = c.id) as nb_calls,
+                    (select count(pc.id) from patients_contacts pc where pc.cont_id = c.id AND pc.deleted_at is null) as nb_patients
+                    FROM contacts c ' . $join . '
+                    WHERE c.type IN (' . implode(",", [Contacts::TYPE_PERSON, Contacts::TYPE_ORGANISATION]) . ')' .
+            $query_tags . 'AND (c.deleted_at IS NULL)
+                    GROUP BY c.id
+                    ORDER BY lastname asc, firstname asc';
+
+        // (select count(f.fogo_id) from followup_goals f where f.cont_id = c.cont_id AND f.delete_at is null) as nb_calls,
+        $stmt = $conn->prepare($query);
+        $resultSet = $stmt->executeQuery();
+
+
+
+
+        return $resultSet->fetchAllAssociative();
     }
 }
