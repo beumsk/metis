@@ -46,7 +46,7 @@ function EditNoReportMeet(props) {
                 ))}
               </>
             ) : (
-              <h6>Pas d'activitées</h6>
+              <p>Pas d'activitées</p>
             )}
           </div>
           <div className="row-care mb-2">

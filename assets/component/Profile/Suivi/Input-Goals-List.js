@@ -34,7 +34,6 @@ function InputGoalsList(props) {
   const onChangeContact = (e) => {
     props.onChange(e.target.value);
   };
-  console.log(props?.goals?.data);
 
   return (
     <>

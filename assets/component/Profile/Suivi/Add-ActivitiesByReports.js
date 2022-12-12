@@ -21,7 +21,7 @@ function AddActivitiesByReport(props) {
   const [auth, setAuth] = useState(useAuth());
   let id = useParams().id;
   var formData = new FormData();
-  formData.append("id", 57);
+  formData.append("id", 106);
   //   formData.append("pathString", props.link);
   const [contacts, setContacts] = useState(null);
   const [places, setPlaces] = useState(null);

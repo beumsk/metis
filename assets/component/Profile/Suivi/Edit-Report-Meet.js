@@ -595,6 +595,7 @@ function EditReportMeet(props) {
         // location.replace(window.location.origin + "/" + idPatient);
         // const [isSentGoals, setSentGoals] = useState(false);
         // const [isSentRepport, setSentRepport] = useState(false);
+        props.onChangeReportMeet(true);
         setSentRepport(true);
       })
       .catch(function (response) {

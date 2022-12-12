@@ -79,6 +79,44 @@ function RapportDetails(props) {
       .catch(function (response) {});
   }, [idPatient]);
 
+  function onChangeReport(e) {
+    axios({
+      method: "post",
+      url: "/api/suggestionsById",
+      data: formData,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    })
+      .then(function (response) {
+        setType(response);
+      })
+      .catch(function (response) {});
+
+    axios({
+      method: "post",
+      url: "/api/getFollowUpReportsById",
+      data: reportData,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    })
+      .then(function (response) {
+        setInformations(response);
+        // for (
+        //   let index = 0;
+        //   index < document.querySelectorAll(".switcher").length;
+        //   index++
+        // ) {
+        //   const element = document.querySelectorAll(".form-check-input")[index];
+        //   element.click();
+        // }
+        // document.querySelectorAll(".switcher")[0].click();
+      })
+      .catch(function (response) {});
+  }
   function onChangeFilter(e) {
     setInformations(e);
   }
@@ -184,6 +222,7 @@ function RapportDetails(props) {
                       goals={props?.goals}
                       contacts={props?.contacts}
                       places={props?.places}
+                      onChangeReportMeet={onChangeReport}
                       indicatorsResponse={r.followupReportsIndicators}
                     ></EditReportMeet>
                   )}
