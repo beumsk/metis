@@ -99,7 +99,9 @@ class ContactsRepository extends ServiceEntityRepository
      */
     public function findBirthdays($month)
     {
+       
         $conn = $this->getEntityManager()->getConnection();
+     
         $query = '                      
                 SELECT c.*, ci.value as birthdate
                 FROM contacts c
@@ -108,18 +110,18 @@ class ContactsRepository extends ServiceEntityRepository
                 INNER JOIN suggestions s ON ite.suge_id = s.id 
                 WHERE s.path_string = "' . ContactsInformation::INFO_BIRTHDATE . '"
                 AND (c.deleted_at IS NULL) AND ci.deleted_at IS NULL
-                GROUP BY MONTH(birthdate), birthdate 
+               
                 HAVING MONTH(birthdate) = "' . $month . '"
                 ORDER BY birthdate 
             ';
 
-
+        
         $stmt = $conn->prepare($query);
         $resultSet = $stmt->executeQuery();
 
+      
 
-
-        // returns an array of arrays (i.e. a raw data set)
+       
         return $resultSet->fetchAllAssociative();
     }
 

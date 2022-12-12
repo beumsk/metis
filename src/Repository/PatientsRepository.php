@@ -145,7 +145,11 @@ class PatientsRepository extends ServiceEntityRepository
 
         $conn = $this->getEntityManager()->getConnection();
         $query = '                      
-                SELECT p.*
+                SELECT any_value(p.birthdate) as birthdate, 
+                any_value(p.firstname) as firstname, 
+                any_value(p.lastname) as lastname, 
+                any_value(p.status) as status,
+                any_value(p.id) as id
                 FROM patients p                                      
                 WHERE p.deleted_at is null AND p.antenna = "' . $antenna  . '"      
                 GROUP BY MONTH(birthdate), birthdate                 

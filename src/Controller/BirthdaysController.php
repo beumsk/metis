@@ -23,6 +23,7 @@ class BirthdaysController extends AbstractController
         $patientRepository = $doctrine->getRepository(Patients::class);
 
 
+    
         $months = [date('m'), date('m', strtotime('+1 month')), date('m', strtotime('+2 month'))];
 
         $p_bdays = $isPatiBirthday = $ages = [];
@@ -46,7 +47,7 @@ class BirthdaysController extends AbstractController
                 else $isPatiBirthday[$patient['id']] = false;
             }
         }
-
+     
         // $isContBirthday = [];
         // foreach ($c_bdays as $timestamp => $contacts) {
         //     foreach ($contacts as $contact) {
@@ -65,7 +66,7 @@ class BirthdaysController extends AbstractController
             'isPatientBirthday' => $isPatiBirthday,
             // 'isContactBirthday' => $isContBirthday,
         ];
-
+    
         $response = new Response(json_encode($jsonObject), 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
         // $response->setSharedMaxAge(3600);
         return $response;

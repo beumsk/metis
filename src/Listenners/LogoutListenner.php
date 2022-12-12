@@ -4,7 +4,7 @@ namespace App\Listenners;
 
 use Symfony\Component\Security\Http\Event\LogoutEvent;
 
-class LogoutListener
+class LogoutListenner
 {
 
     public function onSymfonyComponentSecurityHttpEventLogoutEvent(LogoutEvent $event)

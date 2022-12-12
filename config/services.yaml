@@ -13,8 +13,16 @@ services:
     App\DataFixtures\:
         resource: '%kernel.project_dir%/src/DataFixtures'
         tags: ['doctrine.fixture.orm']
+    exception_subscriber:
+        class: App\EventListener\ExceptionListener
+        arguments:
+            - "@logger"
+        tags:
+            - { name: kernel.event_subscriber }
   
-
+    App\EventListener\ExceptionListener:
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception }
 when@test:
     services:
         test.user_password_hasher:
