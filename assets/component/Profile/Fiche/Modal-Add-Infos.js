@@ -23,6 +23,7 @@ function ModalEditInfos(props) {
   const [infos, setInfos] = useState(null);
   const [elementsOpt, setElementsOpt] = useState(null);
   const [idPatient, setIdPatient] = useState(id);
+  const [error, setError] = useState(null);
   const [responseDatas, setResponseDatas] = useState(null);
   const [start, setStartDate] = useState(
     props?.infosPatient?.start !== null ? props?.infosPatient?.start : null
@@ -65,10 +66,21 @@ function ModalEditInfos(props) {
   const handleSave = (e) => {
     let formData = new FormData();
     // value-sugg
+    if (valueSelect) {
+      formData.append("valueSelect", valueSelect);
+      setError(null);
+    } else {
+      setError("Valeur obligatoire");
+    }
 
-    formData.append("valueSelect", valueSelect);
-    formData.append("specificValueInput", specificValueInput);
-    formData.append("commentaireInput", commentaireInput);
+    if (specificValueInput) {
+      formData.append("specificValueInput", specificValueInput);
+    }
+
+    if (commentaireInput) {
+      formData.append("commentaireInput", commentaireInput);
+    }
+
     formData.append("start", start);
     formData.append("end", end);
     formData.append("idInfo", props?.infosPatient?.id);
@@ -78,43 +90,48 @@ function ModalEditInfos(props) {
 
     var formGetInfos = new FormData();
     formGetInfos.append("id", id.toString());
-    axios({
-      method: "post",
-      url: "/api/setPatientInformation",
-      data: formData,
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${auth.auth.accessToken}`,
-      },
-    }).then(function (response) {
-      if (response) {
-        axios({
-          method: "post",
-          url: "/api/patientsInformationByPatients",
-          data: formGetInfos,
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${auth.auth.accessToken}`,
-          },
-        })
-          .then(function (response) {
-            setResponseDatas(response.data);
-            setIsSentRepport(true);
-            document.querySelectorAll(".btn-close")[0].click();
-          })
-          .catch(function (response) {});
-        // document.querySelectorAll(".btn-close")[0].click();
-        // location.replace(window.location.origin + "/" + idPatient);
-      }
-    });
+
+    if (error === null) {
+      axios({
+        method: "post",
+        url: "/api/setPatientInformation",
+        data: formData,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${auth.auth.accessToken}`,
+        },
+      }).then(function (response) {
+        props.onChange(response);
+        // if (response) {
+        //   axios({
+        //     method: "post",
+        //     url: "/api/patientsInformationByPatients",
+        //     data: formGetInfos,
+        //     headers: {
+        //       "Content-Type": "application/json",
+        //       Authorization: `Bearer ${auth.auth.accessToken}`,
+        //     },
+        //   })
+        //     .then(function (response) {
+        //       setResponseDatas(response.data);
+        //       setIsSentRepport(true);
+        //       document.querySelectorAll(".btn-close")[0].click();
+        //     })
+        //     .catch(function (response) {});
+        //   // document.querySelectorAll(".btn-close")[0].click();
+        //   // location.replace(window.location.origin + "/" + idPatient);
+        // }
+      });
+    }
   };
 
-  if (responseDatas !== null) {
-    props.onChange({
-      response: responseDatas,
-    });
-    // document.querySelectorAll(".btn-close")[0].click();
-  }
+  // if (responseDatas !== null) {
+  //   props.onChange({
+  //     response: responseDatas,
+  //   });
+  //   // setShow(false);
+  //   document.querySelectorAll(".btn-close")[0].click();
+  // }
 
   return (
     <>
@@ -134,6 +151,7 @@ function ModalEditInfos(props) {
             <Form.Label htmlFor="inputValue">Valeur</Form.Label>
             <Form.Select
               size="lg"
+              className="uk-select"
               onChange={(e) => setValueSelect(e.target.value)}
               id="value-sugg"
             >
@@ -161,6 +179,7 @@ function ModalEditInfos(props) {
               <>
                 <Form.Control
                   type="date"
+                  className="uk-select"
                   placeholder="Here edit the release date"
                   onChange={handleInputChange}
                   id="inputValueSpécifique"
@@ -169,6 +188,7 @@ function ModalEditInfos(props) {
             ) : (
               <Form.Control
                 type="date"
+                className="uk-select"
                 placeholder="Here edit the release date"
                 onChange={handleInputChange}
                 id="inputValueSpécifique"
@@ -180,6 +200,7 @@ function ModalEditInfos(props) {
             {end ? (
               <Form.Control
                 type="date"
+                className="uk-select"
                 onChange={handleInputChange}
                 id="inputValueSpécifique"
               />
@@ -188,6 +209,7 @@ function ModalEditInfos(props) {
                 type="date"
                 onChange={handleInputChange}
                 id="inputValueSpécifique"
+                className="uk-select"
               />
             )}
 
@@ -202,6 +224,7 @@ function ModalEditInfos(props) {
           </>
         </Modal.Body>
         <Modal.Footer>
+          {error && <p>{error}</p>}
           <Button onClick={handleClose}>Fermer</Button>
           <Button onClick={handleSave} className="btn-metis">
             Sauver

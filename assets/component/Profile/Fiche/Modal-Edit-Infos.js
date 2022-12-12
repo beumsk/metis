@@ -136,7 +136,9 @@ function ModalEditInfos(props) {
               size="lg"
               onChange={(e) => setValueSelect(e.target.value)}
               id="value-sugg"
+              className="uk-select"
             >
+              <option value={null}>Choissisez votre valeur</option>
               {elementsOpt?.map((el, id) => (
                 <option
                   key={el.id}
@@ -172,6 +174,7 @@ function ModalEditInfos(props) {
                   placeholder="Here edit the release date"
                   onChange={handleInputChange}
                   id="inputValueSpécifique"
+                  className="uk-select"
                 />
               </>
             ) : (
@@ -183,6 +186,7 @@ function ModalEditInfos(props) {
                 placeholder="Here edit the release date"
                 onChange={handleInputChange}
                 id="inputValueSpécifique"
+                className="uk-select"
               />
             )}
 
@@ -194,6 +198,7 @@ function ModalEditInfos(props) {
                 defaultValue={new Date(end).toISOString().substring(0, 10)}
                 onChange={handleInputChange}
                 id="inputValueSpécifique"
+                className="uk-select"
               />
             ) : (
               <Form.Control
@@ -201,6 +206,7 @@ function ModalEditInfos(props) {
                 defaultValue={new Date(end).toISOString().substring(0, 10)}
                 onChange={handleInputChange}
                 id="inputValueSpécifique"
+                className="uk-select"
               />
             )}
 

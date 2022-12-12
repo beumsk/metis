@@ -73,9 +73,21 @@ const Fiche = () => {
     // document.querySelectorAll(".btn-close")[0].click();
   };
   const onChangeAddPatientInformation = (e) => {
-    setInformation(e);
+    axios({
+      method: "post",
+      url: "/api/patientsInformationByPatients",
+      data: formData,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    })
+      .then(function (response) {
+        setInformation(response.data);
+      })
+      .catch(function (response) {});
 
-    // document.querySelectorAll(".btn-close")[0].click();
+    document.querySelectorAll(".btn-close")[0].click();
   };
   return (
     <section>

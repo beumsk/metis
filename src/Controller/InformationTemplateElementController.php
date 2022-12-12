@@ -2,19 +2,25 @@
 
 namespace App\Controller;
 
-use App\Entity\InformationTemplateElement;
-use App\Entity\PatientsInformation;
+use App\Entity\User;
 use App\Entity\Patients;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Entity\Suggestions;
+use App\Entity\PatientsInformation;
+use App\Entity\InformationTemplateBlock;
+use Doctrine\Persistence\ManagerRegistry;
+use App\Entity\InformationTemplateElement;
+use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Entity\User;
-use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\HttpFoundation\Request;
-use App\Entity\InformationTemplateBlock;
-use App\Entity\Suggestions;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
+use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 
 class InformationTemplateElementController extends AbstractController
@@ -29,9 +35,12 @@ class InformationTemplateElementController extends AbstractController
 
         $idInfo = $request->request->get('idInfo');
 
-        $valueSelect = $request->request->get('valueSelect');
-        $specificValueInput = $request->request->get('specificValueInput');
-        $commentaireInput = $request->request->get('commentaireInput');
+
+        $valueSelect = ($request->request->get('valueSelect') !== "null") ? $request->request->get('valueSelect') : null;
+
+
+        $specificValueInput = ($request->request->get('specificValueInput') !== "null") ? $request->request->get('specificValueInput') : null;
+        $commentaireInput = ($request->request->get('commentaireInput') !== "null") ? $request->request->get('commentaireInput') : null;
         $start = $request->request->get('start');
         $end = $request->request->get('end');
 
@@ -80,7 +89,7 @@ class InformationTemplateElementController extends AbstractController
     }
 
     #[Route('/api/setPatientInformation', name: 'app_setPatientInformation')]
-    public function setPatientInformation(ManagerRegistry $doctrine, Request $request): JsonResponse
+    public function setPatientInformation(ManagerRegistry $doctrine, Request $request, SerializerInterface $serializer): Response
     {
         $entityManager = $doctrine->getManager();
         $request = Request::createFromGlobals();
@@ -121,7 +130,21 @@ class InformationTemplateElementController extends AbstractController
 
         $entityManager->flush();
 
-        return $this->json($patientInfo);
+
+        $encoders = [new JsonEncoder()];
+        $normalizers = [new DateTimeNormalizer(), new ObjectNormalizer()];
+        $serializer = new Serializer($normalizers, $encoders);
+
+
+        $jsonObject = $serializer->serialize($patientInfo, 'json', [
+            'circular_reference_handler' => function ($object) {
+                return $object->getId();
+            },
+            AbstractNormalizer::IGNORED_ATTRIBUTES => ["contacts", "pati", "sugg", "orga", "calls", "user", "informations", "fore", "contact"]
+        ]);
+
+
+        return new Response($jsonObject, 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
     }
     #[Route('/api/findElAndBlckAndValByPatient', name: 'app_information')]
     public function index(ManagerRegistry $doctrine, Request $request): Response

@@ -36,9 +36,8 @@ const BlockInfos = (props) => {
     }
   }
   function onChangePatientInformation(e) {
-    if (e && e.response) {
-      props.onChangeAddPati(e.response);
-    }
+    props.onChangeAddPati(e);
+
     // props.onChangeAddPati(e.response);
   }
 
@@ -83,7 +82,9 @@ const BlockInfos = (props) => {
                           </p>
                         </div>
 
-                        <div className="col-sm-6">{pi?.comment}</div>
+                        <div className="col-sm-6">
+                          <p>{pi?.value}</p>
+                        </div>
                       </div>
                     ))}
                   </>
@@ -93,7 +94,7 @@ const BlockInfos = (props) => {
                 <ModalAddInfos
                   link={props.link}
                   infos={patient}
-                  onChange={(e) => onChangePatientInformation(e)}
+                  onChange={onChangePatientInformation}
                 />
               </div>
             </div>

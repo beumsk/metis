@@ -218,7 +218,7 @@ class PatientsController extends AbstractController
             'circular_reference_handler' => function ($object) {
                 return $object->getId();
             },
-            AbstractNormalizer::IGNORED_ATTRIBUTES => ["contacts", "pati", "sugg", "orga", "calls", "user", "informations", "fore", "contact"]
+            AbstractNormalizer::IGNORED_ATTRIBUTES => ["contacts", "pati", "orga", "calls", "user", "informations", "fore", "contact"]
         ]);
 
 

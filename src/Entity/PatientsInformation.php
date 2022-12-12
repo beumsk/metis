@@ -65,8 +65,8 @@ class PatientsInformation
     #[ORM\Column(type: Types::SMALLINT, nullable: true)]
     private ?int $end_inaccurate = null;
 
-
-    #[ORM\ManyToOne]
+    #[ORM\ManyToOne(targetEntity: 'InformationTemplateElement', cascade: ["all"], fetch: "EAGER")]
+    #[ORM\JoinColumn(name: "itel_id", referencedColumnName: "id", nullable: true, onDelete: "SET NULL")]
     private ?InformationTemplateElement $itel = null;
 
     public function getId(): ?int
