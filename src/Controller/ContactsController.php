@@ -33,6 +33,37 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class ContactsController extends AbstractController
 {
 
+    #[Route('/api/addContact', name: 'app_addContact')]
+    public function addContact(ManagerRegistry $doctrine, SerializerInterface $serializer)
+    {
+
+        $entityManager = $doctrine->getManager();
+        $request = Request::createFromGlobals();
+
+        $type = $request->request->get('type');
+        $lastName = $request->request->get('name');
+        $firstname = $request->request->get('firstname');
+        $orga_id = $request->request->get('organisation');
+        $url = $request->request->get('url');
+        $description = $request->request->get('description');
+
+        $contact = new Contacts();
+        $organisation = $doctrine->getRepository(Contacts::class)->find($orga_id);
+        $contact->setOrga($organisation);
+        $contact->setFirstname($firstname);
+        $contact->setLastname($lastName);
+        $contact->setType($type);
+        $contact->setUrl($url);
+        $contact->setDescription($description);
+        $entityManager->persist($contact);
+        $entityManager->flush();
+
+
+
+
+        return $this->json($contact->getId());
+    }
+
     #[Route('/api/getContacts', name: 'app_listContacts')]
     public function listContacts(ManagerRegistry $doctrine, SerializerInterface $serializer): Response
     {

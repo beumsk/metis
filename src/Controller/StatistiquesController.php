@@ -15,8 +15,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class StatistiquesController extends AbstractController
 {
-    const SERVERNAME = "127.0.0.1:3306";
-    const USERNAME = "root";
+    const SERVERNAME = "51.75.124.242:3306";
+    const USERNAME = "DoloresHaze";
     const PASSWORD = "Foutaise.1";
     const DBNAME = "metisapp";
 

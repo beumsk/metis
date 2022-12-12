@@ -12,6 +12,7 @@ import ToolkitProvider, {
 import Pagination from "react-js-pagination";
 import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
 import paginationFactory from "react-bootstrap-table2-paginator";
+import ModalAddContact from "./Modal-Add-Contacts";
 function ContactOrganisations() {
   const { SearchBar } = Search;
   const [auth, setAuth] = useState(useAuth());
@@ -91,13 +92,36 @@ function ContactOrganisations() {
   };
 
   function onChangeUpdateContact(e) {
-    props.onChangeUpdateContact(e);
+    // props.onChangeUpdateContact(e);
+    console.log(e);
+    axios({
+      method: "post",
+      url: "/api/getContacts",
+      data: formData,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    })
+      .then(function (response) {
+        //handle success
+        setListContacts(response);
+      })
+      .catch(function (response) {});
+    // setListContacts(e);
   }
 
   return (
     <>
       <Menu></Menu>
       <div className="container container-patients row mx-auto ">
+        <div className="row-btn">
+          <ModalAddContact
+            listOrganisation={listContacts}
+            onChangeContacts={onChangeUpdateContact}
+          ></ModalAddContact>
+        </div>
+
         <h4>Liste de contacts</h4>
         {listContacts && listContacts.data && (
           <ToolkitProvider

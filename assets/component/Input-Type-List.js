@@ -38,9 +38,10 @@ function InputTypeList(props) {
 
   return (
     <>
-      <Form.Select
+      <select
         size="lg"
         value={typeValue}
+        className="uk-select"
         defaultValue={props.defaultValue}
         onChange={(e) => onChangeType(e)}
       >
@@ -48,7 +49,7 @@ function InputTypeList(props) {
         {props?.type?.data?.map((el, id) => (
           <>{el.value && <option value={el?.id}>{el?.value}</option>}</>
         ))}
-      </Form.Select>
+      </select>
     </>
   );
 }
