@@ -46,7 +46,8 @@ class ContactsController extends AbstractController
             $calls[] = [
                 "id" => $value->getId(),
                 "firstname" => $value->getFirstName(),
-                "lastname" => $value->getLastName()
+                "lastname" => $value->getLastName(),
+                "orga" => $value->getOrga()
             ];
         }
 

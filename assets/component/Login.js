@@ -92,7 +92,7 @@ const Login = () => {
           <input
             type="text"
             id="username"
-            className="uk-input"
+            className="uk-input mb-4"
             // className="my-4"
             ref={userRef}
             placeholder="Tapez votre utilisateur"
@@ -104,14 +104,14 @@ const Login = () => {
 
           <input
             type="password"
-            className="uk-input"
+            className="uk-input mb-4"
             id="password"
             placeholder="Tapez votre mot de passe"
             onChange={(e) => setPwd(e.target.value)}
             value={password}
             required
           />
-          <button className="btn-metis">Sign In</button>
+          <button className="btn-metis">Se connecter</button>
           <div className="persistCheck  d-flex justify-content-start align-items-center mt-4">
             <input
               type="checkbox"
@@ -119,7 +119,7 @@ const Login = () => {
               onChange={togglePersist}
               checked={persist}
             />
-            <label htmlFor="persist">Trust This Device</label>
+            <label htmlFor="persist">Se souvenir de moi</label>
           </div>
         </form>
         <p
