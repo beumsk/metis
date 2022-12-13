@@ -97,7 +97,9 @@ class FollowUpReportsController extends AbstractController
         foreach ($reportFollowUp as  $value) {
             if ($value->getId()) {
                 $report = $doctrine->getRepository(FollowupReportsActivities::class)->findBy(['fore' => $value->getId()]);
+
                 $indicators = $doctrine->getRepository(FollowupReportsIndicators::class)->findBy(['fore' => $value->getId()]);
+                // dd($report);
                 if ($report !== []) {
                     foreach ($report as $itemReport) {
                         if ($itemReport->getSugg()->getParentSugg() !== null && $itemReport->getSugg()->getParentSugg()->getValue() === "Soins") {
@@ -105,6 +107,7 @@ class FollowUpReportsController extends AbstractController
                         }
 
                         if ($itemReport->getSugg()->getParentSugg() !== null && $itemReport->getSugg()->getParentSugg()->getValue() === "Activités") {
+                            // return $this->json($itemReport->getContacts()[0]->getId());
                             $value->setFollowupReportsActivities($itemReport);
                         }
                     }
@@ -132,7 +135,7 @@ class FollowUpReportsController extends AbstractController
             AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context) {
                 return $object->getId();
             },
-            AbstractNormalizer::IGNORED_ATTRIBUTES => ['pati', 'informations', 'occupants', 'contact', 'func', 'contacts', 'calls', 'patients']
+            AbstractNormalizer::IGNORED_ATTRIBUTES => ['pati', 'informations', 'occupants', 'contact', 'func', 'calls', 'patients']
         ]);
 
 
@@ -888,8 +891,8 @@ class FollowUpReportsController extends AbstractController
         if ($care_jsondecode && $care_jsondecode !== null) {
             $editFollowUpReportCare =  (property_exists($care_jsondecode, "care_id") === true && $care_jsondecode->care_id !== null) ? $doctrine->getRepository(FollowupReportsActivities::class)->findBy(["id" => $care_jsondecode->care_id]) : null;
 
-            $contact =  (property_exists($care_jsondecode, "contact") === true) ? $doctrine->getRepository(Contacts::class)->find(intval($care_jsondecode->contact)) : null;
-            $place =  (property_exists($care_jsondecode, "place") === true) ? $doctrine->getRepository(Contacts::class)->find(intval($care_jsondecode->place)) : null;
+            $contact =  (property_exists($care_jsondecode, "contact") === true && $care_jsondecode->contact !== null) ? $doctrine->getRepository(Contacts::class)->find(intval($care_jsondecode->contact)) : null;
+            $place =  (property_exists($care_jsondecode, "place") === true && $care_jsondecode->place !== null) ? $doctrine->getRepository(Contacts::class)->find(intval($care_jsondecode->place)) : null;
 
 
             $description = $care_jsondecode->description;
@@ -964,10 +967,10 @@ class FollowUpReportsController extends AbstractController
 
 
         if ($care_jsondecode && $care_jsondecode !== null) {
-            $editFollowUpReportCare =  (property_exists($care_jsondecode, "act_id") === true) ? $doctrine->getRepository(FollowupReportsActivities::class)->findBy(["id" => $care_jsondecode->act_id]) : null;
+            $editFollowUpReportCare =  (property_exists($care_jsondecode, "act_id") === true  && $care_jsondecode->act_id !== null) ? $doctrine->getRepository(FollowupReportsActivities::class)->findBy(["id" => $care_jsondecode->act_id]) : null;
 
-            $contact =  (property_exists($care_jsondecode, "contact") === true) ? $doctrine->getRepository(Contacts::class)->find(intval($care_jsondecode->contact)) : null;
-            $place =  (property_exists($care_jsondecode, "place") === true) ? $doctrine->getRepository(Contacts::class)->find(intval($care_jsondecode->place)) : null;
+            $contact =  (property_exists($care_jsondecode, "contact") === true  && $care_jsondecode->contact !== null) ? $doctrine->getRepository(Contacts::class)->find(intval($care_jsondecode->contact)) : null;
+            $place =  (property_exists($care_jsondecode, "place") === true  && $care_jsondecode->place !== null) ? $doctrine->getRepository(Contacts::class)->find(intval($care_jsondecode->place)) : null;
 
             $description = $care_jsondecode->description;
 
@@ -1291,8 +1294,9 @@ class FollowUpReportsController extends AbstractController
 
         $id = $request->request->get('id');
 
-        $places = $doctrine->getRepository(FollowupReportsActivities::class)->findBy(["pati_id" => $id]);
-        return $this->json($places);
+        $places = $doctrine->getRepository(FollowupReportsActivities::class)->find(13309);
+
+        return $this->json($places->getContacts());
     }
 
     #[Route('/api/setFollowUpReport', name: 'app_report')]

@@ -163,7 +163,6 @@ function AddSoinsByReport(props) {
         <select
           size="lg"
           className="uk-select"
-          required={true}
           onChange={(e) => handleChangeContacts(e)}
           value={props.formCaresEdit?.contact}
         >
@@ -172,7 +171,7 @@ function AddSoinsByReport(props) {
             <>
               <option
                 value={el?.id}
-                selected={el?.id === props.formCaresEdit?.contact}
+                selected={el?.id === parseInt(props.formCaresEdit?.contact)}
               >
                 {el?.firstname} {el?.lastname}
               </option>
@@ -192,7 +191,7 @@ function AddSoinsByReport(props) {
         >
           <option>Choissisez le lieu</option>
           {props?.places?.data?.map((el, id) => (
-            <>{el?.lastname && <option value={el.id}>{el?.lastname}</option>}</>
+            <><option value={el.id} selected={el?.id === props.formCaresEdit?.place}>{el?.lastname}</option></>
           ))}
         </select>
       </div>

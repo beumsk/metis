@@ -60,7 +60,7 @@ function AddActivitiesByReport(props) {
       .then(function (response) {
         setType(response);
       })
-      .catch(function (response) {});
+      .catch(function (response) { });
   }, [idPatient]);
 
   function handleChangeValue(e) {
@@ -118,7 +118,7 @@ function AddActivitiesByReport(props) {
                 <option
                   selected={
                     el?.id === props.formActivitiesEdit?.type ||
-                    el?.id === props?.activity?.id
+                    el?.id === props.formActivitiesEdit?.value
                   }
                   value={el?.id}
                 >
@@ -160,7 +160,7 @@ function AddActivitiesByReport(props) {
             <>
               <option
                 value={el?.id}
-                // selected={el?.id === props.formActivitiesEdit?.contact}
+              // selected={el?.id === props.formActivitiesEdit?.contact}
               >
                 {el?.firstname} {el?.lastname}
               </option>
