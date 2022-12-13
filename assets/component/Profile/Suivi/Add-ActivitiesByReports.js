@@ -116,7 +116,10 @@ function AddActivitiesByReport(props) {
             <>
               {el.value && (
                 <option
-                  selected={el?.id === props.formActivitiesEdit?.type}
+                  selected={
+                    el?.id === props.formActivitiesEdit?.type ||
+                    el?.id === props?.activity?.id
+                  }
                   value={el?.id}
                 >
                   {el?.value}
@@ -157,7 +160,7 @@ function AddActivitiesByReport(props) {
             <>
               <option
                 value={el?.id}
-                selected={el?.id === props.formActivitiesEdit?.contact}
+                // selected={el?.id === props.formActivitiesEdit?.contact}
               >
                 {el?.firstname} {el?.lastname}
               </option>

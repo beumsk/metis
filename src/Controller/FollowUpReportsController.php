@@ -965,7 +965,7 @@ class FollowUpReportsController extends AbstractController
                     $followUpReportActivities->addContact($contact);
                 }
 
-                // dd($followUpReportActivities);
+                dd($followUpReportActivities);
                 $entityManager->persist($followUpReportActivities);
                 $entityManager->flush();
             }
