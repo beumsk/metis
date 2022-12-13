@@ -62,7 +62,7 @@ function RapportDetails(props) {
       .then(function (response) {
         setType(response);
       })
-      .catch(function (response) {});
+      .catch(function (response) { });
 
     axios({
       method: "post",
@@ -76,7 +76,7 @@ function RapportDetails(props) {
       .then(function (response) {
         setInformations(response);
       })
-      .catch(function (response) {});
+      .catch(function (response) { });
   }, [idPatient]);
 
   function onChangeReport(e) {
@@ -92,7 +92,7 @@ function RapportDetails(props) {
       .then(function (response) {
         setType(response);
       })
-      .catch(function (response) {});
+      .catch(function (response) { });
 
     axios({
       method: "post",
@@ -115,7 +115,7 @@ function RapportDetails(props) {
         // }
         // document.querySelectorAll(".switcher")[0].click();
       })
-      .catch(function (response) {});
+      .catch(function (response) { });
   }
   function onChangeFilter(e) {
     setInformations(e);
@@ -128,7 +128,19 @@ function RapportDetails(props) {
 
     if (e.target.checked === false) {
       r.isHightlight = false;
-      setInformations(informations);
+      axios({
+        method: "post",
+        url: "/api/getFollowUpReportsById",
+        data: reportData,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${auth.auth.accessToken}`,
+        },
+      })
+        .then(function (response) {
+          setInformations(response);
+        })
+        .catch(function (response) { });
     }
   };
 
@@ -172,7 +184,19 @@ function RapportDetails(props) {
                         r.isShow = false;
 
                         setInformations(informations);
-                        console.log(r);
+                        axios({
+                          method: "post",
+                          url: "/api/getFollowUpReportsById",
+                          data: reportData,
+                          headers: {
+                            "Content-Type": "application/json",
+                            Authorization: `Bearer ${auth.auth.accessToken}`,
+                          },
+                        })
+                          .then(function (response) {
+                            setInformations(response);
+                          })
+                          .catch(function (response) { });
                       }
 
                       // if (r.isHightlight === false) {

@@ -886,7 +886,7 @@ class FollowUpReportsController extends AbstractController
 
 
         if ($care_jsondecode && $care_jsondecode !== null) {
-            $editFollowUpReportCare =  (property_exists($care_jsondecode, "care_id") === true) ? $doctrine->getRepository(FollowupReportsActivities::class)->findBy(["id" => $care_jsondecode->care_id]) : null;
+            $editFollowUpReportCare =  (property_exists($care_jsondecode, "care_id") === true && $care_jsondecode->care_id !== null) ? $doctrine->getRepository(FollowupReportsActivities::class)->findBy(["id" => $care_jsondecode->care_id]) : null;
 
             $contact =  (property_exists($care_jsondecode, "contact") === true) ? $doctrine->getRepository(Contacts::class)->find(intval($care_jsondecode->contact)) : null;
             $place =  (property_exists($care_jsondecode, "place") === true) ? $doctrine->getRepository(Contacts::class)->find(intval($care_jsondecode->place)) : null;
@@ -914,12 +914,35 @@ class FollowUpReportsController extends AbstractController
 
                 $entityManager->persist($followUpReportActivities);
                 $entityManager->flush();
+
+                return new JsonResponse([
+                    'response' => $followUpReportActivities->getId()
+                ]);
+            } else {
+                $sugg =  $doctrine->getRepository(Suggestions::class)->find($care_jsondecode->type);
+                $editFollowUpReportCare[0]->setActivity($sugg);
+
+                $editFollowUpReportCare[0]->setDescription($description);
+                $editFollowUpReportCare[0]->setIsIdrStep(1);
+                $editFollowUpReportCare[0]->setFore($report);
+
+                if (property_exists($care_jsondecode, "place") === true && $care_jsondecode->place !== null) {
+                    $editFollowUpReportCare[0]->addPlace($place);
+                }
+
+                if (property_exists($care_jsondecode, "contact") === true && $care_jsondecode->contact !== null) {
+                    $editFollowUpReportCare[0]->addContact($contact);
+                }
+
+
+                // $entityManager->persist($followUpReportActivities);
+                $entityManager->flush();
+
+                return new JsonResponse([
+                    'response' => $editFollowUpReportCare[0]->getId()
+                ]);
             }
         }
-
-        return new JsonResponse([
-            'response' => $followUpReportActivities
-        ]);
     }
     #[Route('/api/addActivitiesToReport', name: 'app_addActivitiesToReport')]
     public function addActivitiesToReport(ManagerRegistry $doctrine, Request $request): JsonResponse
@@ -965,8 +988,27 @@ class FollowUpReportsController extends AbstractController
                     $followUpReportActivities->addContact($contact);
                 }
 
-                dd($followUpReportActivities);
+
                 $entityManager->persist($followUpReportActivities);
+                $entityManager->flush();
+            } else {
+                $sugg =  $doctrine->getRepository(Suggestions::class)->find($care_jsondecode->type);
+                $editFollowUpReportCare[0]->setActivity($sugg);
+
+                $editFollowUpReportCare[0]->setDescription($description);
+                $editFollowUpReportCare[0]->setIsIdrStep(1);
+                $editFollowUpReportCare[0]->setFore($report);
+
+                if (property_exists($care_jsondecode, "place") === true && $care_jsondecode->place !== null) {
+                    $editFollowUpReportCare[0]->addPlace($place);
+                }
+
+                if (property_exists($care_jsondecode, "contact") === true && $care_jsondecode->contact !== null) {
+                    $editFollowUpReportCare[0]->addContact($contact);
+                }
+
+
+
                 $entityManager->flush();
             }
         }
