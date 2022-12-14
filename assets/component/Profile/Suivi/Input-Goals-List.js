@@ -32,7 +32,7 @@ function InputGoalsList(props) {
 
   //   /api/getContacts
   const onChangeContact = (e) => {
-    props.onChange(e.target.value);
+    props.onChangeGoals(e.target.value);
   };
 
   return (
@@ -48,7 +48,7 @@ function InputGoalsList(props) {
         <option>Choissisez l'objectif</option>
         {props?.goals?.data?.map((el, id) => (
           <>
-            {el.status === 0 && (
+            {el.type === 1 && (el.status === 0 || el.status === 1) && (
               <option
                 value={el?.id}
                 // selected={props.defaultValue === el?.id}

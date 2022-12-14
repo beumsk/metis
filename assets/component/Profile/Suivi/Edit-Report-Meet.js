@@ -111,12 +111,17 @@ function EditReportMeet(props) {
   const [changeDate, setChangeDate] = useState(null);
   const [changeGoals, setChangeGoals] = useState(null);
   const [changeContacts, setChangeContacts] = useState(null);
-  const [changeDescriptionGoals, setChangeDescriptionGoals] = useState(null);
+  const [changeDescriptionGoals, setChangeDescriptionGoals] = useState(
+    props.informationPatient.content || props.informationPatient.description
+  );
   const [changePlaces, setChangePlaces] = useState(null);
   const [changeEditor, setChangeEditor] = useState(null);
   const [changeOptions, setChangeOptions] = useState(null);
   const [reportDate, setReportDate] = useState(null);
 
+  function onChangeGoals(e) {
+    setGoalsInput(e);
+  }
   useEffect(() => {
     if (
       props?.informationPatient &&
@@ -371,6 +376,7 @@ function EditReportMeet(props) {
     // if (props.informationPatient.type === 2){
     //   formData.append("activityType", 1);
     // }
+    console.log(props?.informationPatient);
     var formData = new FormData();
     formData.append("idRapport", props?.informationPatient?.id);
 
@@ -378,12 +384,12 @@ function EditReportMeet(props) {
       formData.append("changeDate", changeDate);
     } else {
       formData.append(
-        "dateDefault",
+        "changeDate",
         new Date(props?.informationPatient?.creationDate).toJSON().slice(0, 10)
       );
     }
 
-    formData.append("changeGoals", changeGoals);
+    formData.append("changeGoals", goalsInput);
     formData.append("contId", changeContacts);
     formData.append("goalsInput", goalsInput);
     formData.append("userId", userId);
@@ -1017,7 +1023,7 @@ function EditReportMeet(props) {
       <InputGoalsList
         goals={props?.goals}
         // defaultValue={props?.informationPatient?.cont[0]?.orga?.id}
-        onChange={onChangeContacts}
+        onChangeGoals={onChangeGoals}
       />
       {props?.informationPatient?.hasOwnProperty("type") === false && (
         <InputContactList

@@ -346,24 +346,35 @@ class FollowUpReportsController extends AbstractController
         $request = Request::createFromGlobals();
         $idRapport = $request->request->get('idRapport');
         $changeDate = $request->request->get('changeDate');
-        $changeGoals = $request->request->get('changeGoals');
+        $goal_id = $request->request->get('changeGoals');
         $contId = $request->request->get('contId');
         $goalsInput = $request->request->get('goalsInput');
         $userId = $request->request->get('userId');
         $patiId = $request->request->get('patiId');
         $description = $request->request->get('description');
 
-        $followupGoals = $doctrine->getRepository(FollowupGoals::class)->find(["id" => $idRapport]);
-        $changeGoals = $doctrine->getRepository(Suggestions::class)->find($changeGoals);
+        $followupGoals = $doctrine->getRepository(FollowupReports::class)->find($idRapport);
+        $changeGoals = $doctrine->getRepository(FollowupGoals::class)->find($goal_id);
         $contact = $doctrine->getRepository(Contacts::class)->find($contId);
 
 
-        $followupGoals->setCreationDate(new \DateTime($changeDate));
+        // $followupGoals->setCreationDate(new \DateTime($changeDate));
+        if ($changeDate !== "null") {
+            $followupGoals->setReportDate(new \DateTime($changeDate));
+        }
 
 
-        $followupGoals->setSugg($changeGoals);
-        $followupGoals->setCont($contact);
-        $followupGoals->setDescription($description);
+        // $followupGoals->setActivityType($changeGoals);
+        if ($goal_id !== "null") {
+            $followupGoals->addfogo($changeGoals);
+        }
+
+        if ($contId !== "null") {
+            $followupGoals->addCont($contact);
+        }
+
+
+        $followupGoals->setContent($description);
 
         $entityManager->flush();
         return new JsonResponse([
