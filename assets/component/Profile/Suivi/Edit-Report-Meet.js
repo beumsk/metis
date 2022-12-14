@@ -389,9 +389,9 @@ function EditReportMeet(props) {
       );
     }
 
-    formData.append("changeGoals", goalsInput);
-    formData.append("contId", changeContacts);
-    formData.append("goalsInput", goalsInput);
+    formData.append("changeGoals", JSON.stringify(goalsInput));
+    formData.append("contId", JSON.stringify(changeContacts));
+    formData.append("goalsInput", JSON.stringify(goalsInput));
     formData.append("userId", userId);
     formData.append("patiId", patiId);
     formData.append("description", changeDescriptionGoals);
@@ -465,11 +465,11 @@ function EditReportMeet(props) {
       formData.append("changeDate", changeDate);
     }
 
-    formData.append("changeGoals", changeGoals);
+    formData.append("changeGoals", JSON.stringify(changeGoals));
     formData.append("contId", changeContacts);
     formData.append("changePlaces", changePlaces);
     formData.append("changeEditor", changeEditor);
-    formData.append("goalsInput", goalsInput);
+    formData.append("goalsInput", JSON.stringify(goalsInput));
     formData.append("meetType", meetType);
     formData.append("userId", userId);
     formData.append("patiId", patiId);
@@ -1022,7 +1022,7 @@ function EditReportMeet(props) {
       )}
       <InputGoalsList
         goals={props?.goals}
-        // defaultValue={props?.informationPatient?.cont[0]?.orga?.id}
+        defaultValue={props?.informationPatient?.fogo}
         onChangeGoals={onChangeGoals}
       />
       {props?.informationPatient?.hasOwnProperty("type") === false && (

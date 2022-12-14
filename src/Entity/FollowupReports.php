@@ -332,6 +332,7 @@ class FollowupReports
 
     public function addfogo(FollowupGoals $fogo): self
     {
+
         if (!$this->fogo->contains($fogo)) {
             $this->fogo->add($fogo);
         }

@@ -2,36 +2,37 @@
 
 namespace App\Controller;
 
-use App\Entity\Contacts;
-use App\Entity\FollowupGoals;
-use App\Entity\FollowupReports;
-use App\Entity\FollowupReportsActivities;
-use App\Entity\FollowupReportsContact;
-use App\Entity\FollowupReportsIndicators;
-use App\Entity\Indicators;
-use App\Entity\Patients;
-use App\Entity\PatientsPlaces;
-use App\Entity\Places;
-use App\Entity\Suggestions;
 use App\Entity\User;
+use App\Entity\Places;
+use App\Entity\Contacts;
+use App\Entity\Patients;
+use App\Entity\Indicators;
+use App\Entity\Suggestions;
+use App\Entity\FollowupGoals;
+use App\Entity\PatientsPlaces;
+use App\Entity\FollowupReports;
+use App\Entity\FollowupReportsContact;
+use App\Entity\FollowupReportsActivities;
+use App\Entity\FollowupReportsIndicators;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use Symfony\Component\HttpFoundation\Request;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Serializer\SerializerBuilder;
+use Symfony\Component\Serializer\Encoder\XmlEncoder;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Encoder\XmlEncoder;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
-use Symfony\Component\Serializer\Serializer;
-use Symfony\Component\Serializer\Context\Normalizer\ObjectNormalizerContextBuilder;
 
-use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Serializer\Context\Normalizer\ObjectNormalizerContextBuilder;
 
 class FollowUpReportsController extends AbstractController
 {
@@ -251,7 +252,7 @@ class FollowUpReportsController extends AbstractController
         $contacts = $request->request->get('contacts');
         $changeTypeMeet = $request->request->get('changeTypeMeet');
         $changeDate = $request->request->get('changeDate');
-        $changeGoals = $request->request->get('changeGoals');
+        $goal_id = $request->request->get('changeGoals');
         $changeContacts = $request->request->get('changeContacts');
         $changePlaces = $request->request->get('changePlaces');
         $changeEditor = $request->request->get('changeEditor');
@@ -324,6 +325,21 @@ class FollowUpReportsController extends AbstractController
         }
 
 
+
+        if ($goalsInput !== "null") {
+            $changeGoals = $doctrine->getRepository(FollowupGoals::class)->findBy(array("id" => json_decode($goalsInput)));
+
+            foreach ($report->getFogo() as $value) {
+                $report->removefogo($value);
+                // dd($followupGoals->getfogo());
+            }
+            // $arrayCollectionDiff = new FollowupGoals($changeGoals);
+            foreach ($changeGoals as $value) {
+                // $arrayCollectionDiff = new FollowupGoals($value);
+                $report->addfogo($value);
+            }
+        }
+
         // dd($report);
         $entityManager = $doctrine->getManager();
 
@@ -354,7 +370,26 @@ class FollowUpReportsController extends AbstractController
         $description = $request->request->get('description');
 
         $followupGoals = $doctrine->getRepository(FollowupReports::class)->find($idRapport);
-        $changeGoals = $doctrine->getRepository(FollowupGoals::class)->find($goal_id);
+
+
+        if ($goal_id !== "null") {
+            $changeGoals = $doctrine->getRepository(FollowupGoals::class)->findBy(array("id" => json_decode($goal_id)));
+
+            foreach ($followupGoals->getFogo() as $value) {
+                $followupGoals->removefogo($value);
+                // dd($followupGoals->getfogo());
+            }
+            // $arrayCollectionDiff = new FollowupGoals($changeGoals);
+            foreach ($changeGoals as $value) {
+                // $arrayCollectionDiff = new FollowupGoals($value);
+                $followupGoals->addfogo($value);
+            }
+        }
+
+
+
+
+
         $contact = $doctrine->getRepository(Contacts::class)->find($contId);
 
 
@@ -365,9 +400,9 @@ class FollowUpReportsController extends AbstractController
 
 
         // $followupGoals->setActivityType($changeGoals);
-        if ($goal_id !== "null") {
-            $followupGoals->addfogo($changeGoals);
-        }
+        // if ($goal_id !== "null") {
+        //     $followupGoals->addfogo($changeGoals);
+        // }
 
         if ($contId !== "null") {
             $followupGoals->addCont($contact);
