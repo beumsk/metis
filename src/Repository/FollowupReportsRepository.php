@@ -98,7 +98,8 @@ class FollowupReportsRepository extends ServiceEntityRepository
 
         $qb->select('f')
             ->from('App:FollowupReports', 'f')
-            ->andWhere('f.pati = :idPati ');
+            ->andWhere('f.pati = :idPati ')
+            ->addOrderBy('f.creation_date', 'DESC');
         $parameters["idPati"] = $id;
         if (null !== $textSearch) {
             $qb->andWhere('f.content like :textSearch');
