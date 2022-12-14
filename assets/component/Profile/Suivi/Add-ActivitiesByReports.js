@@ -60,7 +60,7 @@ function AddActivitiesByReport(props) {
       .then(function (response) {
         setType(response);
       })
-      .catch(function (response) { });
+      .catch(function (response) {});
   }, [idPatient]);
 
   function handleChangeValue(e) {
@@ -82,7 +82,7 @@ function AddActivitiesByReport(props) {
       setValueDescription(null);
     }
   };
-
+  console.log(props.formActivitiesEdit);
   props.onChange([
     {
       act_id:
@@ -160,7 +160,7 @@ function AddActivitiesByReport(props) {
             <>
               <option
                 value={el?.id}
-              // selected={el?.id === props.formActivitiesEdit?.contact}
+                // selected={el?.id === props.formActivitiesEdit?.contact}
               >
                 {el?.firstname} {el?.lastname}
               </option>
@@ -198,7 +198,14 @@ function AddActivitiesByReport(props) {
         >
           <option>Choissisez le lieu</option>
           {props?.places?.data?.map((el, id) => (
-            <>{el?.lastname && <option value={el.id}>{el?.lastname}</option>}</>
+            <>
+              <option
+                selected={el?.id === props.formActivitiesEdit?.place}
+                value={el?.id}
+              >
+                {el?.lastname}
+              </option>
+            </>
           ))}
         </select>
       </div>

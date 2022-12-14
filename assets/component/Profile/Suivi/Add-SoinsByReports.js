@@ -59,7 +59,7 @@ function AddSoinsByReport(props) {
       .then(function (response) {
         setType(response);
       })
-      .catch(function (response) { });
+      .catch(function (response) {});
   }, [idPatient]);
 
   function handleChangeType(e) {
@@ -86,8 +86,6 @@ function AddSoinsByReport(props) {
 
     setValueDescription(e.target.value);
   };
-
-  console.log(props.formCaresEdit);
 
   props.onChange([
     {
@@ -132,7 +130,10 @@ function AddSoinsByReport(props) {
           {type?.data?.map((el, id) => (
             <>
               {el.value && (
-                <option selected={el?.id === props.formCaresEdit.value} value={el?.id}>
+                <option
+                  selected={el?.id === props.formCaresEdit.value}
+                  value={el?.id}
+                >
                   {el?.value}
                 </option>
               )}
@@ -191,7 +192,14 @@ function AddSoinsByReport(props) {
         >
           <option>Choissisez le lieu</option>
           {props?.places?.data?.map((el, id) => (
-            <><option value={el.id} selected={el?.id === props.formCaresEdit?.place}>{el?.lastname}</option></>
+            <>
+              <option
+                value={el.id}
+                selected={el?.id === props.formCaresEdit?.place}
+              >
+                {el?.lastname}
+              </option>
+            </>
           ))}
         </select>
       </div>

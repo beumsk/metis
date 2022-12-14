@@ -111,9 +111,9 @@ class FollowupReportsActivities
     /**
      * @return Collection<int, Contacts>
      */
-    public function getPlaces(): Collection
+    public function getPlaces()
     {
-        return $this->places;
+        return $this->places->last();
     }
 
     public function addPlace(Contacts $place): self
@@ -147,9 +147,9 @@ class FollowupReportsActivities
     /**
      * @return Collection<int, Contacts>
      */
-    public function getContacts(): Collection
+    public function getContacts()
     {
-        return $this->contacts;
+        return $this->contacts->last();
     }
 
     public function addContact(Contacts $contact): self

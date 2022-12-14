@@ -32,29 +32,29 @@ function EditReportMeet(props) {
     props?.informationPatient?.followupReportsCare?.length > 0
       ? [{ ...props?.informationPatient?.followupReportsCare }]
       : [
-        {
-          idEdit: null,
-          id: 0,
-          value: null,
-          contact: null,
-          place: null,
-          description: null,
-        },
-      ]
+          {
+            idEdit: null,
+            id: 0,
+            value: null,
+            contact: null,
+            place: null,
+            description: null,
+          },
+        ]
   );
   const [formActivities, setFormActivities] = useState(
     props?.informationPatient?.followupReportsActivities?.length > 0
       ? [{ ...props?.informationPatient?.followupReportsActivities }]
       : [
-        {
-          idEdit: null,
-          id: 0,
-          value: null,
-          contact: null,
-          place: null,
-          description: null,
-        },
-      ]
+          {
+            idEdit: null,
+            id: 0,
+            value: null,
+            contact: null,
+            place: null,
+            description: null,
+          },
+        ]
   );
   const [formIndicateurs, setFormIndicateurs] = useState([
     {
@@ -66,21 +66,21 @@ function EditReportMeet(props) {
         : null,
       indicateursFormHestiaRisqueDeces: props.indicatorsResponse
         ? [
-          ...props.indicatorsResponse.filter((e) => {
-            if (e.indi.id > 6 && e.indi.id < 11) {
-              return e;
-            }
-          }),
-        ]
+            ...props.indicatorsResponse.filter((e) => {
+              if (e.indi.id > 6 && e.indi.id < 11) {
+                return e;
+              }
+            }),
+          ]
         : null,
       indicateursEstLeLogement: props.indicatorsResponse
         ? [
-          ...props.indicatorsResponse.filter((e) => {
-            if (e.indi.id > 3 && e.indi.id < 7) {
-              return e;
-            }
-          }),
-        ]
+            ...props.indicatorsResponse.filter((e) => {
+              if (e.indi.id > 3 && e.indi.id < 7) {
+                return e;
+              }
+            }),
+          ]
         : null,
     },
   ]);
@@ -162,15 +162,13 @@ function EditReportMeet(props) {
           var care = new Cares();
           care["care_id"] = copyCares[prop]?.id;
           care["id"] = Number(prop);
-          care["value"] = Number(copyCares[prop].activity?.id);
-          care["contact"] =
-            copyCares[prop].cont && copyCares[prop].cont.length > 0
-              ? Number(copyCares[prop].cont[0]?.orga?.id)
-              : null;
-          care["place"] =
-            copyCares[prop].places && copyCares[prop].places.length > 0
-              ? Number(copyCares[prop].places[0]?.id)
-              : null;
+          care["type"] = Number(copyCares[prop].activity?.id);
+          care["contact"] = copyCares[prop].contacts
+            ? Number(copyCares[prop].contacts?.id)
+            : null;
+          care["place"] = copyCares[prop].places
+            ? Number(copyCares[prop].places?.id)
+            : null;
           care["description"] = copyCares[prop].description;
 
           arrCareHydrated.push(care);
@@ -178,6 +176,7 @@ function EditReportMeet(props) {
       }
       formSoins.splice(0, formSoins.length);
       formSoins.push(...arrCareHydrated);
+
       setFormSoins(arrCareHydrated);
     }
 
@@ -206,17 +205,15 @@ function EditReportMeet(props) {
           activities["id"] = Number(prop);
 
           // activities["id"] = Number(prop);
-          activities["value"] = Number(copy[prop].activity?.id);
-          activities["contact"] =
-            copy[prop].cont && copy[prop].cont.length > 0
-              ? Number(copy[prop].cont[0]?.orga?.id)
-              : null;
-          activities["place"] =
-            copy[prop].places && copy[prop].places.length > 0
-              ? Number(copy[prop].places[0]?.id)
-              : null;
+          activities["type"] = Number(copy[prop].activity?.id);
+          activities["contact"] = copy[prop].contacts
+            ? Number(copy[prop].contacts?.id)
+            : null;
+          activities["place"] = copy[prop].places
+            ? Number(copy[prop].places?.id)
+            : null;
           activities["description"] = copy[prop].description;
-
+          console.log(copy[prop]);
           arrActivitiesHydrated.push(activities);
         }
       }
@@ -240,7 +237,7 @@ function EditReportMeet(props) {
       .then(function (response) {
         setType(response);
       })
-      .catch(function (response) { });
+      .catch(function (response) {});
     axios({
       method: "post",
       url: "/api/suggestionsById",
@@ -253,7 +250,7 @@ function EditReportMeet(props) {
       .then(function (response) {
         setTypeFormActivities(response);
       })
-      .catch(function (response) { });
+      .catch(function (response) {});
     setPatiId(idPatient);
     setUserId(auth.auth.idUser);
     setOptions(options);
@@ -418,12 +415,12 @@ function EditReportMeet(props) {
       if (
         Object.keys(el).length === 1 ||
         JSON.stringify(el) ===
-        JSON.stringify({
-          id: el.id,
-          indicateursFormCVC: null,
-          indicateursFormHestiaRisqueDeces: null,
-          indicateursEstLeLogement: null,
-        })
+          JSON.stringify({
+            id: el.id,
+            indicateursFormCVC: null,
+            indicateursFormHestiaRisqueDeces: null,
+            indicateursEstLeLogement: null,
+          })
       ) {
         return null;
       } else {
@@ -586,6 +583,7 @@ function EditReportMeet(props) {
   };
 
   function onChangeValuesByOnCareForm(e) {
+    console.log(e);
     if (formSoins.filter((el) => e[0].id === el.id)) {
       formSoins.filter((el) => e[0].id === el.id)[0].type =
         e[0].value === undefined ? null : e[0].value;
@@ -612,6 +610,7 @@ function EditReportMeet(props) {
         e[0].description === undefined ? null : e[0].description;
 
       setFormActivities(formActivities);
+      console.log(e);
     }
   }
 
@@ -938,16 +937,16 @@ function EditReportMeet(props) {
                       {(formIndicateurs[0].indicateursEstLeLogement !== null ||
                         formIndicateurs[0].indicateursFormCVC !== null ||
                         formIndicateurs[0].indicateursFormHestiaRisqueDeces !==
-                        null) && (
-                          <button
-                            className="uk-button uk-button-default"
-                            onClick={(e) =>
-                              onClickDeleteIndicateursForm(idx, form.id)
-                            }
-                          >
-                            Supprimer un autre soin
-                          </button>
-                        )}
+                          null) && (
+                        <button
+                          className="uk-button uk-button-default"
+                          onClick={(e) =>
+                            onClickDeleteIndicateursForm(idx, form.id)
+                          }
+                        >
+                          Supprimer un autre soin
+                        </button>
+                      )}
 
                       {formIndicateurs && formIndicateurs.length < 3 && (
                         <button
@@ -976,7 +975,7 @@ function EditReportMeet(props) {
             className="uk-select"
             onChange={(e) => inputChangeTypeMeet(e)}
             defaultValue={props?.informationPatient?.reportType}
-          // selected={props?.informationPatient?.reportType}
+            // selected={props?.informationPatient?.reportType}
           >
             <>
               <option>Choissisez votre type de rencontre</option>
