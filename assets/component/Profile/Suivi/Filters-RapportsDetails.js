@@ -48,10 +48,7 @@ function FilterRapportDetails(props) {
     }
 
     if (filterDateContentRapport) {
-      reportData.append(
-        "setDateRapport",
-        new Date(filterDateContentRapport).toISOString()
-      );
+      reportData.append("setDateRapport", filterDateContentRapport);
     }
 
     axios({

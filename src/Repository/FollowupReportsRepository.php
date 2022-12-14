@@ -107,13 +107,13 @@ class FollowupReportsRepository extends ServiceEntityRepository
         }
 
         if (null !== $dateSearch) {
-            $qb->andWhere('f.creation_date = :dateSearch');
-            $parameters["dateSearch"] = $dateSearch;
+            $qb->andWhere('f.creation_date like :dateSearch');
+            $parameters["dateSearch"] = '%' . $dateSearch . '%';
         }
 
         if (null !== $typeSearch) {
-            $qb->andWhere('f.activity_type = :typeSearch');
-            $parameters["typeSearch"] = $typeSearch;
+            $qb->andWhere('f.activity_type like :typeSearch');
+            $parameters["typeSearch"] = '%' . $typeSearch . '%';
         }
 
         $qb->setParameters($parameters);
