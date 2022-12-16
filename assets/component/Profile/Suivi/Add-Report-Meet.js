@@ -18,6 +18,7 @@ import AddSoinsByReport from "./Add-SoinsByReports";
 import InputPlaceList from "./Input-Place-List";
 import { nanoid } from "nanoid";
 import InputContactList from "./Input-Contact-List";
+import InputGoalsList from "./Input-Goals-List";
 function AddReportMeet(props) {
   const [show, setShow] = useState(false);
   const [auth, setAuth] = useState(useAuth());
@@ -27,6 +28,7 @@ function AddReportMeet(props) {
 
   const [userId, setUserId] = useState(null);
   const [patiId, setPatiId] = useState(null);
+
   var formActivitiesDatas = new FormData();
   formActivitiesDatas.append("id", 106);
   const [formSoins, setFormSoins] = useState([{ id: nanoid() }]);
@@ -234,11 +236,11 @@ function AddReportMeet(props) {
     formData.append("contacts", contacts);
     formData.append("changeTypeMeet", changeTypeMeet);
     formData.append("changeDate", changeDate);
-    formData.append("changeGoals", changeGoals);
-    formData.append("contId", changeContacts);
+    formData.append("changeGoals", JSON.stringify(changeGoals));
+    formData.append("contId", JSON.stringify(changeContacts));
     formData.append("changePlaces", changePlaces);
     formData.append("changeEditor", changeEditor);
-    formData.append("goalsInput", goalsInput);
+    formData.append("goalsInput", JSON.stringify(goalsInput));
     formData.append("meetType", 1);
     formData.append(
       "formSoins",
@@ -510,7 +512,9 @@ function AddReportMeet(props) {
     }
     // console.log(formActivities);
   }
-
+  function onChangeGoals(e) {
+    setGoalsInput(e);
+  }
   const onChangeValuesIndicateursForm = (e) => {
     // setSelectedTypeCVC(e[0].selectedOptionType);
 
@@ -833,17 +837,16 @@ function AddReportMeet(props) {
       <Form.Label htmlFor="inputValue" className="uk-form-label">
         Objectifs
       </Form.Label>
-      <Form.Select
-        size="lg"
-        className="uk-select"
-        onChange={(e) => inputChangeGoals(e)}
-        value={goalsInput}
-      >
-        <>
-          <option>Objectifs non chargées pour l'instant</option>
-        </>
-      </Form.Select>
-      <InputContactList contacts={props.contacts} onChange={onChangeContacts} />
+      <InputGoalsList
+        goals={props.goals}
+        defaultValue={null}
+        onChangeGoals={onChangeGoals}
+      />
+      <InputContactList
+        contacts={props.contacts}
+        onChange={onChangeContacts}
+        defaultValue={null}
+      />
       <InputPlaceList places={props.places} onChange={onChangePlaces} />
       <Editor onChange={editorChange}></Editor>
 

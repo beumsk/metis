@@ -34,6 +34,58 @@ use Symfony\Component\Serializer\Context\Normalizer\ObjectNormalizerContextBuild
 
 class PlacesController extends AbstractController
 {
+    #[Route('/api/getPlacesSelect', name: 'app_getPlacesForSelect')]
+    public function getPlacesForSelect(ManagerRegistry $doctrine, SerializerInterface $serializer): Response
+    {
+
+        $entityManager = $doctrine->getManager();
+        $request = Request::createFromGlobals();
+
+
+        $pati_id = $request->request->get('id');
+        $query = $request->request->get('query');
+
+        // dd($query);
+        $contacts = $doctrine->getRepository(Contacts::class)->findBy(["type" => 3, "deleted_at" => null]);
+
+        $encoders = [new JsonEncoder()];
+        $normalizers = [new DateTimeNormalizer(), new ObjectNormalizer()];
+        $serializer = new Serializer($normalizers, $encoders);
+
+        $calls = [];
+        foreach ($contacts as $value) {
+            // dd($value);
+            if ($value->getDeletedAt() === null) {
+                $calls[] = [
+                    "value" => $value->getId(),
+                    "label" => $value->getFirstName() . " " . $value->getLastName(),
+
+                ];
+            }
+        }
+
+
+
+
+
+        $jsonObject = $serializer->serialize($calls, 'json', [
+            'circular_reference_handler' => function ($object) {
+                return $object->getId();
+            },
+            JsonEncoder::FORMAT,
+            [AbstractNormalizer::IGNORED_ATTRIBUTES => ["url", "description", "type", "pathString", "sugg", "patients", "path", "calls", "informations", "cont", "calls", "informations", "occupants"]]
+        ]);
+
+        $response =  new Response($jsonObject, 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
+
+        $response->setSharedMaxAge(3600);
+
+
+
+        return $response;
+    }
+
+
     #[Route('/api/getPlaces', name: 'app_places')]
     public function index(ManagerRegistry $doctrine): Response
     {

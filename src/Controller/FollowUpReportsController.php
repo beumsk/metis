@@ -313,14 +313,15 @@ class FollowUpReportsController extends AbstractController
         $report->setReportDate(new \DateTime($changeDate));
 
 
-        $arrCont_id = [];
 
-        foreach (json_decode($contId) as $value) {
-            array_push($arrCont_id, $value->value);
-        }
 
 
         if ($contId !== "null") {
+            $arrCont_id = [];
+
+            foreach (json_decode($contId) as $value) {
+                array_push($arrCont_id, $value->value);
+            }
             $contact = $doctrine->getRepository(Contacts::class)->findBy(array("id" => $arrCont_id));
 
             foreach ($report->getCont() as $value) {
@@ -334,6 +335,7 @@ class FollowUpReportsController extends AbstractController
             }
         }
 
+
         // if ($contId !== "null") {
         //     $contact = $doctrine->getRepository(Contacts::class)->find($contId);
         //     $report->addCont($contact);
@@ -346,8 +348,15 @@ class FollowUpReportsController extends AbstractController
 
 
 
+
+
         if ($goalsInput !== "null") {
-            $changeGoals = $doctrine->getRepository(FollowupGoals::class)->findBy(array("id" => json_decode($goalsInput)));
+            $arrGoals_id = [];
+
+            foreach (json_decode($goalsInput) as $value) {
+                array_push($arrGoals_id, $value->value);
+            }
+            $changeGoals = $doctrine->getRepository(FollowupGoals::class)->findBy(array("id" => $arrGoals_id));
 
             foreach ($report->getFogo() as $value) {
                 $report->removefogo($value);
@@ -392,8 +401,16 @@ class FollowUpReportsController extends AbstractController
         $followupGoals = $doctrine->getRepository(FollowupReports::class)->find($idRapport);
 
 
+
+        $arrGoals_id = [];
+
+        foreach (json_decode($goal_id) as $value) {
+            array_push($arrGoals_id, $value->value);
+        }
+
+
         if ($goal_id !== "null") {
-            $changeGoals = $doctrine->getRepository(FollowupGoals::class)->findBy(array("id" => json_decode($goal_id)));
+            $changeGoals = $doctrine->getRepository(FollowupGoals::class)->findBy(array("id" => json_decode($arrGoals_id)));
 
             foreach ($followupGoals->getFogo() as $value) {
                 $followupGoals->removefogo($value);
@@ -1184,9 +1201,48 @@ class FollowUpReportsController extends AbstractController
 
 
 
+
+
         if ($changeContacts !== "null") {
-            $contact = $doctrine->getRepository(Contacts::class)->find($changeContacts);
-            $report->addCont($contact);
+            $arrCont_id = [];
+            foreach (json_decode($changeContacts) as $value) {
+                array_push($arrCont_id, $value->value);
+            }
+
+            $contact = $doctrine->getRepository(Contacts::class)->findBy(array("id" => $arrCont_id));
+
+            foreach ($report->getCont() as $value) {
+                $report->removeCont($value);
+                // dd($followupGoals->getfogo());
+            }
+            // $arrayCollectionDiff = new FollowupGoals($changeGoals);
+            foreach ($contact as $value) {
+                // $arrayCollectionDiff = new FollowupGoals($value);
+                $report->addCont($value);
+            }
+        }
+
+
+
+
+
+        if ($goalsInput !== "null") {
+            $arrGoals_id = [];
+
+            foreach (json_decode($goalsInput) as $value) {
+                array_push($arrGoals_id, $value->value);
+            }
+            $changeGoals = $doctrine->getRepository(FollowupGoals::class)->findBy(array("id" => $arrGoals_id));
+
+            foreach ($report->getFogo() as $value) {
+                $report->removefogo($value);
+                // dd($followupGoals->getfogo());
+            }
+            // $arrayCollectionDiff = new FollowupGoals($changeGoals);
+            foreach ($changeGoals as $value) {
+                // $arrayCollectionDiff = new FollowupGoals($value);
+                $report->addfogo($value);
+            }
         }
 
         if ($changePlaces !== "null") {
@@ -1194,23 +1250,11 @@ class FollowUpReportsController extends AbstractController
             $report->setPlac($places);
         }
 
-
-        // dd($report);
         $entityManager = $doctrine->getManager();
 
         $entityManager->persist($report);
 
         $entityManager->flush();
-
-        // dd($indicateurs_jsondecode);
-
-
-
-
-
-
-
-
 
         return new JsonResponse([
             'id' => $report->getId(),
@@ -1327,6 +1371,47 @@ class FollowUpReportsController extends AbstractController
 
         return $response;
     }
+
+    #[Route('/api/getFollowUpReportsGoalsForSelect', name: 'app_getFollowUpReportsGoalsForSelect')]
+    public function getFollowUpReportsGoalsForSelect(ManagerRegistry $doctrine): Response
+    {
+        $request = Request::createFromGlobals();
+
+        $id = $request->request->get('id');
+
+        $goals = $doctrine->getRepository(FollowupGoals::class)->findBy(["pati" => $id]);
+
+        $goalsArr = [];
+
+        // dd($goals);
+        foreach ($goals as $value) {
+            // dd($value);
+            if ($value->getDeletedAt() === null) {
+                $goalsArr[] = [
+                    "value" => $value->getId(),
+                    "label" => $value->getDescription(),
+
+                ];
+            }
+        }
+
+        // $places = $doctrine->getRepository(FollowupGoals::class)->findAll();
+        $encoders = [new JsonEncoder()];
+        $normalizers = [new DateTimeNormalizer(), new ObjectNormalizer()];
+        $serializer = new Serializer($normalizers, $encoders);
+
+        // $serializer = SerializerBuilder::create()->build();
+        $jsonObject = $serializer->serialize($goalsArr, 'json', [
+            AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context) {
+                return $object->getId();
+            },
+            AbstractNormalizer::IGNORED_ATTRIBUTES => ['pati', 'cont', 'contact', 'func', 'sugg']
+        ]);
+
+        $response = new Response($jsonObject, 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
+        return $response;
+    }
+
 
     #[Route('/api/getFollowUpReportsGoals', name: 'app_FollowUpReportsGoals')]
     public function getGoals(ManagerRegistry $doctrine): Response

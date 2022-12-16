@@ -62,7 +62,7 @@ const Profile = () => {
 
     axios({
       method: "post",
-      url: "/api/getFollowUpReportsGoals",
+      url: "/api/getFollowUpReportsGoalsForSelect",
       data: formData,
       headers: {
         "Content-Type": "application/json",
@@ -323,6 +323,7 @@ const Profile = () => {
             <AddReportMeet
               type={type}
               contacts={contacts}
+              goals={goals}
               places={places}
             ></AddReportMeet>
           )}
