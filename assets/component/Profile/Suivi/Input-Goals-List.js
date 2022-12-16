@@ -3,7 +3,7 @@ import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import CircularProgress from "@mui/material/CircularProgress";
 import { array } from "prop-types";
-
+import Form from "react-bootstrap/Form";
 function sleep(delay = 0) {
   return new Promise((resolve) => {
     setTimeout(resolve, delay);
@@ -60,10 +60,10 @@ export default function InputContactList(props) {
 
   return (
     <Autocomplete
-      id="asynchronous-demo"
+      // id="asynchronous-demo"
       sx={{ width: "100%" }}
       open={open}
-      style={{ margin: "1rem 0 1rem 0" }}
+      // style={{ margin: "1rem 0 1rem 0" }}
       onOpen={() => {
         setOpen(true);
       }}
@@ -80,21 +80,26 @@ export default function InputContactList(props) {
       multiple
       defaultValue={arr}
       renderInput={(params) => (
-        <TextField
-          {...params}
-          label="Objectifs"
-          InputProps={{
-            ...params.InputProps,
-            endAdornment: (
-              <React.Fragment>
-                {loading ? (
-                  <CircularProgress color="inherit" size={20} />
-                ) : null}
-                {params.InputProps.endAdornment}
-              </React.Fragment>
-            ),
-          }}
-        />
+        <>
+          <Form.Label htmlFor="inputValue" className="uk-form-label">
+            Objectifs
+          </Form.Label>
+          <TextField
+            {...params}
+            className="input-autocomplete"
+            InputProps={{
+              ...params.InputProps,
+              endAdornment: (
+                <React.Fragment>
+                  {loading ? (
+                    <CircularProgress color="inherit" size={20} />
+                  ) : null}
+                  {params.InputProps.endAdornment}
+                </React.Fragment>
+              ),
+            }}
+          />
+        </>
       )}
     />
   );

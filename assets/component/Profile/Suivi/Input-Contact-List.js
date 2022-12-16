@@ -3,7 +3,7 @@ import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import CircularProgress from "@mui/material/CircularProgress";
 import { array } from "prop-types";
-
+import Form from "react-bootstrap/Form";
 function sleep(delay = 0) {
   return new Promise((resolve) => {
     setTimeout(resolve, delay);
@@ -63,7 +63,7 @@ export default function InputContactList(props) {
       id="asynchronous-demo"
       sx={{ width: "100%" }}
       open={open}
-      style={{ margin: "1rem 0 1rem 0" }}
+      // style={{ margin: "1rem 0 1rem 0" }}
       onOpen={() => {
         setOpen(true);
       }}
@@ -73,29 +73,32 @@ export default function InputContactList(props) {
       isOptionEqualToValue={(option, value) => option.label === value.title}
       getOptionLabel={(option) => option.label}
       options={options}
-      onChange={(event, newValue) => {
-        console.log(newValue);
-        props.onChange(newValue);
-      }}
+      onChange={(event, newValue) => props.onChange(newValue)}
       loading={loading}
       multiple
       defaultValue={arr}
       renderInput={(params) => (
-        <TextField
-          {...params}
-          label="Contacts"
-          InputProps={{
-            ...params.InputProps,
-            endAdornment: (
-              <React.Fragment>
-                {loading ? (
-                  <CircularProgress color="inherit" size={20} />
-                ) : null}
-                {params.InputProps.endAdornment}
-              </React.Fragment>
-            ),
-          }}
-        />
+        <>
+          <Form.Label htmlFor="inputValue" className="uk-form-label">
+            Contacts
+          </Form.Label>
+          <TextField
+            {...params}
+            // label="Contacts"
+            className="input-autocomplete"
+            InputProps={{
+              ...params.InputProps,
+              endAdornment: (
+                <React.Fragment>
+                  {loading ? (
+                    <CircularProgress color="inherit" size={20} />
+                  ) : null}
+                  {params.InputProps.endAdornment}
+                </React.Fragment>
+              ),
+            }}
+          />
+        </>
       )}
     />
   );

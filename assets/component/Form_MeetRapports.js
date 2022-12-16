@@ -15,8 +15,10 @@ import Nav from "react-bootstrap/Nav";
 import Editor from "./Editor-Reports";
 import InputPlaceList from "../component/Profile/Suivi/Input-Place-List";
 import InputContactList from "../component/Profile/Suivi/Input-Contact-List";
+import InputGoalsList from "../component/Profile/Suivi/Input-Goals-List";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
+
 const Form_MeetRapports = () => {
   const navigate = useNavigate();
   const logout = useLogout();
@@ -56,6 +58,7 @@ const Form_MeetRapports = () => {
   const [typeFormActivities, setTypeFormActivities] = useState(null);
   const [meetType, setMeetType] = useState(null);
   const [goalsInput, setGoalsInput] = useState(null);
+  const [goals, setGoals] = useState(null);
   const [changeTypeMeet, setChangeTypeMeet] = useState(null);
   const [changeDate, setChangeDate] = useState(null);
   const [changeGoals, setChangeGoals] = useState(null);
@@ -64,7 +67,9 @@ const Form_MeetRapports = () => {
   const [changeEditor, setChangeEditor] = useState(null);
   const [patientsLists, setPatientsLists] = useState(null);
   const [changeOptions, setChangeOptions] = useState(null);
-
+  function onChangeGoals(e) {
+    setGoalsInput(e);
+  }
   useEffect(() => {
     axios({
       method: "post",
@@ -108,7 +113,7 @@ const Form_MeetRapports = () => {
       .catch(function (response) {});
     axios({
       method: "post",
-      url: "/api/getContacts",
+      url: "/api/getFollowUpReportsGoalsForSelect",
       data: formData,
       headers: {
         "Content-Type": "application/json",
@@ -116,6 +121,21 @@ const Form_MeetRapports = () => {
       },
     })
       .then(function (response) {
+        console.log(response);
+        setGoals(response);
+      })
+      .catch(function (response) {});
+    axios({
+      method: "post",
+      url: "/api/getContactsForSelect",
+      data: formData,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    })
+      .then(function (response) {
+        console.log(response);
         setContacts(response);
       })
       .catch(function (response) {});
@@ -262,7 +282,18 @@ const Form_MeetRapports = () => {
           onChange={(e) => setChangeDate(e.target.value)}
           id="inputValueSpécifique"
         />
-        <InputContactList contacts={contacts} onChange={onChangeContacts} />
+
+        <InputGoalsList
+          goals={goals}
+          defaultValue={null}
+          onChangeGoals={onChangeGoals}
+        />
+
+        <InputContactList
+          contacts={contacts}
+          onChange={onChangeContacts}
+          defaultValue={null}
+        />
         <InputPlaceList places={places} onChange={onChangePlaces} />
 
         <Editor onChange={editorChange} content={editorChange}></Editor>
