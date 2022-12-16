@@ -15,6 +15,18 @@ html, body, #root{
   }
 }
 
+.profile-img{
+  height: 116px;
+  position: relative;
+  overflow: hidden;
+  img{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+  }
+}
+
 .input-autocomplete{
   background-color: white!important;
   padding: 0!important;
