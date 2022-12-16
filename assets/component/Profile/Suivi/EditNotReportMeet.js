@@ -28,7 +28,7 @@ function EditNoReportMeet(props) {
   const [isSentRepport, setSentRepport] = useState(false);
   var formActivitiesDatas = new FormData();
   formActivitiesDatas.append("id", 106);
-  console.log(props?.rapport);
+
   return (
     <div className="noEditRepports-container">
       <div className="contact-row">
