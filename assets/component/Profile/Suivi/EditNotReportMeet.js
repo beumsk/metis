@@ -28,9 +28,76 @@ function EditNoReportMeet(props) {
   const [isSentRepport, setSentRepport] = useState(false);
   var formActivitiesDatas = new FormData();
   formActivitiesDatas.append("id", 106);
-
+  console.log(props?.rapport);
   return (
     <div className="noEditRepports-container">
+      <div className="contact-row">
+        {props.rapport &&
+          props.rapport.fogo &&
+          props.rapport.fogo.length > 0 && (
+            <>
+              <h6>Objectifs: </h6>
+              <span style={{ fontWeight: "normal" }}>
+                {props?.rapport.fogo?.map((fo) => (
+                  <>{fo.description}</>
+                ))}
+              </span>
+            </>
+          )}
+      </div>
+      <div className="contact-row">
+        {props.rapport &&
+          props.rapport.cont &&
+          props.rapport.cont.length > 0 && (
+            <>
+              <h6>Contact: </h6>
+              <span style={{ fontWeight: "normal" }}>
+                {props?.rapport.cont?.map((cont) => (
+                  <>
+                    {cont.lastname}
+                    {cont.firstname}
+                  </>
+                ))}
+              </span>
+            </>
+          )}
+      </div>
+      <div className="place-row">
+        {props.rapport && props.rapport.plac && props.rapport.plac !== null && (
+          <>
+            <h6>Lieu: </h6>
+            <span style={{ fontWeight: "normal" }}>
+              {props.rapport.plac.lastname}
+            </span>
+          </>
+        )}
+      </div>
+
+      <div className="date-row">
+        {props.rapport && props.rapport.creationDate && (
+          <>
+            <h6>Date: </h6>
+            <span style={{ fontWeight: "normal" }}>
+              {new Date(props.rapport.creationDate).toLocaleString(
+                "fr-BE",
+                "short"
+              )}
+            </span>
+          </>
+        )}
+      </div>
+      <div className="description-row">
+        <h6>Description: </h6>
+        <div
+          style={{ padding: "0" }}
+          dangerouslySetInnerHTML={{
+            __html:
+              props.rapport.content ||
+              props.rapport.description ||
+              "Aucune description donnée pour l'instant",
+          }}
+        ></div>
+      </div>
       {props.rapport.activityType === 1 && (
         <>
           <div className="row-activities mb-2">
@@ -109,57 +176,6 @@ function EditNoReportMeet(props) {
           </div>
         </>
       )}
-
-      <div className="contact-row">
-        {props.rapport &&
-          props.rapport.cont &&
-          props.rapport.cont.length > 0 && (
-            <>
-              <h6>Contact: </h6>
-              <span style={{ fontWeight: "normal" }}>
-                {props?.rapport.cont[0].lastname}
-                {props?.rapport.cont[0].firstname}
-              </span>
-            </>
-          )}
-      </div>
-      <div className="place-row">
-        {props.rapport && props.rapport.plac && props.rapport.plac !== null && (
-          <>
-            <h6>Lieu: </h6>
-            <span style={{ fontWeight: "normal" }}>
-              {props.rapport.plac.lastname}
-            </span>
-          </>
-        )}
-      </div>
-
-      <div className="date-row">
-        {props.rapport && props.rapport.creationDate && (
-          <>
-            <h6>Date: </h6>
-            <span style={{ fontWeight: "normal" }}>
-              {new Date(props.rapport.creationDate).toLocaleString(
-                "fr-BE",
-                "short"
-              )}
-            </span>
-          </>
-        )}
-      </div>
-      <div className="description-row">
-        <h6>Description: </h6>
-        <div
-          style={{ padding: "0" }}
-          dangerouslySetInnerHTML={{
-            __html:
-              props.rapport.content ||
-              props.rapport.description ||
-              "Aucune description donnée pour l'instant",
-          }}
-        ></div>
-      </div>
-
       {props.rapport.content === null && (
         <p>"Aucune description donnée pour l'instant"</p>
       )}
