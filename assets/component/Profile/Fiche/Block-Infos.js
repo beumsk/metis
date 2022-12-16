@@ -41,6 +41,8 @@ const BlockInfos = (props) => {
     // props.onChangeAddPati(e.response);
   }
 
+  console.log(props.infos);
+
   return (
     <>
       {props.infos?.map((patient, id) => (
@@ -61,6 +63,11 @@ const BlockInfos = (props) => {
                             {pi.sugg?.value}
                             {pi && (
                               <>
+                                {pi?.value}{" "}
+                                {pi?.start !== null &&
+                                  new Date(pi?.start).toLocaleDateString()}
+                                {pi?.end !== null &&
+                                  new Date(pi?.end).toLocaleDateString()}
                                 <ModalEditInfos
                                   link={props.link}
                                   infosPatient={pi}
@@ -83,7 +90,7 @@ const BlockInfos = (props) => {
                         </div>
 
                         <div className="col-sm-6">
-                          <p>{pi?.value}</p>
+                          <p>{pi?.comment}</p>
                         </div>
                       </div>
                     ))}
