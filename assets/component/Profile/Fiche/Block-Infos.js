@@ -48,48 +48,59 @@ const BlockInfos = (props) => {
       {props.infos?.map((patient, id) => (
         <div key={patient.id}>
           {patient && patient.suge?.pathString === props.link && (
-            <div className="row">
-              <div className="col-sm-4">
-                <p>{patient.suge?.value}</p>
+            <div className="row row-infos">
+              <div className="col-sm-3">
+                <p style={{ fontWeight: "600" }}>{patient.suge?.value}</p>
               </div>
 
-              <div className="col-sm-6">
+              <div className="col-sm-7">
                 {patient?.patientInformation && (
                   <>
                     {patient?.patientInformation?.map((pi, id) => (
                       <div className="row">
                         <div className="col-sm-6">
-                          <p key={pi.id}>
-                            {pi.sugg?.value}
-                            {pi && (
-                              <>
-                                {pi?.value}{" "}
-                                {pi?.start !== null &&
-                                  new Date(pi?.start).toLocaleDateString()}
-                                {pi?.end !== null &&
-                                  new Date(pi?.end).toLocaleDateString()}
-                                <ModalEditInfos
-                                  link={props.link}
-                                  infosPatient={pi}
-                                  infos={patient}
-                                  onChange={(e) =>
-                                    onChangeEditPatientInformation(e)
-                                  }
-                                />
-                                <ModalDeleteInfos
-                                  link={props.link}
-                                  infosPatient={pi}
-                                  infos={patient}
-                                  onChange={(e) =>
-                                    onChangeEditPatientInformation(e)
-                                  }
-                                />
-                              </>
+                          <p
+                            key={pi.id}
+                            style={{
+                              color: "rgb(145, 189, 16)",
+                              fontWeight: "500",
+                            }}
+                          >
+                            {pi.sugg?.value ? (
+                              <>{pi.sugg?.value}</>
+                            ) : (
+                              <> Pas d'informations </>
                             )}
+
+                            <ModalEditInfos
+                              link={props.link}
+                              infosPatient={pi}
+                              infos={patient}
+                              onChange={(e) =>
+                                onChangeEditPatientInformation(e)
+                              }
+                            />
+                            <ModalDeleteInfos
+                              link={props.link}
+                              infosPatient={pi}
+                              infos={patient}
+                              onChange={(e) =>
+                                onChangeEditPatientInformation(e)
+                              }
+                            />
                           </p>
                         </div>
 
                         <div className="col-sm-6">
+                          {pi && (
+                            <p>
+                              {pi?.value}{" "}
+                              {pi?.start !== null &&
+                                new Date(pi?.start).toLocaleDateString()}{" "}
+                              {pi?.end !== null &&
+                                new Date(pi?.end).toLocaleDateString()}
+                            </p>
+                          )}
                           <p>{pi?.comment}</p>
                         </div>
                       </div>
