@@ -24,16 +24,17 @@ function InputGoalsList(props) {
   formData.append("id", 57);
   //   formData.append("pathString", props.link);
   const [options, setOptions] = useState([]);
+  const [defaultValue, setDefaultValue] = useState(props.defaultValue);
+  const [selectedOption, setSelectedOption] = useState([]);
   const [selectFunction, setFunction] = useState(null);
   const [contacts, setContacts] = useState(null);
   const [places, setPlaces] = useState(null);
   const [elementsOpt, setElementsOpt] = useState(null);
-  const [defaultValue, setDefaultValue] = useState(props.defaultValue);
+
   const [idPatient, setIdPatient] = useState(id);
   const [type, setType] = useState(null);
   const handleClose = () => setShow(false);
-  const [selectedOption, setSelectedOption] = useState([]);
-  console.log(selectedOption);
+
   const handleShow = () => setShow(true);
   const [contactValue, setContactValue] = useState(null);
   useEffect(() => {

@@ -147,6 +147,38 @@ class ContactsRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
+    public function findAvailableContacts($patientId, $currentId = null, $query = null)
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+
+        $parameters = [];
+
+        $qb->select('c')
+            ->from('App:Contacts', 'c')
+            ->where('c.type in (' . implode(",", [Contacts::TYPE_PERSON, Contacts::TYPE_ORGANISATION]) . ') AND c.id NOT in (
+                select c2.id FROM App:PatientsContacts pc
+                JOIN pc.cont c2
+                WHERE pc.pati = :patientId) AND c.deleted_at IS NULL');
+
+
+        if ($query !== null) {
+
+            $qb->andWhere('c.lastname LIKE :query');
+            $parameters["query"] = '%' . $query . '%';
+        }
+
+        $parameters['patientId'] = $patientId;
+
+        // if ($query === null) {
+        //     $qb->setMaxResults(200);
+        // }
+        $qb->setParameters($parameters);
+
+        // dd($qb->getQuery());
+
+        return $qb->getQuery()->getResult();
+    }
+
     public function findAllContacts($tags = null)
     {
 

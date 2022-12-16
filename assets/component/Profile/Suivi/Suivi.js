@@ -87,9 +87,10 @@ const Profile = () => {
         setType(response);
       })
       .catch(function (response) {});
+
     axios({
       method: "post",
-      url: "/api/getContacts",
+      url: "/api/getContactsForSelect",
       data: formData,
       headers: {
         "Content-Type": "application/json",

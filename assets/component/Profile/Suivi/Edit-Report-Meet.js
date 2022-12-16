@@ -466,7 +466,7 @@ function EditReportMeet(props) {
     }
 
     formData.append("changeGoals", JSON.stringify(changeGoals));
-    formData.append("contId", changeContacts);
+    formData.append("contId", JSON.stringify(changeContacts));
     formData.append("changePlaces", changePlaces);
     formData.append("changeEditor", changeEditor);
     formData.append("goalsInput", JSON.stringify(goalsInput));
@@ -1028,18 +1028,14 @@ function EditReportMeet(props) {
       {props?.informationPatient?.hasOwnProperty("type") === false && (
         <InputContactList
           contacts={props.contacts}
-          defaultValue={
-            props?.informationPatient?.cont
-              ? props?.informationPatient?.cont[0]?.orga?.id
-              : null
-          }
+          defaultValue={props?.informationPatient?.cont}
           onChange={onChangeContacts}
         />
       )}
       {props?.informationPatient?.hasOwnProperty("type") === true && (
         <InputContactList
           contacts={props.contacts}
-          defaultValue={props?.informationPatient?.cont[0]?.id}
+          defaultValue={props?.informationPatient?.cont}
           onChange={onChangeContacts}
         />
       )}
