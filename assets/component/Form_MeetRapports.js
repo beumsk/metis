@@ -283,11 +283,11 @@ const Form_MeetRapports = () => {
           id="inputValueSpécifique"
         />
 
-        <InputGoalsList
+        {/* <InputGoalsList
           goals={goals}
           defaultValue={null}
           onChangeGoals={onChangeGoals}
-        />
+        /> */}
 
         <InputContactList
           contacts={contacts}
