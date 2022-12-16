@@ -313,11 +313,31 @@ class FollowUpReportsController extends AbstractController
         $report->setReportDate(new \DateTime($changeDate));
 
 
+        $arrCont_id = [];
+
+        foreach (json_decode($contId) as $value) {
+            array_push($arrCont_id, $value->value);
+        }
+
 
         if ($contId !== "null") {
-            $contact = $doctrine->getRepository(Contacts::class)->find($contId);
-            $report->addCont($contact);
+            $contact = $doctrine->getRepository(Contacts::class)->findBy(array("id" => $arrCont_id));
+
+            foreach ($report->getCont() as $value) {
+                $report->removeCont($value);
+                // dd($followupGoals->getfogo());
+            }
+            // $arrayCollectionDiff = new FollowupGoals($changeGoals);
+            foreach ($contact as $value) {
+                // $arrayCollectionDiff = new FollowupGoals($value);
+                $report->addCont($value);
+            }
         }
+
+        // if ($contId !== "null") {
+        //     $contact = $doctrine->getRepository(Contacts::class)->find($contId);
+        //     $report->addCont($contact);
+        // }
 
         if ($changePlaces !== "null") {
             $places = $doctrine->getRepository(Contacts::class)->find($changePlaces);
