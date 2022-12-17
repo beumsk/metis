@@ -69,6 +69,11 @@ class PatientsInformation
     #[ORM\JoinColumn(name: "itel_id", referencedColumnName: "id", nullable: true, onDelete: "SET NULL")]
     private ?InformationTemplateElement $itel = null;
 
+
+    #[ORM\ManyToOne(targetEntity: 'Patients', inversedBy: 'informations')]
+    #[ORM\JoinColumn(name: "pati_id", referencedColumnName: "id", nullable: true, onDelete: "SET NULL")]
+    private ?Patients $patients = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -227,6 +232,18 @@ class PatientsInformation
     {
 
         $this->itel = $itel;
+
+        return $this;
+    }
+
+    public function getPatients(): ?Patients
+    {
+        return $this->patients;
+    }
+
+    public function setPatients(?Patients $patients): self
+    {
+        $this->patients = $patients;
 
         return $this;
     }

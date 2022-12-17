@@ -13,7 +13,7 @@ import { Link } from "react-router-dom";
 function Patients() {
   const [auth, setAuth] = useState(useAuth());
   const [patientsList, setPatientsList] = useState(null);
-  const [lengthList, setLengthList] = useState(10);
+  const [lengthList, setLengthList] = useState(100);
   const [searchNamePatient, setSearchNamePatient] = useState(null);
   const [searchDateBirth, setDateBirth] = useState(null);
   const [typePatient, setTypePatient] = useState(null);
@@ -92,7 +92,7 @@ function Patients() {
     console.log(typePatient);
   }
   const readMore = () => {
-    setLengthList(lengthList + 10);
+    setLengthList(lengthList + 100);
   };
 
   return (
@@ -167,7 +167,38 @@ function Patients() {
                   </Accordion.Header>
                   <Accordion.Body>
                     <div className="row body-accordeonitemPatient">
-                      <div className="col-sm-4">
+                      <p>
+                        <b>Activitées</b>
+                      </p>
+                      {patient?.fore?.map((f) => (
+                        <div>
+                          {f.activityType === 1 && (
+                            <p>
+                              Rapport de rencontre{" "}
+                              {new Date(f.lastUpdate).toLocaleDateString()}
+                            </p>
+                          )}
+                          {f.activityType === 2 && (
+                            <p>
+                              Appel sortant{" "}
+                              {new Date(f.lastUpdate).toLocaleDateString()}
+                            </p>
+                          )}
+                          {f.activityType === 4 && (
+                            <p>
+                              Appel entrant{" "}
+                              {new Date(f.lastUpdate).toLocaleDateString()}
+                            </p>
+                          )}
+                          {f.activityType === 4 && (
+                            <p>
+                              Rapport de rencontre{" "}
+                              {new Date(f.lastUpdate).toLocaleDateString()}
+                            </p>
+                          )}
+                        </div>
+                      ))}
+                      {/* <div className="col-sm-4">
                         <b>Dernière activitée</b>
                         <p>Rapport de rencontre 12/08/2021</p>
                         <p>Rapport de rencontre 20/08/2022</p>
@@ -189,7 +220,7 @@ function Patients() {
                         <b>Autres détails</b>
                         <p>Sans papiers</p>
                         <p>Inscris au logement social</p>
-                      </div>
+                      </div> */}
                     </div>
                   </Accordion.Body>
                 </Accordion.Item>

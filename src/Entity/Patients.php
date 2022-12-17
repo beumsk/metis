@@ -77,10 +77,14 @@ class Patients
     #[ORM\OneToMany(mappedBy: 'patient', targetEntity: FollowupReports::class)]
     private Collection $fore;
 
+    // #[ORM\OneToMany(mappedBy: 'patients', targetEntity: PatientsInformation::class)]
+    // private Collection $informations;
+
     public function __construct()
     {
         $this->contacts = new ArrayCollection();
         $this->fore = new ArrayCollection();
+        // $this->informations = new ArrayCollection();
     }
 
 
@@ -353,4 +357,34 @@ class Patients
 
         return $this;
     }
+
+    // /**
+    //  * @return Collection<int, PatientsInformation>
+    //  */
+    // public function getInformations(): Collection
+    // {
+    //     return $this->informations;
+    // }
+
+    // public function addInformation(PatientsInformation $information): self
+    // {
+    //     if (!$this->informations->contains($information)) {
+    //         $this->informations->add($information);
+    //         $information->setPatients($this);
+    //     }
+
+    //     return $this;
+    // }
+
+    // public function removeInformation(PatientsInformation $information): self
+    // {
+    //     if ($this->informations->removeElement($information)) {
+    //         // set the owning side to null (unless already changed)
+    //         if ($information->getPatients() === $this) {
+    //             $information->setPatients(null);
+    //         }
+    //     }
+
+    //     return $this;
+    // }
 }

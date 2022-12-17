@@ -121,21 +121,16 @@ const Patient = () => {
               <div className="col-sm-2">
                 <div className="profile-img">
                   {imgPatient &&
-                    imgPatient !== null &&
-                    Object.keys(imgPatient).length > 0 && (
-                      <>
-                        <img src={imgPatient.image} />;
-                      </>
-                    )}
-
-                  {imgPatient &&
-                    imgPatient === null &&
-                    Object.keys(imgPatient).length > 0 && (
-                      <>
-                        <img src="https://ucreate.ch/wp-content/uploads/2022/02/profil_vide.jpg" />
-                        ;
-                      </>
-                    )}
+                  imgPatient !== null &&
+                  Object.keys(imgPatient).length > 0 ? (
+                    <>
+                      <img src={imgPatient.image} />;
+                    </>
+                  ) : (
+                    <>
+                      <img src="https://ucreate.ch/wp-content/uploads/2022/02/profil_vide.jpg" />
+                    </>
+                  )}
 
                   <div className="file btn btn-lg btn-primary">
                     Change Photo

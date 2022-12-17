@@ -88,7 +88,7 @@ class PatientsRepository extends ServiceEntityRepository
 
         $q->setParameters($parameters)
             ->orderBy('f.last_update', 'DESC')
-            ->setMaxResults(100);
+            ->setMaxResults($numberPage);
 
         // dd($q->getQuery());
         return $q->getQuery()->getResult();
