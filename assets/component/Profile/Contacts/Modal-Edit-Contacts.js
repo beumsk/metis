@@ -132,7 +132,7 @@ function ModalEditContacts(props) {
   return (
     <>
       <Button onClick={handleShow} className="btn-metis">
-        Modifier contact
+        <FontAwesomeIcon icon={faEdit} />
       </Button>
 
       <Modal show={show} onHide={handleClose}>

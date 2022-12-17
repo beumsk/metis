@@ -82,6 +82,7 @@ const Contacts = () => {
       },
     })
       .then(function (response) {
+        console.log(response);
         setPatients(response);
       })
       .catch(function (response) {});

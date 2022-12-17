@@ -98,11 +98,18 @@ class PatientsRepository extends ServiceEntityRepository
     public function listPatientsByAntenna($antenna): array
     {
         return $this->createQueryBuilder('p')
-            ->andWhere('p.antenna = :antenna')
+            ->andWhere('p.antenna = :antenna AND p.deleted_at IS NULL')
             ->orderBy('p.id', 'ASC')
+            ->innerJoin(
+                'App:FollowupReports',
+                'f',
+                'WITH',
+                'f.pati = p.id'
+            )
             ->setParameters([
                 'antenna' => $antenna
             ])
+            // ->setMaxResults(1)
             ->getQuery()
             ->getResult();
     }
