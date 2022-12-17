@@ -70,7 +70,7 @@ function Patients() {
           })
           .catch(function (response) {});
         console.log(params.get("q"));
-        document.getElementById("btn-search").click();
+        // document.getElementById("btn-search").click();
       }
     }
 
