@@ -14,6 +14,15 @@ const Search = () => {
   let [resultSearch, setResultSearch] = useState(null);
   let [isOpen, setOpenResult] = useState(false);
 
+  useEffect(() => {
+    if (window.location.search) {
+      const params = new URLSearchParams(window.location.search);
+      let query = params.get("q");
+      if (params.get("q")) {
+        setSearch(query);
+      }
+    }
+  }, []);
   const setValue = (e) => {
     // e.defaultPrevented();
     //
@@ -64,6 +73,20 @@ const Search = () => {
   //   }, 0);
   // };
 
+  if (document.getElementById("input")) {
+    var input = document.getElementById("input");
+    input.addEventListener("keypress", function (event) {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        const urlParams = new URLSearchParams(window.location.search);
+
+        urlParams.set("q", valueSearch);
+
+        window.location.search = urlParams;
+      }
+    });
+  }
+
   const redirectionToPatient = (id) => {
     if (id) {
       return (window.location.href = "/" + id);
@@ -75,6 +98,7 @@ const Search = () => {
       <Form.Control
         type="search"
         placeholder="Search"
+        id="input"
         className="me-2 uk-input"
         // onBlur={onBlursetValue}
         onClick={(e) => onClickIfValue()}

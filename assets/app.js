@@ -61,6 +61,7 @@ function App() {
             <Route path="lieux" element={<Lieux />} />
             <Route path="profil-lieux/:idLieux" element={<ProfilLieux />} />
             <Route path="patients" element={<Patients />} />
+            <Route path="patients/:query" element={<Patients />} />
             <Route path="anniversaire" element={<Anniversaire />} />
             <Route path="edit-profile" element={<EditProfile />} />
             <Route path="edit-password" element={<EditPassword />} />

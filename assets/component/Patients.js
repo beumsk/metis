@@ -10,6 +10,7 @@ import { faUser } from "@fortawesome/free-solid-svg-icons";
 import Menu from "./Menu";
 import Accordion from "react-bootstrap/Accordion";
 import { Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 function Patients() {
   const [auth, setAuth] = useState(useAuth());
   const [patientsList, setPatientsList] = useState(null);
@@ -18,10 +19,13 @@ function Patients() {
   const [searchDateBirth, setDateBirth] = useState(null);
   const [typePatient, setTypePatient] = useState(null);
   const [typeSelectPatient, setTypeSelectPatient] = useState(null);
+  const [query, setQuery] = useState(null);
 
   var formData = new FormData();
   formData.append("page", lengthList.toString());
   formData.append("antenna", auth.antenna);
+
+  // const anchor = document.getElementById("myAnchor");
 
   useEffect(() => {
     axios({
@@ -39,6 +43,36 @@ function Patients() {
         setPatientsList(response);
       })
       .catch(function (response) {});
+    if (window.location.search) {
+      // const queryString = window.location.search;
+      const params = new URLSearchParams(window.location.search);
+      let query = params.get("q");
+      // console.log(query);
+      if (params.get("q")) {
+        let query = params.get("q");
+        setQuery(query);
+        if (query) {
+          formData.append("searchNamePatient", query);
+        }
+
+        axios({
+          method: "post",
+          url: "/api/getPatients",
+          data: formData,
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${auth.auth.accessToken}`,
+          },
+        })
+          .then(function (response) {
+            console.log(response);
+            setPatientsList(response);
+          })
+          .catch(function (response) {});
+        console.log(params.get("q"));
+        document.getElementById("btn-search").click();
+      }
+    }
 
     var suggestion = new FormData();
     suggestion.append("id", 100);
@@ -108,6 +142,7 @@ function Patients() {
                 className="uk-input"
                 placeholder="Tapez le nom du patient"
                 onChange={(e) => setSearchNamePatient(e.target.value)}
+                defaultValue={query}
               />
             </div>
             <div className="col-sm-3">
@@ -133,7 +168,11 @@ function Patients() {
             </div>
 
             <div className="col-sm-3">
-              <Button onClick={(e) => onSubmitFilter(e)} className="btn-metis">
+              <Button
+                onClick={(e) => onSubmitFilter(e)}
+                id="btn-search"
+                className="btn-metis"
+              >
                 Filtrer
               </Button>
             </div>

@@ -3,11 +3,11 @@
     "app": {
       "js": [
         "/build/runtime.js",
-        "/build/vendors-node_modules_fortawesome_react-fontawesome_index_es_js-node_modules_mui_material_Auto-0286d2.js",
+        "/build/vendors-node_modules_fortawesome_react-fontawesome_index_es_js-node_modules_mui_material_Auto-3d3c44.js",
         "/build/app.js"
       ],
       "css": [
-        "/build/vendors-node_modules_fortawesome_react-fontawesome_index_es_js-node_modules_mui_material_Auto-0286d2.css",
+        "/build/vendors-node_modules_fortawesome_react-fontawesome_index_es_js-node_modules_mui_material_Auto-3d3c44.css",
         "/build/assets_styles_uikits_uikit_css-assets_styles_app_scss.css"
       ]
     },
