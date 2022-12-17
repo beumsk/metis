@@ -25,7 +25,7 @@ function Anniversaire() {
   const columns = [
     {
       dataField: "id",
-      text: "Product ID",
+      text: "id",
       sort: true,
       sortCaret: (order, column) => {
         if (!order)

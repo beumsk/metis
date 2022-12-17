@@ -15,6 +15,13 @@ html, body, #root{
   }
 }
 
+
+.sortable{
+  span{
+    display: inline-block;
+    margin-left: 0.5rem!important;
+  }
+}
 .profile-img{
   height: 116px;
   position: relative;

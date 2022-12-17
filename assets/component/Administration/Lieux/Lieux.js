@@ -10,6 +10,12 @@ import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
 import paginationFactory from "react-bootstrap-table2-paginator";
 import ModalAddLieux from "./Modal-Add-Lieux";
 import ReactLoading from "react-loading";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faUser,
+  faArrowDown,
+  faArrowUp,
+} from "@fortawesome/free-solid-svg-icons";
 function Lieux() {
   const { SearchBar } = Search;
   const [auth, setAuth] = useState(useAuth());
@@ -22,18 +28,82 @@ function Lieux() {
   let linker = <a href="profil-lieux/1">Détails</a>;
   const columns = [
     {
-      dataField: "id",
-      text: "Product ID",
-      sort: true,
-    },
-    {
       dataField: "lastname",
       text: "Nom",
       sort: true,
+      sortCaret: (order, column) => {
+        if (!order)
+          return (
+            <span>
+              <FontAwesomeIcon icon={faArrowDown} />/
+              <FontAwesomeIcon icon={faArrowUp} />
+            </span>
+          );
+        else if (order === "desc")
+          return (
+            <span>
+              <FontAwesomeIcon icon={faArrowDown} />/
+              <font color="#91bd10">
+                <FontAwesomeIcon icon={faArrowUp} />
+              </font>
+            </span>
+          );
+        else if (order === "asc")
+          return (
+            <span>
+              <font color="#91bd10">
+                <FontAwesomeIcon icon={faArrowDown} />
+              </font>
+              /<FontAwesomeIcon icon={faArrowUp} />
+            </span>
+          );
+        return null;
+      },
+    },
+    {
+      dataField: "description",
+      text: "Description",
+      sort: true,
+    },
+    {
+      dataField: "occupants",
+      text: "Occupants",
+      formatter: (cell, row, rowIndex, extraData) => (
+        <div>{row.occupants.length}</div>
+      ),
+      sort: true,
+      sortCaret: (order, column) => {
+        if (!order)
+          return (
+            <span>
+              <FontAwesomeIcon icon={faArrowDown} />/
+              <FontAwesomeIcon icon={faArrowUp} />
+            </span>
+          );
+        else if (order === "asc")
+          return (
+            <span>
+              <FontAwesomeIcon icon={faArrowDown} />/
+              <font color="#91bd10">
+                <FontAwesomeIcon icon={faArrowUp} />
+              </font>
+            </span>
+          );
+        else if (order === "desc")
+          return (
+            <span>
+              <font color="#91bd10">
+                <FontAwesomeIcon icon={faArrowDown} />
+              </font>
+              /<FontAwesomeIcon icon={faArrowUp} />
+            </span>
+          );
+        return null;
+      },
     },
     {
       dataField: "Détails",
-      text: "Product Price",
+      text: "Détails",
       formatter: (cell, row, rowIndex, extraData) => (
         <div>
           <a href={"/profil-lieux/" + row.id} className="uk-link-muted">
@@ -55,6 +125,7 @@ function Lieux() {
     })
       .then(function (response) {
         //handle success
+        console.log(response);
         setListContacts(response);
       })
       .catch(function (response) {});

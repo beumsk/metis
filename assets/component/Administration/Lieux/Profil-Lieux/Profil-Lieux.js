@@ -87,13 +87,13 @@ const ProfilLieux = () => {
       <section>
         <div className="container emp-profile">
           <div className="row profile-head">
-            <h5>
+            <h5 style={{ padding: "0" }}>
               {contactInformation?.firstname} {contactInformation?.lastname}
             </h5>
             <p>{contactInformation?.description}</p>
           </div>
 
-          <div className="row coordonnes-body">
+          {/* <div className="row coordonnes-body">
             <table class="uk-table uk-table-striped">
               <h6>Infos</h6>
               {contactInformation?.informations.map((contInfo) => (
@@ -146,7 +146,7 @@ const ProfilLieux = () => {
                 </tr>
               ))}
             </table>
-          </div>
+          </div> */}
 
           <div className="row coordonnes-body">
             <table class="uk-table uk-table-striped">
@@ -163,6 +163,14 @@ const ProfilLieux = () => {
                   </td>
                 </tr>
               ))}
+
+              {contactInformation?.patients.length === 0 && (
+                <tr>
+                  <td>
+                    <p>Aucuns patients liées pour l'instant</p>
+                  </td>
+                </tr>
+              )}
             </table>
           </div>
         </div>
