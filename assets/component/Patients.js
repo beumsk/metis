@@ -28,21 +28,6 @@ function Patients() {
   // const anchor = document.getElementById("myAnchor");
 
   useEffect(() => {
-    axios({
-      method: "post",
-      url: "/api/getPatients",
-      data: formData,
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${auth.auth.accessToken}`,
-      },
-    })
-      .then(function (response) {
-        //handle success
-        console.log(response);
-        setPatientsList(response);
-      })
-      .catch(function (response) {});
     if (window.location.search) {
       // const queryString = window.location.search;
       const params = new URLSearchParams(window.location.search);
@@ -72,6 +57,22 @@ function Patients() {
         console.log(params.get("q"));
         // document.getElementById("btn-search").click();
       }
+    } else {
+      axios({
+        method: "post",
+        url: "/api/getPatients",
+        data: formData,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${auth.auth.accessToken}`,
+        },
+      })
+        .then(function (response) {
+          //handle success
+          console.log(response);
+          setPatientsList(response);
+        })
+        .catch(function (response) {});
     }
 
     var suggestion = new FormData();
