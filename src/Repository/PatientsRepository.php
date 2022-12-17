@@ -48,8 +48,27 @@ class PatientsRepository extends ServiceEntityRepository
 
         $parameters = [];
         $parameters["antenna"] = $antenna;
-        $q = $this->createQueryBuilder('p')
-            ->andWhere('p.antenna = :antenna');
+        $q = $this->getEntityManager()->createQueryBuilder();
+
+        $stringPath = '/patient/fiche/information-generale';
+
+        // $id = $patient["id"];
+
+
+
+        $q = $this->getEntityManager()->createQueryBuilder();
+
+        $q->select('p')
+            ->from('App:Patients', 'p')
+            ->andWhere('p.antenna = :antenna')
+
+            ->andWhere('p.deleted_at is NULL')
+            ->innerJoin(
+                'App:FollowupReports',
+                'f',
+                'WITH',
+                'f.pati = p.id'
+            );
 
 
         if ($searchPatient) {
@@ -68,8 +87,8 @@ class PatientsRepository extends ServiceEntityRepository
         }
 
         $q->setParameters($parameters)
-            ->orderBy('p.id', 'ASC')
-            ->setMaxResults($numberPage);
+            ->orderBy('f.last_update', 'DESC')
+            ->setMaxResults(100);
 
         // dd($q->getQuery());
         return $q->getQuery()->getResult();

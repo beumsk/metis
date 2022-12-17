@@ -74,9 +74,13 @@ class Patients
     #[ORM\OneToMany(mappedBy: 'patient', targetEntity: PatientsContacts::class)]
     private Collection $contacts;
 
+    #[ORM\OneToMany(mappedBy: 'patient', targetEntity: FollowupReports::class)]
+    private Collection $fore;
+
     public function __construct()
     {
         $this->contacts = new ArrayCollection();
+        $this->fore = new ArrayCollection();
     }
 
 
@@ -314,6 +318,36 @@ class Patients
             // set the owning side to null (unless already changed)
             if ($contact->getPatient() === $this) {
                 $contact->setPatient(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, FollowupReports>
+     */
+    public function getFore()
+    {
+        return [$this->fore[count($this->fore) - 1], $this->fore[count($this->fore) - 2], $this->fore[count($this->fore) - 3]];
+    }
+
+    public function addFore(FollowupReports $fore): self
+    {
+        if (!$this->fore->contains($fore)) {
+            $this->fore->add($fore);
+            $fore->setPatient($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFore(FollowupReports $fore): self
+    {
+        if ($this->fore->removeElement($fore)) {
+            // set the owning side to null (unless already changed)
+            if ($fore->getPatient() === $this) {
+                $fore->setPatient(null);
             }
         }
 

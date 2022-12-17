@@ -100,6 +100,11 @@ class FollowupReports
     #[ORM\ManyToMany(targetEntity: FollowupGoals::class)]
     private Collection $fogo;
 
+
+    #[ORM\ManyToOne(targetEntity: 'Patients', inversedBy: 'fore')]
+    #[ORM\JoinColumn(name: "pati_id", referencedColumnName: "id", nullable: true, onDelete: "SET NULL")]
+    private ?Patients $patient = null;
+
     public function __construct()
     {
         $this->cont = new ArrayCollection();
@@ -343,6 +348,18 @@ class FollowupReports
     public function removefogo(FollowupGoals $fogo): self
     {
         $this->fogo->removeElement($fogo);
+
+        return $this;
+    }
+
+    public function getPatient(): ?Patients
+    {
+        return $this->patient;
+    }
+
+    public function setPatient(?Patients $patient): self
+    {
+        $this->patient = $patient;
 
         return $this;
     }

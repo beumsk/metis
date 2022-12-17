@@ -35,6 +35,7 @@ function Patients() {
     })
       .then(function (response) {
         //handle success
+        console.log(response);
         setPatientsList(response);
       })
       .catch(function (response) {});
@@ -81,7 +82,7 @@ function Patients() {
       },
     })
       .then(function (response) {
-        //handle success
+        console.log(response);
         setPatientsList(response);
       })
       .catch(function (response) {});
