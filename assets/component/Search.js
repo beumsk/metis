@@ -82,7 +82,7 @@ const Search = () => {
 
         urlParams.set("q", valueSearch);
 
-        window.location.search = urlParams;
+        window.location.search = "/patients" + urlParams;
       }
     });
   }
