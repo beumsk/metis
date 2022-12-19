@@ -108,9 +108,7 @@ function ModalLierContacts(props) {
   }
 
   if (responseDatas !== null) {
-    props.onChangeContacts({
-      data: responseDatas,
-    });
+    props.onChangeUpdateContact(responseDatas);
   }
 
   const handleInputChange = (e) => {
@@ -136,10 +134,11 @@ function ModalLierContacts(props) {
             <Form.Label htmlFor="inputValue">Valeur</Form.Label>
             <Form.Select
               size="lg"
+              className="uk-select"
               onChange={(e) => setContactItemList(e.target.value)}
               defaultValue={props?.infos?.cont?.id}
             >
-              {props.listContacts?.data?.map((el, id) => (
+              {props?.contacts?.data?.map((el, id) => (
                 <>
                   {el?.firstname && el?.lastname && (
                     <option value={el.id}>
@@ -151,10 +150,11 @@ function ModalLierContacts(props) {
             </Form.Select>
             <Form.Label htmlFor="inputValue">Type</Form.Label>
             <Form.Select
+              className="uk-select"
               size="lg"
               onChange={(e) => setTypeItemList(e.target.value)}
             >
-              {type?.data?.map((el, id) => (
+              {props?.type?.data?.map((el, id) => (
                 <>{el.value && <option value={el.id}>{el?.value}</option>}</>
               ))}
             </Form.Select>
@@ -172,6 +172,7 @@ function ModalLierContacts(props) {
             <Form.Control
               type="date"
               onChange={handleInputChange}
+              className="uk-select"
               id="inputValueSpécifique"
               aria-describedby="valueSpécifique"
             />
@@ -179,6 +180,7 @@ function ModalLierContacts(props) {
             <Form.Control
               type="date"
               onChange={handleInputChange}
+              className="uk-select"
               id="inputValueSpécifique"
               aria-describedby="valueSpécifique"
             />

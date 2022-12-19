@@ -44,21 +44,7 @@ function ModalLierPatient(props) {
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-  useEffect(() => {
-    axios({
-      method: "post",
-      url: "/api/suggestionsById",
-      data: formData,
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${auth.auth.accessToken}`,
-      },
-    })
-      .then(function (response) {
-        setType(response);
-      })
-      .catch(function (response) {});
-  }, [idPatient]);
+
   function handleSave() {
     let formData = new FormData();
     // value-sugg
@@ -81,23 +67,24 @@ function ModalLierPatient(props) {
       },
     }).then(function (response) {
       if (response) {
-        var formGetInfos = new FormData();
-        formGetInfos.append("id", id.toString());
+        let resFormData = new FormData();
+        resFormData.append("antenna", localStorage.getItem("antenna"));
+        resFormData.append("id", idPatient);
         axios({
           method: "post",
           url: "/api/getPatientsByPatients",
-          data: formGetInfos,
+          data: resFormData,
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${auth.auth.accessToken}`,
           },
         })
           .then(function (response) {
-            setResponseDatas(response);
+            setResponseDatas(response.data);
             setIsSentRepport(true);
-            document.querySelectorAll(".btn-close")[0].click();
           })
           .catch(function (response) {});
+
         // document.querySelectorAll(".btn-close")[0].click();
         // location.replace(window.location.origin + "/" + idPatient);
       }
@@ -105,9 +92,8 @@ function ModalLierPatient(props) {
   }
 
   if (responseDatas !== null) {
-    props.onChangePatientsPatients({
-      data: responseDatas,
-    });
+    console.log(props);
+    props.onChangeUpdatePatient(responseDatas);
   }
 
   const handleInputChange = (e) => {
@@ -132,14 +118,15 @@ function ModalLierPatient(props) {
           <>
             <Form.Label htmlFor="inputValue">Valeur</Form.Label>
             <Form.Select
+              className="uk-select"
               size="lg"
               defaultValue={props?.infos?.orpa?.id}
               onChange={(e) => setPatientItemList(e.target.value)}
             >
-              {props.listPatients?.data?.map((el, id) => (
+              {props?.contacts?.data?.map((el, id) => (
                 <>
                   {el?.firstname && el?.lastname && (
-                    <option value={el.id}>
+                    <option>
                       {el?.firstname} {el?.lastname}
                     </option>
                   )}
@@ -149,11 +136,12 @@ function ModalLierPatient(props) {
             <Form.Label htmlFor="inputValue">Type</Form.Label>
             <Form.Select
               size="lg"
+              className="uk-select"
               onChange={(e) => setTypeItemList(e.target.value)}
               defaultValue={props?.infos?.sugg?.id}
             >
-              {type?.data?.map((el, id) => (
-                <>{el.value && <option>{el?.value}</option>}</>
+              {props?.type?.data?.map((el, id) => (
+                <option>{el?.value}</option>
               ))}
             </Form.Select>
             <Form.Label htmlFor="inputValue">Description</Form.Label>
@@ -176,11 +164,13 @@ function ModalLierPatient(props) {
                 .substring(0, 10)}
               id="inputValueSpécifique"
               aria-describedby="valueSpécifique"
+              className="uk-select"
             />
             <Form.Label htmlFor="inputValue">Fin</Form.Label>
             <Form.Control
               type="date"
               id="inputValueSpécifique"
+              className="uk-select"
               onChange={handleInputChange}
               defaultValue={new Date(props?.infos?.end)
                 .toISOString()

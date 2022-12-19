@@ -42,34 +42,7 @@ function ModalEditContacts(props) {
   const [type, setType] = useState(null);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-  useEffect(() => {
-    axios({
-      method: "post",
-      url: "/api/suggestionsById",
-      data: formData,
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${auth.auth.accessToken}`,
-      },
-    })
-      .then(function (response) {
-        setType(response);
-      })
-      .catch(function (response) {});
-    // axios({
-    //   method: "post",
-    //   url: "/api/getContacts",
-    //   data: formData,
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //     Authorization: `Bearer ${auth.auth.accessToken}`,
-    //   },
-    // })
-    //   .then(function (response) {
-    //     setContacts(response);
-    //   })
-    //   .catch(function (response) {});
-  }, [idPatient]);
+  useEffect(() => {}, [idPatient]);
   //
   //   /api/getContacts
 
@@ -95,33 +68,32 @@ function ModalEditContacts(props) {
       },
     }).then(function (response) {
       if (response) {
-        var formGetInfos = new FormData();
-        formGetInfos.append("id", id.toString());
+        let resFormData = new FormData();
+        resFormData.append("antenna", localStorage.getItem("antenna"));
+        resFormData.append("id", idPatient);
         axios({
           method: "post",
           url: "/api/getContactsByPatients",
-          data: formGetInfos,
+          data: resFormData,
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${auth.auth.accessToken}`,
           },
         })
           .then(function (response) {
-            setResponseDatas(response);
+            setResponseDatas(response.data);
             setIsSentRepport(true);
-            document.querySelectorAll(".btn-close")[0].click();
           })
           .catch(function (response) {});
+
         // document.querySelectorAll(".btn-close")[0].click();
         // location.replace(window.location.origin + "/" + idPatient);
       }
     });
   }
-
+  console.log(props);
   if (responseDatas !== null) {
-    props.onChangeUpdateContact({
-      data: responseDatas,
-    });
+    props.onChange(responseDatas);
   }
 
   const handleInputChange = (e) => {
@@ -149,8 +121,9 @@ function ModalEditContacts(props) {
               size="lg"
               onChange={(e) => setContactItemList(e.target.value)}
               defaultValue={props?.infos.cont?.id}
+              className="uk-select"
             >
-              {props.listContactsSelect?.data?.map((el, id) => (
+              {props?.contacts?.data?.map((el, id) => (
                 <>
                   {el?.firstname && el?.lastname && (
                     <option value={el.id}>
@@ -165,8 +138,9 @@ function ModalEditContacts(props) {
               size="lg"
               defaultValue={props?.infos.sugg?.id}
               onChange={(e) => setTypeItemList(e.target.value)}
+              className="uk-select"
             >
-              {type?.data?.map((el, id) => (
+              {props?.type?.data?.map((el, id) => (
                 <>{el.value && <option value={el.id}>{el?.value}</option>}</>
               ))}
             </Form.Select>
@@ -184,6 +158,7 @@ function ModalEditContacts(props) {
             <Form.Label htmlFor="inputValue">Début</Form.Label>
             <Form.Control
               type="date"
+              className="uk-select"
               onChange={handleInputChange}
               defaultValue={new Date(props?.infos?.start)
                 .toISOString()
@@ -194,6 +169,7 @@ function ModalEditContacts(props) {
             <Form.Label htmlFor="inputValue">Fin</Form.Label>
             <Form.Control
               type="date"
+              className="uk-select"
               defaultValue={new Date(props?.infos?.end)
                 .toISOString()
                 .substring(0, 10)}

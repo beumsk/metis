@@ -17,6 +17,8 @@ import ToolkitProvider, {
 } from "react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit";
 import paginationFactory from "react-bootstrap-table2-paginator";
 import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
+import ModalDeleteContacts from "./Modal-Delete-Contacts";
+import ModalDeletePatient from "./Modal-Delete-Patient";
 
 const Contacts = () => {
   let id = useParams().id;
@@ -26,37 +28,28 @@ const Contacts = () => {
   formData.append("antenna", auth.antenna);
 
   const [idPatient, setIdPatient] = useState(id);
+  const [contacts, setContactsList] = useState(null);
   const [listContacts, setContacts] = useState(null);
   const [options, setOptions] = useState();
+  const [type, setType] = useState(null);
   const [contactList, setContactList] = useState();
   const [filterDates, setFilterDates] = useState();
   const [patients, setPatients] = useState(null);
   const [patientsLists, setPatientsLists] = useState(null);
   useEffect(() => {
+    var formDataSugg = new FormData();
+    formDataSugg.append("id", 57);
     axios({
       method: "post",
-      url: "/api/getContactsByPatients",
-      data: formData,
+      url: "/api/suggestionsById",
+      data: formDataSugg,
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${auth.auth.accessToken}`,
       },
     })
       .then(function (response) {
-        setContacts(response);
-      })
-      .catch(function (response) {});
-    axios({
-      method: "post",
-      url: "/api/getPatientsByPatients",
-      data: formData,
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${auth.auth.accessToken}`,
-      },
-    })
-      .then(function (response) {
-        setPatientsLists(response);
+        setType(response);
       })
       .catch(function (response) {});
     axios({
@@ -69,13 +62,57 @@ const Contacts = () => {
       },
     })
       .then(function (response) {
-        setContactList(response);
+        setContactsList(response);
       })
       .catch(function (response) {});
     axios({
       method: "post",
-      url: "/api/getAllPatients",
+      url: "/api/getContactsByPatients",
       data: formData,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    })
+      .then(function (response) {
+        console.log(response);
+        setContacts(response.data);
+      })
+      .catch(function (response) {});
+    axios({
+      method: "post",
+      url: "/api/getPatientsByPatients",
+      data: formData,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    })
+      .then(function (response) {
+        console.log(response);
+        setPatientsLists(response.data);
+      })
+      .catch(function (response) {});
+    axios({
+      method: "post",
+      url: "/api/getContacts",
+      data: formData,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    })
+      .then(function (response) {
+        setContactList(response.data);
+      })
+      .catch(function (response) {});
+    var formDataPati = new FormData();
+    formDataPati.append("antenna", auth.antenna);
+
+    axios({
+      method: "post",
+      url: "/api/getAllPatients",
+      data: formDataPati,
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${auth.auth.accessToken}`,
@@ -90,38 +127,38 @@ const Contacts = () => {
 
   const columnsPatients = [
     {
-      dataField: "nickname",
+      dataField: "orpa.nicknames",
       text: "Surnom",
       formatter: (cell, row, rowIndex, extraData) => (
-        <div>{row.orpa.nicknames}</div>
+        <div>{row?.orpa?.nicknames}</div>
       ),
     },
     {
-      dataField: "firstname",
+      dataField: "orpa.firstname",
       text: "Prenom",
       formatter: (cell, row, rowIndex, extraData) => (
-        <div>{row.orpa.firstname}</div>
+        <div>{row?.orpa?.firstname}</div>
       ),
     },
     {
-      dataField: "lastname",
+      dataField: "orpa.lastname",
       text: "Nom",
       formatter: (cell, row, rowIndex, extraData) => (
-        <div>{row.orpa.lastname}</div>
+        <div>{row?.orpa?.lastname}</div>
       ),
     },
     {
-      dataField: "value",
+      dataField: "sugg.value",
       text: "Type",
       formatter: (cell, row, rowIndex, extraData) => (
         <div>{row?.sugg?.value}</div>
       ),
     },
     {
-      dataField: "description",
+      dataField: "linkDescription",
       text: "Description",
       formatter: (cell, row, rowIndex, extraData) => (
-        <div>{row.linkDescription === "null" ? "" : row.linkDescription}</div>
+        <div>{row?.linkDescription === "null" ? "" : row?.linkDescription}</div>
       ),
     },
     {
@@ -142,7 +179,7 @@ const Contacts = () => {
       sort: true,
       formatter: (cell, row, rowIndex, extraData) => (
         <div>
-          {row.end === "null"
+          {row?.end === "null"
             ? ""
             : new Date(row?.end).toLocaleString("fr-BE", "short")}
         </div>
@@ -156,33 +193,53 @@ const Contacts = () => {
         <div className="d-flex">
           <ModalEditPatient
             infos={row}
+            type={type}
+            contacts={patients}
             // onChangeContacts={(e) => contactLierResponse(e)}
-            onChange={(e) => onChangeUpdateContact(e)}
+            onChangeUpdateContact={onChangeUpdateContact}
             listContacts={listContacts}
             // listContactsSelect={props.listContacts}
+            // infos={row}
+            // // onChangeContacts={(e) => contactLierResponse(e)}
+            // listPatients={patients}
+            // onChangeUpdatePatient={onChangeUpdatePatient}
+            // type={type}
+            // contacts={patients && patients.data.length > 0 ? patients : null}
+            // // listContactsSelect={props.listContacts}
           />
+          <ModalDeletePatient
+            infos={row}
+            onChangeUpdatePatient={onChangeUpdatePatient}
+          ></ModalDeletePatient>
         </div>
       ),
 
       text: "Actions",
     },
   ];
+
   const columns = [
     {
       dataField: "firstname + lastname",
       text: "Nom",
       formatter: (cell, row, rowIndex, extraData) => (
         <div>
-          {row.cont[0].firstname} {row.cont[0].lastname}
+          {row?.cont?.map((cont) => (
+            <>
+              {cont?.firstname} {cont?.lastname}
+            </>
+          ))}
         </div>
       ),
     },
     {
-      dataField: "description",
+      dataField: "cont.description",
       text: "Organisation",
       formatter: (cell, row, rowIndex, extraData) => (
         <div>
-          {row.cont[0].firstname} {row.cont[0].firstname}
+          {row?.cont?.map((cont) => (
+            <>{cont?.description}</>
+          ))}
         </div>
       ),
     },
@@ -190,14 +247,19 @@ const Contacts = () => {
       dataField: "value",
       text: "Type",
       formatter: (cell, row, rowIndex, extraData) => (
-        <div>{row?.sugg[0]?.value}</div>
+        <div>
+          {" "}
+          {row?.sugg?.map((cont) => (
+            <>{cont?.value}</>
+          ))}
+        </div>
       ),
     },
     {
-      dataField: "description",
+      dataField: "comment",
       text: "Description",
       formatter: (cell, row, rowIndex, extraData) => (
-        <div>{row.description === "null" ? "" : row.description}</div>
+        <div>{row?.comment === "null" ? "" : row?.comment}</div>
       ),
     },
     {
@@ -206,7 +268,7 @@ const Contacts = () => {
 
       formatter: (cell, row, rowIndex, extraData) => (
         <div>
-          {row.start === "null"
+          {row?.start === "null"
             ? ""
             : new Date(row?.start).toLocaleString("fr-BE", "short")}
         </div>
@@ -217,7 +279,7 @@ const Contacts = () => {
       text: "Fin",
       formatter: (cell, row, rowIndex, extraData) => (
         <div>
-          {row.end === "null"
+          {row?.end === "null"
             ? ""
             : new Date(row?.end).toLocaleString("fr-BE", "short")}
         </div>
@@ -231,10 +293,16 @@ const Contacts = () => {
         <div className="d-flex">
           <ModalEditContacts
             infos={row}
+            type={type}
+            contacts={contacts}
             // onChangeContacts={(e) => contactLierResponse(e)}
-            onChange={(e) => onChangeUpdateContact(e)}
+            onChangeUpdateContact={onChangeUpdateContact}
             listContacts={listContacts}
             // listContactsSelect={props.listContacts}
+          />
+          <ModalDeleteContacts
+            infos={row}
+            onChangeUpdateContact={onChangeUpdateContact}
           />
         </div>
       ),
@@ -253,16 +321,15 @@ const Contacts = () => {
       order: "asc", // or desc
     },
   ];
-  function onChangePatientsPatients(e) {
-    if (e && e.data?.data) {
-      setContacts(e.data?.data);
-    }
-  }
+
+  const onChangeUpdatePatient = (e) => {
+    console.log(e);
+    setPatientsLists(e);
+  };
 
   function onChangeUpdateContact(e) {
-    if (e && e.response) {
-      setContacts(e.response);
-    }
+    console.log(e);
+    setContacts(e);
   }
 
   function patientLierResponse(e) {
@@ -277,33 +344,33 @@ const Contacts = () => {
     }
   }
 
-  function onChangeUpdateContact(e) {
-    setContacts(e.data);
-  }
-
   function onChangePatients(e) {
     setPatients(e.data);
   }
   return (
     <div className="onglet-contact">
-      {listContacts && listContacts.data.length > 0 && (
+      {listContacts && listContacts.length > 0 && (
         <div className="d-flex mb-4 row-btn">
           <ModalLierPatient
             listPatients={patients}
-            onChangePatients={(e) => patientLierResponse(e)}
+            onChangeUpdatePatient={onChangeUpdatePatient}
+            type={type}
+            contacts={patients}
           ></ModalLierPatient>
           <ModalLierContacts
-            onChangeContacts={(e) => contactLierResponse(e)}
+            onChangeUpdateContact={onChangeUpdateContact}
+            type={type}
+            contacts={contacts}
             listContacts={contactList}
           ></ModalLierContacts>
         </div>
       )}
 
       <h5>Personnes</h5>
-      {listContacts && listContacts.data.length > 0 ? (
+      {listContacts && listContacts.length > 0 ? (
         <ToolkitProvider
           keyField="id"
-          data={[...listContacts.data]}
+          data={[...listContacts]}
           columns={columns}
           sort={
             ({ dataField: "end", order: "desc" },
@@ -323,10 +390,10 @@ const Contacts = () => {
       )}
 
       <h5>Patients</h5>
-      {patientsLists && patientsLists.data.length > 0 ? (
+      {patientsLists && patientsLists.length > 0 ? (
         <ToolkitProvider
           keyField="id"
-          data={[...patientsLists.data]}
+          data={patientsLists}
           columns={columnsPatients}
           search
         >

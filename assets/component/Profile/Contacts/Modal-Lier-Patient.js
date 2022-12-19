@@ -48,7 +48,8 @@ function ModalEditPatient(props) {
       })
       .catch(function (response) {});
   }, [idPatient]);
-  function handleSave() {
+
+  const handleSave = () => {
     let formData = new FormData();
     // value-sugg
 
@@ -69,33 +70,52 @@ function ModalEditPatient(props) {
       },
     }).then(function (response) {
       if (response) {
-        var formGetInfos = new FormData();
-        formGetInfos.append("id", id.toString());
+        let resFormData = new FormData();
+        resFormData.append("antenna", localStorage.getItem("antenna"));
+        resFormData.append("id", idPatient);
         axios({
           method: "post",
           url: "/api/getPatientsByPatients",
-          data: formGetInfos,
+          data: resFormData,
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${auth.auth.accessToken}`,
           },
         })
           .then(function (response) {
-            setResponseDatas(response.data);
-            setIsSentRepport(true);
-            document.querySelectorAll(".btn-close")[0].click();
+            if (response) {
+              let resFormData = new FormData();
+              resFormData.append("antenna", localStorage.getItem("antenna"));
+              resFormData.append("id", idPatient);
+              axios({
+                method: "post",
+                url: "/api/getPatientsByPatients",
+                data: resFormData,
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${auth.auth.accessToken}`,
+                },
+              })
+                .then(function (response) {
+                  setResponseDatas(response.data);
+                  setIsSentRepport(true);
+                })
+                .catch(function (response) {});
+
+              // document.querySelectorAll(".btn-close")[0].click();
+              // location.replace(window.location.origin + "/" + idPatient);
+            }
           })
           .catch(function (response) {});
+
         // document.querySelectorAll(".btn-close")[0].click();
         // location.replace(window.location.origin + "/" + idPatient);
       }
     });
-  }
+  };
 
   if (responseDatas !== null) {
-    props.onChangePatients({
-      data: responseDatas,
-    });
+    props.onChangeUpdatePatient(responseDatas);
   }
 
   const handleInputChange = (e) => {
@@ -122,8 +142,9 @@ function ModalEditPatient(props) {
             <Form.Select
               size="lg"
               onChange={(e) => setPatientItemList(e.target.value)}
+              className="uk-input"
             >
-              {props.listPatients?.data?.map((el, id) => (
+              {props?.contacts?.data?.map((el, id) => (
                 <>
                   {el?.firstname && el?.lastname && (
                     <option>
@@ -136,9 +157,10 @@ function ModalEditPatient(props) {
             <Form.Label htmlFor="inputValue">Type</Form.Label>
             <Form.Select
               size="lg"
+              className="uk-select"
               onChange={(e) => setTypeItemList(e.target.value)}
             >
-              {type?.data?.map((el, id) => (
+              {props?.type?.data?.map((el, id) => (
                 <>{el.value && <option>{el?.value}</option>}</>
               ))}
             </Form.Select>
@@ -156,18 +178,19 @@ function ModalEditPatient(props) {
               type="date"
               onChange={handleInputChange}
               id="inputValueSpécifique"
+              className="uk-select"
               aria-describedby="valueSpécifique"
             />
             <Form.Label htmlFor="inputValue">Fin</Form.Label>
             <Form.Control
               type="date"
+              className="uk-select"
               id="inputValueSpécifique"
               onChange={handleInputChange}
-              className="uk-input"
               aria-describedby="valueSpécifique"
             />
             <Form.Label htmlFor="inputValue">Commentaire</Form.Label>
-            <Form.Control as="textarea" rows={3} className="uk-input" s />
+            <Form.Control as="textarea" rows={3} className="uk-input" />
           </>
         </Modal.Body>
         <Modal.Footer>

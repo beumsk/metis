@@ -49,7 +49,6 @@ function ModalDeletePatient(props) {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   useEffect(() => {
-    setElementsOpt(...props?.infos?.suggestionsByBlock);
     setStartDate(
       new Date(props?.infosPatient?.start?.timestamp * 1000).toJSON()
     );
@@ -66,32 +65,28 @@ function ModalDeletePatient(props) {
 
   const handleSave = (e) => {
     let formData = new FormData();
-    // value-sugg
+    formData.append("id", props?.infos?.id);
 
-    formData.append("valueSelect", valueSelect);
-    formData.append("specificValueInput", specificValueInput);
-    formData.append("commentaireInput", commentaireInput);
-    formData.append("start", start);
-    formData.append("end", end);
-    formData.append("idInfo", props?.infosPatient?.id);
     var formGetInfos = new FormData();
     formGetInfos.append("id", id.toString());
+
     axios({
       method: "post",
-      url: "/api/deletePatientInformation",
+      url: "/api/getDeletePatientsPatients",
       data: formData,
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${auth.auth.accessToken}`,
       },
     }).then(function (response) {
-      // location.replace(window.location.origin + "/" + idPatient);
-      // document.querySelectorAll(".btn-close")[0].click();
       if (response) {
+        let resFormData = new FormData();
+        resFormData.append("antenna", localStorage.getItem("antenna"));
+        resFormData.append("id", idPatient);
         axios({
           method: "post",
-          url: "/api/deletePatientByContact",
-          data: formGetInfos,
+          url: "/api/getPatientsByPatients",
+          data: resFormData,
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${auth.auth.accessToken}`,
@@ -100,9 +95,9 @@ function ModalDeletePatient(props) {
           .then(function (response) {
             setResponseDatas(response.data);
             setIsSentRepport(true);
-            document.querySelectorAll(".btn-close")[0].click();
           })
           .catch(function (response) {});
+
         // document.querySelectorAll(".btn-close")[0].click();
         // location.replace(window.location.origin + "/" + idPatient);
       }
@@ -112,15 +107,13 @@ function ModalDeletePatient(props) {
   // handleInputChange;
 
   if (responseDatas !== null) {
-    props.onChange({
-      response: responseDatas,
-    });
+    props.onChangeUpdatePatient(responseDatas);
 
     // document.querySelectorAll(".btn-close")[0].click();
   }
   return (
     <>
-      <button onClick={handleShow} className="ml-4">
+      <button onClick={handleShow} className="ml-4 btn-metis">
         <FontAwesomeIcon icon={faTrash} />
       </button>
 

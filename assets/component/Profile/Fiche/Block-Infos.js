@@ -41,8 +41,6 @@ const BlockInfos = (props) => {
     // props.onChangeAddPati(e.response);
   }
 
-  console.log(props.infos);
-
   return (
     <>
       {props.infos?.map((patient, id) => (

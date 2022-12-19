@@ -561,7 +561,7 @@ class ContactsController extends AbstractController
         $entityManager->flush();
 
 
-        return $this->json($contact);
+        return $this->json(["id" => $contact->getId()]);
     }
 
     #[Route('/api/updatePatientPatient', name: 'app_updatePatientPatient')]
@@ -576,10 +576,11 @@ class ContactsController extends AbstractController
         $end = $request->request->get('end');
         $typeItemList = $request->request->get('typeItemList');
         $idPatient = $request->request->get('idPatient');
+        $Idinfos = $request->request->get('Idinfos');
 
         $entityManager = $doctrine->getManager();
 
-        $contact = new PatientsPatients();
+        $contact = $doctrine->getRepository(PatientsPatients::class)->find($Idinfos);
 
         $contact->setLinkDescription($description);
         $pati_item = $doctrine->getRepository(Patients::class)->find($patientItemList);
@@ -602,7 +603,7 @@ class ContactsController extends AbstractController
         $entityManager->flush();
 
 
-        return $this->json($contact);
+        return $this->json(["id" => $contact->getId()]);
     }
 
 
@@ -645,7 +646,7 @@ class ContactsController extends AbstractController
         $entityManager->flush();
 
 
-        return $this->json($contact);
+        return $this->json(["id" => $contact->getId()]);
     }
 
     #[Route('/api/updatePatientContact', name: 'app_updatePatientContact')]
@@ -687,7 +688,7 @@ class ContactsController extends AbstractController
         $entityManager->flush();
 
 
-        return $this->json($contact);
+        return $this->json(["id" => $contact->getId()]);
     }
 
 

@@ -39,7 +39,7 @@ class FollowupReportsContactController extends AbstractController
         $reports = $doctrine->getRepository(FollowupReports::class)->findBy(["pati" => $id]);
 
         $cont = $doctrine->getRepository(PatientsContacts::class)->findBy(["pati" => $id]);
-        $patientspatients = $doctrine->getRepository(PatientsPatients::class)->findBy(['tapa' => $id]);
+        $patientspatients = $doctrine->getRepository(PatientsPatients::class)->findBy(['tapa' => $id, 'deleted_at' => null]);
 
         $encoder = new JsonEncoder();
         $defaultContext = [
@@ -75,7 +75,7 @@ class FollowupReportsContactController extends AbstractController
 
         foreach ($cont as $value) {
             // dd($value->getCont()->getFirstname());
-            if ($value) {
+            if ($value && $value->getDeletedAt() === null) {
                 $arrContactByPatients[] = [
                     "id" => $value->getId(),
                     "start" => $value->getStart(),
