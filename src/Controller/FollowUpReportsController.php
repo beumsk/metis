@@ -104,6 +104,10 @@ class FollowUpReportsController extends AbstractController
             if ($value->getId()) {
 
                 $value->setIsShow(false);
+
+                foreach ($value->getFore() as $fore) {
+                    $fore->setIsShow(false);
+                }
             }
         }
 
@@ -116,7 +120,7 @@ class FollowUpReportsController extends AbstractController
 
 
 
-        $jsonObject = $serializer->serialize([$reportFollowUp], 'json', [
+        $jsonObject = $serializer->serialize([...[$reportFollowUp], ...[...($reportFollowUp && $reportFollowUp->getFore()) ? [...$reportFollowUp->getFore()] : null]], 'json', [
             AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context) {
                 return $object->getId();
             },
