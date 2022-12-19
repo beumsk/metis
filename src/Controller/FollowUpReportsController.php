@@ -498,7 +498,7 @@ class FollowUpReportsController extends AbstractController
 
         $followupGoals->setCreationDate(new \DateTime("now"));
         $followupGoals->setDescription($description);
-        $followupGoals->setStatus(0);
+        $followupGoals->setStatus(1);
         $entityManager->persist($followupGoals);
         // dd($followupGoals);
         $entityManager->flush();
