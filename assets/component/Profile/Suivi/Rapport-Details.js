@@ -180,7 +180,7 @@ function RapportDetails(props) {
                 <Form.Check
                   type="switch"
                   className="switcher"
-                  defaultChecked={r.isShow === true}
+                  defaultChecked={r.isShow}
                   onClick={(e) => {
                     // setToggle(!toggle);
 
