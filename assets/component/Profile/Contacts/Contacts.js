@@ -196,13 +196,13 @@ const Contacts = () => {
             type={type}
             contacts={patients}
             // onChangeContacts={(e) => contactLierResponse(e)}
-            onChangeUpdateContact={onChangeUpdateContact}
-            listContacts={listContacts}
+            // onChangeUpdateContact={onChangeUpdateContact}
+            listPatients={patients}
             // listContactsSelect={props.listContacts}
             // infos={row}
             // // onChangeContacts={(e) => contactLierResponse(e)}
             // listPatients={patients}
-            // onChangeUpdatePatient={onChangeUpdatePatient}
+            onChangeUpdatePatient={onChangeUpdatePatient}
             // type={type}
             // contacts={patients && patients.data.length > 0 ? patients : null}
             // // listContactsSelect={props.listContacts}
@@ -390,7 +390,7 @@ const Contacts = () => {
       )}
 
       <h5>Patients</h5>
-      {patientsLists && patientsLists.length > 0 ? (
+      {patientsLists && patients && patientsLists.length > 0 ? (
         <ToolkitProvider
           keyField="id"
           data={patientsLists}

@@ -90,7 +90,7 @@ function ModalLierPatient(props) {
       }
     });
   }
-
+  console.log(props);
   if (responseDatas !== null) {
     console.log(props);
     props.onChangeUpdatePatient(responseDatas);
@@ -126,7 +126,7 @@ function ModalLierPatient(props) {
               {props?.contacts?.data?.map((el, id) => (
                 <>
                   {el?.firstname && el?.lastname && (
-                    <option>
+                    <option value={el.id}>
                       {el?.firstname} {el?.lastname}
                     </option>
                   )}
@@ -141,7 +141,7 @@ function ModalLierPatient(props) {
               defaultValue={props?.infos?.sugg?.id}
             >
               {props?.type?.data?.map((el, id) => (
-                <option>{el?.value}</option>
+                <option value={el.id}>{el?.value}</option>
               ))}
             </Form.Select>
             <Form.Label htmlFor="inputValue">Description</Form.Label>
