@@ -1435,7 +1435,7 @@ class FollowUpReportsController extends AbstractController
 
         $id = $request->request->get('id');
 
-        $places = $doctrine->getRepository(FollowupGoals::class)->findBy(["pati" => $id]);
+        $places = $doctrine->getRepository(FollowupGoals::class)->findBy(["pati" => $id, "deleted_at" => null]);
         // $places = $doctrine->getRepository(FollowupGoals::class)->findAll();
         $encoders = [new JsonEncoder()];
         $normalizers = [new DateTimeNormalizer(), new ObjectNormalizer()];
@@ -1446,7 +1446,7 @@ class FollowUpReportsController extends AbstractController
             AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context) {
                 return $object->getId();
             },
-            AbstractNormalizer::IGNORED_ATTRIBUTES => ['pati', 'cont', 'contact', 'func', 'sugg']
+            AbstractNormalizer::IGNORED_ATTRIBUTES => ['pati', 'cont', 'contact', 'func', 'sugg', 'contacts', 'contact', 'fore', 'goalsInformation', 'followupInformation']
         ]);
 
         $response = new Response($jsonObject, 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);

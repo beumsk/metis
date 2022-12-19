@@ -43,6 +43,7 @@ const Profile = () => {
 
   const [informationPatient, setInformation] = useState(null);
   const [goals, setGoals] = useState(null);
+  const [goalsList, setGoalsList] = useState(null);
   const [activities, setActivities] = useState(null);
   // getFollowUpReportsGoals
   useEffect(() => {
@@ -73,7 +74,19 @@ const Profile = () => {
         setGoals(response);
       })
       .catch(function (response) {});
-
+    axios({
+      method: "post",
+      url: "/api/getFollowUpReportsGoals",
+      data: formData,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    })
+      .then(function (response) {
+        setGoalsList(response);
+      })
+      .catch(function (response) {});
     axios({
       method: "post",
       url: "/api/suggestionsById",
@@ -183,11 +196,11 @@ const Profile = () => {
               <Accordion.Item eventKey="0">
                 <Accordion.Header>Ouvertes</Accordion.Header>
                 <Accordion.Body>
-                  {goals?.data.map((g, id) => (
+                  {goalsList?.data.map((g, id) => (
                     <>
                       {g &&
                       g.type === 1 &&
-                      (g.status === 0 || g.status === 1) ? (
+                      (g.status === 1 || g.status === 2) ? (
                         <div className="item-goals" key={id}>
                           {new Date(g.creationDate).toLocaleString("fr-BE", {
                             dateStyle: "short",
@@ -204,11 +217,11 @@ const Profile = () => {
               <Accordion.Item eventKey="1">
                 <Accordion.Header>Fermées</Accordion.Header>
                 <Accordion.Body>
-                  {goals?.data.map((g, id) => (
+                  {goalsList?.data.map((g, id) => (
                     <>
                       {g &&
                       g.type === 1 &&
-                      (g.status === 2 || g.status === 3) ? (
+                      (g.status === 3 || g.status === 4) ? (
                         <div className="item-goals" key={id}>
                           {new Date(g.creationDate).toLocaleString("fr-BE", {
                             dateStyle: "short",
@@ -239,11 +252,11 @@ const Profile = () => {
                 <Accordion.Item eventKey="0">
                   <Accordion.Header>Ouvertes</Accordion.Header>
                   <Accordion.Body>
-                    {goals?.data.map((g, id) => (
+                    {goalsList?.data.map((g, id) => (
                       <>
                         {g &&
                         g?.type === 2 &&
-                        (g.status === 0 || g.status === 1) ? (
+                        (g.status === 1 || g.status === 2) ? (
                           <div className="item-goals" key={id}>
                             {new Date(g.creationDate).toLocaleString("fr-BE", {
                               dateStyle: "short",
@@ -261,11 +274,11 @@ const Profile = () => {
                 <Accordion.Item eventKey="1">
                   <Accordion.Header>Fermées</Accordion.Header>
                   <Accordion.Body>
-                    {goals?.data.map((g, id) => (
+                    {goalsList?.data.map((g, id) => (
                       <>
                         {g &&
                         g?.type === 2 &&
-                        (g.status === 2 || g.status === 3) ? (
+                        (g.status === 3 || g.status === 4) ? (
                           <div className="item-goals" key={id}>
                             {new Date(g.creationDate).toLocaleString("fr-BE", {
                               dateStyle: "short",
