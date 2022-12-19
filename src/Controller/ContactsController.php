@@ -627,7 +627,7 @@ class ContactsController extends AbstractController
 
         $contact->setLinkDescription($description);
         $cont_item = $doctrine->getRepository(Contacts::class)->find($contactItemList);
-        $contact->setCont($cont_item);
+        $contact->setContact($cont_item);
 
         if ($start !== "null") {
             $contact->setStart(new \DateTime($start));
@@ -637,9 +637,9 @@ class ContactsController extends AbstractController
             $contact->setEnd(new \DateTime($end));
         }
         $sugg_item = $doctrine->getRepository(Suggestions::class)->find($typeItemList);
-        $contact->setSugg($sugg_item);
+        $contact->setLinkType($sugg_item);
         $patient = $doctrine->getRepository(Patients::class)->find($idPatient);
-        $contact->setPati($patient);
+        $contact->setPatient($patient);
 
 
         $entityManager->persist($contact);
@@ -669,7 +669,7 @@ class ContactsController extends AbstractController
 
         $contact->setLinkDescription($description);
         $cont_item = $doctrine->getRepository(Contacts::class)->find($contactItemList);
-        $contact->setCont($cont_item);
+        $contact->setContact($cont_item);
 
         if ($start !== "null") {
             $contact->setStart(new \DateTime($start));
@@ -679,9 +679,9 @@ class ContactsController extends AbstractController
             $contact->setEnd(new \DateTime($end));
         }
         $sugg_item = $doctrine->getRepository(Suggestions::class)->find($typeItemList);
-        $contact->setSugg($sugg_item);
+        $contact->setLinkType($sugg_item);
         $patient = $doctrine->getRepository(Patients::class)->find($idPatient);
-        $contact->setPati($patient);
+        $contact->setPatient($patient);
 
 
         // $entityManager->persist($contact);

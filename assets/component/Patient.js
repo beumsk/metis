@@ -124,7 +124,7 @@ const Patient = () => {
                   imgPatient !== null &&
                   Object.keys(imgPatient).length > 0 ? (
                     <>
-                      <img src={imgPatient.image} />;
+                      <img src={imgPatient.image} />
                     </>
                   ) : (
                     <>

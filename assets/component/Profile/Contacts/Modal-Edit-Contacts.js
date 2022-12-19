@@ -26,11 +26,11 @@ function ModalEditContacts(props) {
   const [responseDatas, setResponseDatas] = useState(null);
   const [idPatient, setIdPatient] = useState(id);
   const [description, setDescription] = useState(
-    props?.infos?.linkDesciption ? props?.infos?.linkDesciption : null
+    props?.infos?.comment ? props?.infos?.comment : null
   );
   const [commentaire, setCommentaire] = useState(null);
   const [contactItemList, setContactItemList] = useState(
-    props?.infos?.cont?.id ? props?.infos?.cont?.id : null
+    props?.infos?.cont[0]?.id ? props?.infos?.cont[0]?.id : null
   );
   const [start, setStartDate] = useState(
     props?.infos?.start ? props?.infos?.start : null
@@ -38,7 +38,9 @@ function ModalEditContacts(props) {
   const [end, setEndDate] = useState(
     props?.infos?.end ? props?.infos?.end : null
   );
-  const [typeItemList, setTypeItemList] = useState();
+  const [typeItemList, setTypeItemList] = useState(
+    props?.infos?.sugg[0]?.id ? props?.infos?.sugg[0]?.id : null
+  );
   const [type, setType] = useState(null);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -85,7 +87,7 @@ function ModalEditContacts(props) {
             setIsSentRepport(true);
           })
           .catch(function (response) {});
-
+        setShow(false);
         // document.querySelectorAll(".btn-close")[0].click();
         // location.replace(window.location.origin + "/" + idPatient);
       }
@@ -93,7 +95,7 @@ function ModalEditContacts(props) {
   }
   console.log(props);
   if (responseDatas !== null) {
-    props.onChange(responseDatas);
+    props.onChangeUpdateContact(responseDatas);
   }
 
   const handleInputChange = (e) => {
@@ -120,7 +122,7 @@ function ModalEditContacts(props) {
             <Form.Select
               size="lg"
               onChange={(e) => setContactItemList(e.target.value)}
-              defaultValue={props?.infos.cont?.id}
+              defaultValue={props?.infos?.cont[0]?.id}
               className="uk-select"
             >
               {props?.contacts?.data?.map((el, id) => (
@@ -136,7 +138,7 @@ function ModalEditContacts(props) {
             <Form.Label htmlFor="inputValue">Type</Form.Label>
             <Form.Select
               size="lg"
-              defaultValue={props?.infos.sugg?.id}
+              defaultValue={props?.infos?.sugg[0]?.id}
               onChange={(e) => setTypeItemList(e.target.value)}
               className="uk-select"
             >
@@ -150,7 +152,7 @@ function ModalEditContacts(props) {
               rows={3}
               className="uk-input"
               id="inputValueSpécifique"
-              defaultValue={props?.infos?.linkDescription}
+              defaultValue={props?.infos?.comment}
               aria-describedby="valueSpécifique"
               onChange={(e) => setDescription(e.target.value)}
             />
@@ -160,9 +162,11 @@ function ModalEditContacts(props) {
               type="date"
               className="uk-select"
               onChange={handleInputChange}
-              defaultValue={new Date(props?.infos?.start)
-                .toISOString()
-                .substring(0, 10)}
+              defaultValue={
+                props?.infos?.start === null
+                  ? ""
+                  : new Date(props?.infos?.start).toISOString().substring(0, 10)
+              }
               id="inputValueSpécifique"
               aria-describedby="valueSpécifique"
             />
@@ -170,9 +174,11 @@ function ModalEditContacts(props) {
             <Form.Control
               type="date"
               className="uk-select"
-              defaultValue={new Date(props?.infos?.end)
-                .toISOString()
-                .substring(0, 10)}
+              defaultValue={
+                props?.infos?.end === null
+                  ? ""
+                  : new Date(props?.infos?.end).toISOString().substring(0, 10)
+              }
               onChange={handleInputChange}
               id="inputValueSpécifique"
               aria-describedby="valueSpécifique"

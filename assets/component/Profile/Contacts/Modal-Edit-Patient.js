@@ -90,9 +90,8 @@ function ModalLierPatient(props) {
       }
     });
   }
-  console.log(props);
+
   if (responseDatas !== null) {
-    console.log(props);
     props.onChangeUpdatePatient(responseDatas);
   }
 
@@ -159,9 +158,11 @@ function ModalLierPatient(props) {
             <Form.Control
               type="date"
               onChange={handleInputChange}
-              defaultValue={new Date(props?.infos?.start)
-                .toISOString()
-                .substring(0, 10)}
+              defaultValue={
+                props?.infos?.start === null
+                  ? ""
+                  : new Date(props?.infos?.start).toISOString().substring(0, 10)
+              }
               id="inputValueSpécifique"
               aria-describedby="valueSpécifique"
               className="uk-select"
@@ -172,9 +173,11 @@ function ModalLierPatient(props) {
               id="inputValueSpécifique"
               className="uk-select"
               onChange={handleInputChange}
-              defaultValue={new Date(props?.infos?.end)
-                .toISOString()
-                .substring(0, 10)}
+              defaultValue={
+                props?.infos?.end === null
+                  ? ""
+                  : new Date(props?.infos?.end).toISOString().substring(0, 10)
+              }
               aria-describedby="valueSpécifique"
             />
           </>

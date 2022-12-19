@@ -36,7 +36,8 @@ class PatientsContacts
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $deleted_at = null;
 
-    #[ORM\ManyToOne]
+    #[ORM\ManyToOne(targetEntity: 'Suggestions', cascade: ["all"], fetch: "EAGER")]
+    #[ORM\JoinColumn(name: "sugg_id", referencedColumnName: "id", nullable: true, onDelete: "SET NULL")]
     private ?Suggestions $sugg = null;
 
     #[ORM\ManyToOne(targetEntity: 'Contacts', inversedBy: 'patients', cascade: ["all"], fetch: "EAGER")]

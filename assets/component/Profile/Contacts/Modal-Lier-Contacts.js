@@ -46,19 +46,6 @@ function ModalLierContacts(props) {
         setType(response);
       })
       .catch(function (response) {});
-    // axios({
-    //   method: "post",
-    //   url: "/api/getContacts",
-    //   data: formData,
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //     Authorization: `Bearer ${auth.auth.accessToken}`,
-    //   },
-    // })
-    //   .then(function (response) {
-    //     setContacts(response);
-    //   })
-    //   .catch(function (response) {});
   }, [idPatient]);
   //
   //   /api/getContacts
@@ -101,8 +88,6 @@ function ModalLierContacts(props) {
             document.querySelectorAll(".btn-close")[0].click();
           })
           .catch(function (response) {});
-        // document.querySelectorAll(".btn-close")[0].click();
-        // location.replace(window.location.origin + "/" + idPatient);
       }
     });
   }

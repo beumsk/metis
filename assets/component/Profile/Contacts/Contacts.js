@@ -167,9 +167,9 @@ const Contacts = () => {
       sort: true,
       formatter: (cell, row, rowIndex, extraData) => (
         <div>
-          {row.start === "null"
+          {row.start === null
             ? ""
-            : new Date(row?.start).toLocaleString("fr-BE", "short")}
+            : new Date(row?.start).toISOString().substring(0, 10)}
         </div>
       ),
     },
@@ -179,9 +179,9 @@ const Contacts = () => {
       sort: true,
       formatter: (cell, row, rowIndex, extraData) => (
         <div>
-          {row?.end === "null"
+          {row?.end === null
             ? ""
-            : new Date(row?.end).toLocaleString("fr-BE", "short")}
+            : new Date(row?.end).toISOString().substring(0, 10)}
         </div>
       ),
     },
@@ -268,9 +268,9 @@ const Contacts = () => {
 
       formatter: (cell, row, rowIndex, extraData) => (
         <div>
-          {row?.start === "null"
+          {row?.start === null
             ? ""
-            : new Date(row?.start).toLocaleString("fr-BE", "short")}
+            : new Date(row?.start).toISOString().substring(0, 10)}
         </div>
       ),
     },
@@ -279,9 +279,9 @@ const Contacts = () => {
       text: "Fin",
       formatter: (cell, row, rowIndex, extraData) => (
         <div>
-          {row?.end === "null"
+          {row?.end === null
             ? ""
-            : new Date(row?.end).toLocaleString("fr-BE", "short")}
+            : new Date(row?.end).toISOString().substring(0, 10)}
         </div>
       ),
     },
@@ -308,17 +308,6 @@ const Contacts = () => {
       ),
 
       text: "Actions",
-    },
-  ];
-
-  const defaultSortedBy = [
-    {
-      dataField: "start",
-      order: "desc", // or desc
-    },
-    {
-      dataField: "end",
-      order: "asc", // or desc
     },
   ];
 
@@ -351,22 +340,22 @@ const Contacts = () => {
     <div className="onglet-contact">
       {listContacts && listContacts.length > 0 && (
         <div className="d-flex mb-4 row-btn">
-          <ModalLierPatient
-            listPatients={patients}
-            onChangeUpdatePatient={onChangeUpdatePatient}
-            type={type}
-            contacts={patients}
-          ></ModalLierPatient>
           <ModalLierContacts
             onChangeUpdateContact={onChangeUpdateContact}
             type={type}
             contacts={contacts}
             listContacts={contactList}
           ></ModalLierContacts>
+          <ModalLierPatient
+            listPatients={patients}
+            onChangeUpdatePatient={onChangeUpdatePatient}
+            type={type}
+            contacts={patients}
+          ></ModalLierPatient>
         </div>
       )}
 
-      <h5>Personnes</h5>
+      <h5>Contacts</h5>
       {listContacts && listContacts.length > 0 ? (
         <ToolkitProvider
           keyField="id"
