@@ -38,6 +38,7 @@ function ModalEditAppels(props) {
   const [isCallsPatients, setIsCallsPatients] = useState(false);
   const [isPriority, setPriority] = useState(false);
   const [contact, setonChangeContact] = useState(props?.calls?.cont?.id);
+  const [valueType, setValueType] = useState(props?.calls?.title);
   const [description, setDescription] = useState(props?.calls?.description);
   const [type, setType] = useState(null);
   const [fonction, setFonction] = useState(null);
@@ -111,7 +112,7 @@ function ModalEditAppels(props) {
   const onChangeWhatDoinFunction = (e) => {
     setValueWhatDoinFunction(e.target.value);
   };
-  function onSended() {
+  function onSentCalls() {
     // isCall is true appel entrant
     console.log("send");
     let formData = new FormData();
@@ -123,8 +124,9 @@ function ModalEditAppels(props) {
     formData.append("description", description);
     formData.append("valueWhatDoinFunction", valueWhatDoinFunction);
     formData.append("patientId", idPatient);
+    formData.append("valueType", valueType);
     formData.append("userId", userId);
-    formData.append("callsId", props?.calls?.id);
+    formData.append("goalsId", props?.calls?.id);
     formData.append("valueDate", valueDate);
     formData.append("valueStatus", valueStatus);
     // console.log(isCallsPatients);
@@ -213,6 +215,7 @@ function ModalEditAppels(props) {
               type="text"
               id="inputText"
               className="uk-input"
+              onChange={(e) => setValueType(e.target.value)}
               defaultValue={props?.calls?.title}
             />
             <Form.Group className="mb-3" controlId="formBasicCheckbox">
@@ -277,7 +280,7 @@ function ModalEditAppels(props) {
         </Modal.Body>
         <Modal.Footer>
           <Button onClick={handleClose}>Fermer</Button>
-          <Button onClick={onSended} className="btn-metis">
+          <Button onClick={onSentCalls} className="btn-metis">
             Sauver
           </Button>
         </Modal.Footer>

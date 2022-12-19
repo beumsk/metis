@@ -552,15 +552,20 @@ class FollowUpReportsController extends AbstractController
         $followupGoals = $doctrine->getRepository(FollowupGoals::class)->find($goalsId);
         $patients = $doctrine->getRepository(Patients::class)->find($patientId);
         $user = $doctrine->getRepository(Patients::class)->find($userId);
-        if ($valueWhatDoinFunction !== "null") {
+
+
+        if ($valueWhatDoinFunction !== null) {
+
             $suggestions = $doctrine->getRepository(Suggestions::class)->find($valueWhatDoinFunction);
+            $followupGoals->setSugg($suggestions);
         }
 
-        if ($callsFunctionValue !== "null") {
+        if ($callsFunctionValue !== null) {
             $function = $doctrine->getRepository(Suggestions::class)->find($callsFunctionValue);
+            $followupGoals->setFunc($function);
         }
 
-        if ($typeValue !== "null") {
+        if ($typeValue !== null) {
             $typeValue = $doctrine->getRepository(Suggestions::class)->find($typeValue);
             $followupGoals->setSugg($typeValue);
         }
@@ -582,13 +587,9 @@ class FollowUpReportsController extends AbstractController
             $followupGoals->setType(2);
         }
 
-        if ($function !== "null") {
-            $followupGoals->setFunc($function);
-        }
 
-        if ($suggestions !== 'null') {
-            $followupGoals->setSugg($suggestions);
-        }
+
+
 
         // $followupGoals->setUser($user);
 
@@ -1592,7 +1593,7 @@ class FollowUpReportsController extends AbstractController
             AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context) {
                 return $object->getId();
             },
-            AbstractNormalizer::IGNORED_ATTRIBUTES => ['pati', 'contact', 'contacts', 'contact', 'fore', 'goalsInformation', 'followupInformation']
+            AbstractNormalizer::IGNORED_ATTRIBUTES => ['pati', 'contact', 'orga', 'parentSugg', 'followupReportsIndicators', "followupReportsActivities", "followupReportsGoals", "followupReportsCare", "patients", "informations", "calls", 'contacts', 'contact', 'fore', 'goalsInformation', 'followupInformation']
         ]);
 
         $response = new Response($jsonObject, 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
