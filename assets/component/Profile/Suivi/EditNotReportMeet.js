@@ -61,6 +61,32 @@ function EditNoReportMeet(props) {
           )}
       </div> */}
       <div className="contact-row">
+        <h6>Contact: </h6>
+        {props.rapport && props.rapport.cont && (
+          <>
+            <span style={{ fontWeight: "normal" }}>
+              {props?.rapport.cont.lastname}
+              {props?.rapport.cont.firstname}
+            </span>
+          </>
+        )}
+
+        {props.rapport &&
+          props.rapport.cont &&
+          props.rapport.cont.length > 0 && (
+            <>
+              <span style={{ fontWeight: "normal" }}>
+                {props?.rapport.cont?.map((cont) => (
+                  <>
+                    {cont.lastname}
+                    {cont.firstname}
+                  </>
+                ))}
+              </span>
+            </>
+          )}
+      </div>
+      {/* <div className="contact-row">
         {props.rapport &&
           props.rapport.cont &&
           props.rapport.cont.length > 0 && (
@@ -76,7 +102,7 @@ function EditNoReportMeet(props) {
               </span>
             </>
           )}
-      </div>
+      </div> */}
       <div className="place-row">
         {props.rapport && props.rapport.plac && props.rapport.plac !== null && (
           <>
@@ -93,6 +119,20 @@ function EditNoReportMeet(props) {
             <h6>Date de création: </h6>
             <span style={{ fontWeight: "normal" }}>
               {new Date(props.rapport.creationDate).toLocaleString(
+                "fr-BE",
+                "short"
+              )}
+            </span>
+          </>
+        )}
+      </div>
+
+      <div className="date-row">
+        {props.rapport && props.rapport.duration && (
+          <>
+            <h6>Duration: </h6>
+            <span style={{ fontWeight: "normal" }}>
+              {new Date(props.rapport.duration).toLocaleString(
                 "fr-BE",
                 "short"
               )}
