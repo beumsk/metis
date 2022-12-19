@@ -28,7 +28,7 @@ function EditNoReportMeet(props) {
   const [isSentRepport, setSentRepport] = useState(false);
   var formActivitiesDatas = new FormData();
   formActivitiesDatas.append("id", 106);
-
+  console.log(props);
   return (
     <div className="noEditRepports-container">
       <div className="contact-row">
@@ -45,6 +45,21 @@ function EditNoReportMeet(props) {
             </>
           )}
       </div>
+
+      {/* <div className="contact-row">
+        {props.rapport &&
+          props.rapport.fore &&
+          props.rapport.fore.length > 0 && (
+            <>
+              <h6>Rapports: </h6>
+              <span style={{ fontWeight: "normal" }}>
+                {props?.rapport.fore?.map((fo) => (
+                  <>{fo.content}</>
+                ))}
+              </span>
+            </>
+          )}
+      </div> */}
       <div className="contact-row">
         {props.rapport &&
           props.rapport.cont &&
@@ -72,11 +87,23 @@ function EditNoReportMeet(props) {
           </>
         )}
       </div>
-
+      <div className="date-row">
+        {props.rapport && props.rapport.creationDate && (
+          <>
+            <h6>Date de création: </h6>
+            <span style={{ fontWeight: "normal" }}>
+              {new Date(props.rapport.creationDate).toLocaleString(
+                "fr-BE",
+                "short"
+              )}
+            </span>
+          </>
+        )}
+      </div>
       <div className="date-row">
         {props.rapport && props.rapport.reportDate && (
           <>
-            <h6>Date: </h6>
+            <h6>Date de rencontre: </h6>
             <span style={{ fontWeight: "normal" }}>
               {new Date(props.rapport.reportDate).toLocaleString(
                 "fr-BE",

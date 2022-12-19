@@ -8,6 +8,7 @@ import {
   faPlusCircle,
   faFilePen,
   faPhone,
+  faHouseSignal,
   faSquarePhoneFlip,
 } from "@fortawesome/free-solid-svg-icons";
 import { useParams } from "react-router-dom";
@@ -62,7 +63,7 @@ function RapportDetails(props) {
       .then(function (response) {
         setType(response);
       })
-      .catch(function (response) { });
+      .catch(function (response) {});
 
     axios({
       method: "post",
@@ -76,7 +77,7 @@ function RapportDetails(props) {
       .then(function (response) {
         setInformations(response);
       })
-      .catch(function (response) { });
+      .catch(function (response) {});
   }, [idPatient]);
 
   function onChangeReport(e) {
@@ -92,7 +93,7 @@ function RapportDetails(props) {
       .then(function (response) {
         setType(response);
       })
-      .catch(function (response) { });
+      .catch(function (response) {});
 
     axios({
       method: "post",
@@ -105,18 +106,13 @@ function RapportDetails(props) {
     })
       .then(function (response) {
         setInformations(response);
-        // for (
-        //   let index = 0;
-        //   index < document.querySelectorAll(".switcher").length;
-        //   index++
-        // ) {
-        //   const element = document.querySelectorAll(".form-check-input")[index];
-        //   element.click();
-        // }
-        // document.querySelectorAll(".switcher")[0].click();
       })
-      .catch(function (response) { });
+      .catch(function (response) {});
+
+    console.log(props.search);
+    // setInformations(props.informations);
   }
+
   function onChangeFilter(e) {
     setInformations(e);
   }
@@ -140,9 +136,25 @@ function RapportDetails(props) {
         .then(function (response) {
           setInformations(response);
         })
-        .catch(function (response) { });
+        .catch(function (response) {});
     }
   };
+
+  function onChangeInformations(e) {
+    console.log(e);
+  }
+
+  useEffect(() => {
+    console.log(props.search);
+    // let obj = {};
+    // obj.data = [props.search];
+    // console.log(obj);
+    // console.log("useEffect logic ran");
+    // console.log(informations);
+    if (props.search !== null) {
+      setInformations(props.search);
+    }
+  }, [props.search]);
 
   return (
     <>
@@ -162,52 +174,58 @@ function RapportDetails(props) {
                   : { border: "4px solid #9c5fb5" }
               }
             >
+              {r.activityType === 1 ||
+              r.activityType === 4 ||
+              r.activityType === 2 ? (
+                <Form.Check
+                  type="switch"
+                  className="switcher"
+                  defaultChecked={r.isShow === true}
+                  onClick={(e) => {
+                    // setToggle(!toggle);
+
+                    if (e.target.checked === true) {
+                      setToggle(true);
+                      r.isShow = true;
+
+                      setInformations(informations);
+                      console.log(r);
+                    }
+
+                    if (e.target.checked === false) {
+                      setToggle(false);
+                      r.isShow = false;
+
+                      setInformations(informations);
+                      axios({
+                        method: "post",
+                        url: "/api/getFollowUpReportsById",
+                        data: reportData,
+                        headers: {
+                          "Content-Type": "application/json",
+                          Authorization: `Bearer ${auth.auth.accessToken}`,
+                        },
+                      })
+                        .then(function (response) {
+                          setInformations(response);
+                        })
+                        .catch(function (response) {});
+                    }
+
+                    // if (r.isHightlight === false) {
+                    //   setToggle(!toggle);
+                    //   r.isShow = toggle;
+
+                    //   setInformations(informations);
+                    // }
+                  }}
+                  label="Activer le mode édition"
+                />
+              ) : (
+                ""
+              )}
               {r && r.deletedAt === null && (
                 <>
-                  <Form.Check
-                    type="switch"
-                    className="switcher"
-                    defaultChecked={r.isShow === true}
-                    onClick={(e) => {
-                      // setToggle(!toggle);
-
-                      if (e.target.checked === true) {
-                        setToggle(true);
-                        r.isShow = true;
-
-                        setInformations(informations);
-                        console.log(r);
-                      }
-
-                      if (e.target.checked === false) {
-                        setToggle(false);
-                        r.isShow = false;
-
-                        setInformations(informations);
-                        axios({
-                          method: "post",
-                          url: "/api/getFollowUpReportsById",
-                          data: reportData,
-                          headers: {
-                            "Content-Type": "application/json",
-                            Authorization: `Bearer ${auth.auth.accessToken}`,
-                          },
-                        })
-                          .then(function (response) {
-                            setInformations(response);
-                          })
-                          .catch(function (response) { });
-                      }
-
-                      // if (r.isHightlight === false) {
-                      //   setToggle(!toggle);
-                      //   r.isShow = toggle;
-
-                      //   setInformations(informations);
-                      // }
-                    }}
-                    label="Activer le mode édition"
-                  />
                   {r && r.activityType === 1 && (
                     <h3 className="uk-card-title">
                       {" "}
@@ -219,25 +237,37 @@ function RapportDetails(props) {
                     </h3>
                   )}
 
-                  {r && r.activityType === 2 && (
+                  {r.type === 1 && (
                     <h3 className="uk-card-title">
                       <FontAwesomeIcon
-                        icon={faPhone}
+                        icon={faHouseSignal}
                         style={{ marginRight: "1rem" }}
                       />
-                      Appel Sortant
+                      Objectif
                     </h3>
                   )}
 
-                  {r && r.activityType === 4 && (
-                    <h3 className="uk-card-title">
-                      <FontAwesomeIcon
-                        icon={faPhone}
-                        style={{ marginRight: "1rem" }}
-                      />
-                      Appel Entrant
-                    </h3>
-                  )}
+                  {(r && r.activityType === 2) ||
+                    (r && r.cont === null && r.type === 2 && (
+                      <h3 className="uk-card-title">
+                        <FontAwesomeIcon
+                          icon={faPhone}
+                          style={{ marginRight: "1rem" }}
+                        />
+                        Appel Sortant
+                      </h3>
+                    ))}
+
+                  {(r && r.activityType === 4) ||
+                    (r && r?.cont?.id && r.type === 2 && (
+                      <h3 className="uk-card-title">
+                        <FontAwesomeIcon
+                          icon={faPhone}
+                          style={{ marginRight: "1rem" }}
+                        />
+                        Appel Entrant
+                      </h3>
+                    ))}
 
                   {r.isShow === true && (
                     <EditReportMeet

@@ -42,9 +42,11 @@ const Profile = () => {
   let objPatient = {};
 
   const [informationPatient, setInformation] = useState(null);
+  const [search, setSearch] = useState(null);
   const [goals, setGoals] = useState(null);
   const [goalsList, setGoalsList] = useState(null);
   const [activities, setActivities] = useState(null);
+  const [idSearch, setIdSearch] = useState(null);
   // getFollowUpReportsGoals
   useEffect(() => {
     axios({
@@ -151,6 +153,28 @@ const Profile = () => {
     setIsReportsDetails(true);
   };
 
+  const choiceRepport = (e) => {
+    var reportSearch = new FormData();
+    reportSearch.append("id", e);
+    axios({
+      method: "post",
+      url: "/api/getFollowUpGoalsById",
+      data: reportSearch,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    })
+      .then(function (response) {
+        return setSearch(response);
+      })
+      .catch(function (response) {});
+  };
+
+  function onChangeGoals(e) {
+    console.log(e);
+    setGoalsList(e);
+  }
   return (
     <div className="container-ongletProfile">
       <div className="row item-report">
@@ -202,10 +226,17 @@ const Profile = () => {
                       g.type === 1 &&
                       (g.status === 1 || g.status === 2) ? (
                         <div className="item-goals" key={id}>
-                          {new Date(g.creationDate).toLocaleString("fr-BE", {
-                            dateStyle: "short",
-                          })}
-                          {g?.func?.value} {g?.description}
+                          <Link
+                            // from={window.location.origin}
+
+                            onClick={(e) => choiceRepport(g.id)}
+                          >
+                            (
+                            {new Date(g.creationDate).toLocaleString("fr-BE", {
+                              dateStyle: "short",
+                            })}
+                            ){g?.sugg?.value} {g?.description}
+                          </Link>
                         </div>
                       ) : (
                         ""
@@ -223,10 +254,16 @@ const Profile = () => {
                       g.type === 1 &&
                       (g.status === 3 || g.status === 4) ? (
                         <div className="item-goals" key={id}>
-                          {new Date(g.creationDate).toLocaleString("fr-BE", {
-                            dateStyle: "short",
-                          })}
-                          {g?.func?.value} {g?.description}
+                          <Link
+                            // from={window.location.origin}
+
+                            onClick={(e) => choiceRepport(g.id)}
+                          >
+                            {new Date(g.creationDate).toLocaleString("fr-BE", {
+                              dateStyle: "short",
+                            })}
+                            {g?.func?.value} {g?.description}
+                          </Link>
                         </div>
                       ) : (
                         ""
@@ -258,10 +295,19 @@ const Profile = () => {
                         g?.type === 2 &&
                         (g.status === 1 || g.status === 2) ? (
                           <div className="item-goals" key={id}>
-                            {new Date(g.creationDate).toLocaleString("fr-BE", {
-                              dateStyle: "short",
-                            })}
-                            {g?.func?.value} {g?.description}
+                            <Link
+                              // from={window.location.origin}
+
+                              onClick={(e) => choiceRepport(g.id)}
+                            >
+                              {new Date(g.creationDate).toLocaleString(
+                                "fr-BE",
+                                {
+                                  dateStyle: "short",
+                                }
+                              )}
+                              {g?.func?.value} {g?.description}
+                            </Link>
                           </div>
                         ) : (
                           ""
@@ -280,10 +326,19 @@ const Profile = () => {
                         g?.type === 2 &&
                         (g.status === 3 || g.status === 4) ? (
                           <div className="item-goals" key={id}>
-                            {new Date(g.creationDate).toLocaleString("fr-BE", {
-                              dateStyle: "short",
-                            })}
-                            {g?.func?.value} {g?.description}
+                            <Link
+                              // from={window.location.origin}
+
+                              onClick={(e) => choiceRepport(g.id)}
+                            >
+                              {new Date(g.creationDate).toLocaleString(
+                                "fr-BE",
+                                {
+                                  dateStyle: "short",
+                                }
+                              )}
+                              {g?.func?.value} {g?.description}
+                            </Link>
                           </div>
                         ) : (
                           ""
@@ -310,6 +365,7 @@ const Profile = () => {
                 type={type}
                 contacts={contacts}
                 places={places}
+                onChange={onChangeGoals}
               ></ModalAddAppels>
             </div>
 
@@ -318,6 +374,7 @@ const Profile = () => {
                 type={type}
                 contacts={contacts}
                 places={places}
+                onChange={onChangeGoals}
               ></ModalAddObjectifs>
             </div>
           </div>
@@ -327,6 +384,7 @@ const Profile = () => {
               type={type}
               contacts={contacts}
               goals={goals}
+              search={search}
               places={places}
               informationPatient={informationPatient}
             ></RapportDetails>

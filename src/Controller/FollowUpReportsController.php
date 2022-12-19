@@ -69,9 +69,13 @@ class FollowUpReportsController extends AbstractController
         $followupGoals->setType(1);
         $followupGoals->setSugg($suggestions);
         $followupGoals->setCreationDate(new \DateTime("now"));
+        if ($description !== "null") {
+            $followupGoals->setDescription($description);
+        } else {
+            $followupGoals->setDescription("Pas de description");
+        }
 
-        $followupGoals->setDescription($description);
-        $followupGoals->setStatus(0);
+        $followupGoals->setStatus(1);
         $followupGoals->setTitle($valueType);
         $entityManager->persist($followupGoals);
 
@@ -81,6 +85,52 @@ class FollowUpReportsController extends AbstractController
             'idAppel' => $followupGoals->getId()
         ]);
     }
+
+    #[Route('/api/getFollowUpGoalsById', name: 'app_getFollowUpGoalsById')]
+    public function getFollowUpGoalsById(ManagerRegistry $doctrine, SerializerInterface $serializer): Response
+    {
+        $request = Request::createFromGlobals();
+
+        $id = $request->request->get('id');
+
+        $textSearch = $request->request->get('setTextRapport');
+        $dateSearch = $request->request->get('setDateRapport');
+        $typeSearch = $request->request->get('setTypeRapport');
+        $searchLink = $request->request->get('idSearch');
+
+        $reportFollowUp = $doctrine->getRepository(FollowupGoals::class)->find($id);
+
+        foreach ([$reportFollowUp] as  $value) {
+            if ($value->getId()) {
+
+                $value->setIsShow(false);
+            }
+        }
+
+
+        $encoders = [new JsonEncoder()];
+        $normalizers = [new DateTimeNormalizer(), new ObjectNormalizer()];
+        $serializer = new Serializer($normalizers, $encoders);
+
+
+
+
+
+        $jsonObject = $serializer->serialize([$reportFollowUp], 'json', [
+            AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context) {
+                return $object->getId();
+            },
+            AbstractNormalizer::IGNORED_ATTRIBUTES => ['pati', 'informations', 'occupants', 'contact', 'func', 'calls', 'patients']
+        ]);
+
+
+        $response = new Response($jsonObject, 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
+
+        $response->setSharedMaxAge(3600);
+
+        return $response;
+    }
+
 
     #[Route('/api/getFollowUpReportsById', name: 'app_getFollowUpReportsById')]
     public function getFollowUpReportsById(ManagerRegistry $doctrine, SerializerInterface $serializer): Response
@@ -92,8 +142,9 @@ class FollowUpReportsController extends AbstractController
         $textSearch = $request->request->get('setTextRapport');
         $dateSearch = $request->request->get('setDateRapport');
         $typeSearch = $request->request->get('setTypeRapport');
+        $searchLink = $request->request->get('idSearch');
 
-        $reportFollowUp = $doctrine->getRepository(FollowupReports::class)->mergeFollowUpGoalsAndReports($id, $textSearch, $dateSearch, $typeSearch);
+        $reportFollowUp = $doctrine->getRepository(FollowupReports::class)->mergeFollowUpGoalsAndReports($id, $textSearch, $dateSearch, $typeSearch, $searchLink);
 
         foreach ($reportFollowUp as  $value) {
             if ($value->getId()) {
@@ -496,7 +547,7 @@ class FollowUpReportsController extends AbstractController
 
         if ($isCallsPatients === "true") {
 
-            $followupGoals->setType(1);
+            $followupGoals->setType(2);
         }
 
         if ($isCallsPatients === "false") {

@@ -11,10 +11,12 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\MaxDepth;
 use App\Utils\InfosCallsTrait;
+use App\Utils\InfosReportTrait;
 
 #[ORM\Entity(repositoryClass: FollowupGoalsRepository::class)]
 class FollowupGoals
 {
+    use InfosReportTrait;
     use InfosCallsTrait;
     const STATUS_NEW = 0;
     const STATUS_OPEN = 1;

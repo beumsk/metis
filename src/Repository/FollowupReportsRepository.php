@@ -91,7 +91,7 @@ class FollowupReportsRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
-    public function mergeFollowUpGoalsAndReports($id, $textSearch = null, $dateSearch = null, $typeSearch = null)
+    public function mergeFollowUpGoalsAndReports($id, $textSearch = null, $dateSearch = null, $typeSearch = null, $searchLink = null)
     {
 
         $qb = $this->getEntityManager()->createQueryBuilder();
@@ -102,6 +102,13 @@ class FollowupReportsRepository extends ServiceEntityRepository
             ->addOrderBy('f.creation_date', 'DESC')
             ->setMaxResults(10);
         $parameters["idPati"] = $id;
+
+        if (null !== $searchLink) {
+            $qb->andWhere('f.id = :searchLink');
+            $parameters["searchLink"] = '%' . $searchLink . '%';
+        }
+
+
         if (null !== $textSearch) {
             $qb->andWhere('f.content like :textSearch');
             $parameters["textSearch"] = '%' . $textSearch . '%';

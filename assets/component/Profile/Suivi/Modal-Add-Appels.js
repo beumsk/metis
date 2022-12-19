@@ -128,7 +128,21 @@ function ModalAddAppels(props) {
         Authorization: `Bearer ${auth.auth.accessToken}`,
       },
     }).then(function (response) {
-      // location.replace(window.location.origin + "/" + idPatient);
+      var formDataGetGoals = new FormData();
+      formDataGetGoals.append("id", id.toString());
+      axios({
+        method: "post",
+        url: "/api/getFollowUpReportsGoals",
+        data: formDataGetGoals,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${auth.auth.accessToken}`,
+        },
+      })
+        .then(function (response) {
+          props.onChange(response);
+        })
+        .catch(function (response) {});
       document.querySelectorAll(".btn-close")[0].click();
     });
   }

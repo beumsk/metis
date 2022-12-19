@@ -1002,9 +1002,13 @@ function EditReportMeet(props) {
       {reportDate ? (
         <Form.Control
           type="date"
-          defaultValue={new Date(props?.informationPatient?.reportDate)
-            .toJSON()
-            .slice(0, 10)}
+          defaultValue={
+            props?.informationPatient && props?.informationPatient?.reportDate
+              ? new Date(props?.informationPatient?.reportDate)
+                  .toJSON()
+                  .slice(0, 10)
+              : ""
+          }
           placeholder="Here edit the release date"
           onChange={(e) => onChangeDate(e)}
           className="uk-select"
@@ -1013,9 +1017,13 @@ function EditReportMeet(props) {
       ) : (
         <Form.Control
           type="date"
-          defaultValue={new Date(props?.informationPatient?.reportDate)
-            .toJSON()
-            .slice(0, 10)}
+          defaultValue={
+            props?.informationPatient && props?.informationPatient?.reportDate
+              ? new Date(props?.informationPatient?.reportDate)
+                  .toJSON()
+                  .slice(0, 10)
+              : ""
+          }
           placeholder="Here edit the release date"
           onChange={(e) => onChangeDate(e)}
           className="uk-select"
@@ -1024,7 +1032,11 @@ function EditReportMeet(props) {
       )}
       <InputGoalsList
         goals={props?.goals}
-        defaultValue={props?.informationPatient?.fogo}
+        defaultValue={
+          props?.informationPatient && props?.informationPatient?.fogo
+            ? props?.informationPatient?.fogo
+            : null
+        }
         onChangeGoals={onChangeGoals}
       />
       {props?.informationPatient?.hasOwnProperty("type") === false && (
