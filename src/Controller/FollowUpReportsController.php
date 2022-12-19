@@ -411,11 +411,15 @@ class FollowUpReportsController extends AbstractController
 
             foreach ($report->getFogo() as $value) {
                 $report->removefogo($value);
+
                 // dd($followupGoals->getfogo());
             }
             // $arrayCollectionDiff = new FollowupGoals($changeGoals);
             foreach ($changeGoals as $value) {
                 // $arrayCollectionDiff = new FollowupGoals($value);
+                $value->removeFollowupReport($report);
+                $value->addFollowupReport($report);
+
                 $report->addfogo($value);
             }
         }
@@ -1299,14 +1303,17 @@ class FollowUpReportsController extends AbstractController
                 array_push($arrGoals_id, $value->value);
             }
             $changeGoals = $doctrine->getRepository(FollowupGoals::class)->findBy(array("id" => $arrGoals_id));
-
             foreach ($report->getFogo() as $value) {
                 $report->removefogo($value);
+
                 // dd($followupGoals->getfogo());
             }
             // $arrayCollectionDiff = new FollowupGoals($changeGoals);
             foreach ($changeGoals as $value) {
                 // $arrayCollectionDiff = new FollowupGoals($value);
+                $value->removeFollowupReport($report);
+                $value->addFollowupReport($report);
+
                 $report->addfogo($value);
             }
         }
@@ -1452,7 +1459,7 @@ class FollowUpReportsController extends AbstractController
         // dd($goals);
         foreach ($goals as $value) {
             // dd($value);
-            if ($value->getDeletedAt() === null) {
+            if ($value->getDeletedAt() === null && $value->getType() === 1 && ($value->getStatus() === 1 || $value->getStatus() === 2)) {
                 $goalsArr[] = [
                     "value" => $value->getId(),
                     "label" => $value->getDescription(),
