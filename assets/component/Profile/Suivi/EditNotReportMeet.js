@@ -74,11 +74,11 @@ function EditNoReportMeet(props) {
       </div>
 
       <div className="date-row">
-        {props.rapport && props.rapport.creationDate && (
+        {props.rapport && props.rapport.reportDate && (
           <>
             <h6>Date: </h6>
             <span style={{ fontWeight: "normal" }}>
-              {new Date(props.rapport.creationDate).toLocaleString(
+              {new Date(props.rapport.reportDate).toLocaleString(
                 "fr-BE",
                 "short"
               )}

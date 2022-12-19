@@ -312,6 +312,7 @@ function EditReportMeet(props) {
 
   function editorChange(e) {
     //
+    setChangeDescriptionGoals(e);
     setChangeEditor(e);
   }
   const onClickAddIndicateurs = (e) => {
@@ -395,6 +396,7 @@ function EditReportMeet(props) {
     formData.append("userId", userId);
     formData.append("patiId", patiId);
     formData.append("description", changeDescriptionGoals);
+    console.log(changeDescriptionGoals);
 
     axios({
       method: "post",
@@ -1011,7 +1013,7 @@ function EditReportMeet(props) {
       ) : (
         <Form.Control
           type="date"
-          defaultValue={new Date(props?.informationPatient?.creationDate)
+          defaultValue={new Date(props?.informationPatient?.reportDate)
             .toJSON()
             .slice(0, 10)}
           placeholder="Here edit the release date"
@@ -1060,7 +1062,7 @@ function EditReportMeet(props) {
         <>
           <Form.Label htmlFor="inputValue">Description</Form.Label>
           <Editor
-            onChange={(e) => setChangeDescriptionGoals(e.target.value)}
+            onChange={editorChange}
             content={
               props.informationPatient.content ||
               props.informationPatient.description
