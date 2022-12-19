@@ -161,7 +161,9 @@ function ModalEditContacts(props) {
             <Form.Control
               type="date"
               className="uk-select"
-              onChange={handleInputChange}
+              onChange={(e) =>
+                setStartDate(new Date(e.target.value).toJSON().slice(0, 10))
+              }
               defaultValue={
                 props?.infos?.start === null
                   ? ""
@@ -179,7 +181,9 @@ function ModalEditContacts(props) {
                   ? ""
                   : new Date(props?.infos?.end).toISOString().substring(0, 10)
               }
-              onChange={handleInputChange}
+              onChange={(e) =>
+                setEndDate(new Date(e.target.value).toJSON().slice(0, 10))
+              }
               id="inputValueSpécifique"
               aria-describedby="valueSpécifique"
             />

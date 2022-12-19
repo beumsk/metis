@@ -118,11 +118,6 @@ function ModalEditPatient(props) {
     props.onChangeUpdatePatient(responseDatas);
   }
 
-  const handleInputChange = (e) => {
-    //new Date(start).toJSON().slice(0, 10)
-    setStartDate(new Date(e.target.value).toJSON().slice(0, 10));
-    setEndDate(new Date(e.target.value).toJSON().slice(0, 10));
-  };
   return (
     <>
       <Button onClick={handleShow} className="btn-metis">
@@ -176,7 +171,9 @@ function ModalEditPatient(props) {
             <Form.Label htmlFor="inputValue">Début</Form.Label>
             <Form.Control
               type="date"
-              onChange={handleInputChange}
+              onChange={(e) =>
+                setStartDate(new Date(e.target.value).toJSON().slice(0, 10))
+              }
               id="inputValueSpécifique"
               className="uk-select"
               aria-describedby="valueSpécifique"
@@ -186,7 +183,9 @@ function ModalEditPatient(props) {
               type="date"
               className="uk-select"
               id="inputValueSpécifique"
-              onChange={handleInputChange}
+              onChange={(e) =>
+                setEndDate(new Date(e.target.value).toJSON().slice(0, 10))
+              }
               aria-describedby="valueSpécifique"
             />
             <Form.Label htmlFor="inputValue">Commentaire</Form.Label>

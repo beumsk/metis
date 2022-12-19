@@ -94,12 +94,7 @@ function ModalLierPatient(props) {
   if (responseDatas !== null) {
     props.onChangeUpdatePatient(responseDatas);
   }
-  console.log(props);
-  const handleInputChange = (e) => {
-    //new Date(start).toJSON().slice(0, 10)
-    setStartDate(new Date(e.target.value).toJSON().slice(0, 10));
-    setEndDate(new Date(e.target.value).toJSON().slice(0, 10));
-  };
+
   return (
     <>
       <Button onClick={handleShow} className="btn-metis">
@@ -157,7 +152,9 @@ function ModalLierPatient(props) {
             <Form.Label htmlFor="inputValue">Début</Form.Label>
             <Form.Control
               type="date"
-              onChange={handleInputChange}
+              onChange={(e) =>
+                setStartDate(new Date(e.target.value).toJSON().slice(0, 10))
+              }
               defaultValue={
                 props?.infos?.start === null
                   ? ""
@@ -172,7 +169,9 @@ function ModalLierPatient(props) {
               type="date"
               id="inputValueSpécifique"
               className="uk-select"
-              onChange={handleInputChange}
+              onChange={(e) =>
+                setEndDate(new Date(e.target.value).toJSON().slice(0, 10))
+              }
               defaultValue={
                 props?.infos?.end === null
                   ? ""
