@@ -93,6 +93,8 @@ function ModalDeletePatient(props) {
           },
         })
           .then(function (response) {
+            console.log(response);
+
             setResponseDatas(response.data);
             setIsSentRepport(true);
           })

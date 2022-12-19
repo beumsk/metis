@@ -84,7 +84,7 @@ function ModalLierPatient(props) {
             setIsSentRepport(true);
           })
           .catch(function (response) {});
-
+        setShow(false);
         // document.querySelectorAll(".btn-close")[0].click();
         // location.replace(window.location.origin + "/" + idPatient);
       }
@@ -94,7 +94,7 @@ function ModalLierPatient(props) {
   if (responseDatas !== null) {
     props.onChangeUpdatePatient(responseDatas);
   }
-
+  console.log(props);
   const handleInputChange = (e) => {
     //new Date(start).toJSON().slice(0, 10)
     setStartDate(new Date(e.target.value).toJSON().slice(0, 10));

@@ -107,7 +107,7 @@ function ModalEditPatient(props) {
             }
           })
           .catch(function (response) {});
-
+        setShow(false);
         // document.querySelectorAll(".btn-close")[0].click();
         // location.replace(window.location.origin + "/" + idPatient);
       }

@@ -51,7 +51,7 @@ class FollowupReportsContactController extends AbstractController
         $normalizer = new ObjectNormalizer(null, null, null, null, null, null, $defaultContext);
 
         $serializer = new Serializer([new DateTimeNormalizer(), $normalizer], [$encoder]);
-        $data = $serializer->serialize($patientspatients, 'json', [AbstractNormalizer::IGNORED_ATTRIBUTES => ["cont", "pati", "sugg", "orga", "calls", "user", "informations", "fore", "contact", "linkType", "patient"]]);
+        $data = $serializer->serialize($patientspatients, 'json', [AbstractNormalizer::IGNORED_ATTRIBUTES => ["cont", "pati", "orga", "calls", "user", "informations", "fore", "contact", "linkType", "patient"]]);
 
         return $this->json(json_decode($data));
     }

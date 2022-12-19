@@ -539,8 +539,9 @@ class ContactsController extends AbstractController
         $entityManager = $doctrine->getManager();
 
         $contact = new PatientsPatients();
-
-        $contact->setLinkDescription($description);
+        if ($description !== "null") {
+            $contact->setLinkDescription($description);
+        }
         $pati_item = $doctrine->getRepository(Patients::class)->find($patientItemList);
         $contact->setOrpa($pati_item);
 
@@ -552,7 +553,7 @@ class ContactsController extends AbstractController
             $contact->setEnd(new \DateTime($end));
         }
         $sugg_item = $doctrine->getRepository(Suggestions::class)->find($typeItemList);
-        $contact->setSugg($sugg_item);
+        $contact->setLinkType($sugg_item);
         $patient = $doctrine->getRepository(Patients::class)->find($idPatient);
         $contact->setTapa($patient);
 
@@ -581,8 +582,9 @@ class ContactsController extends AbstractController
         $entityManager = $doctrine->getManager();
 
         $contact = $doctrine->getRepository(PatientsPatients::class)->find($Idinfos);
-
-        $contact->setLinkDescription($description);
+        if ($description !== "null") {
+            $contact->setLinkDescription($description);
+        }
         $pati_item = $doctrine->getRepository(Patients::class)->find($patientItemList);
         $contact->setOrpa($pati_item);
 
@@ -594,7 +596,7 @@ class ContactsController extends AbstractController
             $contact->setEnd(new \DateTime($end));
         }
         $sugg_item = $doctrine->getRepository(Suggestions::class)->find($typeItemList);
-        $contact->setSugg($sugg_item);
+        $contact->setLinkType($sugg_item);
         $patient = $doctrine->getRepository(Patients::class)->find($idPatient);
         $contact->setTapa($patient);
 
