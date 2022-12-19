@@ -31,6 +31,11 @@ function RapportDetails(props) {
 
   var reportData = new FormData();
   reportData.append("id", id.toString());
+  var funcAppelFormData = new FormData();
+  funcAppelFormData.append("id", 658);
+
+  var valueFormData = new FormData();
+  valueFormData.append("id", 174);
   //reportData.append("countResult", 10);
   //   formData.append("pathString", props.link);
   const [contacts, setContacts] = useState(null);
@@ -49,19 +54,20 @@ function RapportDetails(props) {
   const [toggle, setToggle] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+  const [whatDoinFunction, setWhatDoinFunction] = useState(null);
 
   useEffect(() => {
     axios({
       method: "post",
       url: "/api/suggestionsById",
-      data: formData,
+      data: funcAppelFormData,
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${auth.auth.accessToken}`,
       },
     })
       .then(function (response) {
-        setType(response);
+        setFonction(response);
       })
       .catch(function (response) {});
 

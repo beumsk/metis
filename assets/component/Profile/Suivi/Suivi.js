@@ -22,6 +22,8 @@ import ModalAddObjectifs from "./Modal-Add-Objectifs";
 import AddReportMeet from "./Add-Report-Meet";
 import DashboardReports from "./Dashboard-Reports";
 import Accordion from "react-bootstrap/Accordion";
+import ModalEditObjectifs from "./Modal-Edit-Objectifs";
+import ModalEditAppels from "./Modal-Edit-Appels";
 const Profile = () => {
   let id = useParams().id;
   const [auth, setAuth] = useState(useAuth());
@@ -33,12 +35,20 @@ const Profile = () => {
   const [places, setPlaces] = useState(null);
   const [isDahsboardReports, setIsDashbordReports] = useState(false);
   const [isAddReportMeet, setIsAddReportMeet] = useState(false);
+  const [fonction, setFonction] = useState(null);
+  const [whatDoinFunction, setWhatDoinFunction] = useState(null);
+  const [valueWhatDoinFunction, setValueWhatDoinFunction] = useState(null);
   const [isReportDetails, setIsReportsDetails] = useState(true);
   const [value, setValue] = useState(null);
+  var funcAppelFormData = new FormData();
+  funcAppelFormData.append("id", 658);
   var formData = new FormData();
   formData.append("id", id.toString());
   var suggForm = new FormData();
   suggForm.append("id", [57, 658, 174, 25]);
+
+  var valueFormData = new FormData();
+  valueFormData.append("id", 174);
   let objPatient = {};
 
   const [informationPatient, setInformation] = useState(null);
@@ -65,6 +75,19 @@ const Profile = () => {
 
     axios({
       method: "post",
+      url: "/api/suggestionsById",
+      data: valueFormData,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    })
+      .then(function (response) {
+        setWhatDoinFunction(response);
+      })
+      .catch(function (response) {});
+    axios({
+      method: "post",
       url: "/api/getFollowUpReportsGoalsForSelect",
       data: formData,
       headers: {
@@ -89,10 +112,13 @@ const Profile = () => {
         setGoalsList(response);
       })
       .catch(function (response) {});
+
+    var formDataType = new FormData();
+    formDataType.append("id", 174);
     axios({
       method: "post",
       url: "/api/suggestionsById",
-      data: formData,
+      data: formDataType,
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${auth.auth.accessToken}`,
@@ -103,6 +129,19 @@ const Profile = () => {
       })
       .catch(function (response) {});
 
+    axios({
+      method: "post",
+      url: "/api/suggestionsById",
+      data: funcAppelFormData,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    })
+      .then(function (response) {
+        setFonction(response);
+      })
+      .catch(function (response) {});
     axios({
       method: "post",
       url: "/api/getContactsForSelect",
@@ -226,6 +265,11 @@ const Profile = () => {
                       g.type === 1 &&
                       (g.status === 1 || g.status === 2) ? (
                         <div className="item-goals" key={id}>
+                          <ModalEditObjectifs
+                            goalsItem={g}
+                            type={type}
+                            onChange={onChangeGoals}
+                          ></ModalEditObjectifs>
                           <Link
                             // from={window.location.origin}
 
@@ -254,6 +298,11 @@ const Profile = () => {
                       g.type === 1 &&
                       (g.status === 3 || g.status === 4) ? (
                         <div className="item-goals" key={id}>
+                          <ModalEditObjectifs
+                            goalsItem={g}
+                            onChange={onChangeGoals}
+                            type={type}
+                          ></ModalEditObjectifs>
                           <Link
                             // from={window.location.origin}
 
@@ -295,6 +344,13 @@ const Profile = () => {
                         g?.type === 2 &&
                         (g.status === 1 || g.status === 2) ? (
                           <div className="item-goals" key={id}>
+                            <ModalEditAppels
+                              calls={g}
+                              contacts={contacts}
+                              fonction={fonction}
+                              whatDoinFunction={whatDoinFunction}
+                              onChange={onChangeGoals}
+                            ></ModalEditAppels>
                             <Link
                               // from={window.location.origin}
 
@@ -326,6 +382,13 @@ const Profile = () => {
                         g?.type === 2 &&
                         (g.status === 3 || g.status === 4) ? (
                           <div className="item-goals" key={id}>
+                            <ModalEditAppels
+                              calls={g}
+                              contacts={contacts}
+                              fonction={fonction}
+                              whatDoinFunction={whatDoinFunction}
+                              onChange={onChangeGoals}
+                            ></ModalEditAppels>
                             <Link
                               // from={window.location.origin}
 

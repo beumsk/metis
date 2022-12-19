@@ -529,7 +529,91 @@ class FollowUpReportsController extends AbstractController
         ]);
     }
 
+    #[Route('/api/updateCallsAndGoals', name: 'app_updateCallsAndGoals')]
+    public function updateCallsAndGoals(ManagerRegistry $doctrine, Request $request): JsonResponse
+    {
+        $entityManager = $doctrine->getManager();
+        $request = Request::createFromGlobals();
+        $callsFunctionValue = $request->request->get('callsFunctionValue');
+        $isCallsPatients = $request->request->get('isCallsPatients');
+        $isPriority = $request->request->get('isPriority');
+        $contact = $request->request->get('contact');
+        $typeValue = $request->request->get('typeValue');
+        $description = $request->request->get('description');
+        $valueWhatDoinFunction = $request->request->get('valueWhatDoinFunction');
+        $patientId = $request->request->get('patientId');
+        $userId = $request->request->get('userId');
+        $goalsId = $request->request->get('goalsId');
+        $valueStatus = $request->request->get('valueStatus');
+        $dateCreation = $request->request->get('dateCreation');
+        // dd($patientId);
 
+
+        $followupGoals = $doctrine->getRepository(FollowupGoals::class)->find($goalsId);
+        $patients = $doctrine->getRepository(Patients::class)->find($patientId);
+        $user = $doctrine->getRepository(Patients::class)->find($userId);
+        if ($valueWhatDoinFunction !== "null") {
+            $suggestions = $doctrine->getRepository(Suggestions::class)->find($valueWhatDoinFunction);
+        }
+
+        if ($callsFunctionValue !== "null") {
+            $function = $doctrine->getRepository(Suggestions::class)->find($callsFunctionValue);
+        }
+
+        if ($typeValue !== "null") {
+            $typeValue = $doctrine->getRepository(Suggestions::class)->find($typeValue);
+            $followupGoals->setSugg($typeValue);
+        }
+
+
+
+        $followupGoals->setPati($patients);
+
+        if ($isCallsPatients === "true") {
+
+            $followupGoals->setType(2);
+        }
+
+        if ($isCallsPatients === "false") {
+            $cont = $doctrine->getRepository(Contacts::class)->find($contact);
+
+            $followupGoals->setCont($cont);
+            $followupGoals->setContact($cont);
+            $followupGoals->setType(2);
+        }
+
+        if ($function !== "null") {
+            $followupGoals->setFunc($function);
+        }
+
+        if ($suggestions !== 'null') {
+            $followupGoals->setSugg($suggestions);
+        }
+
+        // $followupGoals->setUser($user);
+
+
+        $followupGoals->setCreationDate(new \DateTime($dateCreation));
+
+
+        if ($isPriority !== 'null') {
+            $followupGoals->setIsHightlight($isPriority);
+        }
+
+        if ($description !== 'null') {
+            $followupGoals->setDescription($description);
+        }
+
+
+        $followupGoals->setStatus($valueStatus);
+        // $entityManager->persist($followupGoals);
+        // dd($followupGoals);
+        $entityManager->flush();
+        return new JsonResponse([
+            'response' => "Sent !",
+            'idAppel' => $followupGoals->getId()
+        ]);
+    }
     #[Route('/api/setCalls', name: 'app_setCalls')]
     public function setCalls(ManagerRegistry $doctrine, Request $request): JsonResponse
     {
@@ -1508,7 +1592,7 @@ class FollowUpReportsController extends AbstractController
             AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context) {
                 return $object->getId();
             },
-            AbstractNormalizer::IGNORED_ATTRIBUTES => ['pati', 'cont', 'contact', 'func', 'sugg', 'contacts', 'contact', 'fore', 'goalsInformation', 'followupInformation']
+            AbstractNormalizer::IGNORED_ATTRIBUTES => ['pati', 'contact', 'contacts', 'contact', 'fore', 'goalsInformation', 'followupInformation']
         ]);
 
         $response = new Response($jsonObject, 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
