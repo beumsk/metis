@@ -124,7 +124,7 @@ class InformationTemplateElementController extends AbstractController
             $patientInfo->setEnd(new \DateTime($end));
         }
         $patientInfo->setComment($commentaireInput);
-        $patientInfo->setPati($patient);
+        $patientInfo->setPatients($patient);
         $patientInfo->setItel($itel);
         $entityManager->persist($patientInfo);
 

@@ -50,6 +50,7 @@ const Form_AddPatients = () => {
     })
       .then(function (response) {
         console.log(response);
+        setShow(false);
       })
       .catch(function (response) {
         console.log(response);
