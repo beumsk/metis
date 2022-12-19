@@ -504,7 +504,7 @@ class FollowUpReportsController extends AbstractController
         $entityManager->flush();
         return new JsonResponse([
             'response' => "Sent !",
-            'idAppel' => $followupGoals->getCont()->getId()
+            'idAppel' => $followupGoals->getId()
         ]);
     }
 

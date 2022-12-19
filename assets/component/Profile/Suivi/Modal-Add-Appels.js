@@ -113,7 +113,7 @@ function ModalAddAppels(props) {
     formData.append("callsFunctionValue", callsFunctionValue);
     formData.append("isCallsPatients", isCallsPatients);
     formData.append("isPriority", isPriority);
-    formData.append("contact", contact);
+    formData.append("contact", contact[0]?.value);
     formData.append("description", description);
     formData.append("valueWhatDoinFunction", valueWhatDoinFunction);
     formData.append("patientId", idPatient);
@@ -147,7 +147,11 @@ function ModalAddAppels(props) {
           {" "}
           <>
             <Form.Label htmlFor="inputValue">Fonction du référent</Form.Label>
-            <Form.Select size="lg" onChange={(e) => onChangeFunction(e)}>
+            <Form.Select
+              size="lg"
+              onChange={(e) => onChangeFunction(e)}
+              className="uk-select"
+            >
               <option>Rajoutez la fonction du référent</option>
               {fonction?.data?.map((el, id) => (
                 <>{el.value && <option value={el?.id}>{el?.value}</option>}</>
@@ -157,6 +161,7 @@ function ModalAddAppels(props) {
             <Form.Select
               size="lg"
               onChange={(e) => onChangeWhatDoinFunction(e)}
+              className="uk-select"
             >
               <option>Rajoutez sa valeur</option>
               {whatDoinFunction?.data?.map((el, id) => (
@@ -164,7 +169,11 @@ function ModalAddAppels(props) {
               ))}
             </Form.Select>
 
-            <Form.Control type="text" id="inputText" className="mt-4" />
+            <Form.Control
+              type="text"
+              id="inputText"
+              className="mt-4 uk-input"
+            />
             <Form.Group className="mb-3" controlId="formBasicCheckbox">
               <Form.Check
                 type="checkbox"
@@ -182,6 +191,7 @@ function ModalAddAppels(props) {
             {isCallsPatients === false && (
               <InputContactList
                 contacts={props.contacts}
+                defaultValue={null}
                 onChange={(e) => onChangeContacts(e)}
               />
             )}
