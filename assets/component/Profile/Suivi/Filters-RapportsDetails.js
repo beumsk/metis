@@ -24,6 +24,7 @@ function FilterRapportDetails(props) {
 
   var reportData = new FormData();
   reportData.append("id", id.toString());
+  reportData.append("number", 10);
   const [filterTextContentRapport, setFilterTextContentRapport] =
     useState(null);
   const [filterDateContentRapport, setFilterDateContentRapport] =
