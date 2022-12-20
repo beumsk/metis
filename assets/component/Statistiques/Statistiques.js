@@ -7,6 +7,7 @@ import { useParams } from "react-router-dom";
 
 import useAuth from "../../hooks/useAuth";
 import Form from "react-bootstrap/Form";
+import { Label } from "@mui/icons-material";
 
 const Statistiques = () => {
   let id = useParams().id;
@@ -16,6 +17,7 @@ const Statistiques = () => {
   const [resultCsv, setResultCSV] = useState(null);
   const [statValue, setStatsValue] = useState(null);
   const [nameFileName, setFileName] = useState(null);
+  const [year, setYear] = useState("2022");
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -52,17 +54,19 @@ const Statistiques = () => {
     console.log(statValue);
     let request = "/api/statistiques" + statValue;
 
-    let formdata = new FormData();
-    formdata.year = "2024";
-    axios({
-      method: "post",
-      url: request,
-      formdata: formdata,
+    var params = {
+      data1: year,
+    };
+
+    var headers = {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${auth.auth.accessToken}`,
       },
-    })
+    };
+
+    axios
+      .post(request, params, headers)
       .then(function (response) {
         setResultCSV(response.data);
         if (response.data) {
@@ -71,6 +75,25 @@ const Statistiques = () => {
         exportFile();
       })
       .catch(function (response) {});
+
+    // axios({
+    //   method: "post",
+    //   url: request,
+    //   item: { some: { year: "2024" } },
+    //   type: "products",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //     Authorization: `Bearer ${auth.auth.accessToken}`,
+    //   },
+    // })
+    //   .then(function (response) {
+    //     setResultCSV(response.data);
+    //     if (response.data) {
+    //       jsonToCsv(response.data);
+    //     }
+    //     exportFile();
+    //   })
+    //   .catch(function (response) {});
   }
 
   function jsonToCsv(items) {
@@ -108,8 +131,17 @@ const Statistiques = () => {
   return (
     <>
       <Menu></Menu>
-      Statistiques
-      <div className="select">
+
+      <div className="select container" style={{ position: "relative" }}>
+        <h5>Statistiques</h5>
+        <Form.Label>Année</Form.Label>
+        <input
+          className="uk-input"
+          defaultValue={"2022"}
+          onChange={(e) => setYear(e.target.value)}
+        />
+
+        <Form.Label>Protocoles</Form.Label>
         <Form.Select
           size="lg"
           className="uk-select"
@@ -638,14 +670,20 @@ const Statistiques = () => {
             Valeurs "autres" pour les pathologies physiques
           </option>
         </Form.Select>
+        <a
+          onClick={exportCSV}
+          className="btn-metis"
+          style={{
+            // position: "absolute",
+            bottom: "0",
+            left: "0",
+            display: "inline-block",
+            marginTop: "1rem",
+          }}
+        >
+          export
+        </a>
       </div>
-      <a
-        onClick={exportCSV}
-        className="btn-metis mt-4"
-        style={{ position: "absolute" }}
-      >
-        export
-      </a>
     </>
   );
 };

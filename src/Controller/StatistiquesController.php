@@ -6,8 +6,9 @@ use PDO;
 use mysqli;
 use GuzzleHttp\Client;
 use App\Entity\Patients;
-use Doctrine\Persistence\ManagerRegistry;
 use PhpParser\Node\Scalar\String_;
+use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -50,26 +51,28 @@ class StatistiquesController extends AbstractController
         $nextyear0101 = null,
         $refYear = null
     ) {
+
+        $_POST = json_decode(file_get_contents("php://input"), true);
         $initDate = 'referencedatesh';
         $currentDate = '2022-11-24';
-        $refDate = ($initDate === 'referencedatesh') ? date('Y-m-d') : '2014-01-01';
+        $refDate = ($initDate === 'referencedatesh') ?  $_POST['data1'] . '-01-01' : '2014-01-01';
 
         $antennainit = 'antennash';
         $antenna = ($antennainit === 'Liege') ? 'Liege' : 'Bruxelles';
         $current_quarter = ceil(date('n') / 3);
-        $quarterstartdate = date('Y-m-d', strtotime(date('Y') . '-' . (($current_quarter * 3) - 2) . '-1'));
-        $quarterenddate = date('Y-m-t', strtotime(date('Y') . '-' . (($current_quarter * 3)) . '-1'));
-        $query_date = '2022-01-01';
-        $startDate = date('Y-m-01', strtotime($query_date));
-        $a_date = "2022-01-01";
-        $endDate = date("Y-m-t", strtotime($a_date));
-        $nextYear = date('Y', strtotime('+1 year'));
+        $quarterstartdate = date($_POST['data1'] . '-m-d', strtotime($_POST['data1'] . '-' . (($current_quarter * 3) - 2) . '-1'));
+        $quarterenddate = date($_POST['data1'] . '-m-d', strtotime($_POST['data1'] . '-' . (($current_quarter * 3)) . '-1'));
+        $query_date =  $_POST['data1'] . '-01-01';
+        $startDate = date($_POST['data1'] . '-m-01', strtotime($query_date));
+        $a_date =  $_POST['data1'] . "-01-01";
+        $endDate = date($_POST['data1'] . "-m-t", strtotime($a_date));
+        $nextYear =  $_POST['data1'] + 1;
 
-        $previousYear = date("Y", strtotime("-1 year"));
-        $refyearwc = date('Y') . "%";
+        $previousYear =  $_POST['data1'] - 1;
+        $refyearwc =  $_POST['data1'] . "%";
         $past = "1903-01-01";
         $nextyear0101 = $nextYear . "-01-01";
-        $refYear = date('Y');
+        $refYear = $_POST['data1'];
 
         // dd($refDate);
 
@@ -84,7 +87,14 @@ class StatistiquesController extends AbstractController
         $this->refyearwc = $refyearwc;
         $this->nextyear0101 = $nextyear0101;
         $this->refYear = $refYear;
+
+
+
+
+        // echo $_POST['data1'];
     }
+
+
 
     #[Route('/api/statistiques140', name: 'app_statistiques140')]
     public function request140()
