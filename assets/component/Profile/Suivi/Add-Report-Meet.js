@@ -834,9 +834,6 @@ function AddReportMeet(props) {
         onChange={(e) => onChangeDate(e)}
         id="inputValueSpécifique"
       />
-      <Form.Label htmlFor="inputValue" className="uk-form-label">
-        Objectifs
-      </Form.Label>
       <InputGoalsList
         goals={props.goals}
         defaultValue={null}
