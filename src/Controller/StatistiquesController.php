@@ -33,6 +33,9 @@ class StatistiquesController extends AbstractController
     public $nextyear0101;
     public $refYear;
 
+
+
+
     public function __construct(
         $quarterstartdate = null,
         $initDate = null,
@@ -69,6 +72,8 @@ class StatistiquesController extends AbstractController
         $refYear = date('Y');
 
         // dd($refDate);
+
+
 
         $this->antennainit = $antennainit;
         $this->startDate = $startDate;
