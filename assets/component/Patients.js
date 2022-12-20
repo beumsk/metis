@@ -14,7 +14,7 @@ import { useParams } from "react-router-dom";
 function Patients() {
   const [auth, setAuth] = useState(useAuth());
   const [patientsList, setPatientsList] = useState(null);
-  const [lengthList, setLengthList] = useState(100);
+  const [lengthList, setLengthList] = useState(10);
   const [searchNamePatient, setSearchNamePatient] = useState(null);
   const [searchDateBirth, setDateBirth] = useState(null);
   const [typePatient, setTypePatient] = useState(null);
@@ -128,7 +128,7 @@ function Patients() {
     console.log(typePatient);
   }
   const readMore = () => {
-    setLengthList(lengthList + 100);
+    setLengthList(lengthList + 10);
   };
 
   return (

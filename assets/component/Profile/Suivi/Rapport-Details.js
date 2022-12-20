@@ -176,9 +176,9 @@ function RapportDetails(props) {
         onChangeFilter={onChangeFilter}
       ></FilterRapportDetails>
 
-      {informations && informations.data && informations.data.length > 0 ? (
+      {informations && informations?.data && informations?.data?.length > 0 ? (
         <>
-          {informations.data.map((r, id) => (
+          {informations?.data.map((r, id) => (
             <div
               key={id}
               className="uk-card uk-card-default uk-card-hover uk-card-body mt-4 mb-4"
