@@ -147,8 +147,9 @@ class FollowUpReportsController extends AbstractController
         $dateSearch = $request->request->get('setDateRapport');
         $typeSearch = $request->request->get('setTypeRapport');
         $searchLink = $request->request->get('idSearch');
+        $number = $request->request->get('number');
 
-        $reportFollowUp = $doctrine->getRepository(FollowupReports::class)->mergeFollowUpGoalsAndReports($id, $textSearch, $dateSearch, $typeSearch, $searchLink);
+        $reportFollowUp = $doctrine->getRepository(FollowupReports::class)->mergeFollowUpGoalsAndReports($id, $textSearch, $dateSearch, $typeSearch, $searchLink, $number);
 
         foreach ($reportFollowUp as  $value) {
             if ($value->getId()) {
@@ -191,7 +192,7 @@ class FollowUpReportsController extends AbstractController
             AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context) {
                 return $object->getId();
             },
-            AbstractNormalizer::IGNORED_ATTRIBUTES => ['pati', 'informations', 'occupants', 'contact', 'func', 'calls', 'patients']
+            AbstractNormalizer::IGNORED_ATTRIBUTES => ['pati', 'informations', 'occupants', 'patient', 'contact', 'func', 'user', 'calls', 'patients', 'roles', 'userIdentifier', "email", "password", "salt", "lastLogin"]
         ]);
 
 

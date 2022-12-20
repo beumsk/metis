@@ -25,12 +25,14 @@ import FilterRapportDetails from "./Filters-RapportsDetails";
 function RapportDetails(props) {
   const [show, setShow] = useState(false);
   const [auth, setAuth] = useState(useAuth());
+  const [numberReports, setNumberReports] = useState(10);
   let id = useParams().id;
   var formData = new FormData();
   formData.append("id", 57);
 
   var reportData = new FormData();
   reportData.append("id", id.toString());
+  reportData.append("number", numberReports);
   var funcAppelFormData = new FormData();
   funcAppelFormData.append("id", 658);
 
@@ -86,20 +88,11 @@ function RapportDetails(props) {
       .catch(function (response) {});
   }, [idPatient]);
 
-  function onChangeReport(e) {
-    axios({
-      method: "post",
-      url: "/api/suggestionsById",
-      data: formData,
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${auth.auth.accessToken}`,
-      },
-    })
-      .then(function (response) {
-        setType(response);
-      })
-      .catch(function (response) {});
+  function onChangeNumber(e) {
+    var reportData = new FormData();
+    reportData.append("id", id.toString());
+    setNumberReports(numberReports + 10);
+    reportData.append("number", numberReports);
 
     axios({
       method: "post",
@@ -112,6 +105,21 @@ function RapportDetails(props) {
     })
       .then(function (response) {
         setInformations(response);
+      })
+      .catch(function (response) {});
+  }
+  function onChangeReport(e) {
+    axios({
+      method: "post",
+      url: "/api/suggestionsById",
+      data: formData,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    })
+      .then(function (response) {
+        setType(response);
       })
       .catch(function (response) {});
 
@@ -307,6 +315,10 @@ function RapportDetails(props) {
               )}
             </div>
           ))}
+
+          <button className="btn-metis" onClick={(e) => onChangeNumber()}>
+            READ MORE
+          </button>
         </>
       ) : (
         <ReactLoading
