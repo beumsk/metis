@@ -217,7 +217,7 @@ const Profile = () => {
   return (
     <div className="container-ongletProfile">
       <div className="row item-report">
-        <div className="col-sm-3">
+        <div className="col-sm-4">
           <div className="menu-ongletFiche mb-4">
             <button
               style={
@@ -253,7 +253,7 @@ const Profile = () => {
             </button>
           </div>
 
-          <h6>Objectifs</h6>
+          <h6>Objectifs </h6>
           {goals ? (
             <Accordion>
               <Accordion.Item eventKey="0">
@@ -272,7 +272,11 @@ const Profile = () => {
                           ></ModalEditObjectifs>
                           <Link
                             // from={window.location.origin}
-
+                            style={
+                              g?.isHightlight
+                                ? { fontWeight: "bold", color: "#3371cd" }
+                                : { fontWeight: "normal", color: "#3371cd" }
+                            }
                             onClick={(e) => choiceRepport(g.id)}
                           >
                             (
@@ -305,7 +309,11 @@ const Profile = () => {
                           ></ModalEditObjectifs>
                           <Link
                             // from={window.location.origin}
-
+                            style={
+                              g?.isHightlight
+                                ? { fontWeight: "bold", color: "#4f5053" }
+                                : { fontWeight: "normal", color: "#4f5053" }
+                            }
                             onClick={(e) => choiceRepport(g.id)}
                           >
                             {new Date(g.creationDate).toLocaleString("fr-BE", {
@@ -353,7 +361,11 @@ const Profile = () => {
                             ></ModalEditAppels>
                             <Link
                               // from={window.location.origin}
-
+                              style={
+                                g?.isHightlight
+                                  ? { fontWeight: "bold", color: "#8cb30c" }
+                                  : { fontWeight: "normal", color: "#8cb30c" }
+                              }
                               onClick={(e) => choiceRepport(g.id)}
                             >
                               {new Date(g.creationDate).toLocaleString(
@@ -391,7 +403,11 @@ const Profile = () => {
                             ></ModalEditAppels>
                             <Link
                               // from={window.location.origin}
-
+                              style={
+                                g?.isHightlight
+                                  ? { fontWeight: "bold", color: "#4f5053" }
+                                  : { fontWeight: "normal", color: "#4f5053" }
+                              }
                               onClick={(e) => choiceRepport(g.id)}
                             >
                               {new Date(g.creationDate).toLocaleString(
@@ -421,7 +437,7 @@ const Profile = () => {
             />
           )}
         </div>
-        <div className="col-sm-9">
+        <div className="col-sm-8">
           <div className="d-flex row-btn mb-4">
             <div style={{ margin: "0 1rem" }}>
               <ModalAddAppels

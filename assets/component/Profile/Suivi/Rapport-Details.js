@@ -261,27 +261,45 @@ function RapportDetails(props) {
                     </h3>
                   )}
 
-                  {(r && r.activityType === 2) ||
-                    (r && r.cont === null && r.type === 2 && (
-                      <h3 className="uk-card-title">
-                        <FontAwesomeIcon
-                          icon={faPhone}
-                          style={{ marginRight: "1rem" }}
-                        />
-                        Appel Sortant
-                      </h3>
-                    ))}
+                  {r && r.activityType === 2 && (
+                    <h3 className="uk-card-title">
+                      <FontAwesomeIcon
+                        icon={faPhone}
+                        style={{ marginRight: "1rem" }}
+                      />
+                      Appel Sortant
+                    </h3>
+                  )}
 
-                  {(r && r.activityType === 4) ||
-                    (r && r?.cont?.id && r.type === 2 && (
-                      <h3 className="uk-card-title">
-                        <FontAwesomeIcon
-                          icon={faPhone}
-                          style={{ marginRight: "1rem" }}
-                        />
-                        Appel Entrant
-                      </h3>
-                    ))}
+                  {r && r.activityType === 4 && (
+                    <h3 className="uk-card-title">
+                      <FontAwesomeIcon
+                        icon={faPhone}
+                        style={{ marginRight: "1rem" }}
+                      />
+                      Appel Entrant
+                    </h3>
+                  )}
+
+                  {r && r.cont === null && r.type === 2 && (
+                    <h3 className="uk-card-title">
+                      <FontAwesomeIcon
+                        icon={faPhone}
+                        style={{ marginRight: "1rem" }}
+                      />
+                      Appel Sortant
+                    </h3>
+                  )}
+
+                  {r && r?.cont?.id && r.type === 2 && (
+                    <h3 className="uk-card-title">
+                      <FontAwesomeIcon
+                        icon={faPhone}
+                        style={{ marginRight: "1rem" }}
+                      />
+                      Appel Entrant
+                    </h3>
+                  )}
 
                   {r.isShow === true && (
                     <EditReportMeet

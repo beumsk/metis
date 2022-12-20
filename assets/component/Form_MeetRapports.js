@@ -121,7 +121,6 @@ const Form_MeetRapports = () => {
       },
     })
       .then(function (response) {
-        console.log(response);
         setGoals(response);
       })
       .catch(function (response) {});
@@ -135,7 +134,6 @@ const Form_MeetRapports = () => {
       },
     })
       .then(function (response) {
-        console.log(response);
         setContacts(response);
       })
       .catch(function (response) {});

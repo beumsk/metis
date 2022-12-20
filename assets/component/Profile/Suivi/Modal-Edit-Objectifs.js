@@ -69,7 +69,6 @@ function ModalEditObjectifs(props) {
     //   .catch(function (response) {});
     setUserId(auth.auth.idUser);
   }, [idPatient]);
-
   function onSent() {
     // isCall is true appel entrant
 
@@ -175,7 +174,11 @@ function ModalEditObjectifs(props) {
               <option value={3}>Annulée</option>
             </Form.Select>
             <Form.Group className="mb-3" controlId="formBasicCheckbox">
-              <Form.Check type="checkbox" label="Prioritaire ?" />
+              <Form.Check
+                type="checkbox"
+                label="Prioritaire ?"
+                defaultChecked={props?.goalsItem?.isHightlight}
+              />
             </Form.Group>
             <Form.Label htmlFor="inputValue">Description</Form.Label>
             <Form.Control
