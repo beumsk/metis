@@ -177,7 +177,8 @@ function ModalEditObjectifs(props) {
               <Form.Check
                 type="checkbox"
                 label="Prioritaire ?"
-                defaultChecked={props?.goalsItem?.isHightlight}
+                onClick={(e) => setPriority(true)}
+                defaultChecked={props?.calls?.isHightlight}
               />
             </Form.Group>
             <Form.Label htmlFor="inputValue">Description</Form.Label>
