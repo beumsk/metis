@@ -213,25 +213,25 @@ function Patients() {
                       </p>
                       {patient?.fore?.map((f) => (
                         <div>
-                          {f.activityType === 1 && (
+                          {f?.activityType === 1 && (
                             <p>
                               Rapport de rencontre{" "}
                               {new Date(f.lastUpdate).toLocaleDateString()}
                             </p>
                           )}
-                          {f.activityType === 2 && (
+                          {f?.activityType === 2 && (
                             <p>
                               Appel sortant{" "}
                               {new Date(f.lastUpdate).toLocaleDateString()}
                             </p>
                           )}
-                          {f.activityType === 4 && (
+                          {f?.activityType === 4 && (
                             <p>
                               Appel entrant{" "}
                               {new Date(f.lastUpdate).toLocaleDateString()}
                             </p>
                           )}
-                          {f.activityType === 4 && (
+                          {f?.activityType === 4 && (
                             <p>
                               Rapport de rencontre{" "}
                               {new Date(f.lastUpdate).toLocaleDateString()}

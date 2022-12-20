@@ -44,11 +44,23 @@ function App() {
         <Route path="unauthorized" element={<Unauthorized />} />
 
         <Route element={<PersistLogin />}>
-          <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
+          <Route
+            element={
+              <RequireAuth
+                allowedRoles={[ROLES.Admin, ROLES.User, ROLES.Basic]}
+              />
+            }
+          >
             <Route path="/" element={<Home />}></Route>
           </Route>
 
-          <Route element={<RequireAuth allowedRoles={[ROLES.Admin]} />}>
+          <Route
+            element={
+              <RequireAuth
+                allowedRoles={[ROLES.Admin, ROLES.User, ROLES.Basic]}
+              />
+            }
+          >
             <Route path="statistiques" element={<Statistiques />} />
             <Route
               path="contactsorganisation"

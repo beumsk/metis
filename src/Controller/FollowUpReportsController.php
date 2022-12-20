@@ -1334,7 +1334,7 @@ class FollowUpReportsController extends AbstractController
 
 
         $report->setDeletedAt(null);
-        $report->setPati($patient);
+        $report->setPatient($patient);
         $report->setDuration(null);
 
         if ($reportDate !== "null") {

@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20221121110159 extends AbstractMigration
+final class Version20221220141631 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -20,12 +20,12 @@ final class Version20221121110159 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE patients_contacts ADD CONSTRAINT FK_EE6A617261D0310E FOREIGN KEY (pati_id) REFERENCES patients (id)');
+        $this->addSql('ALTER TABLE user CHANGE roles roles JSON NOT NULL');
     }
 
     public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE patients_contacts DROP FOREIGN KEY FK_EE6A617261D0310E');
+        $this->addSql('ALTER TABLE user CHANGE roles roles LONGTEXT NOT NULL');
     }
 }
