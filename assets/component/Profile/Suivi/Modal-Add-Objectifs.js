@@ -121,11 +121,12 @@ function ModalAddObjectifs(props) {
             </Form.Group>
             <Form.Label htmlFor="inputValue">Description</Form.Label>
             <Form.Control
-              type="text"
+              as="textarea"
               className="uk-input"
               id="inputValueSpécifique"
               aria-describedby="valueSpécifique"
               onChange={(e) => setDescription(e.target.value)}
+              row={3}
             />
           </>
         </Modal.Body>
