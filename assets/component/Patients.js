@@ -38,6 +38,7 @@ function Patients() {
         setQuery(query);
         if (query) {
           formData.append("searchNamePatient", query);
+          formData.append("page", 10);
         }
 
         axios({

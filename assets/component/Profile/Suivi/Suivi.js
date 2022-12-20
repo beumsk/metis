@@ -59,19 +59,19 @@ const Profile = () => {
   const [idSearch, setIdSearch] = useState(null);
   // getFollowUpReportsGoals
   useEffect(() => {
-    axios({
-      method: "post",
-      url: "/api/getFollowUpReportsById",
-      data: formData,
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${auth.auth.accessToken}`,
-      },
-    })
-      .then(function (response) {
-        setInformation(response);
-      })
-      .catch(function (response) {});
+    // axios({
+    //   method: "post",
+    //   url: "/api/getFollowUpReportsById",
+    //   data: formData,
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //     Authorization: `Bearer ${auth.auth.accessToken}`,
+    //   },
+    // })
+    //   .then(function (response) {
+    //     setInformation(response);
+    //   })
+    //   .catch(function (response) {});
 
     axios({
       method: "post",
@@ -462,11 +462,11 @@ const Profile = () => {
             ></AddReportMeet>
           )}
 
-          {isDahsboardReports && (
-            <DashboardReports
-              informationPatient={informationPatient}
-            ></DashboardReports>
-          )}
+          {/* {isDahsboardReports && (
+            // <DashboardReports
+            //   informationPatient={informationPatient}
+            // ></DashboardReports>
+          )} */}
         </div>
 
         {/* <h1>TEXT</h1> */}

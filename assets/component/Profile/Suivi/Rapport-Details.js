@@ -130,29 +130,29 @@ function RapportDetails(props) {
   function onChangeFilter(e) {
     setInformations(e);
   }
-  const editContent = (e, r) => {
-    if (e.target.checked === true) {
-      r.isHightlight = true;
-      setInformations(informations);
-    }
+  // const editContent = (e, r) => {
+  //   if (e.target.checked === true) {
+  //     r.isHightlight = true;
+  //     setInformations(informations);
+  //   }
 
-    if (e.target.checked === false) {
-      r.isHightlight = false;
-      axios({
-        method: "post",
-        url: "/api/getFollowUpReportsById",
-        data: reportData,
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${auth.auth.accessToken}`,
-        },
-      })
-        .then(function (response) {
-          setInformations(response);
-        })
-        .catch(function (response) {});
-    }
-  };
+  //   if (e.target.checked === false) {
+  //     r.isHightlight = false;
+  //     axios({
+  //       method: "post",
+  //       url: "/api/getFollowUpReportsById",
+  //       data: reportData,
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         Authorization: `Bearer ${auth.auth.accessToken}`,
+  //       },
+  //     })
+  //       .then(function (response) {
+  //         setInformations(response);
+  //       })
+  //       .catch(function (response) {});
+  //   }
+  // };
 
   function onChangeInformations(e) {
     console.log(e);
