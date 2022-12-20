@@ -158,8 +158,6 @@ function ModalEditAppels(props) {
     });
   }
 
-  console.log(props);
-
   return (
     <>
       <Button onClick={handleShow}>

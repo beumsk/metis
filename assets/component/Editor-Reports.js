@@ -5,7 +5,7 @@ import { templates } from "suneditor/src/plugins";
 import "suneditor/src/assets/css/suneditor.css";
 const Editor = (props) => {
   const editor = useRef();
-  console.log(props);
+
   const defaultValueRapport =
     "<b><u>Nom(s) du travailleur :</u></b><br><br><b><u>Résumé :</u></b><br><br><b><u>Bien-être :</u></b><br><br><b><u>Logement :</u></b><br><br><b><u>Médical :</u></b><br><br><b><u>Social :</u></b><br>";
   // The sunEditor parameter will be set to the core suneditor instance when this function is called

@@ -33,7 +33,6 @@ function ModalLierLieux(props) {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  console.log(props);
   useEffect(() => {
     //   axios({
     //     method: "post",

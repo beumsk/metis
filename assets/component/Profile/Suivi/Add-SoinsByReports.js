@@ -97,7 +97,7 @@ function AddSoinsByReport(props) {
       description: description ? description : props.formCaresEdit?.description,
     },
   ]);
-  console.log(props);
+
   return (
     <>
       <div className="addSoins-form" id={props.id}>

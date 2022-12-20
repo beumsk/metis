@@ -93,7 +93,7 @@ function ModalEditContacts(props) {
       }
     });
   }
-  console.log(props);
+
   if (responseDatas !== null) {
     props.onChangeUpdateContact(responseDatas);
   }

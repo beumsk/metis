@@ -28,7 +28,6 @@ function InputTypeList(props) {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  console.log(props);
   useEffect(() => {}, [idPatient]);
   //
   //   /api/getContacts

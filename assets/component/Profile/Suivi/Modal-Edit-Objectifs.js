@@ -114,7 +114,7 @@ function ModalEditObjectifs(props) {
       document.querySelectorAll(".btn-close")[0].click();
     });
   }
-  console.log(props);
+
   //   /api/getContacts
   return (
     <>

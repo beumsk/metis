@@ -28,7 +28,7 @@ function ModalCallCanceled(props) {
 
     formGetInfos.append("patientId", props.goal.pati_id);
     formGetInfos.append("user_id", auth.auth.idUser);
-    console.log(props);
+
     axios({
       method: "post",
       url: "/api/setCallsCanceledByContacts",

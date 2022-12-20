@@ -18,7 +18,7 @@ function ModalEditContact(props) {
   const [show, setShow] = useState(false);
   const [auth, setAuth] = useState(useAuth());
   let id = useParams().idContact;
-  console.log(props);
+
   // formData.append("pathString", props.link);
   const [infos, setInfos] = useState(null);
   const [isSentRepport, setIsSentRepport] = useState(false);
@@ -49,7 +49,6 @@ function ModalEditContact(props) {
     setStartDate(new Date(e.target.value).toJSON().slice(0, 10));
     setEndDate(new Date(e.target.value).toJSON().slice(0, 10));
   };
-  console.log(props);
 
   const handleSave = (e) => {
     let formGetInfos = new FormData();

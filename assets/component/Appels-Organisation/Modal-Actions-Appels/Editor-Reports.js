@@ -6,7 +6,7 @@ import "suneditor/src/assets/css/suneditor.css";
 
 const Editor = (props) => {
   const editor = useRef();
-  console.log(props);
+
   const defaultValueRapport = "";
   // The sunEditor parameter will be set to the core suneditor instance when this function is called
   const handleOnResizeEditor = (height, prevHeight) => {
