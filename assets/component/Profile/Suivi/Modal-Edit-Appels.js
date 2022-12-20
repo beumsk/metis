@@ -221,6 +221,7 @@ function ModalEditAppels(props) {
                 type="checkbox"
                 label="Prioritaire ?"
                 onClick={(e) => setPriority(true)}
+                defaultChecked={props?.calls?.isHightlight}
               />
             </Form.Group>
             <Form.Group className="mb-3 mt-4" controlId="formBasicCheckbox">
