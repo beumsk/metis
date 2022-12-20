@@ -1,9 +1,9 @@
 {
-  "build/app.js": "/build/app.js",
-  "build/runtime.js": "/build/runtime.js",
-  "build/vendors-node_modules_fortawesome_react-fontawesome_index_es_js-node_modules_mui_material_Auto-3d3c44.css": "/build/vendors-node_modules_fortawesome_react-fontawesome_index_es_js-node_modules_mui_material_Auto-3d3c44.css",
-  "build/vendors-node_modules_fortawesome_react-fontawesome_index_es_js-node_modules_mui_material_Auto-3d3c44.js": "/build/vendors-node_modules_fortawesome_react-fontawesome_index_es_js-node_modules_mui_material_Auto-3d3c44.js",
-  "build/assets_styles_uikits_uikit_css-assets_styles_app_scss.css": "/build/assets_styles_uikits_uikit_css-assets_styles_app_scss.css",
+  "build/app.js": "/build/app.f218fe6d.js",
+  "build/runtime.js": "/build/runtime.dea08fc2.js",
+  "build/629.647ccd6f.css": "/build/629.647ccd6f.css",
+  "build/629.2035da9c.js": "/build/629.2035da9c.js",
+  "build/9.b4ea0a9c.css": "/build/9.b4ea0a9c.css",
   "build/images/8c56f3ba.jpeg": "/build/images/75892d8312278f9230828b2115fc7f468c56f3ba.jpeg",
   "build/images/20220324_132711-637379b5df786.jpg": "/build/images/20220324_132711-637379b5df786.jpg",
   "build/images/6a802119.pdf": "/build/images/d1ac41cfdb792ee5667013ee56e63d246a802119.pdf",
@@ -657,6 +657,7 @@
   "build/images/02838355.jpeg": "/build/images/150a446250f809517bedad2d8c0fa8c702838355.jpeg",
   "build/images/a5c35fc8.png": "/build/images/0337f5c8ea2b2546cc4548c2f6f87211a5c35fc8.png",
   "build/images/efa27bcb.jpeg": "/build/images/247b171cef769222764578121145625aefa27bcb.jpeg",
+  "build/images/Screenshot 2022-07-07 at 08-51-46 React App-63a1cba79016e.png": "/build/images/Screenshot 2022-07-07 at 08-51-46 React App-63a1cba79016e.png",
   "build/images/5934ade0.jpeg": "/build/images/be8a8082d8bbba610882c88fefe7b37c5934ade0.jpeg",
   "build/images/517d9518.jpeg": "/build/images/78adc1b128575120b13b160f0a85fd9a517d9518.jpeg",
   "build/images/2fc0731e.jpeg": "/build/images/1d558e16fa47702f90cc821498a0138c2fc0731e.jpeg",
@@ -846,8 +847,5 @@
   "build/images/1ba21299.jpeg": "/build/images/c2869f3ff3c87901865be872f28100e31ba21299.jpeg",
   "build/images/d13dfa1d.jpeg": "/build/images/220b71cd3e0d8d00a02dd5d751a8cc15d13dfa1d.jpeg",
   "build/images/menu.svg": "/build/images/menu.svg",
-  "build/images/dfa87693": "/build/images/a0fb7e4b5f4c0c55562968778cf63f99dfa87693.bin",
-  "build/vendors-node_modules_fortawesome_react-fontawesome_index_es_js-node_modules_mui_material_Auto-079f95.css": "/build/vendors-node_modules_fortawesome_react-fontawesome_index_es_js-node_modules_mui_material_Auto-079f95.css",
-  "build/vendors-node_modules_fortawesome_react-fontawesome_index_es_js-node_modules_mui_material_Auto-079f95.js": "/build/vendors-node_modules_fortawesome_react-fontawesome_index_es_js-node_modules_mui_material_Auto-079f95.js",
-  "build/images/Screenshot 2022-07-07 at 08-51-46 React App-63a1cba79016e.png": "/build/images/Screenshot 2022-07-07 at 08-51-46 React App-63a1cba79016e.png"
+  "build/images/dfa87693": "/build/images/a0fb7e4b5f4c0c55562968778cf63f99dfa87693.bin"
 }
