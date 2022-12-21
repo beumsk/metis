@@ -52,7 +52,7 @@ const Login = () => {
       });
 
       const roles = roles_used?.data?.roleNames;
-
+      setPersist((prev) => !prev);
       if (roles.length > 0) {
         setAuth({ email, password, roles, accessToken });
         setUser("");
@@ -73,9 +73,9 @@ const Login = () => {
     }
   };
 
-  const togglePersist = () => {
-    setPersist((prev) => !prev);
-  };
+  // const togglePersist = () => {
+  //   setPersist((prev) => !prev);
+  // };
 
   useEffect(() => {
     localStorage.setItem("persist", persist);
@@ -112,7 +112,7 @@ const Login = () => {
             required
           />
           <button className="btn-metis">Se connecter</button>
-          <div className="persistCheck  d-flex justify-content-start align-items-center mt-4">
+          {/* <div className="persistCheck  d-flex justify-content-start align-items-center mt-4">
             <input
               type="checkbox"
               id="persist"
@@ -120,7 +120,7 @@ const Login = () => {
               checked={persist}
             />
             <label htmlFor="persist">Se souvenir de moi</label>
-          </div>
+          </div> */}
           <p
             ref={errRef}
             className={errMsg ? "errmsg" : "offscreen"}

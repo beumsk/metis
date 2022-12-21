@@ -43,7 +43,7 @@ class PatientsRepository extends ServiceEntityRepository
     //    /**
     //     * @return Patients[] Returns an array of Patients objects
     //     */
-    public function findPatients($numberPage, $antenna, $searchPatient = null, $searchDatePatient = null, $searchTypeForPatient = null): array
+    public function findPatients($numberPage, $antenna, $searchPatient = null, $searchDatePatient = null, $searchTypeForPatient = null, $bySearchRepportsPatient = false): array
     {
 
         $parameters = [];
@@ -63,12 +63,17 @@ class PatientsRepository extends ServiceEntityRepository
             ->andWhere('p.antenna = :antenna')
 
             ->andWhere('p.deleted_at is NULL')
-            ->innerJoin(
+            ->setMaxResults($numberPage);
+
+        if ($bySearchRepportsPatient) {
+            $q->leftJoin(
                 'App:FollowupReports',
                 'f',
                 'WITH',
                 'f.pati = p.id'
-            );
+            )
+                ->orderBy('f.last_update', 'DESC');
+        }
 
 
         if ($searchPatient) {
@@ -86,9 +91,10 @@ class PatientsRepository extends ServiceEntityRepository
             $parameters["searchTypeForPatient"] = $searchTypeForPatient;
         }
 
-        $q->setParameters($parameters)
-            ->orderBy('f.last_update', 'DESC')
-            ->setMaxResults($numberPage);
+        $q->setParameters($parameters);
+
+
+        // ->setMaxResults($numberPage);
 
         // dd($q->getQuery());
         return $q->getQuery()->getResult();
