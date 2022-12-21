@@ -120,7 +120,10 @@ function ModalEditAppels(props) {
     formData.append("callsFunctionValue", callsFunctionValue);
     formData.append("isCallsPatients", isCallsPatients);
     formData.append("isPriority", isPriority);
-    formData.append("contact", contact[0]?.value);
+    formData.append(
+      "contact",
+      contact && contact.length > 0 ? contact[0]?.value : null
+    );
     formData.append("description", description);
     formData.append("valueWhatDoinFunction", valueWhatDoinFunction);
     formData.append("patientId", idPatient);

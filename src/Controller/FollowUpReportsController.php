@@ -663,7 +663,7 @@ class FollowUpReportsController extends AbstractController
 
         $followupGoals->setCreationDate(new \DateTime("now"));
         $followupGoals->setDescription($description);
-        $followupGoals->setStatus(1);
+        $followupGoals->setStatus(0);
         $entityManager->persist($followupGoals);
         // dd($followupGoals);
         $entityManager->flush();
@@ -814,6 +814,7 @@ class FollowUpReportsController extends AbstractController
                 // $arrayCollectionDiff = new FollowupGoals($value);
 
                 // $followupReports->addfogo($value);
+                $value->setStatus(1);
                 $value->addFollowupReport($followupReports);
             }
         }
@@ -1766,11 +1767,13 @@ class FollowUpReportsController extends AbstractController
         $serializer = new Serializer($normalizers, $encoders);
 
         // $serializer = SerializerBuilder::create()->build();
+
         $jsonObject = $serializer->serialize($places, 'json', [
             AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context) {
                 return $object->getId();
             },
-            AbstractNormalizer::IGNORED_ATTRIBUTES => ['pati', 'contact', 'orga', 'parentSugg', 'followupReportsIndicators', "followupReportsActivities", "followupReportsGoals", "followupReportsCare", "patients", "informations", "calls", 'contacts', 'contact', 'fore', 'goalsInformation', 'followupInformation']
+
+            AbstractNormalizer::IGNORED_ATTRIBUTES => ['pati', 'contact', 'fore', 'orga', 'parentSugg', 'followupReportsIndicators', "followupReportsActivities", "followupReportsGoals", "followupReportsCare", "patients", "informations", "calls", 'contacts', 'contact', 'goalsInformation', 'followupInformation']
         ]);
 
         $response = new Response($jsonObject, 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);

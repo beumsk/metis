@@ -127,6 +127,7 @@ const Profile = () => {
       },
     })
       .then(function (response) {
+        console.log(response);
         setGoalsList(response);
       })
       .catch(function (response) {});
@@ -299,12 +300,50 @@ const Profile = () => {
               <Accordion.Item eventKey="0">
                 <Accordion.Header>Ouvertes</Accordion.Header>
                 <Accordion.Body>
+                  <div className="goals-open mb-4">
+                    {goalsList?.data.map((g, id) => (
+                      <>
+                        {g && g.type === 1 && g.status === 0 ? (
+                          <div className="item-goals" key={id}>
+                            <ModalEditObjectifs
+                              goalsItem={g}
+                              type={type}
+                              onChange={onChangeGoals}
+                            ></ModalEditObjectifs>
+                            <Link
+                              // from={window.location.origin}
+                              style={
+                                g?.isHightlight
+                                  ? { fontWeight: "bold", color: "#3371cd" }
+                                  : { fontWeight: "normal", color: "#3371cd" }
+                              }
+                              onClick={(e) => choiceRepport(g.id)}
+                            >
+                              (
+                              {new Date(g.creationDate).toLocaleString(
+                                "fr-BE",
+                                {
+                                  dateStyle: "short",
+                                }
+                              )}
+                              ){g?.sugg?.value} {g?.description}
+                            </Link>
+                          </div>
+                        ) : (
+                          ""
+                        )}
+                      </>
+                    ))}
+                  </div>
+
                   {goalsList?.data.map((g, id) => (
                     <>
-                      {g &&
-                      g.type === 1 &&
-                      (g.status === 1 || g.status === 2) ? (
-                        <div className="item-goals" key={id}>
+                      {g && g.type === 1 && g.status === 1 ? (
+                        <div
+                          className="item-goals"
+                          key={id}
+                          style={{ fontWeight: "bold" }}
+                        >
                           <ModalEditObjectifs
                             goalsItem={g}
                             type={type}
@@ -314,8 +353,8 @@ const Profile = () => {
                             // from={window.location.origin}
                             style={
                               g?.isHightlight
-                                ? { fontWeight: "bold", color: "#3371cd" }
-                                : { fontWeight: "normal", color: "#3371cd" }
+                                ? { fontWeight: "bold", color: "#8cb30c" }
+                                : { fontWeight: "normal", color: "#8cb30c" }
                             }
                             onClick={(e) => choiceRepport(g.id)}
                           >
@@ -340,7 +379,7 @@ const Profile = () => {
                     <>
                       {g &&
                       g.type === 1 &&
-                      (g.status === 3 || g.status === 4) ? (
+                      (g.status === 2 || g.status === 3) ? (
                         <div className="item-goals" key={id}>
                           <ModalEditObjectifs
                             goalsItem={g}
@@ -386,12 +425,51 @@ const Profile = () => {
                 <Accordion.Item eventKey="0">
                   <Accordion.Header>Ouvertes</Accordion.Header>
                   <Accordion.Body>
+                    <div className="calls-open mb-4">
+                      {goalsList?.data.map((g, id) => (
+                        <>
+                          {g && g?.type === 2 && g?.status === 0 ? (
+                            <div className="item-goals" key={id}>
+                              <ModalEditAppels
+                                calls={g}
+                                contacts={contacts}
+                                fonction={fonction}
+                                whatDoinFunction={whatDoinFunction}
+                                onChange={onChangeGoals}
+                              ></ModalEditAppels>
+                              <Link
+                                // from={window.location.origin}
+                                style={
+                                  g?.isHightlight
+                                    ? { fontWeight: "bold", color: "#3371cd" }
+                                    : { fontWeight: "normal", color: "#3371cd" }
+                                }
+                                onClick={(e) => choiceRepport(g.id)}
+                              >
+                                {new Date(g.creationDate).toLocaleString(
+                                  "fr-BE",
+                                  {
+                                    dateStyle: "short",
+                                  }
+                                )}
+                                {g?.func?.value} {g?.description}
+                              </Link>
+                            </div>
+                          ) : (
+                            ""
+                          )}
+                        </>
+                      ))}
+                    </div>
+
                     {goalsList?.data.map((g, id) => (
                       <>
-                        {g &&
-                        g?.type === 2 &&
-                        (g.status === 1 || g.status === 2) ? (
-                          <div className="item-goals" key={id}>
+                        {g && g?.type === 2 && g?.status === 1 ? (
+                          <div
+                            className="item-goals"
+                            key={id}
+                            style={{ fontWeight: "bold" }}
+                          >
                             <ModalEditAppels
                               calls={g}
                               contacts={contacts}
@@ -432,7 +510,7 @@ const Profile = () => {
                       <>
                         {g &&
                         g?.type === 2 &&
-                        (g.status === 3 || g.status === 4) ? (
+                        (g.status === 2 || g.status === 3) ? (
                           <div className="item-goals" key={id}>
                             <ModalEditAppels
                               calls={g}
