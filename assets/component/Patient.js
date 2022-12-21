@@ -14,6 +14,8 @@ import Profile from "./Profile/Suivi/Suivi";
 import Medias from "./Profile/Medias";
 import Contacts from "./Profile/Contacts/Contacts";
 import Places from "./Profile/Lieux/Places";
+import Moment from "react-moment";
+import "moment-timezone";
 
 const Patient = () => {
   let id = useParams().id;
@@ -149,12 +151,18 @@ const Patient = () => {
                   <h5>
                     {patient.firstname} {patient.lastname}
                   </h5>
-                  <h6> {new Date(patient.birthdate).toLocaleDateString()}</h6>
+                  <h6>
+                    {" "}
+                    <Moment format="DD/MM/YYYY">{patient.birthdate}</Moment>
+                    {/* {new Date(patient.birthdate).toLocaleDateString()} */}
+                  </h6>
                   <p className="proile-rating">
                     Premier contact :{" "}
                     <span>
                       {" "}
-                      {new Date(patient.firstContactDate).toLocaleDateString()}
+                      <Moment format="DD/MM/YYYY">
+                        {patient.firstContactDate}
+                      </Moment>
                     </span>
                   </p>
                 </div>

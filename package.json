@@ -85,6 +85,7 @@
         "react-hooks-paginator": "^0.5.0",
         "react-js-pagination": "^3.0.3",
         "react-loading": "^2.0.3",
+        "react-moment": "^1.1.2",
         "react-native-password-eye": "^1.0.5",
         "react-notifications": "^1.7.4",
         "react-paginate": "^8.1.4",
