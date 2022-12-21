@@ -86,6 +86,8 @@ class FollowUpReportsController extends AbstractController
         ]);
     }
 
+
+
     #[Route('/api/getFollowUpGoalsById', name: 'app_getFollowUpGoalsById')]
     public function getFollowUpGoalsById(ManagerRegistry $doctrine, SerializerInterface $serializer): Response
     {
@@ -98,7 +100,10 @@ class FollowUpReportsController extends AbstractController
         $typeSearch = $request->request->get('setTypeRapport');
         $searchLink = $request->request->get('idSearch');
 
+
         $reportFollowUp = $doctrine->getRepository(FollowupGoals::class)->find($id);
+
+
 
         foreach ([$reportFollowUp] as  $value) {
             if ($value->getId()) {
@@ -743,7 +748,86 @@ class FollowUpReportsController extends AbstractController
             'idAppel' => $followupReports->getId()
         ]);
     }
+    #[Route('/api/setCallsByContactsForFollowUpReports', name: 'app_setCallsByContactsForFollowUpReports')]
+    public function setCallsByContactsForFollowUpReports(ManagerRegistry $doctrine, Request $request): JsonResponse
+    {
+        $entityManager = $doctrine->getManager();
+        $request = Request::createFromGlobals();
 
+        $goals = $request->request->get('goals');
+        $contacts = $request->request->get('contacts');
+        $content = $request->request->get('content');
+        $dureevalue = $request->request->get('dureeValue');
+        $patientId = $request->request->get('patientId');
+        $user_id = $request->request->get('userId');
+        // $activity_type = $request->request->get('activity_type');
+        $isCompleted = $request->request->get('is_completed');
+        $activity_type = $request->request->get('activity_type');
+        // dd($dureevalue);
+        $patient = $doctrine->getRepository(Patients::class)->find($patientId);
+
+
+        $user = $doctrine->getRepository(User::class)->find($user_id);
+        $followupReports = new FollowupReports();
+        $followupGoals = new FollowupGoals();
+
+        $followupReports->setContent($content);
+        $followupReports->setCreationDate(new \DateTime('now'));
+
+        $followupReports->setLastUpdate(new \DateTime('now'));
+        $followupReports->setPatient($patient);
+        $followupReports->setDuration(new \DateTime($dureevalue));
+        $followupReports->setUser($user);
+        $followupReports->setActivityType($activity_type);
+
+
+
+
+        if ($contacts !== "null") {
+            $arrGoals_id = [];
+
+            foreach (json_decode($contacts) as $value) {
+                array_push($arrGoals_id, $value);
+            }
+
+            $contactsList = $doctrine->getRepository(Contacts::class)->findBy(array('id' => json_decode($contacts)));
+
+
+            foreach ($contactsList as $value) {
+                // $arrayCollectionDiff = new FollowupGoals($value);
+
+                $followupReports->addCont($value);
+            }
+        }
+
+        if ($goals !== "null") {
+            $arrGoals_id = [];
+
+            foreach (json_decode($goals) as $value) {
+                array_push($arrGoals_id, $value);
+            }
+
+            $fogo = $doctrine->getRepository(FollowupGoals::class)->findBy(array('id' => json_decode($goals)));
+
+
+            foreach ($fogo as $value) {
+                // $arrayCollectionDiff = new FollowupGoals($value);
+
+                // $followupReports->addfogo($value);
+                $value->addFollowupReport($followupReports);
+            }
+        }
+
+
+        $entityManager->persist($followupReports);
+        $entityManager->flush();
+
+
+        return new JsonResponse([
+            'response' => "Sent !",
+            'idAppel' => $followupReports->getId()
+        ]);
+    }
     #[Route('/api/setCallsByContacts', name: 'app_setCallsByContacts')]
     public function setCallsByContacts(ManagerRegistry $doctrine, Request $request): JsonResponse
     {
@@ -760,6 +844,8 @@ class FollowUpReportsController extends AbstractController
         $isCompleted = $request->request->get('is_completed');
         // dd($dureevalue);
         $patient = $doctrine->getRepository(Patients::class)->find($patientId);
+
+
         $user = $doctrine->getRepository(User::class)->find($user_id);
         $followupReports = new FollowupReports();
         $followupGoals = new FollowupGoals();
@@ -776,7 +862,16 @@ class FollowUpReportsController extends AbstractController
         $contactsList = $doctrine->getRepository(Contacts::class)->findBy(array('id' => json_decode($contacts)));
         $fogo = $doctrine->getRepository(FollowupGoals::class)->findBy(array('id' => json_decode($goals)));
         $entityManager = $doctrine->getManager();
-        // dd($contactsList);
+        // dd(
+        //     $goals,
+        //     $contacts,
+        //     $content,
+        //     $dureevalue,
+        //     $patientId,
+        //     $user_id,
+        //     $activity_type,
+        //     $isCompleted,
+        // );
 
 
 
@@ -784,10 +879,12 @@ class FollowUpReportsController extends AbstractController
         foreach ($contactsList as  $contItem) {
             foreach ($fogo as  $fogoItem) {
 
-                if ($fogoItem->getContact()->getId() !== $contItem->getId()) {
-                    $fogo1 = $doctrine->getRepository(FollowupGoals::class)->findBy(['cont' => $contItem->getId(), 'status' => 0, 'pati' => $patientId]);
+                if ($fogoItem->getContact() && $fogoItem->getContact()->getId() !== $contItem->getId()) {
+                    $arr1 = $doctrine->getRepository(FollowupGoals::class)->findBy(['cont' => $contItem->getId(), 'status' => 0, 'pati' => $patientId]);
+                    $arr2 = $doctrine->getRepository(FollowupGoals::class)->findBy(['cont' => $contItem->getId(), 'status' => 1, 'pati' => $patientId]);
+                    $fogo1 = [...$arr1, ...$arr2];
 
-
+                    // dd($fogoItem->getContact()->getId());
                     if ($fogo1 === []) {
 
                         $followupGoals->setDescription($fogoItem->getDescription());
@@ -814,7 +911,7 @@ class FollowUpReportsController extends AbstractController
         }
         return new JsonResponse([
             'response' => "Sent !",
-            'idAppel' => $followupGoals->getId()
+            'idAppel' => $followupReports->getId()
         ]);
     }
 
@@ -1535,6 +1632,85 @@ class FollowUpReportsController extends AbstractController
         return $response;
     }
 
+    #[Route('/api/getFollowUpReportsCallsForSelect', name: 'app_getFollowUpReportsCallsForSelect')]
+    public function getFollowUpReportsCallsForSelect(ManagerRegistry $doctrine): Response
+    {
+        $request = Request::createFromGlobals();
+
+        $id = $request->request->get('id');
+
+        $goals = $doctrine->getRepository(FollowupGoals::class)->findBy(["pati" => $id]);
+
+        $goalsArr = [];
+
+        // dd($goals);
+        foreach ($goals as $value) {
+            // dd($value);
+            if ($value->getDeletedAt() === null && $value->getType() === 2 && ($value->getStatus() === 1 || $value->getStatus() === 2)) {
+                $goalsArr[] = [
+                    "value" => $value->getId(),
+                    "label" => $value->getDescription(),
+
+                ];
+            }
+        }
+
+        // $places = $doctrine->getRepository(FollowupGoals::class)->findAll();
+        $encoders = [new JsonEncoder()];
+        $normalizers = [new DateTimeNormalizer(), new ObjectNormalizer()];
+        $serializer = new Serializer($normalizers, $encoders);
+
+        // $serializer = SerializerBuilder::create()->build();
+        $jsonObject = $serializer->serialize($goalsArr, 'json', [
+            AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context) {
+                return $object->getId();
+            },
+            AbstractNormalizer::IGNORED_ATTRIBUTES => ['pati', 'cont', 'contact', 'func', 'sugg']
+        ]);
+
+        $response = new Response($jsonObject, 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
+        return $response;
+    }
+
+    #[Route('/api/getFollowUpReportsGoalsForSelectForCalls', name: 'app_getFollowUpReportsGoalsForSelectForCalls')]
+    public function getFollowUpReportsGoalsForSelectForCalls(ManagerRegistry $doctrine): Response
+    {
+        $request = Request::createFromGlobals();
+
+        $id = $request->request->get('id');
+
+        $goals = $doctrine->getRepository(FollowupGoals::class)->findBy(["pati" => $id]);
+
+        $goalsArr = [];
+
+        // dd($goals);
+        foreach ($goals as $value) {
+            // dd($value);
+            if ($value->getDeletedAt() === null && $value->getType() === 2 && ($value->getStatus() === 1 || $value->getStatus() === 2)) {
+                $goalsArr[] = [
+                    "value" => $value->getId(),
+                    "label" => $value->getDescription(),
+
+                ];
+            }
+        }
+
+        // $places = $doctrine->getRepository(FollowupGoals::class)->findAll();
+        $encoders = [new JsonEncoder()];
+        $normalizers = [new DateTimeNormalizer(), new ObjectNormalizer()];
+        $serializer = new Serializer($normalizers, $encoders);
+
+        // $serializer = SerializerBuilder::create()->build();
+        $jsonObject = $serializer->serialize($goalsArr, 'json', [
+            AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context) {
+                return $object->getId();
+            },
+            AbstractNormalizer::IGNORED_ATTRIBUTES => ['pati', 'cont', 'contact', 'func', 'sugg']
+        ]);
+
+        $response = new Response($jsonObject, 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
+        return $response;
+    }
     #[Route('/api/getFollowUpReportsGoalsForSelect', name: 'app_getFollowUpReportsGoalsForSelect')]
     public function getFollowUpReportsGoalsForSelect(ManagerRegistry $doctrine): Response
     {

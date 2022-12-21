@@ -117,7 +117,7 @@ function ModalActionsAppelsSortant(props) {
         Authorization: `Bearer ${auth.auth.accessToken}`,
       },
     }).then(function (response) {
-      props.onChangeResponse(response.data);
+      // props.onChangeResponse(response.data);
       setShow(false);
     });
   };
@@ -152,7 +152,7 @@ function ModalActionsAppelsSortant(props) {
         Authorization: `Bearer ${auth.auth.accessToken}`,
       },
     }).then(function (response) {
-      props.onChangeResponse(response.data);
+      // props.onChangeResponse(response.data);
       setShow(false);
     });
   };
@@ -209,6 +209,7 @@ function ModalActionsAppelsSortant(props) {
               <Form.Label>Durée</Form.Label>
               <Form.Select
                 defaultValue={dureeValue}
+                className="uk-select"
                 onChange={(e) => setDureeValue(e.target.value)}
               >
                 <option value={5}>5</option>

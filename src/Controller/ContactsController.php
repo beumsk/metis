@@ -399,8 +399,10 @@ class ContactsController extends AbstractController
         $antenna = $request->request->get('antenna');
         $referent = $request->request->get('referent');
         $typeCalls = $request->request->get('typeCalls');
+        $patient = $request->request->get('patient');
         $limitHistoric = $request->request->get('limitHistoric');
         $team = $request->request->get('team');
+
         $function = $request->request->get('function');
         $followup = $doctrine->getRepository(FollowupGoals::class)->followupGoalsByAntenna(
             $antenna,
@@ -410,7 +412,8 @@ class ContactsController extends AbstractController
             null,
             null,
             FollowupGoals::getStatusForGroup(FollowupGoals::STATUS_GROUP_RUNNING),
-            FollowupGoals::TYPE_CALL
+            FollowupGoals::TYPE_CALL,
+            $patient
         );
 
         // if ($referent !== "null") {
@@ -443,12 +446,13 @@ class ContactsController extends AbstractController
                     $limitHistoric,
                     FollowupGoals::getStatusForGroup(FollowupGoals::STATUS_GROUP_RUNNING),
                     FollowupGoals::TYPE_CALL,
+                    $patient
                 );
             }
 
             if ($typeCalls === "closed") {
 
-                $fogo = $doctrine->getRepository(FollowupGoals::class)->findClosedByContact($value->getId(), FollowupGoals::TYPE_CALL, $limitHistoric, $function, $team, $antenna, $referent);
+                $fogo = $doctrine->getRepository(FollowupGoals::class)->findClosedByContact($value->getId(), FollowupGoals::TYPE_CALL, $limitHistoric, $function, $team, $antenna, $referent, $patient);
             }
 
 

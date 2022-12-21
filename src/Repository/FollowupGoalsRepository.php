@@ -401,7 +401,7 @@ class FollowupGoalsRepository extends ServiceEntityRepository
     /**
      * @return FollowupGoals[] Returns an array of FollowupGoals objects
      */
-    public function followupGoalsByAntenna($antenna, $team = null, $contact = null, $func = "", $referent = null, $date = null, $status, $type): array
+    public function followupGoalsByAntenna($antenna, $team = null, $contact = null, $func = "", $referent = null, $date = null, $status, $type, $patient = null): array
     {
 
 
@@ -427,9 +427,9 @@ class FollowupGoalsRepository extends ServiceEntityRepository
         if ($team) {
             $query .= ' AND p.team = :team ';
         }
-        // if ($patient) {
-        //     $query .= ' AND g.patient = :patient ';
-        // }
+        if ($patient !== null) {
+            $query .= ' AND g.pati = :patient ';
+        }
         // if ($isHighlight) {
         //     $query .= ' AND g.isHighlight = :isHighlight ';
         // }
@@ -457,9 +457,9 @@ class FollowupGoalsRepository extends ServiceEntityRepository
             $parameters['func'] = $func;
         }
 
-        // if ($patient) {
-        //     $parameters['patient'] = $patient;
-        // }
+        if ($patient) {
+            $parameters['patient'] = $patient;
+        }
 
         if ($contact !== null) {
             $parameters['contact'] = $contact;

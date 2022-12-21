@@ -75,6 +75,7 @@ export default function InputContactList(props) {
       options={options}
       onChange={(event, newValue) => props.onChange(newValue)}
       loading={loading}
+      freeSolo={true}
       multiple
       defaultValue={arr}
       renderInput={(params) => (

@@ -24,6 +24,9 @@ import DashboardReports from "./Dashboard-Reports";
 import Accordion from "react-bootstrap/Accordion";
 import ModalEditObjectifs from "./Modal-Edit-Objectifs";
 import ModalEditAppels from "./Modal-Edit-Appels";
+import ModalActionsAppelsEntrant from "./Modal-Actions-AppelsEntrant";
+import ModalActionsAppelSortant from "./Modal-Actions-AppelSortant";
+import { DoNotStepOutlined } from "@mui/icons-material";
 const Profile = () => {
   let id = useParams().id;
   const [auth, setAuth] = useState(useAuth());
@@ -55,6 +58,7 @@ const Profile = () => {
   const [search, setSearch] = useState(null);
   const [goals, setGoals] = useState(null);
   const [goalsList, setGoalsList] = useState(null);
+  const [goalsListForSelect, setGoalsListForSelect] = useState(null);
   const [activities, setActivities] = useState(null);
   const [idSearch, setIdSearch] = useState(null);
   // getFollowUpReportsGoals
@@ -97,6 +101,20 @@ const Profile = () => {
     })
       .then(function (response) {
         setGoals(response);
+      })
+      .catch(function (response) {});
+
+    axios({
+      method: "post",
+      url: "/api/getFollowUpReportsGoalsForSelectForCalls",
+      data: formData,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    })
+      .then(function (response) {
+        setGoalsListForSelect(response);
       })
       .catch(function (response) {});
     axios({
@@ -192,6 +210,28 @@ const Profile = () => {
     setIsReportsDetails(true);
   };
 
+  function onChangeResponseDatas(e) {
+    console.log(e);
+    console.log(id.toString());
+    var reportSearch = new FormData();
+    reportSearch.append("id", id.toString());
+    reportSearch.append("number", 10);
+    // reportSearch.append("number", 10);
+    axios({
+      method: "post",
+      url: "/api/getFollowUpReportsById",
+      data: reportSearch,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    })
+      .then(function (response) {
+        console.log(response);
+        return setSearch(response);
+      })
+      .catch(function (response) {});
+  }
   const choiceRepport = (e) => {
     var reportSearch = new FormData();
     reportSearch.append("id", e);
@@ -439,6 +479,27 @@ const Profile = () => {
         </div>
         <div className="col-sm-8">
           <div className="d-flex row-btn mb-4">
+            <div style={{ margin: "0 1rem" }}>
+              <ModalActionsAppelsEntrant
+                listCalls={goalsListForSelect}
+                // defaultValueContact={patient}
+                onChangeResponse={onChangeResponseDatas}
+                // typeCall={typeCallsSelect}
+                contacts={contacts}
+                // defaultValueGoalsValue={e}
+              ></ModalActionsAppelsEntrant>
+            </div>
+
+            <div style={{ margin: "0 1rem" }}>
+              <ModalActionsAppelSortant
+                listCalls={goalsListForSelect}
+                // defaultValueContact={patient}
+                // typeCall={typeCallsSelect}
+                contacts={contacts}
+                onChangeResponse={onChangeResponseDatas}
+                // defaultValueGoalsValue={e}
+              ></ModalActionsAppelSortant>
+            </div>
             <div style={{ margin: "0 1rem" }}>
               <ModalAddAppels
                 type={type}

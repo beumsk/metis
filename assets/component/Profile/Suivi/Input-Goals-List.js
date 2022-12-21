@@ -77,6 +77,7 @@ export default function InputContactList(props) {
         props.onChangeGoals(newValue);
       }}
       loading={loading}
+      freeSolo={true}
       multiple
       defaultValue={arr}
       renderInput={(params) => (

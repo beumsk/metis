@@ -159,12 +159,6 @@ function RapportDetails(props) {
   }
 
   useEffect(() => {
-    console.log(props.search);
-    // let obj = {};
-    // obj.data = [props.search];
-    // console.log(obj);
-    // console.log("useEffect logic ran");
-    // console.log(informations);
     if (props.search !== null) {
       setInformations(props.search);
     }
