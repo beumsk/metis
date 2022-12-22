@@ -147,17 +147,6 @@ function ModalActionsAppelsSortant(props) {
         <Modal.Body>
           <Form>
             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-              <Form.Label>Objectifs</Form.Label>
-              <div className="editor" style={{ "z-index": 555555 }}>
-                <Select
-                  closeMenuOnSelect={false}
-                  components={animatedComponents}
-                  onChange={(e) => onChangeTagsAppels(e)}
-                  isMulti
-                  options={props?.listCalls}
-                />
-              </div>
-
               <Form.Label>Description</Form.Label>
 
               <div className="editor" style={{ "z-index": -1 }}>
@@ -189,6 +178,17 @@ function ModalActionsAppelsSortant(props) {
                   onChange={(e) => onChangeTagsContacts(e)}
                   isMulti
                   options={props?.contacts?.data}
+                />
+              </div>
+
+              <Form.Label>Objectifs</Form.Label>
+              <div className="editor" style={{ "z-index": 555555 }}>
+                <Select
+                  closeMenuOnSelect={false}
+                  components={animatedComponents}
+                  onChange={(e) => onChangeTagsAppels(e)}
+                  isMulti
+                  options={props?.listCalls}
                 />
               </div>
             </Form.Group>
