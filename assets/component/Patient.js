@@ -153,16 +153,26 @@ const Patient = () => {
                   </h5>
                   <h6>
                     {" "}
-                    <Moment format="DD/MM/YYYY">{patient.birthdate}</Moment>
+                    {patient && patient.birthdate !== null ? (
+                      <Moment format="DD/MM/YYYY">{patient.birthdate}</Moment>
+                    ) : (
+                      <p></p>
+                    )}
                     {/* {new Date(patient.birthdate).toLocaleDateString()} */}
                   </h6>
                   <p className="proile-rating">
                     Premier contact :{" "}
                     <span>
                       {" "}
-                      <Moment format="DD/MM/YYYY">
-                        {patient.firstContactDate}
-                      </Moment>
+                      {patient && patient.firstContactDate !== null ? (
+                        <Moment format="DD/MM/YYYY">
+                          {patient.firstContactDate}
+                        </Moment>
+                      ) : (
+                        <p>
+                          Pas de dates de premières rencontre pour le moment
+                        </p>
+                      )}
                     </span>
                   </p>
                 </div>
