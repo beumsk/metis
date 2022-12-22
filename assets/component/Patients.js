@@ -104,7 +104,7 @@ function Patients() {
       formData.append("searchDateBirthPatient", searchDateBirth);
     }
 
-    if (typeSelectPatient) {
+    if (typeSelectPatient && typeSelectPatient !== "0") {
       formData.append("typeSelectPatient", typeSelectPatient);
     }
 
@@ -160,7 +160,7 @@ function Patients() {
                 value={typeSelectPatient}
                 className="uk-select"
               >
-                <option value={null}>Séléctionnez le type de patient</option>
+                <option value={0}>Séléctionnez le type de patient</option>
 
                 {/* referentList */}
                 {typePatient?.map((type) => (
