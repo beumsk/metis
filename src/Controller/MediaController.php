@@ -84,6 +84,7 @@ class MediaController extends AbstractController
         $entityManager->remove($medias);
         $entityManager->flush();
         unlink($this->getParameter('images_directory') . "/" . $medias->getFileName());
+        unlink($this->getParameter('images_directoryProd') . "/" . $medias->getFileName());
         return $this->json($medias);
     }
 
@@ -124,6 +125,7 @@ class MediaController extends AbstractController
 
 
         $uploadedFile->move($this->getParameter('images_directory'), $newFilename);
+        $uploadedFile->move($this->getParameter('images_directoryProd'), $newFilename);
 
         return $this->json($medias);
     }
