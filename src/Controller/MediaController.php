@@ -127,6 +127,6 @@ class MediaController extends AbstractController
         $uploadedFile->move($this->getParameter('images_directory'), $newFilename);
         $uploadedFile->move($this->getParameter('images_directoryProd'), $newFilename);
 
-        return $this->json($medias);
+        return $this->json("send");
     }
 }

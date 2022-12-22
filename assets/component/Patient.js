@@ -110,7 +110,9 @@ const Patient = () => {
       .then(function (response) {
         window.location.reload();
       })
-      .catch(function (response) {});
+      .catch(function (response) {
+        window.location.reload();
+      });
   };
   return (
     <>
