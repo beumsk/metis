@@ -1687,7 +1687,7 @@ class FollowUpReportsController extends AbstractController
         // dd($goals);
         foreach ($goals as $value) {
             // dd($value);
-            if ($value->getDeletedAt() === null && $value->getType() === 2 && ($value->getStatus() === 1 || $value->getStatus() === 2)) {
+            if ($value->getDeletedAt() === null && $value->getType() === 2 && ($value->getStatus() === 0 || $value->getStatus() === 1)) {
                 $goalsArr[] = [
                     "value" => $value->getId(),
                     "label" => $value->getDescription(),

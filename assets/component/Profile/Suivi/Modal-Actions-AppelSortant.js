@@ -112,42 +112,22 @@ function ModalActionsAppelsSortant(props) {
         Authorization: `Bearer ${auth.auth.accessToken}`,
       },
     }).then(function (response) {
-      // props.onChangeResponse(response.data);
-      setShow(false);
-    });
-  };
-  const handleSaveKeep = (e) => {
-    console.log("content", content);
-    console.log("goalsSelected", JSON.stringify(goalsSelected));
-    console.log("contactsSelected", JSON.stringify(contactsSelected));
-    console.log("dureeValue", dureeValue);
-    console.log("patiId", props.defaultValueGoalsValue.pati_id);
-
-    let formGetInfos = new FormData();
-    let date = new Date(0);
-    date.setMinutes(dureeValue); // specify value for SECONDS here
-    let timeString = date.toISOString().substring(11, 19);
-    console.log(timeString);
-
-    formGetInfos.append("content", content);
-    formGetInfos.append("goals", JSON.stringify(goalsSelected));
-    formGetInfos.append("contacts", JSON.stringify(contactsSelected));
-    formGetInfos.append("dureeValue", timeString);
-    formGetInfos.append("patientId", props.defaultValueGoalsValue.pati_id);
-    formGetInfos.append("activity_type", 3);
-    formGetInfos.append("is_completed", 0);
-
-    formGetInfos.append("userId", auth.auth.idUser);
-    axios({
-      method: "post",
-      url: "/api/setCallsByContactsForFollowUpReports",
-      data: formGetInfos,
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${auth.auth.accessToken}`,
-      },
-    }).then(function (response) {
-      props.onChangeResponse(response.data);
+      var formDataGetGoals = new FormData();
+      formDataGetGoals.append("id", id.toString());
+      axios({
+        method: "post",
+        url: "/api/getFollowUpReportsGoals",
+        data: formDataGetGoals,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${auth.auth.accessToken}`,
+        },
+      })
+        .then(function (response) {
+          props.onChangeResponse(response);
+        })
+        .catch(function (response) {});
+      document.querySelectorAll(".btn-close")[0].click();
       setShow(false);
     });
   };

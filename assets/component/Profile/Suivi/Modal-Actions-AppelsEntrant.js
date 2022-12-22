@@ -122,7 +122,22 @@ function ModalActionsAppelsEntrant(props) {
         Authorization: `Bearer ${auth.auth.accessToken}`,
       },
     }).then(function (response) {
-      props.onChangeResponse(response.data);
+      var formDataGetGoals = new FormData();
+      formDataGetGoals.append("id", id.toString());
+      axios({
+        method: "post",
+        url: "/api/getFollowUpReportsGoals",
+        data: formDataGetGoals,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${auth.auth.accessToken}`,
+        },
+      })
+        .then(function (response) {
+          props.onChangeResponse(response);
+        })
+        .catch(function (response) {});
+      document.querySelectorAll(".btn-close")[0].click();
       setShow(false);
     });
   };
@@ -178,17 +193,6 @@ function ModalActionsAppelsEntrant(props) {
         <Modal.Body>
           <Form>
             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-              <Form.Label>Objectifs</Form.Label>
-              <div className="editor" style={{ "z-index": 555555 }}>
-                <Select
-                  closeMenuOnSelect={false}
-                  components={animatedComponents}
-                  onChange={(e) => onChangeTagsAppels(e)}
-                  isMulti
-                  options={props?.listCalls?.data}
-                />
-              </div>
-
               <Form.Label>Description</Form.Label>
 
               <div className="editor" style={{ "z-index": -1 }}>
@@ -220,6 +224,17 @@ function ModalActionsAppelsEntrant(props) {
                   onChange={(e) => onChangeTagsContacts(e)}
                   isMulti
                   options={props?.contacts?.data}
+                />
+              </div>
+
+              <Form.Label>Objectifs</Form.Label>
+              <div className="editor" style={{ "z-index": 555555 }}>
+                <Select
+                  closeMenuOnSelect={false}
+                  components={animatedComponents}
+                  onChange={(e) => onChangeTagsAppels(e)}
+                  isMulti
+                  options={props?.listCalls?.data}
                 />
               </div>
             </Form.Group>

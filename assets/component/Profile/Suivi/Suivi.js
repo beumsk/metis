@@ -561,7 +561,7 @@ const Profile = () => {
               <ModalActionsAppelsEntrant
                 listCalls={goalsListForSelect}
                 // defaultValueContact={patient}
-                onChangeResponse={onChangeResponseDatas}
+                onChangeResponse={onChangeGoals}
                 // typeCall={typeCallsSelect}
                 contacts={contacts}
                 // defaultValueGoalsValue={e}
@@ -574,7 +574,7 @@ const Profile = () => {
                 // defaultValueContact={patient}
                 // typeCall={typeCallsSelect}
                 contacts={contacts}
-                onChangeResponse={onChangeResponseDatas}
+                onChangeResponse={onChangeGoals}
                 // defaultValueGoalsValue={e}
               ></ModalActionsAppelSortant>
             </div>
