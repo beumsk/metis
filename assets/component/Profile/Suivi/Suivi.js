@@ -294,9 +294,9 @@ const Profile = () => {
             </button>
           </div>
 
-          <h6>Objectifs </h6>
+          <h6 className="mt-4 mb-3">Objectifs </h6>
           {goals ? (
-            <Accordion>
+            <Accordion className="mb-4">
               <Accordion.Item eventKey="0">
                 <Accordion.Header>Ouvertes</Accordion.Header>
                 <Accordion.Body>
@@ -326,7 +326,7 @@ const Profile = () => {
                                   dateStyle: "short",
                                 }
                               )}
-                              ){g?.sugg?.value} {g?.description}
+                              ) {g?.sugg?.value} {g?.description}
                             </Link>
                           </div>
                         ) : (
@@ -362,7 +362,7 @@ const Profile = () => {
                             {new Date(g.creationDate).toLocaleString("fr-BE", {
                               dateStyle: "short",
                             })}
-                            ){g?.sugg?.value} {g?.description}
+                            ) {g?.sugg?.value} {g?.description}
                           </Link>
                         </div>
                       ) : (
@@ -395,10 +395,11 @@ const Profile = () => {
                             }
                             onClick={(e) => choiceRepport(g.id)}
                           >
+                            (
                             {new Date(g.creationDate).toLocaleString("fr-BE", {
                               dateStyle: "short",
                             })}
-                            {g?.func?.value} {g?.description}
+                            ){g?.func?.value} {g?.description}
                           </Link>
                         </div>
                       ) : (
@@ -418,7 +419,7 @@ const Profile = () => {
             />
           )}
 
-          <h6>Appels</h6>
+          <h6 className="mt-4 mb-3">Appels</h6>
           {goals ? (
             <>
               <Accordion>
@@ -446,13 +447,14 @@ const Profile = () => {
                                 }
                                 onClick={(e) => choiceRepport(g.id)}
                               >
+                                (
                                 {new Date(g.creationDate).toLocaleString(
                                   "fr-BE",
                                   {
                                     dateStyle: "short",
                                   }
                                 )}
-                                {g?.func?.value} {g?.description}
+                                ) {g?.func?.value} {g?.description}
                               </Link>
                             </div>
                           ) : (
@@ -486,13 +488,14 @@ const Profile = () => {
                               }
                               onClick={(e) => choiceRepport(g.id)}
                             >
+                              (
                               {new Date(g.creationDate).toLocaleString(
                                 "fr-BE",
                                 {
                                   dateStyle: "short",
                                 }
                               )}
-                              {g?.func?.value} {g?.description}
+                              ) {g?.func?.value} {g?.description}
                             </Link>
                           </div>
                         ) : (
@@ -528,13 +531,14 @@ const Profile = () => {
                               }
                               onClick={(e) => choiceRepport(g.id)}
                             >
+                              (
                               {new Date(g.creationDate).toLocaleString(
                                 "fr-BE",
                                 {
                                   dateStyle: "short",
                                 }
                               )}
-                              {g?.func?.value} {g?.description}
+                              ) {g?.func?.value} {g?.description}
                             </Link>
                           </div>
                         ) : (
@@ -557,7 +561,7 @@ const Profile = () => {
         </div>
         <div className="col-sm-8">
           <div className="d-flex row-btn mb-4">
-            <div style={{ margin: "0 1rem" }}>
+            <div>
               <ModalActionsAppelsEntrant
                 listCalls={goalsListForSelect}
                 // defaultValueContact={patient}
@@ -568,7 +572,7 @@ const Profile = () => {
               ></ModalActionsAppelsEntrant>
             </div>
 
-            <div style={{ margin: "0 1rem" }}>
+            <div>
               <ModalActionsAppelSortant
                 listCalls={goalsListForSelect}
                 // defaultValueContact={patient}
@@ -578,7 +582,7 @@ const Profile = () => {
                 // defaultValueGoalsValue={e}
               ></ModalActionsAppelSortant>
             </div>
-            <div style={{ margin: "0 1rem" }}>
+            <div>
               <ModalAddAppels
                 type={type}
                 contacts={contacts}

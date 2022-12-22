@@ -31,8 +31,11 @@
     text-decoration: none;
 }
 
-.accordion-body p{
-    margin: 0!important;
+.accordion-body {
+    background-color: #f8f8f8!important;
+    p{
+        margin: 0!important;
+    }
 }
 
 $accordion-padding-y:                     1rem;
