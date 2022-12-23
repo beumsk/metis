@@ -185,8 +185,8 @@ class ContactsController extends AbstractController
 
 
         $tags = $request->request->get('tags');
-        $query = $request->request->get('query');
-        $contacts = $doctrine->getRepository(Contacts::class)->findAllContacts($tags, $query);
+        $querySearch = $request->request->get('query');
+        $contacts = $doctrine->getRepository(Contacts::class)->findAllContacts($tags, $querySearch);
         $encoders = [new JsonEncoder()];
         $normalizers = [new DateTimeNormalizer(), new ObjectNormalizer()];
         $serializer = new Serializer($normalizers, $encoders);
