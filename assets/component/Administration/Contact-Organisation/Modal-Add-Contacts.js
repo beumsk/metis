@@ -142,10 +142,8 @@ function ModalAddContact(props) {
               {/* <option>Choissisez le tags</option> */}
               {props?.listOrganisation?.data?.map((el, id) => (
                 <>
-                  {el?.typeLabel === "Morale" && (
-                    <option value={el?.id}>
-                      {el?.firstname} {el?.lastname}
-                    </option>
+                  {el?.organisation !== null && (
+                    <option value={el?.id}>{el?.organisation}</option>
                   )}
                 </>
               ))}

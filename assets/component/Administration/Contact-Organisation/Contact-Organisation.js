@@ -17,6 +17,7 @@ function ContactOrganisations() {
   const { SearchBar } = Search;
   const [auth, setAuth] = useState(useAuth());
   const [listContacts, setListContacts] = useState(null);
+  const [listOrganisation, setListOrganisation] = useState(null);
   const [lengthList, setLengthList] = useState(10);
 
   var formData = new FormData();
@@ -85,6 +86,20 @@ function ContactOrganisations() {
         setListContacts(response);
       })
       .catch(function (response) {});
+
+    axios({
+      method: "get",
+      url: "/api/getOrganisation",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    })
+      .then(function (response) {
+        //handle success
+        setListOrganisation(response);
+      })
+      .catch(function (response) {});
   }, [lengthList, setLengthList]);
 
   const readMore = () => {
@@ -108,6 +123,7 @@ function ContactOrganisations() {
         setListContacts(response);
       })
       .catch(function (response) {});
+
     // setListContacts(e);
   }
   function onColumnMatch({ searchText, value, column, row }) {
@@ -119,7 +135,7 @@ function ContactOrganisations() {
       <div className="container container-patients row mx-auto ">
         <div className="row-btn">
           <ModalAddContact
-            listOrganisation={listContacts}
+            listOrganisation={listOrganisation}
             onChangeContacts={onChangeUpdateContact}
           ></ModalAddContact>
         </div>
