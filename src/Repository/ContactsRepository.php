@@ -231,18 +231,20 @@ class ContactsRepository extends ServiceEntityRepository
         }
 
         $query = 'SELECT 
-                    CASE c.type WHEN ' . Contacts::TYPE_PERSON . ' THEN "Physique" ELSE "Morale" END as typeLabel,
-                    (select o.lastname FROM contacts o WHERE o.id = c.orga_id) as organisation,          
-                    c.firstname, c.lastname, c.id as id, c.orga_id,
-                    (select count(r.id) from followup_reports r 
-                    inner join followup_report_contact rc on r.id = rc.fore_id 
-                    where r.activity_type in (' . implode(",", [FollowupReports::ACTIVITY_CALL_OUT, FollowupReports::ACTIVITY_CALL_IN]) . ')' .  ' and r.deleted_at is null and rc.cont_id = c.id) as nb_calls,
-                    (select count(pc.id) from patients_contacts pc where pc.cont_id = c.id AND pc.deleted_at is null) as nb_patients
-                FROM contacts c ' . $join . '
-                WHERE c.type IN (' . implode(",", [Contacts::TYPE_PERSON, Contacts::TYPE_ORGANISATION]) . ')' .
+                        CASE c.type WHEN ' . Contacts::TYPE_PERSON . ' THEN "Physique" ELSE "Morale" END as typeLabel,
+                        (select o.lastname FROM contacts o WHERE o.id = c.orga_id) as organisation,          
+                        c.firstname, c.lastname, c.id as id, c.orga_id, 
+                        (select count(r.id) from followup_reports r 
+                        inner join followup_report_contact rc on r.id = rc.fore_id 
+                        where r.activity_type in (' . implode(",", [FollowupReports::ACTIVITY_CALL_OUT, FollowupReports::ACTIVITY_CALL_IN]) . ') and r.deleted_at is null and rc.cont_id = c.id) as nb_calls,
+                        (select count(pc.id) from patients_contacts pc where pc.cont_id = c.id AND pc.deleted_at is null) as nb_patients
+                        
+                    FROM contacts c ' . $join . '
+                    WHERE c.type IN (' . implode(",", [Contacts::TYPE_PERSON, Contacts::TYPE_ORGANISATION]) . ')' .
             $query_tags . 'AND (c.deleted_at IS NULL)
-                GROUP BY c.id
-                ORDER BY lastname asc, firstname asc';
+
+                    GROUP BY c.id
+                    ORDER BY lastname asc, firstname asc';
 
         // (select count(f.fogo_id) from followup_goals f where f.cont_id = c.cont_id AND f.delete_at is null) as nb_calls,
         $stmt = $conn->prepare($query);
