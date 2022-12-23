@@ -48,13 +48,33 @@ class ContactsController extends AbstractController
         $description = $request->request->get('description');
 
         $contact = new Contacts();
-        $organisation = $doctrine->getRepository(Contacts::class)->find($orga_id);
-        $contact->setOrga($organisation);
-        $contact->setFirstname($firstname);
-        $contact->setLastname($lastName);
-        $contact->setType($type);
-        $contact->setUrl($url);
-        $contact->setDescription($description);
+
+
+        if ($orga_id !== "null") {
+            $organisation = $doctrine->getRepository(Contacts::class)->find($orga_id);
+            $contact->setOrga($organisation);
+        }
+        if ($firstname !== "null") {
+            $contact->setFirstname($firstname);
+        }
+        if ($lastName !== "null") {
+            $contact->setLastname($lastName);
+        }
+        if ($type !== "null") {
+            $contact->setType($type);
+        }
+
+        if ($url !== "null") {
+            $contact->setUrl($url);
+        }
+
+        if ($description !== "null") {
+            $contact->setDescription($description);
+        }
+
+
+
+
         $entityManager->persist($contact);
         $entityManager->flush();
 

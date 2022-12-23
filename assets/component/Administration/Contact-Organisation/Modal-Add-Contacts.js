@@ -50,22 +50,25 @@ function ModalAddContact(props) {
   const handleSave = (e) => {
     let formData = new FormData();
     // value-sugg
-    if (type) {
-      formData.append("type", typeValue);
-    } else {
-      setValidationType(true);
-    }
+    // if (type) {
+    //   formData.append("type", typeValue);
+    // } else {
+    //   setValidationType(true);
+    // }
 
-    if (name) {
-      formData.append("name", name);
-    } else {
-      setValidationName(true);
-    }
+    // if (name) {
+    //   formData.append("name", name);
+    // } else {
+    //   setValidationName(true);
+    // }
 
+    formData.append("type", typeValue);
+    formData.append("name", name);
     formData.append("firstname", lastName);
     formData.append("organisation", typeValueOrganisation);
     formData.append("url", url);
     formData.append("description", description);
+    // formData.append("description", description);
 
     axios({
       method: "post",
@@ -78,6 +81,7 @@ function ModalAddContact(props) {
     })
       .then(function (response) {
         props.onChangeContacts(response);
+        setShow(false);
       })
       .catch(function (response) {
         console.log(response);
