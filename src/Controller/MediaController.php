@@ -124,7 +124,7 @@ class MediaController extends AbstractController
         $entityManager->flush();
 
 
-        $uploadedFile->move($this->getParameter('images_directory'), $newFilename);
+        // $uploadedFile->move($this->getParameter('images_directory'), $newFilename);
         $uploadedFile->move($this->getParameter('images_directoryProd'), $newFilename);
 
         return $this->json("send");
