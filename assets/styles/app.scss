@@ -27,9 +27,10 @@ a{
   }
 }
 .profile-img{
-  height: 116px;
+  max-height: 156px;
   position: relative;
   overflow: hidden;
+  height: 100%;
   img{
     position: absolute;
     top: 0;
