@@ -3,7 +3,9 @@ import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import CircularProgress from "@mui/material/CircularProgress";
 import { array } from "prop-types";
+import axios from "axios";
 import Form from "react-bootstrap/Form";
+import useAuth from "../../../hooks/useAuth";
 function sleep(delay = 0) {
   return new Promise((resolve) => {
     setTimeout(resolve, delay);
@@ -11,11 +13,13 @@ function sleep(delay = 0) {
 }
 
 export default function InputContactList(props) {
+  const [auth, setAuth] = React.useState(useAuth());
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState([]);
   const [options, setOptions] = React.useState([]);
   const [defaultValueFormatted, setDefaultValueFormatted] = React.useState([]);
   const loading = open && options.length === 0;
+  const [inputValue, setInputValue] = React.useState("");
   let arr = [];
   React.useEffect(() => {
     let active = true;
@@ -28,7 +32,24 @@ export default function InputContactList(props) {
       await sleep(1e3); // For demo purposes.
       console.log(props.contacts);
       if (active) {
-        setOptions([...props.contacts.data]);
+        let formData = new FormData();
+        formData.append("query", inputValue);
+        console.log(formData);
+        axios({
+          method: "post",
+          url: "/api/getContactsForSelect",
+          data: formData,
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${auth.auth.accessToken}`,
+          },
+        })
+          .then(function (response) {
+            console.log(response);
+            setOptions([...response.data]);
+          })
+          .catch(function (response) {});
+        // setOptions([...props.contacts.data]);
       }
     })();
 
@@ -73,7 +94,31 @@ export default function InputContactList(props) {
       isOptionEqualToValue={(option, value) => option.label === value.title}
       getOptionLabel={(option) => option.label}
       options={options}
-      onChange={(event, newValue) => props.onChange(newValue)}
+      onInputChange={(event, newInputValue) => {
+        setInputValue(newInputValue);
+        console.log(newInputValue);
+
+        let formData = new FormData();
+        formData.append("query", newInputValue);
+        console.log(formData);
+        axios({
+          method: "post",
+          url: "/api/getContactsForSelect",
+          data: formData,
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${auth.auth.accessToken}`,
+          },
+        })
+          .then(function (response) {
+            console.log(response);
+            setOptions([...response.data]);
+          })
+          .catch(function (response) {});
+      }}
+      onChange={(event, newValue) => {
+        props.onChange(newValue);
+      }}
       loading={loading}
       freeSolo={true}
       multiple

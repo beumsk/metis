@@ -94,7 +94,12 @@ class ContactsController extends AbstractController
             }
         }
 
+        // $search_text = 'libou';
 
+        // $arr  = array_filter($calls, function ($el) use ($search_text) {
+        //     // dd($el);
+        //     return (strpos($el["label"], $search_text) !== false);
+        // });
 
 
 

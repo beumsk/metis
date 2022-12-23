@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Contacts;
 use App\Entity\FollowupGoals;
 use App\Entity\FollowupReports;
 use App\Entity\InformationTemplateBlock;
@@ -44,7 +45,17 @@ class PatientsController extends AbstractController
     }
 
 
+    #[Route('/api/setContactsResearch', name: 'app_setContactsResearch')]
+    public function setContactsResearch(ManagerRegistry $doctrine, Request $request): Response
+    {
 
+        // $request = Request::createFromGlobals();
+        $valuetest = $request->query->get('value');
+        $antenna = $request->query->get('antenna');
+        // dd($valuetest);
+        $reports = $doctrine->getRepository(Contacts::class)->findContactsResearch("loub", $antenna);
+        return $this->json($reports);
+    }
 
 
     #[Route('/api/getReports', name: 'app_reports')]
