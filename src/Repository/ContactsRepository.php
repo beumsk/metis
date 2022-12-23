@@ -213,7 +213,7 @@ class ContactsRepository extends ServiceEntityRepository
         return $resultSet->fetchAllAssociative();
     }
 
-    public function findAllContacts($tags = null)
+    public function findAllContacts($tags = null, $query = null)
     {
 
         $conn = $this->getEntityManager()->getConnection();
@@ -239,8 +239,8 @@ class ContactsRepository extends ServiceEntityRepository
                     where r.activity_type in (' . implode(",", [FollowupReports::ACTIVITY_CALL_OUT, FollowupReports::ACTIVITY_CALL_IN]) . ')' .  ' and r.deleted_at is null and rc.cont_id = c.id) as nb_calls,
                     (select count(pc.id) from patients_contacts pc where pc.cont_id = c.id AND pc.deleted_at is null) as nb_patients
                     FROM contacts c ' . $join . '
-                    WHERE c.type IN (' . implode(",", [Contacts::TYPE_PERSON, Contacts::TYPE_ORGANISATION]) . ')' .
-            $query_tags . 'AND (c.deleted_at IS NULL)
+                    WHERE c.type IN (' . implode(",", [Contacts::TYPE_PERSON, Contacts::TYPE_ORGANISATION]) . ')' . $query_tags . 'AND (c.deleted_at IS NULL) AND CONCAT(c.firstname," ", c.lastname) LIKE "' . $query . '%" 
+                    OR CONCAT(c.lastname," ", c.firstname) LIKE "' . $query . '%"  AND (c.deleted_at IS NULL)
                     GROUP BY c.id
                     ORDER BY lastname asc, firstname asc';
 

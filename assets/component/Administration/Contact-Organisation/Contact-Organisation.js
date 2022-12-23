@@ -110,7 +110,9 @@ function ContactOrganisations() {
       .catch(function (response) {});
     // setListContacts(e);
   }
-
+  function onColumnMatch({ searchText, value, column, row }) {
+    console.log(searchText, value, column, row);
+  }
   return (
     <>
       <Menu></Menu>
@@ -128,15 +130,35 @@ function ContactOrganisations() {
             keyField="id"
             data={[...listContacts.data]}
             columns={columns}
-            search
+            // search
           >
             {(props) => (
               <div>
                 <div className="mb-2 mt-2">
-                  <SearchBar
+                  {/* <SearchBar
                     className="uk-input"
                     {...props.searchProps}
                     placeholder="Rechercher dans les appels"
+                  /> */}
+                  <input
+                    onChange={(e) => {
+                      let formData = new FormData();
+                      formData.append("query", e.target.value);
+                      axios({
+                        method: "post",
+                        url: "/api/getContacts",
+                        data: formData,
+                        headers: {
+                          "Content-Type": "application/json",
+                          Authorization: `Bearer ${auth.auth.accessToken}`,
+                        },
+                      })
+                        .then(function (response) {
+                          //handle success
+                          setListContacts(response);
+                        })
+                        .catch(function (response) {});
+                    }}
                   />
                 </div>
 
