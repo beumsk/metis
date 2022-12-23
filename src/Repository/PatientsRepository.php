@@ -78,6 +78,8 @@ class PatientsRepository extends ServiceEntityRepository
 
         if ($searchPatient) {
             $q->andWhere('CONCAT(p.lastname,\' \', p.firstname,\' \', COALESCE(p.nicknames, p.id)) LIKE :searchPatient');
+            $q->andWhere('CONCAT(p.firstname,\' \', p.lastname,\' \', COALESCE(p.nicknames, p.id)) LIKE :searchPatient');
+            $q->andWhere('CONCAT(COALESCE(p.nicknames, p.id), p.firstname,\' \', p.lastname,\' \') LIKE :searchPatient');
             $parameters["searchPatient"] = '%' . $searchPatient . '%';
         }
 

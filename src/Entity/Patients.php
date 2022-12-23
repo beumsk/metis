@@ -75,6 +75,7 @@ class Patients
     private Collection $contacts;
 
     #[ORM\OneToMany(mappedBy: 'patient', targetEntity: FollowupReports::class)]
+    #[ORM\OrderBy(["last_update" => "ASC"])]
     private Collection $fore;
 
     // #[ORM\OneToMany(mappedBy: 'patients', targetEntity: PatientsInformation::class)]

@@ -65,8 +65,7 @@ function EditNoReportMeet(props) {
         {props.rapport && props.rapport.cont && (
           <>
             <span style={{ fontWeight: "normal" }}>
-              {props?.rapport.cont.lastname}
-              {props?.rapport.cont.firstname}
+              {props?.rapport.cont.lastname} {props?.rapport.cont.firstname}
             </span>
           </>
         )}
