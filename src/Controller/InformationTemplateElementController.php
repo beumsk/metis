@@ -47,16 +47,17 @@ class InformationTemplateElementController extends AbstractController
         $patientInfo = $doctrine->getRepository(PatientsInformation::class)->find($idInfo);
 
 
-        if ($valueSelect !== "null") {
+        if ($valueSelect && $valueSelect !== "null") {
             $suggestion = $doctrine->getRepository(Suggestions::class)->find($valueSelect);
             $patientInfo->setSugg($suggestion);
         }
-
-        $patientInfo->setValue($specificValueInput);
-        if ($start !== "null") {
+        if ($specificValueInput && $specificValueInput !== "null") {
+            $patientInfo->setValue($specificValueInput);
+        }
+        if ($start && $start !== "null") {
             $patientInfo->setStart(new \DateTime($start));
         }
-        if ($end !== "null") {
+        if ($end && $end !== "null") {
             $patientInfo->setEnd(new \DateTime($end));
         }
         $patientInfo->setComment($commentaireInput);
@@ -111,19 +112,25 @@ class InformationTemplateElementController extends AbstractController
         $patientInfo = new PatientsInformation();
 
 
-        if ($valueSelect !== "null") {
+        if ($valueSelect && $valueSelect !== "null") {
             $suggestion = $doctrine->getRepository(Suggestions::class)->find($valueSelect);
             $patientInfo->setSugg($suggestion);
         }
+        if ($specificValueInput && $specificValueInput !== "null") {
+            $patientInfo->setValue($specificValueInput);
+        }
 
-        $patientInfo->setValue($specificValueInput);
-        if ($start !== "null") {
+        if ($start && $start !== "null") {
             $patientInfo->setStart(new \DateTime($start));
         }
-        if ($end !== "null") {
+        if ($end && $end !== "null") {
             $patientInfo->setEnd(new \DateTime($end));
         }
-        $patientInfo->setComment($commentaireInput);
+
+        if ($commentaireInput && $commentaireInput !== "null") {
+            $patientInfo->setComment($commentaireInput);
+        }
+
         $patientInfo->setPatients($patient);
         $patientInfo->setItel($itel);
         $entityManager->persist($patientInfo);

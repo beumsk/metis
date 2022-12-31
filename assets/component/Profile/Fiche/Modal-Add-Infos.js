@@ -48,10 +48,12 @@ function ModalEditInfos(props) {
 
   const handleSave = (e) => {
     let formData = new FormData();
-    if (valueSelect !== null) {
+    if (valueSelect !== null && elementsOpt.length > 0) {
       formData.append("valueSelect", valueSelect);
       setError(null);
-    } else {
+    }
+
+    if (valueSelect === null && elementsOpt.length > 0) {
       setError("Valeur obligatoire");
     }
 
@@ -108,20 +110,25 @@ function ModalEditInfos(props) {
         <Modal.Body>
           {" "}
           <>
-            <Form.Label htmlFor="inputValue">Valeur</Form.Label>
-            <Form.Select
-              size="lg"
-              className="uk-select"
-              onChange={(e) => setValueSelect(e.target.value)}
-              id="value-sugg"
-            >
-              <option value={null}>Choissisez une valeur</option>
-              {elementsOpt?.map((el, id) => (
-                <option key={el.id} value={el.id}>
-                  {el?.value}
-                </option>
-              ))}
-            </Form.Select>
+            {elementsOpt?.length > 0 && (
+              <>
+                <Form.Label htmlFor="inputValue">Valeur</Form.Label>
+                <Form.Select
+                  size="lg"
+                  className="uk-select"
+                  onChange={(e) => setValueSelect(e.target.value)}
+                  id="value-sugg"
+                >
+                  <option value={null}>Choissisez une valeur</option>
+                  {elementsOpt?.map((el, id) => (
+                    <option key={el.id} value={el.id}>
+                      {el?.value}
+                    </option>
+                  ))}
+                </Form.Select>
+              </>
+            )}
+
             <Form.Label htmlFor="inputValue">Valeur Spécifique</Form.Label>
             <input
               type="text"
