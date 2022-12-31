@@ -560,18 +560,18 @@ class FollowUpReportsController extends AbstractController
         $user = $doctrine->getRepository(Patients::class)->find($userId);
 
 
-        if ($valueWhatDoinFunction !== null) {
+        if ($valueWhatDoinFunction && $valueWhatDoinFunction !== "null") {
 
             $suggestions = $doctrine->getRepository(Suggestions::class)->find($valueWhatDoinFunction);
             $followupGoals->setSugg($suggestions);
         }
 
-        if ($callsFunctionValue !== null) {
+        if ($callsFunctionValue && $callsFunctionValue !== "null") {
             $function = $doctrine->getRepository(Suggestions::class)->find($callsFunctionValue);
             $followupGoals->setFunc($function);
         }
 
-        if ($typeValue !== null) {
+        if ($typeValue && $typeValue !== "null") {
             $typeValue = $doctrine->getRepository(Suggestions::class)->find($typeValue);
             $followupGoals->setSugg($typeValue);
         }
@@ -603,7 +603,7 @@ class FollowUpReportsController extends AbstractController
         $followupGoals->setCreationDate(new \DateTime($dateCreation));
 
 
-        if ($isPriority !== 'null') {
+        if ($isPriority !== "false") {
             $followupGoals->setIsHightlight($isPriority);
         }
 
