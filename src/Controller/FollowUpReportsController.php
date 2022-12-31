@@ -662,7 +662,11 @@ class FollowUpReportsController extends AbstractController
         // $followupGoals->setUser($user);
 
         $followupGoals->setCreationDate(new \DateTime("now"));
-        $followupGoals->setDescription($description);
+
+        if ($description && $description !== "null") {
+            $followupGoals->setDescription($description);
+        }
+
         $followupGoals->setStatus(0);
         $entityManager->persist($followupGoals);
         // dd($followupGoals);
@@ -1690,7 +1694,7 @@ class FollowUpReportsController extends AbstractController
             if ($value->getDeletedAt() === null && $value->getType() === 2 && ($value->getStatus() === 0 || $value->getStatus() === 1)) {
                 $goalsArr[] = [
                     "value" => $value->getId(),
-                    "label" => $value->getDescription(),
+                    "label" => $value->getCreationDate()->format('d/m/Y') . " " . $value->getFunc()->getValue() . " " . $value->getDescription(),
 
                 ];
             }
