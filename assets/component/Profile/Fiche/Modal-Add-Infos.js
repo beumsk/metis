@@ -25,35 +25,18 @@ function ModalEditInfos(props) {
   const [idPatient, setIdPatient] = useState(id);
   const [error, setError] = useState(null);
   const [responseDatas, setResponseDatas] = useState(null);
-  const [start, setStartDate] = useState(
-    props?.infosPatient?.start !== null ? props?.infosPatient?.start : null
-  );
-  const [end, setEndDate] = useState(
-    props?.infosPatient?.end !== null ? props?.infosPatient?.end : null
-  );
+  const [start, setStartDate] = useState(null);
+  const [end, setEndDate] = useState(null);
 
-  const [valueSelect, setValueSelect] = useState(
-    props?.infosPatient?.sugg?.id !== null
-      ? props?.infosPatient?.sugg?.id
-      : null
-  );
-  const [specificValueInput, setSpecificValueInput] = useState(
-    props?.infosPatient?.value !== null ? props?.infosPatient?.value : null
-  );
+  const [valueSelect, setValueSelect] = useState(null);
+  const [specificValueInput, setSpecificValueInput] = useState(null);
 
-  const [commentaireInput, setCommentaire] = useState(
-    props?.infosPatient?.comment !== null ? props?.infosPatient?.comment : null
-  );
+  const [commentaireInput, setCommentaire] = useState(null);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   useEffect(() => {
     setElementsOpt(...props?.infos?.suggestionsByBlock);
-    setStartDate(
-      new Date(props?.infosPatient?.start?.timestamp * 1000).toJSON()
-    );
-
-    setEndDate(new Date(props?.infosPatient?.end?.timestamp * 1000).toJSON());
   }, []);
   //
 
@@ -65,8 +48,7 @@ function ModalEditInfos(props) {
 
   const handleSave = (e) => {
     let formData = new FormData();
-    // value-sugg
-    if (valueSelect) {
+    if (valueSelect !== null) {
       formData.append("valueSelect", valueSelect);
       setError(null);
     } else {
@@ -91,7 +73,7 @@ function ModalEditInfos(props) {
     var formGetInfos = new FormData();
     formGetInfos.append("id", id.toString());
 
-    if (error === null) {
+    if (error === null || valueSelect !== null) {
       axios({
         method: "post",
         url: "/api/setPatientInformation",
@@ -101,37 +83,15 @@ function ModalEditInfos(props) {
           Authorization: `Bearer ${auth.auth.accessToken}`,
         },
       }).then(function (response) {
+        setValueSelect(null);
+        setSpecificValueInput(null);
+        setCommentaire(null);
+        setStartDate(null);
+        setEndDate(null);
         props.onChange(response);
-        // if (response) {
-        //   axios({
-        //     method: "post",
-        //     url: "/api/patientsInformationByPatients",
-        //     data: formGetInfos,
-        //     headers: {
-        //       "Content-Type": "application/json",
-        //       Authorization: `Bearer ${auth.auth.accessToken}`,
-        //     },
-        //   })
-        //     .then(function (response) {
-        //       setResponseDatas(response.data);
-        //       setIsSentRepport(true);
-        //       document.querySelectorAll(".btn-close")[0].click();
-        //     })
-        //     .catch(function (response) {});
-        //   // document.querySelectorAll(".btn-close")[0].click();
-        //   // location.replace(window.location.origin + "/" + idPatient);
-        // }
       });
     }
   };
-
-  // if (responseDatas !== null) {
-  //   props.onChange({
-  //     response: responseDatas,
-  //   });
-  //   // setShow(false);
-  //   document.querySelectorAll(".btn-close")[0].click();
-  // }
 
   return (
     <>
@@ -155,6 +115,7 @@ function ModalEditInfos(props) {
               onChange={(e) => setValueSelect(e.target.value)}
               id="value-sugg"
             >
+              <option value={null}>Choissisez une valeur</option>
               {elementsOpt?.map((el, id) => (
                 <option key={el.id} value={el.id}>
                   {el?.value}
