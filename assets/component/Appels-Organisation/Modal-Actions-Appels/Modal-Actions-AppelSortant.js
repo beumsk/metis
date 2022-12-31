@@ -43,8 +43,8 @@ function ModalActionsAppelsSortant(props) {
     //   .catch(function (response) {});
   }, []);
 
-  for (let index = 0; index < props.listCalls.length; index++) {
-    const element = props.listCalls[index];
+  for (let index = 0; index < props.listCalls.data.length; index++) {
+    const element = props.listCalls.data[index];
     optionsAppel.push({ value: element.id, label: element.description });
   }
 
@@ -52,6 +52,7 @@ function ModalActionsAppelsSortant(props) {
     const element = props.listContacts[index];
     optionsContacts.push({ value: element.id, label: element.description });
   }
+
   const onChangeTagsAppels = (e) => {
     // options.filter(e => e.value);
     let optionsValues = [];
@@ -127,7 +128,7 @@ function ModalActionsAppelsSortant(props) {
     console.log("contactsSelected", JSON.stringify(contactsSelected));
     console.log("dureeValue", dureeValue);
     console.log("patiId", props.defaultValueGoalsValue.pati_id);
-
+    console.log(props);
     let formGetInfos = new FormData();
     let date = new Date(0);
     date.setMinutes(dureeValue); // specify value for SECONDS here
@@ -156,7 +157,7 @@ function ModalActionsAppelsSortant(props) {
       setShow(false);
     });
   };
-
+  console.log(props);
   return (
     <>
       <a variant="primary" onClick={handleShow}>

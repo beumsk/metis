@@ -11,7 +11,7 @@ import makeAnimated from "react-select/animated";
 function ModalActionsAppelsSortant(props) {
   const [show, setShow] = useState(false);
   const [auth, setAuth] = useState(useAuth());
-  let id = useParams().idContact;
+  let id = useParams().id;
   const [contactsSelected, setContactsSelected] = useState(null);
   const [goalsSelected, setGoalsSelected] = useState(null);
   const [content, setContent] = useState(null);
@@ -87,7 +87,7 @@ function ModalActionsAppelsSortant(props) {
     console.log("contactsSelected", JSON.stringify(contactsSelected));
     console.log("dureeValue", dureeValue);
     console.log("patiId", id);
-
+    console.log(props);
     let formGetInfos = new FormData();
     let date = new Date(0);
     date.setMinutes(dureeValue); // specify value for SECONDS here
@@ -131,7 +131,7 @@ function ModalActionsAppelsSortant(props) {
       setShow(false);
     });
   };
-
+  console.log(props);
   return (
     <>
       <button variant="primary" onClick={handleShow} className="btn-metis">
@@ -188,7 +188,7 @@ function ModalActionsAppelsSortant(props) {
                   components={animatedComponents}
                   onChange={(e) => onChangeTagsAppels(e)}
                   isMulti
-                  options={props?.listCalls}
+                  options={props?.listCalls?.data}
                 />
               </div>
             </Form.Group>
