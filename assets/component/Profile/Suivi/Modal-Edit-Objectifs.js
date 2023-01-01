@@ -53,6 +53,7 @@ function ModalEditObjectifs(props) {
   const [valueStatus, setValueStatus] = useState(props?.goalsItem?.status);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+  console.log(props);
   useEffect(() => {
     // axios({
     //   method: "post",
@@ -177,8 +178,8 @@ function ModalEditObjectifs(props) {
               <Form.Check
                 type="checkbox"
                 label="Prioritaire ?"
-                onClick={(e) => setPriority(true)}
-                defaultChecked={props?.calls?.isHightlight}
+                onClick={(e) => setPriority(e.target.checked)}
+                defaultChecked={props?.goalsItem?.isHightlight}
               />
             </Form.Group>
             <Form.Label htmlFor="inputValue">Description</Form.Label>

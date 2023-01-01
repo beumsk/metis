@@ -71,12 +71,14 @@ class FollowUpReportsController extends AbstractController
         $followupGoals->setCreationDate(new \DateTime("now"));
         if ($description !== "null") {
             $followupGoals->setDescription($description);
-        } else {
-            $followupGoals->setDescription("Pas de description");
         }
 
         $followupGoals->setStatus(1);
-        $followupGoals->setTitle($valueType);
+
+        if ($valueType !== "null") {
+            $followupGoals->setTitle($valueType);
+        }
+
         $entityManager->persist($followupGoals);
 
         $entityManager->flush();
@@ -667,13 +669,18 @@ class FollowUpReportsController extends AbstractController
         $goalsId = $request->request->get('goalsId');
         $valueStatus = $request->request->get('valueStatus');
         $dateCreation = $request->request->get('dateCreation');
+        $valueType = $request->request->get('valueType');
         // dd($patientId);
 
 
         $followupGoals = $doctrine->getRepository(FollowupGoals::class)->find($goalsId);
         $patients = $doctrine->getRepository(Patients::class)->find($patientId);
         $user = $doctrine->getRepository(Patients::class)->find($userId);
+        if ($valueType && $valueType !== "null") {
 
+            // $suggestions = $doctrine->getRepository(Suggestions::class)->find($valueWhatDoinFunction);
+            $followupGoals->setTitle($valueType);
+        }
 
         if ($valueWhatDoinFunction && $valueWhatDoinFunction !== "null") {
 
@@ -718,8 +725,8 @@ class FollowUpReportsController extends AbstractController
         $followupGoals->setCreationDate(new \DateTime($dateCreation));
 
 
-        if ($isPriority !== "false") {
-            $followupGoals->setIsHightlight($isPriority);
+        if ($isPriority !== "null") {
+            $followupGoals->setIsHightlight(($isPriority === "true") ? true : false);
         }
 
         if ($description !== 'null') {
@@ -1848,7 +1855,7 @@ class FollowUpReportsController extends AbstractController
             if ($value->getDeletedAt() === null && $value->getType() === 1 && ($value->getStatus() === 1 || $value->getStatus() === 2)) {
                 $goalsArr[] = [
                     "value" => $value->getId(),
-                    "label" => $value->getDescription(),
+                    "label" => $value->getCreationDate()->format('d/m/Y') . " " . (($value->getFunc() && $value->getFunc()->getValue()) ? $value->getFunc()->getValue() : null) . " " . (($value->getDescription()) ? $value->getDescription() : null),
 
                 ];
             }

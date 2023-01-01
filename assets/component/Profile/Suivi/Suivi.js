@@ -115,6 +115,7 @@ const Profile = () => {
       },
     })
       .then(function (response) {
+        console.log(response, "response !");
         setGoalsListForSelect(response);
       })
       .catch(function (response) {});
@@ -343,7 +344,7 @@ const Profile = () => {
                                   dateStyle: "short",
                                 }
                               )}
-                              ) {g?.sugg?.value} {g?.description}
+                              ) {g?.sugg?.value} {g?.title}
                             </Link>
                           </div>
                         ) : (
@@ -379,7 +380,7 @@ const Profile = () => {
                             {new Date(g.creationDate).toLocaleString("fr-BE", {
                               dateStyle: "short",
                             })}
-                            ) {g?.sugg?.value} {g?.description}
+                            ) {g?.sugg?.value} {g?.title}
                           </Link>
                         </div>
                       ) : (
@@ -416,7 +417,7 @@ const Profile = () => {
                             {new Date(g.creationDate).toLocaleString("fr-BE", {
                               dateStyle: "short",
                             })}
-                            ){g?.func?.value} {g?.description}
+                            ){g?.func?.value} {g?.title}
                           </Link>
                         </div>
                       ) : (
@@ -471,7 +472,7 @@ const Profile = () => {
                                     dateStyle: "short",
                                   }
                                 )}
-                                ) {g?.func?.value} {g?.description}
+                                ) {g?.func?.value} {g?.title}
                               </Link>
                             </div>
                           ) : (
@@ -512,7 +513,7 @@ const Profile = () => {
                                   dateStyle: "short",
                                 }
                               )}
-                              ) {g?.func?.value} {g?.description}
+                              ) {g?.func?.value} {g?.title}
                             </Link>
                           </div>
                         ) : (
@@ -555,7 +556,7 @@ const Profile = () => {
                                   dateStyle: "short",
                                 }
                               )}
-                              ) {g?.func?.value} {g?.description}
+                              ) {g?.func?.value} {g?.title}
                             </Link>
                           </div>
                         ) : (
