@@ -85,7 +85,7 @@ class PatientsRepository extends ServiceEntityRepository
     //    /**
     //     * @return Patients[] Returns an array of Patients objects
     //     */
-    public function findPatients($numberPage, $antenna, $searchPatient = null, $searchDatePatient = null, $searchTypeForPatient = null, $bySearchRepportsPatient = false): array
+    public function findPatients($numberPage, $antenna, $searchPatient = null, $searchDatePatient = null, $searchTypeForPatient = null): array
     {
 
         $parameters = [];
@@ -107,21 +107,15 @@ class PatientsRepository extends ServiceEntityRepository
             ->andWhere('p.deleted_at is NULL');
         // ->setMaxResults($numberPage);
 
-        if ($bySearchRepportsPatient) {
-            $q->leftJoin(
-                'App:FollowupReports',
-                'f',
-                'WITH',
-                'f.pati = p.id'
-            )
-                ->orderBy('f.last_update', 'DESC');
-        }
 
 
+        // dd($searchPatient);
         if ($searchPatient) {
+            // dd($searchPatient);
             $q->andWhere('CONCAT(p.lastname,\' \', p.firstname,\' \', COALESCE(p.nicknames, p.id)) LIKE :searchPatient');
             $q->andWhere('CONCAT(p.firstname,\' \', p.lastname,\' \', COALESCE(p.nicknames, p.id)) LIKE :searchPatient');
             $q->andWhere('CONCAT(COALESCE(p.nicknames, p.id), p.firstname,\' \', p.lastname,\' \') LIKE :searchPatient');
+
             $parameters["searchPatient"] = '%' . $searchPatient . '%';
         }
 
@@ -140,7 +134,7 @@ class PatientsRepository extends ServiceEntityRepository
 
         // ->setMaxResults($numberPage);
 
-        // dd($q->getQuery());
+        // dd($q);
 
 
         return $q->getQuery()->getResult();

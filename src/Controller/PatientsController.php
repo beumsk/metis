@@ -270,51 +270,52 @@ class PatientsController extends AbstractController
         $searchDatePatient = $request->request->get('searchDateBirthPatient');
         $searchByRepports = $request->request->get('searchByRepports');
         $searchTypeForPatient = $request->request->get('typeSelectPatient');
-        $patients = $doctrine->getRepository(Patients::class)->findPatients($page, $antenna, $searchNamePatient, $searchDatePatient, $searchTypeForPatient, $searchByRepports);
+        $patients = $doctrine->getRepository(Patients::class)->findPatients($page, $antenna, $searchNamePatient, $searchDatePatient, $searchTypeForPatient);
 
 
         $arr = [];
         foreach ($patients as  $key => $value) {
-            // if ($key < $page) {
-            $goals = $doctrine->getRepository(Patients::class)->findPatientReportsByGoal($value->getId(), null, null, 3);
-            // dd($value);
-            $arr[] = [
-                "id" => $value->getId(),
-                "firstname" => $value->getFirstName(),
-                "lastname" => $value->getLastName(),
-                "nicknames" => $value->getNickNames(),
-                "status" => $value->getStatus(),
-                "birthdate" => ($value->getBirthdate() !== null) ? $value->getBirthdate()->format(DATE_RFC3339_EXTENDED) : null,
-                "first_contact_date" => ($value->getFirstContactDate() !== null) ? $value->getFirstContactDate()->format(DATE_RFC3339_EXTENDED) : null,
-                "deleted_at" => ($value->getDeletedAt() !== null) ? $value->getDeletedAt()->format(DATE_RFC3339_EXTENDED) : null,
-                "medias" => (count($value->getMedias()) > 0) ?
-                    array_map(function ($a) {
-                        if ($a->getSugg()->getValue() === "current") {
+            if ($key < $page) {
+                $goals = $doctrine->getRepository(Patients::class)->findPatientReportsByGoal($value->getId(), null, null, 3);
+                // dd($value);
+                $arr[] = [
+                    "id" => $value->getId(),
+                    "firstname" => $value->getFirstName(),
+                    "lastname" => $value->getLastName(),
+                    "nicknames" => $value->getNickNames(),
+                    "status" => $value->getStatus(),
+                    "birthdate" => ($value->getBirthdate() !== null) ? $value->getBirthdate()->format(DATE_RFC3339_EXTENDED) : null,
+                    "first_contact_date" => ($value->getFirstContactDate() !== null) ? $value->getFirstContactDate()->format(DATE_RFC3339_EXTENDED) : null,
+                    "deleted_at" => ($value->getDeletedAt() !== null) ? $value->getDeletedAt()->format(DATE_RFC3339_EXTENDED) : null,
+                    "medias" => (count($value->getMedias()) > 0) ?
+                        array_map(function ($a) {
+                            if ($a->getSugg()->getValue() === "current") {
+                                return [
+                                    "id" => ($a->getId() !== null) ? $a->getId() : null,
+                                    "sugg" => ($a->getSugg() !== null) ? $a->getSugg()->getValue() : null,
+                                    "absolutePath" => ($a->getAbsolutePath() !== null) ? $a->getAbsolutePath() : null,
+                                    // "lastUpdate" => ($a->getLastUpdate() !== null) ? $a->getLastUpdate()->format(DATE_RFC3339_EXTENDED) : null,
+                                    // "activityType" => $a->getActivityType()
+
+                                ];
+                            }
+                        }, [...$value->getMedias()])
+                        : null,
+                    "fore" => (count($goals) > 0) ?
+                        array_map(function ($a) {
                             return [
                                 "id" => ($a->getId() !== null) ? $a->getId() : null,
-                                "sugg" => ($a->getSugg() !== null) ? $a->getSugg()->getValue() : null,
-                                "absolutePath" => ($a->getAbsolutePath() !== null) ? $a->getAbsolutePath() : null,
-                                // "lastUpdate" => ($a->getLastUpdate() !== null) ? $a->getLastUpdate()->format(DATE_RFC3339_EXTENDED) : null,
-                                // "activityType" => $a->getActivityType()
+                                "lastUpdate" => ($a->getLastUpdate() !== null) ? $a->getLastUpdate()->format(DATE_RFC3339_EXTENDED) : null,
+                                "activityType" => $a->getActivityType()
 
                             ];
-                        }
-                    }, [...$value->getMedias()])
-                    : null,
-                "fore" => (count($goals) > 0) ?
-                    array_map(function ($a) {
-                        return [
-                            "id" => ($a->getId() !== null) ? $a->getId() : null,
-                            "lastUpdate" => ($a->getLastUpdate() !== null) ? $a->getLastUpdate()->format(DATE_RFC3339_EXTENDED) : null,
-                            "activityType" => $a->getActivityType()
-
-                        ];
-                    }, [...$goals])
-                    : null,
+                        }, [...$goals])
+                        : null,
 
 
 
-            ];
+                ];
+            }
         }
 
         return new Response(json_encode($arr), 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
