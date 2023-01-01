@@ -334,7 +334,17 @@ class Patients
      */
     public function getFore()
     {
-        return [$this->fore[count($this->fore) - 1], $this->fore[count($this->fore) - 2], $this->fore[count($this->fore) - 3]];
+
+        return $this->fore;
+        // if ($this->fore) {
+        //     return [
+        //         $this->fore[count($this->fore) - 1],
+        //         // $this->fore[count($this->fore) - 2],
+        //         // $this->fore[count($this->fore) - 3]
+        //     ];
+        // } else {
+        //     return null;
+        // }
     }
 
     public function addFore(FollowupReports $fore): self

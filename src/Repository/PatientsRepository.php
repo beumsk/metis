@@ -40,6 +40,48 @@ class PatientsRepository extends ServiceEntityRepository
         }
     }
 
+    public function findPatientReportsByGoal($patient, $followUpGoalId = null, $keyword = null, $limit = null, $offset = 0)
+    {
+
+        $query = 'SELECT r
+                FROM App:FollowupReports r
+                LEFT JOIN r.cont pl
+                WHERE r.pati = :patient';
+
+        $parameters = array('patient' => $patient);
+        if (null !== $followUpGoalId) {
+            $query .= ' AND r.id IN (
+                SELECT distinct r2.id FROM App:FollowupGoals g 
+                    JOIN g.fore r2 
+                    WHERE r2.pati = :patient AND g.id = :goalId) ';
+            $parameters['goalId'] = $followUpGoalId;
+        }
+
+        // OR c.firstName like :keyword OR c.lastName like :keyword
+
+        if (null !== $keyword) {
+            $query .= ' AND (r.content like :keyword OR pl.firstName like :keyword OR pl.lastName like :keyword)';
+            $parameters['keyword'] = '%' . $keyword . '%';
+        }
+
+        $query .= " ORDER BY r.report_date DESC, r.id DESC ";
+
+        $query = $this->getEntityManager()
+            ->createQuery($query)
+            ->setParameters($parameters);
+
+        if (null != $limit) {
+            $query->setMaxResults($limit)->setFirstResult($offset);
+        }
+
+        // dd($query->getResult());
+        try {
+            return $query->getResult();
+        } catch (\Doctrine\ORM\NoResultException $e) {
+            return null;
+        }
+    }
+
     //    /**
     //     * @return Patients[] Returns an array of Patients objects
     //     */
@@ -61,9 +103,9 @@ class PatientsRepository extends ServiceEntityRepository
         $q->select('p')
             ->from('App:Patients', 'p')
             ->andWhere('p.antenna = :antenna')
-
-            ->andWhere('p.deleted_at is NULL')
-            ->setMaxResults($numberPage);
+            ->orderBy('p.lastname', 'ASC')
+            ->andWhere('p.deleted_at is NULL');
+        // ->setMaxResults($numberPage);
 
         if ($bySearchRepportsPatient) {
             $q->leftJoin(
@@ -99,6 +141,8 @@ class PatientsRepository extends ServiceEntityRepository
         // ->setMaxResults($numberPage);
 
         // dd($q->getQuery());
+
+
         return $q->getQuery()->getResult();
     }
 
