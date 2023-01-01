@@ -108,10 +108,21 @@ class FollowupReports
     #[ORM\JoinColumn(name: "pati_id", referencedColumnName: "id", nullable: true, onDelete: "SET NULL")]
     private ?Patients $patient = null;
 
+    #[ORM\OneToMany(mappedBy: 'FollowupReports', targetEntity: FollowupReportsIndicators::class)]
+    private Collection $indicators;
+
+    #[ORM\ManyToMany(targetEntity: IndicatorsGroups::class, inversedBy: 'followUpReports')]
+    #[ORM\JoinTable(name: "followup_report_indicators_groups")]
+    #[ORM\JoinColumn(name: "fore_id", referencedColumnName: "id", nullable: true)]
+    #[ORM\InverseJoinColumn(name: "igrp_id", referencedColumnName: "id", nullable: true)]
+    private Collection $indicatorsGroups;
+
     public function __construct()
     {
         $this->cont = new ArrayCollection();
         $this->fogo = new ArrayCollection();
+        $this->indicators = new ArrayCollection();
+        $this->indicatorsGroups = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -363,6 +374,60 @@ class FollowupReports
     public function setPatient(?Patients $patient): self
     {
         $this->patient = $patient;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, FollowupReportsIndicators>
+     */
+    public function getIndicators(): Collection
+    {
+        return $this->indicators;
+    }
+
+    public function addIndicator(FollowupReportsIndicators $indicator): self
+    {
+        if (!$this->indicators->contains($indicator)) {
+            $this->indicators->add($indicator);
+            $indicator->setFollowupReports($this);
+        }
+
+        return $this;
+    }
+
+    public function removeIndicator(FollowupReportsIndicators $indicator): self
+    {
+        if ($this->indicators->removeElement($indicator)) {
+            // set the owning side to null (unless already changed)
+            if ($indicator->getFollowupReports() === $this) {
+                $indicator->setFollowupReports(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, IndicatorsGroups>
+     */
+    public function getIndicatorsGroups(): Collection
+    {
+        return $this->indicatorsGroups;
+    }
+
+    public function addIndicatorsGroup(IndicatorsGroups $indicatorsGroup): self
+    {
+        if (!$this->indicatorsGroups->contains($indicatorsGroup)) {
+            $this->indicatorsGroups->add($indicatorsGroup);
+        }
+
+        return $this;
+    }
+
+    public function removeIndicatorsGroup(IndicatorsGroups $indicatorsGroup): self
+    {
+        $this->indicatorsGroups->removeElement($indicatorsGroup);
 
         return $this;
     }

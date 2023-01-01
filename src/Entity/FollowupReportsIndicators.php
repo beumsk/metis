@@ -14,6 +14,12 @@ class FollowupReportsIndicators
     #[ORM\Column]
     private ?int $id = null;
 
+    // * @ORM\ManyToOne(targetEntity="FollowUpReport", inversedBy="indicators")
+    // * @ORM\JoinColumn(name="fore_id", referencedColumnName="fore_id", onDelete="CASCADE")
+    #[ORM\ManyToOne(targetEntity: "FollowupReports", inversedBy: 'indicators')]
+    #[ORM\JoinColumn(name: "fore_id", referencedColumnName: "id", nullable: true, onDelete: "SET NULL")]
+    private ?FollowupReports $FollowupReports = null;
+
     #[ORM\Column(nullable: true)]
     private ?int $value = null;
 
@@ -24,9 +30,13 @@ class FollowupReportsIndicators
     #[ORM\JoinColumn(name: "fore_id", referencedColumnName: "id", nullable: true, onDelete: "SET NULL")]
     private ?FollowupReports $fore = null;
 
+
     #[ORM\ManyToOne(targetEntity: 'Indicators', cascade: ["all"], fetch: "EAGER")]
     #[ORM\JoinColumn(name: "indi_id", referencedColumnName: "id", nullable: true, onDelete: "SET NULL")]
     private ?Indicators $indi = null;
+
+
+
 
     public function getId(): ?int
     {
@@ -77,6 +87,18 @@ class FollowupReportsIndicators
     public function setIndi(?Indicators $indi): self
     {
         $this->indi = $indi;
+
+        return $this;
+    }
+
+    public function getFollowupReports(): ?FollowupReports
+    {
+        return $this->FollowupReports;
+    }
+
+    public function setFollowupReports(?FollowupReports $FollowupReports): self
+    {
+        $this->FollowupReports = $FollowupReports;
 
         return $this;
     }

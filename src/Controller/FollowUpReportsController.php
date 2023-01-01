@@ -156,54 +156,103 @@ class FollowUpReportsController extends AbstractController
 
         $reportFollowUp = $doctrine->getRepository(FollowupReports::class)->mergeFollowUpGoalsAndReports($id, $textSearch, $dateSearch, $typeSearch, $searchLink, $number);
 
+        $arr = [];
         foreach ($reportFollowUp as  $value) {
-            if ($value->getId()) {
-                $report = $doctrine->getRepository(FollowupReportsActivities::class)->findBy(['fore' => $value->getId()]);
+            // dd($value);
+            $arr[] = [
+                "id" => $value->getId(),
+                "activityType" => $value->getActivityType(),
+                "reportType" => $value->getReportType(),
+                "reportDate" => $value->getReportDate()->format(DATE_RFC3339_EXTENDED),
+                "lastUpdate" => $value->getLastUpdate()->format(DATE_RFC3339_EXTENDED),
+                "creationDate" => $value->getCreationDate()->format(DATE_RFC3339_EXTENDED),
+                "description" => $value->getContent(),
+                "isHightlight" => $value->getIsHightlight(),
+                "noCare" => $value->getNoCare(),
+                "noActivities" => $value->getNoActivities(),
+                "noIndicators" => $value->getNoIndicators(),
+                "deletedAt" => $value->getDeletedAt(),
+                "duration" => $value->getDuration(),
+                "plac" => ($value->getPlac() !== null) ?
+                    [
+                        "id" => ($value->getPlac()->getId() !== null) ? $value->getId() : null,
+                        // "lastname" => ($value->getLastName() !== null) ? $value->getLastName() : null,
+                        // "value" => ($a->getValue() && $a->getValue() !== null) ? $a->getValue() : null,
+                        // "comment" => ($a->getComment() && $a->getComment() !== null) ? $a->getComment() : null,
+                        // "indi" => ($a->getIndi() && $a->getIndi() !== null) ? [
+                        //     "id" => $a->getIndi()->getId(),
+                        //     "name" => ($a->getIndi() && $a->getIndi()->getName()) ? $a->getIndi()->getName() : null,
+                        //     "description" => ($a->getIndi() && $a->getIndi()->getDescription()) ? $a->getIndi()->getDescription() : null
+                        // ] : null
+                    ]
 
-                $indicators = $doctrine->getRepository(FollowupReportsIndicators::class)->findBy(['fore' => $value->getId()]);
-                // dd($report);
-                if ($report !== []) {
-                    foreach ($report as $itemReport) {
-                        if ($itemReport->getSugg()->getParentSugg() !== null && $itemReport->getSugg()->getParentSugg()->getValue() === "Soins") {
-                            $value->setFollowupReportsCare($itemReport);
-                        }
+                    : null,
+                "cont" => (count($value->getCont()) > 0) ?
+                    array_map(function ($a) {
+                        return [
+                            "id" => ($a->getId() !== null) ? $a->getId() : null,
+                            // "value" => ($a->getValue() && $a->getValue() !== null) ? $a->getValue() : null,
+                            // "comment" => ($a->getComment() && $a->getComment() !== null) ? $a->getComment() : null,
+                            // "indi" => ($a->getIndi() && $a->getIndi() !== null) ? [
+                            //     "id" => $a->getIndi()->getId(),
+                            //     "name" => ($a->getIndi() && $a->getIndi()->getName()) ? $a->getIndi()->getName() : null,
+                            //     "description" => ($a->getIndi() && $a->getIndi()->getDescription()) ? $a->getIndi()->getDescription() : null
+                            // ] : null
+                        ];
+                    }, [...$value->getCont()])
+                    : null,
+                "fogo" => $value->getFogo(),
+                "indicators" => (count($value->getIndicators()) > 0) ?
+                    array_map(function ($a) {
+                        return [
+                            "id" => ($a->getId() !== null) ? $a->getId() : null,
+                            "value" => ($a->getValue() && $a->getValue() !== null) ? $a->getValue() : null,
+                            "comment" => ($a->getComment() && $a->getComment() !== null) ? $a->getComment() : null,
+                            "indi" => ($a->getIndi() && $a->getIndi() !== null) ? [
+                                "id" => $a->getIndi()->getId(),
+                                "name" => ($a->getIndi() && $a->getIndi()->getName()) ? $a->getIndi()->getName() : null,
+                                "description" => ($a->getIndi() && $a->getIndi()->getDescription()) ? $a->getIndi()->getDescription() : null
+                            ] : null
+                        ];
+                    }, [...$value->getIndicators()])
+                    : null,
+                "indicatorsGroups" => $value->getIndicatorsGroups(),
+                "isShow" => false,
 
-                        if ($itemReport->getSugg()->getParentSugg() !== null && $itemReport->getSugg()->getParentSugg()->getValue() === "Activités") {
-                            // return $this->json($itemReport->getContacts()[0]->getId());
-                            $value->setFollowupReportsActivities($itemReport);
-                        }
-                    }
-                }
-
-                if ($indicators !== []) {
-                    foreach ($indicators as  $indi) {
-                        $value->setFollowupReportsIndicators($indi);
-                    }
-                }
-                $value->setIsShow(false);
-            }
+            ];
         }
+        // foreach ($reportFollowUp as  $value) {
+        //     if ($value->getId()) {
+        //         $report = $doctrine->getRepository(FollowupReportsActivities::class)->findBy(['fore' => $value->getId()]);
 
+        //         $indicators = $doctrine->getRepository(FollowupReportsIndicators::class)->findBy(['fore' => $value->getId()]);
+        //         // dd($report);
+        //         if ($report !== []) {
+        //             foreach ($report as $itemReport) {
+        //                 if ($itemReport->getSugg()->getParentSugg() !== null && $itemReport->getSugg()->getParentSugg()->getValue() === "Soins") {
+        //                     $value->setFollowupReportsCare($itemReport);
+        //                 }
 
-        $encoders = [new JsonEncoder()];
-        $normalizers = [new DateTimeNormalizer(), new ObjectNormalizer()];
-        $serializer = new Serializer($normalizers, $encoders);
+        //                 if ($itemReport->getSugg()->getParentSugg() !== null && $itemReport->getSugg()->getParentSugg()->getValue() === "Activités") {
+        //                     // return $this->json($itemReport->getContacts()[0]->getId());
+        //                     $value->setFollowupReportsActivities($itemReport);
+        //                 }
+        //             }
+        //         }
 
+        //         if ($indicators !== []) {
+        //             foreach ($indicators as  $indi) {
+        //                 $value->setFollowupReportsIndicators($indi);
+        //             }
+        //         }
+        //         $value->setIsShow(false);
+        //     }
+        // }
 
+        // dd($reportFollowUp);
+        $response = new Response(json_encode($arr), 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
 
-
-
-        $jsonObject = $serializer->serialize($reportFollowUp, 'json', [
-            AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context) {
-                return $object->getId();
-            },
-            AbstractNormalizer::IGNORED_ATTRIBUTES => ['pati', 'informations', 'occupants', 'patient', 'contact', 'func', 'user', 'calls', 'patients', 'roles', 'userIdentifier', "email", "password", "salt", "lastLogin"]
-        ]);
-
-
-        $response = new Response($jsonObject, 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
-
-        $response->setSharedMaxAge(3600);
+        // $response->setSharedMaxAge(3600);
 
         return $response;
     }
