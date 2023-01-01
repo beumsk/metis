@@ -163,9 +163,9 @@ class FollowUpReportsController extends AbstractController
                 "id" => $value->getId(),
                 "activityType" => $value->getActivityType(),
                 "reportType" => $value->getReportType(),
-                "reportDate" => $value->getReportDate()->format(DATE_RFC3339_EXTENDED),
-                "lastUpdate" => $value->getLastUpdate()->format(DATE_RFC3339_EXTENDED),
-                "creationDate" => $value->getCreationDate()->format(DATE_RFC3339_EXTENDED),
+                "reportDate" => ($value->getReportDate()) ? $value->getReportDate()->format(DATE_RFC3339_EXTENDED) : null,
+                "lastUpdate" => ($value->getLastUpdate()) ? $value->getLastUpdate()->format(DATE_RFC3339_EXTENDED) : null,
+                "creationDate" => ($value->getCreationDate()) ? $value->getCreationDate()->format(DATE_RFC3339_EXTENDED) : null,
                 "description" => $value->getContent(),
                 "isHightlight" => $value->getIsHightlight(),
                 "noCare" => $value->getNoCare(),
@@ -175,10 +175,14 @@ class FollowUpReportsController extends AbstractController
                 "duration" => ($value->getDuration() !== null) ? $value->getDuration()->format(DATE_RFC3339_EXTENDED) : null,
                 "plac" => (is_array($value->getPlac()) === true && count($value->getPlac()) > 0) ?
                     array_map(function ($a) {
-                        return [
-                            "id" => ($a->getId() !== null) ? $a->getId() : null,
-                            "lastname" => ($a->getLastName() && $a->getLastName() !== null) ? $a->getLastname() : null,
-                        ];
+                        if ($a->getId() !== null) {
+                            return [
+                                "id" => $a->getId(),
+                                "lastname" => ($a->getLastName() && $a->getLastName() !== null) ? $a->getLastname() : null,
+                            ];
+                        } else {
+                            return null;
+                        }
                     }, [...$value->getPlac()])
                     :
                     [
@@ -1805,7 +1809,7 @@ class FollowUpReportsController extends AbstractController
             if ($value->getDeletedAt() === null && $value->getType() === 2 && ($value->getStatus() === 0 || $value->getStatus() === 1)) {
                 $goalsArr[] = [
                     "value" => $value->getId(),
-                    "label" => $value->getCreationDate()->format('d/m/Y') . " " . $value->getFunc()->getValue() . " " . $value->getDescription(),
+                    "label" => $value->getCreationDate()->format('d/m/Y') . " " . (($value->getFunc() && $value->getFunc()->getValue()) ? $value->getFunc()->getValue() : null) . " " . (($value->getDescription()) ? $value->getDescription() : null),
 
                 ];
             }
