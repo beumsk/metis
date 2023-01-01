@@ -131,7 +131,9 @@ function ModalActionsAppelsSortant(props) {
       setShow(false);
     });
   };
-  console.log(props);
+
+  // props.isResponse("sended");
+  // console.log(props);
   return (
     <>
       <button variant="primary" onClick={handleShow} className="btn-metis">

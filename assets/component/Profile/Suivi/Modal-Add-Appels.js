@@ -144,6 +144,7 @@ function ModalAddAppels(props) {
         },
       })
         .then(function (response) {
+          props.isResponse("sended");
           props.onChange(response);
         })
         .catch(function (response) {});

@@ -55,7 +55,7 @@ function ModalActionsAppelsEntrant(props) {
     //   }
     // }
   }, []);
-  console.log(props);
+
   const onChangeTagsAppels = (e) => {
     // options.filter(e => e.value);
     let optionsValues = [];

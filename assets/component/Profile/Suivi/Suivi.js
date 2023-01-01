@@ -62,6 +62,7 @@ const Profile = () => {
   const [activities, setActivities] = useState(null);
   const [idSearch, setIdSearch] = useState(null);
   // getFollowUpReportsGoals
+
   useEffect(() => {
     // axios({
     //   method: "post",
@@ -254,6 +255,22 @@ const Profile = () => {
   function onChangeGoals(e) {
     console.log(e);
     setGoalsList(e);
+  }
+
+  function onChangeIsResponse(e) {
+    axios({
+      method: "post",
+      url: "/api/getFollowUpReportsGoalsForSelectForCalls",
+      data: formData,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    })
+      .then(function (response) {
+        setGoalsListForSelect(response);
+      })
+      .catch(function (response) {});
   }
   return (
     <div className="container-ongletProfile">
@@ -565,6 +582,7 @@ const Profile = () => {
               <ModalActionsAppelsEntrant
                 listCalls={goalsListForSelect}
                 // defaultValueContact={patient}
+                // isResponse={onChangeIsResponse}
                 onChangeResponse={onChangeGoals}
                 // typeCall={typeCallsSelect}
                 contacts={contacts}
@@ -577,6 +595,7 @@ const Profile = () => {
                 listCalls={goalsListForSelect}
                 // defaultValueContact={patient}
                 // typeCall={typeCallsSelect}
+                // isResponse={onChangeIsResponse}
                 contacts={contacts}
                 onChangeResponse={onChangeGoals}
                 // defaultValueGoalsValue={e}
@@ -586,6 +605,7 @@ const Profile = () => {
               <ModalAddAppels
                 type={type}
                 contacts={contacts}
+                isResponse={onChangeIsResponse}
                 places={places}
                 onChange={onChangeGoals}
               ></ModalAddAppels>
