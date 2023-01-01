@@ -47,6 +47,10 @@ class Medias
     #[ORM\Column(type: Types::TEXT)]
     private ?string $original_filename = null;
 
+    #[ORM\ManyToOne(targetEntity: 'Patients', cascade: ["all"], fetch: "EAGER", inversedBy: 'medias')]
+    #[ORM\JoinColumn(name: "pati_id", referencedColumnName: "id", nullable: true)]
+    private ?Patients $patient = null;
+
 
     public function getId(): ?int
     {
@@ -177,6 +181,18 @@ class Medias
     public function setSugg(?Suggestions $sugg): self
     {
         $this->sugg = $sugg;
+
+        return $this;
+    }
+
+    public function getPatient(): ?Patients
+    {
+        return $this->patient;
+    }
+
+    public function setPatient(?Patients $patient): self
+    {
+        $this->patient = $patient;
 
         return $this;
     }

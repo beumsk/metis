@@ -277,7 +277,7 @@ class PatientsController extends AbstractController
         foreach ($patients as  $key => $value) {
             // if ($key < $page) {
             $goals = $doctrine->getRepository(Patients::class)->findPatientReportsByGoal($value->getId(), null, null, 3);
-            // dd($doctrine->getRepository(Patients::class)->findPatientReportsByGoal($value->getId(), null, null, 3));
+            // dd($value);
             $arr[] = [
                 "id" => $value->getId(),
                 "firstname" => $value->getFirstName(),
@@ -287,24 +287,27 @@ class PatientsController extends AbstractController
                 "birthdate" => ($value->getBirthdate() !== null) ? $value->getBirthdate()->format(DATE_RFC3339_EXTENDED) : null,
                 "first_contact_date" => ($value->getFirstContactDate() !== null) ? $value->getFirstContactDate()->format(DATE_RFC3339_EXTENDED) : null,
                 "deleted_at" => ($value->getDeletedAt() !== null) ? $value->getDeletedAt()->format(DATE_RFC3339_EXTENDED) : null,
+                "medias" => (count($value->getMedias()) > 0) ?
+                    array_map(function ($a) {
+                        if ($a->getSugg()->getValue() === "current") {
+                            return [
+                                "id" => ($a->getId() !== null) ? $a->getId() : null,
+                                "sugg" => ($a->getSugg() !== null) ? $a->getSugg()->getValue() : null,
+                                "absolutePath" => ($a->getAbsolutePath() !== null) ? $a->getAbsolutePath() : null,
+                                // "lastUpdate" => ($a->getLastUpdate() !== null) ? $a->getLastUpdate()->format(DATE_RFC3339_EXTENDED) : null,
+                                // "activityType" => $a->getActivityType()
+
+                            ];
+                        }
+                    }, [...$value->getMedias()])
+                    : null,
                 "fore" => (count($goals) > 0) ?
                     array_map(function ($a) {
                         return [
                             "id" => ($a->getId() !== null) ? $a->getId() : null,
                             "lastUpdate" => ($a->getLastUpdate() !== null) ? $a->getLastUpdate()->format(DATE_RFC3339_EXTENDED) : null,
                             "activityType" => $a->getActivityType()
-                            // "type" => $a->getType(),
-                            // "sugg" => ($a->getSugg() && $a->getSugg() !== null) ? [
-                            //     "id" => $a->getSugg()->getId(),
-                            //     "value" => $a->getSugg()->getValue(),
-                            // ] : null,
-                            // "deletedAt" => ($a->getDeletedAt() !== null) ? $a->getDeletedAt()->format(DATE_RFC3339_EXTENDED) : null,
-                            // "title" => ($a->getTitle() !== null) ? $a->getTitle() : null,
-                            // "cont" => ($a->getCont() && $a->getCont() !== null) ? [
-                            //     "id" => $a->getCont()->getId(),
-                            //     "lastname" => ($a->getCont()->getLastName() && $a->getCont()->getLastName() !== null) ? $a->getCont()->getLastname() : null,
-                            //     "firstname" => ($a->getCont()->getFirstName() && $a->getCont()->getFirstName() !== null) ? $a->getCont()->getFirstName() : null
-                            // ] : null
+
                         ];
                     }, [...$goals])
                     : null,
@@ -314,37 +317,6 @@ class PatientsController extends AbstractController
             ];
         }
 
-        // foreach ($arr as $patient) {
-        //     $patient["fore"] = $doctrine->getRepository(Patients::class)->findPatientReportsByGoal($patient["id"], null, null, 3);
-        //     # code...
-        // }
-        // $encoders = [new JsonEncoder()];
-        // $normalizers = [new DateTimeNormalizer(), new ObjectNormalizer()];
-        // $serializer = new Serializer($normalizers, $encoders);
-
-
-
-
-        // // $serializer = SerializerBuilder::create()->build();
-        // $jsonObject = $serializer->serialize($patients, 'json', [
-        //     AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context) {
-        //         return $object->getId();
-        //     },
-        //     AbstractNormalizer::IGNORED_ATTRIBUTES => ["contacts", "pati", "sugg", "orga", "calls", "user", "contact", "patient", "fogo", "cont", "plac", "user", "pati", "content", "hash", "firstContactDate", "deletedAt", "followUpType", "noCare", "noActivities", "noIndicators", "followupReportsCare", "followupReportsGoals", "followupReportsActivities", "followupReportsIndicators", "isHightlight", "duration", "description", "story", "unknownYear"]
-        // ]);
-
-
-        // $response = new Response($arr, 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
-        // MUST TO HAVE: EN FONCTION DES RAPPORTS
-        // usort($arr, function ($a, $b) {
-        //     if (($b["lastUpdate"] && $b["lastUpdate"] !== null) && ($a["lastUpdate"] && $a["lastUpdate"] !== null)) {
-        //         return strtotime($b["lastUpdate"]) - strtotime($a["lastUpdate"]);
-        //     }
-        // });
-        // print_r($arr);
-        // rsort($arr);
-
-        // $response->setSharedMaxAge(3600);
         return new Response(json_encode($arr), 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
     }
 

@@ -188,7 +188,13 @@ function Patients() {
                 <Accordion.Item eventKey={patient.id} key={patient.id}>
                   <Accordion.Header>
                     <div className="col-sm-1">
-                      <FontAwesomeIcon icon={faUser} />
+                      {patient?.medias &&
+                      patient?.medias.length > 0 &&
+                      patient?.medias[0]?.absolutePath ? (
+                        <img src={patient.medias[0].absolutePath} width="50" />
+                      ) : (
+                        <FontAwesomeIcon icon={faUser} />
+                      )}
                     </div>
                     <div className="col-sm-2">
                       {patient.firstname} {patient.lastname}

@@ -78,6 +78,9 @@ class Patients
     #[ORM\OrderBy(["last_update" => "ASC"])]
     private Collection $fore;
 
+    #[ORM\OneToMany(mappedBy: 'patient', targetEntity: Medias::class)]
+    private Collection $medias;
+
     // #[ORM\OneToMany(mappedBy: 'patients', targetEntity: PatientsInformation::class)]
     // private Collection $informations;
 
@@ -86,6 +89,7 @@ class Patients
         $this->contacts = new ArrayCollection();
         $this->fore = new ArrayCollection();
         // $this->informations = new ArrayCollection();
+        $this->medias = new ArrayCollection();
     }
 
 
@@ -398,4 +402,34 @@ class Patients
 
     //     return $this;
     // }
+
+    /**
+     * @return Collection<int, Medias>
+     */
+    public function getMedias(): Collection
+    {
+        return $this->medias;
+    }
+
+    public function addMedia(Medias $media): self
+    {
+        if (!$this->medias->contains($media)) {
+            $this->medias->add($media);
+            $media->setPatient($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMedia(Medias $media): self
+    {
+        if ($this->medias->removeElement($media)) {
+            // set the owning side to null (unless already changed)
+            if ($media->getPatient() === $this) {
+                $media->setPatient(null);
+            }
+        }
+
+        return $this;
+    }
 }
