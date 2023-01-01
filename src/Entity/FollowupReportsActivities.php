@@ -46,6 +46,10 @@ class FollowupReportsActivities
     #[ORM\InverseJoinColumn(name: "cont_id", referencedColumnName: "id", nullable: true)]
     private Collection $contacts;
 
+    #[ORM\ManyToOne(targetEntity: FollowupReports::class, inversedBy: 'activities')]
+    #[ORM\JoinColumn(name: "fore_id", referencedColumnName: "id", nullable: true)]
+    private ?FollowupReports $followupReports = null;
+
     public function __construct()
     {
         $this->places = new ArrayCollection();
@@ -164,6 +168,18 @@ class FollowupReportsActivities
     public function removeContact(Contacts $contact): self
     {
         $this->contacts->removeElement($contact);
+
+        return $this;
+    }
+
+    public function getFollowupReports(): ?FollowupReports
+    {
+        return $this->followupReports;
+    }
+
+    public function setFollowupReports(?FollowupReports $followupReports): self
+    {
+        $this->followupReports = $followupReports;
 
         return $this;
     }

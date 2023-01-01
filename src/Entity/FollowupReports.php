@@ -117,12 +117,16 @@ class FollowupReports
     #[ORM\InverseJoinColumn(name: "igrp_id", referencedColumnName: "id", nullable: true)]
     private Collection $indicatorsGroups;
 
+    #[ORM\OneToMany(mappedBy: 'followupReports', targetEntity: FollowupReportsActivities::class)]
+    private Collection $activities;
+
     public function __construct()
     {
         $this->cont = new ArrayCollection();
         $this->fogo = new ArrayCollection();
         $this->indicators = new ArrayCollection();
         $this->indicatorsGroups = new ArrayCollection();
+        $this->activities = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -428,6 +432,36 @@ class FollowupReports
     public function removeIndicatorsGroup(IndicatorsGroups $indicatorsGroup): self
     {
         $this->indicatorsGroups->removeElement($indicatorsGroup);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, FollowupReportsActivities>
+     */
+    public function getActivities(): Collection
+    {
+        return $this->activities;
+    }
+
+    public function addActivity(FollowupReportsActivities $activity): self
+    {
+        if (!$this->activities->contains($activity)) {
+            $this->activities->add($activity);
+            $activity->setFollowupReports($this);
+        }
+
+        return $this;
+    }
+
+    public function removeActivity(FollowupReportsActivities $activity): self
+    {
+        if ($this->activities->removeElement($activity)) {
+            // set the owning side to null (unless already changed)
+            if ($activity->getFollowupReports() === $this) {
+                $activity->setFollowupReports(null);
+            }
+        }
 
         return $this;
     }
