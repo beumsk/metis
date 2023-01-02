@@ -163,7 +163,7 @@ function RapportDetails(props) {
       setInformations(props.search);
     }
   }, [props.search]);
-
+  console.log(props);
   return (
     <>
       <FilterRapportDetails

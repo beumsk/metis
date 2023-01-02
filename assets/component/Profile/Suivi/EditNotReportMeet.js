@@ -172,10 +172,14 @@ function EditNoReportMeet(props) {
             props.rapport.followupReportsActivities.length > 0 ? (
               <>
                 {props.rapport.followupReportsActivities.map((item, id) => (
-                  <div className="row">
-                    <div className="col-sm-4">{item.activity.value}</div>
-                    <div className="col-sm-8">{item.activity.description}</div>
-                  </div>
+                  <>
+                    {item?.sugg?.parentValue === "Activitées" && (
+                      <div className="row">
+                        <div className="col-sm-4">{item?.sugg?.value}</div>
+                        <div className="col-sm-8">{item?.description}</div>
+                      </div>
+                    )}
+                  </>
                 ))}
               </>
             ) : (
@@ -189,12 +193,14 @@ function EditNoReportMeet(props) {
               props.rapport.followupReportsCare.length > 0 ? (
                 <>
                   {props.rapport.followupReportsCare.map((item, id) => (
-                    <div className="row">
-                      <div className="col-sm-4">{item.activity.value}</div>
-                      <div className="col-sm-8">
-                        {item.activity.description}
-                      </div>
-                    </div>
+                    <>
+                      {item?.sugg?.parentValue === "Soins" && (
+                        <div className="row">
+                          <div className="col-sm-4">{item?.sugg?.value}</div>
+                          <div className="col-sm-8">{item?.description}</div>
+                        </div>
+                      )}
+                    </>
                   ))}
                 </>
               ) : (

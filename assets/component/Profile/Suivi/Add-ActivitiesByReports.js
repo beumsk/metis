@@ -82,7 +82,7 @@ function AddActivitiesByReport(props) {
       setValueDescription(null);
     }
   };
-  console.log(props.formActivitiesEdit);
+  console.log(props);
   props.onChange([
     {
       act_id:
@@ -153,16 +153,16 @@ function AddActivitiesByReport(props) {
           className="uk-select"
           required={true}
           onChange={(e) => handleChangeContacts(e)}
-          value={props.formActivitiesEdit?.contact}
+          value={props.formActivitiesEdit?.contact?.id}
         >
           <option>Choissisez le contact</option>
           {props?.contacts?.data?.map((el, id) => (
             <>
               <option
-                value={el?.id}
+                value={el?.value}
                 // selected={el?.id === props.formActivitiesEdit?.contact}
               >
-                {el?.firstname} {el?.lastname}
+                {el?.label}
               </option>
             </>
           ))}

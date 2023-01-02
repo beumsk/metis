@@ -86,7 +86,7 @@ function AddSoinsByReport(props) {
 
     setValueDescription(e.target.value);
   };
-
+  console.log(props);
   props.onChange([
     {
       care_id: idEditFormSoins[0] !== undefined ? idEditFormSoins[0] : null,
@@ -165,16 +165,16 @@ function AddSoinsByReport(props) {
           size="lg"
           className="uk-select"
           onChange={(e) => handleChangeContacts(e)}
-          value={props.formCaresEdit?.contact}
+          value={props.formCaresEdit?.contact?.id}
         >
           <option>Choissisez le contact</option>
           {props?.contacts?.data?.map((el, id) => (
             <>
               <option
-                value={el?.id}
-                selected={el?.id === parseInt(props.formCaresEdit?.contact)}
+                value={el?.value}
+                selected={el?.id === parseInt(props.formCaresEdit?.contact?.id)}
               >
-                {el?.firstname} {el?.lastname}
+                {el?.label}
               </option>
             </>
           ))}

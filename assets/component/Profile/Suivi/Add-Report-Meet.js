@@ -847,11 +847,24 @@ function AddReportMeet(props) {
       <InputPlaceList places={props.places} onChange={onChangePlaces} />
       <Editor onChange={editorChange}></Editor>
 
-      {validationCare && <p>validationCare</p>}
-      {validationHestiaLogement && <p>validationHestiaLogement</p>}
-      {validationHESTIADeces && <p>validationHESTIADeces</p>}
-      {validationCVC && <p>validationCVC</p>}
-      {validationActivities && <p>validationActivities</p>}
+      {validationCare && (
+        <p>
+          Le type et la description est obligatoire pour le rajout des soins
+        </p>
+      )}
+      {validationHestiaLogement && (
+        <p>Valeurs manquantes dans les indicateurs hestia logement</p>
+      )}
+      {validationHESTIADeces && (
+        <p>Valeurs manquantes dans les indicateurs de hestia décès</p>
+      )}
+      {validationCVC && <p>Valeurs manquantes dans les indicateurs CVC</p>}
+      {validationActivities && (
+        <p>
+          Le type et la description est obligatoire pour le rajout des
+          activitées
+        </p>
+      )}
       <button onClick={(e) => sentRapport(e)}>Envoyer</button>
     </div>
   );

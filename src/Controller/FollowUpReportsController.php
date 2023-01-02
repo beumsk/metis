@@ -177,14 +177,10 @@ class FollowUpReportsController extends AbstractController
                 "duration" => ($value->getDuration() !== null) ? $value->getDuration()->format(DATE_RFC3339_EXTENDED) : null,
                 "plac" => (is_array($value->getPlac()) === true && count($value->getPlac()) > 0) ?
                     array_map(function ($a) {
-                        if ($a->getId() !== null) {
-                            return [
-                                "id" => $a->getId(),
-                                "lastname" => ($a->getLastName() && $a->getLastName() !== null) ? $a->getLastname() : null,
-                            ];
-                        } else {
-                            return null;
-                        }
+                        return [
+                            "id" => $a->getId(),
+                            "lastname" => ($a->getLastName() && $a->getLastName() !== null) ? $a->getLastname() : null,
+                        ];
                     }, [...$value->getPlac()])
                     :
                     [
@@ -242,52 +238,89 @@ class FollowUpReportsController extends AbstractController
                             "name" => ($a->getName() && $a->getName() !== null) ? $a->getName() : null,
                         ];
                     }, [...$value->getIndicatorsGroups()])
-                    : null,
+                    : [
+                        "id" => null,
+                        "name" => null,
+                    ],
                 "isShow" => false,
-                "followupReportsCare" => (count($value->getActivities()) > 0) ?
-                    array_map(function ($a) {
-                        if ($a->getSugg()->getParentSugg() !== null && $a->getSugg()->getParentSugg()->getValue() === "Soins") {
-                            return [
-                                "id" => ($a->getId() !== null) ? $a->getId() : null,
-                                "description" => ($a->getDescription() && $a->getDescription() !== null) ? $a->getDescription() : null,
-                                // "comment" => ($a->getComment() && $a->getComment() !== null) ? $a->getComment() : null,
-                                "places" => ($a->getPlaces() && $a->getPlaces() !== null) ? [
-                                    "id" => $a->getPlaces()->getId(),
-                                    "lastname" => ($a->getPlaces() && $a->getPlaces()->getLastName()) ? $a->getPlaces()->getLastName() : null,
-                                    // "description" => ($a->getIndi() && $a->getIndi()->getDescription()) ? $a->getIndi()->getDescription() : null
-                                ] : null,
-                                "contacts" => ($a->getContacts() && $a->getContacts() !== null) ? [
-                                    "id" => $a->getContacts()->getId(),
-                                    "lastname" => ($a->getContacts() && $a->getContacts()->getLastName()) ? $a->getContacts()->getLastname() : null,
-                                    "firstname" => ($a->getContacts() && $a->getContacts()->getFirstName()) ? $a->getContacts()->getFirstName() : null
-                                ] : null
-                            ];
-                        }
-                    }, [...$value->getActivities()])
-                    : null,
+                // "followupReportsCare" => (count($value->getActivities()) > 0) ?
+                //     array_map(function ($a) {
+                //         // dd($a);
+                //         if ($a->getId() !== null && $a->getSugg()->getParentSugg() !== null && $a->getSugg()->getParentSugg()->getValue() === "Soins") {
+                //             return [
+                //                 "id" => ($a->getId() !== null) ? $a->getId() : null,
+                //                 "description" => ($a->getDescription() && $a->getDescription() !== null) ? $a->getDescription() : null,
+                //                 "sugg" => ($a->getSugg() && $a->getSugg() !== null) ? [
+                //                     "id" => $a->getSugg()->getId(),
+                //                     "value" => ($a->getSugg() !== null && $a->getSugg()->getValue()) ? $a->getSugg()->getValue() : null,
+                //                     "parentValue" => ($a->getSugg() !== null && $a->getSugg()->getValue()) ? $a->getSugg()->getParentSugg()->getValue() : null,
+                //                     // "description" => ($a->getIndi() && $a->getIndi()->getDescription()) ? $a->getIndi()->getDescription() : null
+                //                 ] : null,
+                //                 "places" => ($a->getPlaces() && $a->getPlaces() !== null) ? [
+                //                     "id" => $a->getPlaces()->getId(),
+                //                     "lastname" => ($a->getPlaces() && $a->getPlaces()->getLastName()) ? $a->getPlaces()->getLastName() : null,
+                //                     // "description" => ($a->getIndi() && $a->getIndi()->getDescription()) ? $a->getIndi()->getDescription() : null
+                //                 ] : null,
+                //                 "contacts" => ($a->getContacts() && $a->getContacts() !== null) ? [
+                //                     "id" => $a->getContacts()->getId(),
+                //                     "lastname" => ($a->getContacts() && $a->getContacts()->getLastName()) ? $a->getContacts()->getLastname() : null,
+                //                     "firstname" => ($a->getContacts() && $a->getContacts()->getFirstName()) ? $a->getContacts()->getFirstName() : null
+                //                 ] : null,
+                //             ];
+                //         }
+                //     }, [...$value->getActivities()])
+                //     :
+                //     [
+                //         "id" => null,
+                //         "description" => null,
+                //         // "comment" => ($a->getComment() && $a->getComment() !== null) ? $a->getComment() : null,
+                //         "places" => null,
+                //         "contacts" =>  null
+                //     ],
                 "followupReportsActivities" => (count($value->getActivities()) > 0) ?
                     array_map(function ($a) {
-                        if ($a->getSugg()->getParentSugg() !== null && $a->getSugg()->getParentSugg()->getValue() === "Activités") {
-                            return [
-                                "id" => ($a->getId() !== null) ? $a->getId() : null,
-                                "description" => ($a->getDescription() && $a->getDescription() !== null) ? $a->getDescription() : null,
+
+                        return [
+                            "id" => ($a->getId() !== null) ? $a->getId() : null,
+                            "description" => ($a->getDescription() && $a->getDescription() !== null) ? $a->getDescription() : null,
+                            // "valueParent" => ($a->getValue() && $a->getValue() !== null) ? $a->getValue() : null,
+                            "sugg" => ($a->getSugg() && $a->getSugg() !== null) ? [
+                                "id" => $a->getSugg()->getId(),
+                                "value" => ($a->getSugg() !== null && $a->getSugg()->getValue()) ? $a->getSugg()->getValue() : null,
+                                "parentValue" => ($a->getSugg() !== null && $a->getSugg()->getValue()) ? $a->getSugg()->getParentSugg()->getValue() : null,
+                                // "description" => ($a->getIndi() && $a->getIndi()->getDescription()) ? $a->getIndi()->getDescription() : null
+                            ] : null,
+                            "places" => ($a->getPlaces() && $a->getPlaces() !== null) ? [
+                                "id" => $a->getPlaces()->getId(),
+                                "lastname" => ($a->getPlaces() && $a->getPlaces()->getLastName()) ? $a->getPlaces()->getLastName() : null,
+                                // "description" => ($a->getIndi() && $a->getIndi()->getDescription()) ? $a->getIndi()->getDescription() : null
+                            ] : null,
+                            "contacts" => ($a->getContacts() && $a->getContacts() !== null) ? [
+                                "id" => $a->getContacts()->getId(),
+                                "lastname" => ($a->getContacts() && $a->getContacts()->getLastName()) ? $a->getContacts()->getLastname() : null,
+                                "firstname" => ($a->getContacts() && $a->getContacts()->getFirstName()) ? $a->getContacts()->getFirstName() : null
+                            ] : [
+                                "id" => null,
+                                "description" => null,
                                 // "comment" => ($a->getComment() && $a->getComment() !== null) ? $a->getComment() : null,
-                                "places" => ($a->getPlaces() && $a->getPlaces() !== null) ? [
-                                    "id" => $a->getPlaces()->getId(),
-                                    "lastname" => ($a->getPlaces() && $a->getPlaces()->getLastName()) ? $a->getPlaces()->getLastName() : null,
-                                    // "description" => ($a->getIndi() && $a->getIndi()->getDescription()) ? $a->getIndi()->getDescription() : null
-                                ] : null,
-                                "contacts" => ($a->getContacts() && $a->getContacts() !== null) ? [
-                                    "id" => $a->getContacts()->getId(),
-                                    "lastname" => ($a->getContacts() && $a->getContacts()->getLastName()) ? $a->getContacts()->getLastname() : null,
-                                    "firstname" => ($a->getContacts() && $a->getContacts()->getFirstName()) ? $a->getContacts()->getFirstName() : null
-                                ] : null
-                            ];
-                        }
-                    }, [...$value->getActivities()])
-                    : null,
+                                "places" => null,
+                                "contacts" =>  null
+                            ]
+                        ];
+                    },  [...$value->getActivities()])
+                    :  [
+                        "id" => null,
+                        "description" => null,
+                        // "comment" => ($a->getComment() && $a->getComment() !== null) ? $a->getComment() : null,
+                        "places" => null,
+                        "contacts" => null
+                    ],
 
             ];
+
+            array_filter($arr, function ($v) {
+                return $v["followupReportsActivities"] !== null;
+            });
         }
         // foreach ($reportFollowUp as  $value) {
         //     if ($value->getId()) {
@@ -492,7 +525,24 @@ class FollowUpReportsController extends AbstractController
 
 
 
+        if ($care_jsondecode !== "null") {
+            $arrCont_id = [];
 
+            foreach (json_decode($care_jsondecode) as $value) {
+                array_push($arrCont_id, $value);
+            }
+            $contact = $doctrine->getRepository(Contacts::class)->findBy(array("id" => $arrCont_id));
+
+            foreach ($report->getCont() as $value) {
+                $report->removeCont($value);
+                // dd($followupGoals->getfogo());
+            }
+            // $arrayCollectionDiff = new FollowupGoals($changeGoals);
+            foreach ($contact as $value) {
+                // $arrayCollectionDiff = new FollowupGoals($value);
+                $report->addCont($value);
+            }
+        }
 
         if ($contId !== "null") {
             $arrCont_id = [];
@@ -1371,7 +1421,7 @@ class FollowUpReportsController extends AbstractController
 
                 $followUpReportActivities->setDescription($description);
                 $followUpReportActivities->setIsIdrStep(1);
-                $followUpReportActivities->setFore($report);
+                $followUpReportActivities->setFollowupReports($report);
 
                 if (property_exists($care_jsondecode, "place") === true && $care_jsondecode->place !== null) {
                     $followUpReportActivities->addPlace($place);
@@ -1388,13 +1438,15 @@ class FollowUpReportsController extends AbstractController
                 return new JsonResponse([
                     'response' => $followUpReportActivities->getId()
                 ]);
-            } else {
+            }
+
+            if ($editFollowUpReportCare !== null) {
                 $sugg =  $doctrine->getRepository(Suggestions::class)->find($care_jsondecode->type);
                 $editFollowUpReportCare[0]->setActivity($sugg);
 
                 $editFollowUpReportCare[0]->setDescription($description);
                 $editFollowUpReportCare[0]->setIsIdrStep(1);
-                $editFollowUpReportCare[0]->setFore($report);
+                $editFollowUpReportCare[0]->setFollowupReports($report);
 
                 if (property_exists($care_jsondecode, "place") === true && $care_jsondecode->place !== null) {
                     $editFollowUpReportCare[0]->addPlace($place);
@@ -1448,7 +1500,7 @@ class FollowUpReportsController extends AbstractController
 
                 $followUpReportActivities->setDescription($description);
                 $followUpReportActivities->setIsIdrStep(1);
-                $followUpReportActivities->setFore($report);
+                $followUpReportActivities->setFollowupReports($report);
 
                 if (property_exists($care_jsondecode, "place") === true && $care_jsondecode->place !== null) {
                     $followUpReportActivities->addPlace($place);
@@ -1467,7 +1519,7 @@ class FollowUpReportsController extends AbstractController
 
                 $editFollowUpReportCare[0]->setDescription($description);
                 $editFollowUpReportCare[0]->setIsIdrStep(1);
-                $editFollowUpReportCare[0]->setFore($report);
+                $editFollowUpReportCare[0]->setFollowupReports($report);
 
                 if (property_exists($care_jsondecode, "place") === true && $care_jsondecode->place !== null) {
                     $editFollowUpReportCare[0]->addPlace($place);
