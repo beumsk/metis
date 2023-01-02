@@ -72,13 +72,13 @@ function AddSoinsByReport(props) {
   function handleChangeContacts(e) {
     // ObjForm.contact = newValue;
     // props.onChange(ObjForm);
-    setValueContactForm(e.target.value);
+    setValueContactForm(e);
   }
 
   function handleChangePlaces(e) {
     // ObjForm.place = newValue;
     // props.onChange(ObjForm);
-    setValuePlaceForm(e.target.value);
+    setValuePlaceForm(e);
   }
 
   const onChangeDescription = (e) => {
@@ -89,7 +89,7 @@ function AddSoinsByReport(props) {
   console.log(props);
   props.onChange([
     {
-      care_id: idEditFormSoins[0] !== undefined ? idEditFormSoins[0] : null,
+      act_id: idEditFormSoins[0] !== undefined ? idEditFormSoins[0] : null,
       id: props.id,
       value: value ? value : props.typeValue,
       contact: contact ? contact : props.formCaresEdit?.contact,
@@ -158,10 +158,17 @@ function AddSoinsByReport(props) {
           onChange={handleChangeContacts}
           defaultValue={props.formCaresEdit?.contacts}
         ></InputContactList> */}
-        <Form.Label htmlFor="inputValue" className="uk-form-label">
-          Contacts
-        </Form.Label>
-        <select
+
+        <InputContactList
+          contacts={props?.contacts}
+          onChange={handleChangeContacts}
+          defaultValue={
+            props.formCaresEdit?.contact && props.formCaresEdit?.contact
+              ? props.formCaresEdit?.contact
+              : null
+          }
+        ></InputContactList>
+        {/* <select
           size="lg"
           className="uk-select"
           onChange={(e) => handleChangeContacts(e)}
@@ -178,13 +185,19 @@ function AddSoinsByReport(props) {
               </option>
             </>
           ))}
-        </select>
+        </select> */}
 
-        <Form.Label htmlFor="inputValue" className="uk-form-label">
-          Lieu
-        </Form.Label>
+        <InputPlaceList
+          contacts={props?.places}
+          onChange={handleChangePlaces}
+          defaultValue={
+            props.formCaresEdit?.place && props.formCaresEdit?.place
+              ? props.formCaresEdit?.place
+              : null
+          }
+        ></InputPlaceList>
 
-        <select
+        {/* <select
           size="lg"
           className="mb-4 uk-select"
           value={props.formCaresEdit?.place}
@@ -201,7 +214,7 @@ function AddSoinsByReport(props) {
               </option>
             </>
           ))}
-        </select>
+        </select> */}
       </div>
     </>
   );

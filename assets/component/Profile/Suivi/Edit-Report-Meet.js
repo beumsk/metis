@@ -107,7 +107,9 @@ function EditReportMeet(props) {
     "HESTIA - Risque décès",
   ]);
   const [contacts, setContacts] = useState(null);
-  const [showAccesSoins, setAccesSoins] = useState(false);
+  const [showAccesSoins, setAccesSoins] = useState(
+    formSoins && formSoins.length > 0 ? true : false
+  );
   const [showActivities, setActivities] = useState(false);
   const [showIndicateurs, setChoiceIndicateurs] = useState(false);
 
@@ -159,7 +161,7 @@ function EditReportMeet(props) {
 
     if (formSoins?.length > 0) {
       function Cares() {
-        care_id: null;
+        act_id: null;
         id: null;
         value: null;
         contact: null;
@@ -178,14 +180,14 @@ function EditReportMeet(props) {
           copyCares[prop] !== null
         ) {
           var care = new Cares();
-          care["care_id"] = copyCares[prop]?.id;
+          care["act_id"] = copyCares[prop]?.id;
           care["id"] = Number(prop);
           care["type"] = Number(copyCares[prop]?.sugg?.id);
           care["contact"] = copyCares[prop]?.contacts
-            ? Number(copyCares[prop]?.contacts?.id)
+            ? copyCares[prop]?.contacts
             : null;
           care["place"] = copyCares[prop]?.places
-            ? Number(copyCares[prop]?.places?.id)
+            ? copyCares[prop]?.places
             : null;
           care["description"] = copyCares[prop]?.description;
 
@@ -228,11 +230,9 @@ function EditReportMeet(props) {
           // activities["id"] = Number(prop);
           activities["type"] = Number(copy[prop]?.sugg?.id);
           activities["contact"] = copy[prop]?.contacts
-            ? Number(copy[prop]?.contacts?.id)
+            ? copy[prop]?.contacts
             : null;
-          activities["place"] = copy[prop]?.places
-            ? Number(copy[prop]?.places?.id)
-            : null;
+          activities["place"] = copy[prop]?.places ? copy[prop]?.places : null;
           activities["description"] = copy[prop]?.description;
           console.log(copy[prop]);
           arrActivitiesHydrated.push(activities);
@@ -492,7 +492,6 @@ function EditReportMeet(props) {
     formData.append("meetType", meetType);
     formData.append("userId", userId);
     formData.append("patiId", patiId);
-    console.log(formSoins);
     formData.append("formSoins", JSON.stringify(formSoins));
     formData.append("formActivities", JSON.stringify(formActivities));
     formData.append("formIndicateurs", JSON.stringify(formIndicateurs));
@@ -507,108 +506,6 @@ function EditReportMeet(props) {
     }).then(function (response) {
       console.log(response);
     });
-    //     if (response && formSoins) {
-    //       let endpoints = [];
-
-    //       for (let index = 0; index < formSoins.length; index++) {
-    //         endpoints.push("/api/addCaresToReport");
-    //       }
-
-    //     //   axios
-    //     //     .all(
-    //     //       endpoints.map((endpoint, i) => {
-    //     //         let care = formSoins[i];
-    //     //         let formData = new FormData();
-
-    //     //         formData.append(
-    //     //           "rapportId",
-    //     //           response.data.id ? response.data.id : null
-    //     //         );
-    //     //         formData.append("value", care.value ? care.value : null);
-    //     //         formData.append("formSoins", JSON.stringify(care));
-
-    //     //         axios({
-    //     //           method: "post",
-    //     //           url: endpoint,
-    //     //           data: formData,
-    //     //           headers: {
-    //     //             "Content-Type": "application/json",
-    //     //             Authorization: `Bearer ${auth.auth.accessToken}`,
-    //     //           },
-    //     //         });
-    //     //       })
-    //     //     )
-    //     //     .then((data) => console.log(data));
-    //     // }
-
-    //     // if (response && formActivities) {
-    //     //   let endpoints = [];
-
-    //     //   for (let index = 0; index < formActivities.length; index++) {
-    //     //     endpoints.push("/api/addActivitiesToReport");
-    //     //   }
-    //     //   axios
-    //     //     .all(
-    //     //       endpoints.map((endpoint, i) => {
-    //     //         let activities = formActivities[i];
-    //     //         let formData = new FormData();
-
-    //     //         formData.append(
-    //     //           "rapportId",
-    //     //           response.data.id ? response.data.id : null
-    //     //         );
-    //     //         formData.append(
-    //     //           "value",
-    //     //           activities.value ? activities.value : null
-    //     //         );
-    //     //         formData.append("formActivities", JSON.stringify(activities));
-
-    //     //         axios({
-    //     //           method: "post",
-    //     //           url: endpoint,
-    //     //           data: formData,
-    //     //           headers: {
-    //     //             "Content-Type": "application/json",
-    //     //             Authorization: `Bearer ${auth.auth.accessToken}`,
-    //     //           },
-    //     //         });
-    //     //       })
-    //     //     )
-    //     //     .then((data) => console.log(data));
-    //     // }
-
-    //     // if (response && formIndicateurs) {
-    //     //   for (let index = 0; index < formIndicateurs.length; index++) {
-    //     //     let indi = formIndicateurs[index];
-    //     //     formIndicateurs[index].rapportId = response.idRapport;
-    //     //     let formData = new FormData();
-
-    //     //     formData.append(
-    //     //       "rapportId",
-    //     //       response.data.id ? response.data.id : null
-    //     //     );
-
-    //     //     formData.append("formIndicateurs", JSON.stringify(indi));
-    //     //     axios({
-    //     //       method: "post",
-    //     //       url: "/api/addIndicators",
-    //     //       data: formData,
-    //     //       headers: {
-    //     //         "Content-Type": "application/json",
-    //     //         Authorization: `Bearer ${auth.auth.accessToken}`,
-    //     //       },
-    //     //     });
-    //     //   }
-    //     // }
-    //     // location.replace(window.location.origin + "/" + idPatient);
-    //     // const [isSentGoals, setSentGoals] = useState(false);
-    //     // const [isSentRepport, setSentRepport] = useState(false);
-    //     // props.onChangeReportMeet(true);
-    //     setSentRepport(true);
-    //   })
-    //   .catch(function (response) {
-    //     console.log(response);
-    //   });
   };
 
   function onChangeValuesByOnCareForm(e) {
@@ -624,6 +521,7 @@ function EditReportMeet(props) {
         e[0].description === undefined ? null : e[0].description;
 
       setFormSoins(formSoins);
+      console.log(formSoins);
     }
   }
 

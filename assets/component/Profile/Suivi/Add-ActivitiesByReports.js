@@ -68,11 +68,12 @@ function AddActivitiesByReport(props) {
   }
 
   function handleChangeContacts(e) {
-    setValueContactForm(e.target.value);
+    console.log(e);
+    setValueContactForm(e);
   }
 
   function handleChangePlaces(e) {
-    setValuePlaceForm(e.target.value);
+    setValuePlaceForm(e);
   }
 
   const onChangeDescription = (e) => {
@@ -145,10 +146,10 @@ function AddActivitiesByReport(props) {
           onChange={(e) => onChangeDescription(e)}
         />
 
-        <Form.Label htmlFor="inputValue" className="uk-form-label">
+        {/* <Form.Label htmlFor="inputValue" className="uk-form-label">
           Contacts
-        </Form.Label>
-        <select
+        </Form.Label> */}
+        {/* <select
           size="lg"
           className="uk-select"
           required={true}
@@ -166,17 +167,17 @@ function AddActivitiesByReport(props) {
               </option>
             </>
           ))}
-        </select>
-        {/* <InputContactList
+        </select> */}
+        <InputContactList
           contacts={props?.contacts}
           onChange={handleChangeContacts}
           defaultValue={
-            props.formActivitiesEdit?.contacts &&
-            props.formActivitiesEdit?.contacts[0]
-              ? props.formActivitiesEdit?.contacts[0]?.orga?.id
-              : ""
+            props.formActivitiesEdit?.contact &&
+            props.formActivitiesEdit?.contact
+              ? props.formActivitiesEdit?.contact
+              : null
           }
-        ></InputContactList> */}
+        ></InputContactList>
         {/* <InputPlaceList
           places={props?.places}
           onChange={handleChangePlaces}
@@ -187,10 +188,20 @@ function AddActivitiesByReport(props) {
               : ""
           }
         ></InputPlaceList> */}
-        <Form.Label htmlFor="inputValue" className="uk-form-label">
+        {/* <Form.Label htmlFor="inputValue" className="uk-form-label">
           Lieux
-        </Form.Label>
-        <select
+        </Form.Label> */}
+        <InputPlaceList
+          contacts={props?.places}
+          onChange={handleChangePlaces}
+          defaultValue={
+            props.formActivitiesEdit?.place && props.formActivitiesEdit?.place
+              ? props.formActivitiesEdit?.place
+              : null
+          }
+        ></InputPlaceList>
+
+        {/* <select
           size="lg"
           className="mb-4 uk-select"
           value={props.formActivitiesEdit?.place}
@@ -207,7 +218,7 @@ function AddActivitiesByReport(props) {
               </option>
             </>
           ))}
-        </select>
+        </select> */}
       </div>
     </>
   );

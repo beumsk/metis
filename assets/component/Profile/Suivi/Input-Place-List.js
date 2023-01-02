@@ -1,61 +1,151 @@
-import React, { useState, useEffect } from "react";
-import Button from "react-bootstrap/Button";
-import Modal from "react-bootstrap/Modal";
-import useAuth from "../../../hooks/useAuth";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faPlusCircle,
-  faCancel,
-  faEdit,
-} from "@fortawesome/free-solid-svg-icons";
-import { useParams } from "react-router-dom";
+import * as React from "react";
+import TextField from "@mui/material/TextField";
+import Autocomplete from "@mui/material/Autocomplete";
+import CircularProgress from "@mui/material/CircularProgress";
+import { array } from "prop-types";
 import axios from "axios";
 import Form from "react-bootstrap/Form";
-import Editor from "./Editor-Reports";
-import AddActivitiesByReport from "./Add-ActivitiesByReports";
-import AddIndicateursByReport from "./Indicateurs-Form-AddReports/Add-IndicateursByReports";
-import AddSoinsByReport from "./Add-SoinsByReports";
-function InputPlaceList(props) {
-  const [show, setShow] = useState(false);
-  const [auth, setAuth] = useState(useAuth());
-  let id = useParams().id;
-  var formData = new FormData();
-  formData.append("id", 57);
-  //   formData.append("pathString", props.link);
-  const [contacts, setContacts] = useState(null);
-  const [showAccesSoins, setAccesSoins] = useState(false);
-  const [showActivities, setActivities] = useState(false);
-  const [showIndicateurs, setChoiceIndicateurs] = useState(false);
-  const [idPatient, setIdPatient] = useState(id);
-  const [type, setType] = useState(null);
-  const [places, setPlaces] = useState(null);
-  const [placeValue, setPlaceValue] = useState(null);
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
-  useEffect(() => {}, [idPatient]);
-  const onChangePlaceValue = (e) => {
-    props.onChange(e.target.value);
-  };
-
-  return (
-    <>
-      <Form.Label htmlFor="inputValue" className="uk-form-label">
-        Lieu
-      </Form.Label>
-
-      <Form.Select
-        size="lg"
-        className="mb-4 uk-select"
-        defaultValue={props.defaultValue || placeValue}
-        onChange={(e) => onChangePlaceValue(e)}
-      >
-        <option>Choissisez le lieu</option>
-        {props?.places?.data?.map((el, id) => (
-          <>{el?.lastname && <option value={el.id}>{el?.lastname}</option>}</>
-        ))}
-      </Form.Select>
-    </>
-  );
+import useAuth from "../../../hooks/useAuth";
+function sleep(delay = 0) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, delay);
+  });
 }
 
-export default InputPlaceList;
+export default function InputPlaceList(props) {
+  const [auth, setAuth] = React.useState(useAuth());
+  const [open, setOpen] = React.useState(false);
+  const [value, setValue] = React.useState([]);
+  const [options, setOptions] = React.useState([]);
+  const [defaultValueFormatted, setDefaultValueFormatted] = React.useState([]);
+  const loading = open && options.length === 0;
+  const [inputValue, setInputValue] = React.useState("");
+  let arr = [];
+  React.useEffect(() => {
+    let active = true;
+
+    if (!loading) {
+      return undefined;
+    }
+
+    (async () => {
+      await sleep(1e3); // For demo purposes.
+      console.log(props.contacts);
+      if (active) {
+        let formData = new FormData();
+        formData.append("query", inputValue);
+        console.log(formData);
+        axios({
+          method: "post",
+          url: "/api/getPlacesSelect",
+          data: formData,
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${auth.auth.accessToken}`,
+          },
+        })
+          .then(function (response) {
+            console.log(response);
+            setOptions([...response.data]);
+          })
+          .catch(function (response) {});
+        // setOptions([...props.contacts.data]);
+      }
+    })();
+
+    return () => {
+      active = false;
+    };
+  }, [loading]);
+
+  React.useEffect(() => {
+    if (!open) {
+      setOptions([]);
+    }
+
+    if (props.defaultValue !== null && props.defaultValue !== undefined) {
+      console.log(props.defaultValue);
+
+      for (let index = 0; index < props.defaultValue.length; index++) {
+        const element = props.defaultValue[index];
+
+        arr.push({ value: element.id, label: element.lastname });
+      }
+
+      if (arr && arr.length > 0) {
+        setDefaultValueFormatted([...arr]);
+        console.log(defaultValueFormatted);
+      }
+    }
+  }, [open]);
+
+  return (
+    <Autocomplete
+      id="asynchronous-demo"
+      sx={{ width: "100%" }}
+      open={open}
+      // style={{ margin: "1rem 0 1rem 0" }}
+      onOpen={() => {
+        setOpen(true);
+      }}
+      onClose={() => {
+        setOpen(false);
+      }}
+      isOptionEqualToValue={(option, value) => option.label === value.title}
+      getOptionLabel={(option) => option.label}
+      options={options}
+      onInputChange={(event, newInputValue) => {
+        setInputValue(newInputValue);
+        console.log(newInputValue);
+
+        let formData = new FormData();
+        formData.append("query", newInputValue);
+        console.log(formData);
+        axios({
+          method: "post",
+          url: "/api/getContactsForSelect",
+          data: formData,
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${auth.auth.accessToken}`,
+          },
+        })
+          .then(function (response) {
+            console.log(response);
+            setOptions([...response.data]);
+          })
+          .catch(function (response) {});
+      }}
+      onChange={(event, newValue) => {
+        props.onChange(newValue);
+      }}
+      loading={loading}
+      freeSolo={true}
+      multiple
+      defaultValue={arr}
+      renderInput={(params) => (
+        <>
+          <Form.Label htmlFor="inputValue" className="uk-form-label">
+            Lieux
+          </Form.Label>
+          <TextField
+            {...params}
+            // label="Contacts"
+            className="input-autocomplete"
+            InputProps={{
+              ...params.InputProps,
+              endAdornment: (
+                <React.Fragment>
+                  {loading ? (
+                    <CircularProgress color="inherit" size={20} />
+                  ) : null}
+                  {params.InputProps.endAdornment}
+                </React.Fragment>
+              ),
+            }}
+          />
+        </>
+      )}
+    />
+  );
+}

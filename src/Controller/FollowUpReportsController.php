@@ -290,22 +290,23 @@ class FollowUpReportsController extends AbstractController
                                 "parentValue" => ($a->getSugg() !== null && $a->getSugg()->getValue()) ? $a->getSugg()->getParentSugg()->getValue() : null,
                                 // "description" => ($a->getIndi() && $a->getIndi()->getDescription()) ? $a->getIndi()->getDescription() : null
                             ] : null,
-                            "places" => ($a->getPlaces() && $a->getPlaces() !== null) ? [
-                                "id" => $a->getPlaces()->getId(),
-                                "lastname" => ($a->getPlaces() && $a->getPlaces()->getLastName()) ? $a->getPlaces()->getLastName() : null,
-                                // "description" => ($a->getIndi() && $a->getIndi()->getDescription()) ? $a->getIndi()->getDescription() : null
-                            ] : null,
-                            "contacts" => ($a->getContacts() && $a->getContacts() !== null) ? [
-                                "id" => $a->getContacts()->getId(),
-                                "lastname" => ($a->getContacts() && $a->getContacts()->getLastName()) ? $a->getContacts()->getLastname() : null,
-                                "firstname" => ($a->getContacts() && $a->getContacts()->getFirstName()) ? $a->getContacts()->getFirstName() : null
-                            ] : [
-                                "id" => null,
-                                "description" => null,
-                                // "comment" => ($a->getComment() && $a->getComment() !== null) ? $a->getComment() : null,
-                                "places" => null,
-                                "contacts" =>  null
-                            ]
+                            "places" => ($a->getPlaces() && $a->getPlaces() !== null) ?
+
+                                array_map(function ($b) {
+                                    return [
+                                        "id" => $b->getId(),
+                                        "lastname" => $b->getLastName()
+                                    ];
+                                }, [...$a->getPlaces()]) : null,
+
+                            "contacts" => ($a->getContacts() && $a->getContacts() !== null) ?
+
+                                array_map(function ($b) {
+                                    return [
+                                        "id" => $b->getId(),
+                                        "lastname" => $b->getFirstName() . $b->getLastName()
+                                    ];
+                                }, [...$a->getContacts()]) : null,
                         ];
                     },  [...$value->getActivities()])
                     :  [
@@ -457,7 +458,7 @@ class FollowUpReportsController extends AbstractController
     #[Route('/api/updateSendReport', name: 'app_updateReport')]
     public function updateReport(ManagerRegistry $doctrine, Request $request): Response
     {
-
+        $entityManager = $doctrine->getManager();
         $request = Request::createFromGlobals();
         $activityType = $request->request->get('activityType');
         $contacts = $request->request->get('contacts');
@@ -516,33 +517,195 @@ class FollowUpReportsController extends AbstractController
         $report->setNoActivities($no_activities);
         $report->setNoIndicators($no_indicateurs);
         $report->setReportType(1);
-
-
-
-
         $report->setIsHightlight(false);
         $report->setReportDate(new \DateTime($changeDate));
 
 
 
-        if ($care_jsondecode !== "null") {
-            $arrCont_id = [];
+        if ($care_jsondecode !== "null" || $activities_jsondecode !== "null") {
+            $activities = [...$care_jsondecode, ...$activities_jsondecode];
 
-            foreach (json_decode($care_jsondecode) as $value) {
-                array_push($arrCont_id, $value);
+
+            // foreach (json_decode($care_jsondecode) as $value) {
+            //     array_push($activities, $value);
+            // }
+            $entityManager = $doctrine->getManager();
+            $activitiesMapped = [];
+            foreach ($activities as $activitiesReport) {
+                if ($activitiesReport) {
+                    if (property_exists($activitiesReport, "act_id") === true) {
+                        $reportsAct = $doctrine->getRepository(FollowupReportsActivities::class)->findBy(array("id" => $activitiesReport->act_id));
+
+                        if ($reportsAct && count($reportsAct)) {
+                            foreach ($reportsAct as $act) {
+
+                                if ($activitiesReport->contact && count($activitiesReport->contact) !== 0) {
+                                    $arrCont_id = [];
+                                    foreach ($activitiesReport->contact as $value) {
+
+                                        if (property_exists($value, "lastname") === true) {
+                                            array_push($arrCont_id, $value->lastname);
+                                        }
+
+                                        if (property_exists($value, "value") === true) {
+                                            array_push($arrCont_id, $value->value);
+                                        }
+                                    }
+                                    $contact = $doctrine->getRepository(Contacts::class)->findBy(array("id" => $arrCont_id));
+
+                                    if ($act->getContacts() && count($act->getContacts()) > 0) {
+                                        foreach ($act->getContacts() as $value) {
+
+                                            $act->removeContact($value);
+                                            // dd($followupGoals->getfogo());
+                                        }
+                                    }
+
+                                    // $arrayCollectionDiff = new FollowupGoals($changeGoals);
+                                    foreach ($contact as $value) {
+                                        // $arrayCollectionDiff = new FollowupGoals($value);
+
+                                        $act->addContact($value);
+                                    }
+                                }
+
+                                if ($activitiesReport->place && property_exists($activitiesReport, "place") === true) {
+                                    $arrCont_id = [];
+                                    foreach ($activitiesReport->place as $value) {
+                                        // dd($activitiesReport->place);
+                                        if (property_exists($value, "id") === true) {
+                                            array_push($arrCont_id, $value->id);
+                                        }
+
+                                        if (property_exists($value, "value") === true) {
+                                            array_push($arrCont_id, $value->value);
+                                        }
+                                    }
+
+
+                                    $contact = $doctrine->getRepository(Contacts::class)->findBy(array("id" => $arrCont_id));
+                                    if ($act->getPlaces() && count($act->getPlaces()) > 0) {
+                                        foreach ($act->getPlaces() as $value) {
+                                            $act->removePlace($value);
+                                            // dd($followupGoals->getfogo());
+                                        }
+                                    }
+                                    // $arrayCollectionDiff = new FollowupGoals($changeGoals);
+
+                                    foreach ($contact as $value) {
+
+                                        // $arrayCollectionDiff = new FollowupGoals($value);
+                                        $act->addPlace($value);
+                                    }
+                                }
+
+                                if (property_exists($activitiesReport, "contact") && $activitiesReport->description !== "null") {
+                                    $act->setDescription($activitiesReport->description);
+                                }
+
+                                if ($activitiesReport->type !== "null") {
+                                    // dd($activitiesReport->type);
+                                    $sugg = $doctrine->getRepository(Suggestions::class)->find($activitiesReport->type);
+                                    $act->setSugg($sugg);
+                                }
+
+                                array_push($activitiesMapped, $act);
+                            }
+                        }
+
+                        // $entityManager->flush();
+                        // array_push($activitiesMapped, $doctrine->getRepository(FollowupReportsActivities::class)->findBy(array("id" => $value->care_id))); 
+                    }
+
+                    if (property_exists($activitiesReport, "act_id") === false) {
+                        $actObj = new FollowupReportsActivities();
+
+
+                        if ($activitiesReport->contact && property_exists($activitiesReport, "contact") === true) {
+                            $arrCont_id = [];
+                            // dd("bug");
+                            foreach ($activitiesReport->contact as $value) {
+                                if (property_exists($value, "lastname") === true) {
+                                    array_push($arrCont_id, $value->lastname);
+                                }
+
+                                if (property_exists($value, "value") === true) {
+                                    array_push($arrCont_id, $value->value);
+                                }
+                            }
+                            $contact = $doctrine->getRepository(Contacts::class)->findBy(array("id" => $arrCont_id));
+
+
+
+                            foreach ($contact as $value) {
+                                // $arrayCollectionDiff = new FollowupGoals($value);
+                                $actObj->addContact($value);
+                            }
+                        }
+
+
+
+
+                        if ($activitiesReport->place && property_exists($activitiesReport, "place") === true) {
+                            $arrCont_id = [];
+
+                            foreach ($activitiesReport->place as $value) {
+
+                                if (property_exists($value, "lastname") === true) {
+                                    array_push($arrCont_id, $value->lastname);
+                                }
+
+                                if (property_exists($value, "value") === true) {
+                                    array_push($arrCont_id, $value->value);
+                                }
+                            }
+
+                            $contact = $doctrine->getRepository(Contacts::class)->findBy(array("id" => $arrCont_id));
+
+
+                            // $arrayCollectionDiff = new FollowupGoals($changeGoals);
+                            foreach ($contact as $value) {
+                                // $arrayCollectionDiff = new FollowupGoals($value);
+                                $activitiesReport->addPlace($value);
+                            }
+                        }
+
+                        if ($value->description !== "null") {
+                            $actObj->setDescription($value->description);
+                        }
+
+                        if ($activitiesReport->type !== "null") {
+                            $sugg = $doctrine->getRepository(Contacts::class)->find($value->type);
+                            $actObj->setSugg($sugg);
+                        }
+
+                        array_push($activitiesMapped, $actObj);
+                        $entityManager->flush();
+                    }
+                }
             }
-            $contact = $doctrine->getRepository(Contacts::class)->findBy(array("id" => $arrCont_id));
 
-            foreach ($report->getCont() as $value) {
-                $report->removeCont($value);
+
+            foreach ($report->getActivities() as $value) {
+                $report->removeActivity($value);
                 // dd($followupGoals->getfogo());
             }
-            // $arrayCollectionDiff = new FollowupGoals($changeGoals);
-            foreach ($contact as $value) {
-                // $arrayCollectionDiff = new FollowupGoals($value);
-                $report->addCont($value);
+            foreach ($activitiesMapped as $value) {
+                // dd($value);
+                $report->addActivity($value);
+                // dd($followupGoals->getfogo());
             }
+            // // $arrayCollectionDiff = new FollowupGoals($changeGoals);
+            // foreach ($activities as $value) {
+            //     // $arrayCollectionDiff = new FollowupGoals($value);
+            //     $report->addCont($value);
+            // }
         }
+
+
+
+
+        ///////////////partie contact du formulaire de rapport
 
         if ($contId !== "null") {
             $arrCont_id = [];

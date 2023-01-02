@@ -117,7 +117,7 @@ class FollowupReportsActivities
      */
     public function getPlaces()
     {
-        return $this->places->last();
+        return $this->places;
     }
 
     public function addPlace(Contacts $place): self
@@ -153,7 +153,7 @@ class FollowupReportsActivities
      */
     public function getContacts()
     {
-        return $this->contacts->last();
+        return $this->contacts;
     }
 
     public function addContact(Contacts $contact): self

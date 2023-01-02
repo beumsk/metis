@@ -63,7 +63,7 @@ export default function InputContactList(props) {
       setOptions([]);
     }
 
-    if (props.defaultValue !== null) {
+    if (props.defaultValue !== null && props.defaultValue !== undefined) {
       console.log(props.defaultValue);
 
       for (let index = 0; index < props.defaultValue.length; index++) {
@@ -78,7 +78,7 @@ export default function InputContactList(props) {
       }
     }
   }, [open]);
-
+  console.log(props);
   return (
     <Autocomplete
       id="asynchronous-demo"
