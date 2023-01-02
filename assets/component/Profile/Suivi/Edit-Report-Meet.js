@@ -64,7 +64,7 @@ function EditReportMeet(props) {
           },
         ]
   );
-  console.log(formActivities, formSoins);
+
   const [formIndicateurs, setFormIndicateurs] = useState([
     {
       id: 0,
@@ -107,9 +107,7 @@ function EditReportMeet(props) {
     "HESTIA - Risque décès",
   ]);
   const [contacts, setContacts] = useState(null);
-  const [showAccesSoins, setAccesSoins] = useState(
-    formSoins && formSoins.length > 0 ? true : false
-  );
+  const [showAccesSoins, setAccesSoins] = useState(false);
   const [showActivities, setActivities] = useState(false);
   const [showIndicateurs, setChoiceIndicateurs] = useState(false);
 
@@ -687,9 +685,9 @@ function EditReportMeet(props) {
                 <Form.Check
                   inline
                   label="Oui"
-                  onClick={(e) => choiceSoins(true)}
+                  onClick={(e) => setAccesSoins(true)}
                   name="group26"
-                  defaultChecked={formSoins?.length > 0}
+                  defaultChecked={showAccesSoins === true}
                   type={"radio"}
                   id={`inline-radio-21`}
                 />
@@ -697,8 +695,9 @@ function EditReportMeet(props) {
                   inline
                   label="Non"
                   name="group26"
-                  defaultChecked={formSoins?.length === 0}
-                  onClick={(e) => choiceSoins(false)}
+                  defaultChecked={showAccesSoins === false}
+                  // defaultChecked={formSoins?.length === 0}
+                  onClick={(e) => setAccesSoins(false)}
                   type={"radio"}
                   id={`inline-radio-22`}
                 />
@@ -749,12 +748,9 @@ function EditReportMeet(props) {
                 <Form.Check
                   inline
                   label="Oui"
-                  onClick={(e) => choiceActivities(true)}
+                  onClick={(e) => setActivities(true)}
                   name="group25"
-                  defaultChecked={
-                    props?.informationPatient?.followupReportsActivities
-                      ?.length > 0
-                  }
+                  defaultChecked={showActivities === true}
                   type={"radio"}
                   id={`inline-radio-23`}
                 />
@@ -762,11 +758,8 @@ function EditReportMeet(props) {
                   inline
                   label="Non"
                   name="group25"
-                  defaultChecked={
-                    props?.informationPatient?.followupReportsActivities
-                      ?.length === 0
-                  }
-                  onClick={(e) => choiceActivities(false)}
+                  defaultChecked={showActivities === false}
+                  onClick={(e) => setActivities(false)}
                   type={"radio"}
                   id={`inline-radio-24`}
                 />

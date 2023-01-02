@@ -479,6 +479,7 @@ class FollowUpReportsController extends AbstractController
         $patiId = $request->request->get('patiId');
         $rapportId = $request->request->get('idRapport');
         $contId = $request->request->get('contId');
+        $indicateurs = $request->request->get('formIndicateurs');
 
 
 
@@ -702,6 +703,26 @@ class FollowUpReportsController extends AbstractController
             // }
         }
 
+        ///////////////partie indicateurs du formulaire de rapport
+
+        if ($indicateurs !== "null") {
+            $arrCont_id = [];
+
+            foreach (json_decode($contId) as $value) {
+                array_push($arrCont_id, $value->value);
+            }
+            $contact = $doctrine->getRepository(FollowupReportsIndicators::class)->findBy(array("id" => $arrCont_id));
+
+            foreach ($report->getCont() as $value) {
+                $report->removeCont($value);
+                // dd($followupGoals->getfogo());
+            }
+            // $arrayCollectionDiff = new FollowupGoals($changeGoals);
+            foreach ($contact as $value) {
+                // $arrayCollectionDiff = new FollowupGoals($value);
+                $report->addCont($value);
+            }
+        }
 
 
 
