@@ -543,8 +543,8 @@ class FollowUpReportsController extends AbstractController
                                     $arrCont_id = [];
                                     foreach ($activitiesReport->contact as $value) {
 
-                                        if (property_exists($value, "lastname") === true) {
-                                            array_push($arrCont_id, $value->lastname);
+                                        if (property_exists($value, "id") === true) {
+                                            array_push($arrCont_id, $value->id);
                                         }
 
                                         if (property_exists($value, "value") === true) {
@@ -625,8 +625,8 @@ class FollowUpReportsController extends AbstractController
                             $arrCont_id = [];
                             // dd("bug");
                             foreach ($activitiesReport->contact as $value) {
-                                if (property_exists($value, "lastname") === true) {
-                                    array_push($arrCont_id, $value->lastname);
+                                if (property_exists($value, "id") === true) {
+                                    array_push($arrCont_id, $value->id);
                                 }
 
                                 if (property_exists($value, "value") === true) {
@@ -651,8 +651,8 @@ class FollowUpReportsController extends AbstractController
 
                             foreach ($activitiesReport->place as $value) {
 
-                                if (property_exists($value, "lastname") === true) {
-                                    array_push($arrCont_id, $value->lastname);
+                                if (property_exists($value, "id") === true) {
+                                    array_push($arrCont_id, $value->id);
                                 }
 
                                 if (property_exists($value, "value") === true) {
