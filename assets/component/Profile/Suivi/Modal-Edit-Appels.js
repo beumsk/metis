@@ -102,6 +102,7 @@ function ModalEditAppels(props) {
   };
 
   const onChangeContacts = (e) => {
+    console.log(e);
     setonChangeContact(e);
   };
 
@@ -120,10 +121,7 @@ function ModalEditAppels(props) {
     formData.append("callsFunctionValue", callsFunctionValue);
     formData.append("isCallsPatients", isCallsPatients);
     formData.append("isPriority", isPriority);
-    formData.append(
-      "contact",
-      contact && contact.length > 0 ? contact[0]?.value : null
-    );
+    formData.append("contact", contact ? contact : null);
     formData.append("description", description);
     formData.append("valueWhatDoinFunction", valueWhatDoinFunction);
     formData.append("patientId", idPatient);
@@ -258,7 +256,7 @@ function ModalEditAppels(props) {
                   // value={contactValue}
                   className="uk-select"
                   defaultValue={props?.calls?.cont?.id}
-                  onChange={(e) => onChangeContacts(e)}
+                  onChange={(e) => onChangeContacts(e.target.value)}
                 >
                   <option>Choissisez le contact</option>
                   {props?.contacts?.data?.map((el, id) => (
