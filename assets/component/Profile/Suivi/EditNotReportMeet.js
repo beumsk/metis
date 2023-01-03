@@ -14,6 +14,7 @@ import AddSoinsByReport from "./Add-SoinsByReports";
 import InputPlaceList from "./Input-Place-List";
 import InputContactList from "./Input-Contact-List";
 import InputGoalsList from "./Input-Goals-List";
+import IndicateursActiviteesComponent from "./Indicateurs-Activitées-Component";
 
 function EditNoReportMeet(props) {
   const [show, setShow] = useState(false);
@@ -31,6 +32,7 @@ function EditNoReportMeet(props) {
 
   return (
     <div className="noEditRepports-container">
+      <IndicateursActiviteesComponent></IndicateursActiviteesComponent>
       <div className="contact-row">
         {props.rapport &&
           props.rapport.fogo &&

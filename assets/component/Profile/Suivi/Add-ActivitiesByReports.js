@@ -7,6 +7,7 @@ import {
   faPlusCircle,
   faCancel,
   faEdit,
+  faPlus,
 } from "@fortawesome/free-solid-svg-icons";
 import { useParams } from "react-router-dom";
 import axios from "axios";
@@ -37,14 +38,10 @@ function AddActivitiesByReport(props) {
     props?.formActivitiesEdit?.act_id,
   ]);
 
-  const [value, setValueForm] = useState(props.formActivitiesEdit.type);
-  const [contact, setValueContactForm] = useState(
-    props.formActivitiesEdit.contact
-  );
-  const [place, setValuePlaceForm] = useState(props.formActivitiesEdit.place);
-  const [description, setValueDescription] = useState(
-    props.formActivitiesEdit.description
-  );
+  const [value, setValueForm] = useState();
+  const [contact, setValueContactForm] = useState();
+  const [place, setValuePlaceForm] = useState();
+  const [description, setValueDescription] = useState();
 
   const handleShow = () => setShow(true);
   useEffect(() => {
@@ -63,163 +60,109 @@ function AddActivitiesByReport(props) {
       .catch(function (response) {});
   }, [idPatient]);
 
-  function handleChangeValue(e) {
-    setValueForm(e.target.value);
-  }
+  // function handleChangeValue(e) {
+  //   setValueForm(e.target.value);
+  // }
 
-  function handleChangeContacts(e) {
-    console.log(e);
-    setValueContactForm(e);
-  }
+  // function handleChangeContacts(e) {
+  //   console.log(e);
+  //   setValueContactForm(e);
+  // }
 
-  function handleChangePlaces(e) {
-    setValuePlaceForm(e);
-  }
+  // function handleChangePlaces(e) {
+  //   setValuePlaceForm(e);
+  // }
 
-  const onChangeDescription = (e) => {
-    if (e) {
-      setValueDescription(e.target.value);
-    } else {
-      setValueDescription(null);
-    }
-  };
-  console.log(props);
-  props.onChange([
-    {
-      act_id:
-        idEditFormActivities[0] !== undefined ? idEditFormActivities[0] : null,
-      id: props.id,
-      value: value ? value : props.formActivitiesEdit?.type,
-      contact: contact ? contact : props.formActivitiesEdit?.contact,
-      place: place ? place : props.formActivitiesEdit?.place,
-      description: description
-        ? description
-        : props.formActivitiesEdit?.description,
-    },
-  ]);
+  // const onChangeDescription = (e) => {
+  //   if (e) {
+  //     setValueDescription(e.target.value);
+  //   } else {
+  //     setValueDescription(null);
+  //   }
+  // };
+  // console.log(props);
+  // props.onChange([
+  //   {
+  //     act_id:
+  //       idEditFormActivities[0] !== undefined ? idEditFormActivities[0] : null,
+  //     id: props.id,
+  //     value: value ? value : props.formActivitiesEdit?.type,
+  //     contact: contact ? contact : props.formActivitiesEdit?.contact,
+  //     place: place ? place : props.formActivitiesEdit?.place,
+  //     description: description
+  //       ? description
+  //       : props.formActivitiesEdit?.description,
+  //   },
+  // ]);
   //
 
   return (
     <>
-      <div className="addSoins-form">
-        <Form.Label htmlFor="inputValue" className="uk-form-label">
-          Type
-        </Form.Label>
-        <select
-          size="lg"
-          className="uk-select"
-          required={true}
-          onChange={(e) => handleChangeValue(e)}
-          value={props.formActivitiesEdit?.type}
-        >
-          <option>Choissisez le type</option>
-          {type?.data?.map((el, id) => (
-            <>
-              {el.value && (
-                <option
-                  selected={
-                    el?.id === props.formActivitiesEdit?.type ||
-                    el?.id === props.formActivitiesEdit?.value
-                  }
-                  value={el?.id}
-                >
-                  {el?.value}
-                </option>
-              )}
-            </>
-          ))}
-        </select>
-        {/* <InputTypeList
-          type={props?.type}
-          onChange={handleChangeValue}
-          defaultValue={props.formActivitiesEdit?.value}
-        /> */}
-        <Form.Label htmlFor="inputValue" className="uk-form-label">
-          Description
-        </Form.Label>
-        <Form.Control
-          type="text"
-          id="inputValueSpécifique"
-          className="uk-input"
-          aria-describedby="valueSpécifique"
-          defaultValue={props.formActivitiesEdit?.description}
-          onChange={(e) => onChangeDescription(e)}
-        />
+      <Button onClick={handleShow}>
+        {" "}
+        <FontAwesomeIcon icon={faPlus} />
+      </Button>
 
-        {/* <Form.Label htmlFor="inputValue" className="uk-form-label">
-          Contacts
-        </Form.Label> */}
-        {/* <select
-          size="lg"
-          className="uk-select"
-          required={true}
-          onChange={(e) => handleChangeContacts(e)}
-          value={props.formActivitiesEdit?.contact?.id}
-        >
-          <option>Choissisez le contact</option>
-          {props?.contacts?.data?.map((el, id) => (
-            <>
-              <option
-                value={el?.value}
-                // selected={el?.id === props.formActivitiesEdit?.contact}
-              >
-                {el?.label}
-              </option>
-            </>
-          ))}
-        </select> */}
-        <InputContactList
-          contacts={props?.contacts}
-          onChange={handleChangeContacts}
-          defaultValue={
-            props.formActivitiesEdit?.contact &&
-            props.formActivitiesEdit?.contact
-              ? props.formActivitiesEdit?.contact
-              : null
-          }
-        ></InputContactList>
-        {/* <InputPlaceList
-          places={props?.places}
-          onChange={handleChangePlaces}
-          defaultValue={
-            props.formActivitiesEdit?.places &&
-            props.formActivitiesEdit?.places[0]
-              ? props.formActivitiesEdit?.places[0]?.id
-              : ""
-          }
-        ></InputPlaceList> */}
-        {/* <Form.Label htmlFor="inputValue" className="uk-form-label">
-          Lieux
-        </Form.Label> */}
-        <InputPlaceList
-          contacts={props?.places}
-          onChange={handleChangePlaces}
-          defaultValue={
-            props.formActivitiesEdit?.place && props.formActivitiesEdit?.place
-              ? props.formActivitiesEdit?.place
-              : null
-          }
-        ></InputPlaceList>
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>
+            <h6>Ajouter une activitée</h6>
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div className="addSoins-form">
+            <Form.Label htmlFor="inputValue" className="uk-form-label">
+              Type
+            </Form.Label>
+            <select
+              size="lg"
+              className="uk-select"
+              required={true}
+              onChange={(e) => handleChangeValue(e)}
+              // value={props.formActivitiesEdit?.type}
+            >
+              <option>Choissisez le type</option>
+              {type?.data?.map((el, id) => (
+                <>{el.value && <option value={el?.id}>{el?.value}</option>}</>
+              ))}
+            </select>
 
-        {/* <select
-          size="lg"
-          className="mb-4 uk-select"
-          value={props.formActivitiesEdit?.place}
-          onChange={(e) => handleChangePlaces(e)}
-        >
-          <option>Choissisez le lieu</option>
-          {props?.places?.data?.map((el, id) => (
-            <>
-              <option
-                selected={el?.id === props.formActivitiesEdit?.place}
-                value={el?.id}
-              >
-                {el?.lastname}
-              </option>
-            </>
-          ))}
-        </select> */}
-      </div>
+            <Form.Label htmlFor="inputValue" className="uk-form-label">
+              Description
+            </Form.Label>
+            <Form.Control
+              type="text"
+              id="inputValueSpécifique"
+              className="uk-input"
+              aria-describedby="valueSpécifique"
+              // defaultValue={props.formActivitiesEdit?.description}
+              // onChange={(e) => onChangeDescription(e)}
+            />
+
+            <InputContactList
+            // contacts={props?.contacts}
+            // onChange={handleChangeContacts}
+            // defaultValue={
+            //   props.formActivitiesEdit?.contact &&
+            //   props.formActivitiesEdit?.contact
+            //     ? props.formActivitiesEdit?.contact
+            //     : null
+            // }
+            ></InputContactList>
+
+            <InputPlaceList
+            // contacts={props?.places}
+            // onChange={handleChangePlaces}
+            // defaultValue={
+            //   props.formActivitiesEdit?.place &&
+            //   props.formActivitiesEdit?.place
+            //     ? props.formActivitiesEdit?.place
+            //     : null
+            // }
+            ></InputPlaceList>
+          </div>
+        </Modal.Body>
+      </Modal>
     </>
   );
 }

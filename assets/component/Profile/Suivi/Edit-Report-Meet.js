@@ -14,6 +14,7 @@ import AddSoinsByReport from "./Add-SoinsByReports";
 import InputPlaceListSelect from "./Input-Place-List-Select";
 import InputContactList from "./Input-Contact-List";
 import InputGoalsList from "./Input-Goals-List";
+import IndicateursActiviteesComponent from "./Indicateurs-Activitées-Component";
 
 function EditReportMeet(props) {
   const [show, setShow] = useState(false);
@@ -230,6 +231,7 @@ function EditReportMeet(props) {
     <div className="report-content">
       {props?.informationPatient?.activityType === 1 && (
         <>
+          <IndicateursActiviteesComponent></IndicateursActiviteesComponent>
           <h5 className="mt-4 mb-4">Ajouter un rapport</h5>
           {/* <Form.Control type="text" id="inputText" className="mt-4" /> */}
 

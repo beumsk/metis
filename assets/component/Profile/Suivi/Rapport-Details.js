@@ -21,7 +21,7 @@ import AddReportMeet from "./Add-Report-Meet";
 import EditReportMeet from "./Edit-Report-Meet";
 import EditNoReportMeet from "./EditNotReportMeet";
 import FilterRapportDetails from "./Filters-RapportsDetails";
-
+import IndicateursActiviteesComponent from "./Indicateurs-Activitées-Component";
 function RapportDetails(props) {
   const [show, setShow] = useState(false);
   const [auth, setAuth] = useState(useAuth());
@@ -296,18 +296,21 @@ function RapportDetails(props) {
                   )}
 
                   {r.isShow === true && (
-                    <EditReportMeet
-                      informationPatient={r}
-                      type={type}
-                      goals={props?.goals}
-                      contacts={props?.contacts}
-                      places={props?.places}
-                      onChangeReportMeet={onChangeReport}
-                      indicatorsResponse={r.followupReportsIndicators}
-                    ></EditReportMeet>
+                    <>
+                      <EditReportMeet
+                        informationPatient={r}
+                        type={type}
+                        goals={props?.goals}
+                        contacts={props?.contacts}
+                        places={props?.places}
+                        onChangeReportMeet={onChangeReport}
+                        indicatorsResponse={r.followupReportsIndicators}
+                      ></EditReportMeet>
+                    </>
                   )}
                   {r.isShow === false && (
                     <>
+                      {/* <IndicateursActiviteesComponent></IndicateursActiviteesComponent> */}
                       <EditNoReportMeet
                         indicators={r.followupReportsIndicators}
                         rapport={r}
