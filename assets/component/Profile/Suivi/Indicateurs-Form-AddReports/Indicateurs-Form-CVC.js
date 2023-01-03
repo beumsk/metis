@@ -75,7 +75,14 @@ function IndicateursFormCVC(props) {
     formData.append("comportementScore", comportementScore);
     formData.append("comportementDescription", comportementDescription);
 
-    console.log(formData);
+    console.log(
+      corpsScore,
+      corpsDescription,
+      vetementsScore,
+      vetementsDescription,
+      comportementScore,
+      comportementDescription
+    );
   };
 
   return (

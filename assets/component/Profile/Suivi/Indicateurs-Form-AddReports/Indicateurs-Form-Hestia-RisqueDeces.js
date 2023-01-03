@@ -72,6 +72,13 @@ function IndicateursFormHestiaRisqueDeces(props) {
     formData.append("valueConsommation", valueConsommation);
     formData.append("descriptionConsommation", descriptionConsommation);
 
+    console.log(valueSecuritee);
+    console.log(descriptionSecuritee);
+    console.log(valueSantee);
+    console.log(descriptionSantee);
+    console.log(valueConsommation);
+    console.log(descriptionConsommation);
+
     console.log(formData);
   };
   return (

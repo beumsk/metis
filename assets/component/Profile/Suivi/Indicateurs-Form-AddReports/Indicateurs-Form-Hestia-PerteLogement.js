@@ -89,7 +89,14 @@ function IndicateursFormHestiaPerteLogement(props) {
     formData.append("bailleurSelected", bailleurSelected);
     formData.append("descriptionBailleur", descriptionBailleur);
 
-    console.log(formData);
+    console.log(
+      voisinageSelected,
+      descriptionVoisinage,
+      hygieneSelected,
+      descriptionHygiene,
+      bailleurSelected,
+      descriptionBailleur
+    );
   };
   return (
     <>
