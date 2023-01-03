@@ -78,7 +78,9 @@ function IndicateursFormHestiaPerteLogement(props) {
     setDescriptionBailleur(e.target.value);
   };
   //   /api/getContacts
-
+  const onSend = (e) => {
+    console.log(e);
+  };
   return (
     <>
       <div className="addSoins-form">
@@ -223,6 +225,7 @@ function IndicateursFormHestiaPerteLogement(props) {
             rows={3}
             onChange={(e) => onChangeDescriptionBailleur(e)}
           ></textarea>
+          <button onClick={(e) => onSend(e)}>Envoyer</button>
         </div>
       </div>
     </>

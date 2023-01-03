@@ -76,6 +76,9 @@ function IndicateursFormHestiaRisqueDeces(props) {
   //     descriptionConsommation: descriptionConsommation,
   //   },
   // ]);
+  const onSend = (e) => {
+    console.log(e);
+  };
   return (
     <>
       <div className="addSoins-form">
@@ -210,6 +213,7 @@ function IndicateursFormHestiaRisqueDeces(props) {
             rows={3}
             onChange={(e) => onChangeDescriptionConsommation(e)}
           />
+          <button onClick={(e) => onSend(e)}>Envoyer</button>
         </div>
       </div>
     </>

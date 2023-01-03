@@ -64,6 +64,10 @@ function IndicateursFormCVC(props) {
     setDescriptionComportement(e.target.value);
   };
 
+  const onSend = (e) => {
+    console.log(e);
+  };
+
   return (
     <>
       <div className="addSoins-form">
@@ -252,6 +256,7 @@ function IndicateursFormCVC(props) {
             onChange={(e) => onChangeDescriptionComportement(e)}
           />
         </div>
+        <button onClick={(e) => onSend(e)}>Envoyer</button>
       </div>
     </>
   );
