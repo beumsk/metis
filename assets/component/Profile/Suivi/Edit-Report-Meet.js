@@ -11,7 +11,7 @@ import Editor from "./Editor-Reports";
 import AddActivitiesByReport from "./Add-ActivitiesByReports";
 import AddIndicateursByReport from "./Indicateurs-Form-AddReports/Add-IndicateursByReports";
 import AddSoinsByReport from "./Add-SoinsByReports";
-import InputPlaceList from "./Input-Place-List";
+import InputPlaceListSelect from "./Input-Place-List-Select";
 import InputContactList from "./Input-Contact-List";
 import InputGoalsList from "./Input-Goals-List";
 
@@ -195,6 +195,7 @@ function EditReportMeet(props) {
           Object.prototype.hasOwnProperty.call(copyCares, prop) &&
           copyCares[prop] !== null
         ) {
+          console.log(copyCares[prop]);
           var care = new Cares();
           care["act_id"] = copyCares[prop]?.id;
           care["id"] = Number(prop);
@@ -797,7 +798,7 @@ function EditReportMeet(props) {
                       <AddActivitiesByReport
                         type={typeFormActivities}
                         id={idx}
-                        key={idx}
+                        key={form.id}
                         contacts={props.contacts}
                         places={props.places}
                         formActivitiesEdit={form}
@@ -984,7 +985,7 @@ function EditReportMeet(props) {
       )}
       {props?.informationPatient?.activityType === 1 && (
         <>
-          <InputPlaceList
+          <InputPlaceListSelect
             places={props.places}
             defaultValue={props?.informationPatient?.plac?.id}
             onChange={onChangePlaces}

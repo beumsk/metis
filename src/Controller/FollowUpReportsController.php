@@ -702,6 +702,7 @@ class FollowUpReportsController extends AbstractController
 
         if ($changePlaces !== "null") {
             $places = $doctrine->getRepository(Contacts::class)->find($changePlaces);
+            // dd($changePlaces);
             $report->setPlac($places);
         }
 
@@ -748,7 +749,7 @@ class FollowUpReportsController extends AbstractController
                 // dd($value);
                 $indicateurs_jsondecode = json_decode($indicateurs);
                 // dd($value->selectedOptionType);
-                if (count($value->indicateursFormHestiaRisqueDeces) > 0) {
+                if ($value->indicateursFormHestiaRisqueDeces !== null && count($value->indicateursFormHestiaRisqueDeces) > 0) {
                     // $securitee = ($indicateurs_jsondecode->indicateursFormHestiaRisqueDeces[0]->id_secur !== null) ? $doctrine->getRepository(FollowupReportsIndicators::class)->find($indicateurs_jsondecode->indicateursFormHestiaRisqueDeces[0]->id_secur) : null;
                     // $santee = ($indicateurs_jsondecode->indicateursFormHestiaRisqueDeces[0]->id_sant !== null) ? $doctrine->getRepository(FollowupReportsIndicators::class)->find($indicateurs_jsondecode->indicateursFormHestiaRisqueDeces[0]->id_sant) : null;
                     // $consommation = ($indicateurs_jsondecode->indicateursFormHestiaRisqueDeces[0]->id_conso !== null) ? $doctrine->getRepository(FollowupReportsIndicators::class)->find($indicateurs_jsondecode->indicateursFormHestiaRisqueDeces[0]->id_conso) : null;
@@ -798,7 +799,7 @@ class FollowUpReportsController extends AbstractController
                         // $entityManager->flush();
                     }
                 }
-                if (count($value->indicateursFormCVC) > 0) {
+                if ($value->indicateursFormCVC !== null && count($value->indicateursFormCVC) > 0) {
                     // dd($indicateurs_jsondecode);
                     // $corps = ($indicateurs_jsondecode[0]->indicateursFormCVC[0]->id_corps !== null) ? $doctrine->getRepository(FollowupReportsIndicators::class)->find($indicateurs_jsondecode->indicateursFormCVC[0]->id_corps) : null;
                     // $vetements = ($indicateurs_jsondecode->indicateursFormCVC[0]->id_vetements !== null) ? $doctrine->getRepository(FollowupReportsIndicators::class)->find($indicateurs_jsondecode->indicateursFormCVC[0]->id_vetements) : null;
@@ -852,7 +853,7 @@ class FollowUpReportsController extends AbstractController
 
                     // dd($indicateurs_jsondecode->indicateursFormCVC[0]);
                 }
-                if (count($value->indicateursEstLeLogement) > 0) {
+                if ($value->indicateursEstLeLogement !== null && count($value->indicateursEstLeLogement) > 0) {
 
                     // dd($indicateurs_jsondecode->indicateursEstLeLogement[0]);
                     // $bailleur = ($indicateurs_jsondecode[0]->indicateursEstLeLogement[0]->id_bailleur !== null) ? $doctrine->getRepository(FollowupReportsIndicators::class)->find($indicateurs_jsondecode->indicateursFormHestiaRisqueDeces[0]->id_bailleur) : null;

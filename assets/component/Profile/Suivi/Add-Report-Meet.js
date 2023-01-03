@@ -15,7 +15,7 @@ import Editor from "./Editor-Reports";
 import AddActivitiesByReport from "./Add-ActivitiesByReports";
 import AddIndicateursByReport from "./Indicateurs-Form-AddReports/Add-IndicateursByReports";
 import AddSoinsByReport from "./Add-SoinsByReports";
-import InputPlaceList from "./Input-Place-List";
+import InputPlaceListSelect from "./Input-Place-List-Select";
 import { nanoid } from "nanoid";
 import InputContactList from "./Input-Contact-List";
 import InputGoalsList from "./Input-Goals-List";
@@ -842,7 +842,8 @@ function AddReportMeet(props) {
         onChange={onChangeContacts}
         defaultValue={null}
       />
-      <InputPlaceList places={props.places} onChange={onChangePlaces} />
+
+      <InputPlaceListSelect places={props.places} onChange={onChangePlaces} />
       <Editor onChange={editorChange}></Editor>
 
       {validationCare && (
