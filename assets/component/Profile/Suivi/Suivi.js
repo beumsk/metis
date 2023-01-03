@@ -196,6 +196,24 @@ const Profile = () => {
     setEdit(true);
   };
 
+  function onChangeRepportAdded(e) {
+    // var reportSearch = new FormData();
+    // reportSearch.append("id", idPatient);
+    // axios({
+    //   method: "post",
+    //   url: "/api/getFollowUpReportsById",
+    //   data: reportSearch,
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //     Authorization: `Bearer ${auth.auth.accessToken}`,
+    //   },
+    // })
+    //   .then(function (response) {
+    //     return setSearch(response);
+    //   })
+    //   .catch(function (response) {});
+  }
+
   const showAddReports = (e) => {
     setIsDashbordReports(false);
     setIsAddReportMeet(true);
@@ -638,6 +656,7 @@ const Profile = () => {
               type={type}
               contacts={contacts}
               goals={goals}
+              onChange={onChangeRepportAdded}
               places={places}
             ></AddReportMeet>
           )}

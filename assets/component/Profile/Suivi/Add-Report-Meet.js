@@ -182,8 +182,9 @@ function AddReportMeet(props) {
       },
     })
       .then(function (response) {
-        location.replace(window.location.origin + "/" + idPatient);
+        // location.replace(window.location.origin + "/" + idPatient);
         document.getElementById("rapport_details-btn").click();
+        props.onChange(true);
       })
       .catch(function (response) {
         console.log(response);
