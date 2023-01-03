@@ -107,9 +107,27 @@ function EditReportMeet(props) {
     "HESTIA - Risque décès",
   ]);
   const [contacts, setContacts] = useState(null);
-  const [showAccesSoins, setAccesSoins] = useState(false);
-  const [showActivities, setActivities] = useState(false);
-  const [showIndicateurs, setChoiceIndicateurs] = useState(false);
+  const [showAccesSoins, setAccesSoins] = useState(
+    props?.informationPatient?.followupReportsActivities &&
+      props?.informationPatient?.followupReportsActivities?.filter(
+        (e) => e.sugg.parentValue === "Soins"
+      ).length > 0
+      ? true
+      : false
+  );
+  const [showActivities, setActivities] = useState(
+    props?.informationPatient?.followupReportsActivities &&
+      props?.informationPatient?.followupReportsActivities?.filter(
+        (e) => e.sugg.parentValue === "Activités"
+      ).length > 0
+      ? true
+      : false
+  );
+  const [showIndicateurs, setChoiceIndicateurs] = useState(
+    props?.informationPatient?.followupReportsIndicators?.length === 0
+      ? false
+      : true
+  );
 
   const [idPatient, setIdPatient] = useState(id);
   const [type, setType] = useState(null);
@@ -490,8 +508,14 @@ function EditReportMeet(props) {
     formData.append("meetType", meetType);
     formData.append("userId", userId);
     formData.append("patiId", patiId);
-    formData.append("formSoins", JSON.stringify(formSoins));
-    formData.append("formActivities", JSON.stringify(formActivities));
+    formData.append(
+      "formSoins",
+      showAccesSoins === true ? JSON.stringify(formSoins) : null
+    );
+    formData.append(
+      "formActivities",
+      showActivities === true ? JSON.stringify(formActivities) : null
+    );
     formData.append("formIndicateurs", JSON.stringify(formIndicateurs));
     axios({
       method: "post",
@@ -811,24 +835,19 @@ function EditReportMeet(props) {
                 <Form.Check
                   inline
                   label="Oui"
-                  onClick={(e) => choiceIndicateurs(true)}
+                  onClick={(e) => setChoiceIndicateurs(true)}
                   name="group24"
-                  defaultChecked={
-                    props?.informationPatient?.followupReportsIndicators
-                      ?.length > 0
-                  }
+                  defaultChecked={showIndicateurs === true}
                   type={"radio"}
                   id={`inline-radio-25`}
                 />
+                {/* const [showIndicateurs, setChoiceIndicateurs] = useState(false); */}
                 <Form.Check
                   inline
                   label="Non"
                   name="group24"
-                  defaultChecked={
-                    props?.informationPatient?.followupReportsIndicators
-                      ?.length === 0
-                  }
-                  onClick={(e) => choiceIndicateurs(false)}
+                  defaultChecked={showIndicateurs === false}
+                  onClick={(e) => setChoiceIndicateurs(false)}
                   type={"radio"}
                   id={`inline-radio-26`}
                 />

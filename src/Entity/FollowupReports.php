@@ -108,7 +108,7 @@ class FollowupReports
     #[ORM\JoinColumn(name: "pati_id", referencedColumnName: "id", nullable: true, onDelete: "SET NULL")]
     private ?Patients $patient = null;
 
-    #[ORM\OneToMany(mappedBy: 'FollowupReports', targetEntity: FollowupReportsIndicators::class)]
+    #[ORM\OneToMany(mappedBy: 'FollowupReports', targetEntity: FollowupReportsIndicators::class, cascade: ["all"])]
     private Collection $indicators;
 
     #[ORM\ManyToMany(targetEntity: IndicatorsGroups::class, inversedBy: 'followUpReports')]
@@ -117,7 +117,7 @@ class FollowupReports
     #[ORM\InverseJoinColumn(name: "igrp_id", referencedColumnName: "id", nullable: true)]
     private Collection $indicatorsGroups;
 
-    #[ORM\OneToMany(mappedBy: 'followupReports', targetEntity: FollowupReportsActivities::class)]
+    #[ORM\OneToMany(mappedBy: 'followupReports', targetEntity: FollowupReportsActivities::class, orphanRemoval: true, cascade: ["all"])]
     private Collection $activities;
 
     public function __construct()
@@ -441,6 +441,7 @@ class FollowupReports
      */
     public function getActivities(): Collection
     {
+
         return $this->activities;
     }
 

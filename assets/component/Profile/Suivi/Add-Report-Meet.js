@@ -231,7 +231,7 @@ function AddReportMeet(props) {
         arr.indicateursEstLeLogement = element.indicateursEstLeLogement;
       }
     }
-
+    // showActivities
     formData.append("activityType", 1);
     formData.append("contacts", contacts);
     formData.append("changeTypeMeet", changeTypeMeet);
@@ -244,15 +244,11 @@ function AddReportMeet(props) {
     formData.append("meetType", 1);
     formData.append(
       "formSoins",
-      JSON.stringify(formSoins) === JSON.stringify([{ id: 0 }])
-        ? null
-        : JSON.stringify(formSoins)
+      showAccesSoins === false ? null : JSON.stringify(formSoins)
     );
     formData.append(
       "formActivities",
-      JSON.stringify(formActivities) === JSON.stringify([{ id: 0 }])
-        ? null
-        : JSON.stringify(formActivities)
+      showActivities === false ? null : JSON.stringify(formActivities)
     );
     formData.append(
       "formIndicateurs",
@@ -382,7 +378,6 @@ function AddReportMeet(props) {
 
           if (response && formActivities) {
             let endpoints = [];
-
             for (let index = 0; index < formActivities.length; index++) {
               endpoints.push("/api/addActivitiesToReport");
             }
@@ -391,7 +386,6 @@ function AddReportMeet(props) {
                 endpoints.map((endpoint, i) => {
                   let activities = formActivities[i];
                   let formData = new FormData();
-
                   formData.append(
                     "rapportId",
                     response.data.id ? response.data.id : null
@@ -404,8 +398,12 @@ function AddReportMeet(props) {
                     "description",
                     activities.description ? activities.description : null
                   );
-                  formData.append("formActivities", JSON.stringify(activities));
-
+                  formData.append(
+                    "formActivities",
+                    showActivities === false
+                      ? null
+                      : JSON.stringify(formActivities)
+                  );
                   axios({
                     method: "post",
                     url: endpoint,
@@ -443,7 +441,7 @@ function AddReportMeet(props) {
               });
             }
           }
-          // location.replace(window.location.origin + "/" + idPatient);
+          location.replace(window.location.origin + "/" + idPatient);
           document.getElementById("rapport_details-btn").click();
         })
         .catch(function (response) {

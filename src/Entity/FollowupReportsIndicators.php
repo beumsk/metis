@@ -17,7 +17,7 @@ class FollowupReportsIndicators
     // * @ORM\ManyToOne(targetEntity="FollowUpReport", inversedBy="indicators")
     // * @ORM\JoinColumn(name="fore_id", referencedColumnName="fore_id", onDelete="CASCADE")
     #[ORM\ManyToOne(targetEntity: "FollowupReports", inversedBy: 'indicators')]
-    #[ORM\JoinColumn(name: "fore_id", referencedColumnName: "id", nullable: true, onDelete: "SET NULL")]
+    #[ORM\JoinColumn(name: "fore_id", referencedColumnName: "id", onDelete: "CASCADE")]
     private ?FollowupReports $FollowupReports = null;
 
     #[ORM\Column(nullable: true)]
@@ -34,6 +34,7 @@ class FollowupReportsIndicators
     #[ORM\ManyToOne(targetEntity: 'Indicators', cascade: ["all"], fetch: "EAGER")]
     #[ORM\JoinColumn(name: "indi_id", referencedColumnName: "id", nullable: true, onDelete: "SET NULL")]
     private ?Indicators $indi = null;
+
 
 
 
