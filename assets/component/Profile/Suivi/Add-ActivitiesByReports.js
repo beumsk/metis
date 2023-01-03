@@ -60,42 +60,16 @@ function AddActivitiesByReport(props) {
       .catch(function (response) {});
   }, [idPatient]);
 
-  // function handleChangeValue(e) {
-  //   setValueForm(e.target.value);
-  // }
+  function send() {
+    console.log("send");
+  }
+  function handleChangeContacts(e) {
+    setValueContactForm(e.value);
+  }
 
-  // function handleChangeContacts(e) {
-  //   console.log(e);
-  //   setValueContactForm(e);
-  // }
-
-  // function handleChangePlaces(e) {
-  //   setValuePlaceForm(e);
-  // }
-
-  // const onChangeDescription = (e) => {
-  //   if (e) {
-  //     setValueDescription(e.target.value);
-  //   } else {
-  //     setValueDescription(null);
-  //   }
-  // };
-  // console.log(props);
-  // props.onChange([
-  //   {
-  //     act_id:
-  //       idEditFormActivities[0] !== undefined ? idEditFormActivities[0] : null,
-  //     id: props.id,
-  //     value: value ? value : props.formActivitiesEdit?.type,
-  //     contact: contact ? contact : props.formActivitiesEdit?.contact,
-  //     place: place ? place : props.formActivitiesEdit?.place,
-  //     description: description
-  //       ? description
-  //       : props.formActivitiesEdit?.description,
-  //   },
-  // ]);
-  //
-
+  function handleChangePlaces(e) {
+    setValuePlaceForm(e.value);
+  }
   return (
     <>
       <Button onClick={handleShow}>
@@ -140,26 +114,28 @@ function AddActivitiesByReport(props) {
             />
 
             <InputContactList
-            // contacts={props?.contacts}
-            // onChange={handleChangeContacts}
-            // defaultValue={
-            //   props.formActivitiesEdit?.contact &&
-            //   props.formActivitiesEdit?.contact
-            //     ? props.formActivitiesEdit?.contact
-            //     : null
-            // }
+              contacts={props?.contacts}
+              // contacts={props?.contacts}
+              onChange={handleChangeContacts}
+              // defaultValue={
+              //   props.formActivitiesEdit?.contact &&
+              //   props.formActivitiesEdit?.contact
+              //     ? props.formActivitiesEdit?.contact
+              //     : null
+              // }
             ></InputContactList>
 
             <InputPlaceList
-            // contacts={props?.places}
-            // onChange={handleChangePlaces}
-            // defaultValue={
-            //   props.formActivitiesEdit?.place &&
-            //   props.formActivitiesEdit?.place
-            //     ? props.formActivitiesEdit?.place
-            //     : null
-            // }
+              places={props?.places}
+              onChange={handleChangePlaces}
+              // defaultValue={
+              //   props.formActivitiesEdit?.place &&
+              //   props.formActivitiesEdit?.place
+              //     ? props.formActivitiesEdit?.place
+              //     : null
+              // }
             ></InputPlaceList>
+            <button onClick={(e) => send()}>Envoyer</button>
           </div>
         </Modal.Body>
       </Modal>

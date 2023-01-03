@@ -231,7 +231,19 @@ function EditReportMeet(props) {
     <div className="report-content">
       {props?.informationPatient?.activityType === 1 && (
         <>
-          <IndicateursActiviteesComponent></IndicateursActiviteesComponent>
+          <IndicateursActiviteesComponent
+            contacts={props.contacts}
+            places={props.places}
+            indicateursByDefault={
+              props?.informationPatient?.followupReportsIndicators
+            }
+            soinsByDefault={props?.informationPatient?.followupReportsIndicators.filter(
+              (e) => e.sugg.parentValue === "Soins"
+            )}
+            activitiesByDefault={props?.informationPatient?.followupReportsIndicators.filter(
+              (e) => e.sugg.parentValue === "Activités"
+            )}
+          ></IndicateursActiviteesComponent>
           <h5 className="mt-4 mb-4">Ajouter un rapport</h5>
           {/* <Form.Control type="text" id="inputText" className="mt-4" /> */}
 

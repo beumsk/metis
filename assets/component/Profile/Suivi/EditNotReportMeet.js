@@ -32,7 +32,17 @@ function EditNoReportMeet(props) {
 
   return (
     <div className="noEditRepports-container">
-      <IndicateursActiviteesComponent></IndicateursActiviteesComponent>
+      <IndicateursActiviteesComponent
+        contacts={props.contacts}
+        places={props.places}
+        indicateursByDefault={props?.rapport?.followupReportsIndicators}
+        soinsByDefault={props?.rapport?.followupReportsActivities?.filter(
+          (e) => e?.sugg?.parentValue === "Soins"
+        )}
+        activitiesByDefault={props?.rapport?.followupReportsActivities?.filter(
+          (e) => e?.sugg?.parentValue === "Activités"
+        )}
+      ></IndicateursActiviteesComponent>
       <div className="contact-row">
         {props.rapport &&
           props.rapport.fogo &&
@@ -87,23 +97,7 @@ function EditNoReportMeet(props) {
             </>
           )}
       </div>
-      {/* <div className="contact-row">
-        {props.rapport &&
-          props.rapport.cont &&
-          props.rapport.cont.length > 0 && (
-            <>
-              <h6>Contact: </h6>
-              <span style={{ fontWeight: "normal" }}>
-                {props?.rapport.cont?.map((cont) => (
-                  <>
-                    {cont.lastname}
-                    {cont.firstname}
-                  </>
-                ))}
-              </span>
-            </>
-          )}
-      </div> */}
+
       <div className="place-row">
         {props.rapport && props.rapport.plac && props.rapport.plac !== null && (
           <>

@@ -219,6 +219,7 @@ class FollowUpReportsController extends AbstractController
                     : null,
                 "followupReportsIndicators" => (count($value->getIndicators()) > 0) ?
                     array_map(function ($a) {
+
                         return [
                             "id" => ($a->getId() !== null) ? $a->getId() : null,
                             "value" => ($a->getValue() && $a->getValue() !== null) ? $a->getValue() : null,

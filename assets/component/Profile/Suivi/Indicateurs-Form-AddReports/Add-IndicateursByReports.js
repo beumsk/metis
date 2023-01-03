@@ -23,16 +23,13 @@ function AddIndicateursByReport(props) {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const [options, setOptions] = useState([
-    "HESTIA - Risque perte logement",
-    "CVC",
-    "HESTIA - Risque décès",
+    { id: 0, label: "HESTIA - Risque perte logement" },
+    { id: 1, label: "CVC" },
+    { id: 2, label: "HESTIA - Risque décès" },
   ]);
-  const [indicateursEstLeLogement, setIndicateursLogement] = useState(
-    props?.form?.indicateursEstLeLogement
-      ? props?.form?.indicateursEstLeLogement
-      : null
-  );
+  const [indicateursEstLeLogement, setIndicateursLogement] = useState();
 
+  const [isIndicateurs, setIndicateurs] = useState();
   const [idPatient, setIdPatient] = useState(id);
   const [typeCVCSelected, setTypeCVCSelected] = useState(null);
   const [CSVAlreadyAsked, setAlreadyAsked] = useState();
@@ -95,7 +92,7 @@ function AddIndicateursByReport(props) {
     // setIndicateursLogement(null);
     // setIndicateursFormHestiaRisqueDeces(null);
   };
-
+  console.log(isIndicateurs);
   return (
     <>
       <Button onClick={handleShow}>
@@ -112,23 +109,22 @@ function AddIndicateursByReport(props) {
         <Modal.Body>
           <div className="addSoins-form">
             <Form.Label htmlFor="inputValue" className="uk-form-label">
-              Type: {typeCVCSelected}
+              {/* Type: {isIndicateurs} */}
             </Form.Label>
-            {typeCVCSelected === null && (
-              <Form.Select
-                size="lg"
-                value={typeCVCSelected}
-                className="uk-select"
-                onChange={(e) => choiceTypeCVC(e)}
-              >
-                <option>Sélectionnez le type d'indicateurs</option>
-                {options?.map((el, id) => (
-                  <>{el && <option value={el}>{el}</option>}</>
-                ))}
-              </Form.Select>
-            )}
+            {/* {isIndicateurs} */}
+            <Form.Select
+              size="lg"
+              value={isIndicateurs}
+              className="uk-select"
+              onChange={(e) => setIndicateurs(e.target.value)}
+            >
+              <option>Sélectionnez le type d'indicateurs</option>
+              {options?.map((el, id) => (
+                <>{el && <option value={el.id}>{el.label}</option>}</>
+              ))}
+            </Form.Select>
 
-            {isIndicateursLogement && (
+            {isIndicateurs === "0" && (
               <IndicateursFormHestiaPerteLogement
                 // id={props.id}
 
@@ -136,7 +132,7 @@ function AddIndicateursByReport(props) {
               />
             )}
 
-            {isIndicateursFormCVC && (
+            {isIndicateurs === "1" && (
               <IndicateursFormCVC
               // id={props.id}
               // editForm={props?.form?.indicateursFormCVC}
@@ -146,7 +142,7 @@ function AddIndicateursByReport(props) {
               />
             )}
 
-            {isIndicateursHestiaRisqueDeces && (
+            {isIndicateurs === "2" && (
               <IndicateursFormHestiaRisqueDeces
               // id={props.id}
               // form={props.form}

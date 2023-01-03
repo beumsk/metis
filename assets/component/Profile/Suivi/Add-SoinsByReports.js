@@ -50,7 +50,17 @@ function AddSoinsByReport(props) {
       })
       .catch(function (response) {});
   }, [idPatient]);
+  function send() {
+    console.log("send");
+  }
 
+  function handleChangeContacts(e) {
+    setValueContactForm(e.value);
+  }
+
+  function handleChangePlaces(e) {
+    setValuePlaceForm(e.value);
+  }
   return (
     <>
       <Button onClick={handleShow}>
@@ -92,9 +102,12 @@ function AddSoinsByReport(props) {
               aria-describedby="valueSpécifique"
             />
 
-            <InputContactList></InputContactList>
+            <InputContactList
+              onChange={handleChangeContacts}
+            ></InputContactList>
 
-            <InputPlaceList></InputPlaceList>
+            <InputPlaceList onChange={handleChangePlaces}></InputPlaceList>
+            <button onClick={(e) => send()}>Envoyer</button>
           </div>
         </Modal.Body>
       </Modal>

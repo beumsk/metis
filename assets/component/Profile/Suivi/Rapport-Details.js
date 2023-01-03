@@ -314,6 +314,8 @@ function RapportDetails(props) {
                       <EditNoReportMeet
                         indicators={r.followupReportsIndicators}
                         rapport={r}
+                        contacts={props?.contacts}
+                        places={props?.places}
                       ></EditNoReportMeet>
                     </>
                   )}

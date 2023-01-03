@@ -22,49 +22,19 @@ function IndicateursFormCVC(props) {
 
   const [idPatient, setIdPatient] = useState(id);
 
-  const [idCorps, setidCorps] = useState(
-    props?.editForm && props?.editForm[0]?.id ? props?.editForm[0]?.id : null
-  );
-  const [idVetements, setidVetements] = useState(
-    props?.editForm && props?.editForm[1]?.id ? props?.editForm[1]?.id : null
-  );
+  const [idCorps, setidCorps] = useState();
+  const [idVetements, setidVetements] = useState();
 
-  const [idComportement, setidComportement] = useState(
-    props?.editForm && props?.editForm[2]?.id ? props?.editForm[2]?.id : null
-  );
+  const [idComportement, setidComportement] = useState();
 
-  const [corpsScore, setCorpsScore] = useState(
-    props?.editForm && props?.editForm[0]?.value
-      ? props?.editForm[0]?.value
-      : null
-  );
-  const [corpsDescription, setDescriptionCorps] = useState(
-    props?.editForm && props?.editForm[0]?.comment
-      ? props?.editForm[0]?.comment
-      : null
-  );
+  const [corpsScore, setCorpsScore] = useState();
+  const [corpsDescription, setDescriptionCorps] = useState();
 
-  const [vetementsScore, setVetementsScore] = useState(
-    props?.editForm && props.editForm[1]?.value
-      ? props.editForm[1]?.value
-      : null
-  );
-  const [vetementsDescription, setDescriptionVetements] = useState(
-    props?.editForm && props.editForm[2]?.comment
-      ? props.editForm[2]?.comment
-      : null
-  );
+  const [vetementsScore, setVetementsScore] = useState();
+  const [vetementsDescription, setDescriptionVetements] = useState();
 
-  const [comportementScore, setComportementScore] = useState(
-    props?.editForm && props.editForm[2]?.value
-      ? Number(props.editForm[2]?.value)
-      : null
-  );
-  const [comportementDescription, setDescriptionComportement] = useState(
-    props?.editForm && props?.editForm[2]?.comment
-      ? props?.editForm[2]?.comment
-      : null
-  );
+  const [comportementScore, setComportementScore] = useState();
+  const [comportementDescription, setDescriptionComportement] = useState();
 
   useEffect(() => {
     setCorpsScore(corpsScore);
@@ -93,40 +63,6 @@ function IndicateursFormCVC(props) {
   const onChangeDescriptionComportement = (e) => {
     setDescriptionComportement(e.target.value);
   };
-
-  props.onChange([
-    {
-      id: props.id,
-      id_corps: idCorps,
-      corpsScore: corpsScore,
-      // id_indi:
-      corpsDescription: corpsDescription,
-      id_vetements: idVetements,
-      vetementsScore: vetementsScore,
-      vetementsDescription: vetementsDescription,
-      id_comportement: idComportement,
-      comportementScore: comportementScore,
-      comportementDescription: comportementDescription,
-    },
-  ]);
-
-  //
-  //   id: props.id,
-  //   corpsScore: corpsScore ? corpsScore : props?.editForm[0]?.value,
-  //   // corpsDescription: corpsDescription
-  //   //   ? corpsDescription
-  //   //   : props?.editForm[0]?.comment,
-  //   // vetementsScore: vetementsScore ? vetementsScore : props.editForm[1]?.value,
-  //   // vetementsDescription: vetementsDescription
-  //   //   ? vetementsDescription
-  //   //   : props.editForm[1]?.comment,
-  //   // comportementScore: comportementScore
-  //   //   ? comportementScore
-  //   //   : props.editForm[2]?.value,
-  //   // comportementDescription: comportementDescription
-  //   //   ? comportementDescription
-  //   //   : props?.editForm[2]?.comment,
-  // });
 
   return (
     <>

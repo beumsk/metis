@@ -67,9 +67,28 @@ function IndicateursActiviteesComponent(props) {
             display: "flex",
             width: "100%",
             justifyContent: "space-between",
+            fontWeight: "bold",
           }}
         >
-          Activité(s) <AddActivitiesByReport></AddActivitiesByReport>
+          Activité(s){" "}
+          <AddActivitiesByReport
+            contacts={props.contacts}
+            places={props.places}
+          ></AddActivitiesByReport>
+        </div>
+        <div>
+          {/* indicateursByDefault */}
+          {props?.activitiesByDefault?.map((el, id) => (
+            <div
+              style={{
+                display: "flex",
+                width: "100%",
+                justifyContent: "space-between",
+              }}
+            >
+              {el?.sugg.value} {el?.description}
+            </div>
+          ))}
         </div>
         <div
           className="soins "
@@ -77,19 +96,54 @@ function IndicateursActiviteesComponent(props) {
             display: "flex",
             width: "100%",
             justifyContent: "space-between",
+            fontWeight: "bold",
           }}
         >
-          Soins(s) <AddSoinsByReport></AddSoinsByReport>
+          Soins(s){" "}
+          <AddSoinsByReport
+            contacts={props.contacts}
+            places={props.places}
+          ></AddSoinsByReport>
         </div>
-        <div
-          className="indicateurs "
-          style={{
-            display: "flex",
-            width: "100%",
-            justifyContent: "space-between",
-          }}
-        >
-          Indicateur(s) <AddIndicateursByReport></AddIndicateursByReport>
+        <div>
+          {/* indicateursByDefault */}
+          {props?.soinsByDefault?.map((el, id) => (
+            <div
+              style={{
+                display: "flex",
+                width: "100%",
+                justifyContent: "space-between",
+              }}
+            >
+              {el?.sugg.value} {el?.description}
+            </div>
+          ))}
+        </div>
+        <div className="indicateurs ">
+          <div
+            style={{
+              display: "flex",
+              width: "100%",
+              justifyContent: "space-between",
+              fontWeight: "bold",
+            }}
+          >
+            Indicateur(s) <AddIndicateursByReport></AddIndicateursByReport>
+          </div>
+          <div>
+            {/* indicateursByDefault */}
+            {props?.indicateursByDefault?.map((el, id) => (
+              <div
+                style={{
+                  display: "flex",
+                  width: "100%",
+                  justifyContent: "space-between",
+                }}
+              >
+                {el?.indi.name} {el?.indi.description} {el?.value}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </>
