@@ -28,7 +28,9 @@ function AddActivitiesByReport(props) {
   const [places, setPlaces] = useState(null);
   const [elementsOpt, setElementsOpt] = useState(null);
   const [idPatient, setIdPatient] = useState(id);
+  const [typeForm, setTypeForm] = useState(null);
   const [type, setType] = useState(null);
+  const [descriptionForm, setDescriptionForm] = useState(null);
   const handleClose = () => setShow(false);
   const [editFormActivities, setEditFormActivities] = useState([
     props.formActivitiesEdit,
@@ -60,16 +62,30 @@ function AddActivitiesByReport(props) {
       .catch(function (response) {});
   }, [idPatient]);
 
-  function send() {
-    console.log("send");
-  }
   function handleChangeContacts(e) {
-    setValueContactForm(e.value);
+    console.log(e);
+    setValueContactForm(e);
   }
 
   function handleChangePlaces(e) {
-    setValuePlaceForm(e.value);
+    console.log(e);
+    setValuePlaceForm(e);
   }
+
+  const onSend = (e) => {
+    console.log(contact, place, descriptionForm, typeForm);
+
+    let formData = new FormData();
+    formData.append("contact", contact);
+    formData.append("place", place);
+    formData.append("descriptionForm", descriptionForm);
+    formData.append("typeForm", typeForm);
+    // formData.append("descriptionSantee", descriptionSantee);
+    // formData.append("valueConsommation", valueConsommation);
+    // formData.append("descriptionConsommation", descriptionConsommation);
+
+    console.log(formData);
+  };
   return (
     <>
       <Button onClick={handleShow}>
@@ -92,7 +108,7 @@ function AddActivitiesByReport(props) {
               size="lg"
               className="uk-select"
               required={true}
-              onChange={(e) => handleChangeValue(e)}
+              onChange={(e) => setTypeForm(e.target.value)}
               // value={props.formActivitiesEdit?.type}
             >
               <option>Choissisez le type</option>
@@ -110,7 +126,7 @@ function AddActivitiesByReport(props) {
               className="uk-input"
               aria-describedby="valueSpécifique"
               // defaultValue={props.formActivitiesEdit?.description}
-              // onChange={(e) => onChangeDescription(e)}
+              onChange={(e) => setDescriptionForm(e.target.value)}
             />
 
             <InputContactList
@@ -135,7 +151,7 @@ function AddActivitiesByReport(props) {
               //     : null
               // }
             ></InputPlaceList>
-            <button onClick={(e) => send()}>Envoyer</button>
+            <button onClick={(e) => onSend()}>Envoyer</button>
           </div>
         </Modal.Body>
       </Modal>

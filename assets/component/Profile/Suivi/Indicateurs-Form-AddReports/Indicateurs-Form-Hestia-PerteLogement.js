@@ -80,6 +80,16 @@ function IndicateursFormHestiaPerteLogement(props) {
   //   /api/getContacts
   const onSend = (e) => {
     console.log(e);
+
+    let formData = new FormData();
+    formData.append("voisinageSelected", voisinageSelected);
+    formData.append("descriptionVoisinage", descriptionVoisinage);
+    formData.append("hygieneSelected", hygieneSelected);
+    formData.append("descriptionHygiene", descriptionHygiene);
+    formData.append("bailleurSelected", bailleurSelected);
+    formData.append("descriptionBailleur", descriptionBailleur);
+
+    console.log(formData);
   };
   return (
     <>

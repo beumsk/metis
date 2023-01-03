@@ -23,18 +23,29 @@ function AddSoinsByReport(props) {
   let id = useParams().id;
   var formData = new FormData();
   formData.append("id", 108);
-  const [idEditFormSoins, setIdEditFormSoins] = useState([]);
-  const [value, setValueTypeForm] = useState();
+  //   formData.append("pathString", props.link);
+  const [contacts, setContacts] = useState(null);
+  const [places, setPlaces] = useState(null);
+  const [elementsOpt, setElementsOpt] = useState(null);
+  const [idPatient, setIdPatient] = useState(id);
+  const [typeForm, setTypeForm] = useState(null);
+  const [type, setType] = useState(null);
+  const [descriptionForm, setDescriptionForm] = useState(null);
+  const handleClose = () => setShow(false);
+  const [editFormActivities, setEditFormActivities] = useState([
+    props.formActivitiesEdit,
+  ]);
+
+  const [idEditFormActivities, setIdEditFormActivities] = useState([
+    props?.formActivitiesEdit?.act_id,
+  ]);
+
+  const [value, setValueForm] = useState();
   const [contact, setValueContactForm] = useState();
   const [place, setValuePlaceForm] = useState();
-  const [idPatient, setIdPatient] = useState(id);
-  const [type, setType] = useState();
+  const [description, setValueDescription] = useState();
 
-  const [description, setValueDescription] = useState(null);
-  const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-  let ObjForm = {};
-
   useEffect(() => {
     axios({
       method: "post",
@@ -50,17 +61,31 @@ function AddSoinsByReport(props) {
       })
       .catch(function (response) {});
   }, [idPatient]);
-  function send() {
-    console.log("send");
-  }
 
   function handleChangeContacts(e) {
-    setValueContactForm(e.value);
+    console.log(e);
+    setValueContactForm(e);
   }
 
   function handleChangePlaces(e) {
-    setValuePlaceForm(e.value);
+    console.log(e);
+    setValuePlaceForm(e);
   }
+
+  const onSend = (e) => {
+    console.log(contact, place, descriptionForm, typeForm);
+
+    let formData = new FormData();
+    formData.append("contact", contact);
+    formData.append("place", place);
+    formData.append("descriptionForm", descriptionForm);
+    formData.append("typeForm", typeForm);
+    // formData.append("descriptionSantee", descriptionSantee);
+    // formData.append("valueConsommation", valueConsommation);
+    // formData.append("descriptionConsommation", descriptionConsommation);
+
+    console.log(formData);
+  };
   return (
     <>
       <Button onClick={handleShow}>
@@ -71,20 +96,20 @@ function AddSoinsByReport(props) {
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>
-            <h6>Ajouter un soin</h6>
+            <h6>Ajouter une activitée</h6>
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <div className="addSoins-form" id={props.id}>
+          <div className="addSoins-form">
             <Form.Label htmlFor="inputValue" className="uk-form-label">
               Type
             </Form.Label>
-
             <select
               size="lg"
               className="uk-select"
               required={true}
-              onChange={(e) => handleChangeType(e)}
+              onChange={(e) => setTypeForm(e.target.value)}
+              // value={props.formActivitiesEdit?.type}
             >
               <option>Choissisez le type</option>
               {type?.data?.map((el, id) => (
@@ -100,14 +125,33 @@ function AddSoinsByReport(props) {
               id="inputValueSpécifique"
               className="uk-input"
               aria-describedby="valueSpécifique"
+              // defaultValue={props.formActivitiesEdit?.description}
+              onChange={(e) => setDescriptionForm(e.target.value)}
             />
 
             <InputContactList
+              contacts={props?.contacts}
+              // contacts={props?.contacts}
               onChange={handleChangeContacts}
+              // defaultValue={
+              //   props.formActivitiesEdit?.contact &&
+              //   props.formActivitiesEdit?.contact
+              //     ? props.formActivitiesEdit?.contact
+              //     : null
+              // }
             ></InputContactList>
 
-            <InputPlaceList onChange={handleChangePlaces}></InputPlaceList>
-            <button onClick={(e) => send()}>Envoyer</button>
+            <InputPlaceList
+              places={props?.places}
+              onChange={handleChangePlaces}
+              // defaultValue={
+              //   props.formActivitiesEdit?.place &&
+              //   props.formActivitiesEdit?.place
+              //     ? props.formActivitiesEdit?.place
+              //     : null
+              // }
+            ></InputPlaceList>
+            <button onClick={(e) => onSend()}>Envoyer</button>
           </div>
         </Modal.Body>
       </Modal>

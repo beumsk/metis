@@ -60,24 +60,19 @@ function IndicateursFormHestiaRisqueDeces(props) {
   const onChangeDescriptionConsommation = (e) => {
     setDescriptionConsommationSelected(e.target.value);
   };
-  //   /api/getContacts
 
-  // props.onChange([
-  //   {
-  //     id: props.id,
-  //     id_secur: idSecuritee,
-  //     id_sant: idSantee,
-  //     id_conso: idConsommation,
-  //     valueSecuritee: valueSecuritee,
-  //     descriptionSecuritee: descriptionSecuritee,
-  //     valueSantee: valueSantee,
-  //     descriptionSantee: descriptionSantee,
-  //     valueConsommation: valueConsommation,
-  //     descriptionConsommation: descriptionConsommation,
-  //   },
-  // ]);
   const onSend = (e) => {
     console.log(e);
+
+    let formData = new FormData();
+    formData.append("valueSecuritee", valueSecuritee);
+    formData.append("descriptionSecuritee", descriptionSecuritee);
+    formData.append("valueSantee", valueSantee);
+    formData.append("descriptionSantee", descriptionSantee);
+    formData.append("valueConsommation", valueConsommation);
+    formData.append("descriptionConsommation", descriptionConsommation);
+
+    console.log(formData);
   };
   return (
     <>
