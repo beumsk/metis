@@ -171,7 +171,7 @@ function ModalActionsAppelsSortant(props) {
         <Modal.Body>
           <Form>
             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-              <Form.Label>Appel Entrant</Form.Label>
+              <Form.Label>Ajouter appel Entrant</Form.Label>
               <div className="editor" style={{ "z-index": 555555 }}>
                 <Select
                   closeMenuOnSelect={false}

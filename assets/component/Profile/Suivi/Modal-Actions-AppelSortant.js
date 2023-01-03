@@ -137,7 +137,7 @@ function ModalActionsAppelsSortant(props) {
   return (
     <>
       <button variant="primary" onClick={handleShow} className="btn-metis">
-        Ajouter appel sortant
+        Appel sortant
       </button>
 
       <Modal show={show} onHide={handleClose}>

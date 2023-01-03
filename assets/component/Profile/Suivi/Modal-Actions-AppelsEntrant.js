@@ -181,13 +181,13 @@ function ModalActionsAppelsEntrant(props) {
   return (
     <>
       <button variant="primary" onClick={handleShow} className="btn-metis">
-        Ajouter appel entrant
+        Appel entrant
       </button>
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>
-            <h6>Ajouter appel entrant</h6>
+            <h6>Appel entrant</h6>
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>

@@ -1589,7 +1589,11 @@ class FollowUpReportsController extends AbstractController
         $report->setNoCare($no_care);
         $report->setNoActivities($no_activities);
         $report->setNoIndicators($no_indicateurs);
-        $report->setReportType($meetType);
+
+        if ($meetType !== "null") {
+            $report->setReportType($meetType);
+        }
+
 
         $report->setIsHightlight(false);
 
