@@ -17,11 +17,13 @@ const Editor = (props) => {
     console.log(contents, core);
     props.onChange(contents);
   };
+
+  console.log(props);
   return (
     <div>
       <SunEditor
         code="fr"
-        defaultValue={props.content ? props.content : defaultValueRapport}
+        defaultValue={props.content}
         lang="fr"
         onChange={onChangeEditor}
         setOptions={{

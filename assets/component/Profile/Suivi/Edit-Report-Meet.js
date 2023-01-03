@@ -56,7 +56,9 @@ function EditReportMeet(props) {
     props.informationPatient.content || props.informationPatient.description
   );
   const [changePlaces, setChangePlaces] = useState(null);
-  const [changeEditor, setChangeEditor] = useState(null);
+  const [changeEditor, setChangeEditor] = useState(
+    props.informationPatient.content || props.informationPatient.description
+  );
   const [changeOptions, setChangeOptions] = useState(null);
   const [reportDate, setReportDate] = useState(null);
 
@@ -131,7 +133,7 @@ function EditReportMeet(props) {
   };
 
   function editorChange(e) {
-    //
+    console.log(e);
     setChangeDescriptionGoals(e);
     setChangeEditor(e);
   }
