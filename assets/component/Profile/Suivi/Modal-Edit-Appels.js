@@ -12,6 +12,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import Form from "react-bootstrap/Form";
 import InputContactList from "./Input-Contact-List";
+import moment from "moment";
 
 function ModalEditAppels(props) {
   const [show, setShow] = useState(false);
@@ -42,6 +43,7 @@ function ModalEditAppels(props) {
   const [description, setDescription] = useState(props?.calls?.description);
   const [type, setType] = useState(null);
   const [fonction, setFonction] = useState(null);
+
   const [whatDoinFunction, setWhatDoinFunction] = useState(
     props?.calls?.func?.id
   );
@@ -53,48 +55,7 @@ function ModalEditAppels(props) {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  useEffect(() => {
-    // axios({
-    //   method: "post",
-    //   url: "/api/suggestionsById",
-    //   data: funcAppelFormData,
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //     Authorization: `Bearer ${auth.auth.accessToken}`,
-    //   },
-    // })
-    //   .then(function (response) {
-    //     setFonction(response);
-    //   })
-    //   .catch(function (response) {});
-    // axios({
-    //   method: "post",
-    //   url: "/api/suggestionsById",
-    //   data: typeFormData,
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //     Authorization: `Bearer ${auth.auth.accessToken}`,
-    //   },
-    // })
-    //   .then(function (response) {
-    //     setType(response);
-    //   })
-    //   .catch(function (response) {});
-    // axios({
-    //   method: "post",
-    //   url: "/api/suggestionsById",
-    //   data: valueFormData,
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //     Authorization: `Bearer ${auth.auth.accessToken}`,
-    //   },
-    // })
-    //   .then(function (response) {
-    //     setWhatDoinFunction(response);
-    //   })
-    //   .catch(function (response) {});
-    // setUserId(auth.auth.idUser);
-  }, [idPatient]);
+  useEffect(() => {}, [idPatient]);
   //
 
   const onChangeFunction = (e) => {
@@ -130,6 +91,7 @@ function ModalEditAppels(props) {
     formData.append("goalsId", props?.calls?.id);
     formData.append("valueDate", valueDate);
     formData.append("valueStatus", valueStatus);
+
     // console.log(isCallsPatients);
     axios({
       method: "post",
@@ -179,7 +141,9 @@ function ModalEditAppels(props) {
               id="inputText"
               defaultValue={
                 props?.calls && props?.calls?.creationDate
-                  ? new Date(props?.calls?.creationDate).toJSON().slice(0, 10)
+                  ? moment(props?.calls?.creationDate)
+                      .utc("UTC+01:00")
+                      .format("YYYY-MM-DD")
                   : ""
               }
               className="uk-input"

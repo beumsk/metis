@@ -750,6 +750,7 @@ class FollowUpReportsController extends AbstractController
         $valueWhatDoinFunction = $request->request->get('valueWhatDoinFunction');
         $patientId = $request->request->get('patientId');
         $userId = $request->request->get('userId');
+        $dateCall = $request->request->get('dateCall');
         // dd($patientId);
 
         $followupGoals = new FollowupGoals();
@@ -777,7 +778,13 @@ class FollowUpReportsController extends AbstractController
 
         // $followupGoals->setUser($user);
 
-        $followupGoals->setCreationDate(new \DateTime("now"));
+        if ($dateCall !== "null") {
+            $followupGoals->setCreationDate(new \DateTime($dateCall));
+        } else {
+            $followupGoals->setCreationDate(new \DateTime('now'));
+        }
+
+        // $followupGoals->setReportDate(new \DateTime("now"));
 
         if ($description && $description !== "null") {
             $followupGoals->setDescription($description);

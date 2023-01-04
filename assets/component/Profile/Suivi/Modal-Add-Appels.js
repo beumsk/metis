@@ -42,6 +42,7 @@ function ModalAddAppels(props) {
   const [description, setDescription] = useState(null);
   const [whatDoinFunction, setWhatDoinFunction] = useState(null);
   const [valueWhatDoinFunction, setValueWhatDoinFunction] = useState(null);
+  const [dateCall, setDateCall] = useState(null);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
@@ -122,6 +123,7 @@ function ModalAddAppels(props) {
     formData.append("valueWhatDoinFunction", valueWhatDoinFunction);
     formData.append("patientId", idPatient);
     formData.append("userId", userId);
+    formData.append("dateCall", dateCall);
     // console.log(isCallsPatients);
     axios({
       method: "post",
@@ -214,6 +216,15 @@ function ModalAddAppels(props) {
                 onChange={(e) => onChangeContacts(e)}
               />
             )}
+
+            {/* dateCall */}
+            <Form.Label htmlFor="inputValue">Date d'appel</Form.Label>
+            <input
+              type="date"
+              size="lg"
+              onChange={(e) => setDateCall(e.target.value)}
+              className="uk-select"
+            />
 
             {/* <Form.Label htmlFor="inputValue">
               Appel sortant (Création d'un rapport d'appel pour chaque contact)
