@@ -57,8 +57,42 @@ function RapportDetails(props) {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const [whatDoinFunction, setWhatDoinFunction] = useState(null);
+  const [selectActivities, setSelectActivities] = useState(null);
+  const [selectSoins, setSelectSoins] = useState(null);
 
   useEffect(() => {
+    var formDataActivities = new FormData();
+    formDataActivities.append("id", 106);
+    axios({
+      method: "post",
+      url: "/api/suggestionsById",
+      data: formDataActivities,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    })
+      .then(function (response) {
+        setSelectActivities(response);
+      })
+      .catch(function (response) {});
+
+    var formDataActivities = new FormData();
+    formDataActivities.append("id", 108);
+    axios({
+      method: "post",
+      url: "/api/suggestionsById",
+      data: formDataActivities,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    })
+      .then(function (response) {
+        setSelectSoins(response);
+      })
+      .catch(function (response) {});
+
     axios({
       method: "post",
       url: "/api/suggestionsById",
@@ -163,6 +197,22 @@ function RapportDetails(props) {
       setInformations(props.search);
     }
   }, [props.search]);
+
+  function onChangeIndicators() {
+    axios({
+      method: "post",
+      url: "/api/getFollowUpReportsById",
+      data: reportData,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    })
+      .then(function (response) {
+        setInformations(response);
+      })
+      .catch(function (response) {});
+  }
   console.log(props);
   return (
     <>
@@ -294,13 +344,17 @@ function RapportDetails(props) {
                       Appel Entrant
                     </h3>
                   )}
-
+                  {/* const [selectActivities, setSelectActivities] = useState(null);
+  const [selectSoins, setSelectSoins] = useState(null); */}
                   {r.isShow === true && (
                     <>
                       <EditReportMeet
                         informationPatient={r}
                         type={type}
+                        onChangeIndicators={onChangeIndicators}
                         goals={props?.goals}
+                        selectActivities={selectActivities}
+                        selectSoins={selectSoins}
                         contacts={props?.contacts}
                         places={props?.places}
                         onChangeReportMeet={onChangeReport}
@@ -314,6 +368,8 @@ function RapportDetails(props) {
                       <EditNoReportMeet
                         indicators={r.followupReportsIndicators}
                         rapport={r}
+                        selectActivities={selectActivities}
+                        selectSoins={selectSoins}
                         contacts={props?.contacts}
                         places={props?.places}
                       ></EditNoReportMeet>

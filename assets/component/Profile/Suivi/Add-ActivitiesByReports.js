@@ -46,21 +46,21 @@ function AddActivitiesByReport(props) {
   const [description, setValueDescription] = useState();
 
   const handleShow = () => setShow(true);
-  useEffect(() => {
-    axios({
-      method: "post",
-      url: "/api/suggestionsById",
-      data: formData,
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${auth.auth.accessToken}`,
-      },
-    })
-      .then(function (response) {
-        setType(response);
-      })
-      .catch(function (response) {});
-  }, [idPatient]);
+  // useEffect(() => {
+  //   axios({
+  //     method: "post",
+  //     url: "/api/suggestionsById",
+  //     data: formData,
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       Authorization: `Bearer ${auth.auth.accessToken}`,
+  //     },
+  //   })
+  //     .then(function (response) {
+  //       setType(response);
+  //     })
+  //     .catch(function (response) {});
+  // }, [idPatient]);
 
   function handleChangeContacts(e) {
     console.log(e);
@@ -76,16 +76,30 @@ function AddActivitiesByReport(props) {
     console.log(contact, place, descriptionForm, typeForm);
 
     let formData = new FormData();
-    formData.append("contact", contact);
-    formData.append("place", place);
-    formData.append("descriptionForm", descriptionForm);
-    formData.append("typeForm", typeForm);
+    formData.append("contact", JSON.stringify(contact));
+    formData.append("place", JSON.stringify(place));
+    formData.append("description", descriptionForm);
+    formData.append("type", typeForm);
+    formData.append("idRepport", props.report.id);
     // formData.append("descriptionSantee", descriptionSantee);
     // formData.append("valueConsommation", valueConsommation);
     // formData.append("descriptionConsommation", descriptionConsommation);
 
-    console.log(formData);
+    axios({
+      method: "post",
+      url: "/api/addActivitiesToReport",
+      data: formData,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    })
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (response) {});
   };
+  console.log(props);
   return (
     <>
       <Button onClick={handleShow}>
@@ -100,6 +114,8 @@ function AddActivitiesByReport(props) {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
+          {/* selectActivities={selectActivities}
+                        selectSoins={selectSoins} */}
           <div className="addSoins-form">
             <Form.Label htmlFor="inputValue" className="uk-form-label">
               Type
@@ -112,7 +128,7 @@ function AddActivitiesByReport(props) {
               // value={props.formActivitiesEdit?.type}
             >
               <option>Choissisez le type</option>
-              {type?.data?.map((el, id) => (
+              {props?.selectActivities?.data?.map((el, id) => (
                 <>{el.value && <option value={el?.id}>{el?.value}</option>}</>
               ))}
             </select>

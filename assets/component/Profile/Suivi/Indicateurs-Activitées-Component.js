@@ -57,7 +57,9 @@ function IndicateursActiviteesComponent(props) {
 
   const [changeOptions, setChangeOptions] = useState(null);
   const [reportDate, setReportDate] = useState(null);
-
+  function onChangeIndicators() {
+    props.onChangeIndicators(true);
+  }
   return (
     <>
       <div className="search-textRapport row">
@@ -73,7 +75,10 @@ function IndicateursActiviteesComponent(props) {
           Activité(s){" "}
           <AddActivitiesByReport
             contacts={props.contacts}
+            report={props.report}
             places={props.places}
+            selectActivities={props.selectActivities}
+            activitiesByDefault={props?.activitiesByDefault}
           ></AddActivitiesByReport>
         </div>
         <div>
@@ -103,6 +108,9 @@ function IndicateursActiviteesComponent(props) {
           <AddSoinsByReport
             contacts={props.contacts}
             places={props.places}
+            selectSoins={props.selectSoins}
+            report={props.report}
+            soinsByDefault={props?.soinsByDefault}
           ></AddSoinsByReport>
         </div>
         <div>
@@ -128,7 +136,11 @@ function IndicateursActiviteesComponent(props) {
               fontWeight: "bold",
             }}
           >
-            Indicateur(s) <AddIndicateursByReport></AddIndicateursByReport>
+            Indicateur(s){" "}
+            <AddIndicateursByReport
+              report={props.report}
+              onChangeIndicators={onChangeIndicators}
+            ></AddIndicateursByReport>
           </div>
           <div>
             {/* indicateursByDefault */}

@@ -71,7 +71,20 @@ function IndicateursFormHestiaRisqueDeces(props) {
     formData.append("descriptionSantee", descriptionSantee);
     formData.append("valueConsommation", valueConsommation);
     formData.append("descriptionConsommation", descriptionConsommation);
-
+    formData.append("idRepport", props.report.id);
+    axios({
+      method: "post",
+      url: "/api/addIndicatorsHestiaDeces",
+      data: formData,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    })
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (response) {});
     console.log(valueSecuritee);
     console.log(descriptionSecuritee);
     console.log(valueSantee);

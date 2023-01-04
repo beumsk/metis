@@ -74,7 +74,24 @@ function IndicateursFormCVC(props) {
     formData.append("vetementsDescription", vetementsDescription);
     formData.append("comportementScore", comportementScore);
     formData.append("comportementDescription", comportementDescription);
-
+    formData.append("idRepport", props.report.id);
+    axios({
+      method: "post",
+      url: "/api/addIndicatorsCVC",
+      data: formData,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    })
+      .then(function (response) {
+        console.log(response);
+        useEffect(() => {
+          fetchData();
+        }, [data]);
+        props.onChangeIndicators(true);
+      })
+      .catch(function (response) {});
     console.log(
       corpsScore,
       corpsDescription,

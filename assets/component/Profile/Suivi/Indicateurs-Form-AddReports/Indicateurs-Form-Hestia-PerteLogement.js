@@ -79,7 +79,7 @@ function IndicateursFormHestiaPerteLogement(props) {
   };
   //   /api/getContacts
   const onSend = (e) => {
-    console.log(e);
+    console.log(props.report);
 
     let formData = new FormData();
     formData.append("voisinageSelected", voisinageSelected);
@@ -88,7 +88,20 @@ function IndicateursFormHestiaPerteLogement(props) {
     formData.append("descriptionHygiene", descriptionHygiene);
     formData.append("bailleurSelected", bailleurSelected);
     formData.append("descriptionBailleur", descriptionBailleur);
-
+    formData.append("idRepport", props.report.id);
+    axios({
+      method: "post",
+      url: "/api/addIndicatorsHestiaLogement",
+      data: formData,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    })
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (response) {});
     console.log(
       voisinageSelected,
       descriptionVoisinage,

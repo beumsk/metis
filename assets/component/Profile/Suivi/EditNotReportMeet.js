@@ -35,6 +35,9 @@ function EditNoReportMeet(props) {
       <IndicateursActiviteesComponent
         contacts={props.contacts}
         places={props.places}
+        selectActivities={props.selectActivities}
+        selectSoins={props.selectSoins}
+        report={props?.rapport}
         indicateursByDefault={props?.rapport?.followupReportsIndicators}
         soinsByDefault={props?.rapport?.followupReportsActivities?.filter(
           (e) => e?.sugg?.parentValue === "Soins"

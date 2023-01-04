@@ -92,6 +92,9 @@ function AddIndicateursByReport(props) {
     // setIndicateursLogement(null);
     // setIndicateursFormHestiaRisqueDeces(null);
   };
+  function onChangeIndicators() {
+    props.onChangeIndicators(true);
+  }
   console.log(isIndicateurs);
   return (
     <>
@@ -127,27 +130,30 @@ function AddIndicateursByReport(props) {
             {isIndicateurs === "0" && (
               <IndicateursFormHestiaPerteLogement
                 // id={props.id}
-
+                report={props.report}
                 onChange={onChangeIndicateursEstiaLogement}
               />
             )}
 
             {isIndicateurs === "1" && (
               <IndicateursFormCVC
-              // id={props.id}
-              // editForm={props?.form?.indicateursFormCVC}
-              // onChange={onChangeIndicateursFormCVC}
-              // followupReportsIndicators={props.form}
-              // form={props.form}
+                report={props.report}
+                onChangeIndicators={onChangeIndicators}
+                // id={props.id}
+                // editForm={props?.form?.indicateursFormCVC}
+                // onChange={onChangeIndicateursFormCVC}
+                // followupReportsIndicators={props.form}
+                // form={props.form}
               />
             )}
 
             {isIndicateurs === "2" && (
               <IndicateursFormHestiaRisqueDeces
-              // id={props.id}
-              // form={props.form}
-              // editForm={props?.form?.indicateursFormHestiaRisqueDeces}
-              // onChange={onChangeIndicateursFormHestiaRisqueDeces}
+                report={props.report}
+                // id={props.id}
+                // form={props.form}
+                // editForm={props?.form?.indicateursFormHestiaRisqueDeces}
+                // onChange={onChangeIndicateursFormHestiaRisqueDeces}
               />
             )}
           </div>

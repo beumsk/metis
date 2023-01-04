@@ -227,16 +227,24 @@ function EditReportMeet(props) {
     });
   };
 
+  function onChangeIndicators() {
+    props.onChangeIndicators(true);
+  }
+
   return (
     <div className="report-content">
       {props?.informationPatient?.activityType === 1 && (
         <>
           <IndicateursActiviteesComponent
             contacts={props.contacts}
+            onChangeIndicators={onChangeIndicators}
             places={props.places}
+            selectActivities={props.selectActivities}
+            selectSoins={props.selectSoins}
             indicateursByDefault={
               props?.informationPatient?.followupReportsIndicators
             }
+            report={props?.informationPatient}
             soinsByDefault={props?.informationPatient?.followupReportsIndicators.filter(
               (e) => e.sugg.parentValue === "Soins"
             )}
