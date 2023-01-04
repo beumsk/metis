@@ -48,12 +48,13 @@ function ModalEditInfos(props) {
 
   const handleSave = (e) => {
     let formData = new FormData();
+
     if (valueSelect !== null && elementsOpt.length > 0) {
       formData.append("valueSelect", valueSelect);
       setError(null);
     }
 
-    if (valueSelect === null && elementsOpt.length > 0) {
+    if (valueSelect === null) {
       setError("Valeur obligatoire");
     }
 
@@ -74,8 +75,8 @@ function ModalEditInfos(props) {
 
     var formGetInfos = new FormData();
     formGetInfos.append("id", id.toString());
-
-    if (error === null || valueSelect !== null) {
+    console.log(valueSelect);
+    if (valueSelect !== null) {
       axios({
         method: "post",
         url: "/api/setPatientInformation",
@@ -104,7 +105,7 @@ function ModalEditInfos(props) {
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>
-            <h6>Modifier une information</h6>
+            <h6>Ajouter une information</h6>
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
@@ -116,10 +117,16 @@ function ModalEditInfos(props) {
                 <Form.Select
                   size="lg"
                   className="uk-select"
-                  onChange={(e) => setValueSelect(e.target.value)}
+                  onChange={(e) => {
+                    if (e.target.value !== "Choissisez une valeur") {
+                      setValueSelect(e.target.value);
+                    } else {
+                      setValueSelect(null);
+                    }
+                  }}
                   id="value-sugg"
                 >
-                  <option value={null}>Choissisez une valeur</option>
+                  <option>Choissisez une valeur</option>
                   {elementsOpt?.map((el, id) => (
                     <option key={el.id} value={el.id}>
                       {el?.value}
