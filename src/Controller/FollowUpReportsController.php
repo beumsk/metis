@@ -14,6 +14,7 @@ use App\Entity\FollowupReports;
 use App\Entity\FollowupReportsContact;
 use App\Entity\FollowupReportsActivities;
 use App\Entity\FollowupReportsIndicators;
+use App\Entity\IndicatorsGroups;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\HttpFoundation\Request;
@@ -160,7 +161,7 @@ class FollowUpReportsController extends AbstractController
 
         $arr = [];
         foreach ($reportFollowUp as  $value) {
-            // dd($value);
+
             $arr[] = [
                 "id" => $value->getId(),
                 "activityType" => $value->getActivityType(),
@@ -232,8 +233,11 @@ class FollowUpReportsController extends AbstractController
                         ];
                     }, [...$value->getIndicators()])
                     : null,
+
                 "indicatorsGroups" => (count($value->getIndicatorsGroups()) > 0) ?
+
                     array_map(function ($a) {
+
                         return [
                             "id" => ($a->getId() !== null) ? $a->getId() : null,
                             "name" => ($a->getName() && $a->getName() !== null) ? $a->getName() : null,
@@ -281,38 +285,8 @@ class FollowUpReportsController extends AbstractController
                 return $v["followupReportsActivities"] !== null;
             });
         }
-        // foreach ($reportFollowUp as  $value) {
-        //     if ($value->getId()) {
-        //         $report = $doctrine->getRepository(FollowupReportsActivities::class)->findBy(['fore' => $value->getId()]);
 
-        //         $indicators = $doctrine->getRepository(FollowupReportsIndicators::class)->findBy(['fore' => $value->getId()]);
-        //         // dd($report);
-        //         if ($report !== []) {
-        //             foreach ($report as $itemReport) {
-        //                 if ($itemReport->getSugg()->getParentSugg() !== null && $itemReport->getSugg()->getParentSugg()->getValue() === "Soins") {
-        //                     $value->setFollowupReportsCare($itemReport);
-        //                 }
-
-        //                 if ($itemReport->getSugg()->getParentSugg() !== null && $itemReport->getSugg()->getParentSugg()->getValue() === "Activités") {
-        //                     // return $this->json($itemReport->getContacts()[0]->getId());
-        //                     $value->setFollowupReportsActivities($itemReport);
-        //                 }
-        //             }
-        //         }
-
-        //         if ($indicators !== []) {
-        //             foreach ($indicators as  $indi) {
-        //                 $value->setFollowupReportsIndicators($indi);
-        //             }
-        //         }
-        //         $value->setIsShow(false);
-        //     }
-        // }
-
-        // dd($reportFollowUp);
         $response = new Response(json_encode($arr), 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
-
-        // $response->setSharedMaxAge(3600);
 
         return $response;
     }
@@ -1114,7 +1088,8 @@ class FollowUpReportsController extends AbstractController
         }
 
 
-
+        $indicatorsGroups = $doctrine->getRepository(IndicatorsGroups::class)->find(1);
+        $report->addIndicatorsGroup($indicatorsGroups);
 
         return new JsonResponse([
             'id' => $report->getId(),
@@ -1195,6 +1170,9 @@ class FollowUpReportsController extends AbstractController
             $entityManager->flush();
         }
 
+        $indicatorsGroups = $doctrine->getRepository(IndicatorsGroups::class)->find(3);
+        $report->addIndicatorsGroup($indicatorsGroups);
+
         return new JsonResponse([
             'id' => $report->getId(),
             'response' => "Sent !"
@@ -1272,7 +1250,11 @@ class FollowUpReportsController extends AbstractController
 
         }
 
-
+        $indicatorsGroups = $doctrine->getRepository(IndicatorsGroups::class)->find(2);
+        $report->addIndicatorsGroup($indicatorsGroups);
+        $entityManager->persist($report);
+        $entityManager->flush();
+        // dd($report->getIndicatorsGroups());
 
         return new JsonResponse([
             'id' => $report->getId(),
