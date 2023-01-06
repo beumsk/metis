@@ -25,6 +25,7 @@ function ModalEditInfos(props) {
   const [isSentRepport, setIsSentRepport] = useState(false);
   const [responseDatas, setResponseDatas] = useState(null);
   const [elementsOpt, setElementsOpt] = useState(null);
+  const [error, setError] = useState(null);
   const [idPatient, setIdPatient] = useState(id);
   const [start, setStartDate] = useState(
     props?.infosPatient?.start !== null ? props?.infosPatient?.start : null
@@ -74,37 +75,46 @@ function ModalEditInfos(props) {
     formData.append("start", start);
     formData.append("end", end);
     formData.append("idInfo", props?.infosPatient?.id);
+
+    if (valueSelect !== null && elementsOpt.length > 0) {
+      formData.append("valueSelect", valueSelect);
+      setError(null);
+    }
+
     var formGetInfos = new FormData();
     formGetInfos.append("id", id.toString());
-    axios({
-      method: "post",
-      url: "/api/editPatientInformation",
-      data: formData,
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${auth.auth.accessToken}`,
-      },
-    }).then(function (response) {
-      if (response) {
-        axios({
-          method: "post",
-          url: "/api/patientsInformationByPatients",
-          data: formGetInfos,
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${auth.auth.accessToken}`,
-          },
-        })
-          .then(function (response) {
-            setResponseDatas(response.data);
-            setIsSentRepport(true);
-            document.querySelectorAll(".btn-close")[0].click();
+
+    if (valueSelect !== null) {
+      axios({
+        method: "post",
+        url: "/api/editPatientInformation",
+        data: formData,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${auth.auth.accessToken}`,
+        },
+      }).then(function (response) {
+        if (response) {
+          axios({
+            method: "post",
+            url: "/api/patientsInformationByPatients",
+            data: formGetInfos,
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${auth.auth.accessToken}`,
+            },
           })
-          .catch(function (response) {});
-        // document.querySelectorAll(".btn-close")[0].click();
-        // location.replace(window.location.origin + "/" + idPatient);
-      }
-    });
+            .then(function (response) {
+              setResponseDatas(response.data);
+              setIsSentRepport(true);
+              document.querySelectorAll(".btn-close")[0].click();
+            })
+            .catch(function (response) {});
+          // document.querySelectorAll(".btn-close")[0].click();
+          // location.replace(window.location.origin + "/" + idPatient);
+        }
+      });
+    }
   };
   //   new Date(1254088800 *1000)
   // handleInputChange;
@@ -134,7 +144,13 @@ function ModalEditInfos(props) {
             <Form.Label htmlFor="inputValue">Valeur</Form.Label>
             <Form.Select
               size="lg"
-              onChange={(e) => setValueSelect(e.target.value)}
+              onChange={(e) => {
+                if (e.target.value !== "Choissisez une valeur") {
+                  setValueSelect(e.target.value);
+                } else {
+                  setValueSelect(null);
+                }
+              }}
               id="value-sugg"
               className="uk-select"
             >
@@ -222,6 +238,7 @@ function ModalEditInfos(props) {
           </>
         </Modal.Body>
         <Modal.Footer>
+          {error && <p>{error}</p>}
           {isSentRepport && <FontAwesomeIcon icon={faCheck} />}
           <Button onClick={handleClose}>Fermer</Button>
           <Button onClick={handleSave} className="btn-metis">
