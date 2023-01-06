@@ -14,6 +14,10 @@ import AddSoinsByReport from "./Add-SoinsByReports";
 import InputPlaceList from "./Input-Place-List";
 import InputContactList from "./Input-Contact-List";
 import InputGoalsList from "./Input-Goals-List";
+import EditIndicateurs from "./Edit-Indicateurs";
+import EditActivities from "./Edit-Activities";
+import DeleteIndicateurs from "./Delete-Indicateurs";
+import DeleteActivities from "./Delete-Acitivities";
 
 function IndicateursActiviteesComponent(props) {
   const [show, setShow] = useState(false);
@@ -97,6 +101,10 @@ function IndicateursActiviteesComponent(props) {
               }}
             >
               {el?.sugg.value} {el?.description}
+              <div className="edit-delete">
+                <EditActivities></EditActivities>{" "}
+                <DeleteActivities></DeleteActivities>
+              </div>
             </div>
           ))}
         </div>
@@ -129,7 +137,11 @@ function IndicateursActiviteesComponent(props) {
                 justifyContent: "space-between",
               }}
             >
-              {el?.sugg.value} {el?.description}
+              {el?.sugg.value} {el?.description}{" "}
+              <div className="edit-delete">
+                <EditActivities></EditActivities>{" "}
+                <DeleteActivities></DeleteActivities>
+              </div>
             </div>
           ))}
         </div>
@@ -159,6 +171,10 @@ function IndicateursActiviteesComponent(props) {
                 }}
               >
                 {el?.indi.name} {el?.indi.description} {el?.value}
+                <div className="edit-delete">
+                  <EditIndicateurs></EditIndicateurs>{" "}
+                  <DeleteIndicateurs></DeleteIndicateurs>
+                </div>
               </div>
             ))}
           </div>
