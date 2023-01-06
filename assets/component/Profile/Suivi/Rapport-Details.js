@@ -213,6 +213,22 @@ function RapportDetails(props) {
       })
       .catch(function (response) {});
   }
+
+  function onChangeActivities() {
+    axios({
+      method: "post",
+      url: "/api/getFollowUpReportsById",
+      data: reportData,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    })
+      .then(function (response) {
+        setInformations(response);
+      })
+      .catch(function (response) {});
+  }
   console.log(props);
   return (
     <>
@@ -369,6 +385,8 @@ function RapportDetails(props) {
                         indicators={r.followupReportsIndicators}
                         rapport={r}
                         selectActivities={selectActivities}
+                        onChangeIndicators={onChangeIndicators}
+                        onChangeActivities={onChangeActivities}
                         selectSoins={selectSoins}
                         contacts={props?.contacts}
                         places={props?.places}

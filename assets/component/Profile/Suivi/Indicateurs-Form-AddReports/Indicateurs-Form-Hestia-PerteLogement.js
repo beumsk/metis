@@ -99,17 +99,10 @@ function IndicateursFormHestiaPerteLogement(props) {
       },
     })
       .then(function (response) {
-        console.log(response);
+        props.onChangeIndicators(true);
+        setShow(false);
       })
       .catch(function (response) {});
-    console.log(
-      voisinageSelected,
-      descriptionVoisinage,
-      hygieneSelected,
-      descriptionHygiene,
-      bailleurSelected,
-      descriptionBailleur
-    );
   };
   return (
     <>

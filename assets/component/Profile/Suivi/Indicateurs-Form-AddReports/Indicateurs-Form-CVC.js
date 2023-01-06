@@ -86,10 +86,9 @@ function IndicateursFormCVC(props) {
     })
       .then(function (response) {
         console.log(response);
-        useEffect(() => {
-          fetchData();
-        }, [data]);
+
         props.onChangeIndicators(true);
+        setShow(false);
       })
       .catch(function (response) {});
     console.log(

@@ -131,7 +131,7 @@ function AddIndicateursByReport(props) {
               <IndicateursFormHestiaPerteLogement
                 // id={props.id}
                 report={props.report}
-                onChange={onChangeIndicateursEstiaLogement}
+                onChangeIndicators={onChangeIndicators}
               />
             )}
 
@@ -153,7 +153,8 @@ function AddIndicateursByReport(props) {
                 // id={props.id}
                 // form={props.form}
                 // editForm={props?.form?.indicateursFormHestiaRisqueDeces}
-                // onChange={onChangeIndicateursFormHestiaRisqueDeces}
+
+                onChangeIndicators={onChangeIndicators}
               />
             )}
           </div>

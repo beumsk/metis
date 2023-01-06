@@ -96,6 +96,8 @@ function AddActivitiesByReport(props) {
     })
       .then(function (response) {
         console.log(response);
+        props.onChangeActivities(true);
+        setShow(false);
       })
       .catch(function (response) {});
   };

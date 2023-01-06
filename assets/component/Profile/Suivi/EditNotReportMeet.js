@@ -29,14 +29,22 @@ function EditNoReportMeet(props) {
   const [isSentRepport, setSentRepport] = useState(false);
   var formActivitiesDatas = new FormData();
   formActivitiesDatas.append("id", 106);
+  function onChangeActivities() {
+    props.onChangeActivities(true);
+  }
 
+  function onChangeIndicators() {
+    props.onChangeIndicators(true);
+  }
   return (
     <div className="noEditRepports-container">
       <IndicateursActiviteesComponent
         contacts={props.contacts}
         places={props.places}
         selectActivities={props.selectActivities}
+        onChangeActivities={onChangeActivities}
         selectSoins={props.selectSoins}
+        onChangeIndicators={onChangeIndicators}
         report={props?.rapport}
         indicateursByDefault={props?.rapport?.followupReportsIndicators}
         soinsByDefault={props?.rapport?.followupReportsActivities?.filter(

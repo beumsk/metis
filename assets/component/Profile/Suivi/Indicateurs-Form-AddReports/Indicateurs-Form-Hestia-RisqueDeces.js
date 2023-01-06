@@ -83,16 +83,10 @@ function IndicateursFormHestiaRisqueDeces(props) {
     })
       .then(function (response) {
         console.log(response);
+        props.onChangeIndicators(true);
+        setShow(false);
       })
       .catch(function (response) {});
-    console.log(valueSecuritee);
-    console.log(descriptionSecuritee);
-    console.log(valueSantee);
-    console.log(descriptionSantee);
-    console.log(valueConsommation);
-    console.log(descriptionConsommation);
-
-    console.log(formData);
   };
   return (
     <>
