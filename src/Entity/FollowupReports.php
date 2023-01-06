@@ -113,7 +113,7 @@ class FollowupReports
 
     #[ORM\ManyToMany(targetEntity: IndicatorsGroups::class, inversedBy: 'followUpReports')]
     #[ORM\JoinTable(name: "followup_report_indicators_groups")]
-    #[ORM\JoinColumn(name: "fore_id", referencedColumnName: "id", nullable: true)]
+    #[ORM\JoinColumn(name: "id", referencedColumnName: "id", nullable: true)]
     #[ORM\InverseJoinColumn(name: "igrp_id", referencedColumnName: "id", nullable: true)]
     private Collection $indicatorsGroups;
 

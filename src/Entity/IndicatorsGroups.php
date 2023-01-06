@@ -22,9 +22,13 @@ class IndicatorsGroups
     #[ORM\ManyToMany(targetEntity: FollowupReports::class, mappedBy: 'indicatorsGroups')]
     private Collection $followUpReports;
 
+    #[ORM\ManyToMany(targetEntity: Indicators::class, mappedBy: 'groups')]
+    private Collection $indicators;
+
     public function __construct()
     {
         $this->followUpReports = new ArrayCollection();
+        $this->indicators = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -67,6 +71,30 @@ class IndicatorsGroups
         if ($this->followUpReports->removeElement($followUpReport)) {
             $followUpReport->removeIndicatorsGroup($this);
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Indicators>
+     */
+    public function getIndicators(): Collection
+    {
+        return $this->indicators;
+    }
+
+    public function addIndicator(Indicators $indicator): self
+    {
+        if (!$this->indicators->contains($indicator)) {
+            $this->indicators->add($indicator);
+        }
+
+        return $this;
+    }
+
+    public function removeIndicator(Indicators $indicator): self
+    {
+        $this->indicators->removeElement($indicator);
 
         return $this;
     }

@@ -228,7 +228,8 @@ class FollowUpReportsController extends AbstractController
                             "indi" => ($a->getIndi() && $a->getIndi() !== null) ? [
                                 "id" => $a->getIndi()->getId(),
                                 "name" => ($a->getIndi() && $a->getIndi()->getName()) ? $a->getIndi()->getName() : null,
-                                "description" => ($a->getIndi() && $a->getIndi()->getDescription()) ? $a->getIndi()->getDescription() : null
+                                "description" => ($a->getIndi() && $a->getIndi()->getDescription()) ? $a->getIndi()->getDescription() : null,
+                                "groups" => ($a->getIndi()->getGroups()[0]->getName()) ? $a->getIndi()->getGroups()[0]->getName() : null
                             ] : null
                         ];
                     }, [...$value->getIndicators()])
@@ -1090,7 +1091,8 @@ class FollowUpReportsController extends AbstractController
 
         $indicatorsGroups = $doctrine->getRepository(IndicatorsGroups::class)->find(1);
         $report->addIndicatorsGroup($indicatorsGroups);
-
+        $entityManager->persist($report);
+        $entityManager->flush();
         return new JsonResponse([
             'id' => $report->getId(),
             'response' => "Sent !"
@@ -1172,7 +1174,8 @@ class FollowUpReportsController extends AbstractController
 
         $indicatorsGroups = $doctrine->getRepository(IndicatorsGroups::class)->find(3);
         $report->addIndicatorsGroup($indicatorsGroups);
-
+        $entityManager->persist($report);
+        $entityManager->flush();
         return new JsonResponse([
             'id' => $report->getId(),
             'response' => "Sent !"
