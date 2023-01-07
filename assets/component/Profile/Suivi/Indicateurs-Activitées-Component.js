@@ -61,6 +61,19 @@ function IndicateursActiviteesComponent(props) {
 
   const [changeOptions, setChangeOptions] = useState(null);
   const [reportDate, setReportDate] = useState(null);
+
+  useEffect(() => {
+    console.log(props?.indicateursByDefault);
+    if (props?.indicateursByDefault !== null) {
+      var result = props?.indicateursByDefault.reduce((x, y) => {
+        (x[y.indi.groups.id] = x[y.indi.groups.name] || []).push(y);
+
+        return x;
+      }, {});
+
+      console.log(result);
+    }
+  }, []);
   function onChangeIndicators() {
     props.onChangeIndicators(true);
   }
@@ -68,6 +81,7 @@ function IndicateursActiviteesComponent(props) {
   function onChangeActivities() {
     props.onChangeActivities(true);
   }
+
   return (
     <>
       <div className="search-textRapport row">
@@ -162,20 +176,110 @@ function IndicateursActiviteesComponent(props) {
           </div>
           <div>
             {/* indicateursByDefault */}
+            {props?.report?.indicatorsGroups?.map((el, id) => (
+              <>
+                {el.id === 3 && (
+                  <div
+                    style={{
+                      display: "flex",
+                      width: "100%",
+                      justifyContent: "space-between",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {el.name}{" "}
+                    <div className="edit-delete">
+                      <EditIndicateurs></EditIndicateurs>{" "}
+                      <DeleteIndicateurs></DeleteIndicateurs>
+                    </div>
+                  </div>
+                )}
+              </>
+            ))}
             {props?.indicateursByDefault?.map((el, id) => (
-              <div
-                style={{
-                  display: "flex",
-                  width: "100%",
-                  justifyContent: "space-between",
-                }}
-              >
-                {el?.indi.name} {el?.indi.description} {el?.value}
-                <div className="edit-delete">
-                  <EditIndicateurs></EditIndicateurs>{" "}
-                  <DeleteIndicateurs></DeleteIndicateurs>
-                </div>
-              </div>
+              <>
+                {el.indi.groups.id === 3 && (
+                  <div
+                    style={{
+                      display: "flex",
+                      width: "100%",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    {el?.indi.name} {el?.indi.description} {el?.value}
+                  </div>
+                )}
+              </>
+            ))}
+            {props?.report?.indicatorsGroups?.map((el, id) => (
+              <>
+                {el.id === 2 && (
+                  <div
+                    style={{
+                      display: "flex",
+                      width: "100%",
+                      justifyContent: "space-between",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {el.name}{" "}
+                    <div className="edit-delete">
+                      <EditIndicateurs></EditIndicateurs>{" "}
+                      <DeleteIndicateurs></DeleteIndicateurs>
+                    </div>
+                  </div>
+                )}
+              </>
+            ))}
+            {props?.indicateursByDefault?.map((el, id) => (
+              <>
+                {el.indi.groups.id === 2 && (
+                  <div
+                    style={{
+                      display: "flex",
+                      width: "100%",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    {el?.indi.name} {el?.indi.description} {el?.value}
+                  </div>
+                )}
+              </>
+            ))}
+            {props?.report?.indicatorsGroups?.map((el, id) => (
+              <>
+                {el.id === 1 && (
+                  <div
+                    style={{
+                      display: "flex",
+                      width: "100%",
+                      justifyContent: "space-between",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {el.name}{" "}
+                    <div className="edit-delete">
+                      <EditIndicateurs></EditIndicateurs>{" "}
+                      <DeleteIndicateurs></DeleteIndicateurs>
+                    </div>
+                  </div>
+                )}
+              </>
+            ))}
+            {props?.indicateursByDefault?.map((el, id) => (
+              <>
+                {el.indi.groups.id === 1 && (
+                  <div
+                    style={{
+                      display: "flex",
+                      width: "100%",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    {el?.indi.name} {el?.indi.description} {el?.value}
+                  </div>
+                )}
+              </>
             ))}
           </div>
         </div>

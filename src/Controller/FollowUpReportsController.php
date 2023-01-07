@@ -229,7 +229,10 @@ class FollowUpReportsController extends AbstractController
                                 "id" => $a->getIndi()->getId(),
                                 "name" => ($a->getIndi() && $a->getIndi()->getName()) ? $a->getIndi()->getName() : null,
                                 "description" => ($a->getIndi() && $a->getIndi()->getDescription()) ? $a->getIndi()->getDescription() : null,
-                                "groups" => ($a->getIndi()->getGroups()[0]->getName()) ? $a->getIndi()->getGroups()[0]->getName() : null
+                                "groups" => [
+                                    "name" => ($a->getIndi()->getGroups()[0]->getName()) ? $a->getIndi()->getGroups()[0]->getName() : null,
+                                    "id" => ($a->getIndi()->getGroups()[0]->getId()) ? $a->getIndi()->getGroups()[0]->getId() : null
+                                ]
                             ] : null
                         ];
                     }, [...$value->getIndicators()])
