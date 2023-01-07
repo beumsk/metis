@@ -116,7 +116,11 @@ function IndicateursActiviteesComponent(props) {
             >
               {el?.sugg.value} {el?.description}
               <div className="edit-delete">
-                <EditActivities></EditActivities>{" "}
+                <EditActivities
+                  activity={el}
+                  select={props.selectActivities}
+                  report={props.report}
+                ></EditActivities>{" "}
                 <DeleteActivities></DeleteActivities>
               </div>
             </div>
@@ -153,7 +157,11 @@ function IndicateursActiviteesComponent(props) {
             >
               {el?.sugg.value} {el?.description}{" "}
               <div className="edit-delete">
-                <EditActivities></EditActivities>{" "}
+                <EditActivities
+                  activity={el}
+                  select={props.selectSoins}
+                  report={props.report}
+                ></EditActivities>{" "}
                 <DeleteActivities></DeleteActivities>
               </div>
             </div>

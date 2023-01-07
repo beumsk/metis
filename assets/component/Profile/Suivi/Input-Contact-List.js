@@ -78,7 +78,7 @@ export default function InputContactList(props) {
       }
     }
   }, [open]);
-  console.log(props);
+  console.log(props?.defaultValue);
   return (
     <Autocomplete
       id="asynchronous-demo"
@@ -122,7 +122,7 @@ export default function InputContactList(props) {
       loading={loading}
       freeSolo={true}
       multiple
-      defaultValue={arr}
+      defaultValue={props?.defaultValue}
       renderInput={(params) => (
         <>
           <Form.Label htmlFor="inputValue" className="uk-form-label">

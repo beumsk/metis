@@ -3,89 +3,157 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import useAuth from "../../../hooks/useAuth";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck, faCancel, faEdit } from "@fortawesome/free-solid-svg-icons";
+import {
+  faPlusCircle,
+  faCancel,
+  faEdit,
+  faPlus,
+} from "@fortawesome/free-solid-svg-icons";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import Form from "react-bootstrap/Form";
 import Editor from "./Editor-Reports";
-import AddActivitiesByReport from "./Add-ActivitiesByReports";
-import AddIndicateursByReport from "./Indicateurs-Form-AddReports/Add-IndicateursByReports";
-import AddSoinsByReport from "./Add-SoinsByReports";
 import InputPlaceList from "./Input-Place-List";
 import InputContactList from "./Input-Contact-List";
-import InputGoalsList from "./Input-Goals-List";
+import InputTypeList from "./Input-Type-List";
 
 function EditActivities(props) {
+  const [show, setShow] = useState(false);
   const [auth, setAuth] = useState(useAuth());
   let id = useParams().id;
   var formData = new FormData();
-  formData.append("id", 57);
-
-  const [userId, setUserId] = useState(null);
-  const [patiId, setPatiId] = useState(null);
-  const [isSentGoals, setSentGoals] = useState(false);
-  const [isSentRepport, setSentRepport] = useState(false);
-  var formActivitiesDatas = new FormData();
-  formActivitiesDatas.append("id", 106);
-
-  const [selectedTypeCVC, setSelectedTypeCVC] = useState(null);
+  formData.append("id", 108);
   //   formData.append("pathString", props.link);
-  const [options, setOptions] = useState([
-    "HESTIA - Risque perte logement",
-    "CVC",
-    "HESTIA - Risque décès",
-  ]);
-  const [optionsConst, setOptionsConst] = useState([
-    "HESTIA - Risque perte logement",
-    "CVC",
-    "HESTIA - Risque décès",
-  ]);
   const [contacts, setContacts] = useState(null);
-
+  const [places, setPlaces] = useState(null);
+  const [elementsOpt, setElementsOpt] = useState(null);
   const [idPatient, setIdPatient] = useState(id);
+  const [typeForm, setTypeForm] = useState(null);
   const [type, setType] = useState(null);
-  const [typeFormActivities, setTypeFormActivities] = useState(null);
-  const [meetType, setMeetType] = useState(null);
-  const [goalsInput, setGoalsInput] = useState(null);
-  const [changeTypeMeet, setChangeTypeMeet] = useState(null);
-  const [changeDate, setChangeDate] = useState(null);
-  const [changeGoals, setChangeGoals] = useState(null);
-  const [changeContacts, setChangeContacts] = useState(null);
-
-  const [changePlaces, setChangePlaces] = useState(null);
-
-  const [changeOptions, setChangeOptions] = useState(null);
-  const [reportDate, setReportDate] = useState(null);
-  const [show, setShow] = useState(false);
-
+  const [descriptionForm, setDescriptionForm] = useState(null);
   const handleClose = () => setShow(false);
+  const [editFormActivities, setEditFormActivities] = useState([
+    props.formActivitiesEdit,
+  ]);
+
+  const [idEditFormActivities, setIdEditFormActivities] = useState([
+    props?.formActivitiesEdit?.act_id,
+  ]);
+
+  const [value, setValueForm] = useState();
+  const [contact, setValueContactForm] = useState();
+  const [place, setValuePlaceForm] = useState();
+  const [description, setValueDescription] = useState();
+
   const handleShow = () => setShow(true);
-  function onChangeIndicators() {
-    props.onChangeIndicators(true);
+
+  function handleChangeContacts(e) {
+    console.log(e);
+    setValueContactForm(e);
   }
 
-  function onChangeActivities() {
-    props.onChangeActivities(true);
+  function handleChangePlaces(e) {
+    console.log(e);
+    setValuePlaceForm(e);
   }
+
+  const onSend = (e) => {
+    console.log(contact, place, descriptionForm, typeForm);
+
+    let formData = new FormData();
+    formData.append("contact", JSON.stringify(contact));
+    formData.append("place", JSON.stringify(place));
+    formData.append("description", descriptionForm);
+    formData.append("type", typeForm);
+    console.log(props.report);
+    formData.append("idRepport", props.report.id);
+    // formData.append("descriptionSantee", descriptionSantee);
+    // formData.append("valueConsommation", valueConsommation);
+    // formData.append("descriptionConsommation", descriptionConsommation);
+    axios({
+      method: "post",
+      url: "/api/addActivitiesToReport",
+      data: formData,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    })
+      .then(function (response) {
+        console.log(response);
+        props.onChangeActivities(true);
+        setShow(false);
+      })
+      .catch(function (response) {});
+
+    console.log(formData);
+  };
+
+  console.log(props.activity);
   return (
     <>
-      <Button variant="primary" onClick={handleShow}>
+      <Button onClick={handleShow}>
+        {" "}
         <FontAwesomeIcon icon={faEdit} />
       </Button>
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Modal heading</Modal.Title>
+          <Modal.Title>
+            <h6>Ajouter une activitée</h6>
+          </Modal.Title>
         </Modal.Header>
-        <Modal.Body>Woohoo, you're reading this text in a modal!</Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Close
-          </Button>
-          <Button variant="primary" onClick={handleClose}>
-            Save Changes
-          </Button>
-        </Modal.Footer>
+        <Modal.Body>
+          <div className="addSoins-form">
+            <Form.Label htmlFor="inputValue" className="uk-form-label">
+              Type
+            </Form.Label>
+            {/* selectActivities={selectActivities}
+                        selectSoins={selectSoins} */}
+            <select
+              size="lg"
+              className="uk-select"
+              required={true}
+              onChange={(e) => setTypeForm(e.target.value)}
+              value={props.activity?.sugg?.id}
+            >
+              <option>Choissisez le type</option>
+              {props?.select?.data?.map((el, id) => (
+                <>{el.value && <option value={el?.id}>{el?.value}</option>}</>
+              ))}
+            </select>
+
+            <Form.Label htmlFor="inputValue" className="uk-form-label">
+              Description
+            </Form.Label>
+            <Form.Control
+              type="text"
+              id="inputValueSpécifique"
+              className="uk-input"
+              aria-describedby="valueSpécifique"
+              defaultValue={props.activity?.description}
+              onChange={(e) => setDescriptionForm(e.target.value)}
+            />
+
+            <InputContactList
+              contacts={props?.contacts}
+              // contacts={props?.contacts}
+              onChange={handleChangeContacts}
+              defaultValue={
+                props.activity?.contacts ? props.activity?.contacts : null
+              }
+            ></InputContactList>
+
+            <InputPlaceList
+              places={props?.places}
+              onChange={handleChangePlaces}
+              defaultValue={
+                props.activity?.places ? props.activity?.places : null
+              }
+            ></InputPlaceList>
+            <button onClick={(e) => onSend()}>Envoyer</button>
+          </div>
+        </Modal.Body>
       </Modal>
     </>
   );

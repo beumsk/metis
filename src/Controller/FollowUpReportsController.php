@@ -275,8 +275,8 @@ class FollowUpReportsController extends AbstractController
 
                                 array_map(function ($b) {
                                     return [
-                                        "id" => $b->getId(),
-                                        "lastname" => $b->getFirstName() . $b->getLastName()
+                                        "value" => $b->getId(),
+                                        "label" => $b->getFirstName() . " " . $b->getLastName(),
                                     ];
                                 }, [...$a->getContacts()]) : null,
                         ];
