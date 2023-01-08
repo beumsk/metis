@@ -55,17 +55,15 @@ function DeleteIndicateurs(props) {
     let formData = new FormData();
     // value-sugg
 
-    formData.append("valueSelect", valueSelect);
-    formData.append("specificValueInput", specificValueInput);
-    formData.append("commentaireInput", commentaireInput);
-    formData.append("start", start);
-    formData.append("end", end);
-    formData.append("idInfo", props?.infosPatient?.id);
-    var formGetInfos = new FormData();
-    formGetInfos.append("id", id.toString());
+    formData.append(
+      "idIndicateurs",
+      JSON.stringify(props.indicatorsItem.map((e) => e.id))
+    );
+    formData.append("idRapport", props.report.id);
+    formData.append("idIndicatorsGroups", props.idIndicators);
     axios({
       method: "post",
-      url: "/api/deletePatientInformation",
+      url: "/api/deleteIndicateurs",
       data: formData,
       headers: {
         "Content-Type": "application/json",
@@ -74,6 +72,8 @@ function DeleteIndicateurs(props) {
     }).then(function (response) {
       // location.replace(window.location.origin + "/" + idPatient);
       // document.querySelectorAll(".btn-close")[0].click();
+      var formGetInfos = new FormData();
+      formGetInfos.append("id", id.toString());
       if (response) {
         axios({
           method: "post",
@@ -85,9 +85,8 @@ function DeleteIndicateurs(props) {
           },
         })
           .then(function (response) {
-            setResponseDatas(response.data);
-            setIsSentRepport(true);
-            document.querySelectorAll(".btn-close")[0].click();
+            props.onChangeIndicators(true);
+            setShow(false);
           })
           .catch(function (response) {});
         // document.querySelectorAll(".btn-close")[0].click();

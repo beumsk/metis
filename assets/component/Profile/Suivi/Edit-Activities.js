@@ -48,24 +48,20 @@ function EditActivities(props) {
   const handleShow = () => setShow(true);
 
   function handleChangeContacts(e) {
-    console.log(e);
     setValueContactForm(e);
   }
 
   function handleChangePlaces(e) {
-    console.log(e);
     setValuePlaceForm(e);
   }
 
   const onSend = (e) => {
-    console.log(contact, place, descriptionForm, typeForm);
-
     let formData = new FormData();
     formData.append("contact", JSON.stringify(contact));
     formData.append("place", JSON.stringify(place));
     formData.append("description", descriptionForm);
     formData.append("type", typeForm);
-    console.log(props.report);
+
     formData.append("idRepport", props.report.id);
     // formData.append("descriptionSantee", descriptionSantee);
     // formData.append("valueConsommation", valueConsommation);
@@ -80,16 +76,12 @@ function EditActivities(props) {
       },
     })
       .then(function (response) {
-        console.log(response);
         props.onChangeActivities(true);
         setShow(false);
       })
       .catch(function (response) {});
-
-    console.log(formData);
   };
 
-  console.log(props.activity);
   return (
     <>
       <Button onClick={handleShow}>

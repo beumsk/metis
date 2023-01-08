@@ -65,8 +65,6 @@ function IndicateursFormCVC(props) {
   };
 
   const onSend = (e) => {
-    console.log(e);
-
     let formData = new FormData();
     formData.append("corpsScore", corpsScore);
     formData.append("corpsDescription", corpsDescription);
@@ -85,20 +83,16 @@ function IndicateursFormCVC(props) {
       },
     })
       .then(function (response) {
-        console.log(response);
-
         props.onChangeIndicators(true);
+
         setShow(false);
+        reload();
       })
       .catch(function (response) {});
-    console.log(
-      corpsScore,
-      corpsDescription,
-      vetementsScore,
-      vetementsDescription,
-      comportementScore,
-      comportementDescription
-    );
+  };
+  const handleClose = () => {
+    setShow(false);
+    reload();
   };
 
   return (

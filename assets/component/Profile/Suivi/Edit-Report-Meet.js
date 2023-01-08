@@ -71,7 +71,7 @@ function EditReportMeet(props) {
       new Date(props?.informationPatient?.reportDate?.timestamp * 1000).toJSON()
     );
 
-    // console.log(formActivities);
+    //
 
     axios({
       method: "post",
@@ -134,7 +134,6 @@ function EditReportMeet(props) {
   };
 
   function editorChange(e) {
-    console.log(e);
     setChangeDescriptionGoals(e);
     setChangeEditor(e);
   }
@@ -151,7 +150,7 @@ function EditReportMeet(props) {
     // if (props.informationPatient.type === 2){
     //   formData.append("activityType", 1);
     // }
-    console.log(props?.informationPatient);
+
     var formData = new FormData();
     formData.append("idRapport", props?.informationPatient?.id);
 
@@ -170,7 +169,6 @@ function EditReportMeet(props) {
     formData.append("userId", userId);
     formData.append("patiId", patiId);
     formData.append("description", changeDescriptionGoals);
-    console.log(changeDescriptionGoals);
 
     axios({
       method: "post",

@@ -298,8 +298,6 @@ export default function App() {
       .catch(function (response) {});
   }, [idPatient]);
   const onChangeIndicateurs = (e) => {
-    console.log(e);
-
     if (e === "1") {
       setIndicateurCVCShow(true);
       setIndicateurLogementShow(false);
@@ -317,7 +315,6 @@ export default function App() {
       setIndicateurLogementShow(false);
       setIndicateurDecesShow(true);
     }
-    console.log(indicateurCVCShow, indicateurLogementShow, indicateurDecesShow);
   };
   return (
     <>

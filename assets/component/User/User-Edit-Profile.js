@@ -32,18 +32,15 @@ const EditProfile = () => {
       },
     })
       .then(function (response) {
-        console.log(response);
         setIdUser(response.data.user.id);
         setUsername(response.data.user.username);
         setEmail(response.data.user.email);
       })
-      .catch(function (response) {
-        console.log(response);
-      });
+      .catch(function (response) {});
   }, []);
   const setFormCreation = (e) => {
     var formData = new FormData();
-    console.log(idUser);
+
     formData.append("id", idUser);
     formData.append("username", username);
     formData.append("email", email);
@@ -57,14 +54,11 @@ const EditProfile = () => {
       },
     })
       .then(function (response) {
-        console.log(response);
         setResponseBack(response.data.response);
         // setUsername(response.data.user.username);
         // setEmail(response.data.user.email);
       })
-      .catch(function (response) {
-        console.log(response);
-      });
+      .catch(function (response) {});
   };
   return (
     <>

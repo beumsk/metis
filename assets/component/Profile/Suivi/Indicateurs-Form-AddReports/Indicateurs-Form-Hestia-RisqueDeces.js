@@ -62,8 +62,6 @@ function IndicateursFormHestiaRisqueDeces(props) {
   };
 
   const onSend = (e) => {
-    console.log(e);
-
     let formData = new FormData();
     formData.append("valueSecuritee", valueSecuritee);
     formData.append("descriptionSecuritee", descriptionSecuritee);
@@ -82,11 +80,16 @@ function IndicateursFormHestiaRisqueDeces(props) {
       },
     })
       .then(function (response) {
-        console.log(response);
         props.onChangeIndicators(true);
         setShow(false);
+        reload();
       })
       .catch(function (response) {});
+  };
+
+  const handleClose = () => {
+    setShow(false);
+    reload();
   };
   return (
     <>

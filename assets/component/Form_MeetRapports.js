@@ -164,7 +164,6 @@ const Form_MeetRapports = () => {
   };
 
   function editorChange(e) {
-    console.log(e);
     setChangeEditor(e);
   }
 
@@ -175,7 +174,7 @@ const Form_MeetRapports = () => {
   const onChangePlaces = (e) => {
     setChangePlaces(e);
   };
-  console.log(idPatient);
+
   const sentRapport = (e) => {
     let opt = [
       "HESTIA - Risque perte logement",
@@ -209,7 +208,6 @@ const Form_MeetRapports = () => {
       },
     })
       .then(function (response) {
-        console.log(response);
         setIsSent(true);
       })
       .catch(function (response) {});

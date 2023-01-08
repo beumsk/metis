@@ -30,11 +30,11 @@ export default function InputPlaceList(props) {
 
     (async () => {
       await sleep(1e3); // For demo purposes.
-      console.log(props.contacts);
+
       if (active) {
         let formData = new FormData();
         formData.append("query", inputValue);
-        console.log(formData);
+
         axios({
           method: "post",
           url: "/api/getPlacesSelect",
@@ -45,7 +45,6 @@ export default function InputPlaceList(props) {
           },
         })
           .then(function (response) {
-            console.log(response);
             setOptions([...response.data]);
           })
           .catch(function (response) {});
@@ -64,8 +63,6 @@ export default function InputPlaceList(props) {
     }
 
     if (props.defaultValue !== null && props.defaultValue !== undefined) {
-      console.log(props.defaultValue);
-
       for (let index = 0; index < props.defaultValue.length; index++) {
         const element = props.defaultValue[index];
 
@@ -74,7 +71,6 @@ export default function InputPlaceList(props) {
 
       if (arr && arr.length > 0) {
         setDefaultValueFormatted([...arr]);
-        console.log(defaultValueFormatted);
       }
     }
   }, [open]);
@@ -96,11 +92,10 @@ export default function InputPlaceList(props) {
       options={options}
       onInputChange={(event, newInputValue) => {
         setInputValue(newInputValue);
-        console.log(newInputValue);
 
         let formData = new FormData();
         formData.append("query", newInputValue);
-        console.log(formData);
+
         axios({
           method: "post",
           url: "/api/getContactsForSelect",
@@ -111,7 +106,6 @@ export default function InputPlaceList(props) {
           },
         })
           .then(function (response) {
-            console.log(response);
             setOptions([...response.data]);
           })
           .catch(function (response) {});

@@ -95,7 +95,7 @@ function EditIndicateursByReport(props) {
   function onChangeIndicators() {
     props.onChangeIndicators(true);
   }
-  console.log(props);
+
   return (
     <>
       <Button onClick={handleShow}>

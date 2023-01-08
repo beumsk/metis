@@ -102,7 +102,6 @@ function ModalEditAppels(props) {
   };
 
   const onChangeContacts = (e) => {
-    console.log(e);
     setonChangeContact(e);
   };
 
@@ -115,7 +114,7 @@ function ModalEditAppels(props) {
   };
   function onSentCalls() {
     // isCall is true appel entrant
-    console.log("send");
+
     let formData = new FormData();
 
     formData.append("callsFunctionValue", callsFunctionValue);
@@ -130,7 +129,7 @@ function ModalEditAppels(props) {
     formData.append("goalsId", props?.calls?.id);
     formData.append("valueDate", valueDate);
     formData.append("valueStatus", valueStatus);
-    // console.log(isCallsPatients);
+    //
     axios({
       method: "post",
       url: "/api/updateCallsAndGoals",

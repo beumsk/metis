@@ -23,14 +23,13 @@ const TypeCalls = (props) => {
     //   },
     // })
     //   .then(function (response) {
-    //     console.log(response);
+    //
     //     setSelectTeam(response.data);
     //   })
     //   .catch(function (response) {});
   }, []);
 
   function onChangeType(e) {
-    console.log(e);
     props.onChangeTypeCalls(e);
   }
 

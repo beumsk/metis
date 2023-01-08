@@ -33,7 +33,7 @@ function ModalActionsAppelsSortant(props) {
     //   },
     // })
     //   .then(function (response) {
-    //     console.log(response);
+    //
     //     setFunction(response.data);
     //   })
     //   .catch(function (response) {});
@@ -58,8 +58,8 @@ function ModalActionsAppelsSortant(props) {
 
     // e.filter((f) => [f.value]);
     // props.onChangeFunction(optionsValues);
-    // console.log(optionsValues);
-    // console.log(e);
+    //
+    //
   };
 
   const onChangeTagsContacts = (e) => {
@@ -73,26 +73,18 @@ function ModalActionsAppelsSortant(props) {
     setContactsSelected(optionsValues);
     // e.filter((f) => [f.value]);
     // props.onChangeFunction(optionsValues);
-    // console.log(optionsValues);
-    // console.log(e);
+    //
+    //
   };
 
   function onChangeEditor(e) {
-    console.log(e);
     setContent(e);
   }
   const handleSaveComplete = (e) => {
-    console.log("content", content);
-    console.log("goalsSelected", JSON.stringify(goalsSelected));
-    console.log("contactsSelected", JSON.stringify(contactsSelected));
-    console.log("dureeValue", dureeValue);
-    console.log("patiId", id);
-    console.log(props);
     let formGetInfos = new FormData();
     let date = new Date(0);
     date.setMinutes(dureeValue); // specify value for SECONDS here
     let timeString = date.toISOString().substring(11, 19);
-    console.log(timeString);
 
     formGetInfos.append("content", content);
     formGetInfos.append("goals", JSON.stringify(goalsSelected));
@@ -133,7 +125,7 @@ function ModalActionsAppelsSortant(props) {
   };
 
   // props.isResponse("sended");
-  // console.log(props);
+  //
   return (
     <>
       <button variant="primary" onClick={handleShow} className="btn-metis">

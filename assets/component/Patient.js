@@ -88,10 +88,8 @@ const Patient = () => {
   };
 
   const uploadFile = (e) => {
-    console.log(e);
     var formData = new FormData();
 
-    console.log(document.getElementById("fileInput").files[0]);
     let fileName = document.getElementById("fileInput").files[0].name;
     formData.append("id", id.toString());
     formData.append("image", document.getElementById("fileInput").files[0]);

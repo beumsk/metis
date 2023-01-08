@@ -63,18 +63,14 @@ function AddActivitiesByReport(props) {
   // }, [idPatient]);
 
   function handleChangeContacts(e) {
-    console.log(e);
     setValueContactForm(e);
   }
 
   function handleChangePlaces(e) {
-    console.log(e);
     setValuePlaceForm(e);
   }
 
   const onSend = (e) => {
-    console.log(contact, place, descriptionForm, typeForm);
-
     let formData = new FormData();
     formData.append("contact", JSON.stringify(contact));
     formData.append("place", JSON.stringify(place));
@@ -95,13 +91,12 @@ function AddActivitiesByReport(props) {
       },
     })
       .then(function (response) {
-        console.log(response);
         props.onChangeActivities(true);
         setShow(false);
       })
       .catch(function (response) {});
   };
-  console.log(props);
+
   return (
     <>
       <Button onClick={handleShow}>

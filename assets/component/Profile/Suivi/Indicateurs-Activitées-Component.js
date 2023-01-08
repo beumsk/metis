@@ -65,15 +65,12 @@ function IndicateursActiviteesComponent(props) {
   const [reportDate, setReportDate] = useState(null);
 
   useEffect(() => {
-    console.log(props?.indicateursByDefault);
     if (props?.indicateursByDefault !== null) {
       var result = props?.indicateursByDefault.reduce((x, y) => {
         (x[y.indi.groups.id] = x[y.indi.groups.name] || []).push(y);
 
         return x;
       }, {});
-
-      console.log(result);
     }
   }, []);
   function onChangeIndicators() {
@@ -214,8 +211,18 @@ function IndicateursActiviteesComponent(props) {
                           (e) => e.indi.groups.id === 3
                         )}
                         report={props.report}
+                        onChangeIndicators={onChangeIndicators}
+                        idIndicators={"3"}
                       ></EditIndicateursByReport>
-                      <DeleteIndicateurs></DeleteIndicateurs>
+                      <DeleteIndicateurs
+                        rapportIndicators={el}
+                        idIndicators={"3"}
+                        indicatorsItem={props.report.followupReportsIndicators.filter(
+                          (e) => e.indi.groups.id === 3
+                        )}
+                        report={props.report}
+                        onChangeIndicators={onChangeIndicators}
+                      ></DeleteIndicateurs>
                     </div>
                   </div>
                 )}
@@ -255,8 +262,18 @@ function IndicateursActiviteesComponent(props) {
                           (e) => e.indi.groups.id === 2
                         )}
                         report={props.report}
+                        onChangeIndicators={onChangeIndicators}
+                        idIndicators={"2"}
                       ></EditIndicateursByReport>
-                      <DeleteIndicateurs></DeleteIndicateurs>
+                      <DeleteIndicateurs
+                        rapportIndicators={el}
+                        indicatorsItem={props.report.followupReportsIndicators.filter(
+                          (e) => e.indi.groups.id === 2
+                        )}
+                        report={props.report}
+                        idIndicators={"2"}
+                        onChangeIndicators={onChangeIndicators}
+                      ></DeleteIndicateurs>
                     </div>
                   </div>
                 )}
@@ -292,12 +309,22 @@ function IndicateursActiviteesComponent(props) {
                     <div className="edit-delete">
                       <EditIndicateursByReport
                         rapportIndicators={el}
+                        idIndicators={"1"}
                         indicatorsItem={props.report.followupReportsIndicators.filter(
                           (e) => e.indi.groups.id === 1
                         )}
                         report={props.report}
+                        onChangeIndicators={onChangeIndicators}
                       ></EditIndicateursByReport>
-                      <DeleteIndicateurs></DeleteIndicateurs>
+                      <DeleteIndicateurs
+                        rapportIndicators={el}
+                        indicatorsItem={props.report.followupReportsIndicators.filter(
+                          (e) => e.indi.groups.id === 1
+                        )}
+                        report={props.report}
+                        idIndicators={"1"}
+                        onChangeIndicators={onChangeIndicators}
+                      ></DeleteIndicateurs>
                     </div>
                   </div>
                 )}

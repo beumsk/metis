@@ -32,14 +32,14 @@ function AddIndicateursByReport(props) {
   const [options, setOptions] = useState([]);
 
   // optionsItems.forEach((element) => {
-  //   return console.log(
+  //   return
   //     props?.indicatorsGroups?.filter((e) => e.id !== element.id)
   //   );
   // });
 
   const [indicateursEstLeLogement, setIndicateursLogement] = useState();
 
-  const [isIndicateurs, setIndicateurs] = useState();
+  const [isIndicateurs, setIndicateurs] = useState(null);
   const [idPatient, setIdPatient] = useState(id);
   const [typeCVCSelected, setTypeCVCSelected] = useState(null);
   const [CSVAlreadyAsked, setAlreadyAsked] = useState();
@@ -57,30 +57,36 @@ function AddIndicateursByReport(props) {
 
   let obj = {};
 
-  useEffect(() => {
-    setIndicateursLogement(indicateursEstLeLogement);
-    setIndicateursFormHestiaRisqueDeces(indicateursFormHestiaRisqueDeces);
-    setIndicateursFormCVC(indicateursFormCVC);
-    if (
-      optionsItems &&
-      optionsItems.length > 0 &&
-      props?.indicatorsGroups &&
-      props?.indicatorsGroups.length > 0
-    ) {
-      function diff(obj1, obj2) {
-        var temp = JSON.stringify(obj2?.map((x) => x.id));
-        return obj1.filter((y) => temp.indexOf(y.id) < 0 && y);
+  useEffect(
+    () => {
+      setIndicateursLogement(indicateursEstLeLogement);
+      setIndicateursFormHestiaRisqueDeces(indicateursFormHestiaRisqueDeces);
+      setIndicateursFormCVC(indicateursFormCVC);
+      if (
+        optionsItems &&
+        optionsItems.length > 0 &&
+        props?.indicatorsGroups &&
+        props?.indicatorsGroups.length > 0
+      ) {
+        function diff(obj1, obj2) {
+          var temp = JSON.stringify(obj2?.map((x) => x.id));
+          return obj1.filter((y) => temp.indexOf(y.id) < 0 && y);
+        }
+
+        var result = diff(optionsItems, props?.indicatorsGroups);
+
+        setOptionsItems(result);
+        //
       }
-
-      var result = diff(optionsItems, props?.indicatorsGroups);
-
-      setOptionsItems(result);
-    }
-  }, [
-    indicateursEstLeLogement,
-    indicateursFormHestiaRisqueDeces,
-    indicateursFormCVC,
-  ]);
+      setIndicateurs(null);
+    },
+    [
+      // optionsItems,
+      // indicateursEstLeLogement,
+      // indicateursFormHestiaRisqueDeces,
+      // indicateursFormCVC,
+    ]
+  );
 
   function choiceTypeCVC(e) {}
 
@@ -120,7 +126,7 @@ function AddIndicateursByReport(props) {
   function onChangeIndicators() {
     props.onChangeIndicators(true);
   }
-  console.log(options);
+  //
   return (
     <>
       <Button onClick={handleShow}>
@@ -142,11 +148,11 @@ function AddIndicateursByReport(props) {
             {/* {isIndicateurs} */}
             <Form.Select
               size="lg"
-              value={isIndicateurs}
+              defaultValue={"0"}
               className="uk-select"
               onChange={(e) => setIndicateurs(e.target.value)}
             >
-              <option>Sélectionnez le type d'indicateurs</option>
+              <option value={"0"}>Sélectionnez le type d'indicateurs</option>
               {optionsItems?.map((el, id) => (
                 <>{el && <option value={el.id}>{el.name}</option>}</>
               ))}

@@ -53,7 +53,7 @@ function ModalEditObjectifs(props) {
   const [valueStatus, setValueStatus] = useState(props?.goalsItem?.status);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-  console.log(props);
+
   useEffect(() => {
     // axios({
     //   method: "post",

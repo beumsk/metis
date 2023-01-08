@@ -1026,8 +1026,8 @@ class FollowUpReportsController extends AbstractController
         $formIndicateurs = $request->request->get('formIndicateurs');
         $reportId = $request->request->get('idRepport');
         $corpsScore = $request->request->get('corpsScore');
-        $vetementsScore = $request->request->get('corpsScore');
-        $comportementScore = $request->request->get('corpsScore');
+        $vetementsScore = $request->request->get('vetementsScore');
+        $comportementScore = $request->request->get('comportementScore');
         $corpsDescription = $request->request->get('corpsDescription');
         $vetementsDescription = $request->request->get('vetementsDescription');
         $comportementDescription = $request->request->get('comportementDescription');
@@ -1113,10 +1113,15 @@ class FollowUpReportsController extends AbstractController
         $report = $doctrine->getRepository(FollowupReports::class)->find($reportId);
         $activities = $doctrine->getRepository(FollowupReportsActivities::class)->find($activities_id);
 
-        $entityManager->remove($activities);
+        // $entityManager->remove($activities);
+        // $entityManager->flush();
+
+        // $indicators = $doctrine->getRepository(FollowupReportsActivities::class)->find($activities);
+        // dd("cul");
+        $report->removeActivity($activities);
         $entityManager->flush();
 
-        // dd($report);
+
         return new JsonResponse([
             'id' => $report->getId(),
             'response' => "Sent !"
@@ -1124,6 +1129,39 @@ class FollowUpReportsController extends AbstractController
         // formData.append("activity_id", props.activity.id);
         // formData.append("report_id", props.report.id);
 
+    }
+
+    #[Route('/api/deleteIndicateurs', name: 'app_deleteIndicateurs')]
+    public function deleteIndicateurs(ManagerRegistry $doctrine, Request $request)
+    {
+        $entityManager = $doctrine->getManager();
+        $request = Request::createFromGlobals();
+        $formIndicateurs = $request->request->get('formIndicateurs');
+        $reportId = $request->request->get('idRapport');
+        $idIndicateurs = $request->request->get('idIndicateurs');
+        $idIndicatorsGroups = $request->request->get('idIndicatorsGroups');
+
+        $report = $doctrine->getRepository(FollowupReports::class)->find($reportId);
+        $indicatorsGroups = $doctrine->getRepository(IndicatorsGroups::class)->find($idIndicatorsGroups);
+
+        $report->removeIndicatorsGroup($indicatorsGroups);
+
+        $arrIndi = json_decode($idIndicateurs);
+
+
+        foreach ($arrIndi as $value) {
+            // dd($value);
+            $indicators = $doctrine->getRepository(FollowupReportsIndicators::class)->find($value);
+
+            $report->removeIndicator($indicators);
+        }
+
+        $entityManager->flush();
+
+        return new JsonResponse([
+            'id' => $report->getId(),
+            'response' => "Sent !"
+        ]);
     }
 
     #[Route('/api/addIndicatorsHestiaDeces', name: 'app_addIndicatorsHestiaDeces')]

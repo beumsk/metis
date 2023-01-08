@@ -122,7 +122,7 @@ function ModalAddAppels(props) {
     formData.append("valueWhatDoinFunction", valueWhatDoinFunction);
     formData.append("patientId", idPatient);
     formData.append("userId", userId);
-    // console.log(isCallsPatients);
+    //
     axios({
       method: "post",
       url: "/api/setCalls",

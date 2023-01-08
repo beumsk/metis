@@ -19,7 +19,7 @@ import ModalDeleteInfos from "./Modal-Delete-Infos";
 const ProfilLieux = () => {
   const [auth, setAuth] = useState(useAuth());
   let id = useParams().idContact;
-  console.log(id);
+
   const [contactInformation, setContactInformation] = useState(null);
   const [lengthList, setLengthList] = useState(10);
   const [idAppel, setIdAppel] = useState(id);
@@ -38,7 +38,6 @@ const ProfilLieux = () => {
       },
     })
       .then(function (response) {
-        console.log(response);
         setContactInformation(response.data);
       })
       .catch(function (response) {});

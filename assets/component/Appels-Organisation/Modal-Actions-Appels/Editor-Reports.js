@@ -9,12 +9,9 @@ const Editor = (props) => {
 
   const defaultValueRapport = "";
   // The sunEditor parameter will be set to the core suneditor instance when this function is called
-  const handleOnResizeEditor = (height, prevHeight) => {
-    console.log(height, prevHeight);
-  };
+  const handleOnResizeEditor = (height, prevHeight) => {};
 
   const onChangeEditor = (contents, core) => {
-    console.log(contents, core);
     props.onChange(contents);
   };
   return (

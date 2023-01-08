@@ -123,7 +123,6 @@ function Anniversaire() {
       },
     })
       .then(function (response) {
-        console.log(response);
         setBirthDaysList(response.data.patients_bdays);
       })
       .catch(function (response) {});

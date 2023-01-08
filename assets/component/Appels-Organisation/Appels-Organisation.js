@@ -52,7 +52,6 @@ function AppelsOrganisation() {
       .catch(function (response) {});
   }, [lengthList, setLengthList]);
 
-  console.log(typeCallsSelect);
   const readMore = () => {
     setLengthList(lengthList + 10);
   };
@@ -76,7 +75,6 @@ function AppelsOrganisation() {
   }
 
   const sentFilters = (e) => {
-    console.log(e);
     var formData = new FormData();
     // formData.append("page", lengthList.toString());
 
@@ -120,7 +118,6 @@ function AppelsOrganisation() {
   };
 
   function onChangeResponseDatas(e) {
-    console.log(e);
     axios({
       method: "post",
       url: "/api/getCallsAndOrganisationRunning",

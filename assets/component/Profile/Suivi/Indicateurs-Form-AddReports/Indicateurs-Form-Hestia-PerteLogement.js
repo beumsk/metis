@@ -28,7 +28,10 @@ function IndicateursFormHestiaPerteLogement(props) {
   const [typeCVCSelected, setTypeCVCSelected] = useState(null);
 
   const [type, setType] = useState(null);
-  const handleClose = () => setShow(false);
+  const handleClose = () => {
+    setShow(false);
+    reload();
+  };
   const handleShow = () => setShow(true);
 
   // const [vetementsDescription, setDescriptionVetements] = useState(
@@ -79,8 +82,6 @@ function IndicateursFormHestiaPerteLogement(props) {
   };
   //   /api/getContacts
   const onSend = (e) => {
-    console.log(props.report);
-
     let formData = new FormData();
     formData.append("voisinageSelected", voisinageSelected);
     formData.append("descriptionVoisinage", descriptionVoisinage);
@@ -101,9 +102,11 @@ function IndicateursFormHestiaPerteLogement(props) {
       .then(function (response) {
         props.onChangeIndicators(true);
         setShow(false);
+        reload();
       })
       .catch(function (response) {});
   };
+
   return (
     <>
       <div className="addSoins-form">

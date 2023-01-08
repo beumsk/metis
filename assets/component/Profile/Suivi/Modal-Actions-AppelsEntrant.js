@@ -35,7 +35,7 @@ function ModalActionsAppelsEntrant(props) {
     //   },
     // })
     //   .then(function (response) {
-    //     console.log(response);
+    //
     //     setFunction(response.data);
     //   })
     //   .catch(function (response) {});
@@ -50,7 +50,7 @@ function ModalActionsAppelsEntrant(props) {
     //   for (let index = 0; index < props?.listContacts?.length; index++) {
     //     const element = props.listContacts[index];
     //     optionsContacts.push({ value: element.id, label: element.description });
-    //     console.log(optionsContacts);
+    //
     //     setOptionsContacts(optionsContacts);
     //   }
     // }
@@ -67,8 +67,8 @@ function ModalActionsAppelsEntrant(props) {
 
     // e.filter((f) => [f.value]);
     // props.onChangeFunction(optionsValues);
-    // console.log(optionsValues);
-    // console.log(e);
+    //
+    //
   };
 
   const onChangeTagsContacts = (e) => {
@@ -82,27 +82,19 @@ function ModalActionsAppelsEntrant(props) {
     setContactsSelected(optionsValues);
     // e.filter((f) => [f.value]);
     // props.onChangeFunction(optionsValues);
-    // console.log(optionsValues);
-    // console.log(e);
+    //
+    //
   };
 
   function onChangeEditor(e) {
-    console.log(e);
     setContent(e);
   }
 
   const handleSaveComplete = (e) => {
-    console.log("content", content);
-    console.log("goalsSelected", JSON.stringify(goalsSelected));
-    console.log("contactsSelected", JSON.stringify(contactsSelected));
-    console.log("dureeValue", dureeValue);
-    console.log("patiId", id);
-
     let formGetInfos = new FormData();
     let date = new Date(0);
     date.setMinutes(dureeValue); // specify value for SECONDS here
     let timeString = date.toISOString().substring(11, 19);
-    console.log(timeString);
 
     formGetInfos.append("content", content);
     formGetInfos.append("goals", JSON.stringify(goalsSelected));
@@ -143,17 +135,17 @@ function ModalActionsAppelsEntrant(props) {
   };
 
   // const handleSaveKeep = (e) => {
-  //   console.log("content", content);
-  //   console.log("goalsSelected", JSON.stringify(goalsSelected));
-  //   console.log("contactsSelected", JSON.stringify(contactsSelected));
-  //   console.log("dureeValue", dureeValue);
-  //   console.log("patiId", props.defaultValueGoalsValue.pati_id);
+  //
+  //
+  //
+  //
+  //
 
   //   let formGetInfos = new FormData();
   //   let date = new Date(0);
   //   date.setMinutes(dureeValue); // specify value for SECONDS here
   //   let timeString = date.toISOString().substring(11, 19);
-  //   console.log(timeString);
+  //
 
   //   formGetInfos.append("content", content);
   //   formGetInfos.append("goals", JSON.stringify(goalsSelected));

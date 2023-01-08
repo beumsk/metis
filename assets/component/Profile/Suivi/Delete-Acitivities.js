@@ -102,7 +102,6 @@ function DeleteActivities(props) {
     // document.querySelectorAll(".btn-close")[0].click();
   }
 
-  console.log(props);
   return (
     <>
       <button onClick={handleShow} className="ml-4">
