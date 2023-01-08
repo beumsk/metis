@@ -123,7 +123,11 @@ function IndicateursActiviteesComponent(props) {
                   select={props.selectActivities}
                   report={props.report}
                 ></EditActivities>{" "}
-                <DeleteActivities></DeleteActivities>
+                <DeleteActivities
+                  activity={el}
+                  onChangeActivities={onChangeActivities}
+                  report={props.report}
+                ></DeleteActivities>
               </div>
             </div>
           ))}
@@ -164,7 +168,11 @@ function IndicateursActiviteesComponent(props) {
                   select={props.selectSoins}
                   report={props.report}
                 ></EditActivities>{" "}
-                <DeleteActivities></DeleteActivities>
+                <DeleteActivities
+                  activity={el}
+                  onChangeActivities={onChangeActivities}
+                  report={props.report}
+                ></DeleteActivities>
               </div>
             </div>
           ))}

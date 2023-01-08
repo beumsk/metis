@@ -457,13 +457,14 @@ class FollowupReports
 
     public function removeActivity(FollowupReportsActivities $activity): self
     {
+
         if ($this->activities->removeElement($activity)) {
             // set the owning side to null (unless already changed)
             if ($activity->getFollowupReports() === $this) {
                 $activity->setFollowupReports(null);
             }
         }
-
+        dd($this);
         return $this;
     }
 }

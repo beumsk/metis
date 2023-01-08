@@ -1102,6 +1102,30 @@ class FollowUpReportsController extends AbstractController
         ]);
     }
 
+    #[Route('/api/deleteActivities', name: 'app_deleteActivities')]
+    public function deleteActivities(ManagerRegistry $doctrine, Request $request)
+    {
+        $entityManager = $doctrine->getManager();
+        $request = Request::createFromGlobals();
+        $formIndicateurs = $request->request->get('formIndicateurs');
+        $reportId = $request->request->get('report_id');
+        $activities_id = $request->request->get('activity_id');
+        $report = $doctrine->getRepository(FollowupReports::class)->find($reportId);
+        $activities = $doctrine->getRepository(FollowupReportsActivities::class)->find($activities_id);
+
+        $entityManager->remove($activities);
+        $entityManager->flush();
+
+        // dd($report);
+        return new JsonResponse([
+            'id' => $report->getId(),
+            'response' => "Sent !"
+        ]);
+        // formData.append("activity_id", props.activity.id);
+        // formData.append("report_id", props.report.id);
+
+    }
+
     #[Route('/api/addIndicatorsHestiaDeces', name: 'app_addIndicatorsHestiaDeces')]
     public function addIndicatorsHestiaDeces(ManagerRegistry $doctrine, Request $request)
     {

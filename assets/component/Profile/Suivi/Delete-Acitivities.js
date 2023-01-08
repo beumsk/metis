@@ -3,97 +3,132 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import useAuth from "../../../hooks/useAuth";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import moment from "moment";
 import {
-  faCheck,
-  faCancel,
+  faPlusCircle,
+  faTrash,
   faEdit,
-  faRemove,
+  faCheck,
 } from "@fortawesome/free-solid-svg-icons";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import Form from "react-bootstrap/Form";
-import Editor from "./Editor-Reports";
-import AddActivitiesByReport from "./Add-ActivitiesByReports";
-import AddIndicateursByReport from "./Indicateurs-Form-AddReports/Add-IndicateursByReports";
-import AddSoinsByReport from "./Add-SoinsByReports";
-import InputPlaceList from "./Input-Place-List";
-import InputContactList from "./Input-Contact-List";
-import InputGoalsList from "./Input-Goals-List";
 
-function DeleteIndicateurs(props) {
+function DeleteActivities(props) {
+  const [show, setShow] = useState(false);
   const [auth, setAuth] = useState(useAuth());
   let id = useParams().id;
   var formData = new FormData();
-  formData.append("id", 57);
-
-  const [userId, setUserId] = useState(null);
-  const [patiId, setPatiId] = useState(null);
-  const [isSentGoals, setSentGoals] = useState(false);
-  const [isSentRepport, setSentRepport] = useState(false);
-  var formActivitiesDatas = new FormData();
-  formActivitiesDatas.append("id", 106);
-
-  const [selectedTypeCVC, setSelectedTypeCVC] = useState(null);
-  //   formData.append("pathString", props.link);
-  const [options, setOptions] = useState([
-    "HESTIA - Risque perte logement",
-    "CVC",
-    "HESTIA - Risque décès",
-  ]);
-  const [optionsConst, setOptionsConst] = useState([
-    "HESTIA - Risque perte logement",
-    "CVC",
-    "HESTIA - Risque décès",
-  ]);
-  const [contacts, setContacts] = useState(null);
-
+  formData.append("id", id.toString());
+  formData.append("pathString", props.link);
+  const [infos, setInfos] = useState(null);
+  const [isSentRepport, setIsSentRepport] = useState(false);
+  const [responseDatas, setResponseDatas] = useState(null);
+  const [elementsOpt, setElementsOpt] = useState(null);
   const [idPatient, setIdPatient] = useState(id);
-  const [type, setType] = useState(null);
-  const [typeFormActivities, setTypeFormActivities] = useState(null);
-  const [meetType, setMeetType] = useState(null);
-  const [goalsInput, setGoalsInput] = useState(null);
-  const [changeTypeMeet, setChangeTypeMeet] = useState(null);
-  const [changeDate, setChangeDate] = useState(null);
-  const [changeGoals, setChangeGoals] = useState(null);
-  const [changeContacts, setChangeContacts] = useState(null);
+  const [start, setStartDate] = useState(
+    props?.infosPatient?.start !== null ? props?.infosPatient?.start : null
+  );
+  const [end, setEndDate] = useState(
+    props?.infosPatient?.end !== null ? props?.infosPatient?.end : null
+  );
 
-  const [changePlaces, setChangePlaces] = useState(null);
+  const [valueSelect, setValueSelect] = useState(
+    props?.infosPatient?.sugg?.id !== null
+      ? props?.infosPatient?.sugg?.id
+      : null
+  );
+  const [specificValueInput, setSpecificValueInput] = useState(
+    props?.infosPatient?.value !== null ? props?.infosPatient?.value : null
+  );
 
-  const [changeOptions, setChangeOptions] = useState(null);
-  const [reportDate, setReportDate] = useState(null);
-  const [show, setShow] = useState(false);
+  const [commentaireInput, setCommentaire] = useState(
+    props?.infosPatient?.comment !== null ? props?.infosPatient?.comment : null
+  );
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-  function onChangeIndicators() {
-    props.onChangeIndicators(true);
+  useEffect(() => {}, []);
+  //
+
+  const handleSave = (e) => {
+    let formData = new FormData();
+    // value-sugg
+
+    formData.append("activity_id", props.activity.id);
+    formData.append("report_id", props.report.id);
+
+    var formGetInfos = new FormData();
+    formGetInfos.append("id", id.toString());
+    axios({
+      method: "post",
+      url: "/api/deleteActivities",
+      data: formData,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    }).then(function (response) {
+      // location.replace(window.location.origin + "/" + idPatient);
+      // document.querySelectorAll(".btn-close")[0].click();
+      if (response) {
+        axios({
+          method: "post",
+          url: "/api/patientsInformationByPatients",
+          data: formGetInfos,
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${auth.auth.accessToken}`,
+          },
+        })
+          .then(function (response) {
+            props.onChangeActivities(true);
+            setShow(false);
+          })
+          .catch(function (response) {});
+        // document.querySelectorAll(".btn-close")[0].click();
+        // location.replace(window.location.origin + "/" + idPatient);
+      }
+    });
+  };
+  //   new Date(1254088800 *1000)
+  // handleInputChange;
+
+  if (responseDatas !== null) {
+    props.onChange({
+      response: responseDatas,
+    });
+
+    // document.querySelectorAll(".btn-close")[0].click();
   }
 
-  function onChangeActivities() {
-    props.onChangeActivities(true);
-  }
+  console.log(props);
   return (
     <>
-      <Button variant="primary" onClick={handleShow}>
-        <FontAwesomeIcon icon={faRemove} />
-      </Button>
+      <button onClick={handleShow} className="ml-4">
+        <FontAwesomeIcon icon={faTrash} />
+      </button>
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Modal heading</Modal.Title>
+          <Modal.Title>Effacer une information</Modal.Title>
         </Modal.Header>
-        <Modal.Body>Woohoo, you're reading this text in a modal!</Modal.Body>
+        <Modal.Body>
+          {" "}
+          <>
+            <p>êtes-vous sur ?</p>
+          </>
+        </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Close
-          </Button>
-          <Button variant="primary" onClick={handleClose}>
-            Save Changes
-          </Button>
+          {isSentRepport && <FontAwesomeIcon icon={faCheck} />}
+          <Button onClick={handleClose}>Fermer</Button>
+          <Button onClick={handleSave}>Delete Changes</Button>
         </Modal.Footer>
       </Modal>
     </>
   );
 }
 
-export default DeleteIndicateurs;
+// render(<Modal />);
+
+export default DeleteActivities;
