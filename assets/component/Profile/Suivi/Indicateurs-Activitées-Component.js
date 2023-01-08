@@ -10,6 +10,7 @@ import Form from "react-bootstrap/Form";
 import Editor from "./Editor-Reports";
 import AddActivitiesByReport from "./Add-ActivitiesByReports";
 import AddIndicateursByReport from "./Indicateurs-Form-AddReports/Add-IndicateursByReports";
+import EditIndicateursByReport from "./Indicateurs-Form-AddReports/Edit-IndicateursByReports";
 import AddSoinsByReport from "./Add-SoinsByReports";
 import InputPlaceList from "./Input-Place-List";
 import InputContactList from "./Input-Contact-List";
@@ -18,6 +19,7 @@ import EditIndicateurs from "./Edit-Indicateurs";
 import EditActivities from "./Edit-Activities";
 import DeleteIndicateurs from "./Delete-Indicateurs";
 import DeleteActivities from "./Delete-Acitivities";
+import { ElderlyRounded } from "@mui/icons-material";
 
 function IndicateursActiviteesComponent(props) {
   const [show, setShow] = useState(false);
@@ -180,6 +182,7 @@ function IndicateursActiviteesComponent(props) {
             <AddIndicateursByReport
               report={props.report}
               onChangeIndicators={onChangeIndicators}
+              indicatorsGroups={props?.report?.indicatorsGroups}
             ></AddIndicateursByReport>
           </div>
           <div>
@@ -197,7 +200,13 @@ function IndicateursActiviteesComponent(props) {
                   >
                     {el.name}{" "}
                     <div className="edit-delete">
-                      <EditIndicateurs></EditIndicateurs>{" "}
+                      <EditIndicateursByReport
+                        rapportIndicators={el}
+                        indicatorsItem={props.report.followupReportsIndicators.filter(
+                          (e) => e.indi.groups.id === 3
+                        )}
+                        report={props.report}
+                      ></EditIndicateursByReport>
                       <DeleteIndicateurs></DeleteIndicateurs>
                     </div>
                   </div>
@@ -232,7 +241,13 @@ function IndicateursActiviteesComponent(props) {
                   >
                     {el.name}{" "}
                     <div className="edit-delete">
-                      <EditIndicateurs></EditIndicateurs>{" "}
+                      <EditIndicateursByReport
+                        rapportIndicators={el}
+                        indicatorsItem={props.report.followupReportsIndicators.filter(
+                          (e) => e.indi.groups.id === 2
+                        )}
+                        report={props.report}
+                      ></EditIndicateursByReport>
                       <DeleteIndicateurs></DeleteIndicateurs>
                     </div>
                   </div>
@@ -267,7 +282,13 @@ function IndicateursActiviteesComponent(props) {
                   >
                     {el.name}{" "}
                     <div className="edit-delete">
-                      <EditIndicateurs></EditIndicateurs>{" "}
+                      <EditIndicateursByReport
+                        rapportIndicators={el}
+                        indicatorsItem={props.report.followupReportsIndicators.filter(
+                          (e) => e.indi.groups.id === 1
+                        )}
+                        report={props.report}
+                      ></EditIndicateursByReport>
                       <DeleteIndicateurs></DeleteIndicateurs>
                     </div>
                   </div>

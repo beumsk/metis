@@ -116,6 +116,9 @@ function IndicateursFormHestiaPerteLogement(props) {
             label="Conflits de voisinage (0)"
             onClick={(e) => choiceVoisinage("0")}
             name="group4"
+            defaultChecked={
+              props.editForm && props?.editForm[0]?.value === 0 ? true : false
+            }
             type={"radio"}
             id={`inline-radio-13`}
           />
@@ -124,6 +127,9 @@ function IndicateursFormHestiaPerteLogement(props) {
             label="Conflits de voisinage mais gérés (1)"
             name="group4"
             onClick={(e) => choiceVoisinage("1")}
+            defaultChecked={
+              props.editForm && props?.editForm[0]?.value === 1 ? true : false
+            }
             type={"radio"}
             id={`inline-radio-14`}
           />
@@ -132,6 +138,9 @@ function IndicateursFormHestiaPerteLogement(props) {
             label="Absence de conflits de voisinage (2)"
             name="group4"
             onClick={(e) => choiceVoisinage("2")}
+            defaultChecked={
+              props.editForm && props?.editForm[0]?.value === 2 ? true : false
+            }
             type={"radio"}
             id={`inline-radio-15`}
           />
@@ -140,6 +149,9 @@ function IndicateursFormHestiaPerteLogement(props) {
             label="Bonne entente avec le voisinage (3)"
             name="group4"
             onClick={(e) => choiceVoisinage("3")}
+            defaultChecked={
+              props.editForm && props?.editForm[0]?.value === 3 ? true : false
+            }
             type={"radio"}
             id={`inline-radio-16`}
           />
@@ -148,6 +160,11 @@ function IndicateursFormHestiaPerteLogement(props) {
           </Form.Label>
           <textarea
             as="textarea"
+            defaultValue={
+              props?.editForm && props?.editForm[0]?.comment
+                ? props?.editForm[0]?.comment
+                : ""
+            }
             className="uk-textarea"
             rows={3}
             onChange={(e) => onChangeDescriptionVoisinage(e)}
@@ -162,6 +179,9 @@ function IndicateursFormHestiaPerteLogement(props) {
             label="Si cumule au moins 2 éléments : Présence d’odeurs nauséabondes, nuisibles, altération du matériel, accumulation (0)"
             onClick={(e) => choiceHygiene("0")}
             name="group5"
+            defaultChecked={
+              props.editForm && props?.editForm[1]?.value === 0 ? true : false
+            }
             type={"radio"}
             id={`inline-radio-17`}
           />
@@ -170,6 +190,9 @@ function IndicateursFormHestiaPerteLogement(props) {
             label="Présence d’odeurs nauséabondes OU nuisibles OU altération du matériel OU accumulation (1)"
             name="group5"
             onClick={(e) => choiceHygiene("1")}
+            defaultChecked={
+              props.editForm && props?.editForm[1]?.value === 1 ? true : false
+            }
             type={"radio"}
             id={`inline-radio-18`}
           />
@@ -178,6 +201,9 @@ function IndicateursFormHestiaPerteLogement(props) {
             label="Logement relativement propre et entretenu mais pas impeccable ou aides familiales limitées (2)"
             name="group5"
             onClick={(e) => choiceHygiene("2")}
+            defaultChecked={
+              props.editForm && props?.editForm[1]?.value === 2 ? true : false
+            }
             type={"radio"}
             id={`inline-radio-19`}
           />
@@ -185,6 +211,9 @@ function IndicateursFormHestiaPerteLogement(props) {
             inline
             label="Logement impeccable et/ou aides familiales régulières et fonctionnelles (3)"
             name="group5"
+            defaultChecked={
+              props.editForm && props?.editForm[1]?.value === 3 ? true : false
+            }
             onClick={(e) => choiceHygiene("3")}
             type={"radio"}
             id={`inline-radio-20`}
@@ -196,6 +225,11 @@ function IndicateursFormHestiaPerteLogement(props) {
             as="textarea"
             className="uk-textarea"
             rows={3}
+            defaultValue={
+              props?.editForm && props?.editForm[1]?.comment
+                ? props?.editForm[1]?.comment
+                : ""
+            }
             onChange={(e) => onChangeDescriptionHygiene(e)}
           />
         </div>
@@ -209,6 +243,9 @@ function IndicateursFormHestiaPerteLogement(props) {
             onClick={(e) => choiceBailleur("0")}
             name="group6"
             type={"radio"}
+            defaultChecked={
+              props.editForm && props?.editForm[2]?.value === 0 ? true : false
+            }
             id={`inline-radio-21`}
           />
           <Form.Check
@@ -217,6 +254,9 @@ function IndicateursFormHestiaPerteLogement(props) {
             name="group6"
             onClick={(e) => choiceBailleur("1")}
             type={"radio"}
+            defaultChecked={
+              props.editForm && props?.editForm[2]?.value === 1 ? true : false
+            }
             id={`inline-radio-22`}
           />
           <Form.Check
@@ -225,6 +265,9 @@ function IndicateursFormHestiaPerteLogement(props) {
             name="group6"
             onClick={(e) => choiceBailleur("2")}
             type={"radio"}
+            defaultChecked={
+              props.editForm && props?.editForm[2]?.value === 2 ? true : false
+            }
             id={`inline-radio-23`}
           />
           <Form.Check
@@ -233,6 +276,9 @@ function IndicateursFormHestiaPerteLogement(props) {
             name="group6"
             onClick={(e) => choiceBailleur("3")}
             type={"radio"}
+            defaultChecked={
+              props.editForm && props?.editForm[2]?.value === 3 ? true : false
+            }
             id={`inline-radio-24`}
           />
           <Form.Label
@@ -246,6 +292,11 @@ function IndicateursFormHestiaPerteLogement(props) {
             as="textarea"
             className="uk-textarea"
             rows={3}
+            defaultValue={
+              props?.editForm && props?.editForm[2]?.comment
+                ? props?.editForm[2]?.comment
+                : ""
+            }
             onChange={(e) => onChangeDescriptionBailleur(e)}
           ></textarea>
           <button onClick={(e) => onSend(e)}>Envoyer</button>

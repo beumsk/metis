@@ -220,10 +220,10 @@ class FollowUpReportsController extends AbstractController
                     : null,
                 "followupReportsIndicators" => (count($value->getIndicators()) > 0) ?
                     array_map(function ($a) {
-
+                        // dd($a);
                         return [
                             "id" => ($a->getId() !== null) ? $a->getId() : null,
-                            "value" => ($a->getValue() && $a->getValue() !== null) ? $a->getValue() : null,
+                            "value" => $a->getValue(),
                             "comment" => ($a->getComment() && $a->getComment() !== null) ? $a->getComment() : null,
                             "indi" => ($a->getIndi() && $a->getIndi() !== null) ? [
                                 "id" => $a->getIndi()->getId(),
@@ -1137,6 +1137,7 @@ class FollowUpReportsController extends AbstractController
             $indicators->setValue($valueSecuritee);
             $indicators->setComment($descriptionSecuritee);
             // $entityManager->persist($indicators);
+
 
             $report->addIndicator($indicators);
             $entityManager->persist($indicators);

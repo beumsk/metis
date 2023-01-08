@@ -151,23 +151,13 @@ function AddActivitiesByReport(props) {
               contacts={props?.contacts}
               // contacts={props?.contacts}
               onChange={handleChangeContacts}
-              // defaultValue={
-              //   props.formActivitiesEdit?.contact &&
-              //   props.formActivitiesEdit?.contact
-              //     ? props.formActivitiesEdit?.contact
-              //     : null
-              // }
+              defaultValue={null}
             ></InputContactList>
 
             <InputPlaceList
               places={props?.places}
               onChange={handleChangePlaces}
-              // defaultValue={
-              //   props.formActivitiesEdit?.place &&
-              //   props.formActivitiesEdit?.place
-              //     ? props.formActivitiesEdit?.place
-              //     : null
-              // }
+              defaultValue={null}
             ></InputPlaceList>
             <button onClick={(e) => onSend()}>Envoyer</button>
           </div>

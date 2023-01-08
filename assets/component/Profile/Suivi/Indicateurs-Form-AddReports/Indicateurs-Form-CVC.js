@@ -114,9 +114,7 @@ function IndicateursFormCVC(props) {
             onClick={(e) => choiceCorps("0")}
             name="group1"
             defaultChecked={
-              props.editForm && props?.editForm[0]?.value
-                ? props?.editForm[0]?.value
-                : null
+              props.editForm && props?.editForm[0]?.value === 0 ? true : false
             }
             type={"radio"}
             id={`inline-radio-1`}
