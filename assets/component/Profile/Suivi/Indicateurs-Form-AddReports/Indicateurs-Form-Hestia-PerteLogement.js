@@ -45,6 +45,13 @@ function IndicateursFormHestiaPerteLogement(props) {
   const [idVoisinage, setidVoisinage] = useState();
 
   const [idHygiene, setidHygiene] = useState();
+  // voisinageSelected
+  // hygieneSelected
+  // bailleurSelected
+
+  const [isVoisinageSelected, setIsVoisinageSelected] = useState(false);
+  const [isHygieneSelected, setIsHygieneSelected] = useState(false);
+  const [isBailleurSelected, setIsBailleurSelected] = useState(false);
 
   const [voisinageSelected, setVoisinageSelected] = useState(
     props?.editForm && props?.editForm[0]?.value !== null
@@ -145,21 +152,48 @@ function IndicateursFormHestiaPerteLogement(props) {
     );
     formData.append("idRapport", props.report.id);
     formData.append("idIndicatorsGroups", props.idIndicators);
-    axios({
-      method: "post",
-      url: "/api/editIndicatorsHestiaLogement",
-      data: formData,
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${auth.auth.accessToken}`,
-      },
-    })
-      .then(function (response) {
-        props.onChangeIndicators(true);
-        setShow(false);
-        reload();
+
+    // {isVoisinageSelected && <p>Score du voisinage manquant</p>}
+
+    // {isHygieneSelected && <p>Score du hygiene manquant</p>}
+
+    // {isBailleurSelected && <p>Score du bailleur manquant</p>}
+    if (voisinageSelected === null) {
+      setIsVoisinageSelected(true);
+    } else {
+      setIsVoisinageSelected(false);
+    }
+    if (hygieneSelected === null) {
+      setIsHygieneSelected(true);
+    } else {
+      setIsHygieneSelected(false);
+    }
+    if (bailleurSelected === null) {
+      setIsBailleurSelected(true);
+    } else {
+      setIsBailleurSelected(false);
+    }
+    if (
+      voisinageSelected !== null &&
+      hygieneSelected !== null &&
+      bailleurSelected !== null
+    ) {
+      axios({
+        method: "post",
+        url: "/api/editIndicatorsHestiaLogement",
+        data: formData,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${auth.auth.accessToken}`,
+        },
       })
-      .catch(function (response) {});
+        .then(function (response) {
+          props.onChangeIndicators(true);
+          setShow(false);
+          reload();
+        })
+        .catch(function (response) {});
+    }
   };
 
   return (
@@ -362,6 +396,15 @@ function IndicateursFormHestiaPerteLogement(props) {
           ) : (
             <button onClick={(e) => onSend(e)}>Envoyer</button>
           )}
+
+          {/* const [isVoisinageSelected, setIsVoisinageSelected] = useState(false);
+  const [isHygieneSelected, setIsHygieneSelected] = useState(false);
+  const [isBailleurSelected, setIsBailleurSelected] = useState(false); */}
+          {isVoisinageSelected && <p>Score du voisinage manquant</p>}
+
+          {isHygieneSelected && <p>Score du hygiene manquant</p>}
+
+          {isBailleurSelected && <p>Score du bailleur manquant</p>}
         </div>
       </div>
     </>

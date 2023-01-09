@@ -59,19 +59,24 @@ function AddActivitiesByReport(props) {
     formData.append("type", typeForm);
     formData.append("idRepport", props.report.id);
 
-    if (typeForm === null) {
+    if (typeForm === null || typeForm === "defaultValue") {
       setIsErrorType(true);
     } else {
       setIsErrorType(false);
     }
 
-    if (descriptionForm === null) {
+    if (descriptionForm === null || descriptionForm === "") {
       setIsErrorDescription(true);
     } else {
       setIsErrorDescription(false);
     }
 
-    if (typeForm !== null && descriptionForm !== null) {
+    let validationType =
+      typeForm === null || typeForm === "defaultValue" ? true : false;
+    let validationDescription =
+      descriptionForm === null || descriptionForm === "" ? true : false;
+
+    if (validationType === false && validationDescription === false) {
       axios({
         method: "post",
         url: "/api/addActivitiesToReport",
@@ -103,53 +108,51 @@ function AddActivitiesByReport(props) {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <form onSubmit={onSend}>
-            <div className="addSoins-form">
-              <Form.Label htmlFor="inputValue" className="uk-form-label">
-                Type
-              </Form.Label>
-              <select
-                size="lg"
-                className="uk-select"
-                required={true}
-                onChange={(e) => setTypeForm(e.target.value)}
-                // value={props.formActivitiesEdit?.type}
-              >
-                <option>Choissisez le type</option>
-                {props?.selectActivities?.data?.map((el, id) => (
-                  <>{el.value && <option value={el?.id}>{el?.value}</option>}</>
-                ))}
-              </select>
+          <div className="addSoins-form">
+            <Form.Label htmlFor="inputValue" className="uk-form-label">
+              Type
+            </Form.Label>
+            <select
+              size="lg"
+              className="uk-select"
+              required={true}
+              onChange={(e) => setTypeForm(e.target.value)}
+              // value={props.formActivitiesEdit?.type}
+            >
+              <option>Choissisez le type</option>
+              {props?.selectActivities?.data?.map((el, id) => (
+                <>{el.value && <option value={el?.id}>{el?.value}</option>}</>
+              ))}
+            </select>
 
-              <Form.Label htmlFor="inputValue" className="uk-form-label">
-                Description
-              </Form.Label>
-              <Form.Control
-                type="text"
-                id="inputValueSpécifique"
-                className="uk-input"
-                aria-describedby="valueSpécifique"
-                // defaultValue={props.formActivitiesEdit?.description}
-                onChange={(e) => setDescriptionForm(e.target.value)}
-              />
+            <Form.Label htmlFor="inputValue" className="uk-form-label">
+              Description
+            </Form.Label>
+            <Form.Control
+              type="text"
+              id="inputValueSpécifique"
+              className="uk-input"
+              aria-describedby="valueSpécifique"
+              // defaultValue={props.formActivitiesEdit?.description}
+              onChange={(e) => setDescriptionForm(e.target.value)}
+            />
 
-              <InputContactList
-                contacts={props?.contacts}
-                // contacts={props?.contacts}
-                onChange={handleChangeContacts}
-                defaultValue={null}
-              ></InputContactList>
+            <InputContactList
+              contacts={props?.contacts}
+              // contacts={props?.contacts}
+              onChange={handleChangeContacts}
+              defaultValue={null}
+            ></InputContactList>
 
-              <InputPlaceList
-                places={props?.places}
-                onChange={handleChangePlaces}
-                defaultValue={null}
-              ></InputPlaceList>
-              <button onClick={(e) => onSend(e)}>Envoyer</button>
-            </div>
-            {isErrorType && <p>Type Obligatoire</p>}
-            {isErrorDescription && <p>Description Obligatoire</p>}
-          </form>
+            <InputPlaceList
+              places={props?.places}
+              onChange={handleChangePlaces}
+              defaultValue={null}
+            ></InputPlaceList>
+            <button onClick={(e) => onSend(e)}>Envoyer</button>
+          </div>
+          {isErrorType && <p>Type Obligatoire</p>}
+          {isErrorDescription && <p>Description Obligatoire</p>}
         </Modal.Body>
       </Modal>
     </>

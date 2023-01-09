@@ -27,6 +27,8 @@ function EditActivities(props) {
   const [contacts, setContacts] = useState(null);
   const [places, setPlaces] = useState(null);
   const [elementsOpt, setElementsOpt] = useState(null);
+  const [isErrorType, setIsErrorType] = useState();
+  const [isErrorDescription, setIsErrorDescription] = useState();
   const [idPatient, setIdPatient] = useState(id);
   const [typeForm, setTypeForm] = useState(
     props.activity?.sugg?.id ? props.activity?.sugg?.id : null
@@ -63,7 +65,7 @@ function EditActivities(props) {
     setValuePlaceForm(e);
   }
 
-  const onSend = (e) => {
+  const onSend = (isErrorType, isErrorDescription) => {
     let formData = new FormData();
     formData.append("contact", JSON.stringify(contact));
     formData.append("place", JSON.stringify(place));
@@ -72,23 +74,40 @@ function EditActivities(props) {
 
     formData.append("idRepport", props.report.id);
     formData.append("idActivity", props.activity.id);
-    // formData.append("descriptionSantee", descriptionSantee);
-    // formData.append("valueConsommation", valueConsommation);
-    // formData.append("descriptionConsommation", descriptionConsommation);
-    axios({
-      method: "post",
-      url: "/api/editActivitiesToReport",
-      data: formData,
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${auth.auth.accessToken}`,
-      },
-    })
-      .then(function (response) {
-        props.onChangeActivities(true);
-        setShow(false);
+
+    if (typeForm === null || typeForm === "defaultValue") {
+      setIsErrorType(true);
+    } else {
+      setIsErrorType(false);
+    }
+
+    if (descriptionForm === null || descriptionForm === "") {
+      setIsErrorDescription(true);
+    } else {
+      setIsErrorDescription(false);
+    }
+
+    let validationType =
+      typeForm === null || typeForm === "defaultValue" ? true : false;
+    let validationDescription =
+      descriptionForm === null || descriptionForm === "" ? true : false;
+
+    if (validationType === false && validationDescription === false) {
+      axios({
+        method: "post",
+        url: "/api/editActivitiesToReport",
+        data: formData,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${auth.auth.accessToken}`,
+        },
       })
-      .catch(function (response) {});
+        .then(function (response) {
+          props.onChangeActivities(true);
+          setShow(false);
+        })
+        .catch(function (response) {});
+    }
   };
 
   return (
@@ -116,9 +135,11 @@ function EditActivities(props) {
               className="uk-select"
               required={true}
               onChange={(e) => setTypeForm(e.target.value)}
-              value={props.activity?.sugg?.id}
+              defaultValue={
+                props.activity?.sugg?.id ? props.activity?.sugg?.id : typeForm
+              }
             >
-              <option>Choissisez le type</option>
+              <option value={"defaultValue"}>Choissisez le type</option>
               {props?.select?.data?.map((el, id) => (
                 <>{el.value && <option value={el?.id}>{el?.value}</option>}</>
               ))}
@@ -152,8 +173,15 @@ function EditActivities(props) {
                 props.activity?.places ? props.activity?.places : null
               }
             ></InputPlaceList>
-            <button onClick={(e) => onSend()}>Envoyer</button>
+            <button
+              onClick={(e) => onSend(isErrorType, isErrorDescription)}
+              // disabled={isErrorType && isErrorDescription}
+            >
+              Envoyer
+            </button>
           </div>
+          {isErrorType && <p>Type Obligatoire</p>}
+          {isErrorDescription && <p>Description Obligatoire</p>}
         </Modal.Body>
       </Modal>
     </>

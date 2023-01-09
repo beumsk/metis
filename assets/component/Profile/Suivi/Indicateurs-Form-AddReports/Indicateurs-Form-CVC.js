@@ -27,6 +27,13 @@ function IndicateursFormCVC(props) {
 
   const [idComportement, setidComportement] = useState();
 
+  // isCorpsScore
+  // isVetementsScore
+  // isComportementScore
+  const [isCorpsScore, setIsCorpsScore] = useState(false);
+  const [isVetementsScore, setIsVetementsScore] = useState(false);
+  const [isComportementScore, setIsComportementScore] = useState(false);
+
   const [corpsScore, setCorpsScore] = useState(
     props?.editForm && props?.editForm[0]?.value
       ? props?.editForm[0]?.value
@@ -88,6 +95,17 @@ function IndicateursFormCVC(props) {
   // onSendEdit
   const onSendEdit = (e) => {
     let formData = new FormData();
+
+    if (corpsScore === null) {
+      setIsCorpsScore(true);
+    }
+    if (vetementsScore === null) {
+      setIsVetementsScore(true);
+    }
+    if (comportementScore === null) {
+      setIsComportementScore(true);
+    }
+
     formData.append("corpsScore", corpsScore);
     formData.append("corpsDescription", corpsDescription);
     formData.append("vetementsScore", vetementsScore);
@@ -101,48 +119,77 @@ function IndicateursFormCVC(props) {
     );
     formData.append("idRapport", props.report.id);
     formData.append("idIndicatorsGroups", props.idIndicators);
-    axios({
-      method: "post",
-      url: "/api/editIndicatorsCVC",
-      data: formData,
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${auth.auth.accessToken}`,
-      },
-    })
-      .then(function (response) {
-        props.onChangeIndicators(true);
 
-        setShow(false);
-        reload();
+    if (
+      corpsScore !== null &&
+      vetementsScore !== null &&
+      comportementScore !== null
+    ) {
+      axios({
+        method: "post",
+        url: "/api/editIndicatorsCVC",
+        data: formData,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${auth.auth.accessToken}`,
+        },
       })
-      .catch(function (response) {});
+        .then(function (response) {
+          props.onChangeIndicators(true);
+
+          setShow(false);
+          reload();
+        })
+        .catch(function (response) {});
+    }
   };
   const onSend = (e) => {
-    let formData = new FormData();
-    formData.append("corpsScore", corpsScore);
-    formData.append("corpsDescription", corpsDescription);
-    formData.append("vetementsScore", vetementsScore);
-    formData.append("vetementsDescription", vetementsDescription);
-    formData.append("comportementScore", comportementScore);
-    formData.append("comportementDescription", comportementDescription);
-    formData.append("idRepport", props.report.id);
-    axios({
-      method: "post",
-      url: "/api/addIndicatorsCVC",
-      data: formData,
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${auth.auth.accessToken}`,
-      },
-    })
-      .then(function (response) {
-        props.onChangeIndicators(true);
+    if (corpsScore === null) {
+      setIsCorpsScore(true);
+    } else {
+      setIsCorpsScore(false);
+    }
+    if (vetementsScore === null) {
+      setIsVetementsScore(true);
+    } else {
+      setIsVetementsScore(false);
+    }
+    if (comportementScore === null) {
+      setIsComportementScore(true);
+    } else {
+      setIsComportementScore(false);
+    }
 
-        setShow(false);
-        reload();
+    if (
+      corpsScore !== null &&
+      vetementsScore !== null &&
+      comportementScore !== null
+    ) {
+      let formData = new FormData();
+      formData.append("corpsScore", corpsScore);
+      formData.append("corpsDescription", corpsDescription);
+      formData.append("vetementsScore", vetementsScore);
+      formData.append("vetementsDescription", vetementsDescription);
+      formData.append("comportementScore", comportementScore);
+      formData.append("comportementDescription", comportementDescription);
+      formData.append("idRepport", props.report.id);
+      axios({
+        method: "post",
+        url: "/api/addIndicatorsCVC",
+        data: formData,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${auth.auth.accessToken}`,
+        },
       })
-      .catch(function (response) {});
+        .then(function (response) {
+          props.onChangeIndicators(true);
+
+          setShow(false);
+          reload();
+        })
+        .catch(function (response) {});
+    }
   };
   const handleClose = () => {
     setShow(false);
@@ -340,6 +387,16 @@ function IndicateursFormCVC(props) {
         ) : (
           <button onClick={(e) => onSend(e)}>Envoyer</button>
         )}
+
+        {/* const [isCorpsScore, setIsCorpsScore] = useState(false);
+    const [isVetementsScore, setIsVetementsScore] = useState(false);
+    const [isComportementScore, setIsComportementScore] = useState(false); */}
+
+        {isCorpsScore && <p>Score du corps manquant</p>}
+
+        {isVetementsScore && <p>Score du vêtement manquant</p>}
+
+        {isComportementScore && <p>Score du comportement manquant</p>}
       </div>
     </>
   );

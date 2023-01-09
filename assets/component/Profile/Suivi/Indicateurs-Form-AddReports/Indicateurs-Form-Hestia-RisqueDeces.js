@@ -27,6 +27,10 @@ function IndicateursFormHestiaRisqueDeces(props) {
 
   const [idConsommation, setidConsommation] = useState();
 
+  const [isValueSecuritee, setIsValueSecuritee] = useState(false);
+  const [isValueSantee, setIsValueSantee] = useState(false);
+  const [isValueConsommation, setIsValueConsommation] = useState(false);
+
   const [valueSecuritee, setChoiceSecuriteeSelected] = useState(
     props?.editForm && props?.editForm[0]?.value
       ? props?.editForm[0]?.value
@@ -94,21 +98,45 @@ function IndicateursFormHestiaRisqueDeces(props) {
     formData.append("valueConsommation", valueConsommation);
     formData.append("descriptionConsommation", descriptionConsommation);
     formData.append("idRepport", props.report.id);
-    axios({
-      method: "post",
-      url: "/api/addIndicatorsHestiaDeces",
-      data: formData,
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${auth.auth.accessToken}`,
-      },
-    })
-      .then(function (response) {
-        props.onChangeIndicators(true);
-        setShow(false);
-        reload();
+
+    if (valueSecuritee === null) {
+      setIsValueSecuritee(true);
+    } else {
+      setIsValueSecuritee(false);
+    }
+    if (valueSantee === null) {
+      setIsValueSantee(true);
+    } else {
+      setIsValueSantee(false);
+    }
+    if (valueConsommation === null) {
+      setIsValueConsommation(true);
+    } else {
+      setIsValueConsommation(false);
+    }
+
+    console.log(valueSecuritee, valueSantee, valueConsommation);
+    if (
+      valueSecuritee !== null &&
+      valueSantee !== null &&
+      valueConsommation !== null
+    ) {
+      axios({
+        method: "post",
+        url: "/api/addIndicatorsHestiaDeces",
+        data: formData,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${auth.auth.accessToken}`,
+        },
       })
-      .catch(function (response) {});
+        .then(function (response) {
+          props.onChangeIndicators(true);
+          setShow(false);
+          reload();
+        })
+        .catch(function (response) {});
+    }
   };
   const onSendEdit = (e) => {
     let formData = new FormData();
@@ -125,21 +153,48 @@ function IndicateursFormHestiaRisqueDeces(props) {
     );
     formData.append("idRapport", props.report.id);
     formData.append("idIndicatorsGroups", props.idIndicators);
-    axios({
-      method: "post",
-      url: "/api/editIndicatorsHestiaDeces",
-      data: formData,
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${auth.auth.accessToken}`,
-      },
-    })
-      .then(function (response) {
-        props.onChangeIndicators(true);
-        setShow(false);
-        reload();
+
+    // const [isValueSecuritee, setIsValueSecuritee] = useState(false);
+    // const [isValueSantee, setIsValueSantee] = useState(false);
+    // const [isValueConsommation, setIsValueConsommation] = useState(false);
+    if (valueSecuritee === null) {
+      setIsValueSecuritee(true);
+    } else {
+      setIsValueSecuritee(false);
+    }
+    if (valueSantee === null) {
+      setIsValueSantee(true);
+    } else {
+      setIsValueSantee(false);
+    }
+    if (valueConsommation === null) {
+      setIsValueConsommation(true);
+    } else {
+      setIsValueConsommation(false);
+    }
+
+    console.log(valueSecuritee, valueSantee, valueConsommation);
+    if (
+      valueSecuritee !== null &&
+      valueSantee !== null &&
+      valueConsommation !== null
+    ) {
+      axios({
+        method: "post",
+        url: "/api/editIndicatorsHestiaDeces",
+        data: formData,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${auth.auth.accessToken}`,
+        },
       })
-      .catch(function (response) {});
+        .then(function (response) {
+          props.onChangeIndicators(true);
+          setShow(false);
+          reload();
+        })
+        .catch(function (response) {});
+    }
   };
   const handleClose = () => {
     setShow(false);
@@ -336,6 +391,10 @@ function IndicateursFormHestiaRisqueDeces(props) {
             <button onClick={(e) => onSend(e)}>Envoyer</button>
           )}
         </div>
+
+        {isValueSecuritee && <p>Score du securitée manquant</p>}
+        {isValueSantee && <p>Score du santée manquant</p>}
+        {isValueConsommation && <p>Score de consommation manquant</p>}
       </div>
     </>
   );
