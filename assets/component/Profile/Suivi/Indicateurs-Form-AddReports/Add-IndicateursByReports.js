@@ -113,8 +113,6 @@ function AddIndicateursByReport(props) {
   const onChangeIndicateursEstiaLogement = (indicateursEstLeLogement) => {
     setIndicateursLogement(indicateursEstLeLogement);
     setTypeCVCSelected("HESTIA - Risque perte logement");
-    // setIndicateursFormHestiaRisqueDeces(indicateursFormHestiaRisqueDeces);
-    // setIndicateursFormCVC(indicateursFormCVC);
   };
 
   const onChangeIndicateursFormHestiaRisqueDeces = (
