@@ -89,6 +89,61 @@ class FollowUpReportsController extends AbstractController
         ]);
     }
 
+    #[Route('/api/editProfile', name: 'app_editProfile')]
+    public function editProfile(ManagerRegistry $doctrine): Response
+    {
+        $entityManager = $doctrine->getManager();
+        $request = Request::createFromGlobals();
+        $firstname = $request->request->get('firstname');
+        $lastname = $request->request->get('lastname');
+        $nickname = $request->request->get('nickname');
+        $birthDate = $request->request->get('birthDate');
+        $unknownYear = $request->request->get('unknownYear');
+        $birthlocation = $request->request->get('birthlocation');
+        $firstContactDate = $request->request->get('firstContactDate');
+        $pati_id = $request->request->get('patient');
+
+
+        //   dd($firstname);
+        $patient = $doctrine->getRepository(Patients::class)->find($pati_id);
+
+
+        if ($firstname !== "null") {
+            $patient->setFirstname($firstname);
+        }
+
+        if ($lastname !== "null") {
+            $patient->setLastname($lastname);
+        }
+
+        if ($nickname !== "null") {
+
+            $patient->setNicknames($nickname);
+        }
+
+        if ($birthDate !== "null") {
+            $patient->setBirthdate(new \DateTime($birthDate));
+        }
+
+        if ($unknownYear !== "null") {
+            $patient->setUnknownYear($unknownYear !== "true" ? true : false);
+        }
+
+        if ($birthlocation !== "null") {
+            $patient->setBirthLocation($birthlocation);
+        }
+
+        if ($firstContactDate !== "null") {
+            $patient->setFirstContactDate(new \DateTime($firstContactDate));
+        }
+
+
+
+
+        $entityManager->flush();
+
+        return $this->json($patient->getId());
+    }
 
 
     #[Route('/api/getFollowUpGoalsById', name: 'app_getFollowUpGoalsById')]

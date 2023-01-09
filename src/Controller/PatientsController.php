@@ -36,7 +36,8 @@ use Symfony\Component\Serializer\Context\Normalizer\ObjectNormalizerContextBuild
 class PatientsController extends AbstractController
 {
 
-    #[Route('/api/getGoals', name: 'app_patients')]
+
+    #[Route('/api/getGoals', name: 'app_getGoals')]
     public function getGoals(ManagerRegistry $doctrine, Request $request): Response
     {
 

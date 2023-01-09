@@ -15,6 +15,7 @@ import Medias from "./Profile/Medias";
 import Contacts from "./Profile/Contacts/Contacts";
 import Places from "./Profile/Lieux/Places";
 import Moment from "react-moment";
+import EditPatient from "./Edit-Patient";
 import "moment-timezone";
 
 const Patient = () => {
@@ -73,6 +74,38 @@ const Patient = () => {
       .catch(function (response) {});
   }, [idPatient]);
 
+  function onChangeEditPatient() {
+    console.log("mise a jour");
+    axios({
+      method: "post",
+      url: "/api/getPatient",
+      data: formData,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    })
+      .then(function (response) {
+        //handle success
+        objPatient.patient = response.data;
+        setPatient(response.data);
+        axios({
+          method: "post",
+          url: "/api/getMediaForPatient",
+          data: formData,
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${auth.auth.accessToken}`,
+          },
+        })
+          .then(function (response) {
+            let backgroundImage = response.image;
+            setImgPatient(response.data);
+          })
+          .catch(function (response) {});
+      })
+      .catch(function (response) {});
+  }
   const showOngletProfile = (titleOnglet) => {
     titleOnglet === "Fiche" ? setFiche(true) : setFiche(false);
     titleOnglet === "Profile" ? setProfile(true) : setProfile(false);
@@ -176,6 +209,12 @@ const Patient = () => {
                     </span>
                   </p>
                 </div>
+              </div>
+              <div className="col-sm-4">
+                <EditPatient
+                  patient={patient}
+                  onChangeEditPatient={onChangeEditPatient}
+                ></EditPatient>
               </div>
             </div>
             <div className="row body-profile">
