@@ -86,7 +86,37 @@ function IndicateursFormHestiaRisqueDeces(props) {
       })
       .catch(function (response) {});
   };
-
+  const onSendEdit = (e) => {
+    let formData = new FormData();
+    formData.append("valueSecuritee", valueSecuritee);
+    formData.append("descriptionSecuritee", descriptionSecuritee);
+    formData.append("valueSantee", valueSantee);
+    formData.append("descriptionSantee", descriptionSantee);
+    formData.append("valueConsommation", valueConsommation);
+    formData.append("descriptionConsommation", descriptionConsommation);
+    formData.append("idRepport", props.report.id);
+    formData.append(
+      "idIndicateurs",
+      JSON.stringify(props.indicatorsItem.map((e) => e.id))
+    );
+    formData.append("idRapport", props.report.id);
+    formData.append("idIndicatorsGroups", props.idIndicators);
+    axios({
+      method: "post",
+      url: "/api/addIndicatorsHestiaDeces",
+      data: formData,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    })
+      .then(function (response) {
+        props.onChangeIndicators(true);
+        setShow(false);
+        reload();
+      })
+      .catch(function (response) {});
+  };
   const handleClose = () => {
     setShow(false);
     reload();
@@ -276,7 +306,11 @@ function IndicateursFormHestiaRisqueDeces(props) {
             rows={3}
             onChange={(e) => onChangeDescriptionConsommation(e)}
           />
-          <button onClick={(e) => onSend(e)}>Envoyer</button>
+          {props.isEdit ? (
+            <button onClick={(e) => onSendEdit(e)}>Envoyer</button>
+          ) : (
+            <button onClick={(e) => onSend(e)}>Envoyer</button>
+          )}
         </div>
       </div>
     </>

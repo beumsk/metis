@@ -28,9 +28,13 @@ function EditActivities(props) {
   const [places, setPlaces] = useState(null);
   const [elementsOpt, setElementsOpt] = useState(null);
   const [idPatient, setIdPatient] = useState(id);
-  const [typeForm, setTypeForm] = useState(null);
+  const [typeForm, setTypeForm] = useState(
+    props.activity?.sugg?.id ? props.activity?.sugg?.id : null
+  );
   const [type, setType] = useState(null);
-  const [descriptionForm, setDescriptionForm] = useState(null);
+  const [descriptionForm, setDescriptionForm] = useState(
+    props.activity?.description ? props.activity?.description : null
+  );
   const handleClose = () => setShow(false);
   const [editFormActivities, setEditFormActivities] = useState([
     props.formActivitiesEdit,
@@ -41,8 +45,12 @@ function EditActivities(props) {
   ]);
 
   const [value, setValueForm] = useState();
-  const [contact, setValueContactForm] = useState();
-  const [place, setValuePlaceForm] = useState();
+  const [contact, setValueContactForm] = useState(
+    props.activity?.contacts ? props.activity?.contacts : null
+  );
+  const [place, setValuePlaceForm] = useState(
+    props.activity?.places ? props.activity?.places : null
+  );
   const [description, setValueDescription] = useState();
 
   const handleShow = () => setShow(true);
@@ -63,12 +71,13 @@ function EditActivities(props) {
     formData.append("type", typeForm);
 
     formData.append("idRepport", props.report.id);
+    formData.append("idActivity", props.activity.id);
     // formData.append("descriptionSantee", descriptionSantee);
     // formData.append("valueConsommation", valueConsommation);
     // formData.append("descriptionConsommation", descriptionConsommation);
     axios({
       method: "post",
-      url: "/api/addActivitiesToReport",
+      url: "/api/editActivitiesToReport",
       data: formData,
       headers: {
         "Content-Type": "application/json",

@@ -182,6 +182,7 @@ function AddIndicateursByReport(props) {
               <IndicateursFormHestiaPerteLogement
                 // id={props.id}
                 report={props.report}
+                isEdit={false}
                 onChangeIndicators={onChangeIndicators}
               />
             )}
@@ -190,6 +191,7 @@ function AddIndicateursByReport(props) {
                 report={props.report}
                 onChangeIndicators={onChangeIndicators}
                 // id={props.id}
+                isEdit={false}
                 // editForm={props?.form?.indicateursFormCVC}
                 // onChange={onChangeIndicateursFormCVC}
                 // followupReportsIndicators={props.form}
@@ -201,6 +203,7 @@ function AddIndicateursByReport(props) {
                 report={props.report}
                 // id={props.id}
                 // form={props.form}
+                isEdit={false}
                 // editForm={props?.form?.indicateursFormHestiaRisqueDeces}
 
                 onChangeIndicators={onChangeIndicators}

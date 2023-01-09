@@ -63,7 +63,39 @@ function IndicateursFormCVC(props) {
   const onChangeDescriptionComportement = (e) => {
     setDescriptionComportement(e.target.value);
   };
+  // onSendEdit
+  const onSendEdit = (e) => {
+    let formData = new FormData();
+    formData.append("corpsScore", corpsScore);
+    formData.append("corpsDescription", corpsDescription);
+    formData.append("vetementsScore", vetementsScore);
+    formData.append("vetementsDescription", vetementsDescription);
+    formData.append("comportementScore", comportementScore);
+    formData.append("comportementDescription", comportementDescription);
+    formData.append("idRepport", props.report.id);
+    formData.append(
+      "idIndicateurs",
+      JSON.stringify(props.indicatorsItem.map((e) => e.id))
+    );
+    formData.append("idRapport", props.report.id);
+    formData.append("idIndicatorsGroups", props.idIndicators);
+    axios({
+      method: "post",
+      url: "/api/editIndicatorsCVC",
+      data: formData,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    })
+      .then(function (response) {
+        props.onChangeIndicators(true);
 
+        setShow(false);
+        reload();
+      })
+      .catch(function (response) {});
+  };
   const onSend = (e) => {
     let formData = new FormData();
     formData.append("corpsScore", corpsScore);
@@ -281,7 +313,11 @@ function IndicateursFormCVC(props) {
             onChange={(e) => onChangeDescriptionComportement(e)}
           />
         </div>
-        <button onClick={(e) => onSend(e)}>Envoyer</button>
+        {props.isEdit ? (
+          <button onClick={(e) => onSendEdit(e)}>Envoyer</button>
+        ) : (
+          <button onClick={(e) => onSend(e)}>Envoyer</button>
+        )}
       </div>
     </>
   );

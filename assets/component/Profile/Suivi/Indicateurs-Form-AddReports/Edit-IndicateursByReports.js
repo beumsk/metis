@@ -77,20 +77,7 @@ function EditIndicateursByReport(props) {
 
   const onChangeIndicateursFormCVC = (indicateursFormCVC) => {
     setIndicateursFormCVC(indicateursFormCVC);
-    // setIndicateursLogement(indicateursEstLeLogement);
-    // setIndicateursFormHestiaRisqueDeces(indicateursFormHestiaRisqueDeces);
     setTypeCVCSelected("CVC");
-    // if (CSVAlreadyAsked && CSVAlreadyAsked.length > 0) {
-    //   setIndicateursFormCVC(CSVAlreadyAsked);
-    //   setTypeCVCSelected("CVC");
-
-    //   //
-    // } else {
-    //   setIndicateursFormCVC(e);
-    // }
-
-    // setIndicateursLogement(null);
-    // setIndicateursFormHestiaRisqueDeces(null);
   };
   function onChangeIndicators() {
     props.onChangeIndicators(true);
@@ -131,6 +118,7 @@ function EditIndicateursByReport(props) {
             {props.rapportIndicators.id === 2 && (
               <IndicateursFormHestiaPerteLogement
                 // id={props.id}
+                isEdit={true}
                 editForm={props?.indicatorsItem}
                 report={props.report}
                 onChangeIndicators={onChangeIndicators}
@@ -140,6 +128,7 @@ function EditIndicateursByReport(props) {
             {props.rapportIndicators.id === 1 && (
               <IndicateursFormCVC
                 report={props.report}
+                isEdit={true}
                 onChangeIndicators={onChangeIndicators}
                 // id={props.id}
                 editForm={props?.indicatorsItem}
@@ -153,6 +142,7 @@ function EditIndicateursByReport(props) {
               <IndicateursFormHestiaRisqueDeces
                 report={props.report}
                 // id={props.id}
+                isEdit={true}
                 // form={props.form}
                 editForm={props?.indicatorsItem}
                 onChangeIndicators={onChangeIndicators}
