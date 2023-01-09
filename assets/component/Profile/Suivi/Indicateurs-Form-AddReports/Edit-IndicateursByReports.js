@@ -94,6 +94,7 @@ function EditIndicateursByReport(props) {
   };
   function onChangeIndicators() {
     props.onChangeIndicators(true);
+    setShow(false);
   }
 
   return (

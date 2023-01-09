@@ -22,7 +22,26 @@ function AddIndicateursByReport(props) {
   const [auth, setAuth] = useState(useAuth());
   let id = useParams().id;
   const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const handleShow = () => {
+    if (
+      optionsItems &&
+      optionsItems.length > 0 &&
+      props?.indicatorsGroups &&
+      props?.indicatorsGroups.length > 0
+    ) {
+      function diff(obj1, obj2) {
+        var temp = JSON.stringify(obj2?.map((x) => x.id));
+        return obj1.filter((y) => temp.indexOf(y.id) < 0 && y);
+      }
+
+      var result = diff(optionsItems, props?.indicatorsGroups);
+      console.log(result);
+      setOptionsItems(result);
+      setIndicateurs();
+      //
+    }
+    setShow(true);
+  };
   const [optionsItems, setOptionsItems] = useState([
     { id: 1, name: "CVC" },
     { id: 2, name: "HESTIA - Risque perte logement" },
@@ -39,7 +58,7 @@ function AddIndicateursByReport(props) {
 
   const [indicateursEstLeLogement, setIndicateursLogement] = useState();
 
-  const [isIndicateurs, setIndicateurs] = useState(null);
+  const [isIndicateurs, setIndicateurs] = useState();
   const [idPatient, setIdPatient] = useState(id);
   const [typeCVCSelected, setTypeCVCSelected] = useState(null);
   const [CSVAlreadyAsked, setAlreadyAsked] = useState();
@@ -62,6 +81,8 @@ function AddIndicateursByReport(props) {
       setIndicateursLogement(indicateursEstLeLogement);
       setIndicateursFormHestiaRisqueDeces(indicateursFormHestiaRisqueDeces);
       setIndicateursFormCVC(indicateursFormCVC);
+
+      // console.log(props?.indicatorsGroups);
       if (
         optionsItems &&
         optionsItems.length > 0 &&
@@ -78,7 +99,6 @@ function AddIndicateursByReport(props) {
         setOptionsItems(result);
         //
       }
-      setIndicateurs(null);
     },
     [
       // optionsItems,
@@ -125,6 +145,7 @@ function AddIndicateursByReport(props) {
   };
   function onChangeIndicators() {
     props.onChangeIndicators(true);
+    setShow(false);
   }
   //
   return (
@@ -148,11 +169,10 @@ function AddIndicateursByReport(props) {
             {/* {isIndicateurs} */}
             <Form.Select
               size="lg"
-              defaultValue={"0"}
               className="uk-select"
               onChange={(e) => setIndicateurs(e.target.value)}
             >
-              <option value={"0"}>Sélectionnez le type d'indicateurs</option>
+              <option>Sélectionnez le type d'indicateurs</option>
               {optionsItems?.map((el, id) => (
                 <>{el && <option value={el.id}>{el.name}</option>}</>
               ))}
@@ -165,7 +185,6 @@ function AddIndicateursByReport(props) {
                 onChangeIndicators={onChangeIndicators}
               />
             )}
-
             {isIndicateurs === "1" && (
               <IndicateursFormCVC
                 report={props.report}
@@ -177,7 +196,6 @@ function AddIndicateursByReport(props) {
                 // form={props.form}
               />
             )}
-
             {isIndicateurs === "3" && (
               <IndicateursFormHestiaRisqueDeces
                 report={props.report}

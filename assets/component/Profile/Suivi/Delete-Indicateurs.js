@@ -97,13 +97,6 @@ function DeleteIndicateurs(props) {
   //   new Date(1254088800 *1000)
   // handleInputChange;
 
-  if (responseDatas !== null) {
-    props.onChange({
-      response: responseDatas,
-    });
-
-    // document.querySelectorAll(".btn-close")[0].click();
-  }
   return (
     <>
       <button onClick={handleShow} className="ml-4">
