@@ -16,6 +16,7 @@ import Editor from "./Editor-Reports";
 import InputPlaceList from "./Input-Place-List";
 import InputContactList from "./Input-Contact-List";
 import InputTypeList from "./Input-Type-List";
+import { isNull } from "lodash";
 
 function AddSoinsByReport(props) {
   const [show, setShow] = useState(false);
@@ -41,9 +42,11 @@ function AddSoinsByReport(props) {
   ]);
 
   const [value, setValueForm] = useState();
-  const [contact, setValueContactForm] = useState();
-  const [place, setValuePlaceForm] = useState();
+  const [contact, setValueContactForm] = useState(null);
+  const [place, setValuePlaceForm] = useState(null);
   const [description, setValueDescription] = useState();
+  const [isErrorType, setIsErrorType] = useState();
+  const [isErrorDescription, setIsErrorDescription] = useState();
 
   const handleShow = () => setShow(true);
 
@@ -66,20 +69,34 @@ function AddSoinsByReport(props) {
     // formData.append("descriptionSantee", descriptionSantee);
     // formData.append("valueConsommation", valueConsommation);
     // formData.append("descriptionConsommation", descriptionConsommation);
-    axios({
-      method: "post",
-      url: "/api/addActivitiesToReport",
-      data: formData,
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${auth.auth.accessToken}`,
-      },
-    })
-      .then(function (response) {
-        props.onChangeActivities(true);
-        setShow(false);
+
+    if (typeForm === null) {
+      setIsErrorType(true);
+    } else {
+      setIsErrorType(false);
+    }
+
+    if (descriptionForm === null) {
+      setIsErrorDescription(true);
+    } else {
+      setIsErrorDescription(false);
+    }
+    if (typeForm !== null && descriptionForm !== null) {
+      axios({
+        method: "post",
+        url: "/api/addActivitiesToReport",
+        data: formData,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${auth.auth.accessToken}`,
+        },
       })
-      .catch(function (response) {});
+        .then(function (response) {
+          props.onChangeActivities(true);
+          setShow(false);
+        })
+        .catch(function (response) {});
+    }
   };
   return (
     <>
@@ -150,6 +167,8 @@ function AddSoinsByReport(props) {
             ></InputPlaceList>
             <button onClick={(e) => onSend()}>Envoyer</button>
           </div>
+          {isErrorType && <p>Type Obligatoire</p>}
+          {isErrorDescription && <p>Description Obligatoire</p>}
         </Modal.Body>
       </Modal>
     </>

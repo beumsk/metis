@@ -51,6 +51,7 @@ function AddActivitiesByReport(props) {
   }
 
   const onSend = (e) => {
+    e.preventDefault();
     let formData = new FormData();
     formData.append("contact", JSON.stringify(contact));
     formData.append("place", JSON.stringify(place));
@@ -70,24 +71,21 @@ function AddActivitiesByReport(props) {
       setIsErrorDescription(false);
     }
 
-    console.log(typeForm, descriptionForm);
-    console.log(isErrorType, isErrorDescription);
-    if (isErrorType === false && isErrorDescription === false) {
-      console.log("sended!");
-      // axios({
-      //   method: "post",
-      //   url: "/api/addActivitiesToReport",
-      //   data: formData,
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //     Authorization: `Bearer ${auth.auth.accessToken}`,
-      //   },
-      // })
-      //   .then(function (response) {
-      //     props.onChangeActivities(true);
-      //     setShow(false);
-      //   })
-      //   .catch(function (response) {});
+    if (typeForm !== null && descriptionForm !== null) {
+      axios({
+        method: "post",
+        url: "/api/addActivitiesToReport",
+        data: formData,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${auth.auth.accessToken}`,
+        },
+      })
+        .then(function (response) {
+          props.onChangeActivities(true);
+          setShow(false);
+        })
+        .catch(function (response) {});
     }
   };
 
@@ -147,7 +145,7 @@ function AddActivitiesByReport(props) {
                 onChange={handleChangePlaces}
                 defaultValue={null}
               ></InputPlaceList>
-              <input type="submit" value="Envoyer" className="btn-metis" />
+              <button onClick={(e) => onSend(e)}>Envoyer</button>
             </div>
             {isErrorType && <p>Type Obligatoire</p>}
             {isErrorDescription && <p>Description Obligatoire</p>}
