@@ -274,8 +274,8 @@ const Profile = () => {
     setGoalsList(e);
   }
 
-  function addReport(e) {
-    formData.append("activityType", 1);
+  function addReport(status) {
+    formData.append("activityType", status);
     formData.append("contacts", null);
     formData.append("changeTypeMeet", null);
     formData.append("changeDate", null);
@@ -638,8 +638,12 @@ const Profile = () => {
         </div>
         <div className="col-sm-8">
           <div className="d-flex row-btn mb-4">
-            <button onClick={(e) => addReport(e)} className="btn-metis">
+            <button onClick={(e) => addReport(1)} className="btn-metis">
               Rapport de rencontre
+            </button>
+
+            <button onClick={(e) => addReport(3)} className="btn-metis">
+              Rapport de réunion
             </button>
             <div>
               <ModalActionsAppelsEntrant

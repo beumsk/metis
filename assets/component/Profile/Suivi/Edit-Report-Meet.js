@@ -184,7 +184,7 @@ function EditReportMeet(props) {
     });
   };
   console.log(props?.informationPatient);
-  const sentRapport = (e) => {
+  const sentRapport = (status) => {
     let opt = [
       "HESTIA - Risque perte logement",
       "CVC",
@@ -192,7 +192,7 @@ function EditReportMeet(props) {
     ];
     var formData = new FormData();
 
-    formData.append("activityType", 1);
+    formData.append("activityType", status);
     formData.append("idRapport", props?.informationPatient?.id);
     formData.append("contacts", contacts);
     formData.append("changeTypeMeet", changeTypeMeet);
@@ -380,7 +380,16 @@ function EditReportMeet(props) {
       )}
       {props?.informationPatient?.activityType === 1 && (
         <>
-          <button onClick={(e) => sentRapport(e)} className="mt-4 btn-metis">
+          <button onClick={(e) => sentRapport(1)} className="mt-4 btn-metis">
+            Confirmer
+          </button>
+          {isSentRepport && <FontAwesomeIcon icon={faCheck} />}
+        </>
+      )}
+
+      {props?.informationPatient?.activityType === 3 && (
+        <>
+          <button onClick={(e) => sentRapport(3)} className="mt-4 btn-metis">
             Confirmer
           </button>
           {isSentRepport && <FontAwesomeIcon icon={faCheck} />}
