@@ -183,7 +183,7 @@ function EditReportMeet(props) {
       setSentGoals(true);
     });
   };
-
+  console.log(props?.informationPatient);
   const sentRapport = (e) => {
     let opt = [
       "HESTIA - Risque perte logement",
@@ -225,31 +225,35 @@ function EditReportMeet(props) {
     });
   };
 
+  function onChangeActivities() {
+    props.onChangeActivities(true);
+  }
+
   function onChangeIndicators() {
     props.onChangeIndicators(true);
   }
-
   return (
     <div className="report-content">
+      <IndicateursActiviteesComponent
+        contacts={props.contacts}
+        onChangeIndicators={onChangeIndicators}
+        places={props.places}
+        onChangeActivities={onChangeActivities}
+        selectActivities={props.selectActivities}
+        selectSoins={props.selectSoins}
+        indicateursByDefault={
+          props?.informationPatient?.followupReportsIndicators
+        }
+        report={props?.informationPatient}
+        soinsByDefault={props?.informationPatient?.followupReportsActivities?.filter(
+          (e) => e.sugg && e.sugg.parentValue === "Soins"
+        )}
+        activitiesByDefault={props?.informationPatient?.followupReportsActivities?.filter(
+          (e) => e.sugg && e.sugg.parentValue === "Activités"
+        )}
+      ></IndicateursActiviteesComponent>
       {props?.informationPatient?.activityType === 1 && (
         <>
-          <IndicateursActiviteesComponent
-            contacts={props.contacts}
-            onChangeIndicators={onChangeIndicators}
-            places={props.places}
-            selectActivities={props.selectActivities}
-            selectSoins={props.selectSoins}
-            indicateursByDefault={
-              props?.informationPatient?.followupReportsIndicators
-            }
-            report={props?.informationPatient}
-            soinsByDefault={props?.informationPatient?.followupReportsIndicators.filter(
-              (e) => e.sugg.parentValue === "Soins"
-            )}
-            activitiesByDefault={props?.informationPatient?.followupReportsIndicators.filter(
-              (e) => e.sugg.parentValue === "Activités"
-            )}
-          ></IndicateursActiviteesComponent>
           <h5 className="mt-4 mb-4">Ajouter un rapport</h5>
           {/* <Form.Control type="text" id="inputText" className="mt-4" /> */}
 

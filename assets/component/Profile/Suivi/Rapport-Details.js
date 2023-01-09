@@ -364,6 +364,7 @@ function RapportDetails(props) {
                         informationPatient={r}
                         type={type}
                         onChangeIndicators={onChangeIndicators}
+                        onChangeActivities={onChangeActivities}
                         goals={props?.goals}
                         selectActivities={selectActivities}
                         selectSoins={selectSoins}

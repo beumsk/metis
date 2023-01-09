@@ -29,6 +29,7 @@ function EditNoReportMeet(props) {
   const [isSentRepport, setSentRepport] = useState(false);
   var formActivitiesDatas = new FormData();
   formActivitiesDatas.append("id", 106);
+
   function onChangeActivities() {
     props.onChangeActivities(true);
   }
@@ -48,10 +49,10 @@ function EditNoReportMeet(props) {
         report={props?.rapport}
         indicateursByDefault={props?.rapport?.followupReportsIndicators}
         soinsByDefault={props?.rapport?.followupReportsActivities?.filter(
-          (e) => e?.sugg?.parentValue === "Soins"
+          (e) => e?.sugg && e?.sugg?.parentValue === "Soins"
         )}
         activitiesByDefault={props?.rapport?.followupReportsActivities?.filter(
-          (e) => e?.sugg?.parentValue === "Activités"
+          (e) => e?.sugg && e?.sugg?.parentValue === "Activités"
         )}
       ></IndicateursActiviteesComponent>
       <div className="contact-row">
