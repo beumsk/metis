@@ -27,15 +27,39 @@ function IndicateursFormHestiaRisqueDeces(props) {
 
   const [idConsommation, setidConsommation] = useState();
 
-  const [valueSecuritee, setChoiceSecuriteeSelected] = useState();
-  const [descriptionSecuritee, setDescriptionSecuriteeSelected] = useState();
+  const [valueSecuritee, setChoiceSecuriteeSelected] = useState(
+    props?.editForm && props?.editForm[0]?.value
+      ? props?.editForm[0]?.value
+      : null
+  );
+  const [descriptionSecuritee, setDescriptionSecuriteeSelected] = useState(
+    props?.editForm && props?.editForm[0]?.comment
+      ? props?.editForm[0]?.comment
+      : null
+  );
 
-  const [valueSantee, setChoiceSanteeSelected] = useState();
-  const [descriptionSantee, setDescriptionSanteeSelected] = useState();
+  const [valueSantee, setChoiceSanteeSelected] = useState(
+    props?.editForm && props.editForm[1]?.value
+      ? props.editForm[1]?.value
+      : null
+  );
+  const [descriptionSantee, setDescriptionSanteeSelected] = useState(
+    props?.editForm && props?.editForm[1]?.comment
+      ? props?.editForm[1]?.comment
+      : null
+  );
 
-  const [valueConsommation, setChoiceConsommationSelected] = useState();
+  const [valueConsommation, setChoiceConsommationSelected] = useState(
+    props?.editForm && props.editForm[2]?.value
+      ? props.editForm[2]?.value
+      : null
+  );
   const [descriptionConsommation, setDescriptionConsommationSelected] =
-    useState();
+    useState(
+      props?.editForm && props?.editForm[2]?.comment
+        ? props?.editForm[2]?.comment
+        : null
+    );
 
   const choiceSecuritee = (valueSecuritee) => {
     setChoiceSecuriteeSelected(valueSecuritee);
@@ -97,13 +121,13 @@ function IndicateursFormHestiaRisqueDeces(props) {
     formData.append("idRepport", props.report.id);
     formData.append(
       "idIndicateurs",
-      JSON.stringify(props.indicatorsItem.map((e) => e.id))
+      JSON.stringify(props.editForm.map((e) => e.id))
     );
     formData.append("idRapport", props.report.id);
     formData.append("idIndicatorsGroups", props.idIndicators);
     axios({
       method: "post",
-      url: "/api/addIndicatorsHestiaDeces",
+      url: "/api/editIndicatorsHestiaDeces",
       data: formData,
       headers: {
         "Content-Type": "application/json",

@@ -27,18 +27,40 @@ function IndicateursFormCVC(props) {
 
   const [idComportement, setidComportement] = useState();
 
-  const [corpsScore, setCorpsScore] = useState();
-  const [corpsDescription, setDescriptionCorps] = useState();
+  const [corpsScore, setCorpsScore] = useState(
+    props?.editForm && props?.editForm[0]?.value
+      ? props?.editForm[0]?.value
+      : null
+  );
+  const [corpsDescription, setDescriptionCorps] = useState(
+    props?.editForm && props?.editForm[0]?.comment
+      ? props?.editForm[0]?.comment
+      : null
+  );
 
-  const [vetementsScore, setVetementsScore] = useState();
-  const [vetementsDescription, setDescriptionVetements] = useState();
+  const [vetementsScore, setVetementsScore] = useState(
+    props?.editForm && props.editForm[1]?.value
+      ? props.editForm[1]?.value
+      : null
+  );
+  const [vetementsDescription, setDescriptionVetements] = useState(
+    props?.editForm && props?.editForm[1]?.comment
+      ? props?.editForm[1]?.comment
+      : null
+  );
 
-  const [comportementScore, setComportementScore] = useState();
-  const [comportementDescription, setDescriptionComportement] = useState();
+  const [comportementScore, setComportementScore] = useState(
+    props?.editForm && props.editForm[2]?.value
+      ? props.editForm[2]?.value
+      : null
+  );
+  const [comportementDescription, setDescriptionComportement] = useState(
+    props?.editForm && props?.editForm[2]?.comment
+      ? props?.editForm[2]?.comment
+      : null
+  );
 
-  useEffect(() => {
-    setCorpsScore(corpsScore);
-  }, [idPatient, corpsScore]);
+  useEffect(() => {}, [idPatient]);
 
   function choiceCorps(corpsScore) {
     setCorpsScore(corpsScore);
@@ -75,7 +97,7 @@ function IndicateursFormCVC(props) {
     formData.append("idRepport", props.report.id);
     formData.append(
       "idIndicateurs",
-      JSON.stringify(props.indicatorsItem.map((e) => e.id))
+      JSON.stringify(props.editForm.map((e) => e.id))
     );
     formData.append("idRapport", props.report.id);
     formData.append("idIndicatorsGroups", props.idIndicators);
