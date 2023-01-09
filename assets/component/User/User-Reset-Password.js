@@ -40,14 +40,11 @@ const EditPassword = () => {
       },
     })
       .then(function (response) {
-        console.log(response);
         setUserId(response.data.user.id);
         setUsername(response.data.user.username);
         setEmail(response.data.user.email);
       })
-      .catch(function (response) {
-        console.log(response);
-      });
+      .catch(function (response) {});
   }, []);
   const setFormReset = (e) => {
     var formData = new FormData();
@@ -65,12 +62,9 @@ const EditPassword = () => {
       },
     })
       .then(function (response) {
-        console.log(response);
         setResponseBack(response.data.response);
       })
-      .catch(function (response) {
-        console.log(response);
-      });
+      .catch(function (response) {});
   };
   return (
     <>

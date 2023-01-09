@@ -9,16 +9,12 @@ const Editor = (props) => {
   const defaultValueRapport =
     "<b><u>Nom(s) du travailleur :</u></b><br><br><b><u>Résumé :</u></b><br><br><b><u>Bien-être :</u></b><br><br><b><u>Logement :</u></b><br><br><b><u>Médical :</u></b><br><br><b><u>Social :</u></b><br>";
   // The sunEditor parameter will be set to the core suneditor instance when this function is called
-  const handleOnResizeEditor = (height, prevHeight) => {
-    console.log(height, prevHeight);
-  };
+  const handleOnResizeEditor = (height, prevHeight) => {};
 
   const onChangeEditor = (contents, core) => {
-    console.log(contents, core);
     props.onChange(contents);
   };
 
-  console.log(props);
   return (
     <div>
       <SunEditor

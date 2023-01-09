@@ -20,7 +20,6 @@ const SelectTeam = (props) => {
       },
     })
       .then(function (response) {
-        console.log(response);
         setSelectTeam(response.data);
       })
       .catch(function (response) {});

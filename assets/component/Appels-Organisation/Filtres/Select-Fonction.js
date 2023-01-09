@@ -24,7 +24,6 @@ const SelectFunction = (props) => {
       },
     })
       .then(function (response) {
-        console.log(response);
         setFunction(response.data);
       })
       .catch(function (response) {});
@@ -46,8 +45,8 @@ const SelectFunction = (props) => {
     }
     // e.filter((f) => [f.value]);
     props.onChangeFunction(optionsValues);
-    // console.log(optionsValues);
-    // console.log(e);
+    //
+    //
   };
 
   return (

@@ -30,7 +30,7 @@ function ModalCallMissing(props) {
       },
     }).then(function (response) {
       props.onChangeResponse(response.data);
-      console.log(response);
+
       setShow(false);
     });
   };

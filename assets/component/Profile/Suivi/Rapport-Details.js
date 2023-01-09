@@ -123,7 +123,6 @@ function RapportDetails(props) {
       })
       .catch(function (response) {});
 
-    console.log(props.search);
     // setInformations(props.informations);
   }
 
@@ -154,16 +153,14 @@ function RapportDetails(props) {
   //   }
   // };
 
-  function onChangeInformations(e) {
-    console.log(e);
-  }
+  function onChangeInformations(e) {}
 
   useEffect(() => {
     if (props.search !== null) {
       setInformations(props.search);
     }
   }, [props.search]);
-  console.log(props);
+
   return (
     <>
       <FilterRapportDetails
@@ -197,7 +194,6 @@ function RapportDetails(props) {
                       r.isShow = true;
 
                       setInformations(informations);
-                      console.log(r);
                     }
 
                     if (e.target.checked === false) {

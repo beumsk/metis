@@ -125,7 +125,7 @@ function Lieux() {
     })
       .then(function (response) {
         //handle success
-        console.log(response);
+
         setListContacts(response);
       })
       .catch(function (response) {});

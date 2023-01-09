@@ -48,7 +48,7 @@ function ModalAddContact(props) {
     // $idCont = $request->request->get('idCont');
     // $idBlock = $request->request->get('idBlock');
     // $idSugg = $request->request->get('idSugg');
-    console.log("test");
+
     formGetInfos.append("type", type);
     formGetInfos.append("value", specificValueInput);
     formGetInfos.append("idCont", id.toString());

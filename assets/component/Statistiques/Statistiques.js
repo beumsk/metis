@@ -27,7 +27,6 @@ const Statistiques = () => {
   useEffect(() => {}, []);
 
   async function exportAll() {
-    console.log(statValue);
     for (let index = 0; index < 5; index++) {
       let request = "/api/statistiques" + index;
 
@@ -51,7 +50,6 @@ const Statistiques = () => {
   }
 
   function exportCSV() {
-    console.log(statValue);
     let request = "/api/statistiques" + statValue;
 
     var params = {
@@ -97,7 +95,6 @@ const Statistiques = () => {
   }
 
   function jsonToCsv(items) {
-    console.log(items);
     const header = Object.keys(items[0]);
 
     const headerString = header.join(",");
@@ -111,8 +108,6 @@ const Statistiques = () => {
     );
 
     let csv = [headerString, ...rowItems].join("\r\n");
-
-    console.log(csv);
 
     // document.write(csv);
 

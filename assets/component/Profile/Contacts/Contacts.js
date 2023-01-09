@@ -75,7 +75,6 @@ const Contacts = () => {
       },
     })
       .then(function (response) {
-        console.log(response);
         setContacts(response.data);
       })
       .catch(function (response) {});
@@ -89,7 +88,6 @@ const Contacts = () => {
       },
     })
       .then(function (response) {
-        console.log(response);
         setPatientsLists(response.data);
       })
       .catch(function (response) {});
@@ -119,7 +117,6 @@ const Contacts = () => {
       },
     })
       .then(function (response) {
-        console.log(response);
         setPatients(response);
       })
       .catch(function (response) {});
@@ -312,12 +309,10 @@ const Contacts = () => {
   ];
 
   const onChangeUpdatePatient = (e) => {
-    console.log(e);
     setPatientsLists(e);
   };
 
   function onChangeUpdateContact(e) {
-    console.log(e);
     setContacts(e);
   }
 

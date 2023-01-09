@@ -117,7 +117,6 @@ function AddReportMeet(props) {
 
   const onClickAddActivities = (e) => {
     setFormActivities((prevFormSoins) => [...prevFormSoins, e]);
-    console.log(formActivities);
   };
 
   function editorChange(e) {
@@ -186,9 +185,7 @@ function AddReportMeet(props) {
         document.getElementById("rapport_details-btn").click();
         props.onChange(true);
       })
-      .catch(function (response) {
-        console.log(response);
-      });
+      .catch(function (response) {});
   };
 
   function onChangeGoals(e) {

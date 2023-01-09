@@ -34,7 +34,7 @@ const Menu = () => {
   };
 
   const onChangeAntenne = (e) => {
-    // console.log(e);
+    //
     localStorage.setItem("antenna", e.target.value);
     location.reload();
   };

@@ -11,17 +11,17 @@ function ModalCallCanceled(props) {
   const handleShow = () => setShow(true);
 
   const handleSave = (e) => {
-    // console.log("content", content);
-    // console.log("goalsSelected", JSON.stringify(goalsSelected));
-    // console.log("contactsSelected", JSON.stringify(contactsSelected));
-    // console.log("dureeValue", dureeValue);
-    // console.log("patiId", props.defaultValueGoalsValue.pati_id);
+    //
+    //
+    //
+    //
+    //
 
     // let formGetInfos = new FormData();
     // let date = new Date(0);
     // date.setMinutes(dureeValue); // specify value for SECONDS here
     // let timeString = date.toISOString().substring(11, 19);
-    // console.log(timeString);
+    //
     let formGetInfos = new FormData();
     formGetInfos.append("goal", props.goal.id);
     formGetInfos.append("contact", props.contact.id);
@@ -39,7 +39,7 @@ function ModalCallCanceled(props) {
       },
     }).then(function (response) {
       props.onChangeResponse(response.data);
-      console.log(response);
+
       setShow(false);
     });
   };

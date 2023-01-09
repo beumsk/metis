@@ -86,7 +86,7 @@ function AddSoinsByReport(props) {
 
     setValueDescription(e.target.value);
   };
-  console.log(props);
+
   props.onChange([
     {
       act_id: idEditFormSoins[0] !== undefined ? idEditFormSoins[0] : null,

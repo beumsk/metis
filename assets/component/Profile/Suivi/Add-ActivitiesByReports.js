@@ -68,7 +68,6 @@ function AddActivitiesByReport(props) {
   }
 
   function handleChangeContacts(e) {
-    console.log(e);
     setValueContactForm(e);
   }
 
@@ -83,7 +82,7 @@ function AddActivitiesByReport(props) {
       setValueDescription(null);
     }
   };
-  console.log(props);
+
   props.onChange([
     {
       act_id:

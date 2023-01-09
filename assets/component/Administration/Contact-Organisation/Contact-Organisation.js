@@ -108,7 +108,7 @@ function ContactOrganisations() {
 
   function onChangeUpdateContact(e) {
     // props.onChangeUpdateContact(e);
-    console.log(e);
+
     axios({
       method: "post",
       url: "/api/getContacts",
@@ -126,9 +126,7 @@ function ContactOrganisations() {
 
     // setListContacts(e);
   }
-  function onColumnMatch({ searchText, value, column, row }) {
-    console.log(searchText, value, column, row);
-  }
+  function onColumnMatch({ searchText, value, column, row }) {}
   return (
     <>
       <Menu></Menu>

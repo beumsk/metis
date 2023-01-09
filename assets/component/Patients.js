@@ -32,7 +32,7 @@ function Patients() {
       // const queryString = window.location.search;
       const params = new URLSearchParams(window.location.search);
       let query = params.get("q");
-      // console.log(query);
+      //
       if (params.get("q")) {
         let query = params.get("q");
         setQuery(query);
@@ -51,11 +51,10 @@ function Patients() {
           },
         })
           .then(function (response) {
-            console.log(response);
             setPatientsList(response);
           })
           .catch(function (response) {});
-        console.log(params.get("q"));
+
         // document.getElementById("btn-search").click();
       }
     } else {
@@ -70,7 +69,7 @@ function Patients() {
       })
         .then(function (response) {
           //handle success
-          console.log(response);
+
           setPatientsList(response);
         })
         .catch(function (response) {});
@@ -90,7 +89,6 @@ function Patients() {
       .then(function (response) {
         //handle success
         setTypePatient(response.data);
-        console.log(response.data);
       })
       .catch(function (response) {});
   }, [lengthList, setLengthList]);
@@ -118,14 +116,12 @@ function Patients() {
       },
     })
       .then(function (response) {
-        console.log(response);
         setPatientsList(response);
       })
       .catch(function (response) {});
   };
 
   if (typePatient) {
-    console.log(typePatient);
   }
   const readMore = () => {
     setLengthList(lengthList + 10);

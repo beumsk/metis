@@ -124,7 +124,7 @@ function ModalAddAppels(props) {
     formData.append("patientId", idPatient);
     formData.append("userId", userId);
     formData.append("dateCall", dateCall);
-    // console.log(isCallsPatients);
+    //
     axios({
       method: "post",
       url: "/api/setCalls",

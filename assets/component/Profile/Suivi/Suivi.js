@@ -115,7 +115,6 @@ const Profile = () => {
       },
     })
       .then(function (response) {
-        console.log(response, "response !");
         setGoalsListForSelect(response);
       })
       .catch(function (response) {});
@@ -129,7 +128,6 @@ const Profile = () => {
       },
     })
       .then(function (response) {
-        console.log(response);
         setGoalsList(response);
       })
       .catch(function (response) {});
@@ -232,8 +230,6 @@ const Profile = () => {
   };
 
   function onChangeResponseDatas(e) {
-    console.log(e);
-    console.log(id.toString());
     var reportSearch = new FormData();
     reportSearch.append("id", id.toString());
     reportSearch.append("number", 10);
@@ -248,7 +244,6 @@ const Profile = () => {
       },
     })
       .then(function (response) {
-        console.log(response);
         return setSearch(response);
       })
       .catch(function (response) {});
@@ -272,7 +267,6 @@ const Profile = () => {
   };
 
   function onChangeGoals(e) {
-    console.log(e);
     setGoalsList(e);
   }
 

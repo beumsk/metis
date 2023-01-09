@@ -83,9 +83,7 @@ function ModalAddContact(props) {
         props.onChangeContacts(response);
         setShow(false);
       })
-      .catch(function (response) {
-        console.log(response);
-      });
+      .catch(function (response) {});
   };
 
   return (
