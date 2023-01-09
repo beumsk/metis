@@ -81,6 +81,8 @@ function IndicateursActiviteesComponent(props) {
     props.onChangeActivities(true);
   }
 
+  console.log(props);
+
   return (
     <>
       <div className="search-textRapport row">
@@ -130,223 +132,228 @@ function IndicateursActiviteesComponent(props) {
             </div>
           ))}
         </div>
-        <div
-          className="soins "
-          style={{
-            display: "flex",
-            width: "100%",
-            justifyContent: "space-between",
-            fontWeight: "bold",
-          }}
-        >
-          Soins(s){" "}
-          <AddSoinsByReport
-            contacts={props.contacts}
-            places={props.places}
-            onChangeActivities={onChangeActivities}
-            selectSoins={props.selectSoins}
-            report={props.report}
-            soinsByDefault={props?.soinsByDefault}
-          ></AddSoinsByReport>
-        </div>
-        <div>
-          {/* indicateursByDefault */}
-          {props?.soinsByDefault?.map((el, id) => (
-            <div
-              style={{
-                display: "flex",
-                width: "100%",
-                justifyContent: "space-between",
-              }}
-            >
-              {el?.sugg.value} {el?.description}{" "}
-              <div className="edit-delete">
-                <EditActivities
-                  activity={el}
-                  select={props.selectSoins}
-                  onChangeActivities={onChangeActivities}
-                  report={props.report}
-                ></EditActivities>{" "}
-                <DeleteActivities
-                  activity={el}
-                  onChangeActivities={onChangeActivities}
-                  report={props.report}
-                ></DeleteActivities>
-              </div>
-            </div>
-          ))}
-        </div>
+
         <div className="indicateurs ">
-          <div
-            style={{
-              display: "flex",
-              width: "100%",
-              justifyContent: "space-between",
-              fontWeight: "bold",
-            }}
-          >
-            Indicateur(s){" "}
-            <AddIndicateursByReport
-              report={props.report}
-              onChangeIndicators={onChangeIndicators}
-              indicatorsGroups={props?.report?.indicatorsGroups}
-            ></AddIndicateursByReport>
-          </div>
           <div>
             {/* indicateursByDefault */}
-            {props?.report?.indicatorsGroups?.map((el, id) => (
+            {props.activityType === 1 && (
               <>
-                {el.id === 3 && (
-                  <div
-                    style={{
-                      display: "flex",
-                      width: "100%",
-                      justifyContent: "space-between",
-                      fontWeight: "bold",
-                    }}
-                  >
-                    {el.name}{" "}
-                    <div className="edit-delete">
-                      <EditIndicateursByReport
-                        rapportIndicators={el}
-                        indicatorsItem={props.report.followupReportsIndicators.filter(
-                          (e) => e.indi.groups.id === 3
-                        )}
-                        report={props.report}
-                        onChangeIndicators={onChangeIndicators}
-                        idIndicators={"3"}
-                      ></EditIndicateursByReport>
-                      <DeleteIndicateurs
-                        rapportIndicators={el}
-                        idIndicators={"3"}
-                        indicatorsItem={props.report.followupReportsIndicators.filter(
-                          (e) => e.indi.groups.id === 3
-                        )}
-                        report={props.report}
-                        onChangeIndicators={onChangeIndicators}
-                      ></DeleteIndicateurs>
+                <div
+                  className="soins "
+                  style={{
+                    display: "flex",
+                    width: "100%",
+                    justifyContent: "space-between",
+                    fontWeight: "bold",
+                  }}
+                >
+                  Soins(s){" "}
+                  <AddSoinsByReport
+                    contacts={props.contacts}
+                    places={props.places}
+                    onChangeActivities={onChangeActivities}
+                    selectSoins={props.selectSoins}
+                    report={props.report}
+                    soinsByDefault={props?.soinsByDefault}
+                  ></AddSoinsByReport>
+                </div>
+                <div>
+                  {/* indicateursByDefault */}
+                  {props?.soinsByDefault?.map((el, id) => (
+                    <div
+                      style={{
+                        display: "flex",
+                        width: "100%",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      {el?.sugg.value} {el?.description}{" "}
+                      <div className="edit-delete">
+                        <EditActivities
+                          activity={el}
+                          select={props.selectSoins}
+                          onChangeActivities={onChangeActivities}
+                          report={props.report}
+                        ></EditActivities>{" "}
+                        <DeleteActivities
+                          activity={el}
+                          onChangeActivities={onChangeActivities}
+                          report={props.report}
+                        ></DeleteActivities>
+                      </div>
                     </div>
-                  </div>
-                )}
+                  ))}
+                </div>
+                <div
+                  style={{
+                    display: "flex",
+                    width: "100%",
+                    justifyContent: "space-between",
+                    fontWeight: "bold",
+                  }}
+                >
+                  Indicateur(s){" "}
+                  <AddIndicateursByReport
+                    report={props.report}
+                    onChangeIndicators={onChangeIndicators}
+                    indicatorsGroups={props?.report?.indicatorsGroups}
+                  ></AddIndicateursByReport>
+                </div>
+                {props?.report?.indicatorsGroups?.map((el, id) => (
+                  <>
+                    {el.id === 3 && (
+                      <div
+                        style={{
+                          display: "flex",
+                          width: "100%",
+                          justifyContent: "space-between",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        {el.name}{" "}
+                        <div className="edit-delete">
+                          <EditIndicateursByReport
+                            rapportIndicators={el}
+                            indicatorsItem={props.report.followupReportsIndicators.filter(
+                              (e) => e.indi.groups.id === 3
+                            )}
+                            report={props.report}
+                            onChangeIndicators={onChangeIndicators}
+                            idIndicators={"3"}
+                          ></EditIndicateursByReport>
+                          <DeleteIndicateurs
+                            rapportIndicators={el}
+                            idIndicators={"3"}
+                            indicatorsItem={props.report.followupReportsIndicators.filter(
+                              (e) => e.indi.groups.id === 3
+                            )}
+                            report={props.report}
+                            onChangeIndicators={onChangeIndicators}
+                          ></DeleteIndicateurs>
+                        </div>
+                      </div>
+                    )}
+                  </>
+                ))}
+                {props?.indicateursByDefault?.map((el, id) => (
+                  <>
+                    {el.indi.groups.id === 3 && (
+                      <div
+                        style={{
+                          display: "flex",
+                          width: "100%",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        {el?.indi.name} {el?.indi.description} {el?.value}
+                      </div>
+                    )}
+                  </>
+                ))}
+                {props?.report?.indicatorsGroups?.map((el, id) => (
+                  <>
+                    {el.id === 2 && (
+                      <div
+                        style={{
+                          display: "flex",
+                          width: "100%",
+                          justifyContent: "space-between",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        {el.name}{" "}
+                        <div className="edit-delete">
+                          <EditIndicateursByReport
+                            rapportIndicators={el}
+                            indicatorsItem={props.report.followupReportsIndicators.filter(
+                              (e) => e.indi.groups.id === 2
+                            )}
+                            report={props.report}
+                            onChangeIndicators={onChangeIndicators}
+                            idIndicators={"2"}
+                          ></EditIndicateursByReport>
+                          <DeleteIndicateurs
+                            rapportIndicators={el}
+                            indicatorsItem={props.report.followupReportsIndicators.filter(
+                              (e) => e.indi.groups.id === 2
+                            )}
+                            report={props.report}
+                            idIndicators={"2"}
+                            onChangeIndicators={onChangeIndicators}
+                          ></DeleteIndicateurs>
+                        </div>
+                      </div>
+                    )}
+                  </>
+                ))}
+                {props?.indicateursByDefault?.map((el, id) => (
+                  <>
+                    {el.indi.groups.id === 2 && (
+                      <div
+                        style={{
+                          display: "flex",
+                          width: "100%",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        {el?.indi.name} {el?.indi.description} {el?.value}
+                      </div>
+                    )}
+                  </>
+                ))}
+                {props?.report?.indicatorsGroups?.map((el, id) => (
+                  <>
+                    {el.id === 1 && (
+                      <div
+                        style={{
+                          display: "flex",
+                          width: "100%",
+                          justifyContent: "space-between",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        {el.name}{" "}
+                        <div className="edit-delete">
+                          <EditIndicateursByReport
+                            rapportIndicators={el}
+                            idIndicators={"1"}
+                            indicatorsItem={props.report.followupReportsIndicators.filter(
+                              (e) => e.indi.groups.id === 1
+                            )}
+                            report={props.report}
+                            onChangeIndicators={onChangeIndicators}
+                          ></EditIndicateursByReport>
+                          <DeleteIndicateurs
+                            rapportIndicators={el}
+                            indicatorsItem={props.report.followupReportsIndicators.filter(
+                              (e) => e.indi.groups.id === 1
+                            )}
+                            report={props.report}
+                            idIndicators={"1"}
+                            onChangeIndicators={onChangeIndicators}
+                          ></DeleteIndicateurs>
+                        </div>
+                      </div>
+                    )}
+                  </>
+                ))}
+                {props?.indicateursByDefault?.map((el, id) => (
+                  <>
+                    {el.indi.groups.id === 1 && (
+                      <div
+                        style={{
+                          display: "flex",
+                          width: "100%",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        {el?.indi.name} {el?.indi.description} {el?.value}
+                      </div>
+                    )}
+                  </>
+                ))}
               </>
-            ))}
-            {props?.indicateursByDefault?.map((el, id) => (
-              <>
-                {el.indi.groups.id === 3 && (
-                  <div
-                    style={{
-                      display: "flex",
-                      width: "100%",
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    {el?.indi.name} {el?.indi.description} {el?.value}
-                  </div>
-                )}
-              </>
-            ))}
-            {props?.report?.indicatorsGroups?.map((el, id) => (
-              <>
-                {el.id === 2 && (
-                  <div
-                    style={{
-                      display: "flex",
-                      width: "100%",
-                      justifyContent: "space-between",
-                      fontWeight: "bold",
-                    }}
-                  >
-                    {el.name}{" "}
-                    <div className="edit-delete">
-                      <EditIndicateursByReport
-                        rapportIndicators={el}
-                        indicatorsItem={props.report.followupReportsIndicators.filter(
-                          (e) => e.indi.groups.id === 2
-                        )}
-                        report={props.report}
-                        onChangeIndicators={onChangeIndicators}
-                        idIndicators={"2"}
-                      ></EditIndicateursByReport>
-                      <DeleteIndicateurs
-                        rapportIndicators={el}
-                        indicatorsItem={props.report.followupReportsIndicators.filter(
-                          (e) => e.indi.groups.id === 2
-                        )}
-                        report={props.report}
-                        idIndicators={"2"}
-                        onChangeIndicators={onChangeIndicators}
-                      ></DeleteIndicateurs>
-                    </div>
-                  </div>
-                )}
-              </>
-            ))}
-            {props?.indicateursByDefault?.map((el, id) => (
-              <>
-                {el.indi.groups.id === 2 && (
-                  <div
-                    style={{
-                      display: "flex",
-                      width: "100%",
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    {el?.indi.name} {el?.indi.description} {el?.value}
-                  </div>
-                )}
-              </>
-            ))}
-            {props?.report?.indicatorsGroups?.map((el, id) => (
-              <>
-                {el.id === 1 && (
-                  <div
-                    style={{
-                      display: "flex",
-                      width: "100%",
-                      justifyContent: "space-between",
-                      fontWeight: "bold",
-                    }}
-                  >
-                    {el.name}{" "}
-                    <div className="edit-delete">
-                      <EditIndicateursByReport
-                        rapportIndicators={el}
-                        idIndicators={"1"}
-                        indicatorsItem={props.report.followupReportsIndicators.filter(
-                          (e) => e.indi.groups.id === 1
-                        )}
-                        report={props.report}
-                        onChangeIndicators={onChangeIndicators}
-                      ></EditIndicateursByReport>
-                      <DeleteIndicateurs
-                        rapportIndicators={el}
-                        indicatorsItem={props.report.followupReportsIndicators.filter(
-                          (e) => e.indi.groups.id === 1
-                        )}
-                        report={props.report}
-                        idIndicators={"1"}
-                        onChangeIndicators={onChangeIndicators}
-                      ></DeleteIndicateurs>
-                    </div>
-                  </div>
-                )}
-              </>
-            ))}
-            {props?.indicateursByDefault?.map((el, id) => (
-              <>
-                {el.indi.groups.id === 1 && (
-                  <div
-                    style={{
-                      display: "flex",
-                      width: "100%",
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    {el?.indi.name} {el?.indi.description} {el?.value}
-                  </div>
-                )}
-              </>
-            ))}
+            )}
           </div>
         </div>
       </div>

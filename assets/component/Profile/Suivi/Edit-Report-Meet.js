@@ -241,6 +241,7 @@ function EditReportMeet(props) {
         onChangeActivities={onChangeActivities}
         selectActivities={props.selectActivities}
         selectSoins={props.selectSoins}
+        activityType={props.activityType}
         indicateursByDefault={
           props?.informationPatient?.followupReportsIndicators
         }

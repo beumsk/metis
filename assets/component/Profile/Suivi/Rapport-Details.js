@@ -370,6 +370,7 @@ function RapportDetails(props) {
                         selectSoins={selectSoins}
                         contacts={props?.contacts}
                         places={props?.places}
+                        activityType={r.activityType}
                         onChangeReportMeet={onChangeReport}
                         indicatorsResponse={r.followupReportsIndicators}
                       ></EditReportMeet>
@@ -384,6 +385,7 @@ function RapportDetails(props) {
                         selectActivities={selectActivities}
                         onChangeIndicators={onChangeIndicators}
                         onChangeActivities={onChangeActivities}
+                        activityType={r.activityType}
                         selectSoins={selectSoins}
                         contacts={props?.contacts}
                         places={props?.places}
