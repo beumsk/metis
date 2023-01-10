@@ -204,7 +204,10 @@ function EditReportMeet(props) {
 
     formData.append("changeGoals", JSON.stringify(changeGoals));
     formData.append("contId", JSON.stringify(changeContacts));
-    formData.append("changePlaces", changePlaces.value);
+    formData.append(
+      "changePlaces",
+      changePlaces && changePlaces.value ? changePlaces.value : null
+    );
     formData.append("changeEditor", changeEditor);
     formData.append("goalsInput", JSON.stringify(goalsInput));
     formData.append("meetType", meetType);
