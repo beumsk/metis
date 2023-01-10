@@ -115,7 +115,7 @@ const Menu = () => {
             </Form.Select>
 
             <Search></Search>
-            <Dropdown>
+            <Dropdown align={{ xxl: "end" }}>
               <Dropdown.Toggle
                 style={{
                   backgroundColor: "transparent",
@@ -127,7 +127,7 @@ const Menu = () => {
 
               <Dropdown.Menu>
                 <Dropdown.Item href="/edit-profile">
-                  Editer le profile
+                  Editer le profil
                 </Dropdown.Item>
                 <Dropdown.Item href="/edit-password">
                   Editer le mot de passe

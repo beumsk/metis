@@ -370,7 +370,7 @@ const Contacts = () => {
           )}
         </ToolkitProvider>
       ) : (
-        <p>Loading</p>
+        <p>{listContacts ? "Pas de contact pour ce contact." : "Loading"}</p>
       )}
 
       <h5>Patients</h5>
@@ -389,7 +389,7 @@ const Contacts = () => {
           )}
         </ToolkitProvider>
       ) : (
-        <p>Loading</p>
+        <p>{patientsLists ? "Pas de patient pour ce contact." : "Loading"}</p>
       )}
     </div>
   );

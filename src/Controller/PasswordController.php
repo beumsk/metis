@@ -41,7 +41,7 @@ class PasswordController extends AbstractController
             ]);
         } else {
             return new JsonResponse([
-                'response' => "Le mot de passe que vous avez tapée ne correspond pas au mot de passe actuel",
+                'response' => "Le mot de passe que vous avez entré ne correspond pas au mot de passe actuel.",
                 'idAppel' => $user->getId()
             ]);
         }

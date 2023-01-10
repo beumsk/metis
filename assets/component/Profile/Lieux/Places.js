@@ -168,7 +168,7 @@ const Places = () => {
           )}
         </ToolkitProvider>
       ) : (
-        <p>Loading</p>
+        <p>{listPlaces ? "Pas de lieu pour ce contact." : "Loading"}</p>
       )}
       {/* {listPlaces && listPlaces.data.length > 0 && (
         <>
