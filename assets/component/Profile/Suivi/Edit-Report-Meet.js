@@ -335,7 +335,8 @@ function EditReportMeet(props) {
           onChange={onChangeContacts}
         />
       )}
-      {props?.informationPatient?.activityType === 1 && (
+      {(props?.informationPatient?.activityType === 1 ||
+        props?.informationPatient?.activityType === 3) && (
         <>
           <InputPlaceListSelect
             places={props.places}

@@ -83,7 +83,7 @@ function IndicateursActiviteesComponent(props) {
 
   return (
     <>
-      <div className="search-textRapport row">
+      <div className="indicateurs-container row">
         <div
           className="activities"
           style={{
