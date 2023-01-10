@@ -155,7 +155,7 @@ class ContactsRepository extends ServiceEntityRepository
 
         $qb->select('c')
             ->from('App:Contacts', 'c')
-            ->where('c.type in (' . implode(",", [Contacts::TYPE_PERSON]) . ') AND c.id NOT in (
+            ->where('c.type in (' . implode(",", [Contacts::TYPE_PERSON, Contacts::TYPE_ORGANISATION]) . ') AND c.id NOT in (
                 select c2.id FROM App:PatientsContacts pc
                 JOIN pc.cont c2
                 WHERE pc.pati = :patientId) AND c.deleted_at IS NULL');
@@ -163,7 +163,8 @@ class ContactsRepository extends ServiceEntityRepository
 
         if ($query !== null) {
 
-            $qb->andWhere('CONCAT(c.lastname,\' \', c.firstname,\' \') LIKE :query OR CONCAT(c.firstname,\' \', c.lastname,\' \') LIKE :query ');
+            $qb->andWhere('CONCAT(c.lastname,\' \', c.firstname,\' \', c.description) LIKE :query OR CONCAT(c.firstname,\' \', c.lastname,\' \', c.description) LIKE :query OR CONCAT(c.lastname,\' \') LIKE :query OR CONCAT(c.firstname,\' \') LIKE :query OR CONCAT(c.lastname,\' \',c.description,\' \') LIKE :query OR CONCAT(c.lastname,\' \',c.description,\' \') LIKE :query ');
+            // $qb->andWhere('CONCAT(c.lastname,\' \') LIKE :query OR CONCAT(c.firstname,\' \') LIKE :query ');
             $parameters["query"] = '%' . $query . '%';
         }
 
