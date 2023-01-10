@@ -87,7 +87,9 @@ export default function InputContactList(props) {
       onClose={() => {
         setOpen(false);
       }}
-      isOptionEqualToValue={(option, value) => option.label === value.title}
+      isOptionEqualToValue={(option, value) =>
+        option.label === value.title || option.label === value.description
+      }
       getOptionLabel={(option) => option.label}
       options={options}
       onInputChange={(event, newInputValue) => {
@@ -107,11 +109,16 @@ export default function InputContactList(props) {
         })
           .then(function (response) {
             setOptions([...response.data]);
+            if (options) {
+              setOpen(true);
+              console.log("true");
+            }
           })
           .catch(function (response) {});
       }}
       onChange={(event, newValue) => {
         props.onChange(newValue);
+        setOpen(true);
       }}
       loading={loading}
       freeSolo={true}
