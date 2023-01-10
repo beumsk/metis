@@ -26,18 +26,33 @@ const Editor = (props) => {
           plugins: plugins,
           buttonList: [
             ["undo", "redo"],
-            ["font", "fontSize", "formatBlock"],
+
+            // ["font", "fontSize", "formatBlock"],
             // ["paragraphStyle", "blockquote"],
-            ["bold", "underline", "italic"],
-            // ["fontColor", "hiliteColor", "textStyle"],
+            [
+              "bold",
+              "underline",
+              "italic",
+              "strike",
+              "subscript",
+              "superscript",
+            ],
+            ["fontColor", "hiliteColor"],
             ["removeFormat"],
             // "/", // Line break
+
             ["outdent", "indent"],
-            ["align", "horizontalRule", "list", "lineHeight"],
-            ["audio" /** ,'math' */], // You must add the 'katex' library at options to use the 'math' plugin.
-            /** ['imageGallery'] */ // You must add the "imageGalleryUrl".
+
+            [
+              // "table",
+              "link",
+              "image",
+              // "audio" /** ,'math' */
+            ], // You must add the 'katex' library at options to use the 'math' plugin.
+            // ["imageGallery"], // You must add the "imageGalleryUrl".
             // ["fullScreen"],
             // ["preview", "print"],
+            ["list"],
             // ["save", "template"],
             /** ['dir', 'dir_ltr', 'dir_rtl'] */ // "dir": Toggle text direction, "dir_ltr": Right to Left, "dir_rtl": Left to Right
           ],
