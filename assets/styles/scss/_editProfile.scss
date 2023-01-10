@@ -14,3 +14,17 @@
         margin-top: 1rem;
     }
 }
+
+.editIconPatient{
+    float: right;
+}
+
+.row-btnRapport{
+    display: flex;
+    align-items: flex-end;
+    justify-content: end;
+    flex-direction: row-reverse;
+    button{
+        margin-left: 0.5rem;
+    }
+}

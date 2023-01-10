@@ -28,7 +28,10 @@ function IndicateursFormHestiaPerteLogement(props) {
   const [typeCVCSelected, setTypeCVCSelected] = useState(null);
 
   const [type, setType] = useState(null);
-  const handleClose = () => setShow(false);
+  const handleClose = () => {
+    setShow(false);
+    reload();
+  };
   const handleShow = () => setShow(true);
 
   // const [vetementsDescription, setDescriptionVetements] = useState(
@@ -38,46 +41,47 @@ function IndicateursFormHestiaPerteLogement(props) {
   // );
   useEffect(() => {}, [idPatient]);
 
-  const [idBailleur, setidBailleur] = useState(
-    props?.editForm && props?.editForm[0]?.id ? props?.editForm[0]?.id : null
-  );
-  const [idVoisinage, setidVoisinage] = useState(
-    props?.editForm && props?.editForm[1]?.id ? props?.editForm[1]?.id : null
-  );
+  const [idBailleur, setidBailleur] = useState();
+  const [idVoisinage, setidVoisinage] = useState();
 
-  const [idHygiene, setidHygiene] = useState(
-    props?.editForm && props?.editForm[2]?.id ? props?.editForm[2]?.id : null
-  );
+  const [idHygiene, setidHygiene] = useState();
+  // voisinageSelected
+  // hygieneSelected
+  // bailleurSelected
+
+  const [isVoisinageSelected, setIsVoisinageSelected] = useState(false);
+  const [isHygieneSelected, setIsHygieneSelected] = useState(false);
+  const [isBailleurSelected, setIsBailleurSelected] = useState(false);
 
   const [voisinageSelected, setVoisinageSelected] = useState(
-    props?.editForm && props?.editForm[0]?.value
+    props?.editForm && props?.editForm[0]?.value !== null
       ? props?.editForm[0]?.value
       : null
   );
   const [descriptionVoisinage, setDescriptionVoisinage] = useState(
-    props?.editForm && props?.editForm[0]?.comment
+    props?.editForm && props?.editForm[0]?.comment !== null
       ? props?.editForm[0]?.comment
       : null
   );
 
   const [hygieneSelected, setHygieneSelected] = useState(
-    props?.editForm && props.editForm[1]?.value
+    props?.editForm && props.editForm[1]?.value !== null
       ? props.editForm[1]?.value
       : null
   );
   const [descriptionHygiene, setDescriptionHygiene] = useState(
-    props?.editForm && props.editForm[1]?.comment
-      ? props.editForm[1]?.comment
+    props?.editForm && props?.editForm[1]?.comment !== null
+      ? props?.editForm[1]?.comment
       : null
   );
 
   const [bailleurSelected, setBailleurSelected] = useState(
-    props?.editForm && props.editForm[2]?.value
-      ? Number(props.editForm[2]?.value)
+    props?.editForm && props.editForm[2]?.value !== null
+      ? props.editForm[2]?.value
       : null
   );
   const [descriptionBailleur, setDescriptionBailleur] = useState(
-    props?.editForm && props?.editForm[2]?.comment
+    props?.editForm && props?.editForm[2]?.comment !== null
       ? props?.editForm[2]?.comment
       : null
   );
@@ -108,21 +112,90 @@ function IndicateursFormHestiaPerteLogement(props) {
     setDescriptionBailleur(e.target.value);
   };
   //   /api/getContacts
+  const onSend = (e) => {
+    let formData = new FormData();
+    formData.append("voisinageSelected", voisinageSelected);
+    formData.append("descriptionVoisinage", descriptionVoisinage);
+    formData.append("hygieneSelected", hygieneSelected);
+    formData.append("descriptionHygiene", descriptionHygiene);
+    formData.append("bailleurSelected", bailleurSelected);
+    formData.append("descriptionBailleur", descriptionBailleur);
+    formData.append("idRepport", props.report.id);
+    axios({
+      method: "post",
+      url: "/api/addIndicatorsHestiaLogement",
+      data: formData,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    })
+      .then(function (response) {
+        props.onChangeIndicators(true);
+        setShow(false);
+        reload();
+      })
+      .catch(function (response) {});
+  };
+  const onSendEdit = (e) => {
+    let formData = new FormData();
+    formData.append("voisinageSelected", voisinageSelected);
+    formData.append("descriptionVoisinage", descriptionVoisinage);
+    formData.append("hygieneSelected", hygieneSelected);
+    formData.append("descriptionHygiene", descriptionHygiene);
+    formData.append("bailleurSelected", bailleurSelected);
+    formData.append("descriptionBailleur", descriptionBailleur);
+    formData.append("idRepport", props.report.id);
+    formData.append(
+      "idIndicateurs",
+      JSON.stringify(props.editForm.map((e) => e.id))
+    );
+    formData.append("idRapport", props.report.id);
+    formData.append("idIndicatorsGroups", props.idIndicators);
 
-  props.onChange([
-    {
-      id: props.id,
-      id_bailleur: idBailleur,
-      id_voisinage: idVoisinage,
-      id_hygiene: idHygiene,
-      bailleurSelected: bailleurSelected,
-      voisinageSelected: voisinageSelected,
-      hygieneSelected: hygieneSelected,
-      descriptionVoisinage: descriptionVoisinage,
-      descriptionHygiene: descriptionHygiene,
-      descriptionBailleur: descriptionBailleur,
-    },
-  ]);
+    // {isVoisinageSelected && <p>Score du voisinage manquant</p>}
+
+    // {isHygieneSelected && <p>Score du hygiene manquant</p>}
+
+    // {isBailleurSelected && <p>Score du bailleur manquant</p>}
+    if (voisinageSelected === null) {
+      setIsVoisinageSelected(true);
+    } else {
+      setIsVoisinageSelected(false);
+    }
+    if (hygieneSelected === null) {
+      setIsHygieneSelected(true);
+    } else {
+      setIsHygieneSelected(false);
+    }
+    if (bailleurSelected === null) {
+      setIsBailleurSelected(true);
+    } else {
+      setIsBailleurSelected(false);
+    }
+    if (
+      voisinageSelected !== null &&
+      hygieneSelected !== null &&
+      bailleurSelected !== null
+    ) {
+      axios({
+        method: "post",
+        url: "/api/editIndicatorsHestiaLogement",
+        data: formData,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${auth.auth.accessToken}`,
+        },
+      })
+        .then(function (response) {
+          props.onChangeIndicators(true);
+          setShow(false);
+          reload();
+        })
+        .catch(function (response) {});
+    }
+  };
+
   return (
     <>
       <div className="addSoins-form">
@@ -145,10 +218,10 @@ function IndicateursFormHestiaPerteLogement(props) {
             inline
             label="Conflits de voisinage mais gérés (1)"
             name="group4"
+            onClick={(e) => choiceVoisinage("1")}
             defaultChecked={
               props.editForm && props?.editForm[0]?.value === 1 ? true : false
             }
-            onClick={(e) => choiceVoisinage("1")}
             type={"radio"}
             id={`inline-radio-14`}
           />
@@ -179,13 +252,13 @@ function IndicateursFormHestiaPerteLogement(props) {
           </Form.Label>
           <textarea
             as="textarea"
-            className="uk-textarea"
-            rows={3}
             defaultValue={
               props?.editForm && props?.editForm[0]?.comment
                 ? props?.editForm[0]?.comment
                 : ""
             }
+            className="uk-textarea"
+            rows={3}
             onChange={(e) => onChangeDescriptionVoisinage(e)}
           />
         </div>
@@ -199,7 +272,7 @@ function IndicateursFormHestiaPerteLogement(props) {
             onClick={(e) => choiceHygiene("0")}
             name="group5"
             defaultChecked={
-              props.editForm && props.editForm[1]?.value === 0 ? true : false
+              props.editForm && props?.editForm[1]?.value === 0 ? true : false
             }
             type={"radio"}
             id={`inline-radio-17`}
@@ -209,10 +282,10 @@ function IndicateursFormHestiaPerteLogement(props) {
             label="Présence d’odeurs nauséabondes OU nuisibles OU altération du matériel OU accumulation (1)"
             name="group5"
             onClick={(e) => choiceHygiene("1")}
-            type={"radio"}
             defaultChecked={
-              props.editForm && props.editForm[1]?.value === 1 ? true : false
+              props.editForm && props?.editForm[1]?.value === 1 ? true : false
             }
+            type={"radio"}
             id={`inline-radio-18`}
           />
           <Form.Check
@@ -220,21 +293,21 @@ function IndicateursFormHestiaPerteLogement(props) {
             label="Logement relativement propre et entretenu mais pas impeccable ou aides familiales limitées (2)"
             name="group5"
             onClick={(e) => choiceHygiene("2")}
-            type={"radio"}
             defaultChecked={
-              props.editForm && props.editForm[1]?.value === 2 ? true : false
+              props.editForm && props?.editForm[1]?.value === 2 ? true : false
             }
+            type={"radio"}
             id={`inline-radio-19`}
           />
           <Form.Check
             inline
             label="Logement impeccable et/ou aides familiales régulières et fonctionnelles (3)"
             name="group5"
+            defaultChecked={
+              props.editForm && props?.editForm[1]?.value === 3 ? true : false
+            }
             onClick={(e) => choiceHygiene("3")}
             type={"radio"}
-            defaultChecked={
-              props.editForm && props.editForm[1]?.value === 3 ? true : false
-            }
             id={`inline-radio-20`}
           />
           <Form.Label htmlFor="inputValue" className="uk-form-label">
@@ -245,8 +318,8 @@ function IndicateursFormHestiaPerteLogement(props) {
             className="uk-textarea"
             rows={3}
             defaultValue={
-              props.editForm && props.editForm[1]?.comment
-                ? props.editForm[1]?.comment
+              props?.editForm && props?.editForm[1]?.comment
+                ? props?.editForm[1]?.comment
                 : ""
             }
             onChange={(e) => onChangeDescriptionHygiene(e)}
@@ -261,10 +334,10 @@ function IndicateursFormHestiaPerteLogement(props) {
             label="Absence de paiement du loyer (0)"
             onClick={(e) => choiceBailleur("0")}
             name="group6"
-            defaultChecked={
-              props.editForm && props.editForm[2]?.value === 0 ? true : false
-            }
             type={"radio"}
+            defaultChecked={
+              props.editForm && props?.editForm[2]?.value === 0 ? true : false
+            }
             id={`inline-radio-21`}
           />
           <Form.Check
@@ -272,10 +345,10 @@ function IndicateursFormHestiaPerteLogement(props) {
             label="La personne paie son loyer mais aucune garantie de régularité ou de manière erronée (1)"
             name="group6"
             onClick={(e) => choiceBailleur("1")}
-            defaultChecked={
-              props.editForm && props.editForm[2]?.value === 1 ? true : false
-            }
             type={"radio"}
+            defaultChecked={
+              props.editForm && props?.editForm[2]?.value === 1 ? true : false
+            }
             id={`inline-radio-22`}
           />
           <Form.Check
@@ -283,10 +356,10 @@ function IndicateursFormHestiaPerteLogement(props) {
             label="Quelqu’un est garant du paiement du loyer mais personne n’est garant de la signature des baux (2)"
             name="group6"
             onClick={(e) => choiceBailleur("2")}
-            defaultChecked={
-              props.editForm && props.editForm[2]?.value === 2 ? true : false
-            }
             type={"radio"}
+            defaultChecked={
+              props.editForm && props?.editForm[2]?.value === 2 ? true : false
+            }
             id={`inline-radio-23`}
           />
           <Form.Check
@@ -294,19 +367,14 @@ function IndicateursFormHestiaPerteLogement(props) {
             label="Garantie du paiement du loyer et de la signature des baux (3)"
             name="group6"
             onClick={(e) => choiceBailleur("3")}
-            defaultChecked={
-              props.editForm && props.editForm[2]?.value === 3 ? true : false
-            }
             type={"radio"}
+            defaultChecked={
+              props.editForm && props?.editForm[2]?.value === 3 ? true : false
+            }
             id={`inline-radio-24`}
           />
           <Form.Label
             htmlFor="inputValue"
-            defaultValue={
-              props?.editForm && props?.editForm?.length > 0
-                ? props?.editForm[2]?.comment
-                : ""
-            }
             className="uk-form-label"
             onChange={(e) => onChangeDescriptionBailleur(e)}
           >
@@ -317,12 +385,26 @@ function IndicateursFormHestiaPerteLogement(props) {
             className="uk-textarea"
             rows={3}
             defaultValue={
-              props.editForm && props.editForm[2]?.comment
-                ? props.editForm[2]?.comment
+              props?.editForm && props?.editForm[2]?.comment
+                ? props?.editForm[2]?.comment
                 : ""
             }
             onChange={(e) => onChangeDescriptionBailleur(e)}
           ></textarea>
+          {props.isEdit ? (
+            <button onClick={(e) => onSendEdit(e)}>Envoyer</button>
+          ) : (
+            <button onClick={(e) => onSend(e)}>Envoyer</button>
+          )}
+
+          {/* const [isVoisinageSelected, setIsVoisinageSelected] = useState(false);
+  const [isHygieneSelected, setIsHygieneSelected] = useState(false);
+  const [isBailleurSelected, setIsBailleurSelected] = useState(false); */}
+          {isVoisinageSelected && <p>Score du voisinage manquant</p>}
+
+          {isHygieneSelected && <p>Score du hygiene manquant</p>}
+
+          {isBailleurSelected && <p>Score du bailleur manquant</p>}
         </div>
       </div>
     </>

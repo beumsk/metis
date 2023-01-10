@@ -113,7 +113,7 @@ class FollowupReports
 
     #[ORM\ManyToMany(targetEntity: IndicatorsGroups::class, inversedBy: 'followUpReports')]
     #[ORM\JoinTable(name: "followup_report_indicators_groups")]
-    #[ORM\JoinColumn(name: "fore_id", referencedColumnName: "id", nullable: true)]
+    #[ORM\JoinColumn(name: "id", referencedColumnName: "id", nullable: true)]
     #[ORM\InverseJoinColumn(name: "igrp_id", referencedColumnName: "id", nullable: true)]
     private Collection $indicatorsGroups;
 
@@ -457,13 +457,14 @@ class FollowupReports
 
     public function removeActivity(FollowupReportsActivities $activity): self
     {
+
         if ($this->activities->removeElement($activity)) {
             // set the owning side to null (unless already changed)
             if ($activity->getFollowupReports() === $this) {
                 $activity->setFollowupReports(null);
             }
         }
-
+        // dd($this);
         return $this;
     }
 }

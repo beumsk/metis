@@ -22,16 +22,17 @@ function IndicateursFormCVC(props) {
 
   const [idPatient, setIdPatient] = useState(id);
 
-  const [idCorps, setidCorps] = useState(
-    props?.editForm && props?.editForm[0]?.id ? props?.editForm[0]?.id : null
-  );
-  const [idVetements, setidVetements] = useState(
-    props?.editForm && props?.editForm[1]?.id ? props?.editForm[1]?.id : null
-  );
+  const [idCorps, setidCorps] = useState();
+  const [idVetements, setidVetements] = useState();
 
-  const [idComportement, setidComportement] = useState(
-    props?.editForm && props?.editForm[2]?.id ? props?.editForm[2]?.id : null
-  );
+  const [idComportement, setidComportement] = useState();
+
+  // isCorpsScore
+  // isVetementsScore
+  // isComportementScore
+  const [isCorpsScore, setIsCorpsScore] = useState(false);
+  const [isVetementsScore, setIsVetementsScore] = useState(false);
+  const [isComportementScore, setIsComportementScore] = useState(false);
 
   const [corpsScore, setCorpsScore] = useState(
     props?.editForm && props?.editForm[0]?.value
@@ -50,14 +51,14 @@ function IndicateursFormCVC(props) {
       : null
   );
   const [vetementsDescription, setDescriptionVetements] = useState(
-    props?.editForm && props.editForm[2]?.comment
-      ? props.editForm[2]?.comment
+    props?.editForm && props?.editForm[1]?.comment
+      ? props?.editForm[1]?.comment
       : null
   );
 
   const [comportementScore, setComportementScore] = useState(
     props?.editForm && props.editForm[2]?.value
-      ? Number(props.editForm[2]?.value)
+      ? props.editForm[2]?.value
       : null
   );
   const [comportementDescription, setDescriptionComportement] = useState(
@@ -66,9 +67,7 @@ function IndicateursFormCVC(props) {
       : null
   );
 
-  useEffect(() => {
-    setCorpsScore(corpsScore);
-  }, [idPatient, corpsScore]);
+  useEffect(() => {}, [idPatient]);
 
   function choiceCorps(corpsScore) {
     setCorpsScore(corpsScore);
@@ -93,40 +92,109 @@ function IndicateursFormCVC(props) {
   const onChangeDescriptionComportement = (e) => {
     setDescriptionComportement(e.target.value);
   };
+  // onSendEdit
+  const onSendEdit = (e) => {
+    let formData = new FormData();
 
-  props.onChange([
-    {
-      id: props.id,
-      id_corps: idCorps,
-      corpsScore: corpsScore,
-      // id_indi:
-      corpsDescription: corpsDescription,
-      id_vetements: idVetements,
-      vetementsScore: vetementsScore,
-      vetementsDescription: vetementsDescription,
-      id_comportement: idComportement,
-      comportementScore: comportementScore,
-      comportementDescription: comportementDescription,
-    },
-  ]);
+    if (corpsScore === null) {
+      setIsCorpsScore(true);
+    }
+    if (vetementsScore === null) {
+      setIsVetementsScore(true);
+    }
+    if (comportementScore === null) {
+      setIsComportementScore(true);
+    }
 
-  //
-  //   id: props.id,
-  //   corpsScore: corpsScore ? corpsScore : props?.editForm[0]?.value,
-  //   // corpsDescription: corpsDescription
-  //   //   ? corpsDescription
-  //   //   : props?.editForm[0]?.comment,
-  //   // vetementsScore: vetementsScore ? vetementsScore : props.editForm[1]?.value,
-  //   // vetementsDescription: vetementsDescription
-  //   //   ? vetementsDescription
-  //   //   : props.editForm[1]?.comment,
-  //   // comportementScore: comportementScore
-  //   //   ? comportementScore
-  //   //   : props.editForm[2]?.value,
-  //   // comportementDescription: comportementDescription
-  //   //   ? comportementDescription
-  //   //   : props?.editForm[2]?.comment,
-  // });
+    formData.append("corpsScore", corpsScore);
+    formData.append("corpsDescription", corpsDescription);
+    formData.append("vetementsScore", vetementsScore);
+    formData.append("vetementsDescription", vetementsDescription);
+    formData.append("comportementScore", comportementScore);
+    formData.append("comportementDescription", comportementDescription);
+    formData.append("idRepport", props.report.id);
+    formData.append(
+      "idIndicateurs",
+      JSON.stringify(props.editForm.map((e) => e.id))
+    );
+    formData.append("idRapport", props.report.id);
+    formData.append("idIndicatorsGroups", props.idIndicators);
+
+    if (
+      corpsScore !== null &&
+      vetementsScore !== null &&
+      comportementScore !== null
+    ) {
+      axios({
+        method: "post",
+        url: "/api/editIndicatorsCVC",
+        data: formData,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${auth.auth.accessToken}`,
+        },
+      })
+        .then(function (response) {
+          props.onChangeIndicators(true);
+
+          setShow(false);
+          reload();
+        })
+        .catch(function (response) {});
+    }
+  };
+  const onSend = (e) => {
+    if (corpsScore === null) {
+      setIsCorpsScore(true);
+    } else {
+      setIsCorpsScore(false);
+    }
+    if (vetementsScore === null) {
+      setIsVetementsScore(true);
+    } else {
+      setIsVetementsScore(false);
+    }
+    if (comportementScore === null) {
+      setIsComportementScore(true);
+    } else {
+      setIsComportementScore(false);
+    }
+
+    if (
+      corpsScore !== null &&
+      vetementsScore !== null &&
+      comportementScore !== null
+    ) {
+      let formData = new FormData();
+      formData.append("corpsScore", corpsScore);
+      formData.append("corpsDescription", corpsDescription);
+      formData.append("vetementsScore", vetementsScore);
+      formData.append("vetementsDescription", vetementsDescription);
+      formData.append("comportementScore", comportementScore);
+      formData.append("comportementDescription", comportementDescription);
+      formData.append("idRepport", props.report.id);
+      axios({
+        method: "post",
+        url: "/api/addIndicatorsCVC",
+        data: formData,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${auth.auth.accessToken}`,
+        },
+      })
+        .then(function (response) {
+          props.onChangeIndicators(true);
+
+          setShow(false);
+          reload();
+        })
+        .catch(function (response) {});
+    }
+  };
+  const handleClose = () => {
+    setShow(false);
+    reload();
+  };
 
   return (
     <>
@@ -141,9 +209,7 @@ function IndicateursFormCVC(props) {
             onClick={(e) => choiceCorps("0")}
             name="group1"
             defaultChecked={
-              props.editForm && props?.editForm[0]?.value
-                ? props?.editForm[0]?.value
-                : null
+              props.editForm && props?.editForm[0]?.value === 0 ? true : false
             }
             type={"radio"}
             id={`inline-radio-1`}
@@ -316,6 +382,21 @@ function IndicateursFormCVC(props) {
             onChange={(e) => onChangeDescriptionComportement(e)}
           />
         </div>
+        {props.isEdit ? (
+          <button onClick={(e) => onSendEdit(e)}>Envoyer</button>
+        ) : (
+          <button onClick={(e) => onSend(e)}>Envoyer</button>
+        )}
+
+        {/* const [isCorpsScore, setIsCorpsScore] = useState(false);
+    const [isVetementsScore, setIsVetementsScore] = useState(false);
+    const [isComportementScore, setIsComportementScore] = useState(false); */}
+
+        {isCorpsScore && <p>Score du corps manquant</p>}
+
+        {isVetementsScore && <p>Score du vêtement manquant</p>}
+
+        {isComportementScore && <p>Score du comportement manquant</p>}
       </div>
     </>
   );

@@ -14,6 +14,7 @@ import AddSoinsByReport from "./Add-SoinsByReports";
 import InputPlaceList from "./Input-Place-List";
 import InputContactList from "./Input-Contact-List";
 import InputGoalsList from "./Input-Goals-List";
+import IndicateursActiviteesComponent from "./Indicateurs-Activitées-Component";
 
 function EditNoReportMeet(props) {
   const [show, setShow] = useState(false);
@@ -29,8 +30,32 @@ function EditNoReportMeet(props) {
   var formActivitiesDatas = new FormData();
   formActivitiesDatas.append("id", 106);
 
+  function onChangeActivities() {
+    props.onChangeActivities(true);
+  }
+
+  function onChangeIndicators() {
+    props.onChangeIndicators(true);
+  }
   return (
     <div className="noEditRepports-container">
+      <IndicateursActiviteesComponent
+        contacts={props.contacts}
+        places={props.places}
+        selectActivities={props.selectActivities}
+        onChangeActivities={onChangeActivities}
+        selectSoins={props.selectSoins}
+        onChangeIndicators={onChangeIndicators}
+        report={props?.rapport}
+        activityType={props.activityType}
+        indicateursByDefault={props?.rapport?.followupReportsIndicators}
+        soinsByDefault={props?.rapport?.followupReportsActivities?.filter(
+          (e) => e?.sugg && e?.sugg?.parentValue === "Soins"
+        )}
+        activitiesByDefault={props?.rapport?.followupReportsActivities?.filter(
+          (e) => e?.sugg && e?.sugg?.parentValue === "Activités"
+        )}
+      ></IndicateursActiviteesComponent>
       <div className="contact-row">
         {props.rapport &&
           props.rapport.fogo &&
@@ -85,23 +110,7 @@ function EditNoReportMeet(props) {
             </>
           )}
       </div>
-      {/* <div className="contact-row">
-        {props.rapport &&
-          props.rapport.cont &&
-          props.rapport.cont.length > 0 && (
-            <>
-              <h6>Contact: </h6>
-              <span style={{ fontWeight: "normal" }}>
-                {props?.rapport.cont?.map((cont) => (
-                  <>
-                    {cont.lastname}
-                    {cont.firstname}
-                  </>
-                ))}
-              </span>
-            </>
-          )}
-      </div> */}
+
       <div className="place-row">
         {props.rapport && props.rapport.plac && props.rapport.plac !== null && (
           <>

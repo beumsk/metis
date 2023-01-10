@@ -14,6 +14,7 @@ import AddSoinsByReport from "./Add-SoinsByReports";
 import InputPlaceListSelect from "./Input-Place-List-Select";
 import InputContactList from "./Input-Contact-List";
 import InputGoalsList from "./Input-Goals-List";
+import IndicateursActiviteesComponent from "./Indicateurs-Activitées-Component";
 
 function EditReportMeet(props) {
   const [show, setShow] = useState(false);
@@ -182,8 +183,8 @@ function EditReportMeet(props) {
       setSentGoals(true);
     });
   };
-
-  const sentRapport = (e) => {
+  console.log(props?.informationPatient);
+  const sentRapport = (status) => {
     let opt = [
       "HESTIA - Risque perte logement",
       "CVC",
@@ -191,7 +192,7 @@ function EditReportMeet(props) {
     ];
     var formData = new FormData();
 
-    formData.append("activityType", 1);
+    formData.append("activityType", status);
     formData.append("idRapport", props?.informationPatient?.id);
     formData.append("contacts", contacts);
     formData.append("changeTypeMeet", changeTypeMeet);
@@ -224,8 +225,34 @@ function EditReportMeet(props) {
     });
   };
 
+  function onChangeActivities() {
+    props.onChangeActivities(true);
+  }
+
+  function onChangeIndicators() {
+    props.onChangeIndicators(true);
+  }
   return (
     <div className="report-content">
+      <IndicateursActiviteesComponent
+        contacts={props.contacts}
+        onChangeIndicators={onChangeIndicators}
+        places={props.places}
+        onChangeActivities={onChangeActivities}
+        selectActivities={props.selectActivities}
+        selectSoins={props.selectSoins}
+        activityType={props.activityType}
+        indicateursByDefault={
+          props?.informationPatient?.followupReportsIndicators
+        }
+        report={props?.informationPatient}
+        soinsByDefault={props?.informationPatient?.followupReportsActivities?.filter(
+          (e) => e.sugg && e.sugg.parentValue === "Soins"
+        )}
+        activitiesByDefault={props?.informationPatient?.followupReportsActivities?.filter(
+          (e) => e.sugg && e.sugg.parentValue === "Activités"
+        )}
+      ></IndicateursActiviteesComponent>
       {props?.informationPatient?.activityType === 1 && (
         <>
           <h5 className="mt-4 mb-4">Ajouter un rapport</h5>
@@ -353,7 +380,16 @@ function EditReportMeet(props) {
       )}
       {props?.informationPatient?.activityType === 1 && (
         <>
-          <button onClick={(e) => sentRapport(e)} className="mt-4 btn-metis">
+          <button onClick={(e) => sentRapport(1)} className="mt-4 btn-metis">
+            Confirmer
+          </button>
+          {isSentRepport && <FontAwesomeIcon icon={faCheck} />}
+        </>
+      )}
+
+      {props?.informationPatient?.activityType === 3 && (
+        <>
+          <button onClick={(e) => sentRapport(3)} className="mt-4 btn-metis">
             Confirmer
           </button>
           {isSentRepport && <FontAwesomeIcon icon={faCheck} />}

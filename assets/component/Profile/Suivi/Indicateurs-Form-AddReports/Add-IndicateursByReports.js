@@ -7,6 +7,7 @@ import {
   faPlusCircle,
   faCancel,
   faEdit,
+  faPlus,
 } from "@fortawesome/free-solid-svg-icons";
 import { useParams } from "react-router-dom";
 import axios from "axios";
@@ -15,28 +16,52 @@ import Editor from "../Editor-Reports";
 import IndicateursFormHestiaRisqueDeces from "./Indicateurs-Form-Hestia-RisqueDeces";
 import IndicateursFormHestiaPerteLogement from "./Indicateurs-Form-Hestia-PerteLogement";
 import IndicateursFormCVC from "./Indicateurs-Form-CVC";
+import differenceBy from "lodash/differenceBy";
 function AddIndicateursByReport(props) {
   const [show, setShow] = useState(false);
   const [auth, setAuth] = useState(useAuth());
   let id = useParams().id;
+  const handleClose = () => setShow(false);
+  const handleShow = () => {
+    if (
+      optionsItems &&
+      optionsItems.length > 0 &&
+      props?.indicatorsGroups &&
+      props?.indicatorsGroups.length > 0
+    ) {
+      function diff(obj1, obj2) {
+        var temp = JSON.stringify(obj2?.map((x) => x.id));
+        return obj1.filter((y) => temp.indexOf(y.id) < 0 && y);
+      }
 
-  // const [options, setOptions] = useState([
-  //   "Sélectionnez le type d'indicateurs",
-  //   "HESTIA - Risque perte logement",
-  //   "CVC",
-  //   "HESTIA - Risque décès",
-  // ]);
-  const [indicateursEstLeLogement, setIndicateursLogement] = useState(
-    props?.form?.indicateursEstLeLogement
-      ? props?.form?.indicateursEstLeLogement
-      : null
-  );
+      var result = diff(optionsItems, props?.indicatorsGroups);
+      console.log(result);
+      setOptionsItems(result);
+      setIndicateurs();
+      //
+    }
+    setShow(true);
+  };
+  const [optionsItems, setOptionsItems] = useState([
+    { id: 1, name: "CVC" },
+    { id: 2, name: "HESTIA - Risque perte logement" },
+    { id: 3, name: "HESTIA - Risque décès" },
+  ]);
 
+  const [options, setOptions] = useState([]);
+
+  // optionsItems.forEach((element) => {
+  //   return
+  //     props?.indicatorsGroups?.filter((e) => e.id !== element.id)
+  //   );
+  // });
+
+  const [indicateursEstLeLogement, setIndicateursLogement] = useState();
+
+  const [isIndicateurs, setIndicateurs] = useState();
   const [idPatient, setIdPatient] = useState(id);
   const [typeCVCSelected, setTypeCVCSelected] = useState(null);
-  const [CSVAlreadyAsked, setAlreadyAsked] = useState(
-    props.form.indicateursFormCVC
-  );
+  const [CSVAlreadyAsked, setAlreadyAsked] = useState();
 
   const [isIndicateursLogement, setIsIndicateursLogement] = useState(false);
   const [isIndicateursHestiaRisqueDeces, setIsIndicateursHestiaRisqueDeces] =
@@ -46,99 +71,48 @@ function AddIndicateursByReport(props) {
   const [
     indicateursFormHestiaRisqueDeces,
     setIndicateursFormHestiaRisqueDeces,
-  ] = useState(
-    props?.form?.indicateursFormHestiaRisqueDeces
-      ? props?.form?.indicateursFormHestiaRisqueDeces
-      : null
-  );
-  const [indicateursFormCVC, setIndicateursFormCVC] = useState(
-    props?.form?.indicateursFormCVC ? props?.form?.indicateursFormCVC : null
-  );
+  ] = useState();
+  const [indicateursFormCVC, setIndicateursFormCVC] = useState();
 
   let obj = {};
 
-  useEffect(() => {
-    setIndicateursLogement(indicateursEstLeLogement);
-    setIndicateursFormHestiaRisqueDeces(indicateursFormHestiaRisqueDeces);
-    setIndicateursFormCVC(indicateursFormCVC);
-    if (
-      props?.form &&
-      props?.form?.indicateursFormHestiaRisqueDeces &&
-      props?.form?.indicateursFormHestiaRisqueDeces.length > 0
-    ) {
-      setIsIndicateursHestiaRisqueDeces(true);
-    }
+  useEffect(
+    () => {
+      setIndicateursLogement(indicateursEstLeLogement);
+      setIndicateursFormHestiaRisqueDeces(indicateursFormHestiaRisqueDeces);
+      setIndicateursFormCVC(indicateursFormCVC);
 
-    if (
-      props?.form &&
-      props?.form?.indicateursEstLeLogement &&
-      props?.form?.indicateursEstLeLogement.length > 0
-    ) {
-      setIsIndicateursLogement(true);
-    }
+      // console.log(props?.indicatorsGroups);
+      if (
+        optionsItems &&
+        optionsItems.length > 0 &&
+        props?.indicatorsGroups &&
+        props?.indicatorsGroups.length > 0
+      ) {
+        function diff(obj1, obj2) {
+          var temp = JSON.stringify(obj2?.map((x) => x.id));
+          return obj1.filter((y) => temp.indexOf(y.id) < 0 && y);
+        }
 
-    if (
-      props?.form &&
-      props?.form?.indicateursFormCVC &&
-      props?.form?.indicateursFormCVC.length > 0
-    ) {
-      setIsIndicateursFormCVC(true);
-    }
-  }, [
-    indicateursEstLeLogement,
-    indicateursFormHestiaRisqueDeces,
-    indicateursFormCVC,
-  ]);
+        var result = diff(optionsItems, props?.indicatorsGroups);
 
-  function choiceTypeCVC(e) {
-    if (e.target.value) {
-      setTypeCVCSelected(e.target.value);
-    }
-    if (
-      e.target.value === "HESTIA - Risque décès" ||
-      (props?.form &&
-        props?.form?.indicateursFormHestiaRisqueDeces &&
-        props?.form?.indicateursFormHestiaRisqueDeces.length > 0)
-    ) {
-      setIsIndicateursHestiaRisqueDeces(true);
-    }
+        setOptionsItems(result);
+        //
+      }
+    },
+    [
+      // optionsItems,
+      // indicateursEstLeLogement,
+      // indicateursFormHestiaRisqueDeces,
+      // indicateursFormCVC,
+    ]
+  );
 
-    if (
-      e.target.value === "HESTIA - Risque perte logement" ||
-      (props?.form &&
-        props?.form?.indicateursEstLeLogement &&
-        props?.form?.indicateursEstLeLogement.length > 0)
-    ) {
-      setIsIndicateursLogement(true);
-    }
-
-    if (
-      e.target.value === "CVC" ||
-      (props?.form &&
-        props?.form?.indicateursFormCVC &&
-        props?.form?.indicateursFormCVC.length > 0)
-    ) {
-      setIsIndicateursFormCVC(true);
-    }
-    // if (!typeCVCSelected) {
-    //
-    // }
-    // if (props.form.indicateursEstLeLogement.length > 0) {
-    //   setTypeCVCSelected("HESTIA - Risque perte logement");
-    // }
-    // if (props.form.indicateursFormCVC.length > 0) {
-    //   setTypeCVCSelected("CVC");
-    // }
-    // if (props.form.indicateursFormHestiaRisqueDeces.length > 0) {
-    //   setTypeCVCSelected("HESTIA - Risque décès");
-    // }
-  }
+  function choiceTypeCVC(e) {}
 
   const onChangeIndicateursEstiaLogement = (indicateursEstLeLogement) => {
     setIndicateursLogement(indicateursEstLeLogement);
     setTypeCVCSelected("HESTIA - Risque perte logement");
-    // setIndicateursFormHestiaRisqueDeces(indicateursFormHestiaRisqueDeces);
-    // setIndicateursFormCVC(indicateursFormCVC);
   };
 
   const onChangeIndicateursFormHestiaRisqueDeces = (
@@ -167,73 +141,75 @@ function AddIndicateursByReport(props) {
     // setIndicateursLogement(null);
     // setIndicateursFormHestiaRisqueDeces(null);
   };
-
-  props.onChange([
-    {
-      selectedOptionType: typeCVCSelected ? typeCVCSelected : null,
-      type: typeCVCSelected ? typeCVCSelected : null,
-      id: props.id,
-      indicateursEstLeLogement: indicateursEstLeLogement
-        ? indicateursEstLeLogement
-        : null,
-      indicateursFormHestiaRisqueDeces: indicateursFormHestiaRisqueDeces
-        ? indicateursFormHestiaRisqueDeces
-        : null,
-      indicateursFormCVC:
-        indicateursFormCVC && indicateursFormCVC.length > 0
-          ? indicateursFormCVC
-          : null,
-    },
-  ]);
-
+  function onChangeIndicators() {
+    props.onChangeIndicators(true);
+    setShow(false);
+  }
+  //
   return (
     <>
-      <div className="addSoins-form">
-        <Form.Label htmlFor="inputValue" className="uk-form-label">
-          Type: {typeCVCSelected}
-        </Form.Label>
-        {typeCVCSelected === null && (
-          <Form.Select
-            size="lg"
-            value={typeCVCSelected}
-            className="uk-select"
-            onChange={(e) => choiceTypeCVC(e)}
-          >
-            <option>Sélectionnez le type d'indicateurs</option>
-            {props.options?.map((el, id) => (
-              <>{el && <option value={el}>{el}</option>}</>
-            ))}
-          </Form.Select>
-        )}
+      <Button onClick={handleShow}>
+        {" "}
+        <FontAwesomeIcon icon={faPlus} />
+      </Button>
 
-        {isIndicateursLogement && (
-          <IndicateursFormHestiaPerteLogement
-            id={props.id}
-            form={props.form}
-            editForm={props?.form?.indicateursEstLeLogement}
-            onChange={onChangeIndicateursEstiaLogement}
-          />
-        )}
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>
+            <h6>Ajouter un indicateurs</h6>
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div className="addSoins-form">
+            <Form.Label htmlFor="inputValue" className="uk-form-label">
+              {/* Type: {isIndicateurs} */}
+            </Form.Label>
+            {/* {isIndicateurs} */}
+            <Form.Select
+              size="lg"
+              className="uk-select"
+              onChange={(e) => setIndicateurs(e.target.value)}
+            >
+              <option>Sélectionnez le type d'indicateurs</option>
+              {optionsItems?.map((el, id) => (
+                <>{el && <option value={el.id}>{el.name}</option>}</>
+              ))}
+            </Form.Select>
 
-        {isIndicateursFormCVC && (
-          <IndicateursFormCVC
-            id={props.id}
-            editForm={props?.form?.indicateursFormCVC}
-            onChange={onChangeIndicateursFormCVC}
-            followupReportsIndicators={props.form}
-            form={props.form}
-          />
-        )}
+            {isIndicateurs === "2" && (
+              <IndicateursFormHestiaPerteLogement
+                // id={props.id}
+                report={props.report}
+                isEdit={false}
+                onChangeIndicators={onChangeIndicators}
+              />
+            )}
+            {isIndicateurs === "1" && (
+              <IndicateursFormCVC
+                report={props.report}
+                onChangeIndicators={onChangeIndicators}
+                // id={props.id}
+                isEdit={false}
+                // editForm={props?.form?.indicateursFormCVC}
+                // onChange={onChangeIndicateursFormCVC}
+                // followupReportsIndicators={props.form}
+                // form={props.form}
+              />
+            )}
+            {isIndicateurs === "3" && (
+              <IndicateursFormHestiaRisqueDeces
+                report={props.report}
+                // id={props.id}
+                // form={props.form}
+                isEdit={false}
+                // editForm={props?.form?.indicateursFormHestiaRisqueDeces}
 
-        {isIndicateursHestiaRisqueDeces && (
-          <IndicateursFormHestiaRisqueDeces
-            id={props.id}
-            form={props.form}
-            editForm={props?.form?.indicateursFormHestiaRisqueDeces}
-            onChange={onChangeIndicateursFormHestiaRisqueDeces}
-          />
-        )}
-      </div>
+                onChangeIndicators={onChangeIndicators}
+              />
+            )}
+          </div>
+        </Modal.Body>
+      </Modal>
     </>
   );
 }

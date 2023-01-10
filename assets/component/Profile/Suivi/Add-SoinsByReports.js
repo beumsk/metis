@@ -7,6 +7,7 @@ import {
   faPlusCircle,
   faCancel,
   faEdit,
+  faPlus,
 } from "@fortawesome/free-solid-svg-icons";
 import { useParams } from "react-router-dom";
 import axios from "axios";
@@ -15,6 +16,7 @@ import Editor from "./Editor-Reports";
 import InputPlaceList from "./Input-Place-List";
 import InputContactList from "./Input-Contact-List";
 import InputTypeList from "./Input-Type-List";
+import { isNull } from "lodash";
 
 function AddSoinsByReport(props) {
   const [show, setShow] = useState(false);
@@ -22,200 +24,153 @@ function AddSoinsByReport(props) {
   let id = useParams().id;
   var formData = new FormData();
   formData.append("id", 108);
-  const [idEditFormSoins, setIdEditFormSoins] = useState([
-    props.formCaresEdit && props.formCaresEdit.care_id
-      ? props.formCaresEdit.care_id
-      : null,
-  ]);
-  const [value, setValueTypeForm] = useState(props.formCaresEdit.type);
-  const [contact, setValueContactForm] = useState(
-    props.formCaresEdit && props.formCaresEdit.contact
-      ? props.formCaresEdit.contact
-      : null
-  );
-  const [place, setValuePlaceForm] = useState(
-    props.formCaresEdit && props.formCaresEdit.place
-      ? props.formCaresEdit.place
-      : null
-  );
+  //   formData.append("pathString", props.link);
+  const [contacts, setContacts] = useState(null);
+  const [places, setPlaces] = useState(null);
+  const [elementsOpt, setElementsOpt] = useState(null);
   const [idPatient, setIdPatient] = useState(id);
-  const [type, setType] = useState(props.typeValue);
-
-  const [description, setValueDescription] = useState(null);
+  const [typeForm, setTypeForm] = useState(null);
+  const [type, setType] = useState(null);
+  const [descriptionForm, setDescriptionForm] = useState(null);
   const handleClose = () => setShow(false);
+  const [editFormActivities, setEditFormActivities] = useState([
+    props.formActivitiesEdit,
+  ]);
+
+  const [idEditFormActivities, setIdEditFormActivities] = useState([
+    props?.formActivitiesEdit?.act_id,
+  ]);
+
+  const [value, setValueForm] = useState();
+  const [contact, setValueContactForm] = useState(null);
+  const [place, setValuePlaceForm] = useState(null);
+  const [description, setValueDescription] = useState();
+  const [isErrorType, setIsErrorType] = useState();
+  const [isErrorDescription, setIsErrorDescription] = useState();
+
   const handleShow = () => setShow(true);
-  let ObjForm = {};
-
-  useEffect(() => {
-    axios({
-      method: "post",
-      url: "/api/suggestionsById",
-      data: formData,
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${auth.auth.accessToken}`,
-      },
-    })
-      .then(function (response) {
-        setType(response);
-      })
-      .catch(function (response) {});
-  }, [idPatient]);
-
-  function handleChangeType(e) {
-    // ObjForm.type = newValue;
-    // props.onChange(ObjForm);
-
-    setValueTypeForm(e.target.value);
-  }
 
   function handleChangeContacts(e) {
-    // ObjForm.contact = newValue;
-    // props.onChange(ObjForm);
     setValueContactForm(e);
   }
 
   function handleChangePlaces(e) {
-    // ObjForm.place = newValue;
-    // props.onChange(ObjForm);
     setValuePlaceForm(e);
   }
 
-  const onChangeDescription = (e) => {
-    // ObjForm.description = newValue;
+  const onSend = (e) => {
+    let formData = new FormData();
+    formData.append("contact", JSON.stringify(contact));
+    formData.append("place", JSON.stringify(place));
+    formData.append("description", descriptionForm);
+    formData.append("type", typeForm);
 
-    setValueDescription(e.target.value);
+    formData.append("idRepport", props.report.id);
+    // formData.append("descriptionSantee", descriptionSantee);
+    // formData.append("valueConsommation", valueConsommation);
+    // formData.append("descriptionConsommation", descriptionConsommation);
+
+    if (typeForm === null) {
+      setIsErrorType(true);
+    } else {
+      setIsErrorType(false);
+    }
+
+    if (descriptionForm === null) {
+      setIsErrorDescription(true);
+    } else {
+      setIsErrorDescription(false);
+    }
+    if (typeForm !== null && descriptionForm !== null) {
+      axios({
+        method: "post",
+        url: "/api/addActivitiesToReport",
+        data: formData,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${auth.auth.accessToken}`,
+        },
+      })
+        .then(function (response) {
+          props.onChangeActivities(true);
+          setShow(false);
+        })
+        .catch(function (response) {});
+    }
   };
-
-  props.onChange([
-    {
-      act_id: idEditFormSoins[0] !== undefined ? idEditFormSoins[0] : null,
-      id: props.id,
-      value: value ? value : props.typeValue,
-      contact: contact ? contact : props.formCaresEdit?.contact,
-      place: place ? place : props.formCaresEdit?.place,
-      description: description ? description : props.formCaresEdit?.description,
-    },
-  ]);
-
   return (
     <>
-      <div className="addSoins-form" id={props.id}>
-        <Form.Label htmlFor="inputValue" className="uk-form-label">
-          Type
-        </Form.Label>
-        {/* <InputTypeList
-          type={type}
-          onChange={handleChangeType}
-          defaultValue={props.formCaresEdit?.value}
-        /> {/* <InputTypeList
-          type={type}
-          onChange={handleChangeType}
-          defaultValue={props.formCaresEdit?.value}
-        /> */}
-        {/* <InputTypeList
-          type={type}
-          onChange={handleChangeType}
-          defaultValue={props.formCaresEdit?.value}
-        /> */}
+      <Button onClick={handleShow}>
+        {" "}
+        <FontAwesomeIcon icon={faPlus} />
+      </Button>
 
-        <select
-          size="lg"
-          className="uk-select"
-          required={true}
-          onChange={(e) => handleChangeType(e)}
-          value={props.formCaresEdit?.type}
-        >
-          <option>Choissisez le type</option>
-          {type?.data?.map((el, id) => (
-            <>
-              {el.value && (
-                <option
-                  selected={el?.id === props.formCaresEdit.value}
-                  value={el?.id}
-                >
-                  {el?.value}
-                </option>
-              )}
-            </>
-          ))}
-        </select>
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>
+            <h6>Ajouter une activitée</h6>
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div className="addSoins-form">
+            <Form.Label htmlFor="inputValue" className="uk-form-label">
+              Type
+            </Form.Label>
+            {/* selectActivities={selectActivities}
+                        selectSoins={selectSoins} */}
+            <select
+              size="lg"
+              className="uk-select"
+              required={true}
+              onChange={(e) => setTypeForm(e.target.value)}
+              // value={props.formActivitiesEdit?.type}
+            >
+              <option>Choissisez le type</option>
+              {props?.selectSoins?.data?.map((el, id) => (
+                <>{el.value && <option value={el?.id}>{el?.value}</option>}</>
+              ))}
+            </select>
 
-        <Form.Label htmlFor="inputValue" className="uk-form-label">
-          Description
-        </Form.Label>
-        <Form.Control
-          type="text"
-          id="inputValueSpécifique"
-          className="uk-input"
-          aria-describedby="valueSpécifique"
-          onChange={(e) => onChangeDescription(e)}
-          defaultValue={props.formCaresEdit?.description}
-        />
+            <Form.Label htmlFor="inputValue" className="uk-form-label">
+              Description
+            </Form.Label>
+            <Form.Control
+              type="text"
+              id="inputValueSpécifique"
+              className="uk-input"
+              aria-describedby="valueSpécifique"
+              // defaultValue={props.formActivitiesEdit?.description}
+              onChange={(e) => setDescriptionForm(e.target.value)}
+            />
 
-        {/* <InputContactList
-          contacts={props?.contacts}
-          onChange={handleChangeContacts}
-          defaultValue={props.formCaresEdit?.contacts}
-        ></InputContactList> */}
+            <InputContactList
+              contacts={props?.contacts}
+              // contacts={props?.contacts}
+              onChange={handleChangeContacts}
+              // defaultValue={
+              //   props.formActivitiesEdit?.contact &&
+              //   props.formActivitiesEdit?.contact
+              //     ? props.formActivitiesEdit?.contact
+              //     : null
+              // }
+            ></InputContactList>
 
-        <InputContactList
-          contacts={props?.contacts}
-          onChange={handleChangeContacts}
-          defaultValue={
-            props.formCaresEdit?.contact && props.formCaresEdit?.contact
-              ? props.formCaresEdit?.contact
-              : null
-          }
-        ></InputContactList>
-        {/* <select
-          size="lg"
-          className="uk-select"
-          onChange={(e) => handleChangeContacts(e)}
-          value={props.formCaresEdit?.contact?.id}
-        >
-          <option>Choissisez le contact</option>
-          {props?.contacts?.data?.map((el, id) => (
-            <>
-              <option
-                value={el?.value}
-                selected={el?.id === parseInt(props.formCaresEdit?.contact?.id)}
-              >
-                {el?.label}
-              </option>
-            </>
-          ))}
-        </select> */}
-
-        <InputPlaceList
-          contacts={props?.places}
-          onChange={handleChangePlaces}
-          defaultValue={
-            props.formCaresEdit?.place && props.formCaresEdit?.place
-              ? props.formCaresEdit?.place
-              : null
-          }
-        ></InputPlaceList>
-
-        {/* <select
-          size="lg"
-          className="mb-4 uk-select"
-          value={props.formCaresEdit?.place}
-          onChange={(e) => handleChangePlaces(e)}
-        >
-          <option>Choissisez le lieu</option>
-          {props?.places?.data?.map((el, id) => (
-            <>
-              <option
-                value={el.id}
-                selected={el?.id === props.formCaresEdit?.place}
-              >
-                {el?.lastname}
-              </option>
-            </>
-          ))}
-        </select> */}
-      </div>
+            <InputPlaceList
+              places={props?.places}
+              onChange={handleChangePlaces}
+              // defaultValue={
+              //   props.formActivitiesEdit?.place &&
+              //   props.formActivitiesEdit?.place
+              //     ? props.formActivitiesEdit?.place
+              //     : null
+              // }
+            ></InputPlaceList>
+            <button onClick={(e) => onSend()}>Envoyer</button>
+          </div>
+          {isErrorType && <p>Type Obligatoire</p>}
+          {isErrorDescription && <p>Description Obligatoire</p>}
+        </Modal.Body>
+      </Modal>
     </>
   );
 }

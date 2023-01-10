@@ -21,7 +21,8 @@ import AddReportMeet from "./Add-Report-Meet";
 import EditReportMeet from "./Edit-Report-Meet";
 import EditNoReportMeet from "./EditNotReportMeet";
 import FilterRapportDetails from "./Filters-RapportsDetails";
-
+import IndicateursActiviteesComponent from "./Indicateurs-Activitées-Component";
+import DeleteRapports from "./Delete-Rapports";
 function RapportDetails(props) {
   const [show, setShow] = useState(false);
   const [auth, setAuth] = useState(useAuth());
@@ -57,8 +58,42 @@ function RapportDetails(props) {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const [whatDoinFunction, setWhatDoinFunction] = useState(null);
+  const [selectActivities, setSelectActivities] = useState(null);
+  const [selectSoins, setSelectSoins] = useState(null);
 
   useEffect(() => {
+    var formDataActivities = new FormData();
+    formDataActivities.append("id", 106);
+    axios({
+      method: "post",
+      url: "/api/suggestionsById",
+      data: formDataActivities,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    })
+      .then(function (response) {
+        setSelectActivities(response);
+      })
+      .catch(function (response) {});
+
+    var formDataActivities = new FormData();
+    formDataActivities.append("id", 108);
+    axios({
+      method: "post",
+      url: "/api/suggestionsById",
+      data: formDataActivities,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    })
+      .then(function (response) {
+        setSelectSoins(response);
+      })
+      .catch(function (response) {});
+
     axios({
       method: "post",
       url: "/api/suggestionsById",
@@ -161,6 +196,54 @@ function RapportDetails(props) {
     }
   }, [props.search]);
 
+  function onChangeDelete() {
+    axios({
+      method: "post",
+      url: "/api/getFollowUpReportsById",
+      data: reportData,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    })
+      .then(function (response) {
+        setInformations(response);
+      })
+      .catch(function (response) {});
+  }
+
+  function onChangeIndicators() {
+    axios({
+      method: "post",
+      url: "/api/getFollowUpReportsById",
+      data: reportData,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    })
+      .then(function (response) {
+        setInformations(response);
+      })
+      .catch(function (response) {});
+  }
+
+  function onChangeActivities() {
+    axios({
+      method: "post",
+      url: "/api/getFollowUpReportsById",
+      data: reportData,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    })
+      .then(function (response) {
+        setInformations(response);
+      })
+      .catch(function (response) {});
+  }
+
   return (
     <>
       <FilterRapportDetails
@@ -174,60 +257,67 @@ function RapportDetails(props) {
               key={id}
               className="uk-card uk-card-default uk-card-hover uk-card-body mt-4 mb-4"
               style={
-                r.activityType === 1
+                r.activityType === 1 || r.activityType === 3
                   ? { border: "4px solid rgb(120 156 13 / 53%)" }
                   : { border: "4px solid #9c5fb5" }
               }
             >
-              {r.activityType === 1 ||
-              r.activityType === 4 ||
-              r.activityType === 2 ? (
-                <Form.Check
-                  type="switch"
-                  className="switcher"
-                  defaultChecked={r.isShow}
-                  onClick={(e) => {
-                    // setToggle(!toggle);
+              <div className="row-btnRapport">
+                <DeleteRapports
+                  idRapport={r.id}
+                  onChangeDelete={onChangeDelete}
+                ></DeleteRapports>
+                {r.activityType === 1 ||
+                r.activityType === 4 ||
+                r.activityType === 3 ||
+                r.activityType === 2 ? (
+                  <Form.Check
+                    type="switch"
+                    defaultChecked={r.isShow}
+                    onClick={(e) => {
+                      // setToggle(!toggle);
 
-                    if (e.target.checked === true) {
-                      setToggle(true);
-                      r.isShow = true;
+                      if (e.target.checked === true) {
+                        setToggle(true);
+                        r.isShow = true;
 
-                      setInformations(informations);
-                    }
+                        setInformations(informations);
+                      }
 
-                    if (e.target.checked === false) {
-                      setToggle(false);
-                      r.isShow = false;
+                      if (e.target.checked === false) {
+                        setToggle(false);
+                        r.isShow = false;
 
-                      setInformations(informations);
-                      axios({
-                        method: "post",
-                        url: "/api/getFollowUpReportsById",
-                        data: reportData,
-                        headers: {
-                          "Content-Type": "application/json",
-                          Authorization: `Bearer ${auth.auth.accessToken}`,
-                        },
-                      })
-                        .then(function (response) {
-                          setInformations(response);
+                        setInformations(informations);
+                        axios({
+                          method: "post",
+                          url: "/api/getFollowUpReportsById",
+                          data: reportData,
+                          headers: {
+                            "Content-Type": "application/json",
+                            Authorization: `Bearer ${auth.auth.accessToken}`,
+                          },
                         })
-                        .catch(function (response) {});
-                    }
+                          .then(function (response) {
+                            setInformations(response);
+                          })
+                          .catch(function (response) {});
+                      }
 
-                    // if (r.isHightlight === false) {
-                    //   setToggle(!toggle);
-                    //   r.isShow = toggle;
+                      // if (r.isHightlight === false) {
+                      //   setToggle(!toggle);
+                      //   r.isShow = toggle;
 
-                    //   setInformations(informations);
-                    // }
-                  }}
-                  label="Activer le mode édition"
-                />
-              ) : (
-                ""
-              )}
+                      //   setInformations(informations);
+                      // }
+                    }}
+                    label="Activer le mode édition"
+                  />
+                ) : (
+                  ""
+                )}
+              </div>
+
               {r && r.deletedAt === null && (
                 <>
                   {r && r.activityType === 1 && (
@@ -271,6 +361,16 @@ function RapportDetails(props) {
                     </h3>
                   )}
 
+                  {r && r.activityType === 3 && (
+                    <h3 className="uk-card-title">
+                      <FontAwesomeIcon
+                        icon={faFilePen}
+                        style={{ marginRight: "1rem" }}
+                      />
+                      Rapport de réunion
+                    </h3>
+                  )}
+
                   {r && r.cont === null && r.type === 2 && (
                     <h3 className="uk-card-title">
                       <FontAwesomeIcon
@@ -290,23 +390,39 @@ function RapportDetails(props) {
                       Appel Entrant
                     </h3>
                   )}
-
+                  {/* const [selectActivities, setSelectActivities] = useState(null);
+  const [selectSoins, setSelectSoins] = useState(null); */}
                   {r.isShow === true && (
-                    <EditReportMeet
-                      informationPatient={r}
-                      type={type}
-                      goals={props?.goals}
-                      contacts={props?.contacts}
-                      places={props?.places}
-                      onChangeReportMeet={onChangeReport}
-                      indicatorsResponse={r.followupReportsIndicators}
-                    ></EditReportMeet>
+                    <>
+                      <EditReportMeet
+                        informationPatient={r}
+                        type={type}
+                        onChangeIndicators={onChangeIndicators}
+                        onChangeActivities={onChangeActivities}
+                        goals={props?.goals}
+                        selectActivities={selectActivities}
+                        selectSoins={selectSoins}
+                        contacts={props?.contacts}
+                        places={props?.places}
+                        activityType={r.activityType}
+                        onChangeReportMeet={onChangeReport}
+                        indicatorsResponse={r.followupReportsIndicators}
+                      ></EditReportMeet>
+                    </>
                   )}
                   {r.isShow === false && (
                     <>
+                      {/* <IndicateursActiviteesComponent></IndicateursActiviteesComponent> */}
                       <EditNoReportMeet
                         indicators={r.followupReportsIndicators}
                         rapport={r}
+                        selectActivities={selectActivities}
+                        onChangeIndicators={onChangeIndicators}
+                        onChangeActivities={onChangeActivities}
+                        activityType={r.activityType}
+                        selectSoins={selectSoins}
+                        contacts={props?.contacts}
+                        places={props?.places}
                       ></EditNoReportMeet>
                     </>
                   )}

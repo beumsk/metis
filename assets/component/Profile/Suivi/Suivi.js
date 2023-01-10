@@ -62,6 +62,8 @@ const Profile = () => {
   const [activities, setActivities] = useState(null);
   const [idSearch, setIdSearch] = useState(null);
   // getFollowUpReportsGoals
+  const [userId, setUserId] = useState(null);
+  const [patiId, setPatiId] = useState(null);
 
   useEffect(() => {
     // axios({
@@ -188,6 +190,8 @@ const Profile = () => {
         setPlaces(response);
       })
       .catch(function (response) {});
+    setPatiId(idPatient);
+    setUserId(auth.auth.idUser);
   }, [idPatient]);
 
   const editContent = (e) => {
@@ -270,6 +274,49 @@ const Profile = () => {
     setGoalsList(e);
   }
 
+  function addReport(status) {
+    formData.append("activityType", status);
+    formData.append("contacts", null);
+    formData.append("changeTypeMeet", null);
+    formData.append("changeDate", null);
+    formData.append("changeGoals", null);
+    formData.append("contId", null);
+    formData.append("changePlaces", null);
+    formData.append("changeEditor", null);
+    formData.append("goalsInput", null);
+    formData.append("meetType", null);
+
+    formData.append("userId", userId);
+    formData.append("patiId", patiId);
+
+    axios({
+      method: "post",
+      url: "/api/sendReport",
+      data: formData,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    })
+      .then(function (response) {
+        var reportSearch = new FormData();
+        reportSearch.append("id", idPatient);
+        axios({
+          method: "post",
+          url: "/api/getFollowUpReportsById",
+          data: reportSearch,
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${auth.auth.accessToken}`,
+          },
+        })
+          .then(function (response) {
+            return setSearch(response);
+          })
+          .catch(function (response) {});
+      })
+      .catch(function (response) {});
+  }
   function onChangeIsResponse(e) {
     axios({
       method: "post",
@@ -290,7 +337,7 @@ const Profile = () => {
       <div className="row item-report">
         <div className="col-sm-4">
           <div className="menu-ongletFiche mb-4">
-            <button
+            {/* <button
               style={
                 isAddReportMeet
                   ? { borderBottom: "0.3rem solid #ffc107" }
@@ -299,7 +346,7 @@ const Profile = () => {
               onClick={(e) => showAddReports()}
             >
               Ajouter un rapport
-            </button>
+            </button> */}
             {/* <button
               style={
                 isDahsboardReports
@@ -591,6 +638,13 @@ const Profile = () => {
         </div>
         <div className="col-sm-8">
           <div className="d-flex row-btn mb-4">
+            <button onClick={(e) => addReport(1)} className="btn-metis">
+              Rapport de rencontre
+            </button>
+
+            <button onClick={(e) => addReport(3)} className="btn-metis">
+              Rapport de réunion
+            </button>
             <div>
               <ModalActionsAppelsEntrant
                 listCalls={goalsListForSelect}

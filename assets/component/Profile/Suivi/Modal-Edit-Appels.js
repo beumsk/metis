@@ -90,7 +90,6 @@ function ModalEditAppels(props) {
     formData.append("goalsId", props?.calls?.id);
     formData.append("valueDate", valueDate);
     formData.append("valueStatus", valueStatus);
-
     //
     axios({
       method: "post",
