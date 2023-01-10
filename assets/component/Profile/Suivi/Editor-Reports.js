@@ -53,7 +53,7 @@ const Editor = (props) => {
             // ["imageGallery"], // You must add the "imageGalleryUrl".
             // ["fullScreen"],
             // ["preview", "print"],
-            ["align", "list", "lineHeight"],
+            ["list"],
             // ["save", "template"],
             /** ['dir', 'dir_ltr', 'dir_rtl'] */ // "dir": Toggle text direction, "dir_ltr": Right to Left, "dir_rtl": Left to Right
           ],

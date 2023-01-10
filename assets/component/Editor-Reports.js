@@ -26,6 +26,7 @@ const Editor = (props) => {
           plugins: plugins,
           buttonList: [
             ["undo", "redo"],
+
             // ["font", "fontSize", "formatBlock"],
             // ["paragraphStyle", "blockquote"],
             [
@@ -38,6 +39,8 @@ const Editor = (props) => {
             ],
             ["fontColor", "hiliteColor"],
             ["removeFormat"],
+            // "/", // Line break
+
             ["outdent", "indent"],
 
             [
@@ -46,10 +49,10 @@ const Editor = (props) => {
               "image",
               // "audio" /** ,'math' */
             ], // You must add the 'katex' library at options to use the 'math' plugin.
-            ["align", "horizontalRule", "list", "lineHeight"],
             // ["imageGallery"], // You must add the "imageGalleryUrl".
             // ["fullScreen"],
             // ["preview", "print"],
+            ["list"],
             // ["save", "template"],
             /** ['dir', 'dir_ltr', 'dir_rtl'] */ // "dir": Toggle text direction, "dir_ltr": Right to Left, "dir_rtl": Left to Right
           ],
