@@ -183,7 +183,6 @@ function EditReportMeet(props) {
       setSentGoals(true);
     });
   };
-  console.log(props?.informationPatient);
   const sentRapport = (status) => {
     let opt = [
       "HESTIA - Risque perte logement",

@@ -10,6 +10,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import moment from "moment";
 import Form from "react-bootstrap/Form";
 function EditPatient(props) {
   const [show, setShow] = useState(false);
@@ -147,9 +148,9 @@ function EditPatient(props) {
                   onChange={(e) => setBirthDate(e.target.value)}
                   defaultValue={
                     props?.patient?.birthdate
-                      ? new Date(props?.patient?.birthdate)
-                          .toISOString()
-                          .substring(0, 10)
+                      ? moment(props?.patient?.birthdate)
+                          .utc("UTC+01:00")
+                          .format("YYYY-MM-DD")
                       : null
                   }
                 />
@@ -203,9 +204,9 @@ function EditPatient(props) {
                   className="uk-input"
                   defaultValue={
                     props?.patient?.firstContactDate
-                      ? new Date(props?.patient?.firstContactDate)
-                          .toISOString()
-                          .substring(0, 10)
+                      ? moment(props?.patient?.firstContactDate)
+                          .utc("UTC+01:00")
+                          .format("YYYY-MM-DD")
                       : null
                   }
                 />

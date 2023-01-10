@@ -81,8 +81,6 @@ function IndicateursActiviteesComponent(props) {
     props.onChangeActivities(true);
   }
 
-  console.log(props);
-
   return (
     <>
       <div className="search-textRapport row">

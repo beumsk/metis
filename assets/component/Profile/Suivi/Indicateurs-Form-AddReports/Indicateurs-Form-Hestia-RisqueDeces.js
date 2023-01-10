@@ -115,7 +115,6 @@ function IndicateursFormHestiaRisqueDeces(props) {
       setIsValueConsommation(false);
     }
 
-    console.log(valueSecuritee, valueSantee, valueConsommation);
     if (
       valueSecuritee !== null &&
       valueSantee !== null &&
@@ -173,7 +172,6 @@ function IndicateursFormHestiaRisqueDeces(props) {
       setIsValueConsommation(false);
     }
 
-    console.log(valueSecuritee, valueSantee, valueConsommation);
     if (
       valueSecuritee !== null &&
       valueSantee !== null &&

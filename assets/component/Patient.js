@@ -75,7 +75,6 @@ const Patient = () => {
   }, [idPatient]);
 
   function onChangeEditPatient() {
-    console.log("mise a jour");
     axios({
       method: "post",
       url: "/api/getPatient",
