@@ -6,6 +6,21 @@ html, body, #root{
 
 }
 
+
+.sun-editor .se-tooltip .se-tooltip-inner .se-tooltip-text::after {
+  content: "";
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent transparent #333 transparent;
+  width: 100%!important;
+  height: 100%!important;
+}
+
+
 a{
   text-decoration: none!important;
 }
