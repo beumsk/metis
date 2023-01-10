@@ -232,8 +232,11 @@ function AddReportMeet(props) {
         onChange={onChangeContacts}
         defaultValue={null}
       />
-
-      <InputPlaceListSelect places={props.places} onChange={onChangePlaces} />
+      <InputPlaceListSelect
+        places={props.places}
+        onChange={onChangePlaces}
+        defaultValue={null}
+      />
       <Editor onChange={editorChange}></Editor>
 
       <button onClick={(e) => sentRapport(e)}>Envoyer</button>

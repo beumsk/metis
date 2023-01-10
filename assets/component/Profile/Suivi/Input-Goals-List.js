@@ -26,7 +26,6 @@ export default function InputContactList(props) {
 
     (async () => {
       await sleep(1e3); // For demo purposes.
-
       if (active) {
         setOptions([...props.goals.data]);
       }
@@ -45,10 +44,8 @@ export default function InputContactList(props) {
     if (props.defaultValue !== null) {
       for (let index = 0; index < props.defaultValue.length; index++) {
         const element = props.defaultValue[index];
-
         arr.push({ value: element.id, label: element.description });
       }
-
       if (arr && arr.length > 0) {
         setDefaultValueFormatted([...arr]);
       }

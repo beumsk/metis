@@ -61,13 +61,13 @@ const Login = () => {
       }
     } catch (err) {
       if (!err?.response) {
-        setErrMsg("Erreur de serveur");
+        setErrMsg("Erreur de serveur.");
       } else if (err.response?.status === 400) {
-        setErrMsg("E-mail et mot de passe manquant");
+        setErrMsg("E-mail et mot de passe manquant.");
       } else if (err.response?.status === 401) {
-        setErrMsg("Non autorisée");
+        setErrMsg("Mauvais identifiants.");
       } else {
-        setErrMsg("Mauvais login");
+        setErrMsg("Mauvais identifiants.");
       }
       errRef.current.focus();
     }

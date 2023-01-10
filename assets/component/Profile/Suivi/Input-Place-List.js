@@ -30,11 +30,9 @@ export default function InputPlaceList(props) {
 
     (async () => {
       await sleep(1e3); // For demo purposes.
-
       if (active) {
         let formData = new FormData();
         formData.append("query", inputValue);
-
         axios({
           method: "post",
           url: "/api/getPlacesSelect",
@@ -65,10 +63,8 @@ export default function InputPlaceList(props) {
     if (props.defaultValue !== null && props.defaultValue !== undefined) {
       for (let index = 0; index < props.defaultValue.length; index++) {
         const element = props.defaultValue[index];
-
         arr.push({ value: element.id, label: element.lastname });
       }
-
       if (arr && arr.length > 0) {
         setDefaultValueFormatted([...arr]);
       }
@@ -88,14 +84,12 @@ export default function InputPlaceList(props) {
         setOpen(false);
       }}
       isOptionEqualToValue={(option, value) => option.label === value.title}
-      getOptionLabel={(option) => option.label}
+      getOptionLabel={(option) => option.label || ""}
       options={options}
       onInputChange={(event, newInputValue) => {
         setInputValue(newInputValue);
-
         let formData = new FormData();
         formData.append("query", newInputValue);
-
         axios({
           method: "post",
           url: "/api/getContactsForSelect",
@@ -115,7 +109,6 @@ export default function InputPlaceList(props) {
       }}
       loading={loading}
       freeSolo={true}
-      multiple
       defaultValue={arr}
       renderInput={(params) => (
         <>

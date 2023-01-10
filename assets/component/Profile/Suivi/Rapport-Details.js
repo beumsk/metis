@@ -188,8 +188,6 @@ function RapportDetails(props) {
   //   }
   // };
 
-  function onChangeInformations(e) {}
-
   useEffect(() => {
     if (props.search !== null) {
       setInformations(props.search);
@@ -312,6 +310,7 @@ function RapportDetails(props) {
                       // }
                     }}
                     label="Activer le mode édition"
+                    id={r.id}
                   />
                 ) : (
                   ""
@@ -444,6 +443,8 @@ function RapportDetails(props) {
             READ MORE
           </button>
         </>
+      ) : informations ? (
+        <p>Pas de rapport pour ce contact</p>
       ) : (
         <ReactLoading
           type={"spin"}

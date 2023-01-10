@@ -1,52 +1,46 @@
-
-
-html, body, #root{
-    height: 100%;
-    min-height: 100%;
+html,
+body,
+#root {
+  height: 100%;
+  min-height: 100%;
 
 }
 
 
-.sun-editor .se-tooltip .se-tooltip-inner .se-tooltip-text::after {
-  content: "";
-  position: absolute;
-  bottom: 100%;
-  left: 50%;
-  margin-left: -5px;
-  border-width: 5px;
-  border-style: solid;
-  border-color: transparent transparent #333 transparent;
-  width: 100%!important;
-  height: 100%!important;
-}
+
+
 
 
 a{
   text-decoration: none!important;
-}
-.dropdown{
-  background-color: transparent!important;
+
 }
 
-.body-profile{
-  p{
+.dropdown {
+  background-color: transparent !important;
+}
+
+.body-profile {
+  p {
     font-size: 0.8rem;
   }
 }
 
 
-.sortable{
-  span{
+.sortable {
+  span {
     display: inline-block;
-    margin-left: 0.5rem!important;
+    margin-left: 0.5rem !important;
   }
 }
-.profile-img{
+
+.profile-img {
   max-height: 156px;
   position: relative;
   overflow: hidden;
   height: 100%;
-  img{
+
+  img {
     position: absolute;
     top: 0;
     bottom: 0;
@@ -54,27 +48,28 @@ a{
   }
 }
 
-.input-autocomplete{
-  background-color: white!important;
-  padding: 0!important;
+.input-autocomplete {
+  background-color: white !important;
+  padding: 0 !important;
 }
 
-.body-accordeonitemPatient{
-  .row{
+.body-accordeonitemPatient {
+  .row {
     padding: 1rem 0 1rem 0;
     font-size: 0.8rem;
   }
 }
 
-.modal-dialog h6{
-  margin: 0!important;
+.modal-dialog h6 {
+  margin: 0 !important;
 }
 
 .btn-group {
   border-radius: 0.375rem;
   margin-left: 0.5rem;
-  button{
-     margin-right: 0.5rem;
+
+  button {
+    margin-right: 0.5rem;
     color: #565656;
     /* background-color: #91bd10; */
     /* padding: 0.5rem; */
@@ -86,13 +81,13 @@ a{
 // .editCont {
 //   margin: 0 0.5rem 0 0.9rem;
 // }
-table{
+table {
   width: 100%;
-  background-color: white!important;
+  background-color: white !important;
 }
 
-.container-appelActions{
-  a{
+.container-appelActions {
+  a {
     display: block;
     font-size: 0.8rem;
     cursor: pointer;
@@ -101,12 +96,15 @@ table{
 
 .sun-editor .se-toolbar {
 
+
   z-index: 555555555 !important;
+
 }
 
-.container-password{
+.container-password {
   position: relative;
-  .fa-eye{
+
+  .fa-eye {
     position: absolute;
     top: 0;
     bottom: 0;
@@ -114,27 +112,29 @@ table{
   }
 }
 
-.btn-modal{
-  display: block!important;
-  width: auto!important;
+.btn-modal {
+  display: block !important;
+  width: auto !important;
 }
 
-.ck > *{
-  color: black!important;
-} 
-.row-contactOrganisation{
-  padding: 1rem;
-    background-color: white;
-    color: black;
-    border-radius: 15px;
-    margin-bottom: 1rem;
+.ck>* {
+  color: black !important;
 }
-body{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    width: 100%;
-    font-family: Arial, Helvetica, sans-serif;
+
+.row-contactOrganisation {
+  padding: 1rem;
+  background-color: white;
+  color: black;
+  border-radius: 15px;
+  margin-bottom: 1rem;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  width: 100%;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 // .App{
@@ -142,75 +142,78 @@ body{
 //     min-height: 100%;
 // }
 
-button{
+button {
   background-color: white;
   border: 0;
   padding: 0;
 }
 
 .visually-hidden {
-    clip: rect(0 0 0 0);
-    clip-path: inset(50%);
-    height: 1px;
-    overflow: hidden;
-    position: absolute;
-    white-space: nowrap;
-    width: 1px;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
 }
 
 
-.accordion-fiche{
-  button{
-    background-color: transparent!important;
+.accordion-fiche {
+  button {
+    background-color: transparent !important;
+
     // float: right;
-    svg{
-      color: rgb(22, 21, 21)!important;
+    svg {
+      color: rgb(22, 21, 21) !important;
       margin-left: 1rem;
-      
+
     }
   }
 }
 
-.add-infos-btn{
+.add-infos-btn {
   float: right;
 }
 
-.graph_container{
-    display:block;
-    width:600px;
-  }
+.graph_container {
+  display: block;
+  width: 600px;
+}
 
-  canvas{
-    display: block!important;
-    box-sizing: border-box!important;
-    // height: 300px!important;
-    // width: 600px!important;
-  }
+canvas {
+  display: block !important;
+  box-sizing: border-box !important;
+  // height: 300px!important;
+  // width: 600px!important;
+}
 
-  .dropzone{
-    padding: 1rem;
-    background-color: #f6f6f6;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 2px dashed #dcdcdc;
-    p{
-        margin: 0!important;
-    }
-  }
+.dropzone {
+  padding: 1rem;
+  background-color: #f6f6f6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px dashed #dcdcdc;
 
-  .delete-btn{
-    margin-right: 1rem;
+  p {
+    margin: 0 !important;
   }
+}
 
-  .row-btn{
-    width: 100%;
-    display: flex;
-    align-items: flex-end;
-    justify-content: flex-end;
-    button{
-        margin-left: 1rem;
-    }
+.delete-btn {
+  margin-right: 1rem;
+}
+
+.row-btn {
+  width: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+
+  button {
+    margin-left: 1rem;
+  }
 }
 
 @import "./scss/login";
@@ -221,6 +224,7 @@ button{
 @import "./scss/profil";
 @import "./scss/search";
 @import "./scss/editProfile";
+@import "./scss/editPassword";
 @import "./scss/contact";
 @import "./scss/table";
 

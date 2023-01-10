@@ -11,7 +11,7 @@ import Editor from "./Editor-Reports";
 import AddActivitiesByReport from "./Add-ActivitiesByReports";
 import AddIndicateursByReport from "./Indicateurs-Form-AddReports/Add-IndicateursByReports";
 import AddSoinsByReport from "./Add-SoinsByReports";
-import InputPlaceListSelect from "./Input-Place-List-Select";
+import InputPlaceList from "./Input-Place-List";
 import InputContactList from "./Input-Contact-List";
 import InputGoalsList from "./Input-Goals-List";
 import IndicateursActiviteesComponent from "./Indicateurs-Activitées-Component";
@@ -204,7 +204,7 @@ function EditReportMeet(props) {
 
     formData.append("changeGoals", JSON.stringify(changeGoals));
     formData.append("contId", JSON.stringify(changeContacts));
-    formData.append("changePlaces", changePlaces);
+    formData.append("changePlaces", changePlaces.value);
     formData.append("changeEditor", changeEditor);
     formData.append("goalsInput", JSON.stringify(goalsInput));
     formData.append("meetType", meetType);
@@ -338,12 +338,13 @@ function EditReportMeet(props) {
       {(props?.informationPatient?.activityType === 1 ||
         props?.informationPatient?.activityType === 3) && (
         <>
-          <InputPlaceListSelect
+          <InputPlaceList
             places={props.places}
             defaultValue={props?.informationPatient?.plac?.id}
             onChange={onChangePlaces}
           />
 
+          <Form.Label htmlFor="inputValue">Description</Form.Label>
           <Editor
             onChange={editorChange}
             content={
