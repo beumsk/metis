@@ -74,7 +74,7 @@ class FollowUpReportsController extends AbstractController
             $followupGoals->setDescription($description);
         }
 
-        $followupGoals->setStatus(1);
+        $followupGoals->setStatus(0);
 
         if ($valueType !== "null") {
             $followupGoals->setTitle($valueType);

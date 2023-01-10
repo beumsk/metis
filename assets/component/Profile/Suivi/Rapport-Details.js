@@ -241,6 +241,7 @@ function RapportDetails(props) {
       })
       .catch(function (response) {});
   }
+  console.log(props.onChangeGoals);
 
   return (
     <>
