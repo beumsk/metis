@@ -311,7 +311,7 @@ class PlacesController extends AbstractController
 
 
         $place->setComment($valueCommentary);
-        $place->setCont($places);
+        $place->setPlace($places);
         if ($start !== "null") {
             $place->setStart(new \DateTime($start));
         }
@@ -327,7 +327,7 @@ class PlacesController extends AbstractController
 
 
         return new JsonResponse([
-            'id' => $patient->getId(),
+            'id' => $place->getId(),
             'response' => "Sent !"
         ]);
     }

@@ -2172,17 +2172,17 @@ class FollowUpReportsController extends AbstractController
         $arrPatientsByContacts = [];
 
         foreach ($places as $value) {
-            // dd($value->getCont()->getFirstname());
+            // dd($value);
             if ($value) {
                 $arrPatientsByContacts[] = [
                     "id" => $value->getId(),
                     "start" => $value->getStart(),
                     "end" => $value->getEnd(),
                     "comment" => $value->getComment(),
-                    "cont" => [$value->getCont()],
+                    "cont" => [($value->getCont()) ? $value->getCont() : null],
                     "pati" => [$value->getPati()],
                     "sugg" => [$value->getSugg()],
-                    "firstname" => ($value->getCont()->getFirstname() !== null) ? $value->getCont()->getFirstname() : null,
+                    // "firstname" => ($value->getCont()->getFirstname() !== null) ? $value->getCont()->getFirstname() : null,
                 ];
             }
         }

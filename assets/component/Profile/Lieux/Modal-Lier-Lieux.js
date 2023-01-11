@@ -20,10 +20,12 @@ function ModalLierLieux(props) {
   const [responseDatas, setResponseDatas] = useState(null);
   const [valueLieux, setValueLieux] = useState(null);
   const [type, setType] = useState(null);
+  // console.log(valueLieux);
   const [valueType, setValueType] = useState(null);
   const [start, setStartDate] = useState(null);
   const [end, setEndDate] = useState(null);
   const [valueCommentary, setValueCommentary] = useState(null);
+  const [errorValue, setErrorValue] = useState(null);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
@@ -60,37 +62,47 @@ function ModalLierLieux(props) {
     formData.append("end", end);
     formData.append("valueType", valueType);
     formData.append("idPatient", idPatient);
-    axios({
-      method: "post",
-      url: "/api/setLierPlaces",
-      data: formData,
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${auth.auth.accessToken}`,
-      },
-    }).then(function (response) {
-      if (response) {
-        var formGetInfos = new FormData();
-        formGetInfos.append("id", id.toString());
-        axios({
-          method: "post",
-          url: "/api/getPlacesPatients",
-          data: formGetInfos,
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${auth.auth.accessToken}`,
-          },
-        })
-          .then(function (response) {
-            handleClose();
-            setResponseDatas(response);
-            setIsSentRepport(true);
+
+    if (valueLieux === null || valueLieux === "defaultValue") {
+      setErrorValue(true);
+    } else {
+      setErrorValue(false);
+    }
+
+    if (valueLieux !== null && valueLieux !== "defaultValue") {
+      console.log("sended");
+      axios({
+        method: "post",
+        url: "/api/setLierPlaces",
+        data: formData,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${auth.auth.accessToken}`,
+        },
+      }).then(function (response) {
+        if (response) {
+          var formGetInfos = new FormData();
+          formGetInfos.append("id", id.toString());
+          axios({
+            method: "post",
+            url: "/api/getPlacesPatients",
+            data: formGetInfos,
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${auth.auth.accessToken}`,
+            },
           })
-          .catch(function (response) {});
-        // document.querySelectorAll(".btn-close")[0].click();
-        // location.replace(window.location.origin + "/" + idPatient);
-      }
-    });
+            .then(function (response) {
+              handleClose();
+              setResponseDatas(response);
+              setIsSentRepport(true);
+            })
+            .catch(function (response) {});
+          // document.querySelectorAll(".btn-close")[0].click();
+          // location.replace(window.location.origin + "/" + idPatient);
+        }
+      });
+    }
   }
 
   if (responseDatas !== null) {
@@ -118,6 +130,7 @@ function ModalLierLieux(props) {
               style={{ width: "100%" }}
               onChange={(e) => setValueLieux(e.target.value)}
             >
+              <option value={"defaultValue"}>Sélectionnez le lieu</option>
               {props?.lieuxList?.data?.map((el, id) => (
                 <React.Fragment key={el.id}>
                   {el?.lastname && (
@@ -163,6 +176,7 @@ function ModalLierLieux(props) {
             />
           </>
         </Modal.Body>
+        {errorValue && <p>Lieux obligatoire</p>}
         <Modal.Footer>
           <Button onClick={handleClose}>Fermer</Button>
           <Button onClick={handleSave} className="btn-metis">
