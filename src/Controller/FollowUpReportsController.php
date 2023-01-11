@@ -2114,27 +2114,33 @@ class FollowUpReportsController extends AbstractController
         // dd($indicators);
         $fore = [];
         // dd($indicators);
+        // $timeend = strtotime($end);
+        // $dateend = new \DateTime('@' . strtotime($end));
         foreach ($indicators as $value) {
             // dd($value);
             // foreach ($value->getFore() as $indi) {
 
-            array_push($fore, ["indi" => $value->getIndi(), "value" => $value->getValue(), "comment" => $value->getComment(), "fore" => ["reportDate" => $value->getFore()->getReportDate()]]);
+            array_push($fore, ["indi" => [
+                "id" => $value->getIndi()->getId(),
+                "name" => $value->getIndi()->getName(),
+                "description" => $value->getIndi()->getDescription()
+            ], "value" => $value->getValue(), "comment" => $value->getComment(), "fore" => ["reportDate" => date('c', strtotime($value->getFore()->getReportDate()->format('Y-m-d')))]]);
             // }
         }
 
         // dd($fore);
 
-        $encoders = [new JsonEncoder()];
-        $normalizers = [new DateTimeNormalizer(), new ObjectNormalizer()];
-        $serializer = new Serializer($normalizers, $encoders);
+        // $encoders = [new JsonEncoder()];
+        // $normalizers = [new DateTimeNormalizer(), new ObjectNormalizer()];
+        // $serializer = new Serializer($normalizers, $encoders);
 
-        // $serializer = SerializerBuilder::create()->build();
-        $jsonObject = $serializer->serialize($fore, 'json', [
-            AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context) {
-                return $object->getId();
-            },
-            AbstractNormalizer::IGNORED_ATTRIBUTES => ["pati", "sugg", "user", "informations", "fore"]
-        ]);
+        // // $serializer = SerializerBuilder::create()->build();
+        // $jsonObject = $serializer->serialize($fore, 'json', [
+        //     AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context) {
+        //         return $object->getId();
+        //     },
+        //     AbstractNormalizer::IGNORED_ATTRIBUTES => ["pati", "sugg", "user", "informations", "fore"]
+        // ]);
 
 
         // $response = new Response($jsonObject, 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
@@ -2142,7 +2148,7 @@ class FollowUpReportsController extends AbstractController
 
 
         // $response->setSharedMaxAge(3600);
-        return new Response($jsonObject, 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
+        return new Response(json_encode($fore), 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
 
 
         // return $this->json($fore);
