@@ -376,9 +376,8 @@ class FollowUpReportsController extends AbstractController
                     "cont" => (count($value->getCont()) > 0) ?
                         array_map(function ($a) {
                             return [
-                                "id" => ($a->getId() !== null) ? $a->getId() : null,
-                                "lastname" => ($a->getLastName() && $a->getLastName() !== null) ? $a->getLastname() : null,
-                                "firstname" => ($a->getFirstName() && $a->getFirstName() !== null) ? $a->getFirstName() : null
+                                "value" => $a->getId(),
+                                "label" => $a->getFirstName() . " " . $a->getLastName(),
                             ];
                         }, [...$value->getCont()])
                         : null,

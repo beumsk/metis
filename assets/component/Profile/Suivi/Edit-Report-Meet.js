@@ -357,38 +357,42 @@ function EditReportMeet(props) {
           ></Editor>
         </>
       )}
-      {props?.informationPatient?.activityType !== 1 &&
-        props?.informationPatient?.activityType !== 3 && (
-          <>
-            <Form.Label htmlFor="inputValue">Description</Form.Label>
-            <Editor
-              onChange={editorChange}
-              content={
-                props.informationPatient.content ||
-                props.informationPatient.description
-              }
-            ></Editor>
+      {props?.informationPatient?.activityType === 2 ||
+      props?.informationPatient?.activityType === 4 ? (
+        <>
+          <Form.Label htmlFor="inputValue">Description</Form.Label>
+          <Editor
+            onChange={editorChange}
+            content={
+              props.informationPatient.content ||
+              props.informationPatient.description
+            }
+          ></Editor>
 
-            <button onClick={(e) => sentCalls(e)} className="mt-4 btn-metis">
-              Confirmer
-            </button>
-            {isSentGoals && <FontAwesomeIcon icon={faCheck} />}
-          </>
-        )}
+          <button onClick={(e) => sentCalls(e)} className="mt-4 btn-metis">
+            Confirmer
+          </button>
+          {isSentGoals && <FontAwesomeIcon icon={faCheck} />}
+        </>
+      ) : (
+        ""
+      )}
       {props?.informationPatient?.activityType === 1 ||
-        (props?.informationPatient?.activityType === 3 && (
-          <>
-            <button
-              onClick={(e) =>
-                sentRapport(props?.informationPatient?.activityType)
-              }
-              className="mt-4 btn-metis"
-            >
-              Confirmer
-            </button>
-            {isSentRepport && <FontAwesomeIcon icon={faCheck} />}
-          </>
-        ))}
+      props?.informationPatient?.activityType === 3 ? (
+        <>
+          <button
+            onClick={(e) =>
+              sentRapport(props?.informationPatient?.activityType)
+            }
+            className="mt-4 btn-metis"
+          >
+            Confirmer
+          </button>
+          {isSentRepport && <FontAwesomeIcon icon={faCheck} />}
+        </>
+      ) : (
+        ""
+      )}
     </div>
   );
 }

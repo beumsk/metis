@@ -331,24 +331,23 @@ const Contacts = () => {
   function onChangePatients(e) {
     setPatients(e.data);
   }
+  console.log("test");
   return (
     <div className="onglet-contact">
-      {listContacts && listContacts.length > 0 && (
-        <div className="d-flex mb-4 row-btn">
-          <ModalLierContacts
-            onChangeUpdateContact={onChangeUpdateContact}
-            type={type}
-            contacts={contacts}
-            listContacts={contactList}
-          ></ModalLierContacts>
-          <ModalLierPatient
-            listPatients={patients}
-            onChangeUpdatePatient={onChangeUpdatePatient}
-            type={type}
-            contacts={patients}
-          ></ModalLierPatient>
-        </div>
-      )}
+      <div className="d-flex mb-4 row-btn">
+        <ModalLierContacts
+          onChangeUpdateContact={onChangeUpdateContact}
+          type={type}
+          contacts={contacts}
+          listContacts={contactList}
+        ></ModalLierContacts>
+        <ModalLierPatient
+          listPatients={patients}
+          onChangeUpdatePatient={onChangeUpdatePatient}
+          type={type}
+          contacts={patients}
+        ></ModalLierPatient>
+      </div>
 
       <h5>Contacts</h5>
       {listContacts && listContacts.length > 0 ? (
