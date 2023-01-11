@@ -43,8 +43,8 @@ function ModalActionsAppelsSortant(props) {
     //   .catch(function (response) {});
   }, []);
 
-  for (let index = 0; index < props.listCalls.data.length; index++) {
-    const element = props.listCalls.data[index];
+  for (let index = 0; index < props.listCalls.length; index++) {
+    const element = props.listCalls[index];
     optionsAppel.push({ value: element.id, label: element.description });
   }
 
@@ -157,7 +157,7 @@ function ModalActionsAppelsSortant(props) {
           <Form>
             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
               <Form.Label>Ajouter appel Entrant</Form.Label>
-              <div className="editor" style={{ "z-index": 555555 }}>
+              <div className="editor">
                 <Select
                   closeMenuOnSelect={false}
                   components={animatedComponents}
@@ -167,12 +167,13 @@ function ModalActionsAppelsSortant(props) {
                     label: props.defaultValueGoalsValue.description,
                   }}
                   isMulti
+                  styles={{ menu: (base) => ({ ...base, zIndex: 9999 }) }}
                   options={optionsAppel}
                 />
               </div>
 
               <Form.Label>Contacts</Form.Label>
-              <div className="editor" style={{ "z-index": 555555 }}>
+              <div className="editor">
                 <Select
                   closeMenuOnSelect={false}
                   components={animatedComponents}
@@ -182,13 +183,14 @@ function ModalActionsAppelsSortant(props) {
                     label: props.defaultValueContact.description,
                   }}
                   isMulti
+                  styles={{ menu: (base) => ({ ...base, zIndex: 9999 }) }}
                   options={optionsContacts}
                 />
               </div>
 
               <Form.Label>Description</Form.Label>
 
-              <div className="editor" style={{ "z-index": -1 }}>
+              <div className="editor">
                 <EditorReport onChange={onChangeEditor}></EditorReport>
               </div>
 

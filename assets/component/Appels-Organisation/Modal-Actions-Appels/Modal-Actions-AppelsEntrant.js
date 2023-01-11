@@ -158,7 +158,7 @@ function ModalActionsAppelsEntrant(props) {
           <Form>
             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
               <Form.Label>Appel Entrant</Form.Label>
-              <div className="editor" style={{ "z-index": 555555 }}>
+              <div className="editor">
                 <Select
                   closeMenuOnSelect={false}
                   components={animatedComponents}
@@ -168,12 +168,13 @@ function ModalActionsAppelsEntrant(props) {
                     label: props.defaultValueGoalsValue.description,
                   }}
                   isMulti
+                  styles={{ menu: (base) => ({ ...base, zIndex: 9999 }) }}
                   options={optionsAppel}
                 />
               </div>
 
               <Form.Label>Contacts</Form.Label>
-              <div className="editor" style={{ "z-index": 555555 }}>
+              <div className="editor">
                 <Select
                   closeMenuOnSelect={false}
                   components={animatedComponents}
@@ -183,13 +184,14 @@ function ModalActionsAppelsEntrant(props) {
                     label: props.defaultValueContact.description,
                   }}
                   isMulti
+                  styles={{ menu: (base) => ({ ...base, zIndex: 9999 }) }}
                   options={optionsContacts}
                 />
               </div>
 
               <Form.Label>Description</Form.Label>
 
-              <div className="editor" style={{ "z-index": -1 }}>
+              <div className="editor">
                 <EditorReport onChange={onChangeEditor}></EditorReport>
               </div>
 

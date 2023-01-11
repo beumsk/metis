@@ -51,7 +51,6 @@ const SelectFunction = (props) => {
 
   return (
     <>
-      {" "}
       <Form.Label>Fonction</Form.Label>
       <Select
         closeMenuOnSelect={false}
@@ -59,6 +58,9 @@ const SelectFunction = (props) => {
         onChange={(e) => onChangeTags(e)}
         // defaultValue={[colourOptions[4], colourOptions[5]]}
         isMulti
+        styles={{
+          menu: (base) => ({ ...base, color: "var(--bs-body-color)" }),
+        }}
         options={options}
       />
       {/* <Form.Select
