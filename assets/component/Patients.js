@@ -160,7 +160,9 @@ function Patients() {
 
                 {/* referentList */}
                 {typePatient?.map((type) => (
-                  <option value={type.idvalue}>{type.value}</option>
+                  <option value={type.idvalue} key={type.idvalue}>
+                    {type.value}
+                  </option>
                 ))}
               </Form.Select>
             </div>
@@ -180,7 +182,7 @@ function Patients() {
         {patientsList && patientsList.data && patientsList.data.length > 0 && (
           <>
             {patientsList.data.map((patient) => (
-              <Accordion className="my-3">
+              <Accordion className="my-3" key={patient.id}>
                 <Accordion.Item eventKey={patient.id} key={patient.id}>
                   <Accordion.Header>
                     <div className="col-sm-1">
@@ -213,8 +215,8 @@ function Patients() {
                       <p>
                         <b>Activitées</b>
                       </p>
-                      {patient?.fore?.map((f) => (
-                        <div>
+                      {patient?.fore?.map((f, id) => (
+                        <div key={id}>
                           {f?.activityType === 1 && (
                             <p>
                               Rapport de rencontre{" "}

@@ -403,7 +403,7 @@ const Profile = () => {
                                   dateStyle: "short",
                                 }
                               )}
-                              ) {g?.sugg?.value} {g?.description}
+                              ) {g?.sugg?.value} | {g?.description}
                             </Link>
                           </div>
                         ) : (
@@ -439,7 +439,7 @@ const Profile = () => {
                             {new Date(g.creationDate).toLocaleString("fr-BE", {
                               dateStyle: "short",
                             })}
-                            ) {g?.sugg?.value} {g?.description}
+                            ) {g?.sugg?.value} | {g?.description}
                           </Link>
                         </div>
                       ) : (
@@ -476,7 +476,7 @@ const Profile = () => {
                             {new Date(g.creationDate).toLocaleString("fr-BE", {
                               dateStyle: "short",
                             })}
-                            ){g?.func?.value} {g?.description}
+                            ){g?.sugg?.value} | {g?.description}
                           </Link>
                         </div>
                       ) : (
@@ -501,7 +501,7 @@ const Profile = () => {
             <>
               <Accordion>
                 <Accordion.Item eventKey="0">
-                  <Accordion.Header>Ouvertes</Accordion.Header>
+                  <Accordion.Header>Ouverts</Accordion.Header>
                   <Accordion.Body>
                     <div className="calls-open mb-4">
                       {goalsList?.data.map((g, id) => (
@@ -531,7 +531,7 @@ const Profile = () => {
                                     dateStyle: "short",
                                   }
                                 )}
-                                ) {g?.func?.value} {g?.description}
+                                ) {g?.sugg?.value} | {g?.description}
                               </Link>
                             </div>
                           ) : (
@@ -572,7 +572,7 @@ const Profile = () => {
                                   dateStyle: "short",
                                 }
                               )}
-                              ) {g?.func?.value} {g?.description}
+                              ) {g?.sugg?.value} | {g?.description}
                             </Link>
                           </div>
                         ) : (
@@ -584,7 +584,7 @@ const Profile = () => {
                 </Accordion.Item>
 
                 <Accordion.Item eventKey="1">
-                  <Accordion.Header>Fermées</Accordion.Header>
+                  <Accordion.Header>Fermés</Accordion.Header>
                   <Accordion.Body>
                     {goalsList?.data.map((g, id) => (
                       <>
@@ -615,7 +615,7 @@ const Profile = () => {
                                   dateStyle: "short",
                                 }
                               )}
-                              ) {g?.func?.value} {g?.description}
+                              ) {g?.sugg?.value} | {g?.description}
                             </Link>
                           </div>
                         ) : (

@@ -55,7 +55,7 @@ const BlockInfos = (props) => {
                 {patient?.patientInformation && (
                   <>
                     {patient?.patientInformation?.map((pi, id) => (
-                      <div className="row">
+                      <div className="row" key={pi.id}>
                         <div className="col-sm-6">
                           <p
                             key={pi.id}
