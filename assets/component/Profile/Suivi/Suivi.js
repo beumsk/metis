@@ -403,7 +403,8 @@ const Profile = () => {
                                   dateStyle: "short",
                                 }
                               )}
-                              ) {g?.sugg?.value} {g?.description}
+                              ) {g?.sugg?.value} {g?.value} {g?.description} (
+                              {g?.forelength})
                             </Link>
                           </div>
                         ) : (
@@ -439,7 +440,8 @@ const Profile = () => {
                             {new Date(g.creationDate).toLocaleString("fr-BE", {
                               dateStyle: "short",
                             })}
-                            ) {g?.sugg?.value} {g?.description}
+                            ) {g?.sugg?.value} {g?.value} {g?.description} (
+                            {g?.forelength})
                           </Link>
                         </div>
                       ) : (
@@ -476,7 +478,8 @@ const Profile = () => {
                             {new Date(g.creationDate).toLocaleString("fr-BE", {
                               dateStyle: "short",
                             })}
-                            ){g?.func?.value} {g?.description}
+                            ){g?.func?.value} {g?.value} {g?.description} (
+                            {g?.forelength})
                           </Link>
                         </div>
                       ) : (
@@ -531,7 +534,8 @@ const Profile = () => {
                                     dateStyle: "short",
                                   }
                                 )}
-                                ) {g?.func?.value} {g?.description}
+                                ) {g?.func?.value} {g?.value} {g?.description} (
+                                {g?.forelength})
                               </Link>
                             </div>
                           ) : (
@@ -572,7 +576,8 @@ const Profile = () => {
                                   dateStyle: "short",
                                 }
                               )}
-                              ) {g?.func?.value} {g?.description}
+                              ) {g?.func?.value} {g?.value} {g?.description} (
+                              {g?.forelength})
                             </Link>
                           </div>
                         ) : (
@@ -615,7 +620,8 @@ const Profile = () => {
                                   dateStyle: "short",
                                 }
                               )}
-                              ) {g?.func?.value} {g?.description}
+                              ) {g?.func?.value} {g?.value} {g?.description} (
+                              {g?.forelength})
                             </Link>
                           </div>
                         ) : (

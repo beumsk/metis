@@ -180,10 +180,137 @@ class FollowUpReportsController extends AbstractController
         $serializer = new Serializer($normalizers, $encoders);
 
 
+        $arrForeByFogo = [];
+
+        if ($reportFollowUp && $reportFollowUp->getFore()) {
+            foreach ($reportFollowUp->getFore() as $value) {
+                $arrForeByFogo[] =   [
+                    "id" => $value->getId(),
+                    "activityType" => $value->getActivityType(),
+                    "reportType" => $value->getReportType(),
+                    "reportDate" => ($value->getReportDate()) ? $value->getReportDate()->format(DATE_RFC3339_EXTENDED) : null,
+                    "lastUpdate" => ($value->getLastUpdate()) ? $value->getLastUpdate()->format(DATE_RFC3339_EXTENDED) : null,
+                    "creationDate" => ($value->getCreationDate()) ? $value->getCreationDate()->format(DATE_RFC3339_EXTENDED) : null,
+                    "description" => $value->getContent(),
+                    "isHightlight" => $value->getIsHightlight(),
+                    "noCare" => $value->getNoCare(),
+                    "noActivities" => $value->getNoActivities(),
+                    "noIndicators" => $value->getNoIndicators(),
+                    "deletedAt" => ($value->getDeletedAt() !== null) ? $value->getDeletedAt()->format(DATE_RFC3339_EXTENDED) : null,
+                    "duration" => ($value->getDuration() !== null) ? $value->getDuration()->format(DATE_RFC3339_EXTENDED) : null,
+                    "plac" => (is_array($value->getPlac()) === true && count($value->getPlac()) > 0) ?
+                        array_map(function ($a) {
+                            return [
+                                "id" => $a->getId(),
+                                "lastname" => ($a->getLastName() && $a->getLastName() !== null) ? $a->getLastname() : null,
+                            ];
+                        }, [...$value->getPlac()])
+                        :
+                        [
+                            "id" => ($value->getPlac() && $value->getPlac()->getId() !== null) ? $value->getPlac()->getId() : null,
+                            "lastname" => ($value->getPlac() && $value->getPlac()->getLastName() && $value->getPlac()->getLastName() !== null) ? $value->getPlac()->getLastname() : null,
+                        ],
+                    "cont" => (count($value->getCont()) > 0) ?
+                        array_map(function ($a) {
+                            return [
+                                "value" => $a->getId(),
+                                "label" => $a->getFirstName() . " " . $a->getLastName(),
+                            ];
+                        }, [...$value->getCont()])
+                        : null,
+                    "fogo" => (count($value->getFogo()) > 0) ?
+                        array_map(function ($a) {
+                            return [
+                                "id" => ($a->getId() !== null) ? $a->getId() : null,
+                                "description" => ($a->getDescription() !== null) ? $a->getDescription() : null,
+                                "creationDate" => $a->getCreationDate()->format(DATE_RFC3339_EXTENDED),
+                                "type" => $a->getType(),
+                                "sugg" => ($a->getSugg() && $a->getSugg() !== null) ? [
+                                    "id" => $a->getSugg()->getId(),
+                                    "value" => $a->getSugg()->getValue(),
+                                ] : null,
+                                "deletedAt" => ($a->getDeletedAt() !== null) ? $a->getDeletedAt()->format(DATE_RFC3339_EXTENDED) : null,
+                                "title" => ($a->getTitle() !== null) ? $a->getTitle() : null,
+                                "cont" => ($a->getCont() && $a->getCont() !== null) ? [
+                                    "id" => $a->getCont()->getId(),
+                                    "lastname" => ($a->getCont()->getLastName() && $a->getCont()->getLastName() !== null) ? $a->getCont()->getLastname() : null,
+                                    "firstname" => ($a->getCont()->getFirstName() && $a->getCont()->getFirstName() !== null) ? $a->getCont()->getFirstName() : null
+                                ] : null
+                            ];
+                        }, [...$value->getFogo()])
+                        : null,
+                    "followupReportsIndicators" => (count($value->getIndicators()) > 0) ?
+                        array_map(function ($a) {
+                            // dd($a);
+                            return [
+                                "id" => ($a->getId() !== null) ? $a->getId() : null,
+                                "value" => $a->getValue(),
+                                "comment" => ($a->getComment() && $a->getComment() !== null) ? $a->getComment() : null,
+                                "indi" => ($a->getIndi() && $a->getIndi() !== null) ? [
+                                    "id" => $a->getIndi()->getId(),
+                                    "name" => ($a->getIndi() && $a->getIndi()->getName()) ? $a->getIndi()->getName() : null,
+                                    "description" => ($a->getIndi() && $a->getIndi()->getDescription()) ? $a->getIndi()->getDescription() : null,
+                                    "groups" => [
+                                        "name" => ($a->getIndi()->getGroups()[0]->getName()) ? $a->getIndi()->getGroups()[0]->getName() : null,
+                                        "id" => ($a->getIndi()->getGroups()[0]->getId()) ? $a->getIndi()->getGroups()[0]->getId() : null
+                                    ]
+                                ] : null
+                            ];
+                        }, [...$value->getIndicators()])
+                        : null,
+
+                    "indicatorsGroups" => (count($value->getIndicatorsGroups()) > 0) ?
+
+                        array_map(function ($a) {
+
+                            return [
+                                "id" => ($a->getId() !== null) ? $a->getId() : null,
+                                "name" => ($a->getName() && $a->getName() !== null) ? $a->getName() : null,
+                            ];
+                        }, [...$value->getIndicatorsGroups()])
+                        : null,
+                    "isShow" => false,
+                    "followupReportsActivities" => (count($value->getActivities()) > 0) ?
+                        array_map(function ($a) {
+
+                            return [
+                                "id" => ($a->getId() !== null) ? $a->getId() : null,
+                                "description" => ($a->getDescription() && $a->getDescription() !== null) ? $a->getDescription() : null,
+                                // "valueParent" => ($a->getValue() && $a->getValue() !== null) ? $a->getValue() : null,
+                                "sugg" => ($a->getSugg() && $a->getSugg() !== null) ? [
+                                    "id" => $a->getSugg()->getId(),
+                                    "value" => ($a->getSugg() !== null && $a->getSugg()->getValue()) ? $a->getSugg()->getValue() : null,
+                                    "parentValue" => ($a->getSugg() !== null && $a->getSugg()->getValue()) ? $a->getSugg()->getParentSugg()->getValue() : null,
+                                    // "description" => ($a->getIndi() && $a->getIndi()->getDescription()) ? $a->getIndi()->getDescription() : null
+                                ] : null,
+                                "places" => ($a->getPlaces() && $a->getPlaces() !== null) ?
+
+                                    array_map(function ($b) {
+                                        return [
+                                            "id" => $b->getId(),
+                                            "lastname" => $b->getLastName()
+                                        ];
+                                    }, [...$a->getPlaces()]) : null,
+
+                                "contacts" => ($a->getContacts() && $a->getContacts() !== null) ?
+
+                                    array_map(function ($b) {
+                                        return [
+                                            "value" => $b->getId(),
+                                            "label" => $b->getFirstName() . " " . $b->getLastName(),
+                                        ];
+                                    }, [...$a->getContacts()]) : null,
+                            ];
+                        },  [...$value->getActivities()])
+                        :  null,
+                ];
+            }
+        }
 
 
 
-        $jsonObject = $serializer->serialize([...[$reportFollowUp], ...[...($reportFollowUp && $reportFollowUp->getFore()) ? [...$reportFollowUp->getFore()] : null]], 'json', [
+
+        $jsonObject = $serializer->serialize([...$arrForeByFogo], 'json', [
             AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context) {
                 return $object->getId();
             },
@@ -2042,8 +2169,8 @@ class FollowUpReportsController extends AbstractController
                     "comment" => $value->getComment(),
                     "cont" => [$value->getCont()],
                     "pati" => [$value->getPati()],
-                    "sugg" => [$value->getSugg()]
-                    // "firstname" => ($value->getCont()->getFirstname() !== null) ? $value->getCont()->getFirstname() : null,
+                    "sugg" => [$value->getSugg()],
+                    "firstname" => ($value->getCont()->getFirstname() !== null) ? $value->getCont()->getFirstname() : null,
                 ];
             }
         }
@@ -2161,10 +2288,10 @@ class FollowUpReportsController extends AbstractController
         // dd($goals);
         foreach ($goals as $value) {
             // dd($value);
-            if ($value->getDeletedAt() === null && $value->getType() === 1 && ($value->getStatus() === 1 || $value->getStatus() === 2)) {
+            if ($value->getDeletedAt() === null && $value->getType() === 1 && ($value->getStatus() === 0 || $value->getStatus() === 1)) {
                 $goalsArr[] = [
                     "value" => $value->getId(),
-                    "label" => $value->getCreationDate()->format('d/m/Y') . " " . (($value->getFunc() && $value->getFunc()->getValue()) ? $value->getFunc()->getValue() : null) . " " . (($value->getDescription()) ? $value->getDescription() : null),
+                    "label" => $value->getCreationDate()->format('d/m/Y') . " " . (($value->getSugg() && $value->getSugg()->getValue()) ? $value->getSugg()->getValue() : null) . " " . (($value->getTitle()) ? $value->getTitle() : null),
 
                 ];
             }
