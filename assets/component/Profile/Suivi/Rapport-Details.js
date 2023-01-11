@@ -400,6 +400,7 @@ function RapportDetails(props) {
                         onChangeIndicators={onChangeIndicators}
                         onChangeActivities={onChangeActivities}
                         goals={props?.goals}
+                        goalsList={props?.goalsList}
                         selectActivities={selectActivities}
                         selectSoins={selectSoins}
                         contacts={props?.contacts}

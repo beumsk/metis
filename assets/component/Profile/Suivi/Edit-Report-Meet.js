@@ -315,28 +315,50 @@ function EditReportMeet(props) {
           id="inputValueSpécifique"
         />
       )}
-      <InputGoalsList
-        goals={props?.goals}
-        defaultValue={
-          props?.informationPatient && props?.informationPatient?.fogo
-            ? props?.informationPatient?.fogo
-            : null
-        }
-        onChangeGoals={onChangeGoals}
-      />
+
+      {/* goalsList */}
+
       {props?.informationPatient?.hasOwnProperty("type") === false && (
-        <InputContactList
-          contacts={props.contacts}
-          defaultValue={props?.informationPatient?.cont}
-          onChange={onChangeContacts}
-        />
+        <>
+          <InputContactList
+            contacts={props.contacts}
+            defaultValue={props?.informationPatient?.cont}
+            onChange={onChangeContacts}
+          />
+        </>
       )}
-      {props?.informationPatient?.hasOwnProperty("type") === true && (
-        <InputContactList
-          contacts={props.contacts}
-          defaultValue={props?.informationPatient?.cont}
-          onChange={onChangeContacts}
-        />
+      {(props?.informationPatient?.activityType === 1 ||
+        props?.informationPatient?.activityType === 3) && (
+        <>
+          <InputGoalsList
+            goals={props?.goals}
+            defaultValue={
+              props?.informationPatient && props?.informationPatient?.fogo
+                ? props?.informationPatient?.fogo
+                : null
+            }
+            onChangeGoals={onChangeGoals}
+          />
+          <InputContactList
+            contacts={props.contacts}
+            defaultValue={props?.informationPatient?.cont}
+            onChange={onChangeContacts}
+          />
+        </>
+      )}
+      {(props?.informationPatient?.activityType === 2 ||
+        props?.informationPatient?.activityType === 4) && (
+        <>
+          <InputGoalsList
+            goals={props?.goalsList}
+            defaultValue={
+              props?.informationPatient && props?.informationPatient?.fogo
+                ? props?.informationPatient?.fogo
+                : null
+            }
+            onChangeGoals={onChangeGoals}
+          ></InputGoalsList>
+        </>
       )}
       {(props?.informationPatient?.activityType === 1 ||
         props?.informationPatient?.activityType === 3) && (
@@ -357,7 +379,7 @@ function EditReportMeet(props) {
           ></Editor>
         </>
       )}
-      {props?.informationPatient?.activityType !== 1 && (
+      {props?.informationPatient?.activityType === 2 && (
         <>
           <Form.Label htmlFor="inputValue">Description</Form.Label>
           <Editor
@@ -382,18 +404,30 @@ function EditReportMeet(props) {
           {isSentGoals && <FontAwesomeIcon icon={faCheck} />}
         </>
       )}
-      {props?.informationPatient?.activityType === 1 && (
-        <>
-          <button onClick={(e) => sentRapport(1)} className="mt-4 btn-metis">
-            Confirmer
-          </button>
-          {isSentRepport && <FontAwesomeIcon icon={faCheck} />}
-        </>
-      )}
+      {props?.informationPatient?.activityType === 1 ||
+        props?.informationPatient?.activityType === 2 ||
+        (props?.informationPatient?.activityType === 4 && (
+          <>
+            <button
+              onClick={(e) =>
+                sentRapport(props?.informationPatient?.activityType)
+              }
+              className="mt-4 btn-metis"
+            >
+              Confirmer
+            </button>
+            {isSentRepport && <FontAwesomeIcon icon={faCheck} />}
+          </>
+        ))}
 
       {props?.informationPatient?.activityType === 3 && (
         <>
-          <button onClick={(e) => sentRapport(3)} className="mt-4 btn-metis">
+          <button
+            onClick={(e) =>
+              sentRapport(props?.informationPatient?.activityType)
+            }
+            className="mt-4 btn-metis"
+          >
             Confirmer
           </button>
           {isSentRepport && <FontAwesomeIcon icon={faCheck} />}

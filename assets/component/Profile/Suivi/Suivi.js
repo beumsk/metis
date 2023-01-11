@@ -710,6 +710,7 @@ const Profile = () => {
               onChangeGoals={true}
               goals={goals}
               search={search}
+              goalsList={goalsListForSelect}
               places={places}
               informationPatient={informationPatient}
             ></RapportDetails>

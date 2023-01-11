@@ -246,9 +246,8 @@ class FollowUpReportsController extends AbstractController
                     "cont" => (count($value->getCont()) > 0) ?
                         array_map(function ($a) {
                             return [
-                                "id" => ($a->getId() !== null) ? $a->getId() : null,
-                                "lastname" => ($a->getLastName() && $a->getLastName() !== null) ? $a->getLastname() : null,
-                                "firstname" => ($a->getFirstName() && $a->getFirstName() !== null) ? $a->getFirstName() : null
+                                "value" => $a->getId(),
+                                "label" => $a->getFirstName() . " " . $a->getLastName() . " " . $a->getDescription(),
                             ];
                         }, [...$value->getCont()])
                         : null,
@@ -786,16 +785,18 @@ class FollowUpReportsController extends AbstractController
         $patientId = $request->request->get('patientId');
         $userId = $request->request->get('userId');
         $dateCall = $request->request->get('dateCall');
+        $descriptionCallSortant = $request->request->get('descriptionCallSortant');
+        $valueType = $request->request->get('valueType');
         // dd($patientId);
 
         $followupGoals = new FollowupGoals();
         $patients = $doctrine->getRepository(Patients::class)->find($patientId);
-        $user = $doctrine->getRepository(Patients::class)->find($userId);
+        $user = $doctrine->getRepository(User::class)->find($userId);
         $suggestions = $doctrine->getRepository(Suggestions::class)->find($valueWhatDoinFunction);
         $function = $doctrine->getRepository(Suggestions::class)->find($callsFunctionValue);
 
         $followupGoals->setPati($patients);
-
+        $followupGoals->setTitle($valueType);
         if ($isCallsPatients === "true") {
 
             $followupGoals->setType(2);
@@ -825,10 +826,32 @@ class FollowUpReportsController extends AbstractController
             $followupGoals->setDescription($description);
         }
 
-        $followupGoals->setStatus(0);
+
+        if ($isCallsPatients === "false" && $descriptionCallSortant && $descriptionCallSortant !== "null") {
+            $followupGoals->setStatus(1);
+        } else {
+            $followupGoals->setStatus(0);
+        }
+
         $entityManager->persist($followupGoals);
-        // dd($followupGoals);
+        // dd($followupReports);
         $entityManager->flush();
+
+        if ($isCallsPatients === "false" && $descriptionCallSortant && $descriptionCallSortant !== "null") {
+            $followupReports = new FollowupReports();
+            $followupReports->setContent($descriptionCallSortant);
+            $followupReports->setPatient($patients);
+            $followupReports->setCreationDate(new \DateTime('now'));
+            $followupReports->setLastUpdate(new \DateTime('now'));
+            $followupReports->setReportDate(new \DateTime('now'));
+            $followupReports->setActivityType(2);
+            $followupReports->setUser($user);
+            $followupReports->addfogo($followupGoals);
+
+            $entityManager->persist($followupReports);
+            // dd($followupReports);
+            $entityManager->flush();
+        }
         return new JsonResponse([
             'response' => "Sent !",
             'idAppel' => $followupGoals->getId()
