@@ -357,48 +357,38 @@ function EditReportMeet(props) {
           ></Editor>
         </>
       )}
-      {props?.informationPatient?.activityType !== 1 && (
-        <>
-          <Form.Label htmlFor="inputValue">Description</Form.Label>
-          <Editor
-            onChange={editorChange}
-            content={
-              props.informationPatient.content ||
-              props.informationPatient.description
-            }
-          ></Editor>
-          {/* <Form.Control
-            as="textarea"
-            className="mt-4"
-            placeholder="Leave a comment here"
-            onChange={(e) => setChangeDescriptionGoals(e.target.value)}
-            defaultValue={props.informationPatient.description}
-            style={{ height: "100px" }}
-          /> */}
+      {props?.informationPatient?.activityType !== 1 &&
+        props?.informationPatient?.activityType !== 3 && (
+          <>
+            <Form.Label htmlFor="inputValue">Description</Form.Label>
+            <Editor
+              onChange={editorChange}
+              content={
+                props.informationPatient.content ||
+                props.informationPatient.description
+              }
+            ></Editor>
 
-          <button onClick={(e) => sentCalls(e)} className="mt-4 btn-metis">
-            Confirmer
-          </button>
-          {isSentGoals && <FontAwesomeIcon icon={faCheck} />}
-        </>
-      )}
-      {props?.informationPatient?.activityType === 1 && (
-        <>
-          <button onClick={(e) => sentRapport(1)} className="mt-4 btn-metis">
-            Confirmer
-          </button>
-          {isSentRepport && <FontAwesomeIcon icon={faCheck} />}
-        </>
-      )}
-
-      {props?.informationPatient?.activityType === 3 && (
-        <>
-          <button onClick={(e) => sentRapport(3)} className="mt-4 btn-metis">
-            Confirmer
-          </button>
-          {isSentRepport && <FontAwesomeIcon icon={faCheck} />}
-        </>
-      )}
+            <button onClick={(e) => sentCalls(e)} className="mt-4 btn-metis">
+              Confirmer
+            </button>
+            {isSentGoals && <FontAwesomeIcon icon={faCheck} />}
+          </>
+        )}
+      {props?.informationPatient?.activityType === 1 ||
+        (props?.informationPatient?.activityType === 3 && (
+          <>
+            <button
+              onClick={(e) =>
+                sentRapport(props?.informationPatient?.activityType)
+              }
+              className="mt-4 btn-metis"
+            >
+              Confirmer
+            </button>
+            {isSentRepport && <FontAwesomeIcon icon={faCheck} />}
+          </>
+        ))}
     </div>
   );
 }
