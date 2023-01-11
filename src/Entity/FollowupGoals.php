@@ -255,6 +255,11 @@ class FollowupGoals
         return $this;
     }
 
+    public function getforelength()
+    {
+        return count($this->fore);
+    }
+
     /**
      * @return Collection<int, fore>
      */
