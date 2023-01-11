@@ -73,7 +73,7 @@ export default function InputContactList(props) {
       loading={loading}
       freeSolo={true}
       multiple
-      defaultValue={props.defaultValue}
+      defaultValue={props?.defaultValue || []}
       renderInput={(params) => (
         <>
           <Form.Label htmlFor="inputValue" className="uk-form-label">

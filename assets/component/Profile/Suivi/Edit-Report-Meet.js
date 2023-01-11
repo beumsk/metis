@@ -138,7 +138,7 @@ function EditReportMeet(props) {
     setChangeEditor(e);
   }
   const onClickAddIndicateurs = (e) => {
-    if (formIndicateurs && formIndicateurs.length < 3) {
+    if (formIndicateurs && formIndicateurs?.length < 3) {
       //
       setFormIndicateurs((prevFormSoins) => [...prevFormSoins, e]);
     }
