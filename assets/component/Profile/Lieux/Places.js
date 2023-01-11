@@ -87,7 +87,7 @@ const Places = () => {
       dataField: "lastname",
       text: "Lieu",
       formatter: (cell, row, rowIndex, extraData) => (
-        <div>{row.cont[0].lastname}</div>
+        <div>{row.cont[0]?.lastname}</div>
       ),
     },
     {
@@ -101,19 +101,27 @@ const Places = () => {
       dataField: "start",
       text: "Début",
       formatter: (cell, row, rowIndex, extraData) => (
-        <div>{new Date(row?.start).toLocaleString("fr-BE", "short")}</div>
+        <div>
+          {row?.start
+            ? new Date(row?.start).toLocaleString("fr-BE", "short").slice(0, 10)
+            : ""}
+        </div>
       ),
     },
     {
       dataField: "end",
       text: "Fin",
       formatter: (cell, row, rowIndex, extraData) => (
-        <div>{new Date(row?.end).toLocaleString("fr-BE", "short")}</div>
+        <div>
+          {row?.end
+            ? new Date(row?.end).toLocaleString("fr-BE", "short").slice(0, 10)
+            : ""}
+        </div>
       ),
     },
     {
       dataField: "comment",
-      text: "Comment",
+      text: "Commentaire",
       formatter: (cell, row, rowIndex, extraData) => (
         <div>{row.comment === "null" ? "" : row.comment}</div>
       ),

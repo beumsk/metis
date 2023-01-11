@@ -3,11 +3,7 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import useAuth from "../../../hooks/useAuth";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faPlusCircle,
-  faCancel,
-  faEdit,
-} from "@fortawesome/free-solid-svg-icons";
+import { faEdit } from "@fortawesome/free-solid-svg-icons";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import Form from "react-bootstrap/Form";
@@ -38,7 +34,7 @@ function ModalLierLieux(props) {
     props?.lieu?.end ? props?.lieu?.end : null
   );
   const [valueCommentary, setValueCommentary] = useState(
-    props.lieu.comment ? props.lieu.comment : null
+    props.lieu.comment ? props.lieu.comment : ""
   );
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -58,9 +54,10 @@ function ModalLierLieux(props) {
     //     .catch(function (response) {});
   }, [idPatient]);
   //
-  const handleInputChange = (e) => {
-    //new Date(start).toJSON().slice(0, 10)
+  const handleInputStartChange = (e) => {
     setStartDate(new Date(e.target.value).toJSON().slice(0, 10));
+  };
+  const handleInputEndChange = (e) => {
     setEndDate(new Date(e.target.value).toJSON().slice(0, 10));
   };
 
@@ -96,9 +93,9 @@ function ModalLierLieux(props) {
           },
         })
           .then(function (response) {
+            handleClose();
             setResponseDatas(response);
             setIsSentRepport(true);
-            document.querySelectorAll(".btn-close")[0].click();
           })
           .catch(function (response) {});
         // document.querySelectorAll(".btn-close")[0].click();
@@ -128,28 +125,30 @@ function ModalLierLieux(props) {
             <Form.Label htmlFor="inputValue">Lieu</Form.Label>
             <Form.Select
               size="lg"
-              className="mb-4"
+              style={{ width: "100%" }}
               defaultValue={props?.lieu?.cont?.id}
               onChange={(e) => setValueLieux(e.target.value)}
             >
               {props?.lieuxList?.data?.map((el, id) => (
-                <>
+                <React.Fragment key={el.id}>
                   {el?.lastname && (
                     <option value={el.id}>{el?.lastname}</option>
                   )}
-                </>
+                </React.Fragment>
               ))}
             </Form.Select>
 
             <Form.Label htmlFor="inputValue">Type</Form.Label>
             <Form.Select
               size="lg"
-              className="mb-4"
+              style={{ width: "100%" }}
               defaultValue={props?.lieu?.sugg?.id}
               onChange={(e) => setValueType(e.target.value)}
             >
               {props?.type?.data?.map((el, id) => (
-                <>{el?.value && <option value={el.id}>{el?.value}</option>}</>
+                <React.Fragment key={el.id}>
+                  {el?.value && <option value={el.id}>{el?.value}</option>}
+                </React.Fragment>
               ))}
             </Form.Select>
 
@@ -157,7 +156,7 @@ function ModalLierLieux(props) {
             <Form.Control
               type="date"
               id="inputValueSpécifique"
-              onChange={handleInputChange}
+              onChange={handleInputStartChange}
               defaultValue={new Date(props?.lieu?.start)
                 .toISOString()
                 .substring(0, 10)}
@@ -170,7 +169,7 @@ function ModalLierLieux(props) {
               defaultValue={new Date(props?.lieu?.end)
                 .toISOString()
                 .substring(0, 10)}
-              onChange={handleInputChange}
+              onChange={handleInputEndChange}
               aria-describedby="valueSpécifique"
             />
             <Form.Label htmlFor="inputValue">Commentaire</Form.Label>

@@ -3,16 +3,9 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import useAuth from "../../../hooks/useAuth";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import moment from "moment";
-import {
-  faPlusCircle,
-  faTrash,
-  faEdit,
-  faCheck,
-} from "@fortawesome/free-solid-svg-icons";
+import { faTrash, faCheck } from "@fortawesome/free-solid-svg-icons";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import Form from "react-bootstrap/Form";
 
 function ModalDeletePlaces(props) {
   const [show, setShow] = useState(false);
@@ -55,13 +48,6 @@ function ModalDeletePlaces(props) {
 
     setEndDate(new Date(props?.infosPatient?.end?.timestamp * 1000).toJSON());
   }, []);
-  //
-
-  const handleInputChange = (e) => {
-    //new Date(start).toJSON().slice(0, 10)
-    setStartDate(new Date(e.target.value).toJSON().slice(0, 10));
-    setEndDate(new Date(e.target.value).toJSON().slice(0, 10));
-  };
 
   const handleSave = (e) => {
     let formData = new FormData();
@@ -93,10 +79,9 @@ function ModalDeletePlaces(props) {
           .then(function (response) {
             setResponseDatas(response);
             setIsSentRepport(true);
-            document.querySelectorAll(".btn-close")[0].click();
+            handleClose();
           })
           .catch(function (response) {});
-        // document.querySelectorAll(".btn-close")[0].click();
         // location.replace(window.location.origin + "/" + idPatient);
       }
     });
@@ -106,9 +91,8 @@ function ModalDeletePlaces(props) {
 
   if (responseDatas !== null) {
     props.onChangeDeletePlace(responseDatas);
-
-    // document.querySelectorAll(".btn-close")[0].click();
   }
+
   return (
     <>
       <button onClick={handleShow} className="ml-4 btn-metis">
@@ -120,9 +104,8 @@ function ModalDeletePlaces(props) {
           <Modal.Title>Effacer une information</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {" "}
           <>
-            <p>êtes-vous sur ?</p>
+            <p>Êtes-vous sûr ?</p>
           </>
         </Modal.Body>
         <Modal.Footer>
