@@ -2178,7 +2178,7 @@ class FollowUpReportsController extends AbstractController
                     "id" => $value->getId(),
                     "start" => $value->getStart(),
                     "end" => $value->getEnd(),
-                    "comment" => $value->getComment(),
+                    "comment" => ($value->getComment() !== "null") ? $value->getComment() : null,
                     "cont" => [($value->getCont()) ? $value->getCont() : null],
                     "pati" => [$value->getPati()],
                     "sugg" => [$value->getSugg()],

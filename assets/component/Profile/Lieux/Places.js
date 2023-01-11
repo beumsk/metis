@@ -79,6 +79,7 @@ const Places = () => {
   }
 
   function onChangeDeletePlace(e) {
+    console.log(e);
     setPlaces(e);
   }
 
@@ -129,25 +130,31 @@ const Places = () => {
     {
       formatter: (cell, row, rowIndex, extraData) => (
         <div className="d-flex">
-          <EditLierLieux
-            lieu={row}
-            type={type}
-            onChangeEditPlaces={(e) => editPlacesResponse(e)}
-            // lieuxList={alllistPlaces}
-            // typeDefault={places.type.lastname}
-            places={row}
-          ></EditLierLieux>
-          <ModalDeletePlaces
-            lieu={row}
-            type={type}
-            onChangeDeletePlace={(e) => onChangeDeletePlace(e)}
-            places={row}
-          ></ModalDeletePlaces>
+          <>
+            {console.log(alllistPlaces)}
+            <EditLierLieux
+              lieu={row}
+              type={type}
+              onChangeEditPlaces={(e) => editPlacesResponse(e)}
+              lieuxList={alllistPlaces}
+              // typeDefault={places.type.lastname}
+              places={row}
+            ></EditLierLieux>
+            <ModalDeletePlaces
+              lieu={row}
+              type={type}
+              onChangeDeletePlace={(e) => onChangeDeletePlace(e)}
+              places={row}
+            ></ModalDeletePlaces>
+          </>
         </div>
       ),
-      text: "Actions",
+      dataField: "Actions",
+      text: "Comment",
     },
   ];
+
+  console.log(alllistPlaces);
 
   return (
     <>
@@ -161,18 +168,28 @@ const Places = () => {
           condensed
         ></ModalLierLieux>
       </div>
-      {listPlaces && listPlaces.data.length > 0 ? (
+      {listPlaces &&
+      listPlaces.data.length > 0 &&
+      alllistPlaces?.data?.length > 0 &&
+      type ? (
         <ToolkitProvider
           keyField="id"
           data={[...listPlaces.data]}
           columns={columns}
+          sort={
+            ({ dataField: "end", order: "desc" },
+            { dataField: "start", order: "asc" })
+          }
           search
         >
           {(props) => (
-            <BootstrapTable
-              {...props.baseProps}
-              pagination={paginationFactory()}
-            />
+            <>
+              {console.log(props.baseProps)}
+              <BootstrapTable
+                {...props.baseProps}
+                pagination={paginationFactory()}
+              />
+            </>
           )}
         </ToolkitProvider>
       ) : (

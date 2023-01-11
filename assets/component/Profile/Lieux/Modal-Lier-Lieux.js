@@ -109,6 +109,7 @@ function ModalLierLieux(props) {
     props.onChangeLierPlaces(responseDatas);
   }
   //   /api/getContacts
+  console.log(props?.lieuxList);
   return (
     <>
       <Button onClick={handleShow} className="btn-metis">

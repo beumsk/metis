@@ -21,11 +21,11 @@ function ModalLierLieux(props) {
   const [idPatient, setIdPatient] = useState(id);
   const [responseDatas, setResponseDatas] = useState(null);
   const [valueLieux, setValueLieux] = useState(
-    props?.lieu?.cont?.id ? props?.lieu?.cont?.id : null
+    props?.lieu?.cont[0]?.id ? props?.lieu?.cont[0]?.id : null
   );
   const [type, setType] = useState(null);
   const [valueType, setValueType] = useState(
-    props?.lieu?.sugg?.id ? props?.lieu?.sugg?.id : null
+    props?.lieu?.sugg[0]?.id ? props?.lieu?.sugg[0]?.id : null
   );
   const [start, setStartDate] = useState(
     props?.lieu?.start ? props?.lieu?.start : null
@@ -34,10 +34,12 @@ function ModalLierLieux(props) {
     props?.lieu?.end ? props?.lieu?.end : null
   );
   const [valueCommentary, setValueCommentary] = useState(
-    props.lieu.comment ? props.lieu.comment : ""
+    props?.lieu?.comment ? props?.lieu?.comment : ""
   );
   const handleClose = () => setShow(false);
+  const [errorValue, setErrorValue] = useState(null);
   const handleShow = () => setShow(true);
+  console.log(props);
   useEffect(() => {
     //   axios({
     //     method: "post",
@@ -69,45 +71,55 @@ function ModalLierLieux(props) {
     formData.append("valueLieux", valueLieux);
     formData.append("start", start);
     formData.append("end", end);
+    console.log(valueType);
     formData.append("valueType", valueType);
     formData.append("idPatient", idPatient);
-    axios({
-      method: "post",
-      url: "/api/updateLierPlaces",
-      data: formData,
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${auth.auth.accessToken}`,
-      },
-    }).then(function (response) {
-      if (response) {
-        var formGetInfos = new FormData();
-        formGetInfos.append("id", id.toString());
-        axios({
-          method: "post",
-          url: "/api/getPlacesPatients",
-          data: formGetInfos,
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${auth.auth.accessToken}`,
-          },
-        })
-          .then(function (response) {
-            handleClose();
-            setResponseDatas(response);
-            setIsSentRepport(true);
+
+    if (valueLieux === null || valueLieux === "defaultValue") {
+      setErrorValue(true);
+    } else {
+      setErrorValue(false);
+    }
+
+    if (valueLieux !== null && valueLieux !== "defaultValue") {
+      axios({
+        method: "post",
+        url: "/api/updateLierPlaces",
+        data: formData,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${auth.auth.accessToken}`,
+        },
+      }).then(function (response) {
+        if (response) {
+          var formGetInfos = new FormData();
+          formGetInfos.append("id", id.toString());
+          axios({
+            method: "post",
+            url: "/api/getPlacesPatients",
+            data: formGetInfos,
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${auth.auth.accessToken}`,
+            },
           })
-          .catch(function (response) {});
-        // document.querySelectorAll(".btn-close")[0].click();
-        // location.replace(window.location.origin + "/" + idPatient);
-      }
-    });
+            .then(function (response) {
+              handleClose();
+              setResponseDatas(response);
+              setIsSentRepport(true);
+            })
+            .catch(function (response) {});
+          // document.querySelectorAll(".btn-close")[0].click();
+          // location.replace(window.location.origin + "/" + idPatient);
+        }
+      });
+    }
   }
 
   if (responseDatas !== null) {
     props.onChangeEditPlaces(responseDatas);
   }
-
+  console.log(props.lieu);
   //   /api/getContacts
   return (
     <>
@@ -126,9 +138,11 @@ function ModalLierLieux(props) {
             <Form.Select
               size="lg"
               style={{ width: "100%" }}
-              defaultValue={props?.lieu?.cont?.id}
+              className="uk-select"
+              defaultValue={props?.lieu?.cont[0]?.id}
               onChange={(e) => setValueLieux(e.target.value)}
             >
+              <option value={"defaultValue"}>Sélectionnez le lieu</option>
               {props?.lieuxList?.data?.map((el, id) => (
                 <React.Fragment key={el.id}>
                   {el?.lastname && (
@@ -142,7 +156,8 @@ function ModalLierLieux(props) {
             <Form.Select
               size="lg"
               style={{ width: "100%" }}
-              defaultValue={props?.lieu?.sugg?.id}
+              className="uk-select"
+              defaultValue={props?.lieu?.sugg[0]?.id}
               onChange={(e) => setValueType(e.target.value)}
             >
               {props?.type?.data?.map((el, id) => (
@@ -156,6 +171,7 @@ function ModalLierLieux(props) {
             <Form.Control
               type="date"
               id="inputValueSpécifique"
+              className="uk-select"
               onChange={handleInputStartChange}
               defaultValue={new Date(props?.lieu?.start)
                 .toISOString()
@@ -166,6 +182,7 @@ function ModalLierLieux(props) {
             <Form.Control
               type="date"
               id="inputValueSpécifique"
+              className="uk-select"
               defaultValue={new Date(props?.lieu?.end)
                 .toISOString()
                 .substring(0, 10)}
@@ -182,6 +199,7 @@ function ModalLierLieux(props) {
             />
           </>
         </Modal.Body>
+        {errorValue && <p>Lieux obligatoire</p>}
         <Modal.Footer>
           <Button onClick={handleClose}>Fermer</Button>
           <Button onClick={handleSave} className="btn-metis">
