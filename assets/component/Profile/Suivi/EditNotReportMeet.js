@@ -102,8 +102,8 @@ function EditNoReportMeet(props) {
               <span style={{ fontWeight: "normal" }}>
                 {props?.rapport.cont?.map((cont) => (
                   <>
-                    {cont.lastname}
-                    {cont.firstname}
+                    {cont.label}
+                    {/* {cont.firstname} */}
                   </>
                 ))}
               </span>
