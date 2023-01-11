@@ -64,7 +64,7 @@ function EditNoReportMeet(props) {
               <h6>Objectifs: </h6>
               <span style={{ fontWeight: "normal" }}>
                 {props?.rapport.fogo?.map((fo) => (
-                  <>{fo.description}</>
+                  <>{fo.label}</>
                 ))}
               </span>
             </>

@@ -221,21 +221,24 @@ class FollowUpReportsController extends AbstractController
                     "fogo" => (count($value->getFogo()) > 0) ?
                         array_map(function ($a) {
                             return [
-                                "id" => ($a->getId() !== null) ? $a->getId() : null,
-                                "description" => ($a->getDescription() !== null) ? $a->getDescription() : null,
-                                "creationDate" => $a->getCreationDate()->format(DATE_RFC3339_EXTENDED),
-                                "type" => $a->getType(),
-                                "sugg" => ($a->getSugg() && $a->getSugg() !== null) ? [
-                                    "id" => $a->getSugg()->getId(),
-                                    "value" => $a->getSugg()->getValue(),
-                                ] : null,
-                                "deletedAt" => ($a->getDeletedAt() !== null) ? $a->getDeletedAt()->format(DATE_RFC3339_EXTENDED) : null,
-                                "title" => ($a->getTitle() !== null) ? $a->getTitle() : null,
-                                "cont" => ($a->getCont() && $a->getCont() !== null) ? [
-                                    "id" => $a->getCont()->getId(),
-                                    "lastname" => ($a->getCont()->getLastName() && $a->getCont()->getLastName() !== null) ? $a->getCont()->getLastname() : null,
-                                    "firstname" => ($a->getCont()->getFirstName() && $a->getCont()->getFirstName() !== null) ? $a->getCont()->getFirstName() : null
-                                ] : null
+                                "value" => $a->getId(),
+                                "label" => $a->getCreationDate()->format('d/m/Y') . " " . (($a->getFunc() && $a->getFunc()->getValue()) ? $a->getFunc()->getValue() : null) . " " . (($a->getDescription()) ? $a->getDescription() : null),
+
+                                // "id" => ($a->getId() !== null) ? $a->getId() : null,
+                                // "description" => ($a->getDescription() !== null) ? $a->getDescription() : null,
+                                // "creationDate" => $a->getCreationDate()->format(DATE_RFC3339_EXTENDED),
+                                // "type" => $a->getType(),
+                                // "sugg" => ($a->getSugg() && $a->getSugg() !== null) ? [
+                                //     "id" => $a->getSugg()->getId(),
+                                //     "value" => $a->getSugg()->getValue(),
+                                // ] : null,
+                                // "deletedAt" => ($a->getDeletedAt() !== null) ? $a->getDeletedAt()->format(DATE_RFC3339_EXTENDED) : null,
+                                // "title" => ($a->getTitle() !== null) ? $a->getTitle() : null,
+                                // "cont" => ($a->getCont() && $a->getCont() !== null) ? [
+                                //     "id" => $a->getCont()->getId(),
+                                //     "lastname" => ($a->getCont()->getLastName() && $a->getCont()->getLastName() !== null) ? $a->getCont()->getLastname() : null,
+                                //     "firstname" => ($a->getCont()->getFirstName() && $a->getCont()->getFirstName() !== null) ? $a->getCont()->getFirstName() : null
+                                // ] : null
                             ];
                         }, [...$value->getFogo()])
                         : null,
@@ -382,21 +385,24 @@ class FollowUpReportsController extends AbstractController
                     "fogo" => (count($value->getFogo()) > 0) ?
                         array_map(function ($a) {
                             return [
-                                "id" => ($a->getId() !== null) ? $a->getId() : null,
-                                "description" => ($a->getDescription() !== null) ? $a->getDescription() : null,
-                                "creationDate" => $a->getCreationDate()->format(DATE_RFC3339_EXTENDED),
-                                "type" => $a->getType(),
-                                "sugg" => ($a->getSugg() && $a->getSugg() !== null) ? [
-                                    "id" => $a->getSugg()->getId(),
-                                    "value" => $a->getSugg()->getValue(),
-                                ] : null,
-                                "deletedAt" => ($a->getDeletedAt() !== null) ? $a->getDeletedAt()->format(DATE_RFC3339_EXTENDED) : null,
-                                "title" => ($a->getTitle() !== null) ? $a->getTitle() : null,
-                                "cont" => ($a->getCont() && $a->getCont() !== null) ? [
-                                    "id" => $a->getCont()->getId(),
-                                    "lastname" => ($a->getCont()->getLastName() && $a->getCont()->getLastName() !== null) ? $a->getCont()->getLastname() : null,
-                                    "firstname" => ($a->getCont()->getFirstName() && $a->getCont()->getFirstName() !== null) ? $a->getCont()->getFirstName() : null
-                                ] : null
+
+                                "label" => $a->getCreationDate()->format('d/m/Y') . " " . (($a->getSugg() && $a->getSugg()->getValue()) ? $a->getSugg()->getValue() : null) . " " . (($a->getDescription()) ? $a->getDescription() : null),
+                                "value" => $a->getId(),
+                                // "id" => ($a->getId() !== null) ? $a->getId() : null,
+                                // "description" => ($a->getDescription() !== null) ? $a->getDescription() : null,
+                                // "creationDate" => $a->getCreationDate()->format(DATE_RFC3339_EXTENDED),
+                                // "type" => $a->getType(),
+                                // "sugg" => ($a->getSugg() && $a->getSugg() !== null) ? [
+                                //     "id" => $a->getSugg()->getId(),
+                                //     "value" => $a->getSugg()->getValue(),
+                                // ] : null,
+                                // "deletedAt" => ($a->getDeletedAt() !== null) ? $a->getDeletedAt()->format(DATE_RFC3339_EXTENDED) : null,
+                                // "title" => ($a->getTitle() !== null) ? $a->getTitle() : null,
+                                // "cont" => ($a->getCont() && $a->getCont() !== null) ? [
+                                //     "id" => $a->getCont()->getId(),
+                                //     "lastname" => ($a->getCont()->getLastName() && $a->getCont()->getLastName() !== null) ? $a->getCont()->getLastname() : null,
+                                //     "firstname" => ($a->getCont()->getFirstName() && $a->getCont()->getFirstName() !== null) ? $a->getCont()->getFirstName() : null
+                                // ] : null
                             ];
                         }, [...$value->getFogo()])
                         : null,
