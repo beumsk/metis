@@ -155,7 +155,9 @@ button {
   width: 1px;
 }
 
-
+.accordion-body{
+  padding: 0 12px 0 12px!important;
+}
 .accordion-fiche {
   button {
     background-color: transparent !important;

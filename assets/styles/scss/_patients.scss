@@ -31,8 +31,14 @@
     text-decoration: none;
 }
 
+.accordion-header{
+    background-color: #fff!important;
+    // border: 1px solid #dddddd!important;
+}
+
 .accordion-body {
-    background-color: #f8f8f8!important;
+    background-color: whitesmoke!important;
+
     p{
         margin: 0!important;
     }

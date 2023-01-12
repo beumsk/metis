@@ -47,7 +47,7 @@ const BlockInfos = (props) => {
       {props.infos?.map((patient, id) => (
         <div key={patient.id}>
           {patient && patient.suge?.pathString === props.link && (
-            <div className="row row-infos">
+            <div className="row row-infos" key={patient.id}>
               <div className="col-sm-3">
                 <p style={{ fontWeight: "600" }}>{patient.suge?.value}</p>
               </div>
@@ -56,7 +56,7 @@ const BlockInfos = (props) => {
                 {patient?.patientInformation && (
                   <>
                     {patient?.patientInformation?.map((pi, id) => (
-                      <div className="row" key={pi.id}>
+                      <div className="row pb-2" key={pi.id}>
                         <div className="col-sm-6">
                           <div
                             key={pi.id}
