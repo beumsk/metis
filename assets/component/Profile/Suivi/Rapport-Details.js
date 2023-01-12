@@ -243,6 +243,8 @@ function RapportDetails(props) {
   }
   console.log(props.onChangeGoals);
 
+  function switchEditMode(e) {}
+
   return (
     <>
       <FilterRapportDetails
@@ -254,11 +256,11 @@ function RapportDetails(props) {
           {informations?.data.map((r, id) => (
             <div
               key={id}
-              className="uk-card uk-card-default uk-card-hover uk-card-body mt-4 mb-4"
+              className="suivi-card mt-4 mb-4"
               style={
                 r.activityType === 1 || r.activityType === 3
-                  ? { border: "4px solid rgb(120 156 13 / 53%)" }
-                  : { border: "4px solid #9c5fb5" }
+                  ? { border: "2px solid #BACC8C" }
+                  : { border: "2px solid #9c5fb5" }
               }
             >
               <div className="row-btnRapport">
@@ -270,49 +272,51 @@ function RapportDetails(props) {
                 r.activityType === 4 ||
                 r.activityType === 3 ||
                 r.activityType === 2 ? (
-                  <Form.Check
-                    type="switch"
-                    defaultChecked={r.isShow}
-                    onClick={(e) => {
-                      // setToggle(!toggle);
+                  <Form.Check id={r.id}>
+                    <Form.Check.Input
+                      type="checkbox"
+                      defaultChecked={r.isShow}
+                      className="uk-checkbox"
+                      onClick={(e) => {
+                        // setToggle(!toggle);
 
-                      if (e.target.checked === true) {
-                        setToggle(true);
-                        r.isShow = true;
+                        if (e.target.checked === true) {
+                          setToggle(true);
+                          r.isShow = true;
 
-                        setInformations(informations);
-                      }
+                          setInformations(informations);
+                        }
 
-                      if (e.target.checked === false) {
-                        setToggle(false);
-                        r.isShow = false;
+                        if (e.target.checked === false) {
+                          setToggle(false);
+                          r.isShow = false;
 
-                        setInformations(informations);
-                        axios({
-                          method: "post",
-                          url: "/api/getFollowUpReportsById",
-                          data: reportData,
-                          headers: {
-                            "Content-Type": "application/json",
-                            Authorization: `Bearer ${auth.auth.accessToken}`,
-                          },
-                        })
-                          .then(function (response) {
-                            setInformations(response);
+                          setInformations(informations);
+                          axios({
+                            method: "post",
+                            url: "/api/getFollowUpReportsById",
+                            data: reportData,
+                            headers: {
+                              "Content-Type": "application/json",
+                              Authorization: `Bearer ${auth.auth.accessToken}`,
+                            },
                           })
-                          .catch(function (response) {});
-                      }
+                            .then(function (response) {
+                              setInformations(response);
+                            })
+                            .catch(function (response) {});
+                        }
 
-                      // if (r.isHightlight === false) {
-                      //   setToggle(!toggle);
-                      //   r.isShow = toggle;
+                        // if (r.isHightlight === false) {
+                        //   setToggle(!toggle);
+                        //   r.isShow = toggle;
 
-                      //   setInformations(informations);
-                      // }
-                    }}
-                    label="Activer le mode édition"
-                    id={r.id}
-                  />
+                        //   setInformations(informations);
+                        // }
+                      }}
+                    />
+                    <Form.Check.Label>Activer le mode édition</Form.Check.Label>
+                  </Form.Check>
                 ) : (
                   ""
                 )}
@@ -321,71 +325,70 @@ function RapportDetails(props) {
               {r && r.deletedAt === null && (
                 <>
                   {r && r.activityType === 1 && (
-                    <h3 className="uk-card-title">
-                      {" "}
+                    <h3 className="suivi-card-title">
                       <FontAwesomeIcon
                         icon={faFilePen}
-                        style={{ marginRight: "1rem" }}
+                        style={{ marginRight: "4px" }}
                       />
                       Rapport de rencontre
                     </h3>
                   )}
 
                   {r.type === 1 && (
-                    <h3 className="uk-card-title">
+                    <h3 className="suivi-card-title">
                       <FontAwesomeIcon
                         icon={faHouseSignal}
-                        style={{ marginRight: "1rem" }}
+                        style={{ marginRight: "4px" }}
                       />
                       Objectif
                     </h3>
                   )}
 
                   {r && r.activityType === 2 && (
-                    <h3 className="uk-card-title">
+                    <h3 className="suivi-card-title">
                       <FontAwesomeIcon
                         icon={faPhone}
-                        style={{ marginRight: "1rem" }}
+                        style={{ marginRight: "4px" }}
                       />
                       Appel Sortant
                     </h3>
                   )}
 
                   {r && r.activityType === 4 && (
-                    <h3 className="uk-card-title">
+                    <h3 className="suivi-card-title">
                       <FontAwesomeIcon
                         icon={faPhone}
-                        style={{ marginRight: "1rem" }}
+                        style={{ marginRight: "4px" }}
                       />
                       Appel Entrant
                     </h3>
                   )}
 
                   {r && r.activityType === 3 && (
-                    <h3 className="uk-card-title">
+                    <h3 className="suivi-card-title">
                       <FontAwesomeIcon
                         icon={faFilePen}
-                        style={{ marginRight: "1rem" }}
+                        style={{ marginRight: "4px" }}
                       />
                       Rapport de réunion
                     </h3>
                   )}
 
                   {r && r.cont === null && r.type === 2 && (
-                    <h3 className="uk-card-title">
+                    <h3 className="suivi-card-title">
                       <FontAwesomeIcon
                         icon={faPhone}
-                        style={{ marginRight: "1rem" }}
+                        style={{ marginRight: "4px" }}
                       />
                       Appel Sortant
                     </h3>
                   )}
 
                   {r && r?.cont?.id && r.type === 2 && (
-                    <h3 className="uk-card-title">
+                    <h3 className="suivi-card-title">
                       <FontAwesomeIcon
                         icon={faPhone}
-                        style={{ marginRight: "1rem" }}
+                        style={{ marginRight: "4px" }}
                       />
                       Appel Entrant
                     </h3>

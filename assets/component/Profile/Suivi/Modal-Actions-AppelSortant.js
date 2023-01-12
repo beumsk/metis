@@ -144,9 +144,7 @@ function ModalActionsAppelsSortant(props) {
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>
-            <h6>Ajouter appel sortant</h6>
-          </Modal.Title>
+          <Modal.Title>Ajouter appel sortant</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>
@@ -207,7 +205,7 @@ function ModalActionsAppelsSortant(props) {
           {/* <Button variant="primary" onClick={handleSaveKeep}>
             Sauver et garder
           </Button> */}
-          <Button variant="primary" onClick={handleSaveComplete}>
+          <Button onClick={handleSaveComplete} className="btn-metis">
             Sauver
           </Button>
         </Modal.Footer>

@@ -56,11 +56,9 @@ function ModalCallCanceled(props) {
           Êtes-vous certain de vouloir annuler cette action ?
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Close
-          </Button>
-          <Button variant="primary" onClick={handleSave}>
-            Sauver
+          <Button onClick={handleClose}>Fermer</Button>
+          <Button onClick={handleSave} className="btn-metis-red">
+            Signaler
           </Button>
         </Modal.Footer>
       </Modal>

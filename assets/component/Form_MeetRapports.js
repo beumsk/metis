@@ -290,9 +290,12 @@ const Form_MeetRapports = () => {
           onChange={onChangeContacts}
           defaultValue={null}
         />
+
         <InputPlaceList places={places} onChange={onChangePlaces} />
 
-        <Editor onChange={editorChange} content={editorChange}></Editor>
+        <div className="my-3">
+          <Editor onChange={editorChange} content={editorChange}></Editor>
+        </div>
 
         <a className={"send-btn"} onClick={sentRapport}>
           Envoyer

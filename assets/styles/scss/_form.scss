@@ -15,7 +15,9 @@
   justify-content: right;
 }
 
-.btn-metis {
+.btn-metis,
+.btn-metis-red,
+.btn-metis-grey {
   font-family: "Roboto", sans-serif !important;
   // text-transform: uppercase!important;
   outline: 0 !important;
@@ -36,15 +38,27 @@
   }
 }
 
+.btn-metis-red {
+  background: #F04029 !important;
+
+}
+
+.btn-metis-grey {
+  background: #F8F8F8 !important;
+  color: #212529 !important;
+}
+
 #inputValueSpécifique {
   display: block !important;
   width: 100% !important;
 }
 
 .form-check {
+  cursor: pointer;
+
   label {
-    font-size: 0.7rem;
-    margin-left: 0.5rem;
+    padding-left: 0.5rem;
+    cursor: pointer;
   }
 }
 

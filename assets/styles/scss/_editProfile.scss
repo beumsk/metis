@@ -1,35 +1,41 @@
-.addSoins-form{
-    border: 1px solid #e5e5e5;
-    padding: 2rem;
-    background-color: #f8f8f8;
+.addSoins-form {
+  border: 1px solid #e5e5e5;
+  padding: 2rem;
+  background-color: #f8f8f8;
 }
 
-.row-indicateurs, .row-care, .row-activities{
-    border: 1px solid #0000002e;
-    padding: 1rem;
+.row-indicateurs,
+.row-care,
+.row-activities {
+  border: 1px solid #0000002e;
+  padding: 1rem;
 }
 
-.noEditRepports-container{
-    h6{
-        margin-top: 1rem;
-    }
+.noEditRepports-container {
+  h6 {
+    margin-top: 1rem;
+  }
 }
 
-.indicateurs-container{
-    margin-top: 2rem;
-    margin-bottom: 2rem;
+.indicateurs-container {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: solid 1px #ddd;
 }
 
-.editIconPatient{
-    float: right;
+.editIconPatient {
+  float: right;
 }
 
-.row-btnRapport{
-    display: flex;
-    align-items: flex-end;
-    justify-content: end;
-    flex-direction: row-reverse;
-    button{
-        margin-left: 0.5rem;
-    }
+.row-btnRapport {
+  display: flex;
+  align-items: flex-end;
+  justify-content: end;
+  flex-direction: row-reverse;
+  float: right;
+
+  button {
+    margin-left: 0.5rem;
+  }
 }

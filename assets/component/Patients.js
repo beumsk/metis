@@ -214,7 +214,7 @@ function Patients() {
                   <Accordion.Body>
                     <div className="row body-accordeonitemPatient">
                       <p>
-                        <b>Activitées</b>
+                        <b>Activités</b>
                       </p>
                       {patient?.fore?.map((f, id) => (
                         <div key={id}>
@@ -245,7 +245,7 @@ function Patients() {
                         </div>
                       ))}
                       {/* <div className="col-sm-4">
-                        <b>Dernière activitée</b>
+                        <b>Dernière activité</b>
                         <p>Rapport de rencontre 12/08/2021</p>
                         <p>Rapport de rencontre 20/08/2022</p>
                         <p>Rapport de rencontre 14/09/2022</p>

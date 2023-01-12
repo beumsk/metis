@@ -75,6 +75,7 @@ export default function InputPlaceList(props) {
     <Autocomplete
       id="asynchronous-demo"
       sx={{ width: "100%" }}
+      size="small"
       open={open}
       // style={{ margin: "1rem 0 1rem 0" }}
       onOpen={() => {

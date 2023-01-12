@@ -51,6 +51,11 @@ a {
 .input-autocomplete {
   background-color: white !important;
   padding: 0 !important;
+
+  >div {
+    border-radius: 0 !important;
+    border-color: #e5e5e5 !important;
+  }
 }
 
 .body-accordeonitemPatient {

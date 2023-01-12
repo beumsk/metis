@@ -179,23 +179,29 @@ function ModalEditAppels(props) {
               onChange={(e) => setValueType(e.target.value)}
               defaultValue={props?.calls?.title}
             />
-            <Form.Group className="mb-3" controlId="formBasicCheckbox">
-              <Form.Check
-                type="checkbox"
-                label="Prioritaire ?"
-                onClick={(e) => setPriority(e.target.checked)}
-                defaultChecked={props?.calls?.isHightlight}
-              />
+            <Form.Group className="my-3" controlId="formBasicCheckbox">
+              <Form.Check id="formBasicCheckbox">
+                <Form.Check.Input
+                  onClick={(e) => setPriority(e.target.checked)}
+                  type="checkbox"
+                  defaultChecked={props?.calls?.isHightlight}
+                  className="uk-checkbox"
+                />
+                <Form.Check.Label>Prioritaire ?</Form.Check.Label>
+              </Form.Check>
             </Form.Group>
-            <Form.Group className="mb-3 mt-4" controlId="formBasicCheckbox">
-              <Form.Check
-                type="checkbox"
-                label="Appeler ce patient ?"
-                defaultValue={
-                  props?.calls?.cont && props?.calls?.cont?.id ? false : true
-                }
-                onClick={(e) => setIsCallsPatients(!isCallsPatients)}
-              />
+            <Form.Group className="my-3 mt-4" controlId="formBasicCheckbox2">
+              <Form.Check id="formBasicCheckbox2">
+                <Form.Check.Input
+                  onClick={(e) => setIsCallsPatients(!isCallsPatients)}
+                  type="checkbox"
+                  defaultValue={
+                    props?.calls?.cont && props?.calls?.cont?.id ? false : true
+                  }
+                  className="uk-checkbox"
+                />
+                <Form.Check.Label>Appeler ce patient ?</Form.Check.Label>
+              </Form.Check>
             </Form.Group>
 
             <Form.Label htmlFor="inputValue">Status</Form.Label>

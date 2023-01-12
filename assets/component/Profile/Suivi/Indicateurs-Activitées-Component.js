@@ -83,7 +83,7 @@ function IndicateursActiviteesComponent(props) {
 
   return (
     <>
-      <div className="indicateurs-container row">
+      <div className="indicateurs-container">
         <div
           className="activities"
           style={{
@@ -143,6 +143,7 @@ function IndicateursActiviteesComponent(props) {
                     width: "100%",
                     justifyContent: "space-between",
                     fontWeight: "bold",
+                    marginTop: "0.5rem",
                   }}
                 >
                   Soins(s){" "}
@@ -188,6 +189,7 @@ function IndicateursActiviteesComponent(props) {
                     width: "100%",
                     justifyContent: "space-between",
                     fontWeight: "bold",
+                    marginTop: "0.5rem",
                   }}
                 >
                   Indicateur(s){" "}

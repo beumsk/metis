@@ -118,9 +118,7 @@ function ModalLierLieux(props) {
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>
-            <h6>Modifier une information</h6>
-          </Modal.Title>
+          <Modal.Title>Modifier une information</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <>
@@ -129,6 +127,7 @@ function ModalLierLieux(props) {
             <Form.Select
               size="lg"
               style={{ width: "100%" }}
+              className="uk-select"
               onChange={(e) => setValueLieux(e.target.value)}
             >
               <option value={"defaultValue"}>Sélectionnez le lieu</option>
@@ -145,6 +144,7 @@ function ModalLierLieux(props) {
             <Form.Select
               size="lg"
               style={{ width: "100%" }}
+              className="uk-select"
               onChange={(e) => setValueType(e.target.value)}
             >
               {props?.type?.data?.map((el, id) => (
@@ -158,6 +158,7 @@ function ModalLierLieux(props) {
             <Form.Control
               type="date"
               id="inputValueSpécifique"
+              className="uk-select"
               onChange={handleInputStartChange}
               aria-describedby="valueSpécifique"
             />
@@ -165,6 +166,7 @@ function ModalLierLieux(props) {
             <Form.Control
               type="date"
               id="inputValueSpécifique"
+              className="uk-select"
               onChange={handleInputEndChange}
               aria-describedby="valueSpécifique"
             />

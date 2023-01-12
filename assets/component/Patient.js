@@ -217,11 +217,11 @@ const Patient = () => {
               </div>
             </div>
             <div className="row body-profile">
-              <div className="d-flex mb-4 menuFichePatient">
+              <div className="d-flex mb-5 menuFichePatient">
                 <div
                   style={
                     isFiche
-                      ? { borderBottom: "0.3rem solid #ffc107" }
+                      ? { borderBottom: "0.25rem solid #ffc107" }
                       : { border: "0" }
                   }
                   onClick={(e) => showOngletProfile("Fiche")}
@@ -232,7 +232,7 @@ const Patient = () => {
                 <div
                   style={
                     isProfile
-                      ? { borderBottom: "0.3rem solid #ffc107" }
+                      ? { borderBottom: "0.25rem solid #ffc107" }
                       : { border: "0" }
                   }
                   onClick={(e) => showOngletProfile("Profile")}
@@ -243,7 +243,7 @@ const Patient = () => {
                 <div
                   style={
                     isIndicators
-                      ? { borderBottom: "0.3rem solid #ffc107" }
+                      ? { borderBottom: "0.25rem solid #ffc107" }
                       : { border: "0" }
                   }
                   onClick={(e) => showOngletProfile(1)}
@@ -254,7 +254,7 @@ const Patient = () => {
                 <div
                   style={
                     isMedias
-                      ? { borderBottom: "0.3rem solid #ffc107" }
+                      ? { borderBottom: "0.25rem solid #ffc107" }
                       : { border: "0" }
                   }
                   onClick={(e) => showOngletProfile("Medias")}
@@ -265,7 +265,7 @@ const Patient = () => {
                 <div
                   style={
                     isContacts
-                      ? { borderBottom: "0.3rem solid #ffc107" }
+                      ? { borderBottom: "0.25rem solid #ffc107" }
                       : { border: "0" }
                   }
                   onClick={(e) => showOngletProfile("Contacts")}
@@ -276,7 +276,7 @@ const Patient = () => {
                 <div
                   style={
                     isPlaces
-                      ? { borderBottom: "0.3rem solid #ffc107" }
+                      ? { borderBottom: "0.25rem solid #ffc107" }
                       : { border: "0" }
                   }
                   onClick={(e) => showOngletProfile("Lieux")}
