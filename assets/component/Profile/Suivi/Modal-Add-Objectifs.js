@@ -7,6 +7,7 @@ import {
   faPlusCircle,
   faCancel,
   faEdit,
+  faTag,
 } from "@fortawesome/free-solid-svg-icons";
 import { useParams } from "react-router-dom";
 import axios from "axios";
@@ -99,7 +100,7 @@ function ModalAddObjectifs(props) {
   return (
     <>
       <Button onClick={handleShow} className="btn-metis">
-        Ajouter Objectifs
+        <FontAwesomeIcon icon={faTag} /> Objectifs
       </Button>
 
       <Modal show={show} onHide={handleClose}>

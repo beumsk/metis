@@ -3,6 +3,15 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 import useAuth from "../../../hooks/useAuth";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+import {
+  faPlusCircle,
+  faCancel,
+  faEdit,
+  faCoffee,
+  faLongArrowLeft,
+} from "@fortawesome/free-solid-svg-icons";
 import { useParams } from "react-router-dom";
 import EditorReport from "./Editor-Calls";
 import axios from "axios";
@@ -173,7 +182,7 @@ function ModalActionsAppelsEntrant(props) {
   return (
     <>
       <button variant="primary" onClick={handleShow} className="btn-metis">
-        Appel entrant
+        <FontAwesomeIcon icon={faLongArrowLeft} /> Appel entrant
       </button>
 
       <Modal show={show} onHide={handleClose}>

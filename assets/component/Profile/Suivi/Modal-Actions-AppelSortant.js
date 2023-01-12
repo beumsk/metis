@@ -8,6 +8,16 @@ import EditorReport from "./Editor-Calls";
 import axios from "axios";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+import {
+  faPlusCircle,
+  faCancel,
+  faEdit,
+  faCoffee,
+  faLongArrowRight,
+} from "@fortawesome/free-solid-svg-icons";
 function ModalActionsAppelsSortant(props) {
   const [show, setShow] = useState(false);
   const [auth, setAuth] = useState(useAuth());
@@ -129,7 +139,7 @@ function ModalActionsAppelsSortant(props) {
   return (
     <>
       <button variant="primary" onClick={handleShow} className="btn-metis">
-        Appel sortant
+        <FontAwesomeIcon icon={faLongArrowRight} /> Appel sortant
       </button>
 
       <Modal show={show} onHide={handleClose}>

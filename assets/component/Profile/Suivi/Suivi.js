@@ -6,12 +6,15 @@ import React, {
   useEffect,
 } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import ReactLoading from "react-loading";
+
 import {
   faPlusCircle,
   faCancel,
   faEdit,
+  faCoffee,
+  faPhone,
 } from "@fortawesome/free-solid-svg-icons";
+import ReactLoading from "react-loading";
 import useAuth from "../../../hooks/useAuth";
 import axios from "axios";
 import { Link, useNavigate, useLocation, useParams } from "react-router-dom";
@@ -337,27 +340,6 @@ const Profile = () => {
       <div className="row item-report">
         <div className="col-sm-4">
           <div className="menu-ongletFiche mb-4">
-            {/* <button
-              style={
-                isAddReportMeet
-                  ? { borderBottom: "0.3rem solid #ffc107" }
-                  : { border: "0" }
-              }
-              onClick={(e) => showAddReports()}
-            >
-              Ajouter un rapport
-            </button> */}
-            {/* <button
-              style={
-                isDahsboardReports
-                  ? { borderBottom: "0.3rem solid #ffc107" }
-                  : { border: "0" }
-              }
-              onClick={(e) => showListReports()}
-            >
-              {" "}
-              Liste de rapports
-            </button> */}
             <button
               style={
                 isReportDetails
@@ -644,13 +626,35 @@ const Profile = () => {
         </div>
         <div className="col-sm-8">
           <div className="d-flex row-btn mb-4">
-            <button onClick={(e) => addReport(1)} className="btn-metis">
-              Rapport de rencontre
-            </button>
+            <div style={{ marginRight: "1rem", display: "flex" }}>
+              <div>
+                <ModalAddAppels
+                  type={type}
+                  contacts={contacts}
+                  isResponse={onChangeIsResponse}
+                  places={places}
+                  onChange={onChangeGoals}
+                ></ModalAddAppels>
+              </div>
+
+              <div>
+                <ModalAddObjectifs
+                  type={type}
+                  contacts={contacts}
+                  places={places}
+                  onChange={onChangeGoals}
+                ></ModalAddObjectifs>
+              </div>
+            </div>
 
             <button onClick={(e) => addReport(3)} className="btn-metis">
-              Rapport de réunion
+              <FontAwesomeIcon icon={faPhone} /> Réunion
             </button>
+
+            <button onClick={(e) => addReport(1)} className="btn-metis">
+              <FontAwesomeIcon icon={faCoffee} /> Rencontre
+            </button>
+
             <div>
               <ModalActionsAppelsEntrant
                 listCalls={goalsListForSelect}
@@ -673,24 +677,6 @@ const Profile = () => {
                 onChangeResponse={onChangeGoals}
                 // defaultValueGoalsValue={e}
               ></ModalActionsAppelSortant>
-            </div>
-            <div>
-              <ModalAddAppels
-                type={type}
-                contacts={contacts}
-                isResponse={onChangeIsResponse}
-                places={places}
-                onChange={onChangeGoals}
-              ></ModalAddAppels>
-            </div>
-
-            <div>
-              <ModalAddObjectifs
-                type={type}
-                contacts={contacts}
-                places={places}
-                onChange={onChangeGoals}
-              ></ModalAddObjectifs>
             </div>
           </div>
 

@@ -7,6 +7,7 @@ import {
   faPlusCircle,
   faCancel,
   faEdit,
+  faPhone,
 } from "@fortawesome/free-solid-svg-icons";
 import { useParams } from "react-router-dom";
 import axios from "axios";
@@ -156,7 +157,7 @@ function ModalAddAppels(props) {
   return (
     <>
       <Button onClick={handleShow} className="btn-metis">
-        Ajouter appels
+        <FontAwesomeIcon icon={faPhone} /> Appels
       </Button>
 
       <Modal show={show} onHide={handleClose}>
