@@ -3,13 +3,15 @@ import { useRef, useState, useEffect } from "react";
 import {
   Chart as ChartJS,
   CategoryScale,
-  LinearScale,
   BarElement,
+  PointElement,
+  LinearScale,
   Title,
   Tooltip,
   Legend,
+  LineElement,
 } from "chart.js";
-import { Bar } from "react-chartjs-2";
+import { Bar, Line } from "react-chartjs-2";
 import useAuth from "../../hooks/useAuth";
 import { useParams } from "react-router-dom";
 import axios from "axios";
@@ -18,6 +20,8 @@ ChartJS.register(
   CategoryScale,
   LinearScale,
   BarElement,
+  LineElement,
+  PointElement,
   Title,
   Tooltip,
   Legend
@@ -330,19 +334,19 @@ export default function App() {
       {optionsCVC && informations && indicateurCVCShow && (
         <>
           <h6>CVC évolution</h6>
-          <Bar options={optionsCVC} data={informations} />
+          <Line options={optionsCVC} data={informations} />
         </>
       )}
       {optionsLogement && informationsLogement && indicateurLogementShow && (
         <>
           <h6>HESTIA Logement</h6>
-          <Bar options={optionsLogement} data={informationsLogement} />
+          <Line options={optionsLogement} data={informationsLogement} />
         </>
       )}
       {optionsDeces && informationsDeces && indicateurDecesShow && (
         <>
           <h6>HESTIA Deces</h6>
-          <Bar options={optionsDeces} data={informationsDeces} />
+          <Line options={optionsDeces} data={informationsDeces} />
         </>
       )}
     </>
