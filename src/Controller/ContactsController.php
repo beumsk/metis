@@ -593,7 +593,10 @@ class ContactsController extends AbstractController
                     "patientLastName" => $fg->getPati()->getLastName(),
                     "team" => $fg->getPati()->getTeam(),
                     "fore" =>     array_map(function ($a) {
-                        return ["user" => ($a->getUser() !== null && $a->getUser()->getId() !== null) ? $a->getUser()->getId() : null, "activityType" => $a->getActivityType(), "content" => $a->getContent(), "date" => $a->getCreationDate()];
+                        return [
+                            "user" => ($a && $a->getUser() !== null) ? $a->getUser()->getFirstName() . " " . $a->getUser()->getLastName() : null,
+                            "activityType" => $a->getActivityType(), "content" => $a->getContent(), "date" => $a->getCreationDate()
+                        ];
                     }, [...$fg->getFore()])
                 ]);
             }

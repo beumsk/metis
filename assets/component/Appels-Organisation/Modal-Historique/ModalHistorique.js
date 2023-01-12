@@ -26,26 +26,32 @@ function ModalHistorique(props) {
         aria-labelledby="example-custom-modal-styling-title"
       >
         <Modal.Header closeButton>
-          <Modal.Title>Historique</Modal.Title>
+          <Modal.Title>
+            <h6>Historique</h6>
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <div>
             {props?.foreList?.fore && props?.foreList?.fore.length > 0 && (
               <>
                 {props?.foreList?.fore?.map((e) => (
-                  <div className="d-flex" style={{ fontSize: "0.8rem" }}>
-                    {/* <td>1</td> */}
-                    <p>
-                      {/* {e?.user.firstName}
-                      {e?.user.lastName} */}
-                    </p>
-                    <div
-                      dangerouslySetInnerHTML={{
-                        __html: e?.content,
-                      }}
-                    ></div>
+                  <div className="row" style={{ fontSize: "0.8rem" }}>
+                    <div className="col-sm-4">
+                      <p>{e?.user}</p>
+                    </div>
 
-                    <p>{new Date(e?.date).toISOString("short")}</p>
+                    <div className="col-sm-6">
+                      <div
+                        dangerouslySetInnerHTML={{
+                          __html: e?.content,
+                        }}
+                      ></div>
+                    </div>
+
+                    <div className="col-sm-2">
+                      <p>{new Date(e?.date).toISOString().substring(0, 10)}</p>
+                    </div>
+
                     {/* <td>@mdo</td> */}
                   </div>
                 ))}

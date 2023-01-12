@@ -84,7 +84,8 @@ class FollowupReports
     #[ORM\ManyToOne]
     private ?Patients $pati = null;
 
-    #[ORM\ManyToOne]
+    #[ORM\ManyToOne(targetEntity: 'User', cascade: ["all"], fetch: "EAGER")]
+    #[ORM\JoinColumn(name: "user_id", referencedColumnName: "id", nullable: true)]
     private ?User $user = null;
     // #[ORM\ManyToOne(targetEntity: 'User', cascade: ["all"], fetch: "EAGER")]
     // #[ORM\JoinColumn(name: "user_id", referencedColumnName: "id", nullable: true)]

@@ -139,7 +139,7 @@ function ModalActionsAppelsEntrant(props) {
         Authorization: `Bearer ${auth.auth.accessToken}`,
       },
     }).then(function (response) {
-      // props.onChangeResponse(response.data);
+      props.onChangeResponse(response.data);
       setShow(false);
     });
   };
