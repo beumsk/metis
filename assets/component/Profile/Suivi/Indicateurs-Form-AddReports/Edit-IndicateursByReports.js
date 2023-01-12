@@ -93,9 +93,7 @@ function EditIndicateursByReport(props) {
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>
-            <h6>Ajouter un indicateurs</h6>
-          </Modal.Title>
+          <Modal.Title>Ajouter un indicateurs</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <div className="addSoins-form">

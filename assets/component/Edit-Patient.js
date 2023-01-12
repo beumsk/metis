@@ -80,20 +80,20 @@ function EditPatient(props) {
   return (
     <>
       <Button onClick={handleShow} className={"editIconPatient"}>
-        {" "}
         <FontAwesomeIcon icon={faEdit} />
       </Button>
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>
-            <h6>Modifier une information</h6>
-          </Modal.Title>
+          <Modal.Title>Modifier une information</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <div className="addSoins-form">
-            <div class="form-group">
-              <label class="control-label" for="patient_names_firstName">
+          <div className="">
+            <div className="form-group">
+              <label
+                className="control-label"
+                htmlFor="patient_names_firstName"
+              >
                 Prénom
               </label>
               <input
@@ -105,8 +105,8 @@ function EditPatient(props) {
                 defaultValue={props?.patient?.firstname}
               />
             </div>
-            <div class="form-group">
-              <label class="control-label" for="patient_names_lastName">
+            <div className="form-group">
+              <label className="control-label" htmlFor="patient_names_lastName">
                 Nom
               </label>
               <input
@@ -118,8 +118,11 @@ function EditPatient(props) {
                 defaultValue={props?.patient?.lastname}
               />
             </div>
-            <div class="form-group">
-              <label class="control-label" for="patient_names_nickNames">
+            <div className="form-group">
+              <label
+                className="control-label"
+                htmlFor="patient_names_nickNames"
+              >
                 Pseudonyme
               </label>
               <input
@@ -132,13 +135,16 @@ function EditPatient(props) {
               />
             </div>
 
-            <div class="form-group">
-              <label class="control-label" for="patient_others_birthdate">
+            <div className="form-group">
+              <label
+                className="control-label"
+                htmlFor="patient_others_birthdate"
+              >
                 Date de naissance
               </label>
-              <div class="input-group">
-                <span class="input-group-addon">
-                  <span class="glyphicon glyphicon-calendar"></span>
+              <div className="input-group">
+                <span className="input-group-addon">
+                  <span className="glyphicon glyphicon-calendar"></span>
                 </span>
                 <input
                   type="date"
@@ -156,24 +162,28 @@ function EditPatient(props) {
                 />
               </div>
             </div>
-            <div class="form-group">
-              <div class="checkbox">
-                <label for="patient_others_unknownYear">
-                  <input
-                    type="checkbox"
-                    id="patient_others_unknownYear"
-                    name="patient_others[unknownYear]"
-                    onChange={(e) => setUnknownYear(e.target.checked)}
-                    defaultChecked={
-                      props?.patient?.unknownYear === 0 ? true : false
-                    }
-                  />
+            <div className="form-group">
+              <div className="checkbox form-check">
+                <input
+                  type="checkbox"
+                  id="patient_others_unknownYear"
+                  name="patient_others[unknownYear]"
+                  className="uk-checkbox my-3"
+                  onChange={(e) => setUnknownYear(e.target.checked)}
+                  defaultChecked={
+                    props?.patient?.unknownYear === 0 ? true : false
+                  }
+                />
+                <label htmlFor="patient_others_unknownYear">
                   Année inconnue/non garantie
                 </label>
               </div>
             </div>
-            <div class="form-group">
-              <label class="control-label" for="patient_others_birthLocation">
+            <div className="form-group">
+              <label
+                className="control-label"
+                htmlFor="patient_others_birthLocation"
+              >
                 Lieu de naissance
               </label>
               <input
@@ -185,16 +195,16 @@ function EditPatient(props) {
                 className="uk-input"
               />
             </div>
-            <div class="form-group">
+            <div className="form-group">
               <label
-                class="control-label"
-                for="patient_others_firstContactDate"
+                className="control-label"
+                htmlFor="patient_others_firstContactDate"
               >
                 Date de premier contact
               </label>
-              <div class="input-group">
-                <span class="input-group-addon">
-                  <span class="glyphicon glyphicon-calendar"></span>
+              <div className="input-group">
+                <span className="input-group-addon">
+                  <span className="glyphicon glyphicon-calendar"></span>
                 </span>
                 <input
                   type="date"
@@ -212,10 +222,13 @@ function EditPatient(props) {
                 />
               </div>
             </div>
-
-            <button onClick={(e) => sentRapport(e)}>Envoyer</button>
           </div>
         </Modal.Body>
+        <Modal.Footer>
+          <button onClick={(e) => sentRapport(e)} className="btn-metis">
+            Envoyer
+          </button>
+        </Modal.Footer>
       </Modal>
     </>
   );

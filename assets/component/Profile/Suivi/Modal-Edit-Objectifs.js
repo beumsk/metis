@@ -125,10 +125,7 @@ function ModalEditObjectifs(props) {
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>
-            {" "}
-            <h6>Editer objectif</h6>
-          </Modal.Title>
+          <Modal.Title>Editer objectif</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <>
@@ -174,13 +171,16 @@ function ModalEditObjectifs(props) {
               <option value={2}>Accompli</option>
               <option value={3}>Annulée</option>
             </Form.Select>
-            <Form.Group className="mb-3" controlId="formBasicCheckbox">
-              <Form.Check
-                type="checkbox"
-                label="Prioritaire ?"
-                onClick={(e) => setPriority(e.target.checked)}
-                defaultChecked={props?.goalsItem?.isHightlight}
-              />
+            <Form.Group className="my-3" controlId="formBasicCheckbox">
+              <Form.Check>
+                <Form.Check.Input
+                  type="checkbox"
+                  className="uk-checkbox"
+                  onClick={(e) => setPriority(e.target.checked)}
+                  defaultChecked={props?.goalsItem?.isHightlight}
+                />
+                <Form.Check.Label>Prioritaire ?</Form.Check.Label>
+              </Form.Check>
             </Form.Group>
             <Form.Label htmlFor="inputValue">Description</Form.Label>
             <Form.Control
@@ -195,7 +195,9 @@ function ModalEditObjectifs(props) {
         </Modal.Body>
         <Modal.Footer>
           <Button onClick={handleClose}>Fermer</Button>
-          <Button onClick={onSent}>Sauver</Button>
+          <Button onClick={onSent} className="btn-metis">
+            Sauver
+          </Button>
         </Modal.Footer>
       </Modal>
     </>

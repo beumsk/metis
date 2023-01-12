@@ -12,6 +12,7 @@ import {
   faCancel,
   faEdit,
   faCoffee,
+  faRoad,
   faPhone,
 } from "@fortawesome/free-solid-svg-icons";
 import ReactLoading from "react-loading";
@@ -364,15 +365,15 @@ const Profile = () => {
               onClick={(e) => showDetailsReports()}
               id="rapport_details-btn"
             >
-              Rapports détaillées
+              Rapports détaillés
             </button>
           </div>
 
-          <h6 className="mt-4 mb-3">Objectifs </h6>
+          <h6 className="mt-4 mb-3">Objectifs</h6>
           {goals ? (
             <Accordion className="mb-4">
               <Accordion.Item eventKey="0">
-                <Accordion.Header>Ouvertes</Accordion.Header>
+                <Accordion.Header>Ouverts</Accordion.Header>
                 <Accordion.Body>
                   <div className="goals-open mb-4">
                     {goalsList?.data.map((g, id) => (
@@ -449,7 +450,7 @@ const Profile = () => {
                 </Accordion.Body>
               </Accordion.Item>
               <Accordion.Item eventKey="1">
-                <Accordion.Header>Fermées</Accordion.Header>
+                <Accordion.Header>Fermés</Accordion.Header>
                 <Accordion.Body>
                   {goalsList?.data.map((g, id) => (
                     <>
@@ -499,7 +500,7 @@ const Profile = () => {
           <h6 className="mt-4 mb-3">Appels</h6>
           {goals ? (
             <>
-              <Accordion>
+              <Accordion className="mb-4">
                 <Accordion.Item eventKey="0">
                   <Accordion.Header>Ouverts</Accordion.Header>
                   <Accordion.Body>
@@ -640,35 +641,37 @@ const Profile = () => {
           )}
         </div>
         <div className="col-sm-8">
-          <div className="d-flex row-btn mb-4">
-            <div style={{ marginRight: "1rem", display: "flex" }}>
-              <div>
-                <ModalAddAppels
-                  type={type}
-                  contacts={contacts}
-                  isResponse={onChangeIsResponse}
-                  places={places}
-                  onChange={onChangeGoals}
-                ></ModalAddAppels>
-              </div>
-
-              <div>
-                <ModalAddObjectifs
-                  type={type}
-                  contacts={contacts}
-                  places={places}
-                  onChange={onChangeGoals}
-                ></ModalAddObjectifs>
-              </div>
+          <div className="d-flex row-btn mb-4 suivi-action-buttons">
+            <div>
+              <ModalAddAppels
+                type={type}
+                contacts={contacts}
+                isResponse={onChangeIsResponse}
+                places={places}
+                onChange={onChangeGoals}
+              ></ModalAddAppels>
             </div>
 
-            <button onClick={(e) => addReport(3)} className="btn-metis">
-              <FontAwesomeIcon icon={faPhone} /> Réunion
-            </button>
+            <div>
+              <ModalAddObjectifs
+                type={type}
+                contacts={contacts}
+                places={places}
+                onChange={onChangeGoals}
+              ></ModalAddObjectifs>
+            </div>
 
-            <button onClick={(e) => addReport(1)} className="btn-metis">
-              <FontAwesomeIcon icon={faCoffee} /> Rencontre
-            </button>
+            <div>
+              <button onClick={(e) => addReport(3)} className="btn-metis">
+                <FontAwesomeIcon icon={faCoffee} /> Réunion
+              </button>
+            </div>
+
+            <div>
+              <button onClick={(e) => addReport(1)} className="btn-metis">
+                <FontAwesomeIcon icon={faRoad} /> Rencontre
+              </button>
+            </div>
 
             <div>
               <ModalActionsAppelsEntrant

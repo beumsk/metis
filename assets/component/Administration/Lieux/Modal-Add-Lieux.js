@@ -102,6 +102,7 @@ function ModalAddLieux(props) {
             <input
               type="text"
               id="inputValueSpécifique"
+              className="uk-input"
               onChange={(e) => setName(e.target.value)}
               aria-describedby="valueSpécifique"
             />
@@ -115,6 +116,7 @@ function ModalAddLieux(props) {
             <input
               type="text"
               id="inputValueSpécifique"
+              className="uk-input"
               onChange={(e) => setUrl(e.target.value)}
               aria-describedby="valueSpécifique"
             />
@@ -126,6 +128,7 @@ function ModalAddLieux(props) {
               style={{ width: "100%" }}
               rows={3}
               id="comment-value"
+              className="uk-input"
             />
           </>
         </Modal.Body>

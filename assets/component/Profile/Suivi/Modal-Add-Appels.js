@@ -3,12 +3,7 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import useAuth from "../../../hooks/useAuth";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faPlusCircle,
-  faCancel,
-  faEdit,
-  faPhone,
-} from "@fortawesome/free-solid-svg-icons";
+import { faPhone } from "@fortawesome/free-solid-svg-icons";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import Form from "react-bootstrap/Form";
@@ -169,7 +164,6 @@ function ModalAddAppels(props) {
           <Modal.Title>Ajouter un appel</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {" "}
           <>
             <Form.Label htmlFor="inputValue">Fonction du référent</Form.Label>
             <Form.Select
@@ -200,20 +194,27 @@ function ModalAddAppels(props) {
               onChange={(e) => setTitle(e.target.value)}
               className="uk-input"
             />
-            <Form.Group className="mb-3" controlId="formBasicCheckbox">
+
+            <Form.Group className="my-3" controlId="formBasicCheckbox">
               <Form.Check
-                type="checkbox"
-                label="Prioritaire ?"
                 onClick={(e) => setPriority(true)}
-              />
+                id="formBasicCheckbox"
+              >
+                <Form.Check.Input type="checkbox" className="uk-checkbox" />
+                <Form.Check.Label>Prioritaire ?</Form.Check.Label>
+              </Form.Check>
             </Form.Group>
-            <Form.Group className="mb-3 mt-4" controlId="formBasicCheckbox">
+
+            <Form.Group className="my-3" controlId="formBasicCheckbox2">
               <Form.Check
-                type="checkbox"
-                label="Appeler ce patient ?"
                 onClick={(e) => setIsCallsPatients(!isCallsPatients)}
-              />
+                id="formBasicCheckbox2"
+              >
+                <Form.Check.Input type="checkbox" className="uk-checkbox" />
+                <Form.Check.Label>Appeler ce patient ?</Form.Check.Label>
+              </Form.Check>
             </Form.Group>
+
             {isCallsPatients === false && (
               <InputContactList
                 contacts={props.contacts}
@@ -256,7 +257,9 @@ function ModalAddAppels(props) {
         </Modal.Body>
         <Modal.Footer>
           <Button onClick={handleClose}>Fermer</Button>
-          <Button onClick={onSent}>Sauver</Button>
+          <Button onClick={onSent} className="btn-metis">
+            Sauver
+          </Button>
         </Modal.Footer>
       </Modal>
     </>

@@ -52,9 +52,7 @@ function ModalAddReports(props) {
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>
-            <h6>Ajouter une information</h6>
-          </Modal.Title>
+          <Modal.Title>Ajouter une information</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <>
@@ -87,7 +85,9 @@ function ModalAddReports(props) {
         </Modal.Body>
         <Modal.Footer>
           <Button onClick={handleClose}>Fermer</Button>
-          <Button onClick={handleClose}>Sauver</Button>
+          <Button onClick={handleClose} className="btn-metis">
+            Sauver
+          </Button>
         </Modal.Footer>
       </Modal>
     </>

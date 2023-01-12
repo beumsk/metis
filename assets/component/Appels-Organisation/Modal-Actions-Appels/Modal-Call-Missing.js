@@ -48,11 +48,9 @@ function ModalCallMissing(props) {
           Êtes-vous certain que ce contact est absent/pas de réponse ?
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Close
-          </Button>
-          <Button variant="primary" onClick={handleSave}>
-            Sauver
+          <Button onClick={handleClose}>Fermer</Button>
+          <Button onClick={handleSave} className="btn-metis-red">
+            Signaler
           </Button>
         </Modal.Footer>
       </Modal>

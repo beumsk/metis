@@ -107,12 +107,10 @@ function AddSoinsByReport(props) {
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>
-            <h6>Ajouter une activitée</h6>
-          </Modal.Title>
+          <Modal.Title>Ajouter une activité</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <div className="addSoins-form">
+          <div className="">
             <Form.Label htmlFor="inputValue" className="uk-form-label">
               Type
             </Form.Label>
@@ -165,11 +163,16 @@ function AddSoinsByReport(props) {
               //     : null
               // }
             ></InputPlaceList>
-            <button onClick={(e) => onSend()}>Envoyer</button>
           </div>
           {isErrorType && <p>Type Obligatoire</p>}
           {isErrorDescription && <p>Description Obligatoire</p>}
         </Modal.Body>
+
+        <Modal.Footer>
+          <button onClick={(e) => onSend()} className="btn-metis">
+            Envoyer
+          </button>
+        </Modal.Footer>
       </Modal>
     </>
   );

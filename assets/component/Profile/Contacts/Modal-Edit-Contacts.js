@@ -111,9 +111,7 @@ function ModalEditContacts(props) {
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>
-            <h6>Modifier une information</h6>
-          </Modal.Title>
+          <Modal.Title>Modifier une information</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {" "}

@@ -104,7 +104,6 @@ function DeleteRapports(props) {
           <Modal.Title>Effacer une information</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {" "}
           <>
             <p>êtes-vous sur ?</p>
           </>
@@ -112,7 +111,9 @@ function DeleteRapports(props) {
         <Modal.Footer>
           {isSentRepport && <FontAwesomeIcon icon={faCheck} />}
           <Button onClick={handleClose}>Fermer</Button>
-          <Button onClick={handleSave}>Delete Changes</Button>
+          <Button onClick={handleSave} className="btn-metis-red">
+            Effacer
+          </Button>
         </Modal.Footer>
       </Modal>
     </>

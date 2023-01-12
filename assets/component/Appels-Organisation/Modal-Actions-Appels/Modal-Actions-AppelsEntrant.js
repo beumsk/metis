@@ -216,13 +216,11 @@ function ModalActionsAppelsEntrant(props) {
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Close
-          </Button>
-          <Button variant="primary" onClick={handleSaveKeep}>
+          <Button onClick={handleClose}>Fermer</Button>
+          <Button onClick={handleSaveKeep} className="btn-metis">
             Sauver et garder
           </Button>
-          <Button variant="primary" onClick={handleSaveComplete}>
+          <Button onClick={handleSaveComplete} className="btn-metis">
             Sauver et compléter
           </Button>
         </Modal.Footer>

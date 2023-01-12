@@ -60,9 +60,7 @@ function ModalHistorique(props) {
           </div>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Close
-          </Button>
+          <Button onClick={handleClose}>Fermer</Button>
         </Modal.Footer>
       </Modal>
     </>
