@@ -149,18 +149,15 @@ function AddIndicateursByReport(props) {
   return (
     <>
       <Button onClick={handleShow}>
-        {" "}
         <FontAwesomeIcon icon={faPlus} />
       </Button>
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>
-            <h6>Ajouter un indicateurs</h6>
-          </Modal.Title>
+          <Modal.Title>Ajouter un indicateurs</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <div className="addSoins-form">
+          <div className="">
             <Form.Label htmlFor="inputValue" className="uk-form-label">
               {/* Type: {isIndicateurs} */}
             </Form.Label>

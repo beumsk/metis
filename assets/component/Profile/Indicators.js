@@ -13,6 +13,7 @@ import { Bar } from "react-chartjs-2";
 import useAuth from "../../hooks/useAuth";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import Form from "react-bootstrap/Form";
 
 ChartJS.register(
   CategoryScale,
@@ -318,14 +319,16 @@ export default function App() {
   };
   return (
     <>
-      <select
+      <Form.Select
+        size="lg"
+        style={{ width: "186px" }}
         onChange={(e) => onChangeIndicateurs(e.target.value)}
-        className="mb-4"
+        className="uk-select mb-4"
       >
         <option value={1}>CVC</option>
         <option value={2}>Hestia Logement</option>
         <option value={3}>HESTIA Deces</option>
-      </select>
+      </Form.Select>
 
       {optionsCVC && informations && indicateurCVCShow && (
         <>

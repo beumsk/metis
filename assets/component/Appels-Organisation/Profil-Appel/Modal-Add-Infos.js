@@ -104,12 +104,9 @@ function ModalAddLieux(props) {
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>
-            <h6>Ajouter une information</h6>
-          </Modal.Title>
+          <Modal.Title>Ajouter une information</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {" "}
           <>
             {props?.infosAppels?.value === "Tags" && (
               <InputTypeList

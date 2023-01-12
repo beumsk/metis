@@ -111,7 +111,9 @@ function ModalDeletePlaces(props) {
         <Modal.Footer>
           {isSentRepport && <FontAwesomeIcon icon={faCheck} />}
           <Button onClick={handleClose}>Fermer</Button>
-          <Button onClick={handleSave}>Delete Changes</Button>
+          <Button onClick={handleSave} className="btn-metis-red">
+            Effacer
+          </Button>
         </Modal.Footer>
       </Modal>
     </>

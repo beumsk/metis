@@ -187,9 +187,7 @@ function ModalActionsAppelsEntrant(props) {
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>
-            <h6>Appel entrant</h6>
-          </Modal.Title>
+          <Modal.Title>Appel entrant</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>
@@ -250,7 +248,7 @@ function ModalActionsAppelsEntrant(props) {
           {/* <Button variant="primary" onClick={handleSaveKeep}>
             Sauver et garder
           </Button> */}
-          <Button variant="primary" onClick={handleSaveComplete}>
+          <Button onClick={handleSaveComplete} className="btn-metis">
             Sauver
           </Button>
         </Modal.Footer>

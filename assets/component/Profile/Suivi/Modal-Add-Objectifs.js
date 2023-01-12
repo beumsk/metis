@@ -115,12 +115,19 @@ function ModalAddObjectifs(props) {
               type="text"
               onChange={(e) => setValueType(e.target.value)}
               id="inputText"
-              className="mt-4 uk-input"
+              className="uk-input mt-3"
             />
-            <Form.Group className="mb-3" controlId="formBasicCheckbox">
-              <Form.Check type="checkbox" label="Prioritaire ?" />
+
+            <Form.Group className="my-3" controlId="formBasicCheckbox">
+              <Form.Check>
+                <Form.Check.Input type="checkbox" className="uk-checkbox" />
+                <Form.Check.Label>Prioritaire ?</Form.Check.Label>
+              </Form.Check>
             </Form.Group>
-            <Form.Label htmlFor="inputValue">Description</Form.Label>
+
+            <Form.Label htmlFor="inputVinputValueSpécifiquealue">
+              Description
+            </Form.Label>
             <Form.Control
               as="textarea"
               className="uk-input"
@@ -133,7 +140,9 @@ function ModalAddObjectifs(props) {
         </Modal.Body>
         <Modal.Footer>
           <Button onClick={handleClose}>Fermer</Button>
-          <Button onClick={onSent}>Sauver</Button>
+          <Button onClick={onSent} className="btn-metis">
+            Sauver
+          </Button>
         </Modal.Footer>
       </Modal>
     </>

@@ -94,9 +94,7 @@ function ModalAddContact(props) {
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>
-            <h6>Ajouter un contact</h6>
-          </Modal.Title>
+          <Modal.Title>Ajouter un contact</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {" "}
