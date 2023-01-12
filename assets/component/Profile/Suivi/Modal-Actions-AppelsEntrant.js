@@ -112,7 +112,7 @@ function ModalActionsAppelsEntrant(props) {
     formGetInfos.append("patientId", id);
 
     formGetInfos.append("userId", auth.auth.idUser);
-    formGetInfos.append("activity_type", 2);
+    formGetInfos.append("activity_type", 4);
     formGetInfos.append("is_completed", 3);
     axios({
       method: "post",

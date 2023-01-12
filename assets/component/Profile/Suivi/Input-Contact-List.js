@@ -82,9 +82,7 @@ export default function InputContactList(props) {
       onClose={() => {
         setOpen(false);
       }}
-      isOptionEqualToValue={(option, value) =>
-        option.label === value.title || option.label === value.description
-      }
+      isOptionEqualToValue={(option, value) => option.label === value.title}
       getOptionLabel={(option) => option.label}
       options={options}
       onInputChange={(event, newInputValue) => {

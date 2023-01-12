@@ -101,13 +101,13 @@ function ModalActionsAppelsSortant(props) {
     formGetInfos.append("contacts", JSON.stringify(contactsSelected));
     formGetInfos.append("dureeValue", timeString);
     formGetInfos.append("patientId", id);
-    formGetInfos.append("activity_type", 3);
+    formGetInfos.append("activity_type", 2);
     formGetInfos.append("is_completed", 3);
 
     formGetInfos.append("userId", auth.auth.idUser);
     axios({
       method: "post",
-      url: "/api/setCallsByContacts",
+      url: "/api/setCallsByContactsForFollowUpReports",
       data: formGetInfos,
       headers: {
         "Content-Type": "application/json",

@@ -315,28 +315,50 @@ function EditReportMeet(props) {
           id="inputValueSpécifique"
         />
       )}
-      <InputGoalsList
-        goals={props?.goals}
-        defaultValue={
-          props?.informationPatient && props?.informationPatient?.fogo
-            ? props?.informationPatient?.fogo
-            : null
-        }
-        onChangeGoals={onChangeGoals}
-      />
+
+      {/* goalsList */}
+
       {props?.informationPatient?.hasOwnProperty("type") === false && (
-        <InputContactList
-          contacts={props.contacts}
-          defaultValue={props?.informationPatient?.cont}
-          onChange={onChangeContacts}
-        />
+        <>
+          <InputContactList
+            contacts={props.contacts}
+            defaultValue={props?.informationPatient?.cont}
+            onChange={onChangeContacts}
+          />
+        </>
       )}
-      {props?.informationPatient?.hasOwnProperty("type") === true && (
-        <InputContactList
-          contacts={props.contacts}
-          defaultValue={props?.informationPatient?.cont}
-          onChange={onChangeContacts}
-        />
+      {(props?.informationPatient?.activityType === 1 ||
+        props?.informationPatient?.activityType === 3) && (
+        <>
+          <InputGoalsList
+            goals={props?.goals}
+            defaultValue={
+              props?.informationPatient && props?.informationPatient?.fogo
+                ? props?.informationPatient?.fogo
+                : null
+            }
+            onChangeGoals={onChangeGoals}
+          />
+          <InputContactList
+            contacts={props.contacts}
+            defaultValue={props?.informationPatient?.cont}
+            onChange={onChangeContacts}
+          />
+        </>
+      )}
+      {(props?.informationPatient?.activityType === 2 ||
+        props?.informationPatient?.activityType === 4) && (
+        <>
+          <InputGoalsList
+            goals={props?.goalsList}
+            defaultValue={
+              props?.informationPatient && props?.informationPatient?.fogo
+                ? props?.informationPatient?.fogo
+                : null
+            }
+            onChangeGoals={onChangeGoals}
+          ></InputGoalsList>
+        </>
       )}
       {(props?.informationPatient?.activityType === 1 ||
         props?.informationPatient?.activityType === 3) && (

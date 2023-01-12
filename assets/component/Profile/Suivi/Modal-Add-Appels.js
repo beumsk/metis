@@ -34,6 +34,7 @@ function ModalAddAppels(props) {
   const [fonction, setFonction] = useState(null);
   const [idPatient, setIdPatient] = useState(id);
   const [type, setType] = useState(null);
+  const [title, setTitle] = useState(null);
 
   // FormwhatDoinFunction
   const [callsFunctionValue, setCallsFunction] = useState(null);
@@ -41,6 +42,7 @@ function ModalAddAppels(props) {
   const [isPriority, setPriority] = useState(false);
   const [contact, setonChangeContact] = useState(null);
   const [description, setDescription] = useState(null);
+  const [descriptionCallSortant, setDescriptionCallSortant] = useState(null);
   const [whatDoinFunction, setWhatDoinFunction] = useState(null);
   const [valueWhatDoinFunction, setValueWhatDoinFunction] = useState(null);
   const [dateCall, setDateCall] = useState(null);
@@ -115,6 +117,7 @@ function ModalAddAppels(props) {
     formData.append("callsFunctionValue", callsFunctionValue);
     formData.append("isCallsPatients", isCallsPatients);
     formData.append("isPriority", isPriority);
+    formData.append("descriptionCallSortant", descriptionCallSortant);
 
     formData.append(
       "contact",
@@ -124,6 +127,7 @@ function ModalAddAppels(props) {
     formData.append("valueWhatDoinFunction", valueWhatDoinFunction);
     formData.append("patientId", idPatient);
     formData.append("userId", userId);
+    formData.append("valueType", title);
     //
     axios({
       method: "post",
@@ -189,11 +193,12 @@ function ModalAddAppels(props) {
                 <>{el.value && <option value={el?.id}>{el?.value}</option>}</>
               ))}
             </Form.Select>
-
+            <Form.Label htmlFor="inputValue">Titre</Form.Label>
             <Form.Control
               type="text"
               id="inputText"
-              className="mt-4 uk-input"
+              onChange={(e) => setTitle(e.target.value)}
+              className="uk-input"
             />
             <Form.Group className="mb-3" controlId="formBasicCheckbox">
               <Form.Check
@@ -216,6 +221,16 @@ function ModalAddAppels(props) {
                 onChange={(e) => onChangeContacts(e)}
               />
             )}
+
+            <Form.Label htmlFor="inputValue">
+              Appel sortant (Création d'un rapport d'appel pour chaque contact)
+            </Form.Label>
+            <Form.Control
+              as="textarea"
+              rows={3}
+              className="uk-input"
+              onChange={(e) => setDescriptionCallSortant(e.target.value)}
+            />
 
             {/* dateCall */}
             <Form.Label htmlFor="inputValue">Date d'appel</Form.Label>

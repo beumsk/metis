@@ -275,6 +275,21 @@ const Profile = () => {
 
   function onChangeGoals(e) {
     setGoalsList(e);
+    var reportSearch = new FormData();
+    reportSearch.append("id", idPatient);
+    axios({
+      method: "post",
+      url: "/api/getFollowUpReportsById",
+      data: reportSearch,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    })
+      .then(function (response) {
+        return setSearch(response);
+      })
+      .catch(function (response) {});
   }
 
   function addReport(status) {
@@ -684,8 +699,10 @@ const Profile = () => {
             <RapportDetails
               type={type}
               contacts={contacts}
+              onChangeGoals={true}
               goals={goals}
               search={search}
+              goalsList={goalsListForSelect}
               places={places}
               informationPatient={informationPatient}
             ></RapportDetails>
