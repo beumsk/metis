@@ -206,7 +206,7 @@ function Patients() {
                     </div>
 
                     <div className="col-sm-3">{patient.birthLocation}</div>
-                    <div className="col-sm-1">
+                    <div className="col-sm-3">
                       <span className="status">{patient.status}</span>
                     </div>
                     {/* <div className="col-sm-3">{Date.now()}</div> */}
