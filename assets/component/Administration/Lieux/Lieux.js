@@ -26,10 +26,19 @@ function Lieux() {
   var formData = new FormData();
   formData.append("page", lengthList.toString());
   let linker = <a href="profil-lieux/1">Détails</a>;
+
   const columns = [
     {
       dataField: "lastname",
       text: "Nom",
+      formatter: (cell, row, rowIndex, extraData) =>
+        row.url ? (
+          <a href={row.url} target="_blank">
+            {row.lastname}
+          </a>
+        ) : (
+          row.lastname
+        ),
       sort: true,
       sortCaret: (order, column) => {
         if (!order)
@@ -113,6 +122,7 @@ function Lieux() {
       ),
     },
   ];
+
   useEffect(() => {
     axios({
       method: "post",
@@ -145,7 +155,10 @@ function Lieux() {
 
       <div className="container container-patients row mx-auto ">
         <div className="row-btn">
-          <ModalAddLieux></ModalAddLieux>
+          <ModalAddLieux
+            listContacts={listContacts}
+            setListContacts={(e) => setListContacts(e)}
+          ></ModalAddLieux>
         </div>
 
         <h4>Tous les Lieux</h4>

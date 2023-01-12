@@ -1,43 +1,69 @@
-.menu-metis{
-    z-index: 11;
-    .navbar-collapse{
-        display: none;
-    }
-    .navbar-collapse.collapse.show{
-     
-       
-            display: block;
-       
-    } 
+.menu-metis {
+  z-index: 11;
 
-    .addPatients-btn{
-        background-color: transparent;
-        color: white;
-        margin-right: 0.5rem;
+  .navbar-nav {
+    align-items: start;
+
+    @media screen and (min-width: 1400px) {
+      align-items: center;
     }
-    .dropdown{
-        display: flex;
-        margin: 0 0.5rem;
-        color: white;
-        button{
-            color: white;
-        }
-    }
-    .select-menu{
-        max-width: 186px;
-        margin: 0 1rem 0 1rem;
-    }
- 
-    .nav-link{
-        color: white;
-        display: flex;
-        justify-content: center;
-        align-items: center;
+  }
+
+  .navbar-collapse {
+    display: none;
+  }
+
+  .navbar-collapse.collapse.show {
+
+
+    display: block;
+
+  }
+
+  .addPatients-btn {
+    background-color: transparent;
+    color: white;
+    margin-right: 0.5rem;
+  }
+
+  .dropdown {
+    // display: flex;
+    margin: 0.5rem 0;
+
+    @media screen and (min-width: 1400px) {
+      margin: 0.5rem;
     }
 
-    .nav-item{
-        display: flex;
-        justify-content: center;
-        align-items: center;
+    color: white;
+
+    button {
+      color: white;
     }
+  }
+
+  .uk-input {
+    max-width: 186px;
+  }
+
+  .select-menu {
+    max-width: 186px;
+    margin: 0.5rem 0;
+
+    @media screen and (min-width: 1400px) {
+      margin: 0 0.5rem;
+    }
+  }
+
+  .nav-link {
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .nav-item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 }

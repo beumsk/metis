@@ -35,12 +35,6 @@ function ModalAddLieux(props) {
   useEffect(() => {}, []);
   //
 
-  const handleInputChange = (e) => {
-    //new Date(start).toJSON().slice(0, 10)
-    setStartDate(new Date(e.target.value).toJSON().slice(0, 10));
-    setEndDate(new Date(e.target.value).toJSON().slice(0, 10));
-  };
-
   const handleSave = (e) => {
     let formGetInfos = new FormData();
     // value-sugg
@@ -77,8 +71,12 @@ function ModalAddLieux(props) {
       //     }
       //   });
       // }
+      if (response) {
+        handleClose();
+      }
     });
   };
+
   //   new Date(1254088800 *1000)
   // handleInputChange;
 
@@ -87,7 +85,6 @@ function ModalAddLieux(props) {
   //     response: responseDatas,
   //   });
 
-  //   // document.querySelectorAll(".btn-close")[0].click();
   // }
   return (
     <>
@@ -100,7 +97,6 @@ function ModalAddLieux(props) {
           <Modal.Title>Ajouter un lieu</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {" "}
           <>
             <Form.Label htmlFor="inputValue">Nom</Form.Label>
             <input
@@ -109,6 +105,11 @@ function ModalAddLieux(props) {
               onChange={(e) => setName(e.target.value)}
               aria-describedby="valueSpécifique"
             />
+            {!name && (
+              <Form.Control.Feedback type="invalid">
+                Veuillez entrer un nom.
+              </Form.Control.Feedback>
+            )}
 
             <Form.Label htmlFor="inputValue">URL</Form.Label>
             <input
@@ -122,6 +123,7 @@ function ModalAddLieux(props) {
             <Form.Control
               as="textarea"
               onChange={(e) => setDescription(e.target.value)}
+              style={{ width: "100%" }}
               rows={3}
               id="comment-value"
             />
@@ -130,7 +132,7 @@ function ModalAddLieux(props) {
         <Modal.Footer>
           {isSentRepport && <FontAwesomeIcon icon={faCheck} />}
           <Button onClick={handleClose}>Fermer</Button>
-          <Button onClick={handleSave} className="btn-metis">
+          <Button onClick={handleSave} className="btn-metis" disabled={!name}>
             Sauver
           </Button>
         </Modal.Footer>

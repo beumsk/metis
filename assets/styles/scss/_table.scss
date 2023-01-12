@@ -1,4 +1,8 @@
-.react-bootstrap-table table {
+.react-bootstrap-table {
+  overflow-x: auto;
 
+  table {
     font-size: 0.8rem;
+    table-layout: auto;
+  }
 }
