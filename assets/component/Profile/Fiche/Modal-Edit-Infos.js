@@ -61,8 +61,8 @@ function ModalEditInfos(props) {
 
   const handleInputChange = (e) => {
     //new Date(start).toJSON().slice(0, 10)
-    setStartDate(new Date(e.target.value).toJSON().slice(0, 10));
-    setEndDate(new Date(e.target.value).toJSON().slice(0, 10));
+    // setStartDate(new Date(e.target.value).toJSON().slice(0, 10));
+    // setEndDate(new Date(e.target.value).toJSON().slice(0, 10));
   };
 
   const handleSave = (e) => {
@@ -84,7 +84,7 @@ function ModalEditInfos(props) {
     var formGetInfos = new FormData();
     formGetInfos.append("id", id.toString());
 
-    if (valueSelect !== null) {
+    if (valueSelect !== null && elementsOpt?.length > 0) {
       axios({
         method: "post",
         url: "/api/editPatientInformation",
@@ -126,9 +126,10 @@ function ModalEditInfos(props) {
 
     // document.querySelectorAll(".btn-close")[0].click();
   }
+
   return (
     <>
-      <button onClick={handleShow} className="ml-4">
+      <button onClick={handleShow}>
         <FontAwesomeIcon icon={faEdit} />
       </button>
 
@@ -180,51 +181,36 @@ function ModalEditInfos(props) {
             </p>
             <Form.Label htmlFor="inputValue">Début</Form.Label>
 
-            {start ? (
-              <>
-                <Form.Control
-                  type="date"
-                  defaultValue={new Date(props?.infosPatient?.start)
-                    .toISOString()
-                    .substring(0, 10)}
-                  placeholder="Here edit the release date"
-                  onChange={handleInputChange}
-                  id="inputValueSpécifique"
-                  className="uk-select"
-                />
-              </>
-            ) : (
-              <Form.Control
-                type="date"
-                defaultValue={new Date(props?.infosPatient?.start)
-                  .toISOString()
-                  .substring(0, 10)}
-                placeholder="Here edit the release date"
-                onChange={handleInputChange}
-                id="inputValueSpécifique"
-                className="uk-select"
-              />
-            )}
+            <Form.Control
+              type="date"
+              defaultValue={
+                props?.infosPatient?.start !== null
+                  ? moment(props?.infosPatient?.start)
+                      .utc("UTC+01:00")
+                      .format("YYYY-MM-DD")
+                  : ""
+              }
+              placeholder="Here edit the release date"
+              onChange={(e) => setStartDate(e.target.value)}
+              id="inputValueSpécifique"
+              className="uk-select"
+            />
 
             <Form.Label htmlFor="inputValue">Fin</Form.Label>
 
-            {end ? (
-              <Form.Control
-                type="date"
-                defaultValue={new Date(end).toISOString().substring(0, 10)}
-                onChange={handleInputChange}
-                id="inputValueSpécifique"
-                className="uk-select"
-              />
-            ) : (
-              <Form.Control
-                type="date"
-                defaultValue={new Date(end).toISOString().substring(0, 10)}
-                onChange={handleInputChange}
-                id="inputValueSpécifique"
-                className="uk-select"
-              />
-            )}
+            <Form.Control
+              type="date"
+              defaultValue={
+                props?.infosPatient?.end !== null
+                  ? moment(props?.infosPatient?.end)
+                      .utc("UTC+01:00")
+                      .format("YYYY-MM-DD")
+                  : ""
+              }
+              onChange={(e) => setEndDate(e.target.value)}
+              id="inputValueSpécifique"
+              className="uk-select"
+            />
 
             <Form.Label htmlFor="inputValue">Commentaire</Form.Label>
             <Form.Control

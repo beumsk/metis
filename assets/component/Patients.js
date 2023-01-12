@@ -201,7 +201,8 @@ function Patients() {
                       </Link>
                     </div>
                     <div className="col-sm-2">
-                      {new Date(patient.birthdate).toLocaleDateString()}
+                      {patient.birthdate &&
+                        new Date(patient.birthdate).toLocaleDateString()}
                     </div>
 
                     <div className="col-sm-3">{patient.birthLocation}</div>

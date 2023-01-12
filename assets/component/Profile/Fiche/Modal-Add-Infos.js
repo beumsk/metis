@@ -76,6 +76,8 @@ function ModalEditInfos(props) {
     var formGetInfos = new FormData();
     formGetInfos.append("id", id.toString());
 
+    console.log(elementsOpt);
+
     if (valueSelect !== null) {
       axios({
         method: "post",

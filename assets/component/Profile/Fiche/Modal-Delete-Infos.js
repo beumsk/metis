@@ -120,7 +120,7 @@ function ModalDeleteInfos(props) {
   }
   return (
     <>
-      <button onClick={handleShow} className="ml-4">
+      <button onClick={handleShow}>
         <FontAwesomeIcon icon={faTrash} />
       </button>
 

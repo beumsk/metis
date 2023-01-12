@@ -24,7 +24,7 @@ const RepportCalls = () => {
 
   return (
     <>
-      <p>Repports Calls</p>
+      <p>Rapports Calls</p>
     </>
   );
 };

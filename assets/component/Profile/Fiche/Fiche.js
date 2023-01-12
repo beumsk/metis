@@ -69,6 +69,7 @@ const Fiche = () => {
   //
   const onChangeEditPatientInformation = (e) => {
     setInformation(e);
+    console.log("test");
 
     // document.querySelectorAll(".btn-close")[0].click();
   };

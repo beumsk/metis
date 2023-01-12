@@ -13,6 +13,7 @@ import {
   faEdit,
 } from "@fortawesome/free-solid-svg-icons";
 import ModalAddInfos from "./Modal-Add-Infos";
+import moment from "moment";
 import ModalEditInfos from "./Modal-Edit-Infos";
 import ModalDeleteInfos from "./Modal-Delete-Infos";
 
@@ -57,11 +58,14 @@ const BlockInfos = (props) => {
                     {patient?.patientInformation?.map((pi, id) => (
                       <div className="row" key={pi.id}>
                         <div className="col-sm-6">
-                          <p
+                          <div
                             key={pi.id}
                             style={{
                               color: "rgb(145, 189, 16)",
                               fontWeight: "500",
+                              fontSize: "0.8rem",
+                              display: "flex",
+                              justifyContent: "space-between",
                             }}
                           >
                             {pi.sugg?.value ? (
@@ -70,34 +74,43 @@ const BlockInfos = (props) => {
                               <> Pas d'informations </>
                             )}
 
-                            <ModalEditInfos
-                              link={props.link}
-                              infosPatient={pi}
-                              infos={patient}
-                              onChange={(e) =>
-                                onChangeEditPatientInformation(e)
-                              }
-                            />
-                            <ModalDeleteInfos
-                              link={props.link}
-                              infosPatient={pi}
-                              infos={patient}
-                              onChange={(e) =>
-                                onChangeEditPatientInformation(e)
-                              }
-                            />
-                          </p>
+                            <div className="group-buttons">
+                              <ModalEditInfos
+                                link={props.link}
+                                infosPatient={pi}
+                                infos={patient}
+                                onChange={(e) =>
+                                  onChangeEditPatientInformation(e)
+                                }
+                              />
+                              <ModalDeleteInfos
+                                link={props.link}
+                                infosPatient={pi}
+                                infos={patient}
+                                onChange={(e) =>
+                                  onChangeEditPatientInformation(e)
+                                }
+                              />
+                            </div>
+                          </div>
                         </div>
 
                         <div className="col-sm-6">
                           {pi && (
-                            <p>
-                              {pi?.value}{" "}
-                              {pi?.start !== null &&
-                                new Date(pi?.start).toLocaleDateString()}{" "}
-                              {pi?.end !== null &&
-                                new Date(pi?.end).toLocaleDateString()}
-                            </p>
+                            <>
+                              <p>
+                                {pi?.start !== null &&
+                                  moment(pi?.start)
+                                    .utc("UTC+01:00")
+                                    .format("DD-MM-YYYY")}
+                                {" - "}
+                                {pi?.end !== null &&
+                                  moment(pi?.end)
+                                    .utc("UTC+01:00")
+                                    .format("DD-MM-YYYY")}
+                              </p>
+                              <p> {pi?.value}</p>
+                            </>
                           )}
                           <p>{pi?.comment}</p>
                         </div>
