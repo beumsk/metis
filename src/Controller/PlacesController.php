@@ -228,6 +228,7 @@ class PlacesController extends AbstractController
         $places = new Contacts();
 
         $places->setFirstname($name);
+        $places->setLastname($name);
         $places->setUrl($url);
         $places->setDescription($description);
         $places->setType(3);

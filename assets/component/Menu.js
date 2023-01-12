@@ -63,7 +63,7 @@ const Menu = () => {
 
               <Nav.Link href="/statistiques">Statistiques</Nav.Link>
 
-              <Dropdown>
+              <Dropdown align={{ xxl: "end" }}>
                 <Dropdown.Toggle
                   style={{
                     backgroundColor: "transparent",
@@ -72,7 +72,6 @@ const Menu = () => {
                 >
                   Administration
                 </Dropdown.Toggle>
-
                 <Dropdown.Menu>
                   <Dropdown.Item href="/contactsorganisation">
                     Liste de contacts
@@ -101,42 +100,41 @@ const Menu = () => {
                   <Dropdown.Menu>{notif}</Dropdown.Menu>
                 ))}
               </Dropdown> */}
-            </Nav>
 
-            <Form.Select
-              size="lg"
-              onChange={(e) => onChangeAntenne(e)}
-              className="select-menu uk-select"
-              defaultValue={antenna}
-            >
-              <option>Choissisez l'antenne</option>
-              <option value={"Bruxelles"}>Bruxelles</option>
-              <option value={"Liège"}>Liège</option>
-            </Form.Select>
-
-            <Search></Search>
-            <Dropdown align={{ xxl: "end" }}>
-              <Dropdown.Toggle
-                style={{
-                  backgroundColor: "transparent",
-                  border: "transparent",
-                }}
+              <Form.Select
+                size="lg"
+                onChange={(e) => onChangeAntenne(e)}
+                className="select-menu uk-select"
+                defaultValue={antenna}
               >
-                Mon profil
-              </Dropdown.Toggle>
+                <option>Choissisez l'antenne</option>
+                <option value={"Bruxelles"}>Bruxelles</option>
+                <option value={"Liège"}>Liège</option>
+              </Form.Select>
 
-              <Dropdown.Menu>
-                <Dropdown.Item href="/edit-profile">
-                  Editer le profil
-                </Dropdown.Item>
-                <Dropdown.Item href="/edit-password">
-                  Editer le mot de passe
-                </Dropdown.Item>
-                <Dropdown.Item onClick={signOut}>
-                  Déconnexion <FontAwesomeIcon icon={faSignOut} />{" "}
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
+              <Search></Search>
+              <Dropdown align={{ xxl: "end" }}>
+                <Dropdown.Toggle
+                  style={{
+                    backgroundColor: "transparent",
+                    border: "transparent",
+                  }}
+                >
+                  Mon profil
+                </Dropdown.Toggle>
+                <Dropdown.Menu>
+                  <Dropdown.Item href="/edit-profile">
+                    Editer le profil
+                  </Dropdown.Item>
+                  <Dropdown.Item href="/edit-password">
+                    Editer le mot de passe
+                  </Dropdown.Item>
+                  <Dropdown.Item onClick={signOut}>
+                    Déconnexion <FontAwesomeIcon icon={faSignOut} />{" "}
+                  </Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+            </Nav>
           </Navbar.Collapse>
         </Container>
       </Navbar>
