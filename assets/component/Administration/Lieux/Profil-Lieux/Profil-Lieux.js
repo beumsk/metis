@@ -30,7 +30,7 @@ const ProfilLieux = () => {
   useEffect(() => {
     axios({
       method: "post",
-      url: "/api/getCallsAndOrganisationById",
+      url: "/api/getPlacesListById",
       data: formData,
       headers: {
         "Content-Type": "application/json",

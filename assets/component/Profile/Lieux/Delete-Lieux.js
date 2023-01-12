@@ -52,9 +52,10 @@ function ModalDeletePlaces(props) {
   const handleSave = (e) => {
     let formData = new FormData();
     // value-sugg
-    formData.append("idLieu", props?.lieu?.id);
-    var formGetInfos = new FormData();
-    formGetInfos.append("id", id.toString());
+    formData.append("idPlace", props?.lieu?.id);
+    formData.append("idContact", props?.lieu?.cont[0].id);
+
+    formData.append("idPatient", id.toString());
     axios({
       method: "post",
       url: "/api/deleteLierPlaces",
@@ -64,8 +65,8 @@ function ModalDeletePlaces(props) {
         Authorization: `Bearer ${auth.auth.accessToken}`,
       },
     }).then(function (response) {
-      // location.replace(window.location.origin + "/" + idPatient);
-      // document.querySelectorAll(".btn-close")[0].click();
+      var formGetInfos = new FormData();
+      formGetInfos.append("id", id.toString());
       if (response) {
         axios({
           method: "post",
@@ -77,9 +78,9 @@ function ModalDeletePlaces(props) {
           },
         })
           .then(function (response) {
-            setResponseDatas(response);
+            props.onChangeDeletePlace(response);
             setIsSentRepport(true);
-            handleClose();
+            setShow(false);
           })
           .catch(function (response) {});
         // location.replace(window.location.origin + "/" + idPatient);
@@ -88,11 +89,7 @@ function ModalDeletePlaces(props) {
   };
   //   new Date(1254088800 *1000)
   // handleInputChange;
-
-  if (responseDatas !== null) {
-    props.onChangeDeletePlace(responseDatas);
-  }
-
+  console.log(props?.lieu);
   return (
     <>
       <button onClick={handleShow} className="ml-4 btn-metis">

@@ -148,7 +148,7 @@ function Lieux() {
   function onChangeUpdateContact(e) {
     props.onChangeUpdateContact(e);
   }
-
+  console.log(listContacts);
   return (
     <>
       <Menu></Menu>

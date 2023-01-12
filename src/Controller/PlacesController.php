@@ -164,7 +164,7 @@ class PlacesController extends AbstractController
         foreach ($blocksDecode as $value) {
             foreach ($contact->getInformations() as $infosCont) {
                 if ($infosCont->getItel()->getSuge()->getId() === $value->id) {
-                    array_push($value->obj, ["id" => $infosCont->getId(), "valueInformations" => $infosCont->getValue(), "valueDescription" => $infosCont->getComment(), "sugge" => ($infosCont !== null) ? $infosCont->getSugg() : null]);
+                    array_push($value->obj, ["id" => $infosCont->getId(), "occupants" => $infosCont->getOccupants(), "valueInformations" => $infosCont->getValue(), "valueDescription" => $infosCont->getComment(), "sugge" => ($infosCont !== null) ? $infosCont->getSugg() : null]);
                 }
             }
         }
@@ -177,16 +177,33 @@ class PlacesController extends AbstractController
 
 
 
-        $jsonObject = $serializer->serialize(["informations" => $blocksDecode, "patients" => $patients, "firstname" => $contact->getFirstName(), "lastname" => $contact->getLastName(), "description" => $contact->getDescription()], 'json', [
-            'circular_reference_handler' => function ($object) {
-                return $object->getId();
-            }
-        ]);
+        // $jsonObject = $serializer->serialize(["informations" => $blocksDecode, "patients" => $contact->getOccupants(), "firstname" => $contact->getFirstName(), "lastname" => $contact->getLastName(), "description" => $contact->getDescription()], 'json', [
+        //     'circular_reference_handler' => function ($object) {
+        //         return $object->getId();
+        //     }
+        // ]);
+
+        // dd($contact);
 
 
+        return new Response(json_encode([
+            "patients" =>
+            array_map(function ($a) {
+                // dd($a);
+                return [
+                    "id" => ($a->getPati()->getId() !== null) ? $a->getPati()->getId() : null,
+                    // "value" => $a->getValue(),
+                    "firstName" => ($a->getPati() && $a->getPati() !== null) ? $a->getPati()->getFirstName() : null,
+                    "lastName" => ($a->getPati() && $a->getPati() !== null) ? $a->getPati()->getLastName() : null,
 
 
-        return new Response($jsonObject, 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
+                ];
+            }, [...$contact->getOccupants()]),
+            // "patients" => $contact->getOccupants()[0]->getId(),
+            "firstname" => $contact->getFirstName(),
+            "lastname" => $contact->getLastName(),
+            "description" => $contact->getDescription()
+        ]), 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
     }
 
     #[Route('/api/deleteLierPlaces', name: 'app_deleteLierPlaces')]
@@ -197,18 +214,31 @@ class PlacesController extends AbstractController
 
 
         $idPatient = $request->request->get('idPatient');
-        $idLieu = $request->request->get('idLieu');
+        $idPlace = $request->request->get('idPlace');
+        $idContact = $request->request->get('idContact');
 
         $entityManager = $doctrine->getManager();
 
-        $place = $doctrine->getRepository(PatientsPlaces::class)->find($idLieu);
+        $place = $doctrine->getRepository(PatientsPlaces::class)->find($idPlace);
+        $lieu = $doctrine->getRepository(Contacts::class)->find($idContact);
+        $patient = $doctrine->getRepository(Patients::class)->find($idPatient);
+        //  dd($lieu);
+
+
+
+        $lieu->removeOccupant($place);
+        //    dd($lieu->getOccupants()->last());
+
+
+
+
         $place->setDeletedAt(new \DateTime('now'));
 
         $entityManager->flush();
 
 
         return new JsonResponse([
-            'id' => $place->getId(),
+            'id' => $lieu->getId(),
             'response' => "Sent !"
         ]);
     }
@@ -323,7 +353,11 @@ class PlacesController extends AbstractController
         $place->setSugg($suggType);
         $place->setPati($patient);
 
+
         $entityManager->persist($place);
+
+        $places->addOccupant($place);
+
         $entityManager->flush();
 
 

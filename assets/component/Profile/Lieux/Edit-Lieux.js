@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit } from "@fortawesome/free-solid-svg-icons";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import moment from "moment";
 import Form from "react-bootstrap/Form";
 // import InputTypeList from "./Input-Type-List";
 
@@ -173,9 +174,9 @@ function ModalLierLieux(props) {
               id="inputValueSpécifique"
               className="uk-select"
               onChange={handleInputStartChange}
-              defaultValue={new Date(props?.lieu?.start)
-                .toISOString()
-                .substring(0, 10)}
+              defaultValue={moment(props?.lieu?.start)
+                .utc("UTC+01:00")
+                .format("YYYY-MM-DD")}
               aria-describedby="valueSpécifique"
             />
             <Form.Label htmlFor="inputValue">Fin</Form.Label>
@@ -183,9 +184,9 @@ function ModalLierLieux(props) {
               type="date"
               id="inputValueSpécifique"
               className="uk-select"
-              defaultValue={new Date(props?.lieu?.end)
-                .toISOString()
-                .substring(0, 10)}
+              defaultValue={moment(props?.lieu?.end)
+                .utc("UTC+01:00")
+                .format("YYYY-MM-DD")}
               onChange={handleInputEndChange}
               aria-describedby="valueSpécifique"
             />

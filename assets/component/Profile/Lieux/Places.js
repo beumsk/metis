@@ -85,14 +85,14 @@ const Places = () => {
 
   const columns = [
     {
-      dataField: "lastname",
+      dataField: "cont[0].lastname",
       text: "Lieu",
       formatter: (cell, row, rowIndex, extraData) => (
         <div>{row.cont[0]?.lastname}</div>
       ),
     },
     {
-      dataField: "type",
+      dataField: "sugg[0].type",
       text: "Type de lieu",
       formatter: (cell, row, rowIndex, extraData) => (
         <div>{row?.sugg[0]?.value}</div>
@@ -131,7 +131,6 @@ const Places = () => {
       formatter: (cell, row, rowIndex, extraData) => (
         <div className="d-flex">
           <>
-            {console.log(alllistPlaces)}
             <EditLierLieux
               lieu={row}
               type={type}
@@ -154,7 +153,7 @@ const Places = () => {
     },
   ];
 
-  console.log(alllistPlaces);
+  console.log(listPlaces);
 
   return (
     <>

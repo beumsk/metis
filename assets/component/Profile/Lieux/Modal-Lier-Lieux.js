@@ -5,6 +5,7 @@ import useAuth from "../../../hooks/useAuth";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import Form from "react-bootstrap/Form";
+import moment from "moment";
 // import InputTypeList from "./Input-Type-List";
 
 function ModalLierLieux(props) {
@@ -159,7 +160,7 @@ function ModalLierLieux(props) {
               type="date"
               id="inputValueSpécifique"
               className="uk-select"
-              onChange={handleInputStartChange}
+              onChange={(e) => setStartDate(e.target.value)}
               aria-describedby="valueSpécifique"
             />
             <Form.Label htmlFor="inputValue">Fin</Form.Label>
@@ -167,7 +168,7 @@ function ModalLierLieux(props) {
               type="date"
               id="inputValueSpécifique"
               className="uk-select"
-              onChange={handleInputEndChange}
+              onChange={(e) => setEndDate(e.target.value)}
               aria-describedby="valueSpécifique"
             />
             <Form.Label htmlFor="inputValue">Commentaire</Form.Label>

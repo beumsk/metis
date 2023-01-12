@@ -61,7 +61,7 @@ class Contacts
     #[ORM\OneToMany(mappedBy: 'contact', targetEntity: ContactsInformation::class)]
     private Collection $informations;
 
-    #[ORM\OneToMany(mappedBy: 'place', targetEntity: PatientsPlaces::class)]
+    #[ORM\OneToMany(mappedBy: 'place', targetEntity: PatientsPlaces::class,  orphanRemoval: true, cascade: ["all"])]
     private $occupants;
 
     #[ORM\OneToMany(targetEntity: Contacts::class, mappedBy: "orga", orphanRemoval: true, cascade: ["all"])]
@@ -270,15 +270,10 @@ class Contacts
         return $this;
     }
 
-    public function removeOccupant(PatientsPlaces $occupant): self
+    public function removeOccupant(PatientsPlaces $occupant)
     {
-        if ($this->occupants->removeElement($occupant)) {
-            // set the owning side to null (unless already changed)
-            if ($occupant->getPlace() === $this) {
-                $occupant->setPlace(null);
-            }
-        }
 
+        $this->occupants->removeElement($occupant);
         return $this;
     }
 
