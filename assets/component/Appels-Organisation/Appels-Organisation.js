@@ -136,7 +136,7 @@ function AppelsOrganisation() {
     <>
       <Menu></Menu>
       <div className="container container-patients row mx-auto ">
-        <h4 className="mb-4">Tous les Appels</h4>
+        <h1 className="mb-3">Tous les Appels</h1>
         <div className="container-filters">
           <TypeCalls onChangeTypeCalls={onChangeTypeCalls}></TypeCalls>
           <SelectFunction

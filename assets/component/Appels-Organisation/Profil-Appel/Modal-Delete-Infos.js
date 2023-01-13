@@ -124,9 +124,8 @@ function ModalDeleteInfos(props) {
           <Modal.Title>Effacer une information</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {" "}
           <>
-            <p>êtes-vous sur ?</p>
+            <p>Êtes-vous sur ?</p>
           </>
         </Modal.Body>
         <Modal.Footer>

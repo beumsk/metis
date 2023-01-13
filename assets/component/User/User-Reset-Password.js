@@ -63,7 +63,11 @@ const EditPassword = () => {
       <Menu></Menu>
 
       <Form className="container">
-        <Form.Group className="mb-3" controlId="formBasicEmail">
+        <Form.Group className="my-3" controlId="formBasicEmail">
+          <h1 className="py-3" style={{ color: "#212529" }}>
+            Éditer le mot de passe
+          </h1>
+
           <div className="container-password">
             <Form.Control
               type={passwordShown ? "text" : "password"}
@@ -156,7 +160,7 @@ const EditPassword = () => {
           onClick={(e) => setFormReset(e)}
           className="btn-metis mt-3"
         >
-          Submit
+          Sauver
         </Button>
       </Form>
     </>

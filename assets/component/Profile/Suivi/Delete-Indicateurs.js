@@ -109,7 +109,7 @@ function DeleteIndicateurs(props) {
         </Modal.Header>
         <Modal.Body>
           <>
-            <p>êtes-vous sur ?</p>
+            <p>Êtes-vous sur ?</p>
           </>
         </Modal.Body>
         <Modal.Footer>

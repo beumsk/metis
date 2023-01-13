@@ -159,7 +159,7 @@ function ModalEditObjectifs(props) {
               defaultValue={props?.goalsItem?.title}
               className="uk-input"
             />
-            <Form.Label htmlFor="inputValue">Status</Form.Label>
+            <Form.Label htmlFor="inputValue">Statut</Form.Label>
             <Form.Select
               type="select"
               defaultValue={props?.goalsItem?.status}

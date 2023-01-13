@@ -6,12 +6,13 @@ body,
 
 }
 
-
-.error-danger{
+.error-danger {
   color: rgb(170, 5, 5);
 }
 
-
+h1 {
+  font-size: 2rem !important;
+}
 
 a {
   text-decoration: none !important;
@@ -165,9 +166,10 @@ button {
   width: 1px;
 }
 
-.accordion-body{
-  padding: 0 12px 0 12px!important;
+.accordion-body {
+  padding: 0 12px 0 12px !important;
 }
+
 .accordion-fiche {
   button {
     background-color: transparent !important;

@@ -111,7 +111,7 @@ function ModalEditContacts(props) {
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Modifier une information</Modal.Title>
+          <Modal.Title>Modifier un contact lié</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {" "}
@@ -123,6 +123,7 @@ function ModalEditContacts(props) {
               defaultValue={props?.infos?.cont[0]?.id}
               className="uk-select"
             >
+              <option value="">Choisir contact</option>
               {props?.contacts?.data?.map((el, id) => (
                 <>
                   {el?.firstname && el?.lastname && (
@@ -140,6 +141,7 @@ function ModalEditContacts(props) {
               onChange={(e) => setTypeItemList(e.target.value)}
               className="uk-select"
             >
+              <option value="">Choisir type</option>
               {props?.type?.data?.map((el, id) => (
                 <>{el.value && <option value={el.id}>{el?.value}</option>}</>
               ))}

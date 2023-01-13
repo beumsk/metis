@@ -92,24 +92,14 @@ function ModalDeleteContacts(props) {
           },
         })
           .then(function (response) {
-            setResponseDatas(response.data);
             setIsSentRepport(true);
+            props.onChangeUpdateContact(true);
           })
           .catch(function (response) {});
-
-        // document.querySelectorAll(".btn-close")[0].click();
-        // location.replace(window.location.origin + "/" + idPatient);
       }
     });
   };
-  //   new Date(1254088800 *1000)
-  // handleInputChange;
 
-  if (responseDatas !== null) {
-    props.onChange(responseDatas);
-
-    // document.querySelectorAll(".btn-close")[0].click();
-  }
   return (
     <>
       <button onClick={handleShow} className="ml-4 btn-metis">
@@ -118,19 +108,18 @@ function ModalDeleteContacts(props) {
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Effacer une information</Modal.Title>
+          <Modal.Title>Supprimer un contact lié</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {" "}
           <>
-            <p>êtes-vous sur ?</p>
+            <p>Êtes-vous sur ?</p>
           </>
         </Modal.Body>
         <Modal.Footer>
           {isSentRepport && <FontAwesomeIcon icon={faCheck} />}
           <Button onClick={handleClose}>Fermer</Button>
           <Button onClick={handleSave} className="btn-metis-red">
-            Effacer
+            Supprimer
           </Button>
         </Modal.Footer>
       </Modal>

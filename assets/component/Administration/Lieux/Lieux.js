@@ -16,6 +16,7 @@ import {
   faArrowDown,
   faArrowUp,
 } from "@fortawesome/free-solid-svg-icons";
+
 function Lieux() {
   const { SearchBar } = Search;
   const [auth, setAuth] = useState(useAuth());
@@ -26,6 +27,31 @@ function Lieux() {
   var formData = new FormData();
   formData.append("page", lengthList.toString());
   let linker = <a href="profil-lieux/1">Détails</a>;
+
+  const sortCaret = (order, column) => {
+    if (!order)
+      return (
+        <span>
+          <FontAwesomeIcon icon={faArrowDown} />/
+          <FontAwesomeIcon icon={faArrowUp} />
+        </span>
+      );
+    else if (order === "desc")
+      return (
+        <span>
+          <FontAwesomeIcon icon={faArrowDown} />/
+          <FontAwesomeIcon icon={faArrowUp} color="#91bd10" />
+        </span>
+      );
+    else if (order === "asc")
+      return (
+        <span>
+          <FontAwesomeIcon icon={faArrowDown} color="#91bd10" />/
+          <FontAwesomeIcon icon={faArrowUp} />
+        </span>
+      );
+    return null;
+  };
 
   const columns = [
     {
@@ -40,34 +66,7 @@ function Lieux() {
           row.lastname
         ),
       sort: true,
-      sortCaret: (order, column) => {
-        if (!order)
-          return (
-            <span>
-              <FontAwesomeIcon icon={faArrowDown} />/
-              <FontAwesomeIcon icon={faArrowUp} />
-            </span>
-          );
-        else if (order === "desc")
-          return (
-            <span>
-              <FontAwesomeIcon icon={faArrowDown} />/
-              <font color="#91bd10">
-                <FontAwesomeIcon icon={faArrowUp} />
-              </font>
-            </span>
-          );
-        else if (order === "asc")
-          return (
-            <span>
-              <font color="#91bd10">
-                <FontAwesomeIcon icon={faArrowDown} />
-              </font>
-              /<FontAwesomeIcon icon={faArrowUp} />
-            </span>
-          );
-        return null;
-      },
+      sortCaret: sortCaret,
     },
     {
       dataField: "description",
@@ -81,34 +80,7 @@ function Lieux() {
         <div>{row.occupants.length}</div>
       ),
       sort: true,
-      sortCaret: (order, column) => {
-        if (!order)
-          return (
-            <span>
-              <FontAwesomeIcon icon={faArrowDown} />/
-              <FontAwesomeIcon icon={faArrowUp} />
-            </span>
-          );
-        else if (order === "asc")
-          return (
-            <span>
-              <FontAwesomeIcon icon={faArrowDown} />/
-              <font color="#91bd10">
-                <FontAwesomeIcon icon={faArrowUp} />
-              </font>
-            </span>
-          );
-        else if (order === "desc")
-          return (
-            <span>
-              <font color="#91bd10">
-                <FontAwesomeIcon icon={faArrowDown} />
-              </font>
-              /<FontAwesomeIcon icon={faArrowUp} />
-            </span>
-          );
-        return null;
-      },
+      sortCaret: sortCaret,
     },
     {
       dataField: "Détails",
@@ -145,23 +117,19 @@ function Lieux() {
     setLengthList(lengthList + 10);
   };
 
-  function onChangeUpdateContact(e) {
-    props.onChangeUpdateContact(e);
-  }
-
   return (
     <>
       <Menu></Menu>
 
-      <div className="container container-patients row mx-auto ">
-        <div className="row-btn">
+      <div className="container container-patients mx-auto ">
+        <div style={{ float: "right" }}>
           <ModalAddLieux
             listContacts={listContacts}
             setListContacts={(e) => setListContacts(e)}
           ></ModalAddLieux>
         </div>
 
-        <h4>Tous les Lieux</h4>
+        <h1 className="mb-3">Tous les Lieux</h1>
 
         {listContacts && listContacts.data ? (
           <ToolkitProvider
@@ -172,10 +140,11 @@ function Lieux() {
           >
             {(props) => (
               <div>
-                <div className="mb-2 mt-2">
+                <div className="mb-2">
                   <SearchBar
                     {...props.searchProps}
                     className="uk-input"
+                    style={{ width: "186px" }}
                     placeholder="Rechercher le lieu"
                   />
                 </div>

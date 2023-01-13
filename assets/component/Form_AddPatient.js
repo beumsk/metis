@@ -104,16 +104,17 @@ const Form_AddPatients = () => {
               <option value="Liège">Liège</option>
               <option value="Bruxelles">Bruxelles</option>
             </Form.Select>
-
-            <Button
-              variant="primary"
-              onClick={(e) => setFormCreation(e)}
-              className="btn-metis mt-3"
-            >
-              Submit
-            </Button>
           </Form>
         </Modal.Body>
+        <Modal.Footer>
+          <Button
+            variant="primary"
+            onClick={(e) => setFormCreation(e)}
+            className="btn-metis"
+          >
+            Ajouter
+          </Button>
+        </Modal.Footer>
       </Modal>
     </>
   );

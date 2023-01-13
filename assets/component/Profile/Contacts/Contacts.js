@@ -4,13 +4,8 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import ModalLierPatient from "./Modal-Lier-Patient";
 import ModalLierContacts from "./Modal-Lier-Contacts";
-import Table from "react-bootstrap/Table";
 import ModalEditContacts from "./Modal-Edit-Contacts";
 import ModalEditPatient from "./Modal-Edit-Patient";
-import TableContacts from "./Table-Contacts/Table.js";
-import TablePatients from "./Table-Patients/Table.js";
-
-import countriesData from "./data.js";
 import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider, {
   Search,
@@ -19,11 +14,13 @@ import paginationFactory from "react-bootstrap-table2-paginator";
 import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
 import ModalDeleteContacts from "./Modal-Delete-Contacts";
 import ModalDeletePatient from "./Modal-Delete-Patient";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowDown, faArrowUp } from "@fortawesome/free-solid-svg-icons";
 
 const Contacts = () => {
   let id = useParams().id;
   const [auth, setAuth] = useState(useAuth());
-  var formData = new FormData();
+  let formData = new FormData();
   formData.append("id", id.toString());
   formData.append("antenna", auth.antenna);
 
@@ -36,8 +33,9 @@ const Contacts = () => {
   const [filterDates, setFilterDates] = useState();
   const [patients, setPatients] = useState(null);
   const [patientsLists, setPatientsLists] = useState(null);
+
   useEffect(() => {
-    var formDataSugg = new FormData();
+    let formDataSugg = new FormData();
     formDataSugg.append("id", 57);
     axios({
       method: "post",
@@ -104,7 +102,7 @@ const Contacts = () => {
         setContactList(response.data);
       })
       .catch(function (response) {});
-    var formDataPati = new FormData();
+    let formDataPati = new FormData();
     formDataPati.append("antenna", auth.antenna);
 
     axios({
@@ -122,6 +120,31 @@ const Contacts = () => {
       .catch(function (response) {});
   }, [idPatient]);
 
+  const sortCaret = (order, column) => {
+    if (!order)
+      return (
+        <span>
+          <FontAwesomeIcon icon={faArrowDown} />/
+          <FontAwesomeIcon icon={faArrowUp} />
+        </span>
+      );
+    else if (order === "desc")
+      return (
+        <span>
+          <FontAwesomeIcon icon={faArrowDown} />/
+          <FontAwesomeIcon icon={faArrowUp} color="#91bd10" />
+        </span>
+      );
+    else if (order === "asc")
+      return (
+        <span>
+          <FontAwesomeIcon icon={faArrowDown} color="#91bd10" />/
+          <FontAwesomeIcon icon={faArrowUp} />
+        </span>
+      );
+    return null;
+  };
+
   const columnsPatients = [
     {
       dataField: "orpa.nicknames",
@@ -129,13 +152,17 @@ const Contacts = () => {
       formatter: (cell, row, rowIndex, extraData) => (
         <div>{row?.orpa?.nicknames}</div>
       ),
+      sort: true,
+      sortCaret: sortCaret,
     },
     {
       dataField: "orpa.firstname",
-      text: "Prenom",
+      text: "Prénom",
       formatter: (cell, row, rowIndex, extraData) => (
         <div>{row?.orpa?.firstname}</div>
       ),
+      sort: true,
+      sortCaret: sortCaret,
     },
     {
       dataField: "orpa.lastname",
@@ -143,6 +170,8 @@ const Contacts = () => {
       formatter: (cell, row, rowIndex, extraData) => (
         <div>{row?.orpa?.lastname}</div>
       ),
+      sort: true,
+      sortCaret: sortCaret,
     },
     {
       dataField: "sugg.value",
@@ -161,30 +190,32 @@ const Contacts = () => {
     {
       dataField: "start",
       text: "Début",
-      sort: true,
       formatter: (cell, row, rowIndex, extraData) => (
         <div>
-          {row.start === null
-            ? ""
-            : new Date(row?.start).toISOString().substring(0, 10)}
+          {row?.start
+            ? new Date(row?.start).toLocaleString("fr-BE", "short").slice(0, 10)
+            : ""}
         </div>
       ),
+      sort: true,
+      sortCaret: sortCaret,
     },
     {
       dataField: "end",
       text: "Fin",
-      sort: true,
       formatter: (cell, row, rowIndex, extraData) => (
         <div>
-          {row?.end === null
-            ? ""
-            : new Date(row?.end).toISOString().substring(0, 10)}
+          {row?.end
+            ? new Date(row?.end).toLocaleString("fr-BE", "short").slice(0, 10)
+            : ""}
         </div>
       ),
+      sort: true,
+      sortCaret: sortCaret,
     },
     {
       dataField: "Actions",
-      text: "Comment",
+      text: "Actions",
 
       formatter: (cell, row, rowIndex, extraData) => (
         <div className="d-flex">
@@ -210,14 +241,12 @@ const Contacts = () => {
           ></ModalDeletePatient>
         </div>
       ),
-
-      text: "Actions",
     },
   ];
 
   const columns = [
     {
-      dataField: "firstname + lastname",
+      dataField: "cont",
       text: "Nom",
       formatter: (cell, row, rowIndex, extraData) => (
         <div>
@@ -228,6 +257,15 @@ const Contacts = () => {
           ))}
         </div>
       ),
+      sort: true,
+      // sortCaret: sortCaret,
+      // sortFunc: (a, b, order, dataField, rowA, rowB) => {
+      //   if (order === "asc") {
+      //     console.log(a, b, order);
+      //     return b[0]?.firstname - a[0]?.firstname;
+      //   }
+      //   return a[0]?.firstname - b[0]?.firstname; // desc
+      // },
     },
     {
       dataField: "cont.description",
@@ -239,18 +277,21 @@ const Contacts = () => {
           ))}
         </div>
       ),
+      sort: true,
+      // sortCaret: sortCaret,
     },
     {
-      dataField: "value",
+      dataField: "cont[0].value",
       text: "Type",
       formatter: (cell, row, rowIndex, extraData) => (
         <div>
-          {" "}
           {row?.sugg?.map((cont) => (
             <>{cont?.value}</>
           ))}
         </div>
       ),
+      sort: true,
+      // sortCaret: sortCaret,
     },
     {
       dataField: "comment",
@@ -258,34 +299,38 @@ const Contacts = () => {
       formatter: (cell, row, rowIndex, extraData) => (
         <div>{row?.comment === "null" ? "" : row?.comment}</div>
       ),
+      sort: true,
+      // sortCaret: sortCaret,
     },
     {
       dataField: "start",
       text: "Début",
-
       formatter: (cell, row, rowIndex, extraData) => (
         <div>
-          {row?.start === null
-            ? ""
-            : new Date(row?.start).toISOString().substring(0, 10)}
+          {row?.start
+            ? new Date(row?.start).toLocaleString("fr-BE", "short").slice(0, 10)
+            : ""}
         </div>
       ),
+      sort: true,
+      sortCaret: sortCaret,
     },
     {
       dataField: "end",
       text: "Fin",
       formatter: (cell, row, rowIndex, extraData) => (
         <div>
-          {row?.end === null
-            ? ""
-            : new Date(row?.end).toISOString().substring(0, 10)}
+          {row?.end
+            ? new Date(row?.end).toLocaleString("fr-BE", "short").slice(0, 10)
+            : ""}
         </div>
       ),
+      sort: true,
+      sortCaret: sortCaret,
     },
     {
       dataField: "Actions",
-      text: "Comment",
-
+      text: "Actions",
       formatter: (cell, row, rowIndex, extraData) => (
         <div className="d-flex">
           <ModalEditContacts
@@ -303,17 +348,40 @@ const Contacts = () => {
           />
         </div>
       ),
-
-      text: "Actions",
+      sort: true,
     },
   ];
 
   const onChangeUpdatePatient = (e) => {
-    setPatientsLists(e);
+    axios({
+      method: "post",
+      url: "/api/getPatientsByPatients",
+      data: formData,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    })
+      .then(function (response) {
+        setPatientsLists(response.data);
+      })
+      .catch(function (response) {});
   };
 
   function onChangeUpdateContact(e) {
-    setContacts(e);
+    axios({
+      method: "post",
+      url: "/api/getContactsByPatients",
+      data: formData,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    })
+      .then(function (response) {
+        setContacts(response.data);
+      })
+      .catch(function (response) {});
   }
 
   function patientLierResponse(e) {

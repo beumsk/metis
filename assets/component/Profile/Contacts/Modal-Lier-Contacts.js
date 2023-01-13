@@ -71,36 +71,13 @@ function ModalLierContacts(props) {
       },
     }).then(function (response) {
       if (response) {
-        var formGetInfos = new FormData();
-        formGetInfos.append("id", id.toString());
-        axios({
-          method: "post",
-          url: "/api/getContactsByPatients",
-          data: formGetInfos,
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${auth.auth.accessToken}`,
-          },
-        })
-          .then(function (response) {
-            setResponseDatas(response.data);
-            setIsSentRepport(true);
-            document.querySelectorAll(".btn-close")[0].click();
-          })
-          .catch(function (response) {});
+        props.onChangeUpdateContact(true);
+        setShow(false);
+        // setIsSentRepport(true);
       }
     });
   }
 
-  if (responseDatas !== null) {
-    props.onChangeUpdateContact(responseDatas);
-  }
-
-  const handleInputChange = (e) => {
-    //new Date(start).toJSON().slice(0, 10)
-    setStartDate(new Date(e.target.value).toJSON().slice(0, 10));
-    setEndDate(new Date(e.target.value).toJSON().slice(0, 10));
-  };
   return (
     <>
       <Button onClick={handleShow} className="btn-metis">
@@ -109,10 +86,9 @@ function ModalLierContacts(props) {
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Modifier une information</Modal.Title>
+          <Modal.Title>Lier un contact</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {" "}
           <>
             <Form.Label htmlFor="inputValue">Valeur</Form.Label>
             <Form.Select
@@ -121,6 +97,7 @@ function ModalLierContacts(props) {
               onChange={(e) => setContactItemList(e.target.value)}
               defaultValue={props?.infos?.cont?.id}
             >
+              <option value="">Choisir contact</option>
               {props?.contacts?.data?.map((el, id) => (
                 <>
                   {el?.firstname && el?.lastname && (
@@ -137,6 +114,7 @@ function ModalLierContacts(props) {
               size="lg"
               onChange={(e) => setTypeItemList(e.target.value)}
             >
+              <option value="">Choisir type</option>
               {props?.type?.data?.map((el, id) => (
                 <>{el.value && <option value={el.id}>{el?.value}</option>}</>
               ))}
@@ -154,7 +132,9 @@ function ModalLierContacts(props) {
             <Form.Label htmlFor="inputValue">Début</Form.Label>
             <Form.Control
               type="date"
-              onChange={handleInputChange}
+              onChange={(e) => {
+                setStartDate(new Date(e.target.value).toJSON().slice(0, 10));
+              }}
               className="uk-select"
               id="inputValueSpécifique"
               aria-describedby="valueSpécifique"
@@ -162,7 +142,9 @@ function ModalLierContacts(props) {
             <Form.Label htmlFor="inputValue">Fin</Form.Label>
             <Form.Control
               type="date"
-              onChange={handleInputChange}
+              onChange={(e) => {
+                setEndDate(new Date(e.target.value).toJSON().slice(0, 10));
+              }}
               className="uk-select"
               id="inputValueSpécifique"
               aria-describedby="valueSpécifique"
