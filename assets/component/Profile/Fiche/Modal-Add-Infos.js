@@ -196,6 +196,8 @@ function ModalEditInfos(props) {
         setCommentaire(null);
         setStartDate(null);
         setEndDate(null);
+        setErrorWithStar(null);
+        setError(null);
         props.onChange(response);
       });
     }
@@ -314,13 +316,13 @@ function ModalEditInfos(props) {
           {error && <p className="error-danger">{error}</p>}
           <Button onClick={handleClose}>Fermer</Button>
 
-          {elementsOpt?.length > 0 && (
+          {elementsOpt && elementsOpt?.length > 0 && (
             <Button onClick={handleSave} className="btn-metis">
               Sauver
             </Button>
           )}
 
-          {elementsOpt && elementsOpt[0] === [] && (
+          {elementsOpt && elementsOpt.length === 0 && (
             <Button onClick={handleSaveWithoutValue} className="btn-metis">
               Sauver
             </Button>

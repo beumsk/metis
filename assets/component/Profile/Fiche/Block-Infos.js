@@ -68,7 +68,6 @@ const BlockInfos = (props) => {
                               justifyContent: "space-between",
                             }}
                           >
-                            {console.log(patient.suggestionsByBlock[0])}
                             {pi.sugg?.value &&
                             patient.suggestionsByBlock &&
                             patient.suggestionsByBlock.length > 0 ? (
@@ -120,7 +119,12 @@ const BlockInfos = (props) => {
                                     .utc("UTC+01:00")
                                     .format("DD-MM-YYYY")}
                               </p>
-                              <p> {pi?.value}</p>
+                              <p>
+                                {" "}
+                                {patient.suggestionsByBlock[0].length === 0
+                                  ? ""
+                                  : pi?.value}
+                              </p>
                             </>
                           )}
                           <p>{pi?.comment}</p>

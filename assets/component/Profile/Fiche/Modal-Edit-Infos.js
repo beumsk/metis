@@ -25,8 +25,10 @@ function ModalEditInfos(props) {
   const [isSentRepport, setIsSentRepport] = useState(false);
   const [responseDatas, setResponseDatas] = useState(null);
   const [elementsOpt, setElementsOpt] = useState(null);
+
   const [error, setError] = useState(null);
   const [idPatient, setIdPatient] = useState(id);
+  const [errorWithStar, setErrorWithStar] = useState(null);
   const [start, setStartDate] = useState(
     props?.infosPatient?.start !== null ? props?.infosPatient?.start : null
   );
@@ -65,8 +67,128 @@ function ModalEditInfos(props) {
     // setEndDate(new Date(e.target.value).toJSON().slice(0, 10));
   };
 
+  const handleSaveWithoutValue = (e) => {
+    let formData = new FormData();
+
+    if (specificValueInput !== null) {
+      formData.append("specificValueInput", specificValueInput);
+      setError(null);
+    }
+
+    if (specificValueInput === null) {
+      setError("Valeur obligatoire");
+    }
+
+    if (valueSelect) {
+      formData.append("valueSelect", valueSelect);
+    }
+
+    if (commentaireInput) {
+      formData.append("commentaireInput", commentaireInput);
+    }
+
+    formData.append("start", start);
+    formData.append("end", end);
+    formData.append("idInfo", props?.infosPatient?.id);
+    formData.append("idPatient", idPatient);
+    formData.append("infosPatient", props?.infosPatient);
+    formData.append("itel", props?.infos?.id);
+
+    var formGetInfos = new FormData();
+    formGetInfos.append("id", id.toString());
+
+    console.log(elementsOpt);
+
+    if (specificValueInput !== null) {
+      axios({
+        method: "post",
+        url: "/api/editPatientInformation",
+        data: formData,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${auth.auth.accessToken}`,
+        },
+      }).then(function (response) {
+        setValueSelect(null);
+        setSpecificValueInput(null);
+        setCommentaire(null);
+        setStartDate(null);
+        setEndDate(null);
+        props.onChange(response);
+      });
+    }
+  };
+
   const handleSave = (e) => {
     let formData = new FormData();
+    let isValueStarAndValueSpécific =
+      valueSelect !== null &&
+      document
+        .getElementById("value-sugg")
+        .options[
+          document.getElementById("value-sugg").options.selectedIndex
+        ].innerHTML.indexOf("*") > -1 &&
+      specificValueInput !== null &&
+      specificValueInput !== ""
+        ? true
+        : false;
+
+    let isNotValueStarAndValueSpécific =
+      (valueSelect !== null &&
+        document
+          .getElementById("value-sugg")
+          .options[
+            document.getElementById("value-sugg").options.selectedIndex
+          ].innerHTML.indexOf("*") > -1 &&
+        specificValueInput === null) ||
+      specificValueInput === ""
+        ? true
+        : false;
+
+    let isValueNotStarAndNotValue =
+      valueSelect === null &&
+      document
+        .getElementById("value-sugg")
+        .options[
+          document.getElementById("value-sugg").options.selectedIndex
+        ].innerHTML.indexOf("*") === -1
+        ? true
+        : false;
+
+    let isValueStarValue =
+      valueSelect !== null &&
+      document
+        .getElementById("value-sugg")
+        .options[
+          document.getElementById("value-sugg").options.selectedIndex
+        ].innerHTML.indexOf("*") === -1
+        ? true
+        : false;
+
+    if (isNotValueStarAndValueSpécific === true) {
+      setError(null);
+      setErrorWithStar("Veuillez rajouter cette valeur !");
+    }
+
+    if (isValueNotStarAndNotValue === true) {
+      setErrorWithStar(null);
+      setError("Veuillez séléctionner la valeur !");
+    }
+
+    if (isValueStarAndValueSpécific === true) {
+      setErrorWithStar(null);
+      setError(null);
+    }
+
+    if (isValueStarValue === true) {
+      setError(null);
+      setErrorWithStar(null);
+    }
+
+    if (commentaireInput) {
+      formData.append("commentaireInput", commentaireInput);
+    }
+
     // value-sugg
 
     formData.append("valueSelect", valueSelect);
@@ -75,16 +197,19 @@ function ModalEditInfos(props) {
     formData.append("start", start);
     formData.append("end", end);
     formData.append("idInfo", props?.infosPatient?.id);
-
-    if (valueSelect !== null && elementsOpt.length > 0) {
-      formData.append("valueSelect", valueSelect);
-      setError(null);
-    }
+    formData.append("valueSelect", valueSelect);
+    formData.append("specificValueInput", specificValueInput);
 
     var formGetInfos = new FormData();
     formGetInfos.append("id", id.toString());
 
-    if (valueSelect !== null && elementsOpt?.length > 0) {
+    console.log(
+      isValueStarAndValueSpécific,
+      isValueStarValue,
+      valueSelect,
+      specificValueInput
+    );
+    if (isValueStarAndValueSpécific === true || isValueStarValue === true) {
       axios({
         method: "post",
         url: "/api/editPatientInformation",
@@ -105,7 +230,16 @@ function ModalEditInfos(props) {
             },
           })
             .then(function (response) {
-              setResponseDatas(response.data);
+              setValueSelect(null);
+              setSpecificValueInput(null);
+              setCommentaire(null);
+              setStartDate(null);
+              setEndDate(null);
+              setErrorWithStar(null);
+              setError(null);
+              props.onChange({
+                response: responseDatas,
+              });
               setIsSentRepport(true);
               document.querySelectorAll(".btn-close")[0].click();
             })
@@ -119,13 +253,13 @@ function ModalEditInfos(props) {
   //   new Date(1254088800 *1000)
   // handleInputChange;
 
-  if (responseDatas !== null) {
-    props.onChange({
-      response: responseDatas,
-    });
+  // if (responseDatas !== null) {
+  //   props.onChange({
+  //     response: responseDatas,
+  //   });
 
-    // document.querySelectorAll(".btn-close")[0].click();
-  }
+  //   // document.querySelectorAll(".btn-close")[0].click();
+  // }
 
   return (
     <>
@@ -155,7 +289,7 @@ function ModalEditInfos(props) {
                   id="value-sugg"
                   className="uk-select"
                 >
-                  <option value={null}>Choissisez votre valeur</option>
+                  <option value={null}>Choissisez une valeur</option>
                   {elementsOpt?.map((el, id) => (
                     <option
                       key={el.id}
@@ -177,6 +311,9 @@ function ModalEditInfos(props) {
               defaultValue={props?.infosPatient?.value}
               aria-describedby="valueSpécifique"
             />
+
+            {errorWithStar && <p className="error-danger">{errorWithStar}</p>}
+
             {elementsOpt?.length > 0 && (
               <>
                 <p>
@@ -230,17 +367,18 @@ function ModalEditInfos(props) {
           </>
         </Modal.Body>
         <Modal.Footer>
-          {error && <p>{error}</p>}
+          {console.log(elementsOpt)}
+          {error && <p className="error-danger"> {error}</p>}
           {isSentRepport && <FontAwesomeIcon icon={faCheck} />}
           <Button onClick={handleClose}>Fermer</Button>
-          {elementsOpt?.length > 0 && (
+          {elementsOpt && elementsOpt?.length > 0 && (
             <Button onClick={handleSave} className="btn-metis">
               Sauver
             </Button>
           )}
 
-          {elementsOpt && elementsOpt[0] === [] && (
-            <Button onClick={handleSave} className="btn-metis">
+          {elementsOpt && elementsOpt.length === 0 && (
+            <Button onClick={handleSaveWithoutValue} className="btn-metis">
               Sauver
             </Button>
           )}
