@@ -68,10 +68,21 @@ const BlockInfos = (props) => {
                               justifyContent: "space-between",
                             }}
                           >
-                            {pi.sugg?.value ? (
+                            {console.log(patient.suggestionsByBlock[0])}
+                            {pi.sugg?.value &&
+                            patient.suggestionsByBlock &&
+                            patient.suggestionsByBlock.length > 0 ? (
                               <>{pi.sugg?.value}</>
                             ) : (
-                              <> Pas d'informations </>
+                              <>
+                                {pi?.value &&
+                                patient.suggestionsByBlock &&
+                                patient.suggestionsByBlock[0].length === 0 ? (
+                                  <>{pi.value}</>
+                                ) : (
+                                  <> Pas d'informations </>
+                                )}
+                              </>
                             )}
 
                             <div className="group-buttons">

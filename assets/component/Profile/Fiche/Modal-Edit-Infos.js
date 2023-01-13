@@ -140,30 +140,34 @@ function ModalEditInfos(props) {
         <Modal.Body>
           {" "}
           <>
-            <Form.Label htmlFor="inputValue">Valeur</Form.Label>
-            <Form.Select
-              size="lg"
-              onChange={(e) => {
-                if (e.target.value !== "Choissisez une valeur") {
-                  setValueSelect(e.target.value);
-                } else {
-                  setValueSelect(null);
-                }
-              }}
-              id="value-sugg"
-              className="uk-select"
-            >
-              <option value={null}>Choissisez votre valeur</option>
-              {elementsOpt?.map((el, id) => (
-                <option
-                  key={el.id}
-                  value={el.id}
-                  selected={props?.infosPatient?.sugg?.value === el?.value}
+            {elementsOpt?.length > 0 && (
+              <>
+                <Form.Label htmlFor="inputValue">Valeur</Form.Label>
+                <Form.Select
+                  size="lg"
+                  onChange={(e) => {
+                    if (e.target.value !== "Choissisez une valeur") {
+                      setValueSelect(e.target.value);
+                    } else {
+                      setValueSelect(null);
+                    }
+                  }}
+                  id="value-sugg"
+                  className="uk-select"
                 >
-                  {el?.value}
-                </option>
-              ))}
-            </Form.Select>
+                  <option value={null}>Choissisez votre valeur</option>
+                  {elementsOpt?.map((el, id) => (
+                    <option
+                      key={el.id}
+                      value={el.id}
+                      selected={props?.infosPatient?.sugg?.value === el?.value}
+                    >
+                      {el?.value}
+                    </option>
+                  ))}
+                </Form.Select>
+              </>
+            )}
             <Form.Label htmlFor="inputValue">Valeur Spécifique</Form.Label>
             <input
               type="text"
@@ -173,10 +177,14 @@ function ModalEditInfos(props) {
               defaultValue={props?.infosPatient?.value}
               aria-describedby="valueSpécifique"
             />
-            <p>
-              Les suggestions marquées d'une étoile (*) dans la liste ci-dessus
-              demandent obligatoirement une valeur spécifique.
-            </p>
+            {elementsOpt?.length > 0 && (
+              <>
+                <p>
+                  Les suggestions marquées d'une étoile (*) dans la liste
+                  ci-dessus demandent obligatoirement une valeur spécifique.
+                </p>
+              </>
+            )}
             <Form.Label htmlFor="inputValue">Début</Form.Label>
 
             <Form.Control
@@ -225,9 +233,17 @@ function ModalEditInfos(props) {
           {error && <p>{error}</p>}
           {isSentRepport && <FontAwesomeIcon icon={faCheck} />}
           <Button onClick={handleClose}>Fermer</Button>
-          <Button onClick={handleSave} className="btn-metis">
-            Sauver
-          </Button>
+          {elementsOpt?.length > 0 && (
+            <Button onClick={handleSave} className="btn-metis">
+              Sauver
+            </Button>
+          )}
+
+          {elementsOpt && elementsOpt[0] === [] && (
+            <Button onClick={handleSave} className="btn-metis">
+              Sauver
+            </Button>
+          )}
         </Modal.Footer>
       </Modal>
     </>

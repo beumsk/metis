@@ -35,10 +35,10 @@ trait InfosPatientTrait
     /**
      * @return Collection|Suggestions[]
      */
-    public function getSuggestionsByBlock(): Collection
+    public function getSuggestionsByBlock()
     {
         if (is_null($this->suggestionByBlock)) {
-            $this->suggestionByBlock = new ArrayCollection();
+            $this->suggestionByBlock;
         }
         return $this->suggestionByBlock;
     }
@@ -46,11 +46,14 @@ trait InfosPatientTrait
     /**
      * @return $this
      */
-    public function setSuggestionsByBlock(array $suggestionByBlock): self
+    public function setSuggestionsByBlock($suggestionByBlock): self
     {
         if (is_null($this->suggestionByBlock)) {
+
             $this->suggestionByBlock = new ArrayCollection();
         }
+
+
         $this->suggestionByBlock[] = $suggestionByBlock;
 
         return $this;

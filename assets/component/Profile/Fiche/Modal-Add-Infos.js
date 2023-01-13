@@ -30,6 +30,7 @@ function ModalEditInfos(props) {
 
   const [valueSelect, setValueSelect] = useState(null);
   const [specificValueInput, setSpecificValueInput] = useState(null);
+  const [errorWithStar, setErrorWithStar] = useState(null);
 
   const [commentaireInput, setCommentaire] = useState(null);
 
@@ -46,20 +47,20 @@ function ModalEditInfos(props) {
     setEndDate(new Date(e.target.value).toJSON().slice(0, 10));
   };
 
-  const handleSave = (e) => {
+  const handleSaveWithoutValue = (e) => {
     let formData = new FormData();
 
-    if (valueSelect !== null && elementsOpt.length > 0) {
-      formData.append("valueSelect", valueSelect);
+    if (specificValueInput !== null) {
+      formData.append("specificValueInput", specificValueInput);
       setError(null);
     }
 
-    if (valueSelect === null) {
+    if (specificValueInput === null) {
       setError("Valeur obligatoire");
     }
 
-    if (specificValueInput) {
-      formData.append("specificValueInput", specificValueInput);
+    if (valueSelect) {
+      formData.append("valueSelect", valueSelect);
     }
 
     if (commentaireInput) {
@@ -78,7 +79,109 @@ function ModalEditInfos(props) {
 
     console.log(elementsOpt);
 
-    if (valueSelect !== null) {
+    if (specificValueInput !== null) {
+      axios({
+        method: "post",
+        url: "/api/setPatientInformation",
+        data: formData,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${auth.auth.accessToken}`,
+        },
+      }).then(function (response) {
+        setValueSelect(null);
+        setSpecificValueInput(null);
+        setCommentaire(null);
+        setStartDate(null);
+        setEndDate(null);
+        props.onChange(response);
+      });
+    }
+  };
+
+  const handleSave = (e) => {
+    let formData = new FormData();
+    let isValueStarAndValueSpécific =
+      valueSelect !== null &&
+      document
+        .getElementById("value-sugg")
+        .options[
+          document.getElementById("value-sugg").options.selectedIndex
+        ].innerHTML.indexOf("*") > -1 &&
+      specificValueInput !== null &&
+      specificValueInput !== ""
+        ? true
+        : false;
+
+    let isNotValueStarAndValueSpécific =
+      (valueSelect !== null &&
+        document
+          .getElementById("value-sugg")
+          .options[
+            document.getElementById("value-sugg").options.selectedIndex
+          ].innerHTML.indexOf("*") > -1 &&
+        specificValueInput === null) ||
+      specificValueInput === ""
+        ? true
+        : false;
+
+    let isValueNotStarAndNotValue =
+      valueSelect === null &&
+      document
+        .getElementById("value-sugg")
+        .options[
+          document.getElementById("value-sugg").options.selectedIndex
+        ].innerHTML.indexOf("*") === -1
+        ? true
+        : false;
+
+    let isValueStarValue =
+      valueSelect !== null &&
+      document
+        .getElementById("value-sugg")
+        .options[
+          document.getElementById("value-sugg").options.selectedIndex
+        ].innerHTML.indexOf("*") === -1
+        ? true
+        : false;
+
+    if (isNotValueStarAndValueSpécific === true) {
+      setError(null);
+      setErrorWithStar("Veuillez rajouter cette valeur !");
+    }
+
+    if (isValueNotStarAndNotValue === true) {
+      setErrorWithStar(null);
+      setError("Veuillez séléctionner la valeur !");
+    }
+
+    if (isValueStarAndValueSpécific === true) {
+      setErrorWithStar(null);
+      setError(null);
+    }
+
+    if (isValueStarValue === true) {
+      setError(null);
+      setErrorWithStar(null);
+    }
+
+    if (commentaireInput) {
+      formData.append("commentaireInput", commentaireInput);
+    }
+
+    var formGetInfos = new FormData();
+    formGetInfos.append("id", id.toString());
+
+    formData.append("start", start);
+    formData.append("end", end);
+    formData.append("idInfo", props?.infosPatient?.id);
+    formData.append("idPatient", idPatient);
+    formData.append("infosPatient", props?.infosPatient);
+    formData.append("itel", props?.infos?.id);
+    formData.append("valueSelect", valueSelect);
+    formData.append("specificValueInput", specificValueInput);
+
+    if (isValueStarAndValueSpécific === true || isValueStarValue === true) {
       axios({
         method: "post",
         url: "/api/setPatientInformation",
@@ -120,6 +223,7 @@ function ModalEditInfos(props) {
                   onChange={(e) => {
                     if (e.target.value !== "Choissisez une valeur") {
                       setValueSelect(e.target.value);
+                      console.log(e.target.value);
                     } else {
                       setValueSelect(null);
                     }
@@ -129,7 +233,9 @@ function ModalEditInfos(props) {
                   <option>Choissisez une valeur</option>
                   {elementsOpt?.map((el, id) => (
                     <option key={el.id} value={el.id}>
-                      {el?.value}
+                      {el?.requireCustomValue === true
+                        ? el?.value + "*"
+                        : el?.value}
                     </option>
                   ))}
                 </Form.Select>
@@ -144,10 +250,16 @@ function ModalEditInfos(props) {
               onChange={(e) => setSpecificValueInput(e.target.value)}
               aria-describedby="valueSpécifique"
             />
-            <p>
-              Les suggestions marquées d'une étoile (*) dans la liste ci-dessus
-              demandent obligatoirement une valeur spécifique.
-            </p>
+
+            {errorWithStar && <p className="error-danger">{errorWithStar}</p>}
+            {elementsOpt?.length > 0 && (
+              <>
+                <p>
+                  Les suggestions marquées d'une étoile (*) dans la liste
+                  ci-dessus demandent obligatoirement une valeur spécifique.
+                </p>
+              </>
+            )}
             <Form.Label htmlFor="inputValue">Début</Form.Label>
 
             {start ? (
@@ -199,11 +311,20 @@ function ModalEditInfos(props) {
           </>
         </Modal.Body>
         <Modal.Footer>
-          {error && <p>{error}</p>}
+          {error && <p className="error-danger">{error}</p>}
           <Button onClick={handleClose}>Fermer</Button>
-          <Button onClick={handleSave} className="btn-metis">
-            Sauver
-          </Button>
+
+          {elementsOpt?.length > 0 && (
+            <Button onClick={handleSave} className="btn-metis">
+              Sauver
+            </Button>
+          )}
+
+          {elementsOpt && elementsOpt[0] === [] && (
+            <Button onClick={handleSaveWithoutValue} className="btn-metis">
+              Sauver
+            </Button>
+          )}
         </Modal.Footer>
       </Modal>
     </>

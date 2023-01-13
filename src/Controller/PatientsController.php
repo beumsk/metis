@@ -222,6 +222,10 @@ class PatientsController extends AbstractController
                     $s = $doctrine->getRepository(Suggestions::class)->findBy(["parentSugg" => $sugg->getId()]);
 
                     // dd($s);
+
+
+
+
                     $key->setSuggestionsByBlock([...$s]);
                 }
 
