@@ -178,7 +178,7 @@ const Fiche = () => {
           <Accordion.Body>
             <BlockInfos
               infos={informationPatient}
-              link={"/patient/fiche/description"}
+              link={"/patient/fiche/description/description"}
               onChangeAddPati={(e) => onChangeAddPatientInformation(e)}
               onChangeEditPati={(e) => onChangeEditPatientInformation(e)}
             ></BlockInfos>
