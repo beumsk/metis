@@ -40,7 +40,7 @@ function ModalLierLieux(props) {
   const handleClose = () => setShow(false);
   const [errorValue, setErrorValue] = useState(null);
   const handleShow = () => setShow(true);
-  console.log(props);
+
   useEffect(() => {
     //   axios({
     //     method: "post",
@@ -72,7 +72,7 @@ function ModalLierLieux(props) {
     formData.append("valueLieux", valueLieux);
     formData.append("start", start);
     formData.append("end", end);
-    console.log(valueType);
+
     formData.append("valueType", valueType);
     formData.append("idPatient", idPatient);
 
@@ -120,7 +120,7 @@ function ModalLierLieux(props) {
   if (responseDatas !== null) {
     props.onChangeEditPlaces(responseDatas);
   }
-  console.log(props.lieu);
+
   //   /api/getContacts
   return (
     <>

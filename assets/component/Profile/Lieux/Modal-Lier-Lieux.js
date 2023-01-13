@@ -21,7 +21,7 @@ function ModalLierLieux(props) {
   const [responseDatas, setResponseDatas] = useState(null);
   const [valueLieux, setValueLieux] = useState(null);
   const [type, setType] = useState(null);
-  // console.log(valueLieux);
+
   const [valueType, setValueType] = useState(null);
   const [start, setStartDate] = useState(null);
   const [end, setEndDate] = useState(null);
@@ -71,7 +71,6 @@ function ModalLierLieux(props) {
     }
 
     if (valueLieux !== null && valueLieux !== "defaultValue") {
-      console.log("sended");
       axios({
         method: "post",
         url: "/api/setLierPlaces",
@@ -110,7 +109,7 @@ function ModalLierLieux(props) {
     props.onChangeLierPlaces(responseDatas);
   }
   //   /api/getContacts
-  console.log(props?.lieuxList);
+
   return (
     <>
       <Button onClick={handleShow} className="btn-metis">

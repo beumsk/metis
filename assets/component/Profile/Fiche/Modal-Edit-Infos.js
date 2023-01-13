@@ -50,7 +50,12 @@ function ModalEditInfos(props) {
   );
 
   const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const handleShow = () => {
+    setErrorWithStar(null);
+    setError(null);
+    setIsSentRepport(false);
+    setShow(true);
+  };
   useEffect(() => {
     setElementsOpt(...props?.infos?.suggestionsByBlock);
     setStartDate(
@@ -91,13 +96,11 @@ function ModalEditInfos(props) {
     formData.append("end", end);
     formData.append("idInfo", props?.infosPatient?.id);
     formData.append("idPatient", idPatient);
-    formData.append("infosPatient", props?.infosPatient);
+    formData.append("infosPatient", JSON.stringify(props?.infosPatient));
     formData.append("itel", props?.infos?.id);
 
     var formGetInfos = new FormData();
     formGetInfos.append("id", id.toString());
-
-    console.log(elementsOpt);
 
     if (specificValueInput !== null) {
       axios({
@@ -109,12 +112,30 @@ function ModalEditInfos(props) {
           Authorization: `Bearer ${auth.auth.accessToken}`,
         },
       }).then(function (response) {
-        setValueSelect(null);
-        setSpecificValueInput(null);
-        setCommentaire(null);
-        setStartDate(null);
-        setEndDate(null);
-        props.onChange(response);
+        if (response) {
+          axios({
+            method: "post",
+            url: "/api/patientsInformationByPatients",
+            data: formGetInfos,
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${auth.auth.accessToken}`,
+            },
+          })
+            .then(function (response) {
+              setValueSelect(null);
+              setSpecificValueInput(null);
+              setCommentaire(null);
+              setStartDate(null);
+              setEndDate(null);
+              setResponseDatas(response.data);
+              setIsSentRepport(true);
+              document.querySelectorAll(".btn-close")[0].click();
+            })
+            .catch(function (response) {});
+          // document.querySelectorAll(".btn-close")[0].click();
+          // location.replace(window.location.origin + "/" + idPatient);
+        }
       });
     }
   };
@@ -203,12 +224,12 @@ function ModalEditInfos(props) {
     var formGetInfos = new FormData();
     formGetInfos.append("id", id.toString());
 
-    console.log(
-      isValueStarAndValueSpécific,
-      isValueStarValue,
-      valueSelect,
-      specificValueInput
-    );
+    // console.log(
+    //   isValueStarAndValueSpécific,
+    //   isValueStarValue,
+    //   valueSelect,
+    //   specificValueInput
+    // );
     if (isValueStarAndValueSpécific === true || isValueStarValue === true) {
       axios({
         method: "post",
@@ -220,32 +241,7 @@ function ModalEditInfos(props) {
         },
       }).then(function (response) {
         if (response) {
-          axios({
-            method: "post",
-            url: "/api/patientsInformationByPatients",
-            data: formGetInfos,
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${auth.auth.accessToken}`,
-            },
-          })
-            .then(function (response) {
-              setValueSelect(null);
-              setSpecificValueInput(null);
-              setCommentaire(null);
-              setStartDate(null);
-              setEndDate(null);
-              setErrorWithStar(null);
-              setError(null);
-              props.onChange({
-                response: responseDatas,
-              });
-              setIsSentRepport(true);
-              document.querySelectorAll(".btn-close")[0].click();
-            })
-            .catch(function (response) {});
-          // document.querySelectorAll(".btn-close")[0].click();
-          // location.replace(window.location.origin + "/" + idPatient);
+          props.onChange(response);
         }
       });
     }
@@ -253,13 +249,13 @@ function ModalEditInfos(props) {
   //   new Date(1254088800 *1000)
   // handleInputChange;
 
-  // if (responseDatas !== null) {
-  //   props.onChange({
-  //     response: responseDatas,
-  //   });
+  if (responseDatas !== null) {
+    props.onChange({
+      response: responseDatas,
+    });
 
-  //   // document.querySelectorAll(".btn-close")[0].click();
-  // }
+    // document.querySelectorAll(".btn-close")[0].click();
+  }
 
   return (
     <>
@@ -367,7 +363,6 @@ function ModalEditInfos(props) {
           </>
         </Modal.Body>
         <Modal.Footer>
-          {console.log(elementsOpt)}
           {error && <p className="error-danger"> {error}</p>}
           {isSentRepport && <FontAwesomeIcon icon={faCheck} />}
           <Button onClick={handleClose}>Fermer</Button>

@@ -33,7 +33,7 @@ const BlockInfos = (props) => {
 
   function onChangeEditPatientInformation(e) {
     if (e && e.response) {
-      props.onChangeEditPati(e.response);
+      props.onChangeEditPati(e);
     }
   }
   function onChangePatientInformation(e) {
@@ -89,17 +89,13 @@ const BlockInfos = (props) => {
                                 link={props.link}
                                 infosPatient={pi}
                                 infos={patient}
-                                onChange={(e) =>
-                                  onChangeEditPatientInformation(e)
-                                }
+                                onChange={onChangePatientInformation}
                               />
                               <ModalDeleteInfos
                                 link={props.link}
                                 infosPatient={pi}
                                 infos={patient}
-                                onChange={(e) =>
-                                  onChangeEditPatientInformation(e)
-                                }
+                                onChange={onChangePatientInformation}
                               />
                             </div>
                           </div>

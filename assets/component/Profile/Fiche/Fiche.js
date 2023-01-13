@@ -68,10 +68,22 @@ const Fiche = () => {
   }, [idPatient]);
   //
   const onChangeEditPatientInformation = (e) => {
-    setInformation(e);
-    console.log("test");
+    console.log("edit !");
+    axios({
+      method: "post",
+      url: "/api/patientsInformationByPatients",
+      data: formData,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    })
+      .then(function (response) {
+        setInformation(response.data);
+      })
+      .catch(function (response) {});
 
-    // document.querySelectorAll(".btn-close")[0].click();
+    document.querySelectorAll(".btn-close")[0].click();
   };
   const onChangeAddPatientInformation = (e) => {
     axios({

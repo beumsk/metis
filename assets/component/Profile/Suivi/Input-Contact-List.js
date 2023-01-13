@@ -69,7 +69,7 @@ export default function InputContactList(props) {
       }
     }
   }, [open]);
-  console.log(props?.defaultValue);
+
   return (
     <Autocomplete
       id="asynchronous-demo"
@@ -103,7 +103,6 @@ export default function InputContactList(props) {
             setOptions([...response.data]);
             if (options) {
               setOpen(true);
-              console.log("true");
             }
           })
           .catch(function (response) {});

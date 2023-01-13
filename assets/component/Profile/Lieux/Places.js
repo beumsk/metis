@@ -79,7 +79,6 @@ const Places = () => {
   }
 
   function onChangeDeletePlace(e) {
-    console.log(e);
     setPlaces(e);
   }
 
@@ -153,8 +152,6 @@ const Places = () => {
     },
   ];
 
-  console.log(listPlaces);
-
   return (
     <>
       <div className="d-flex mb-4 row-btn">
@@ -183,7 +180,6 @@ const Places = () => {
         >
           {(props) => (
             <>
-              {console.log(props.baseProps)}
               <BootstrapTable
                 {...props.baseProps}
                 pagination={paginationFactory()}

@@ -77,8 +77,6 @@ function ModalEditInfos(props) {
     var formGetInfos = new FormData();
     formGetInfos.append("id", id.toString());
 
-    console.log(elementsOpt);
-
     if (specificValueInput !== null) {
       axios({
         method: "post",
@@ -225,7 +223,6 @@ function ModalEditInfos(props) {
                   onChange={(e) => {
                     if (e.target.value !== "Choissisez une valeur") {
                       setValueSelect(e.target.value);
-                      console.log(e.target.value);
                     } else {
                       setValueSelect(null);
                     }

@@ -331,7 +331,7 @@ const Contacts = () => {
   function onChangePatients(e) {
     setPatients(e.data);
   }
-  console.log("test");
+
   return (
     <div className="onglet-contact">
       <div className="d-flex mb-4 row-btn">

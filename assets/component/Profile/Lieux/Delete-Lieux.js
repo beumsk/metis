@@ -89,7 +89,7 @@ function ModalDeletePlaces(props) {
   };
   //   new Date(1254088800 *1000)
   // handleInputChange;
-  console.log(props?.lieu);
+
   return (
     <>
       <button onClick={handleShow} className="ml-4 btn-metis">
