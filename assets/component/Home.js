@@ -7,6 +7,7 @@ import Menu from "./Menu";
 import Form_MeetRapports from "./Form_MeetRapports";
 import RepportCalls from "./list_reportCalls";
 import RepportGoals from "./list_reportGoals";
+import logo from "/assets/images/infirmier-de-rue.png";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -54,10 +55,13 @@ const Home = () => {
     <>
       <Menu />
       <div className="container-home row m-0">
-        <div className="col-sm-6 d-flex align-items-center justify-content-center">
+        <div className="col-lg-6 d-flex align-items-center justify-content-center">
           <div>
-            <h3>Bienvenue sur Métis</h3>
-            <p>Cliquez ici pour vos rappels ou éditer un patient:</p>
+            <h1 className="text-center" style={{ color: "#91bd10" }}>
+              Bienvenue sur Métis
+            </h1>
+
+            <img src={logo} alt="Infirmier de rue" />
 
             {/*<Link onClick={onClickRepportMeet}>
               <FontAwesomeIcon icon={faArrowRight} /> Rapport de rencontre
@@ -71,7 +75,7 @@ const Home = () => {
           </div>
         </div>
 
-        <div className="col-sm-6 container-repports">
+        <div className="col-lg-6 container-repports">
           <div className="set-repports">
             {reportMeet && <Form_MeetRapports />}
             {reportCalls && <RepportGoals />}

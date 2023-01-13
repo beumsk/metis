@@ -103,7 +103,7 @@ function ModalLierPatient(props) {
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Modifier une information</Modal.Title>
+          <Modal.Title>Modifier un patient lié</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {" "}
@@ -115,6 +115,7 @@ function ModalLierPatient(props) {
               defaultValue={props?.infos?.orpa?.id}
               onChange={(e) => setPatientItemList(e.target.value)}
             >
+              <option value="">Choisir patient</option>
               {props?.contacts?.data?.map((el, id) => (
                 <>
                   {el?.firstname && el?.lastname && (
@@ -132,6 +133,7 @@ function ModalLierPatient(props) {
               onChange={(e) => setTypeItemList(e.target.value)}
               defaultValue={props?.infos?.sugg?.id}
             >
+              <option value="">Choisir type</option>
               {props?.type?.data?.map((el, id) => (
                 <option value={el.id}>{el?.value}</option>
               ))}

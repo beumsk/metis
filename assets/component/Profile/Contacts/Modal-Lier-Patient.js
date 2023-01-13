@@ -84,39 +84,15 @@ function ModalEditPatient(props) {
         })
           .then(function (response) {
             if (response) {
-              let resFormData = new FormData();
-              resFormData.append("antenna", localStorage.getItem("antenna"));
-              resFormData.append("id", idPatient);
-              axios({
-                method: "post",
-                url: "/api/getPatientsByPatients",
-                data: resFormData,
-                headers: {
-                  "Content-Type": "application/json",
-                  Authorization: `Bearer ${auth.auth.accessToken}`,
-                },
-              })
-                .then(function (response) {
-                  setResponseDatas(response.data);
-                  setIsSentRepport(true);
-                })
-                .catch(function (response) {});
-
-              // document.querySelectorAll(".btn-close")[0].click();
-              // location.replace(window.location.origin + "/" + idPatient);
+              props.onChangeUpdatePatient(true);
+              setShow(false);
+              // setIsSentRepport(true);
             }
           })
           .catch(function (response) {});
-        setShow(false);
-        // document.querySelectorAll(".btn-close")[0].click();
-        // location.replace(window.location.origin + "/" + idPatient);
       }
     });
   };
-
-  if (responseDatas !== null) {
-    props.onChangeUpdatePatient(responseDatas);
-  }
 
   return (
     <>
@@ -126,17 +102,17 @@ function ModalEditPatient(props) {
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Modifier une information</Modal.Title>
+          <Modal.Title>Lier un patient</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {" "}
           <>
             <Form.Label htmlFor="inputValue">Valeur</Form.Label>
             <Form.Select
               size="lg"
+              className="uk-select"
               onChange={(e) => setPatientItemList(e.target.value)}
-              className="uk-input"
             >
+              <option value="">Choisir patient</option>
               {props?.contacts?.data?.map((el, id) => (
                 <>
                   {el?.firstname && el?.lastname && (
@@ -153,13 +129,14 @@ function ModalEditPatient(props) {
               className="uk-select"
               onChange={(e) => setTypeItemList(e.target.value)}
             >
+              <option value="">Choisir type</option>
               {props?.type?.data?.map((el, id) => (
                 <>{el.value && <option value={el.id}>{el?.value}</option>}</>
               ))}
             </Form.Select>
             <Form.Label htmlFor="inputValue">Description</Form.Label>
             <Form.Control
-              type="text"
+              type="textarea"
               className="uk-input"
               id="inputValueSpécifique"
               onChange={(e) => setDescription(e.target.value)}

@@ -78,12 +78,12 @@ const Search = () => {
     input.addEventListener("keypress", function (event) {
       if (event.key === "Enter") {
         event.preventDefault();
-        const urlParams = new URLSearchParams(window.location.search);
-
-        urlParams.set("q", valueSearch);
-
-        // window.location.href + urlParams;
-        window.location.href = "patients?" + urlParams;
+        if (input.value) {
+          const urlParams = new URLSearchParams(window.location.search);
+          urlParams.set("q", valueSearch);
+          // window.location.href + urlParams;
+          window.location.href = "patients?" + urlParams;
+        }
       }
     });
   }

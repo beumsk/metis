@@ -128,7 +128,10 @@ const Statistiques = () => {
       <Menu></Menu>
 
       <div className="select container" style={{ position: "relative" }}>
-        <h5>Statistiques</h5>
+        <h1 className="py-3" style={{ color: "#212529" }}>
+          Statistiques
+        </h1>
+
         <Form.Label>Année</Form.Label>
         <input
           className="uk-input"
@@ -148,7 +151,7 @@ const Statistiques = () => {
           <option value={1}>Stats1</option>
           <option value={2}>Stats2</option>
           <option value={3}>Stats3</option>
-          <option value={4}>Liste de personnes décédés sans date mises</option>
+          <option value={4}>Liste de personnes décédées sans date mises</option>
           <option value={5}>
             Lister les patients ayant 2 états simultanés
           </option>
@@ -676,7 +679,7 @@ const Statistiques = () => {
             marginTop: "1rem",
           }}
         >
-          export
+          Exporter
         </a>
       </div>
     </>

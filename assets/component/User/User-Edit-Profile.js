@@ -65,7 +65,11 @@ const EditProfile = () => {
       <Menu></Menu>
 
       <Form className="container">
-        <Form.Group className="mb-3" controlId="formBasicEmail">
+        <Form.Group className="my-3" controlId="formBasicEmail">
+          <h1 className="py-3" style={{ color: "#212529" }}>
+            Éditer le profil
+          </h1>
+
           <Form.Control
             type="text"
             placeholder="Nom d'utilisateur"
@@ -98,7 +102,7 @@ const EditProfile = () => {
           onClick={(e) => setFormCreation(e)}
           className="btn-metis mt-3"
         >
-          Submit
+          Sauver
         </Button>
         {responseBack && responseBack !== null && responseBack}
       </Form>

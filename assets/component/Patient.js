@@ -180,30 +180,27 @@ const Patient = () => {
               </div>
               <div className="col-sm-6">
                 <div className="profile-head">
-                  <h5>
+                  <h1 style={{ color: "#212529" }}>
                     {patient.firstname} {patient.lastname}
-                  </h5>
-                  <h6>
-                    {" "}
+                  </h1>
+                  {patient.nicknames && <h5>{patient.nicknames}</h5>}
+                  <p>
                     {patient && patient.birthdate !== null ? (
                       <Moment format="DD/MM/YYYY">{patient.birthdate}</Moment>
                     ) : (
-                      <p></p>
+                      "Date et lieu de naissance non connus"
                     )}
                     {/* {new Date(patient.birthdate).toLocaleDateString()} */}
-                  </h6>
+                  </p>
                   <p className="proile-rating">
                     Premier contact :{" "}
                     <span>
-                      {" "}
                       {patient && patient.firstContactDate !== null ? (
                         <Moment format="DD/MM/YYYY">
                           {patient.firstContactDate}
                         </Moment>
                       ) : (
-                        <p>
-                          Pas de dates de premières rencontre pour le moment
-                        </p>
+                        "Pas de date de première rencontre pour le moment"
                       )}
                     </span>
                   </p>

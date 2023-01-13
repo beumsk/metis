@@ -130,15 +130,15 @@ function ContactOrganisations() {
   return (
     <>
       <Menu></Menu>
-      <div className="container container-patients row mx-auto ">
-        <div className="row-btn">
+      <div className="container container-patients mx-auto ">
+        <div style={{ float: "right" }}>
           <ModalAddContact
             listOrganisation={listOrganisation}
             onChangeContacts={onChangeUpdateContact}
           ></ModalAddContact>
         </div>
 
-        <h4>Liste de contacts</h4>
+        <h1 className="mb-3">Liste de contacts</h1>
         {listContacts && listContacts.data && (
           <ToolkitProvider
             keyField="id"
@@ -148,13 +148,16 @@ function ContactOrganisations() {
           >
             {(props) => (
               <div>
-                <div className="mb-2 mt-2">
+                <div className="mb-2">
                   {/* <SearchBar
                     className="uk-input"
                     {...props.searchProps}
                     placeholder="Rechercher dans les appels"
                   /> */}
                   <input
+                    className="uk-input"
+                    style={{ width: "186px" }}
+                    placeholder="Rechercher le nom"
                     onChange={(e) => {
                       let formData = new FormData();
                       formData.append("query", e.target.value);

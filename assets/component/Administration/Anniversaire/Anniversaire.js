@@ -39,17 +39,13 @@ function Anniversaire() {
           return (
             <span>
               <FontAwesomeIcon icon={faArrowDown} />/
-              <font color="red">
-                <FontAwesomeIcon icon={faArrowUp} />
-              </font>
+              <FontAwesomeIcon icon={faArrowUp} color="#91bd10" />
             </span>
           );
         else if (order === "desc")
           return (
             <span>
-              <font color="red">
-                <FontAwesomeIcon icon={faArrowDown} />
-              </font>
+              <FontAwesomeIcon icon={faArrowDown} color="#91bd10" />
               /<FontAwesomeIcon icon={faArrowUp} />
             </span>
           );
@@ -81,17 +77,13 @@ function Anniversaire() {
           return (
             <span>
               <FontAwesomeIcon icon={faArrowDown} />/
-              <font color="red">
-                <FontAwesomeIcon icon={faArrowUp} />
-              </font>
+              <FontAwesomeIcon icon={faArrowUp} color="#91bd10" />
             </span>
           );
         else if (order === "desc")
           return (
             <span>
-              <font color="red">
-                <FontAwesomeIcon icon={faArrowDown} />
-              </font>
+              <FontAwesomeIcon icon={faArrowDown} color="#91bd10" />
               /<FontAwesomeIcon icon={faArrowUp} />
             </span>
           );
@@ -109,7 +101,7 @@ function Anniversaire() {
     },
     {
       dataField: "status",
-      text: "Status",
+      text: "Statut",
     },
   ];
   useEffect(() => {
@@ -143,20 +135,20 @@ function Anniversaire() {
     <>
       <Menu></Menu>
       <div className="container container-patients row mx-auto ">
-        <h4>Anniversaires</h4>
+        <h1 className="mb-3">Anniversaires</h1>
         {birthdayList && birthdayList !== null && (
           <>
             <div className="row coordonnes-body">
               <div>
                 {Object.keys(birthdayList).map((keyName, i) => (
                   <div key={i}>
-                    <h4>
+                    <h5 style={{ color: "white" }}>
                       {toPascalCase(
                         new Date(keyName).toLocaleString("fr-FR", {
                           month: "long",
                         })
                       )}
-                    </h4>
+                    </h5>
                     <ToolkitProvider
                       keyField="id"
                       data={[...birthdayList[keyName]]}
@@ -169,6 +161,8 @@ function Anniversaire() {
                             <SearchBar
                               {...props.searchProps}
                               placeholder="Rechercher le nom"
+                              className="uk-input"
+                              style={{ width: "186px" }}
                             />
                           </div>
 
