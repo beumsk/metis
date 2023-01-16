@@ -15,96 +15,23 @@ import ToolkitProvider, {
 } from "react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit";
 import paginationFactory from "react-bootstrap-table2-paginator";
 import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
+import DataTable from "datatables.net-dt";
+import $ from "jquery";
+// var dt = require("datatables.net")(window, $);
+
 function Anniversaire() {
+  document.addEventListener("DOMContentLoaded", function () {});
+
   const [auth, setAuth] = useState(useAuth());
   const { SearchBar } = Search;
   const [birthdayList, setBirthDaysList] = useState(null);
 
+  // console.log(table);
   var formData = new FormData();
   formData.append("antenna", auth.antenna);
-  const columns = [
-    {
-      dataField: "id",
-      text: "id",
-      sort: true,
-      sortCaret: (order, column) => {
-        if (!order)
-          return (
-            <span>
-              <FontAwesomeIcon icon={faArrowDown} />/
-              <FontAwesomeIcon icon={faArrowUp} />
-            </span>
-          );
-        else if (order === "asc")
-          return (
-            <span>
-              <FontAwesomeIcon icon={faArrowDown} />/
-              <FontAwesomeIcon icon={faArrowUp} color="#91bd10" />
-            </span>
-          );
-        else if (order === "desc")
-          return (
-            <span>
-              <FontAwesomeIcon icon={faArrowDown} color="#91bd10" />
-              /<FontAwesomeIcon icon={faArrowUp} />
-            </span>
-          );
-        return null;
-      },
-    },
-    {
-      dataField: "lastname + firstname",
-      text: "Nom",
-      formatter: (cell, row, rowIndex, extraData) => (
-        <div>
-          {row.firstname} {row.lastname}
-        </div>
-      ),
-    },
-    {
-      dataField: "birthdate",
-      text: "Date de Naissance",
-      sort: true,
-      sortCaret: (order, column) => {
-        if (!order)
-          return (
-            <span>
-              <FontAwesomeIcon icon={faArrowDown} />/
-              <FontAwesomeIcon icon={faArrowUp} />
-            </span>
-          );
-        else if (order === "asc")
-          return (
-            <span>
-              <FontAwesomeIcon icon={faArrowDown} />/
-              <FontAwesomeIcon icon={faArrowUp} color="#91bd10" />
-            </span>
-          );
-        else if (order === "desc")
-          return (
-            <span>
-              <FontAwesomeIcon icon={faArrowDown} color="#91bd10" />
-              /<FontAwesomeIcon icon={faArrowUp} />
-            </span>
-          );
-        return null;
-      },
-    },
-    {
-      dataField: "birthdate",
-      text: "Age",
-      formatter: (cell, row, rowIndex, extraData) => (
-        <div>
-          {new Date().getFullYear() - new Date(row.birthdate).getFullYear()}
-        </div>
-      ),
-    },
-    {
-      dataField: "status",
-      text: "Statut",
-    },
-  ];
+
   useEffect(() => {
+    // table.searchCols = true;
     axios({
       method: "post",
       url: "/api/birthdays",
@@ -116,6 +43,64 @@ function Anniversaire() {
     })
       .then(function (response) {
         setBirthDaysList(response.data.patients_bdays);
+
+        $(".table-anniversaire thead th").each(function () {
+          var title = $(this).text();
+          $(this).html(
+            '<span class="title-column" >' +
+              $(this).text() +
+              "</span>" +
+              ' </br><input type="text" placeholder="Rechercher part ' +
+              title +
+              '" />'
+          );
+        });
+
+        let table0 = new DataTable(".table-anniversaire", {
+          language: {
+            sProcessing: "En cours...",
+            sLengthMenu: "Afficher les enregistrements par:  _MENU_",
+            sZeroRecords: "Aucune données pour l'instant",
+            sEmptyTable: "La table est vide",
+            sInfo:
+              "Affichage des enregistrements du _START_ au _END_ sur un total de _TOTAL_ enregistrements",
+            sInfoEmpty:
+              "Affichage des enregistrements de 0 à 0 sur un total de 0 enregistrements",
+            sInfoFiltered:
+              "(filtré à partir d'un total de _MAX_ enregistrements)",
+            sInfoPostFix: "",
+            sSearch: "Chercher: ",
+            sUrl: "",
+            sInfoThousands: ",",
+            sLoadingRecords: "Mise en charge...",
+            oPaginate: {
+              sFirst: "Premier",
+              sLast: "Dernière",
+              sNext: " Suivant",
+              sPrevious: "Précédent ",
+            },
+            oAria: {
+              sSortAscending:
+                ": Activer pour trier la colonne par ordre croissant",
+              sSortDescending:
+                ": Activer pour trier la colonne par ordre décroissant",
+            },
+          },
+          initComplete: function () {
+            // Apply the search
+            this.api()
+              .columns()
+              .every(function () {
+                var that = this;
+
+                $("input", this.footer()).on("keyup change clear", function () {
+                  if (that.search() !== this.value) {
+                    that.search(this.value).draw();
+                  }
+                });
+              });
+          },
+        });
       })
       .catch(function (response) {});
   }, []);
@@ -136,49 +121,92 @@ function Anniversaire() {
       <Menu></Menu>
       <div className="container container-patients row mx-auto ">
         <h1 className="mb-3">Anniversaires</h1>
-        {birthdayList && birthdayList !== null && (
-          <>
-            <div className="row coordonnes-body">
-              <div>
-                {Object.keys(birthdayList).map((keyName, i) => (
-                  <div key={i}>
-                    <h5 style={{ color: "white" }}>
-                      {toPascalCase(
-                        new Date(keyName).toLocaleString("fr-FR", {
-                          month: "long",
-                        })
-                      )}
-                    </h5>
-                    <ToolkitProvider
-                      keyField="id"
-                      data={[...birthdayList[keyName]]}
-                      columns={columns}
-                      search
-                    >
-                      {(props) => (
-                        <div>
-                          <div className="mb-2 mt-2">
-                            <SearchBar
-                              {...props.searchProps}
-                              placeholder="Rechercher le nom"
-                              className="uk-input"
-                              style={{ width: "186px" }}
-                            />
-                          </div>
-
-                          <BootstrapTable
-                            {...props.baseProps}
-                            pagination={paginationFactory()}
-                          />
-                        </div>
-                      )}
-                    </ToolkitProvider>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </>
-        )}
+        <div id="example_wrapper" className="dataTables_wrapper">
+          {birthdayList && birthdayList !== null && (
+            <>
+              {Object.keys(birthdayList).map((keyName, i) => (
+                <div className="table-anniversaire-container">
+                  <h5>
+                    {toPascalCase(
+                      new Date(keyName).toLocaleString("fr-FR", {
+                        month: "long",
+                      })
+                    )}
+                  </h5>
+                  <table
+                    // id={"table-anniversaire" + i}
+                    className="table-anniversaire display dataTable"
+                    aria-describedby="example_info"
+                  >
+                    <thead>
+                      <tr>
+                        <th
+                          className="sorting sorting_asc"
+                          tabindex="0"
+                          aria-controls="example"
+                          rowSpan="1"
+                          colSpan="1"
+                          aria-sort="ascending"
+                          aria-label="Name: activate to sort column descending"
+                        >
+                          Nom
+                        </th>
+                        <th
+                          className="sorting sorting_asc"
+                          tabindex="0"
+                          aria-controls="example"
+                          rowSpan="1"
+                          colSpan="1"
+                          aria-sort="ascending"
+                          aria-label="Name: activate to sort column descending"
+                        >
+                          Date d'anniversaire
+                        </th>
+                        <th
+                          className="sorting sorting_asc"
+                          tabindex="0"
+                          aria-controls="example"
+                          rowSpan="1"
+                          colSpan="1"
+                          aria-sort="ascending"
+                          aria-label="Name: activate to sort column descending"
+                        >
+                          Age
+                        </th>
+                        <th
+                          className="sorting sorting_asc"
+                          tabindex="0"
+                          aria-controls="example"
+                          rowSpan="1"
+                          colSpan="1"
+                          aria-sort="ascending"
+                          aria-label="Name: activate to sort column descending"
+                        >
+                          Statut
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {birthdayList[keyName].map((e) => (
+                        <tr className="odd">
+                          <td>
+                            {e.firstname} {e.lastname}
+                          </td>
+                          <td className="sorting_1">{e.birthdate}</td>
+                          <td>
+                            {new Date().getFullYear() -
+                              new Date(e.birthdate).getFullYear()}
+                          </td>
+                          <td>{e.status}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              ))}
+            </>
+          )}
+        </div>
       </div>
     </>
   );

@@ -91,7 +91,7 @@ a {
 // }
 table {
   width: 100%;
-  background-color: white !important;
+  // background-color: white !important;
 }
 
 .container-appelActions {
@@ -128,6 +128,18 @@ table {
 .ck>* {
   color: black !important;
 }
+.dataTables_wrapper{
+  margin-bottom: 4rem;
+}
+.dataTables_filter{
+  display: flex;
+  justify-content: end;
+}
+
+#table-anniversaire0_paginate0, #table-anniversaire2_paginate2{
+
+  margin-bottom: 4rem;
+}
 
 .row-contactOrganisation {
   padding: 1rem;
@@ -137,6 +149,14 @@ table {
   margin-bottom: 1rem;
 }
 
+
+
+.paginate_button.current{
+  font-weight: bold;
+}
+// a{
+//   color: rgb(255, 255, 255)!important;
+// }
 body {
   margin: 0;
   padding: 0;
@@ -224,6 +244,40 @@ canvas {
 
   button {
     margin-left: 0.5rem;
+  }
+}
+// assets\images\0a63700fe1c93625f2d45e5571a989199eda46b3.png
+// public\build\images\0a70136ec52ecde32e8350ec74e7940c4739fc96.png
+table.dataTable thead .sorting_asc {
+  background: url("../images/sort_asc.png") no-repeat center right;
+}
+
+table.dataTable thead .sorting {
+  background: url("../images/sort_both.png") no-repeat center right;
+}
+
+table.dataTable thead .sorting_desc {
+  background: url("../images/sort_desc.png") no-repeat center right;
+}
+
+.table-anniversaire-container{
+  background-color: white;
+  border-radius: 15px;
+  padding: 1rem;
+  color: rgb(34, 33, 33);
+  margin-bottom: 2rem;
+
+  .paging_simple_numbers {
+    a{
+      color: rgb(34, 33, 33);
+     
+    }
+  
+    a:hover{
+      font-weight: bold;
+      color: rgb(34, 33, 33);
+  
+    }
   }
 }
 
