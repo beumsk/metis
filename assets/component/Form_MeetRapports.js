@@ -274,7 +274,6 @@ const Form_MeetRapports = () => {
           type="date"
           defaultValue={new Date("now")}
           className="uk-select"
-          placeholder="Here edit the release date"
           onChange={(e) => setChangeDate(e.target.value)}
           id="inputValueSpécifique"
         />

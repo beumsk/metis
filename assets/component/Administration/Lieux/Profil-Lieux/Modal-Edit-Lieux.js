@@ -41,14 +41,6 @@ function ModalEditLieux(props) {
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-  useEffect(() => {}, []);
-  //
-
-  const handleInputChange = (e) => {
-    //new Date(start).toJSON().slice(0, 10)
-    setStartDate(new Date(e.target.value).toJSON().slice(0, 10));
-    setEndDate(new Date(e.target.value).toJSON().slice(0, 10));
-  };
 
   const handleSave = (e) => {
     let formGetInfos = new FormData();
@@ -92,15 +84,13 @@ function ModalEditLieux(props) {
     });
   };
   //   new Date(1254088800 *1000)
-  // handleInputChange;
 
   if (responseDatas !== null) {
     props.onChange({
       response: responseDatas,
     });
-
-    // document.querySelectorAll(".btn-close")[0].click();
   }
+
   return (
     <>
       <button onClick={handleShow} className="ml-4">

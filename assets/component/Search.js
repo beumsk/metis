@@ -1,15 +1,11 @@
 import React, { useContext, useDebugValue, useState, useEffect } from "react";
 import Form from "react-bootstrap/Form";
-import Nav from "react-bootstrap/Nav";
 import axios from "axios";
-import Navbar from "react-bootstrap/Navbar";
-import NavDropdown from "react-bootstrap/NavDropdown";
-import Offcanvas from "react-bootstrap/Offcanvas";
 import useAuth from "../hooks/useAuth";
 import { useNavigate, Link } from "react-router-dom";
 
 const Search = () => {
-  let [valueSearch, setSearch] = useState(null);
+  let [valueSearch, setSearch] = useState("");
   const [auth, setAuth] = useState(useAuth());
   let [resultSearch, setResultSearch] = useState(null);
   let [isOpen, setOpenResult] = useState(false);
@@ -23,12 +19,10 @@ const Search = () => {
       }
     }
   }, []);
+
   const setValue = (e) => {
-    // e.defaultPrevented();
-    //
-    setSearch(e.target.value);
+    setSearch(e.target.value || "");
     // posts.filter((e) => e.name === valueSearch);
-    //
     if (valueSearch && valueSearch?.length > 1) {
       setOpenResult(true);
       axios({
@@ -44,12 +38,9 @@ const Search = () => {
           //handle success
           // setPatientsList(response);
           setResultSearch(response.data);
-          //
-          setSearch(e.target.value);
+          setSearch(e.target.value || "");
         })
-        .catch(function (response) {
-          //
-        });
+        .catch(function (response) {});
     } else {
       setOpenResult(false);
     }
@@ -78,12 +69,10 @@ const Search = () => {
     input.addEventListener("keypress", function (event) {
       if (event.key === "Enter") {
         event.preventDefault();
-        if (input.value) {
-          const urlParams = new URLSearchParams(window.location.search);
-          urlParams.set("q", valueSearch);
-          // window.location.href + urlParams;
-          window.location.href = "patients?" + urlParams;
-        }
+        const urlParams = new URLSearchParams(window.location.search);
+        urlParams.set("q", valueSearch);
+        // window.location.href + urlParams;
+        window.location.href = "patients?" + urlParams;
       }
     });
   }

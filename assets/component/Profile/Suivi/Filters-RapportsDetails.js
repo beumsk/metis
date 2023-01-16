@@ -93,7 +93,7 @@ function FilterRapportDetails(props) {
           </Form.Select>
         </div>
         <div className="search-textRapport col-sm-4">
-          <label className="uk-form-label">Rechercher part date</label>
+          <label className="uk-form-label">Rechercher par date</label>
           <input
             type="date"
             className="uk-select"

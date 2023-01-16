@@ -11,17 +11,6 @@ function ModalCallCanceled(props) {
   const handleShow = () => setShow(true);
 
   const handleSave = (e) => {
-    //
-    //
-    //
-    //
-    //
-
-    // let formGetInfos = new FormData();
-    // let date = new Date(0);
-    // date.setMinutes(dureeValue); // specify value for SECONDS here
-    // let timeString = date.toISOString().substring(11, 19);
-    //
     let formGetInfos = new FormData();
     formGetInfos.append("goal", props.goal.id);
     formGetInfos.append("contact", props.contact.id);

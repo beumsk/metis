@@ -314,7 +314,9 @@ function RapportDetails(props) {
                         // }
                       }}
                     />
-                    <Form.Check.Label>Activer le mode édition</Form.Check.Label>
+                    <Form.Check.Label>
+                      {toggle ? "Désactiver" : "Activer"} le mode édition
+                    </Form.Check.Label>
                   </Form.Check>
                 ) : (
                   ""

@@ -38,14 +38,6 @@ function ModalAddContact(props) {
   const [typeValueOrganisation, setTypeValueOrganisation] = useState(null);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-  useEffect(() => {}, []);
-  //
-
-  const handleInputChange = (e) => {
-    //new Date(start).toJSON().slice(0, 10)
-    setStartDate(new Date(e.target.value).toJSON().slice(0, 10));
-    setEndDate(new Date(e.target.value).toJSON().slice(0, 10));
-  };
 
   const handleSave = (e) => {
     let formData = new FormData();

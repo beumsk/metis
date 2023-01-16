@@ -98,11 +98,6 @@ function ModalEditContacts(props) {
     props.onChangeUpdateContact(responseDatas);
   }
 
-  const handleInputChange = (e) => {
-    //new Date(start).toJSON().slice(0, 10)
-    setStartDate(new Date(e.target.value).toJSON().slice(0, 10));
-    setEndDate(new Date(e.target.value).toJSON().slice(0, 10));
-  };
   return (
     <>
       <Button onClick={handleShow} className="btn-metis">

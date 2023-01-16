@@ -36,16 +36,10 @@ function ModalEditInfos(props) {
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
   useEffect(() => {
     setElementsOpt(...props?.infos?.suggestionsByBlock);
   }, []);
-  //
-
-  const handleInputChange = (e) => {
-    //new Date(start).toJSON().slice(0, 10)
-    setStartDate(new Date(e.target.value).toJSON().slice(0, 10));
-    setEndDate(new Date(e.target.value).toJSON().slice(0, 10));
-  };
 
   const handleSaveWithoutValue = (e) => {
     let formData = new FormData();
@@ -212,7 +206,6 @@ function ModalEditInfos(props) {
           <Modal.Title>Ajouter une information</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {" "}
           <>
             {elementsOpt?.length > 0 && (
               <>
@@ -261,43 +254,25 @@ function ModalEditInfos(props) {
             )}
             <Form.Label htmlFor="inputValue">Début</Form.Label>
 
-            {start ? (
-              <>
-                <Form.Control
-                  type="date"
-                  className="uk-select"
-                  placeholder="Here edit the release date"
-                  onChange={handleInputChange}
-                  id="inputValueSpécifique"
-                />
-              </>
-            ) : (
-              <Form.Control
-                type="date"
-                className="uk-select"
-                placeholder="Here edit the release date"
-                onChange={handleInputChange}
-                id="inputValueSpécifique"
-              />
-            )}
+            <Form.Control
+              type="date"
+              className="uk-select"
+              onChange={(e) => {
+                setStartDate(new Date(e.target.value).toJSON().slice(0, 10));
+              }}
+              id="inputValueSpécifique"
+            />
 
             <Form.Label htmlFor="inputValue">Fin</Form.Label>
 
-            {end ? (
-              <Form.Control
-                type="date"
-                className="uk-select"
-                onChange={handleInputChange}
-                id="inputValueSpécifique"
-              />
-            ) : (
-              <Form.Control
-                type="date"
-                onChange={handleInputChange}
-                id="inputValueSpécifique"
-                className="uk-select"
-              />
-            )}
+            <Form.Control
+              type="date"
+              onChange={(e) => {
+                setEndDate(new Date(e.target.value).toJSON().slice(0, 10));
+              }}
+              id="inputValueSpécifique"
+              className="uk-select"
+            />
 
             <Form.Label htmlFor="inputValue">Commentaire</Form.Label>
             <Form.Control

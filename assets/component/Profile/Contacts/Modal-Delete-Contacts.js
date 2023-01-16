@@ -48,6 +48,7 @@ function ModalDeleteContacts(props) {
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
   useEffect(() => {
     setStartDate(
       new Date(props?.infosPatient?.start?.timestamp * 1000).toJSON()
@@ -55,13 +56,6 @@ function ModalDeleteContacts(props) {
 
     setEndDate(new Date(props?.infosPatient?.end?.timestamp * 1000).toJSON());
   }, []);
-  //
-
-  const handleInputChange = (e) => {
-    //new Date(start).toJSON().slice(0, 10)
-    setStartDate(new Date(e.target.value).toJSON().slice(0, 10));
-    setEndDate(new Date(e.target.value).toJSON().slice(0, 10));
-  };
 
   const handleSave = (e) => {
     let formData = new FormData();

@@ -604,6 +604,7 @@ class FollowUpReportsController extends AbstractController
         $rapportId = $request->request->get('idRapport');
         $contId = $request->request->get('contId');
         $indicateurs = $request->request->get('formIndicateurs');
+        $dureevalue = $request->request->get('dureeValue');
 
 
 
@@ -635,7 +636,7 @@ class FollowUpReportsController extends AbstractController
         $report->setContent(($changeEditor === "null") ? FollowupReports::DEFAULT_REPORT_CONTENT : $changeEditor);
         $report->setDeletedAt(null);
         $report->setPati($patient);
-        $report->setDuration(null);
+        $report->setDuration(new \DateTime($dureevalue));
         $report->setCreationDate($reportDate);
 
         $report->setNoCare($no_care);
@@ -644,8 +645,6 @@ class FollowUpReportsController extends AbstractController
         $report->setReportType(1);
         $report->setIsHightlight(false);
         $report->setReportDate(new \DateTime($changeDate));
-
-
 
 
 
@@ -740,12 +739,13 @@ class FollowUpReportsController extends AbstractController
         $userId = $request->request->get('userId');
         $patiId = $request->request->get('patiId');
         $description = $request->request->get('description');
+        $dureevalue = $request->request->get('dureeValue');
 
         $followupGoals = $doctrine->getRepository(FollowupReports::class)->find($idRapport);
 
-
-
-
+        if ($dureevalue !== 'null') {
+          $followupGoals->setDuration(new \DateTime($dureevalue));
+        }
 
         if ($goal_id !== "null") {
             $arrGoals_id = [];

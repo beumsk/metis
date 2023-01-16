@@ -64,13 +64,6 @@ function ModalEditInfos(props) {
 
     setEndDate(new Date(props?.infosPatient?.end?.timestamp * 1000).toJSON());
   }, []);
-  //
-
-  const handleInputChange = (e) => {
-    //new Date(start).toJSON().slice(0, 10)
-    // setStartDate(new Date(e.target.value).toJSON().slice(0, 10));
-    // setEndDate(new Date(e.target.value).toJSON().slice(0, 10));
-  };
 
   const handleSaveWithoutValue = (e) => {
     let formData = new FormData();
@@ -247,14 +240,11 @@ function ModalEditInfos(props) {
     }
   };
   //   new Date(1254088800 *1000)
-  // handleInputChange;
 
   if (responseDatas !== null) {
     props.onChange({
       response: responseDatas,
     });
-
-    // document.querySelectorAll(".btn-close")[0].click();
   }
 
   return (
@@ -329,7 +319,6 @@ function ModalEditInfos(props) {
                       .format("YYYY-MM-DD")
                   : ""
               }
-              placeholder="Here edit the release date"
               onChange={(e) => setStartDate(e.target.value)}
               id="inputValueSpécifique"
               className="uk-select"
