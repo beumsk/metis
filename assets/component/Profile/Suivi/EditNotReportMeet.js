@@ -37,6 +37,7 @@ function EditNoReportMeet(props) {
   function onChangeIndicators() {
     props.onChangeIndicators(true);
   }
+
   return (
     <div className="noEditRepports-container">
       <IndicateursActiviteesComponent
@@ -56,12 +57,13 @@ function EditNoReportMeet(props) {
           (e) => e?.sugg && e?.sugg?.parentValue === "Activités"
         )}
       ></IndicateursActiviteesComponent>
+
       <div className="contact-row">
         {props.rapport &&
           props.rapport.fogo &&
           props.rapport.fogo.length > 0 && (
             <>
-              <h6>Objectifs: </h6>
+              <h6>Objectifs : </h6>
               <span style={{ fontWeight: "normal" }}>
                 {props?.rapport.fogo?.map((fo) => (
                   <>{fo.label}</>
@@ -86,97 +88,102 @@ function EditNoReportMeet(props) {
           )}
       </div> */}
       <div className="contact-row">
-        <h6>Contact: </h6>
         {props.rapport && props.rapport.cont && (
           <>
-            <span style={{ fontWeight: "normal" }}>
-              {props?.rapport.cont.lastname} {props?.rapport.cont.firstname}
-            </span>
+            <h6>Contact : </h6>
+            {!(props.rapport.cont.length > 0) ? (
+              <>
+                <span style={{ fontWeight: "normal" }}>
+                  {props?.rapport.cont.lastname} {props?.rapport.cont.firstname}
+                </span>
+              </>
+            ) : (
+              <>
+                <span style={{ fontWeight: "normal" }}>
+                  {props?.rapport.cont?.map((cont) => (
+                    <>
+                      {cont.label}
+                      {/* {cont.firstname} */}
+                    </>
+                  ))}
+                </span>
+              </>
+            )}
           </>
         )}
+      </div>
 
+      <div className="place-row">
         {props.rapport &&
-          props.rapport.cont &&
-          props.rapport.cont.length > 0 && (
+          props.rapport.plac &&
+          props.rapport.plac.lastname !== null && (
             <>
+              <h6>Lieu : </h6>
               <span style={{ fontWeight: "normal" }}>
-                {props?.rapport.cont?.map((cont) => (
-                  <>
-                    {cont.label}
-                    {/* {cont.firstname} */}
-                  </>
-                ))}
+                {props.rapport.plac.lastname}
               </span>
             </>
           )}
       </div>
 
-      <div className="place-row">
-        {props.rapport && props.rapport.plac && props.rapport.plac !== null && (
-          <>
-            <h6>Lieu: </h6>
-            <span style={{ fontWeight: "normal" }}>
-              {props.rapport.plac.lastname}
-            </span>
-          </>
-        )}
-      </div>
-      <div className="date-row">
-        {props.rapport && props.rapport.creationDate && (
-          <>
-            <h6>Date de création: </h6>
-            <span style={{ fontWeight: "normal" }}>
-              {new Date(props.rapport.creationDate).toLocaleString(
-                "fr-BE",
-                "short"
-              )}
-            </span>
-          </>
-        )}
-      </div>
+      {props.activityType !== 3 && (
+        <div className="date-row">
+          {props.rapport && props.rapport.creationDate && (
+            <>
+              <h6>Date de création : </h6>
+              <span style={{ fontWeight: "normal" }}>
+                {new Date(props.rapport.creationDate)
+                  .toLocaleString("fr-BE")
+                  .slice(0, 10)}
+              </span>
+            </>
+          )}
+        </div>
+      )}
 
-      <div className="date-row">
-        {props.rapport && props.rapport.duration && (
-          <>
-            <h6>Duration: </h6>
-            <span style={{ fontWeight: "normal" }}>
-              {new Date(props.rapport.duration).toLocaleString(
-                "fr-BE",
-                "short"
-              )}
-            </span>
-          </>
-        )}
-      </div>
       <div className="date-row">
         {props.rapport && props.rapport.reportDate && (
           <>
-            <h6>Date de rencontre: </h6>
+            <h6>Date de rencontre : </h6>
             <span style={{ fontWeight: "normal" }}>
-              {new Date(props.rapport.reportDate).toLocaleString(
-                "fr-BE",
-                "short"
-              )}
+              {new Date(props.rapport.reportDate)
+                .toLocaleString("fr-BE")
+                .slice(0, 10)}
             </span>
           </>
         )}
       </div>
-      <div className="description-row">
-        <h6>Description: </h6>
-        <div
-          style={{ padding: "0" }}
-          dangerouslySetInnerHTML={{
-            __html:
-              props.rapport.content ||
-              props.rapport.description ||
-              "Aucune description donnée pour l'instant",
-          }}
-        ></div>
+
+      <div className="date-row">
+        {props.rapport &&
+          props.rapport.duration &&
+          props.rapport.duration !== "1970-01-01T00:00:00.000+00:00" && (
+            <>
+              <h6>Durée : </h6>
+              <span style={{ fontWeight: "normal" }}>
+                {props.rapport.duration?.slice(11, 16)}
+              </span>
+            </>
+          )}
       </div>
 
-      {props.rapport.content === null && (
-        <p>"Aucune description donnée pour l'instant"</p>
-      )}
+      <div className="description-row">
+        <h6>Description : </h6>
+        {props.rapport.description === "null" ||
+        props.rapport.content === "null" ? (
+          <p>Aucune description donnée pour l'instant</p>
+        ) : (
+          <div
+            style={{ padding: "0" }}
+            dangerouslySetInnerHTML={{
+              __html:
+                props.rapport.content ||
+                props.rapport.description ||
+                "Aucune description donnée pour l'instant",
+            }}
+          ></div>
+        )}
+      </div>
     </div>
   );
 }

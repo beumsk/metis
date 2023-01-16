@@ -89,8 +89,9 @@ function ModalActionsAppelsSortant(props) {
   const handleSaveComplete = (e) => {
     let formGetInfos = new FormData();
     let date = new Date(0);
-    date.setMinutes(dureeValue); // specify value for SECONDS here
-    let timeString = date.toISOString().substring(11, 19);
+    date.setHours(dureeValue.substring(0, 2)); // "01" of "01:30"
+    date.setMinutes(dureeValue.substring(3, 5)); // "30" of "01:30"
+    let timeString = date.toLocaleString("fr-BE").substring(11, 19);
 
     formGetInfos.append("content", content);
     formGetInfos.append("goals", JSON.stringify(goalsSelected));
@@ -117,7 +118,8 @@ function ModalActionsAppelsSortant(props) {
   const handleSaveKeep = (e) => {
     let formGetInfos = new FormData();
     let date = new Date(0);
-    date.setMinutes(dureeValue); // specify value for SECONDS here
+    date.setHours(dureeValue.substring(0, 2)); // "01" of "01:30"
+    date.setMinutes(dureeValue.substring(3, 5)); // "30" of "01:30"
     let timeString = date.toISOString().substring(11, 19);
 
     formGetInfos.append("content", content);
@@ -196,20 +198,59 @@ function ModalActionsAppelsSortant(props) {
 
               <Form.Label>Durée</Form.Label>
               <Form.Select
-                defaultValue={dureeValue}
                 className="uk-select"
                 onChange={(e) => setDureeValue(e.target.value)}
               >
-                <option value={5}>5</option>
-                <option value={10}>10</option>
-                <option value={15}>15</option>
-                <option value={20}>20</option>
-                <option value={25}>25</option>
-                <option value={30}>30</option>
-                <option value={35}>35</option>
-                <option value={40}>40</option>
-                <option value={45}>45</option>
-                <option value={50}>50</option>
+                <option value="00:00">00:00</option>
+                <option value="00:01">00:01</option>
+                <option value="00:05">00:05</option>
+                <option value="00:10">00:10</option>
+                <option value="00:15">00:15</option>
+                <option value="00:20">00:20</option>
+                <option value="00:25">00:25</option>
+                <option value="00:30">00:30</option>
+                <option value="00:35">00:35</option>
+                <option value="00:40">00:40</option>
+                <option value="00:45">00:45</option>
+                <option value="00:50">00:50</option>
+                <option value="00:55">00:55</option>
+                <option value="01:00">01:00</option>
+                <option value="01:05">01:05</option>
+                <option value="01:10">01:10</option>
+                <option value="01:15">01:15</option>
+                <option value="01:20">01:20</option>
+                <option value="01:25">01:25</option>
+                <option value="01:30">01:30</option>
+                <option value="01:35">01:35</option>
+                <option value="01:40">01:40</option>
+                <option value="01:45">01:45</option>
+                <option value="01:50">01:50</option>
+                <option value="01:55">01:55</option>
+                <option value="02:00">02:00</option>
+                <option value="02:05">02:05</option>
+                <option value="02:10">02:10</option>
+                <option value="02:15">02:15</option>
+                <option value="02:20">02:20</option>
+                <option value="02:25">02:25</option>
+                <option value="02:30">02:30</option>
+                <option value="02:35">02:35</option>
+                <option value="02:40">02:40</option>
+                <option value="02:45">02:45</option>
+                <option value="02:50">02:50</option>
+                <option value="02:55">02:55</option>
+                <option value="03:00">03:00</option>
+                <option value="03:05">03:05</option>
+                <option value="03:10">03:10</option>
+                <option value="03:15">03:15</option>
+                <option value="03:20">03:20</option>
+                <option value="03:25">03:25</option>
+                <option value="03:30">03:30</option>
+                <option value="03:35">03:35</option>
+                <option value="03:40">03:40</option>
+                <option value="03:45">03:45</option>
+                <option value="03:50">03:50</option>
+                <option value="03:55">03:55</option>
+                <option value="04:00">04:00</option>
               </Form.Select>
             </Form.Group>
           </Form>

@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from "react";
-import Button from "react-bootstrap/Button";
-import Modal from "react-bootstrap/Modal";
 import useAuth from "../../../hooks/useAuth";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faCancel, faEdit } from "@fortawesome/free-solid-svg-icons";
@@ -8,9 +6,6 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import Form from "react-bootstrap/Form";
 import Editor from "./Editor-Reports";
-import AddActivitiesByReport from "./Add-ActivitiesByReports";
-import AddIndicateursByReport from "./Indicateurs-Form-AddReports/Add-IndicateursByReports";
-import AddSoinsByReport from "./Add-SoinsByReports";
 import InputPlaceList from "./Input-Place-List";
 import InputContactList from "./Input-Contact-List";
 import InputGoalsList from "./Input-Goals-List";
@@ -51,6 +46,9 @@ function EditReportMeet(props) {
   const [goalsInput, setGoalsInput] = useState(null);
   const [changeTypeMeet, setChangeTypeMeet] = useState(null);
   const [changeDate, setChangeDate] = useState(null);
+  const [dureeValue, setDureeValue] = useState(
+    props.informationPatient.duration || "00:00"
+  );
   const [changeGoals, setChangeGoals] = useState(null);
   const [changeContacts, setChangeContacts] = useState(null);
   const [changeDescriptionGoals, setChangeDescriptionGoals] = useState(
@@ -71,7 +69,9 @@ function EditReportMeet(props) {
       new Date(props?.informationPatient?.reportDate?.timestamp * 1000).toJSON()
     );
 
-    //
+    setDureeValue(
+      dureeValue !== "00:00" && props.informationPatient.duration?.slice(11, 16)
+    );
 
     axios({
       method: "post",
@@ -86,6 +86,7 @@ function EditReportMeet(props) {
         setType(response);
       })
       .catch(function (response) {});
+
     axios({
       method: "post",
       url: "/api/suggestionsById",
@@ -99,6 +100,7 @@ function EditReportMeet(props) {
         setTypeFormActivities(response);
       })
       .catch(function (response) {});
+
     setPatiId(idPatient);
     setUserId(auth.auth.idUser);
     setOptions(options);
@@ -114,11 +116,6 @@ function EditReportMeet(props) {
     setChangeDate(e.target.value);
   };
 
-  const inputChangeGoals = (e) => {
-    //
-    setChangeGoals(e);
-  };
-
   const onChangeContacts = (e) => {
     //
     setChangeContacts(e);
@@ -127,10 +124,6 @@ function EditReportMeet(props) {
   const onChangePlaces = (e) => {
     //
     setChangePlaces(e);
-  };
-
-  const onClickAddActivities = (e) => {
-    setFormActivities((prevFormSoins) => [...prevFormSoins, e]);
   };
 
   function editorChange(e) {
@@ -143,8 +136,6 @@ function EditReportMeet(props) {
       setFormIndicateurs((prevFormSoins) => [...prevFormSoins, e]);
     }
   };
-
-  let arrId = [];
 
   const sentCalls = (e) => {
     // if (props.informationPatient.type === 2){
@@ -162,6 +153,12 @@ function EditReportMeet(props) {
         new Date(props?.informationPatient?.creationDate).toJSON().slice(0, 10)
       );
     }
+
+    let date = new Date(0);
+    date.setHours(dureeValue.substring(0, 2)); // "01" of "01:30"
+    date.setMinutes(dureeValue.substring(3, 5)); // "30" of "01:30"
+    let timeString = date.toLocaleString("fr-BE").substring(11, 19);
+    formData.append("dureeValue", timeString);
 
     formData.append("changeGoals", JSON.stringify(goalsInput));
     formData.append("contId", JSON.stringify(changeContacts));
@@ -183,6 +180,7 @@ function EditReportMeet(props) {
       setSentGoals(true);
     });
   };
+
   const sentRapport = (status) => {
     let opt = [
       "HESTIA - Risque perte logement",
@@ -201,6 +199,12 @@ function EditReportMeet(props) {
     } else {
       formData.append("changeDate", changeDate);
     }
+
+    let date = new Date(0);
+    date.setHours(dureeValue.substring(0, 2)); // "01" of "01:30"
+    date.setMinutes(dureeValue.substring(3, 5)); // "30" of "01:30"
+    let timeString = date.toLocaleString("fr-BE").substring(11, 19);
+    formData.append("dureeValue", timeString);
 
     formData.append("changeGoals", JSON.stringify(changeGoals));
     formData.append("contId", JSON.stringify(changeContacts));
@@ -280,41 +284,83 @@ function EditReportMeet(props) {
           </Form.Select>
         </>
       )}
-      <Form.Label htmlFor="inputValue" className="uk-form-label">
+
+      <Form.Label htmlFor="inputValueSpécifique" className="uk-form-label">
         Date de la rencontre
       </Form.Label>
+      <Form.Control
+        type="date"
+        defaultValue={
+          props?.informationPatient && props?.informationPatient?.reportDate
+            ? new Date(props?.informationPatient?.reportDate)
+                .toJSON()
+                .slice(0, 10)
+            : ""
+        }
+        onChange={(e) => onChangeDate(e)}
+        className="uk-select"
+        id="inputValueSpécifique"
+      />
 
-      {reportDate ? (
-        <Form.Control
-          type="date"
-          defaultValue={
-            props?.informationPatient && props?.informationPatient?.reportDate
-              ? new Date(props?.informationPatient?.reportDate)
-                  .toJSON()
-                  .slice(0, 10)
-              : ""
-          }
-          placeholder="Here edit the release date"
-          onChange={(e) => onChangeDate(e)}
-          className="uk-select"
-          id="inputValueSpécifique"
-        />
-      ) : (
-        <Form.Control
-          type="date"
-          defaultValue={
-            props?.informationPatient && props?.informationPatient?.reportDate
-              ? new Date(props?.informationPatient?.reportDate)
-                  .toJSON()
-                  .slice(0, 10)
-              : ""
-          }
-          placeholder="Here edit the release date"
-          onChange={(e) => onChangeDate(e)}
-          className="uk-select"
-          id="inputValueSpécifique"
-        />
-      )}
+      <Form.Label htmlFor="inputValueSpécifique" className="uk-form-label">
+        Durée de la rencontre
+      </Form.Label>
+      <select
+        className="uk-select"
+        value={dureeValue}
+        onChange={(e) => setDureeValue(e.target.value)}
+      >
+        <option value="00:00">00:00</option>
+        <option value="00:01">00:01</option>
+        <option value="00:05">00:05</option>
+        <option value="00:10">00:10</option>
+        <option value="00:15">00:15</option>
+        <option value="00:20">00:20</option>
+        <option value="00:25">00:25</option>
+        <option value="00:30">00:30</option>
+        <option value="00:35">00:35</option>
+        <option value="00:40">00:40</option>
+        <option value="00:45">00:45</option>
+        <option value="00:50">00:50</option>
+        <option value="00:55">00:55</option>
+        <option value="01:00">01:00</option>
+        <option value="01:05">01:05</option>
+        <option value="01:10">01:10</option>
+        <option value="01:15">01:15</option>
+        <option value="01:20">01:20</option>
+        <option value="01:25">01:25</option>
+        <option value="01:30">01:30</option>
+        <option value="01:35">01:35</option>
+        <option value="01:40">01:40</option>
+        <option value="01:45">01:45</option>
+        <option value="01:50">01:50</option>
+        <option value="01:55">01:55</option>
+        <option value="02:00">02:00</option>
+        <option value="02:05">02:05</option>
+        <option value="02:10">02:10</option>
+        <option value="02:15">02:15</option>
+        <option value="02:20">02:20</option>
+        <option value="02:25">02:25</option>
+        <option value="02:30">02:30</option>
+        <option value="02:35">02:35</option>
+        <option value="02:40">02:40</option>
+        <option value="02:45">02:45</option>
+        <option value="02:50">02:50</option>
+        <option value="02:55">02:55</option>
+        <option value="03:00">03:00</option>
+        <option value="03:05">03:05</option>
+        <option value="03:10">03:10</option>
+        <option value="03:15">03:15</option>
+        <option value="03:20">03:20</option>
+        <option value="03:25">03:25</option>
+        <option value="03:30">03:30</option>
+        <option value="03:35">03:35</option>
+        <option value="03:40">03:40</option>
+        <option value="03:45">03:45</option>
+        <option value="03:50">03:50</option>
+        <option value="03:55">03:55</option>
+        <option value="04:00">04:00</option>
+      </select>
 
       {/* goalsList */}
 
@@ -338,11 +384,6 @@ function EditReportMeet(props) {
                 : null
             }
             onChangeGoals={onChangeGoals}
-          />
-          <InputContactList
-            contacts={props.contacts}
-            defaultValue={props?.informationPatient?.cont}
-            onChange={onChangeContacts}
           />
         </>
       )}

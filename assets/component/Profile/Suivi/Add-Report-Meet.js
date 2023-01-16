@@ -218,7 +218,6 @@ function AddReportMeet(props) {
         type="date"
         className="uk-select"
         defaultValue={new Date("now")}
-        placeholder="Here edit the release date"
         onChange={(e) => onChangeDate(e)}
         id="inputValueSpécifique"
       />
