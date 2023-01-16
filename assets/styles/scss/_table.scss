@@ -6,4 +6,10 @@
     table-layout: auto;
     background-color: white;
   }
+  tbody, td, tfoot, th, thead, tr {
+    border: 0 solid!important;
+    border-color: inherit!important;
+    border: 1px solid #d1d1d1!important;
+    padding: 0.8rem!important;
+}
 }
