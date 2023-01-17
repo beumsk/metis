@@ -91,11 +91,14 @@ const Medias = (props) => {
   return (
     <>
       <Basic onChange={(e) => setValue(e)} />
-      <div className="row">
-        <button className="btn-metis send-btn" onClick={(e) => sendMedias()}>
-          Envoyer
-        </button>
-      </div>
+      {value && value.length > 0 && (
+        <div className="row">
+          <button className="btn-metis send-btn" onClick={(e) => sendMedias()}>
+            Envoyer les images sur le serveur
+          </button>
+        </div>
+      )}
+
       {listMedias && listMedias.data.length > 0 && (
         <>
           <h6>Liste de fichiers déjà présents</h6>
@@ -103,7 +106,7 @@ const Medias = (props) => {
             <>
               {medias.deletedAt === null && (
                 <>
-                  <div className="row">
+                  <div className="row mt-2">
                     <div className="col-sm-3">{medias.originalFilename}</div>
                     <div className="col-sm-2">
                       {medias.sugg.parentSugg.value}
@@ -115,7 +118,7 @@ const Medias = (props) => {
                       })}
                     </div>
 
-                    <div className="col-sm-3">
+                    <div className="col-sm-3 d-flex justify-content-around">
                       <DeleteMedias
                         idMedias={medias.id}
                         onChange={onChangeDeleteMedias}
@@ -126,7 +129,7 @@ const Medias = (props) => {
                       >
                         delete
                       </button> */}
-                      <a className="btn-metis" href={medias.absolutePath}>
+                      <a className="btn-metis ml-4" href={medias.absolutePath}>
                         télécharger
                       </a>
                     </div>

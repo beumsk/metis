@@ -2,7 +2,15 @@ import React, { useContext, useDebugValue, useState, useEffect } from "react";
 import { useDropzone } from "react-dropzone";
 
 const Basic = (props) => {
-  const { acceptedFiles, getRootProps, getInputProps } = useDropzone();
+  const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
+    accept: {
+      "image/png": [".png"],
+      "image/jpeg": [".jpeg"],
+      "image/jpg": [".jpg"],
+      "application/pdf": [".pdf"],
+      // "text/html": [".html", ".htm"],
+    },
+  });
 
   const [fileUploaded, setFileUploaded] = useState(null);
 
@@ -25,8 +33,12 @@ const Basic = (props) => {
         <p>Uploadez vos fichiers ici</p>
       </div>
       <div className="col-sm-6">
-        <h6>Fichiers uploadée</h6>
-        <p>{files}</p>
+        {files && files.length > 0 && (
+          <>
+            <h6>Fichiers uploadée</h6>
+            <p>{files}</p>
+          </>
+        )}
       </div>
     </div>
   );

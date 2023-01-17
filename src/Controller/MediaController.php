@@ -141,7 +141,7 @@ class MediaController extends AbstractController
         $medias = new Medias();
 
         // sugg 32 for profile page
-        // if ($isProfilePage === )
+
         $suggestion = $doctrine->getRepository(Suggestions::class)->find($sugg);
         $patients = $doctrine->getRepository(Patients::class)->find($id);
         $medias->setSugg($suggestion);
@@ -152,6 +152,10 @@ class MediaController extends AbstractController
         // dd($medias);
         $entityManager->persist($medias);
         $entityManager->flush();
+
+
+
+
 
 
         // $uploadedFile->move($this->getParameter('images_directory'), $newFilename);

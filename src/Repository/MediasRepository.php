@@ -56,7 +56,8 @@ class MediasRepository extends ServiceEntityRepository
                 $qb->expr()->andX(
                     'm.sugg = s',
                     's.path_string = :path_string',
-                    'm.pati = :patient'
+                    'm.pati = :patient',
+                    'm.deleted_at IS NULL'
                 )
             )
             ->setMaxResults(1)
