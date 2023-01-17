@@ -35,6 +35,7 @@ function ModalEditContacts(props) {
       ? props?.infos?.cont[0]?.id
       : null
   );
+
   const [start, setStartDate] = useState(
     props?.infos?.start ? props?.infos?.start : null
   );

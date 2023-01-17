@@ -573,16 +573,14 @@ const Contacts = () => {
                     ))}
                   </td>
                   <td>
-                    {e?.cont?.map((cont) => (
-                      <>{cont?.description}</>
-                    ))}
+                    <>{e?.comment}</>
                   </td>
                   <td>
                     {e?.sugg?.map((cont) => (
                       <>{cont?.value}</>
                     ))}
                   </td>
-                  <td>{e?.comment === "null" ? "" : e?.comment}</td>
+                  <td>{e?.description === "null" ? "" : e?.description}</td>
                   <td>
                     {e?.start
                       ? new Date(e?.start)
@@ -727,21 +725,11 @@ const Contacts = () => {
                     <>{e?.orpa?.lastname}</>
                   </td>
                   <td>
-                    <>
-                      {e?.sugg && e?.sugg.length > 0 && (
-                        <>
-                          {console.log(e?.sugg)}
-                          {e?.sugg?.map((cont) => (
-                            <>
-                              {console.log(cont)}
-                              {cont?.value}
-                            </>
-                          ))}
-                        </>
-                      )}
-                    </>
+                    <>{e?.sugg && <>{e?.sugg?.value}</>}</>
                   </td>
-                  <td>{e?.comment === "null" ? "" : e?.comment}</td>
+                  <td>
+                    {e?.linkDescription === "null" ? "" : e?.linkDescription}
+                  </td>
                   <td>
                     {e?.start
                       ? new Date(e?.start)
@@ -757,7 +745,7 @@ const Contacts = () => {
                       : ""}
                   </td>
                   <td className="d-flex">
-                    <ModalEditContacts
+                    <ModalEditPatient
                       infos={e}
                       type={type}
                       contacts={contacts}
@@ -766,7 +754,7 @@ const Contacts = () => {
                       listContacts={listContacts}
                       // listContactsSelect={props.listContacts}
                     />
-                    <ModalDeleteContacts
+                    <ModalDeletePatient
                       infos={e}
                       onChangeUpdateContact={onChangeUpdateContact}
                     />
@@ -777,25 +765,6 @@ const Contacts = () => {
           )}
         </tbody>
       </table>
-
-      {/* <h5>Patients</h5>
-      {patientsLists && patients && patientsLists.length > 0 ? (
-        <ToolkitProvider
-          keyField="id"
-          data={patientsLists}
-          columns={columnsPatients}
-          search
-        >
-          {(props) => (
-            <BootstrapTable
-              {...props.baseProps}
-              pagination={paginationFactory()}
-            />
-          )}
-        </ToolkitProvider>
-      ) : (
-        <p>{patientsLists ? "Pas de patient pour ce contact." : "Loading"}</p>
-      )} */}
     </div>
   );
 };
