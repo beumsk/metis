@@ -94,7 +94,7 @@ function ModalLierPatient(props) {
   if (responseDatas !== null) {
     props.onChangeUpdatePatient(responseDatas);
   }
-
+  console.log(props);
   return (
     <>
       <Button onClick={handleShow} className="btn-metis">

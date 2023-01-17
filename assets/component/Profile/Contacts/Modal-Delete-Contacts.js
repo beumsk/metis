@@ -88,6 +88,7 @@ function ModalDeleteContacts(props) {
           .then(function (response) {
             setIsSentRepport(true);
             props.onChangeUpdateContact(true);
+            setShow(false);
           })
           .catch(function (response) {});
       }

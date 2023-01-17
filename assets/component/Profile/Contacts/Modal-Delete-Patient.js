@@ -88,6 +88,7 @@ function ModalDeletePatient(props) {
           .then(function (response) {
             setIsSentRepport(true);
             props.onChangeUpdatePatient(true);
+            setShow(false);
           })
           .catch(function (response) {});
       }
