@@ -187,13 +187,19 @@ function ModalAddAppels(props) {
                 <>{el.value && <option value={el?.id}>{el?.value}</option>}</>
               ))}
             </Form.Select>
-            <Form.Label htmlFor="inputValue">Titre</Form.Label>
-            <Form.Control
-              type="text"
-              id="inputText"
-              onChange={(e) => setTitle(e.target.value)}
-              className="uk-input"
-            />
+            {valueWhatDoinFunction === "609" && (
+              <>
+                <Form.Label htmlFor="inputValue">
+                  Valeur personnalisée
+                </Form.Label>
+                <Form.Control
+                  type="text"
+                  id="inputText"
+                  onChange={(e) => setTitle(e.target.value)}
+                  className="uk-input"
+                />
+              </>
+            )}
 
             <Form.Group className="my-3" controlId="formBasicCheckbox">
               <Form.Check
