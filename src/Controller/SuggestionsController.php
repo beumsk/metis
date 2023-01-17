@@ -25,7 +25,7 @@ class SuggestionsController extends AbstractController
         $request = Request::createFromGlobals();
         $id = $request->request->get("id");
 
-        $suggestion = $doctrine->getRepository(Suggestions::class)->findBy(["parentSugg" => $id, "is_deleted" => null]);
+        $suggestion = $doctrine->getRepository(Suggestions::class)->findBy(["parentSugg" => $id, "is_deleted" => null], ['value' => 'ASC']);
 
 
 
