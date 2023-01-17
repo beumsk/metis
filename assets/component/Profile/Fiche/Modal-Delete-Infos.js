@@ -91,9 +91,9 @@ function ModalDeleteInfos(props) {
           },
         })
           .then(function (response) {
-            setResponseDatas(response.data);
+            props.onChange(true);
             setIsSentRepport(true);
-            document.querySelectorAll(".btn-close")[0].click();
+            setShow(false);
           })
           .catch(function (response) {});
         // document.querySelectorAll(".btn-close")[0].click();
@@ -103,11 +103,11 @@ function ModalDeleteInfos(props) {
   };
   //   new Date(1254088800 *1000)
 
-  if (responseDatas !== null) {
-    props.onChange({
-      response: responseDatas,
-    });
-  }
+  // if (responseDatas !== null) {
+  //   props.onChange({
+  //     response: responseDatas,
+  //   });
+  // }
 
   return (
     <>
