@@ -51,7 +51,19 @@ const Medias = (props) => {
       },
     })
       .then(function (response) {
-        window.location.reload();
+        axios({
+          method: "post",
+          url: "/api/getAllMediasByPatients",
+          data: formData,
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${auth.auth.accessToken}`,
+          },
+        })
+          .then(function (response) {
+            setMedias(response);
+          })
+          .catch(function (response) {});
       })
       .catch(function (response) {
         //

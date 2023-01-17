@@ -58,19 +58,45 @@ class MediaController extends AbstractController
         $id = $request->request->get("id");
         $medias = $doctrine->getRepository(Medias::class)->findBy(["pati" => $id]);
 
-        $encoder = new JsonEncoder();
-        $defaultContext = [
-            AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context) {
-                return $object->getId();
-            },
-        ];
 
-        $normalizer = new ObjectNormalizer(null, null, null, null, null, null, $defaultContext);
+        // dd($medias);
 
-        $serializer = new Serializer([new DateTimeNormalizer(), $normalizer], [$encoder]);
-        $data = $serializer->serialize($medias, 'json', [AbstractNormalizer::IGNORED_ATTRIBUTES => ["contacts"]]);
+        $mediasArr = [];
 
-        return $this->json(json_decode($data));
+        foreach ($medias as $value) {
+
+            // dd($value);medias.sugg.parentSugg.value
+            $mediasArr[] = [
+                "id" => $value->getId(),
+                "filename" => $value->getFilename(),
+                "originalFilename" => $value->getOriginalFilename(),
+                "comment" => $value->getComment(),
+                "date" => $value->getDate()->format(DATE_RFC3339_EXTENDED),
+                "absolutePath" => $value->getAbsolutePath(),
+                "sugg" => [
+                    "parentSugg" => [
+                        "value" => $value->getSugg()->getParentSugg()->getValue()
+                    ]
+                ]
+            ];
+        }
+
+
+
+        // $encoder = new JsonEncoder();
+        // $defaultContext = [
+        //     AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context) {
+        //         return $object->getId();
+        //     },
+        // ];
+
+        // $normalizer = new ObjectNormalizer(null, null, null, null, null, null, $defaultContext);
+
+        // $serializer = new Serializer([new DateTimeNormalizer(), $normalizer], [$encoder]);
+        // $data = $serializer->serialize($medias, 'json', [AbstractNormalizer::IGNORED_ATTRIBUTES => ["contacts"]]);
+        return new Response(json_encode($mediasArr), 200);
+
+        // return $this->json(json_encode($mediasArr));
     }
 
 
