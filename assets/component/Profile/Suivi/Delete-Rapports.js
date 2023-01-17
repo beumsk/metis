@@ -96,7 +96,7 @@ function DeleteRapports(props) {
   return (
     <>
       <button onClick={handleShow}>
-        <FontAwesomeIcon icon={faTimes} />
+        <FontAwesomeIcon icon={faTrash} />
       </button>
 
       <Modal show={show} onHide={handleClose}>

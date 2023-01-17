@@ -5,11 +5,11 @@ import Modal from "react-bootstrap/Modal";
 import useAuth from "../../../hooks/useAuth";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faPlusCircle,
   faFilePen,
   faPhone,
+  faPen,
   faHouseSignal,
-  faSquarePhoneFlip,
+  faSave,
 } from "@fortawesome/free-solid-svg-icons";
 import { useParams } from "react-router-dom";
 import Table from "react-bootstrap/Table";
@@ -143,6 +143,7 @@ function RapportDetails(props) {
       })
       .catch(function (response) {});
   }
+
   function onChangeReport(e) {
     axios({
       method: "post",
@@ -244,6 +245,91 @@ function RapportDetails(props) {
 
   function switchEditMode(e) {}
 
+  useEffect(() => {
+    if (!toggle) {
+      informations?.data.forEach((element) => {
+        element.isShow = false;
+      });
+      setInformations(informations);
+      axios({
+        method: "post",
+        url: "/api/getFollowUpReportsById",
+        data: reportData,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${auth.auth.accessToken}`,
+        },
+      })
+        .then(function (response) {
+          setInformations(response);
+        })
+        .catch(function (response) {});
+    }
+  }, [toggle]);
+
+  const ToggleEdit = ({ r }) =>
+    toggle ? (
+      <></>
+    ) : (
+      <div className="row-btnRapport">
+        <DeleteRapports
+          idRapport={r.id}
+          onChangeDelete={onChangeDelete}
+        ></DeleteRapports>
+        {(r.activityType === 1 ||
+          r.activityType === 4 ||
+          r.activityType === 3 ||
+          r.activityType === 2) && (
+          <Form.Check id={r.id}>
+            <Form.Check.Input
+              type="checkbox"
+              checked={toggle}
+              defaultChecked={r.isShow}
+              className="uk-checkbox"
+              onChange={(e) => {
+                // setToggle(!toggle);
+
+                if (e.target.checked === true) {
+                  setToggle(true);
+                  r.isShow = true;
+
+                  setInformations(informations);
+                }
+
+                // if (e.target.checked === false) {
+                //   setToggle(false);
+                //   r.isShow = false;
+
+                //   setInformations(informations);
+                //   axios({
+                //     method: "post",
+                //     url: "/api/getFollowUpReportsById",
+                //     data: reportData,
+                //     headers: {
+                //       "Content-Type": "application/json",
+                //       Authorization: `Bearer ${auth.auth.accessToken}`,
+                //     },
+                //   })
+                //     .then(function (response) {
+                //       setInformations(response);
+                //     })
+                //     .catch(function (response) {});
+                // }
+
+                // if (r.isHightlight === false) {
+                //   setToggle(!toggle);
+                //   r.isShow = toggle;
+
+                //   setInformations(informations);
+                // }
+              }}
+            />
+            <Form.Check.Label>Activer le mode édition</Form.Check.Label>
+          </Form.Check>
+        )}
+      </div>
+    );
+
   return (
     <>
       <FilterRapportDetails
@@ -262,66 +348,7 @@ function RapportDetails(props) {
                   : { border: "2px solid #9c5fb5" }
               }
             >
-              <div className="row-btnRapport">
-                <DeleteRapports
-                  idRapport={r.id}
-                  onChangeDelete={onChangeDelete}
-                ></DeleteRapports>
-                {r.activityType === 1 ||
-                r.activityType === 4 ||
-                r.activityType === 3 ||
-                r.activityType === 2 ? (
-                  <Form.Check id={r.id}>
-                    <Form.Check.Input
-                      type="checkbox"
-                      defaultChecked={r.isShow}
-                      className="uk-checkbox"
-                      onClick={(e) => {
-                        // setToggle(!toggle);
-
-                        if (e.target.checked === true) {
-                          setToggle(true);
-                          r.isShow = true;
-
-                          setInformations(informations);
-                        }
-
-                        if (e.target.checked === false) {
-                          setToggle(false);
-                          r.isShow = false;
-
-                          setInformations(informations);
-                          axios({
-                            method: "post",
-                            url: "/api/getFollowUpReportsById",
-                            data: reportData,
-                            headers: {
-                              "Content-Type": "application/json",
-                              Authorization: `Bearer ${auth.auth.accessToken}`,
-                            },
-                          })
-                            .then(function (response) {
-                              setInformations(response);
-                            })
-                            .catch(function (response) {});
-                        }
-
-                        // if (r.isHightlight === false) {
-                        //   setToggle(!toggle);
-                        //   r.isShow = toggle;
-
-                        //   setInformations(informations);
-                        // }
-                      }}
-                    />
-                    <Form.Check.Label>
-                      {toggle ? "Désactiver" : "Activer"} le mode édition
-                    </Form.Check.Label>
-                  </Form.Check>
-                ) : (
-                  ""
-                )}
-              </div>
+              <ToggleEdit r={r} />
 
               {r && r.deletedAt === null && (
                 <>
@@ -401,6 +428,7 @@ function RapportDetails(props) {
                       <EditReportMeet
                         informationPatient={r}
                         type={type}
+                        setToggle={setToggle}
                         onChangeIndicators={onChangeIndicators}
                         onChangeActivities={onChangeActivities}
                         goals={props?.goals}
@@ -442,6 +470,8 @@ function RapportDetails(props) {
                   )} */}
                 </>
               )}
+
+              <ToggleEdit r={r} />
             </div>
           ))}
 
