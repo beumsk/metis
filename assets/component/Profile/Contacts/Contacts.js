@@ -77,17 +77,62 @@ const Contacts = () => {
       .then(function (response) {
         setContacts(response.data);
 
-        // $(".table-contacts thead th").each(function () {
-        //   var title = $(this).text();
-        //   $(this).html(
-        //     '<span class="title-column" >' +
-        //       $(this).text() +
-        //       "</span>" +
-        //       ' </br><input type="text" placeholder="Rechercher part ' +
-        //       title +
-        //       '" />'
-        //   );
-        // });
+        setTimeout(() => {
+          let table0 = new DataTable(".table-contacts", {
+            language: {
+              sProcessing: "En cours...",
+              sLengthMenu: "Afficher les enregistrements par:  _MENU_",
+              sZeroRecords: "Aucune données pour l'instant",
+              sEmptyTable: "La table est vide",
+              sInfo:
+                "Affichage des enregistrements du _START_ au _END_ sur un total de _TOTAL_ enregistrements",
+              sInfoEmpty:
+                "Affichage des enregistrements de 0 à 0 sur un total de 0 enregistrements",
+              sInfoFiltered:
+                "(filtré à partir d'un total de _MAX_ enregistrements)",
+              sInfoPostFix: "",
+              sSearch: "Chercher: ",
+              sUrl: "",
+              sInfoThousands: ",",
+              sLoadingRecords: "Mise en charge...",
+              oPaginate: {
+                sFirst: "Premier",
+                sLast: "Dernière",
+                sNext: " Suivant",
+                sPrevious: "Précédent ",
+              },
+              oAria: {
+                sSortAscending:
+                  ": Activer pour trier la colonne par ordre croissant",
+                sSortDescending:
+                  ": Activer pour trier la colonne par ordre décroissant",
+              },
+            },
+            // data: [...listContacts],
+            // columns: [
+            //   { data: "name" },
+            //   { data: "cont" },
+            //   { data: "type" },
+            //   { data: "comment" },
+            //   { data: "start" },
+            //   { data: "end" },
+            //   { data: "Actions" },
+            // ],
+            initComplete: function () {
+              // Apply the search
+              // this.api()
+              //   .columns()
+              //   .every(function () {
+              //     var that = this;
+              //     $("input", this.footer()).on("keyup change clear", function () {
+              //       if (that.search() !== this.value) {
+              //         that.search(this.value).draw();
+              //       }
+              //     });
+              //   });
+            },
+          });
+        }, 4000);
       })
       .catch(function (response) {});
     axios({
@@ -132,63 +177,6 @@ const Contacts = () => {
         setPatients(response);
       })
       .catch(function (response) {});
-
-    setTimeout(() => {
-      let table0 = new DataTable(".table-contacts", {
-        language: {
-          sProcessing: "En cours...",
-          sLengthMenu: "Afficher les enregistrements par:  _MENU_",
-          sZeroRecords: "Aucune données pour l'instant",
-          sEmptyTable: "La table est vide",
-          sInfo:
-            "Affichage des enregistrements du _START_ au _END_ sur un total de _TOTAL_ enregistrements",
-          sInfoEmpty:
-            "Affichage des enregistrements de 0 à 0 sur un total de 0 enregistrements",
-          sInfoFiltered:
-            "(filtré à partir d'un total de _MAX_ enregistrements)",
-          sInfoPostFix: "",
-          sSearch: "Chercher: ",
-          sUrl: "",
-          sInfoThousands: ",",
-          sLoadingRecords: "Mise en charge...",
-          oPaginate: {
-            sFirst: "Premier",
-            sLast: "Dernière",
-            sNext: " Suivant",
-            sPrevious: "Précédent ",
-          },
-          oAria: {
-            sSortAscending:
-              ": Activer pour trier la colonne par ordre croissant",
-            sSortDescending:
-              ": Activer pour trier la colonne par ordre décroissant",
-          },
-        },
-        // data: [...listContacts],
-        // columns: [
-        //   { data: "name" },
-        //   { data: "cont" },
-        //   { data: "type" },
-        //   { data: "comment" },
-        //   { data: "start" },
-        //   { data: "end" },
-        //   { data: "Actions" },
-        // ],
-        initComplete: function () {
-          // Apply the search
-          // this.api()
-          //   .columns()
-          //   .every(function () {
-          //     var that = this;
-          //     $("input", this.footer()).on("keyup change clear", function () {
-          //       if (that.search() !== this.value) {
-          //         that.search(this.value).draw();
-          //       }
-          //     });
-          //   });
-        },
-      });
-    }, 2000);
   }, [idPatient]);
 
   const sortCaret = (order, column) => {
@@ -490,7 +478,7 @@ const Contacts = () => {
 
       <h5>Contacts</h5>
 
-      <div className="table-contacts">
+      <table class="table-contacts">
         <thead>
           <tr>
             <th
@@ -629,30 +617,168 @@ const Contacts = () => {
             </>
           )}
         </tbody>
-      </div>
-      {/* {listContacts && listContacts.length > 0 ? (
-        <ToolkitProvider
-          keyField="id"
-          data={[...listContacts]}
-          columns={columns}
-          sort={
-            ({ dataField: "end", order: "desc" },
-            { dataField: "start", order: "asc" })
-          }
-          search
-        >
-          {(props) => (
-            <BootstrapTable
-              {...props.baseProps}
-              pagination={paginationFactory()}
-            />
-          )}
-        </ToolkitProvider>
-      ) : (
-        <p>{listContacts ? "Pas de contact pour ce contact." : "Loading"}</p>
-      )} */}
-
+      </table>
       <h5>Patients</h5>
+      <table class="table-contacts">
+        <thead>
+          <tr>
+            <th
+              className="sorting sorting_asc"
+              tabindex="0"
+              aria-controls="example"
+              rowSpan="1"
+              colSpan="1"
+              aria-sort="ascending"
+              aria-label="Name: activate to sort column descending"
+            >
+              Surnom
+            </th>
+            <th
+              className="sorting sorting_asc"
+              tabindex="0"
+              aria-controls="example"
+              rowSpan="1"
+              colSpan="1"
+              aria-sort="ascending"
+              aria-label="Name: activate to sort column descending"
+            >
+              Prénom
+            </th>
+            <th
+              className="sorting sorting_asc"
+              tabindex="0"
+              aria-controls="example"
+              rowSpan="1"
+              colSpan="1"
+              aria-sort="ascending"
+              aria-label="Name: activate to sort column descending"
+            >
+              Nom
+            </th>
+            <th
+              className="sorting sorting_asc"
+              tabindex="0"
+              aria-controls="example"
+              rowSpan="1"
+              colSpan="1"
+              aria-sort="ascending"
+              aria-label="Name: activate to sort column descending"
+            >
+              Type
+            </th>
+            <th
+              className="sorting sorting_asc"
+              tabindex="0"
+              aria-controls="example"
+              rowSpan="1"
+              colSpan="1"
+              aria-sort="ascending"
+              aria-label="Name: activate to sort column descending"
+            >
+              Description
+            </th>{" "}
+            <th
+              className="sorting sorting_asc"
+              tabindex="0"
+              aria-controls="example"
+              rowSpan="1"
+              colSpan="1"
+              aria-sort="ascending"
+              aria-label="Name: activate to sort column descending"
+            >
+              Début
+            </th>{" "}
+            <th
+              className="sorting sorting_asc"
+              tabindex="0"
+              aria-controls="example"
+              rowSpan="1"
+              colSpan="1"
+              aria-sort="ascending"
+              aria-label="Name: activate to sort column descending"
+            >
+              Fin
+            </th>
+            <th
+              className="sorting sorting_asc"
+              tabindex="0"
+              aria-controls="example"
+              rowSpan="1"
+              colSpan="1"
+              aria-sort="ascending"
+              aria-label="Name: activate to sort column descending"
+            >
+              Actions
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {patientsLists && patientsLists.length > 0 && (
+            <>
+              {patientsLists.map((e) => (
+                <tr>
+                  <td>
+                    <>{e?.orpa?.nicknames}</>
+                  </td>
+                  <td>
+                    <>{e?.orpa?.firstname}</>
+                  </td>
+                  <td>
+                    <>{e?.orpa?.lastname}</>
+                  </td>
+                  <td>
+                    <>
+                      {e?.sugg && e?.sugg.length > 0 && (
+                        <>
+                          {console.log(e?.sugg)}
+                          {e?.sugg?.map((cont) => (
+                            <>
+                              {console.log(cont)}
+                              {cont?.value}
+                            </>
+                          ))}
+                        </>
+                      )}
+                    </>
+                  </td>
+                  <td>{e?.comment === "null" ? "" : e?.comment}</td>
+                  <td>
+                    {e?.start
+                      ? new Date(e?.start)
+                          .toLocaleString("fr-BE", "short")
+                          .slice(0, 10)
+                      : ""}
+                  </td>
+                  <td>
+                    {e?.end
+                      ? new Date(e?.end)
+                          .toLocaleString("fr-BE", "short")
+                          .slice(0, 10)
+                      : ""}
+                  </td>
+                  <td className="d-flex">
+                    <ModalEditContacts
+                      infos={e}
+                      type={type}
+                      contacts={contacts}
+                      // onChangeContacts={(e) => contactLierResponse(e)}
+                      onChangeUpdateContact={onChangeUpdateContact}
+                      listContacts={listContacts}
+                      // listContactsSelect={props.listContacts}
+                    />
+                    <ModalDeleteContacts
+                      infos={e}
+                      onChangeUpdateContact={onChangeUpdateContact}
+                    />
+                  </td>
+                </tr>
+              ))}
+            </>
+          )}
+        </tbody>
+      </table>
+
+      {/* <h5>Patients</h5>
       {patientsLists && patients && patientsLists.length > 0 ? (
         <ToolkitProvider
           keyField="id"
@@ -669,7 +795,7 @@ const Contacts = () => {
         </ToolkitProvider>
       ) : (
         <p>{patientsLists ? "Pas de patient pour ce contact." : "Loading"}</p>
-      )}
+      )} */}
     </div>
   );
 };

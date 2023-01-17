@@ -25,12 +25,15 @@ function ModalEditContacts(props) {
   const [isSentRepport, setIsSentRepport] = useState(false);
   const [responseDatas, setResponseDatas] = useState(null);
   const [idPatient, setIdPatient] = useState(id);
+  // console.log(props);
   const [description, setDescription] = useState(
     props?.infos?.comment ? props?.infos?.comment : null
   );
   const [commentaire, setCommentaire] = useState(null);
   const [contactItemList, setContactItemList] = useState(
-    props?.infos?.cont[0]?.id ? props?.infos?.cont[0]?.id : null
+    props?.infos && props?.infos?.cont && props?.infos?.cont[0]?.id
+      ? props?.infos?.cont[0]?.id
+      : null
   );
   const [start, setStartDate] = useState(
     props?.infos?.start ? props?.infos?.start : null
@@ -120,7 +123,7 @@ function ModalEditContacts(props) {
             <Form.Select
               size="lg"
               onChange={(e) => setContactItemList(e.target.value)}
-              defaultValue={props?.infos?.cont[0]?.id}
+              defaultValue={contactItemList}
               className="uk-select"
             >
               <option value="">Choisir contact</option>
