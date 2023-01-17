@@ -73,6 +73,7 @@ class MediaController extends AbstractController
                 "comment" => $value->getComment(),
                 "date" => $value->getDate()->format(DATE_RFC3339_EXTENDED),
                 "absolutePath" => $value->getAbsolutePath(),
+                "deletedAt" => $value->getDeletedAt(),
                 "sugg" => [
                     "parentSugg" => [
                         "value" => $value->getSugg()->getParentSugg()->getValue()
@@ -107,11 +108,14 @@ class MediaController extends AbstractController
 
         $id = $request->request->get("id");
         $medias = $doctrine->getRepository(Medias::class)->find($id);
-        $entityManager->remove($medias);
+        // $contInfo = $doctrine->getRepository(ContactsInformation::class)->find($id);
+
+        // dd($medias);
+        $medias->setDeletedAt(new \DateTime('now'));
         $entityManager->flush();
-        unlink($this->getParameter('images_directory') . "/" . $medias->getFileName());
-        unlink($this->getParameter('images_directoryProd') . "/" . $medias->getFileName());
-        return $this->json($medias);
+        // unlink($this->getParameter('images_directory') . "/" . $medias->getFileName());
+        // unlink($this->getParameter('images_directoryProd') . "/" . $medias->getFileName());
+        return $this->json($medias->getId());
     }
 
 
@@ -142,10 +146,10 @@ class MediaController extends AbstractController
         $patients = $doctrine->getRepository(Patients::class)->find($id);
         $medias->setSugg($suggestion);
         $medias->setOriginalFilename($originalFilename);
-        $medias->setPati($patients);
+        $medias->setPatient($patients);
         $medias->setFilename($newFilename);
         $medias->setDate(new \DateTime("now"));
-
+        // dd($medias);
         $entityManager->persist($medias);
         $entityManager->flush();
 
@@ -153,6 +157,6 @@ class MediaController extends AbstractController
         // $uploadedFile->move($this->getParameter('images_directory'), $newFilename);
         $uploadedFile->move($this->getParameter('images_directoryProd'), $newFilename);
 
-        return $this->json("send");
+        return $this->json($medias->getId());
     }
 }
