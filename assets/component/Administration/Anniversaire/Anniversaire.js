@@ -135,7 +135,7 @@ function Anniversaire() {
                   </h5>
                   <table
                     // id={"table-anniversaire" + i}
-                    className="table-anniversaire display dataTable"
+                    className="table-anniversaire display dataTable  mt-2 table table-striped table-bordered table-hover"
                     aria-describedby="example_info"
                   >
                     <thead>
