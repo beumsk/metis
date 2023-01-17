@@ -77,72 +77,17 @@ const Contacts = () => {
       .then(function (response) {
         setContacts(response.data);
 
-        $(".table-anniversaire thead th").each(function () {
-          var title = $(this).text();
-          $(this).html(
-            '<span class="title-column" >' +
-              $(this).text() +
-              "</span>" +
-              ' </br><input type="text" placeholder="Rechercher part ' +
-              title +
-              '" />'
-          );
-        });
-
-        let table0 = new DataTable(".table-contacts", {
-          language: {
-            sProcessing: "En cours...",
-            sLengthMenu: "Afficher les enregistrements par:  _MENU_",
-            sZeroRecords: "Aucune données pour l'instant",
-            sEmptyTable: "La table est vide",
-            sInfo:
-              "Affichage des enregistrements du _START_ au _END_ sur un total de _TOTAL_ enregistrements",
-            sInfoEmpty:
-              "Affichage des enregistrements de 0 à 0 sur un total de 0 enregistrements",
-            sInfoFiltered:
-              "(filtré à partir d'un total de _MAX_ enregistrements)",
-            sInfoPostFix: "",
-            sSearch: "Chercher: ",
-            sUrl: "",
-            sInfoThousands: ",",
-            sLoadingRecords: "Mise en charge...",
-            oPaginate: {
-              sFirst: "Premier",
-              sLast: "Dernière",
-              sNext: " Suivant",
-              sPrevious: "Précédent ",
-            },
-            oAria: {
-              sSortAscending:
-                ": Activer pour trier la colonne par ordre croissant",
-              sSortDescending:
-                ": Activer pour trier la colonne par ordre décroissant",
-            },
-          },
-          // data: [...listContacts],
-          // columns: [
-          //   { data: "name" },
-          //   { data: "cont" },
-          //   { data: "type" },
-          //   { data: "comment" },
-          //   { data: "start" },
-          //   { data: "end" },
-          //   { data: "Actions" },
-          // ],
-          initComplete: function () {
-            // Apply the search
-            // this.api()
-            //   .columns()
-            //   .every(function () {
-            //     var that = this;
-            //     $("input", this.footer()).on("keyup change clear", function () {
-            //       if (that.search() !== this.value) {
-            //         that.search(this.value).draw();
-            //       }
-            //     });
-            //   });
-          },
-        });
+        // $(".table-contacts thead th").each(function () {
+        //   var title = $(this).text();
+        //   $(this).html(
+        //     '<span class="title-column" >' +
+        //       $(this).text() +
+        //       "</span>" +
+        //       ' </br><input type="text" placeholder="Rechercher part ' +
+        //       title +
+        //       '" />'
+        //   );
+        // });
       })
       .catch(function (response) {});
     axios({
@@ -187,6 +132,63 @@ const Contacts = () => {
         setPatients(response);
       })
       .catch(function (response) {});
+
+    setTimeout(() => {
+      let table0 = new DataTable(".table-contacts", {
+        language: {
+          sProcessing: "En cours...",
+          sLengthMenu: "Afficher les enregistrements par:  _MENU_",
+          sZeroRecords: "Aucune données pour l'instant",
+          sEmptyTable: "La table est vide",
+          sInfo:
+            "Affichage des enregistrements du _START_ au _END_ sur un total de _TOTAL_ enregistrements",
+          sInfoEmpty:
+            "Affichage des enregistrements de 0 à 0 sur un total de 0 enregistrements",
+          sInfoFiltered:
+            "(filtré à partir d'un total de _MAX_ enregistrements)",
+          sInfoPostFix: "",
+          sSearch: "Chercher: ",
+          sUrl: "",
+          sInfoThousands: ",",
+          sLoadingRecords: "Mise en charge...",
+          oPaginate: {
+            sFirst: "Premier",
+            sLast: "Dernière",
+            sNext: " Suivant",
+            sPrevious: "Précédent ",
+          },
+          oAria: {
+            sSortAscending:
+              ": Activer pour trier la colonne par ordre croissant",
+            sSortDescending:
+              ": Activer pour trier la colonne par ordre décroissant",
+          },
+        },
+        // data: [...listContacts],
+        // columns: [
+        //   { data: "name" },
+        //   { data: "cont" },
+        //   { data: "type" },
+        //   { data: "comment" },
+        //   { data: "start" },
+        //   { data: "end" },
+        //   { data: "Actions" },
+        // ],
+        initComplete: function () {
+          // Apply the search
+          // this.api()
+          //   .columns()
+          //   .every(function () {
+          //     var that = this;
+          //     $("input", this.footer()).on("keyup change clear", function () {
+          //       if (that.search() !== this.value) {
+          //         that.search(this.value).draw();
+          //       }
+          //     });
+          //   });
+        },
+      });
+    }, 2000);
   }, [idPatient]);
 
   const sortCaret = (order, column) => {
@@ -582,13 +584,53 @@ const Contacts = () => {
                       </>
                     ))}
                   </td>
+                  <td>
+                    {e?.cont?.map((cont) => (
+                      <>{cont?.description}</>
+                    ))}
+                  </td>
+                  <td>
+                    {e?.sugg?.map((cont) => (
+                      <>{cont?.value}</>
+                    ))}
+                  </td>
+                  <td>{e?.comment === "null" ? "" : e?.comment}</td>
+                  <td>
+                    {e?.start
+                      ? new Date(e?.start)
+                          .toLocaleString("fr-BE", "short")
+                          .slice(0, 10)
+                      : ""}
+                  </td>
+                  <td>
+                    {e?.end
+                      ? new Date(e?.end)
+                          .toLocaleString("fr-BE", "short")
+                          .slice(0, 10)
+                      : ""}
+                  </td>
+                  <td className="d-flex">
+                    <ModalEditContacts
+                      infos={e}
+                      type={type}
+                      contacts={contacts}
+                      // onChangeContacts={(e) => contactLierResponse(e)}
+                      onChangeUpdateContact={onChangeUpdateContact}
+                      listContacts={listContacts}
+                      // listContactsSelect={props.listContacts}
+                    />
+                    <ModalDeleteContacts
+                      infos={e}
+                      onChangeUpdateContact={onChangeUpdateContact}
+                    />
+                  </td>
                 </tr>
               ))}
             </>
           )}
         </tbody>
       </div>
-      {listContacts && listContacts.length > 0 ? (
+      {/* {listContacts && listContacts.length > 0 ? (
         <ToolkitProvider
           keyField="id"
           data={[...listContacts]}
@@ -608,7 +650,7 @@ const Contacts = () => {
         </ToolkitProvider>
       ) : (
         <p>{listContacts ? "Pas de contact pour ce contact." : "Loading"}</p>
-      )}
+      )} */}
 
       <h5>Patients</h5>
       {patientsLists && patients && patientsLists.length > 0 ? (
