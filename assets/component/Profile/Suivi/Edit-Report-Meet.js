@@ -64,6 +64,7 @@ function EditReportMeet(props) {
   function onChangeGoals(e) {
     setGoalsInput(e);
   }
+
   useEffect(() => {
     setReportDate(
       new Date(props?.informationPatient?.reportDate?.timestamp * 1000).toJSON()
@@ -178,6 +179,7 @@ function EditReportMeet(props) {
     }).then(function (response) {
       // location.replace(window.location.origin + "/" + idPatient);
       setSentGoals(true);
+      props.setToggle(false);
     });
   };
 
@@ -228,6 +230,7 @@ function EditReportMeet(props) {
       },
     }).then(function (response) {
       setSentRepport(true);
+      props.setToggle(false);
     });
   };
 
@@ -433,7 +436,7 @@ function EditReportMeet(props) {
           ></Editor>
 
           <button onClick={(e) => sentCalls(e)} className="mt-4 btn-metis">
-            Confirmer
+            Sauver
           </button>
           {isSentGoals && <FontAwesomeIcon icon={faCheck} />}
         </>
@@ -449,7 +452,7 @@ function EditReportMeet(props) {
             }
             className="mt-4 btn-metis"
           >
-            Confirmer
+            Sauver
           </button>
           {isSentRepport && <FontAwesomeIcon icon={faCheck} />}
         </>

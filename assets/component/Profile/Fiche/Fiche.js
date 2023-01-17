@@ -331,13 +331,13 @@ const Fiche = () => {
           <Accordion.Body>
             <BlockInfos
               infos={informationPatient}
-              link={"/patient/fiche/assuetude/supposee"}
+              link={"/patient/fiche/pathologie-mentale/supposee"}
               onChangeAddPati={(e) => onChangeAddPatientInformation(e)}
               onChangeEditPati={(e) => onChangeEditPatientInformation(e)}
             ></BlockInfos>
             <BlockInfos
               infos={informationPatient}
-              link={"/patient/fiche/assuetude/declaree"}
+              link={"/patient/fiche/pathologie-mentale/declaree"}
               onChangeAddPati={(e) => onChangeAddPatientInformation(e)}
               onChangeEditPati={(e) => onChangeEditPatientInformation(e)}
             ></BlockInfos>
@@ -348,13 +348,13 @@ const Fiche = () => {
           <Accordion.Body>
             <BlockInfos
               infos={informationPatient}
-              link={"/patient/fiche/pathologie-mentale/supposee"}
+              link={"/patient/fiche/assuetude/supposee"}
               onChangeAddPati={(e) => onChangeAddPatientInformation(e)}
               onChangeEditPati={(e) => onChangeEditPatientInformation(e)}
             ></BlockInfos>
             <BlockInfos
               infos={informationPatient}
-              link={"/patient/fiche/pathologie-mentale/declaree"}
+              link={"/patient/fiche/assuetude/declaree"}
               onChangeAddPati={(e) => onChangeAddPatientInformation(e)}
               onChangeEditPati={(e) => onChangeEditPatientInformation(e)}
             ></BlockInfos>
