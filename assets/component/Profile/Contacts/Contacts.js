@@ -18,6 +18,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowDown, faArrowUp } from "@fortawesome/free-solid-svg-icons";
 import DataTable from "datatables.net-dt";
 import $ from "jquery";
+import Table from "react-bootstrap/Table";
 
 const Contacts = () => {
   let id = useParams().id;
@@ -179,238 +180,6 @@ const Contacts = () => {
       .catch(function (response) {});
   }, [idPatient]);
 
-  const sortCaret = (order, column) => {
-    if (!order)
-      return (
-        <span>
-          <FontAwesomeIcon icon={faArrowDown} />/
-          <FontAwesomeIcon icon={faArrowUp} />
-        </span>
-      );
-    else if (order === "desc")
-      return (
-        <span>
-          <FontAwesomeIcon icon={faArrowDown} />/
-          <FontAwesomeIcon icon={faArrowUp} color="#91bd10" />
-        </span>
-      );
-    else if (order === "asc")
-      return (
-        <span>
-          <FontAwesomeIcon icon={faArrowDown} color="#91bd10" />/
-          <FontAwesomeIcon icon={faArrowUp} />
-        </span>
-      );
-    return null;
-  };
-
-  const columnsPatients = [
-    {
-      dataField: "orpa.nicknames",
-      text: "Surnom",
-      formatter: (cell, row, rowIndex, extraData) => (
-        <div>{row?.orpa?.nicknames}</div>
-      ),
-      sort: true,
-      sortCaret: sortCaret,
-    },
-    {
-      dataField: "orpa.firstname",
-      text: "Prénom",
-      formatter: (cell, row, rowIndex, extraData) => (
-        <div>{row?.orpa?.firstname}</div>
-      ),
-      sort: true,
-      sortCaret: sortCaret,
-    },
-    {
-      dataField: "orpa.lastname",
-      text: "Nom",
-      formatter: (cell, row, rowIndex, extraData) => (
-        <div>{row?.orpa?.lastname}</div>
-      ),
-      sort: true,
-      sortCaret: sortCaret,
-    },
-    {
-      dataField: "sugg.value",
-      text: "Type",
-      formatter: (cell, row, rowIndex, extraData) => (
-        <div>{row?.sugg?.value}</div>
-      ),
-    },
-    {
-      dataField: "linkDescription",
-      text: "Description",
-      formatter: (cell, row, rowIndex, extraData) => (
-        <div>{row?.linkDescription === "null" ? "" : row?.linkDescription}</div>
-      ),
-    },
-    {
-      dataField: "start",
-      text: "Début",
-      formatter: (cell, row, rowIndex, extraData) => (
-        <div>
-          {row?.start
-            ? new Date(row?.start).toLocaleString("fr-BE", "short").slice(0, 10)
-            : ""}
-        </div>
-      ),
-      sort: true,
-      sortCaret: sortCaret,
-    },
-    {
-      dataField: "end",
-      text: "Fin",
-      formatter: (cell, row, rowIndex, extraData) => (
-        <div>
-          {row?.end
-            ? new Date(row?.end).toLocaleString("fr-BE", "short").slice(0, 10)
-            : ""}
-        </div>
-      ),
-      sort: true,
-      sortCaret: sortCaret,
-    },
-    {
-      dataField: "Actions",
-      text: "Actions",
-
-      formatter: (cell, row, rowIndex, extraData) => (
-        <div className="d-flex">
-          <ModalEditPatient
-            infos={row}
-            type={type}
-            contacts={patients}
-            // onChangeContacts={(e) => contactLierResponse(e)}
-            // onChangeUpdateContact={onChangeUpdateContact}
-            listPatients={patients}
-            // listContactsSelect={props.listContacts}
-            // infos={row}
-            // // onChangeContacts={(e) => contactLierResponse(e)}
-            // listPatients={patients}
-            onChangeUpdatePatient={onChangeUpdatePatient}
-            // type={type}
-            // contacts={patients && patients.data.length > 0 ? patients : null}
-            // // listContactsSelect={props.listContacts}
-          />
-          <ModalDeletePatient
-            infos={row}
-            onChangeUpdatePatient={onChangeUpdatePatient}
-          ></ModalDeletePatient>
-        </div>
-      ),
-    },
-  ];
-
-  const columns = [
-    {
-      dataField: "cont",
-      text: "Nom",
-      formatter: (cell, row, rowIndex, extraData) => (
-        <div>
-          {row?.cont?.map((cont) => (
-            <>
-              {cont?.firstname} {cont?.lastname}
-            </>
-          ))}
-        </div>
-      ),
-      sort: true,
-      // sortCaret: sortCaret,
-      // sortFunc: (a, b, order, dataField, rowA, rowB) => {
-      //   if (order === "asc") {
-      //     console.log(a, b, order);
-      //     return b[0]?.firstname - a[0]?.firstname;
-      //   }
-      //   return a[0]?.firstname - b[0]?.firstname; // desc
-      // },
-    },
-    {
-      dataField: "cont.description",
-      text: "Organisation",
-      formatter: (cell, row, rowIndex, extraData) => (
-        <div>
-          {row?.cont?.map((cont) => (
-            <>{cont?.description}</>
-          ))}
-        </div>
-      ),
-      sort: true,
-      // sortCaret: sortCaret,
-    },
-    {
-      dataField: "cont[0].value",
-      text: "Type",
-      formatter: (cell, row, rowIndex, extraData) => (
-        <div>
-          {row?.sugg?.map((cont) => (
-            <>{cont?.value}</>
-          ))}
-        </div>
-      ),
-      sort: true,
-      // sortCaret: sortCaret,
-    },
-    {
-      dataField: "comment",
-      text: "Description",
-      formatter: (cell, row, rowIndex, extraData) => (
-        <div>{row?.comment === "null" ? "" : row?.comment}</div>
-      ),
-      sort: true,
-      // sortCaret: sortCaret,
-    },
-    {
-      dataField: "start",
-      text: "Début",
-      formatter: (cell, row, rowIndex, extraData) => (
-        <div>
-          {row?.start
-            ? new Date(row?.start).toLocaleString("fr-BE", "short").slice(0, 10)
-            : ""}
-        </div>
-      ),
-      sort: true,
-      sortCaret: sortCaret,
-    },
-    {
-      dataField: "end",
-      text: "Fin",
-      formatter: (cell, row, rowIndex, extraData) => (
-        <div>
-          {row?.end
-            ? new Date(row?.end).toLocaleString("fr-BE", "short").slice(0, 10)
-            : ""}
-        </div>
-      ),
-      sort: true,
-      sortCaret: sortCaret,
-    },
-    {
-      dataField: "Actions",
-      text: "Actions",
-      formatter: (cell, row, rowIndex, extraData) => (
-        <div className="d-flex">
-          <ModalEditContacts
-            infos={row}
-            type={type}
-            contacts={contacts}
-            // onChangeContacts={(e) => contactLierResponse(e)}
-            onChangeUpdateContact={onChangeUpdateContact}
-            listContacts={listContacts}
-            // listContactsSelect={props.listContacts}
-          />
-          <ModalDeleteContacts
-            infos={row}
-            onChangeUpdateContact={onChangeUpdateContact}
-          />
-        </div>
-      ),
-      sort: true,
-    },
-  ];
-
   const onChangeUpdatePatient = (e) => {
     axios({
       method: "post",
@@ -478,7 +247,7 @@ const Contacts = () => {
 
       <h5>Contacts</h5>
 
-      <table class="table-contacts">
+      <table class="mt-2 table-contacts table table-striped table-bordered table-hover">
         <thead>
           <tr>
             <th
@@ -616,8 +385,9 @@ const Contacts = () => {
           )}
         </tbody>
       </table>
+
       <h5>Patients</h5>
-      <table class="table-contacts">
+      <table class="mt-2 table-contacts table table-striped table-bordered table-hover">
         <thead>
           <tr>
             <th
