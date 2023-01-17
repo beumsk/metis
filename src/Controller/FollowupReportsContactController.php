@@ -36,10 +36,12 @@ class FollowupReportsContactController extends AbstractController
         $request = Request::createFromGlobals();
 
         $id = $request->request->get('id');
-        $reports = $doctrine->getRepository(FollowupReports::class)->findBy(["pati" => $id]);
+        $patient = $doctrine->getRepository(FollowupReports::class)->find($id);
+        // $reports = $doctrine->getRepository(FollowupReports::class)->findBy(["pati" => $id]);
 
-        $cont = $doctrine->getRepository(PatientsContacts::class)->findBy(["pati" => $id]);
-        $patientspatients = $doctrine->getRepository(PatientsPatients::class)->findBy(['tapa' => $id, 'deleted_at' => null]);
+        // $cont = $doctrine->getRepository(PatientsContacts::class)->findBy(["pati" => $id]);
+        $origPatientPatient = $doctrine->getRepository(PatientsPatients::class)->findPatientPatient("orig", $patient);
+        $targPatientPatient = $doctrine->getRepository(PatientsPatients::class)->findPatientPatient("target", $patient);
 
         $encoder = new JsonEncoder();
         $defaultContext = [
@@ -51,7 +53,14 @@ class FollowupReportsContactController extends AbstractController
         $normalizer = new ObjectNormalizer(null, null, null, null, null, null, $defaultContext);
 
         $serializer = new Serializer([new DateTimeNormalizer(), $normalizer], [$encoder]);
-        $data = $serializer->serialize($patientspatients, 'json', [AbstractNormalizer::IGNORED_ATTRIBUTES => ["cont", "pati", "orga", "calls", "user", "informations", "fore", "contact", "linkType", "patient"]]);
+        $data = $serializer->serialize(
+            [
+                "orig" => $origPatientPatient,
+                "targ" => $targPatientPatient
+            ],
+            'json',
+            [AbstractNormalizer::IGNORED_ATTRIBUTES => ["cont", "pati", "orga", "calls", "user", "informations", "fore", "contact", "linkType", "patient"]]
+        );
 
         return $this->json(json_decode($data));
     }

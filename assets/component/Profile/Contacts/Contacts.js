@@ -228,6 +228,8 @@ const Contacts = () => {
     setPatients(e.data);
   }
 
+  // console.log(patientsLists);
+
   return (
     <div className="onglet-contact">
       <div className="d-flex mb-4 row-btn">
@@ -481,55 +483,121 @@ const Contacts = () => {
           </tr>
         </thead>
         <tbody>
-          {patientsLists && patientsLists.length > 0 && (
+          {patientsLists && patientsLists.targ.length > 0 && (
             <>
-              {patientsLists.map((e) => (
-                <tr>
-                  <td>
-                    <>{e?.orpa?.nicknames}</>
-                  </td>
-                  <td>
-                    <>{e?.orpa?.firstname}</>
-                  </td>
-                  <td>
-                    <>{e?.orpa?.lastname}</>
-                  </td>
-                  <td>
-                    <>{e?.sugg && <>{e?.sugg?.value}</>}</>
-                  </td>
-                  <td>
-                    {e?.linkDescription === "null" ? "" : e?.linkDescription}
-                  </td>
-                  <td>
-                    {e?.start
-                      ? new Date(e?.start)
-                          .toLocaleString("fr-BE", "short")
-                          .slice(0, 10)
-                      : ""}
-                  </td>
-                  <td>
-                    {e?.end
-                      ? new Date(e?.end)
-                          .toLocaleString("fr-BE", "short")
-                          .slice(0, 10)
-                      : ""}
-                  </td>
-                  <td className="d-flex">
-                    <ModalEditPatient
-                      infos={e}
-                      type={type}
-                      contacts={contacts}
-                      // onChangeContacts={(e) => contactLierResponse(e)}
-                      onChangeUpdateContact={onChangeUpdateContact}
-                      listContacts={listContacts}
-                      // listContactsSelect={props.listContacts}
-                    />
-                    <ModalDeletePatient
-                      infos={e}
-                      onChangeUpdateContact={onChangeUpdateContact}
-                    />
-                  </td>
-                </tr>
+              {patientsLists.targ.map((e) => (
+                <>
+                  {e.deletedAt === null && (
+                    <tr>
+                      <td>
+                        <>{e?.orpa?.nicknames}</>
+                      </td>
+                      <td>
+                        <>{e?.orpa?.firstname}</>
+                      </td>
+                      <td>
+                        <>{e?.orpa?.lastname}</>
+                      </td>
+                      <td>
+                        <>{e?.sugg && <>{e?.sugg?.value}</>}</>
+                      </td>
+                      <td>
+                        {e?.linkDescription === "null"
+                          ? ""
+                          : e?.linkDescription}
+                      </td>
+                      <td>
+                        {e?.start
+                          ? new Date(e?.start)
+                              .toLocaleString("fr-BE", "short")
+                              .slice(0, 10)
+                          : ""}
+                      </td>
+                      <td>
+                        {e?.end
+                          ? new Date(e?.end)
+                              .toLocaleString("fr-BE", "short")
+                              .slice(0, 10)
+                          : ""}
+                      </td>
+                      <td className="d-flex">
+                        <ModalEditPatient
+                          infos={e}
+                          type={type}
+                          contacts={contacts}
+                          // onChangeContacts={(e) => contactLierResponse(e)}
+                          onChangeUpdateContact={onChangeUpdateContact}
+                          listContacts={listContacts}
+                          // listContactsSelect={props.listContacts}
+                        />
+                        <ModalDeletePatient
+                          infos={e}
+                          onChangeUpdateContact={onChangeUpdateContact}
+                        />
+                      </td>
+                    </tr>
+                  )}
+                </>
+              ))}
+            </>
+          )}
+          {patientsLists && patientsLists.orig.length > 0 && (
+            <>
+              {patientsLists.orig.map((e) => (
+                <>
+                  {e.deletedAt === null && (
+                    <>
+                      <tr>
+                        <td>
+                          <>{e?.tapa?.nicknames}</>
+                        </td>
+                        <td>
+                          <>{e?.tapa?.firstname}</>
+                        </td>
+                        <td>
+                          <>{e?.tapa?.lastname}</>
+                        </td>
+                        <td>
+                          <>{e?.sugg && <>{e?.sugg?.value}</>}</>
+                        </td>
+                        <td>
+                          {e?.linkDescription === "null"
+                            ? ""
+                            : e?.linkDescription}
+                        </td>
+                        <td>
+                          {e?.start
+                            ? new Date(e?.start)
+                                .toLocaleString("fr-BE", "short")
+                                .slice(0, 10)
+                            : ""}
+                        </td>
+                        <td>
+                          {e?.end
+                            ? new Date(e?.end)
+                                .toLocaleString("fr-BE", "short")
+                                .slice(0, 10)
+                            : ""}
+                        </td>
+                        <td className="d-flex">
+                          <ModalEditPatient
+                            infos={e}
+                            type={type}
+                            contacts={contacts}
+                            // onChangeContacts={(e) => contactLierResponse(e)}
+                            onChangeUpdateContact={onChangeUpdateContact}
+                            listContacts={listContacts}
+                            // listContactsSelect={props.listContacts}
+                          />
+                          <ModalDeletePatient
+                            infos={e}
+                            onChangeUpdateContact={onChangeUpdateContact}
+                          />
+                        </td>
+                      </tr>
+                    </>
+                  )}
+                </>
               ))}
             </>
           )}

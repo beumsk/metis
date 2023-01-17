@@ -39,28 +39,53 @@ class PatientsPatientsRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return PatientsPatients[] Returns an array of PatientsPatients objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('p')
-//            ->andWhere('p.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('p.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    public function findPatientPatient($mode, $patient)
+    {
+        $query = 'SELECT p,t,o
+            FROM App:PatientsPatients p 
+            JOIN p.tapa t
+            JOIN p.orpa o
+            WHERE t.deleted_at IS NULL and o.deleted_at IS NULL ';
 
-//    public function findOneBySomeField($value): ?PatientsPatients
-//    {
-//        return $this->createQueryBuilder('p')
-//            ->andWhere('p.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+        if ("orig" === $mode) {
+            $query .= " AND o.id = :patient";
+        } elseif ("target" === $mode) {
+            $query .= " AND t.id = :patient";
+        }
+
+        $query = $this->getEntityManager()
+            ->createQuery($query)
+            ->setParameter('patient', $patient->getId());
+
+        try {
+            return $query->getResult();
+        } catch (\Doctrine\ORM\NoResultException $e) {
+            return null;
+        }
+    }
+
+    //    /**
+    //     * @return PatientsPatients[] Returns an array of PatientsPatients objects
+    //     */
+    //    public function findByExampleField($value): array
+    //    {
+    //        return $this->createQueryBuilder('p')
+    //            ->andWhere('p.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->orderBy('p.id', 'ASC')
+    //            ->setMaxResults(10)
+    //            ->getQuery()
+    //            ->getResult()
+    //        ;
+    //    }
+
+    //    public function findOneBySomeField($value): ?PatientsPatients
+    //    {
+    //        return $this->createQueryBuilder('p')
+    //            ->andWhere('p.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->getQuery()
+    //            ->getOneOrNullResult()
+    //        ;
+    //    }
 }

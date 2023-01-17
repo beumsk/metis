@@ -61,7 +61,7 @@ function Anniversaire() {
             sProcessing: "En cours...",
             sLengthMenu: "Afficher les enregistrements par:  _MENU_",
             sZeroRecords: "Aucune données pour l'instant",
-            sEmptyTable: "La table est vide",
+            // sEmptyTable: "La table est vide",
             sInfo:
               "Affichage des enregistrements du _START_ au _END_ sur un total de _TOTAL_ enregistrements",
             sInfoEmpty:
