@@ -89,8 +89,8 @@ function ModalActionsAppelsEntrant(props) {
   const handleSaveComplete = (e) => {
     let formGetInfos = new FormData();
     let date = new Date(0);
-    date.setHours(dureeValue.substring(0, 2)); // "01" of "01:30"
-    date.setMinutes(dureeValue.substring(3, 5)); // "30" of "01:30"
+    date.setHours((dureeValue || "00:00").substring(0, 2)); // "01" of "01:30"
+    date.setMinutes((dureeValue || "00:00").substring(3, 5)); // "30" of "01:30"
     let timeString = date.toLocaleString("fr-BE").substring(11, 19);
 
     formGetInfos.append("content", content);
@@ -119,8 +119,8 @@ function ModalActionsAppelsEntrant(props) {
   const handleSaveKeep = (e) => {
     let formGetInfos = new FormData();
     let date = new Date(0);
-    date.setHours(dureeValue.substring(0, 2)); // "01" of "01:30"
-    date.setMinutes(dureeValue.substring(3, 5)); // "30" of "01:30"
+    date.setHours((dureeValue || "00:00").substring(0, 2)); // "01" of "01:30"
+    date.setMinutes((dureeValue || "00:00").substring(3, 5)); // "30" of "01:30"
     let timeString = date.toISOString().substring(11, 19);
 
     formGetInfos.append("content", content);
