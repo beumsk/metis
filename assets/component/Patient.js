@@ -186,7 +186,22 @@ const Patient = () => {
                   {patient.nicknames && <h5>{patient.nicknames}</h5>}
                   <p>
                     {patient && patient.birthdate !== null ? (
-                      <Moment format="DD/MM/YYYY">{patient.birthdate}</Moment>
+                      patient.birthLocation ? (
+                        <span>
+                          Né le{" "}
+                          <Moment format="DD/MM/YYYY">
+                            {patient.birthdate}
+                          </Moment>{" "}
+                          à {patient.birthLocation}
+                        </span>
+                      ) : (
+                        <span>
+                          Né le{" "}
+                          <Moment format="DD/MM/YYYY">
+                            {patient.birthdate}
+                          </Moment>
+                        </span>
+                      )
                     ) : (
                       "Date et lieu de naissance non connus"
                     )}
