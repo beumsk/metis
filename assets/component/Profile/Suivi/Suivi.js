@@ -1,20 +1,6 @@
-import React, {
-  useContext,
-  useDebugValue,
-  useRef,
-  useState,
-  useEffect,
-} from "react";
+import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
-import {
-  faPlusCircle,
-  faCancel,
-  faEdit,
-  faCoffee,
-  faRoad,
-  faPhone,
-} from "@fortawesome/free-solid-svg-icons";
+import { faCoffee, faRoad } from "@fortawesome/free-solid-svg-icons";
 import ReactLoading from "react-loading";
 import useAuth from "../../../hooks/useAuth";
 import axios from "axios";
@@ -30,7 +16,8 @@ import ModalEditObjectifs from "./Modal-Edit-Objectifs";
 import ModalEditAppels from "./Modal-Edit-Appels";
 import ModalActionsAppelsEntrant from "./Modal-Actions-AppelsEntrant";
 import ModalActionsAppelSortant from "./Modal-Actions-AppelSortant";
-import { DoNotStepOutlined } from "@mui/icons-material";
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
+
 const Profile = () => {
   let id = useParams().id;
   const [auth, setAuth] = useState(useAuth());
@@ -351,6 +338,7 @@ const Profile = () => {
       })
       .catch(function (response) {});
   }
+
   return (
     <div className="container-ongletProfile">
       <div className="row item-report">
@@ -385,25 +373,35 @@ const Profile = () => {
                               type={type}
                               onChange={onChangeGoals}
                             ></ModalEditObjectifs>
-                            <Link
-                              // from={window.location.origin}
-                              style={
-                                g?.isHightlight
-                                  ? { fontWeight: "bold", color: "#3371cd" }
-                                  : { fontWeight: "normal", color: "#3371cd" }
+                            <OverlayTrigger
+                              overlay={
+                                <Tooltip id="button-tooltip">
+                                  (
+                                  {new Date(g.creationDate)
+                                    .toLocaleString("fr-BE")
+                                    .substring(0, 10)}
+                                  ) {g?.sugg?.value} {g?.value} {g?.description}{" "}
+                                  ({g?.forelength})
+                                </Tooltip>
                               }
-                              onClick={(e) => choiceRepport(g.id)}
                             >
-                              (
-                              {new Date(g.creationDate).toLocaleString(
-                                "fr-BE",
-                                {
-                                  dateStyle: "short",
+                              <Link
+                                // from={window.location.origin}
+                                style={
+                                  g?.isHightlight
+                                    ? { fontWeight: "bold", color: "#3371cd" }
+                                    : { fontWeight: "normal", color: "#3371cd" }
                                 }
-                              )}
-                              ) {g?.sugg?.value} {g?.value} {g?.description} (
-                              {g?.forelength})
-                            </Link>
+                                onClick={(e) => choiceRepport(g.id)}
+                              >
+                                (
+                                {new Date(g.creationDate)
+                                  .toLocaleString("fr-BE")
+                                  .substring(0, 10)}
+                                ) {g?.sugg?.value} {g?.value} {g?.description} (
+                                {g?.forelength})
+                              </Link>
+                            </OverlayTrigger>
                           </div>
                         ) : (
                           ""
@@ -425,22 +423,35 @@ const Profile = () => {
                             type={type}
                             onChange={onChangeGoals}
                           ></ModalEditObjectifs>
-                          <Link
-                            // from={window.location.origin}
-                            style={
-                              g?.isHightlight
-                                ? { fontWeight: "bold", color: "#8cb30c" }
-                                : { fontWeight: "normal", color: "#8cb30c" }
+                          <OverlayTrigger
+                            overlay={
+                              <Tooltip id="button-tooltip">
+                                (
+                                {new Date(g.creationDate)
+                                  .toLocaleString("fr-BE")
+                                  .substring(0, 10)}
+                                ) {g?.sugg?.value} {g?.value} {g?.description} (
+                                {g?.forelength})
+                              </Tooltip>
                             }
-                            onClick={(e) => choiceRepport(g.id)}
                           >
-                            (
-                            {new Date(g.creationDate).toLocaleString("fr-BE", {
-                              dateStyle: "short",
-                            })}
-                            ) {g?.sugg?.value} {g?.value} {g?.description} (
-                            {g?.forelength})
-                          </Link>
+                            <Link
+                              // from={window.location.origin}
+                              style={
+                                g?.isHightlight
+                                  ? { fontWeight: "bold", color: "#8cb30c" }
+                                  : { fontWeight: "normal", color: "#8cb30c" }
+                              }
+                              onClick={(e) => choiceRepport(g.id)}
+                            >
+                              (
+                              {new Date(g.creationDate)
+                                .toLocaleString("fr-BE")
+                                .substring(0, 10)}
+                              ) {g?.sugg?.value} {g?.value} {g?.description} (
+                              {g?.forelength})
+                            </Link>
+                          </OverlayTrigger>
                         </div>
                       ) : (
                         ""
@@ -463,22 +474,35 @@ const Profile = () => {
                             onChange={onChangeGoals}
                             type={type}
                           ></ModalEditObjectifs>
-                          <Link
-                            // from={window.location.origin}
-                            style={
-                              g?.isHightlight
-                                ? { fontWeight: "bold", color: "#4f5053" }
-                                : { fontWeight: "normal", color: "#4f5053" }
+                          <OverlayTrigger
+                            overlay={
+                              <Tooltip id="button-tooltip">
+                                (
+                                {new Date(g.creationDate)
+                                  .toLocaleString("fr-BE")
+                                  .substring(0, 10)}
+                                ) {g?.func?.value} {g?.value} {g?.description} (
+                                {g?.forelength})
+                              </Tooltip>
                             }
-                            onClick={(e) => choiceRepport(g.id)}
                           >
-                            (
-                            {new Date(g.creationDate).toLocaleString("fr-BE", {
-                              dateStyle: "short",
-                            })}
-                            ){g?.func?.value} {g?.value} {g?.description} (
-                            {g?.forelength})
-                          </Link>
+                            <Link
+                              // from={window.location.origin}
+                              style={
+                                g?.isHightlight
+                                  ? { fontWeight: "bold", color: "#4f5053" }
+                                  : { fontWeight: "normal", color: "#4f5053" }
+                              }
+                              onClick={(e) => choiceRepport(g.id)}
+                            >
+                              (
+                              {new Date(g.creationDate)
+                                .toLocaleString("fr-BE")
+                                .substring(0, 10)}
+                              ){g?.func?.value} {g?.value} {g?.description} (
+                              {g?.forelength})
+                            </Link>
+                          </OverlayTrigger>
                         </div>
                       ) : (
                         ""
@@ -516,25 +540,38 @@ const Profile = () => {
                                 whatDoinFunction={whatDoinFunction}
                                 onChange={onChangeGoals}
                               ></ModalEditAppels>
-                              <Link
-                                // from={window.location.origin}
-                                style={
-                                  g?.isHightlight
-                                    ? { fontWeight: "bold", color: "#3371cd" }
-                                    : { fontWeight: "normal", color: "#3371cd" }
+                              <OverlayTrigger
+                                overlay={
+                                  <Tooltip id="button-tooltip">
+                                    (
+                                    {new Date(g.creationDate)
+                                      .toLocaleString("fr-BE")
+                                      .substring(0, 10)}
+                                    ) {g?.func?.value} {g?.value}{" "}
+                                    {g?.description} ({g?.forelength})
+                                  </Tooltip>
                                 }
-                                onClick={(e) => choiceRepport(g.id)}
                               >
-                                (
-                                {new Date(g.creationDate).toLocaleString(
-                                  "fr-BE",
-                                  {
-                                    dateStyle: "short",
+                                <Link
+                                  // from={window.location.origin}
+                                  style={
+                                    g?.isHightlight
+                                      ? { fontWeight: "bold", color: "#3371cd" }
+                                      : {
+                                          fontWeight: "normal",
+                                          color: "#3371cd",
+                                        }
                                   }
-                                )}
-                                ) {g?.func?.value} {g?.value} {g?.description} (
-                                {g?.forelength})
-                              </Link>
+                                  onClick={(e) => choiceRepport(g.id)}
+                                >
+                                  (
+                                  {new Date(g.creationDate)
+                                    .toLocaleString("fr-BE")
+                                    .substring(0, 10)}
+                                  ) {g?.func?.value} {g?.value} {g?.description}{" "}
+                                  ({g?.forelength})
+                                </Link>
+                              </OverlayTrigger>
                             </div>
                           ) : (
                             ""
@@ -558,25 +595,35 @@ const Profile = () => {
                               whatDoinFunction={whatDoinFunction}
                               onChange={onChangeGoals}
                             ></ModalEditAppels>
-                            <Link
-                              // from={window.location.origin}
-                              style={
-                                g?.isHightlight
-                                  ? { fontWeight: "bold", color: "#8cb30c" }
-                                  : { fontWeight: "normal", color: "#8cb30c" }
+                            <OverlayTrigger
+                              overlay={
+                                <Tooltip id="button-tooltip">
+                                  (
+                                  {new Date(g.creationDate)
+                                    .toLocaleString("fr-BE")
+                                    .substring(0, 10)}
+                                  ) {g?.func?.value} {g?.value} {g?.description}{" "}
+                                  ({g?.forelength})
+                                </Tooltip>
                               }
-                              onClick={(e) => choiceRepport(g.id)}
                             >
-                              (
-                              {new Date(g.creationDate).toLocaleString(
-                                "fr-BE",
-                                {
-                                  dateStyle: "short",
+                              <Link
+                                // from={window.location.origin}
+                                style={
+                                  g?.isHightlight
+                                    ? { fontWeight: "bold", color: "#8cb30c" }
+                                    : { fontWeight: "normal", color: "#8cb30c" }
                                 }
-                              )}
-                              ) {g?.func?.value} {g?.value} {g?.description} (
-                              {g?.forelength})
-                            </Link>
+                                onClick={(e) => choiceRepport(g.id)}
+                              >
+                                (
+                                {new Date(g.creationDate)
+                                  .toLocaleString("fr-BE")
+                                  .substring(0, 10)}
+                                ) {g?.func?.value} {g?.value} {g?.description} (
+                                {g?.forelength})
+                              </Link>
+                            </OverlayTrigger>
                           </div>
                         ) : (
                           ""
@@ -602,25 +649,35 @@ const Profile = () => {
                               whatDoinFunction={whatDoinFunction}
                               onChange={onChangeGoals}
                             ></ModalEditAppels>
-                            <Link
-                              // from={window.location.origin}
-                              style={
-                                g?.isHightlight
-                                  ? { fontWeight: "bold", color: "#4f5053" }
-                                  : { fontWeight: "normal", color: "#4f5053" }
+                            <OverlayTrigger
+                              overlay={
+                                <Tooltip id="button-tooltip">
+                                  (
+                                  {new Date(g.creationDate)
+                                    .toLocaleString("fr-BE")
+                                    .substring(0, 10)}
+                                  ) {g?.func?.value} {g?.value} {g?.description}{" "}
+                                  ({g?.forelength})
+                                </Tooltip>
                               }
-                              onClick={(e) => choiceRepport(g.id)}
                             >
-                              (
-                              {new Date(g.creationDate).toLocaleString(
-                                "fr-BE",
-                                {
-                                  dateStyle: "short",
+                              <Link
+                                // from={window.location.origin}
+                                style={
+                                  g?.isHightlight
+                                    ? { fontWeight: "bold", color: "#4f5053" }
+                                    : { fontWeight: "normal", color: "#4f5053" }
                                 }
-                              )}
-                              ) {g?.func?.value} {g?.value} {g?.description} (
-                              {g?.forelength})
-                            </Link>
+                                onClick={(e) => choiceRepport(g.id)}
+                              >
+                                (
+                                {new Date(g.creationDate)
+                                  .toLocaleString("fr-BE")
+                                  .substring(0, 10)}
+                                ) {g?.func?.value} {g?.value} {g?.description} (
+                                {g?.forelength})
+                              </Link>
+                            </OverlayTrigger>
                           </div>
                         ) : (
                           ""

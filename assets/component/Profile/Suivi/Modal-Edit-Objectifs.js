@@ -125,11 +125,11 @@ function ModalEditObjectifs(props) {
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Editer objectif</Modal.Title>
+          <Modal.Title>Modifier objectif</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <>
-            <Form.Label htmlFor="inputValue">Date de creation</Form.Label>
+            <Form.Label htmlFor="inputValue">Date de création</Form.Label>
             <Form.Control
               type="date"
               onChange={(e) => setDateValue(e.target.value)}
