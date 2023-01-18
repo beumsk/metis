@@ -109,7 +109,7 @@ const ProfilContact = () => {
               </h5>
               <p>{contactInformation?.description}</p>
               <p>
-                <a href={contactInformation?.url} target="_blank">
+                <a href={"http://" + contactInformation?.url} target="_blank">
                   {contactInformation?.url}
                 </a>
               </p>
