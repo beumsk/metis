@@ -117,9 +117,9 @@ const ProfilContact = () => {
 
             <div className="col-sm-4">
               <div className="btn-groups">
-                <a className="prev-btn" href="/contactsorganisation">
+                <Link className="prev-btn" to="/contactsorganisation">
                   <FontAwesomeIcon icon={faArrowLeft} />
-                </a>
+                </Link>
                 <ModalEditProfileContact
                   onChange={onChangeContactProfile}
                   contactInfo={contactInformation}

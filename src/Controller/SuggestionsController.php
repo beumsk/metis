@@ -38,7 +38,7 @@ class SuggestionsController extends AbstractController
         $jsonObject = $serializer->serialize(
             $suggestion,
             JsonEncoder::FORMAT,
-            [AbstractNormalizer::IGNORED_ATTRIBUTES => ['parentSugg', "requireCustomValue", "isLocked", "attributes", "pathString", "path", 'defaultComment', "isDeleted"]]
+            [AbstractNormalizer::IGNORED_ATTRIBUTES => ['parentSugg', "tags", "requireCustomValue", "isLocked", "attributes", "pathString", "path", 'defaultComment', "isDeleted"]]
         );
 
         $response =  new Response($jsonObject, 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);

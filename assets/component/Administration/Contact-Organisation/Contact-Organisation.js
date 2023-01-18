@@ -311,7 +311,7 @@ function ContactOrganisations() {
                     <td>{e.nb_calls}</td>
                     <td>{e.nb_patients}</td>
                     <td>
-                      <a href={"/profil-contact/" + e.id}>Détails</a>
+                      <Link to={"/profil-contact/" + e.id}>Détails</Link>
                     </td>
                   </tr>
                 ))}

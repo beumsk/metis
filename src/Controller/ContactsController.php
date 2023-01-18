@@ -503,7 +503,19 @@ class ContactsController extends AbstractController
         foreach ($blocksDecode as $value) {
             foreach ($contact->getInformations() as $infosCont) {
                 if ($infosCont->getItel()->getSuge()->getId() === $value->id && $infosCont->getDeletedAt() === null) {
-                    array_push($value->obj, ["id" => $infosCont->getId(), "deletedAt" => $infosCont->getDeletedAt(), "valueInformations" => $infosCont->getValue(), "valueDescription" => $infosCont->getComment(), "sugge" => ($infosCont !== null) ? $infosCont->getSugg() : null]);
+                    array_push($value->obj, [
+                        "id" => $infosCont->getId(),
+                        "deletedAt" => $infosCont->getDeletedAt(),
+                        "valueInformations" => $infosCont->getValue(),
+                        "valueDescription" => $infosCont->getComment(),
+                        "sugge" => ($infosCont !== null) ? [
+                            array_map(function ($a) {
+                                return [
+                                    "value" => ($a && $a->getValue() !== null) ? $a->getValue() . " " . $a->getValue() : null
+                                ];
+                            }, [$infosCont->getSugg()])
+                        ] : null
+                    ]);
                 }
             }
         }
@@ -512,16 +524,35 @@ class ContactsController extends AbstractController
         // dd($contact->getPatients()[0]->getCont());
         foreach ($contact->getPatients() as $patient) {
 
-            $patients[] = ["id" => $patient->getPati()->getId(), "firstName" => $patient->getPati()->getFirstName(), "lastName" => $patient->getPati()->getLastName()];
+            $patients[] = [
+                "id" => $patient->getPati()->getId(),
+                "firstName" => $patient->getPati()->getFirstName(),
+                "lastName" => $patient->getPati()->getLastName()
+            ];
         }
 
 
 
-        $jsonObject = $serializer->serialize(["id" => $contact->getId(), "informations" => $blocksDecode, "patients" => $patients, "firstname" => $contact->getFirstName(), "lastname" => $contact->getLastName(), "description" => $contact->getDescription(), "url" => $contact->getURL(), "type" => $contact->getType()], 'json', [
-            'circular_reference_handler' => function ($object) {
-                return $object->getId();
-            }
-        ]);
+        $jsonObject = $serializer->serialize(
+            [
+                "id" => $contact->getId(),
+                "informations" => $blocksDecode,
+                "patients" => $patients,
+                "firstname" => $contact->getFirstName(),
+                "lastname" => $contact->getLastName(),
+                "description" => $contact->getDescription(),
+                "url" => $contact->getURL(),
+                "type" => $contact->getType()
+            ],
+            'json',
+            [
+                'circular_reference_handler' => function ($object) {
+                    return $object->getId();
+                }
+            ],
+            [AbstractNormalizer::IGNORED_ATTRIBUTES => ['parentSugg', "tags", "requireCustomValue", "isLocked", "attributes", "pathString", "path", 'defaultComment', "isDeleted"]]
+
+        );
         return new Response($jsonObject, 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
     }
     #[Route('/api/getCallsAndOrganisationRunning', name: 'app_getCallsAndOrganisationRunning')]
