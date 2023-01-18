@@ -262,17 +262,17 @@ class ContactsController extends AbstractController
                     : null,
 
 
-                "tags" => (count($contactRepository->findTags($contactId))) ?
-                    array_map(function ($a) {
-                        return $a->getValue();
-                    },  [...$contactRepository->findTags($contactId)])
-                    : null,
+                // "tags" => (count($contactRepository->findTags($contactId))) ?
+                //     array_map(function ($a) {
+                //         return $a->getValue();
+                //     },  [...$contactRepository->findTags($contactId)])
+                //     : null,
                 "typeLabel" => $contact["typeLabel"],
                 "organisation" => $contact["organisation"],
                 "firstname" => $contact["firstname"],
                 "lastname" => $contact["lastname"],
-                "id" => $contact["id"],
-                "orga_id" => $contact["orga_id"],
+                // "id" => $contact["id"],
+                // "orga_id" => $contact["orga_id"],
                 "nb_calls" => $contact["nb_calls"],
                 "nb_patients" => $contact["nb_patients"]
             ];
