@@ -126,6 +126,18 @@ function EditNoReportMeet(props) {
           )}
       </div>
 
+      {props?.activityType === 1 && props?.rapport?.reportType && (
+        <>
+          <h6>Type de rencontre : </h6>
+          <span style={{ fontWeight: "normal" }}>
+            {props.rapport.reportType === 1 && "Vu"}
+            {props.rapport.reportType === 2 && "Rencontre"}
+            {props.rapport.reportType === 3 && "Repos"}
+            {props.rapport.reportType === 4 && "Recherche"}
+          </span>
+        </>
+      )}
+
       {props.activityType !== 3 && (
         <div className="date-row">
           {props.rapport && props.rapport.creationDate && (

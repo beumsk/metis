@@ -100,7 +100,7 @@ const Form_AddPatients = () => {
               className="uk-select"
               onChange={(e) => setAntenna(e.target.value)}
             >
-              <option>Choissisez votre antenne</option>
+              <option>Choisissez votre antenne</option>
               <option value="Liège">Liège</option>
               <option value="Bruxelles">Bruxelles</option>
             </Form.Select>

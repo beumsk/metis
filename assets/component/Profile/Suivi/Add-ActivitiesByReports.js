@@ -116,7 +116,7 @@ function AddActivitiesByReport(props) {
               onChange={(e) => setTypeForm(e.target.value)}
               // value={props.formActivitiesEdit?.type}
             >
-              <option>Choissisez le type</option>
+              <option>Choisissez le type</option>
               {props?.selectActivities?.data?.map((el, id) => (
                 <>{el.value && <option value={el?.id}>{el?.value}</option>}</>
               ))}

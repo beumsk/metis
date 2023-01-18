@@ -107,7 +107,7 @@ const Menu = () => {
                 className="select-menu uk-select"
                 defaultValue={antenna}
               >
-                <option>Choissisez l'antenne</option>
+                <option>Choisissez l'antenne</option>
                 <option value={"Bruxelles"}>Bruxelles</option>
                 <option value={"Liège"}>Liège</option>
               </Form.Select>

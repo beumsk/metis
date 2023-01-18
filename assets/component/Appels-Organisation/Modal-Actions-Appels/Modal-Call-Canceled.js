@@ -35,7 +35,7 @@ function ModalCallCanceled(props) {
 
   return (
     <>
-      <a onClick={handleShow}>Signaler appel Annulée</a>
+      <a onClick={handleShow}>Signaler appel Annulé</a>
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>

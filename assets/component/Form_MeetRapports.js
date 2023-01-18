@@ -255,7 +255,7 @@ const Form_MeetRapports = () => {
           className="uk-select"
         >
           <>
-            <option>Choissisez votre type de rencontre</option>
+            <option>Choisissez votre type de rencontre</option>
             <option value={1}>Vu</option>
             <option value={2}>Rencontre</option>
             <option value={3}>Repos</option>

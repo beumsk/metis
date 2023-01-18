@@ -49,7 +49,7 @@ function InputPlaceListSelect(props) {
         defaultValue={props.defaultValue || placeValue}
         onChange={(e) => onChangePlaceValue(e)}
       >
-        <option>Choissisez le lieu</option>
+        <option>Choisissez le lieu</option>
         {props?.places?.data?.map((el, id) => (
           <>{el?.lastname && <option value={el.id}>{el?.lastname}</option>}</>
         ))}

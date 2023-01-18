@@ -204,7 +204,7 @@ function ModalEditAppels(props) {
               </Form.Check>
             </Form.Group>
 
-            <Form.Label htmlFor="inputValue">Status</Form.Label>
+            <Form.Label htmlFor="inputValue">Statut</Form.Label>
             <Form.Select
               type="select"
               defaultValue={props?.calls?.status}
@@ -214,7 +214,7 @@ function ModalEditAppels(props) {
               <option value={0}>Nouveau</option>
               <option value={1}>En cours</option>
               <option value={2}>Accompli</option>
-              <option value={3}>Annulée</option>
+              <option value={3}>Annulé</option>
             </Form.Select>
             {isCallsPatients === false && (
               <>
@@ -226,7 +226,7 @@ function ModalEditAppels(props) {
                   defaultValue={props?.calls?.cont?.id}
                   onChange={(e) => onChangeContacts(e.target.value)}
                 >
-                  <option>Choissisez le contact</option>
+                  <option>Choisissez le contact</option>
                   {props?.contacts?.data?.map((el, id) => (
                     <>
                       <option value={el?.value}>{el?.label}</option>

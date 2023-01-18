@@ -98,7 +98,7 @@ function ModalAddContact(props) {
               required
               value={typeValue}
             >
-              <option value={0}>Choissisez un type</option>
+              <option value={0}>Choisissez un type</option>
               <option value={1}>Morale</option>
               <option value={2}>Physique</option>
             </select>
@@ -127,7 +127,7 @@ function ModalAddContact(props) {
               className="uk-select"
               onChange={(e) => setTypeValueOrganisation(e.target.value)}
             >
-              {/* <option>Choissisez le tags</option> */}
+              {/* <option>Choisissez le tags</option> */}
               {props?.listOrganisation?.data?.map((el, id) => (
                 <>
                   {el?.typeLabel === "Morale" && (

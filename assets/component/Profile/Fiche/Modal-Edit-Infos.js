@@ -266,7 +266,7 @@ function ModalEditInfos(props) {
                 <Form.Select
                   size="lg"
                   onChange={(e) => {
-                    if (e.target.value !== "Choissisez une valeur") {
+                    if (e.target.value !== "Choisissez une valeur") {
                       setValueSelect(e.target.value);
                     } else {
                       setValueSelect(null);
@@ -275,7 +275,7 @@ function ModalEditInfos(props) {
                   id="value-sugg"
                   className="uk-select"
                 >
-                  <option value={null}>Choissisez une valeur</option>
+                  <option value={null}>Choisissez une valeur</option>
                   {elementsOpt?.map((el, id) => (
                     <option
                       key={el.id}
