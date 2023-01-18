@@ -149,7 +149,7 @@ const ProfilLieux = () => {
 
           <div className="row coordonnes-body">
             <table class="uk-table uk-table-striped">
-              <h6>Patients liées</h6>
+              <h6>Patients liés</h6>
               {contactInformation?.patients.map((e) => (
                 <tr>
                   <td>
@@ -166,7 +166,7 @@ const ProfilLieux = () => {
               {contactInformation?.patients.length === 0 && (
                 <tr>
                   <td>
-                    <p>Aucuns patients liées pour l'instant</p>
+                    <p>Aucun patient lié pour l'instant</p>
                   </td>
                 </tr>
               )}

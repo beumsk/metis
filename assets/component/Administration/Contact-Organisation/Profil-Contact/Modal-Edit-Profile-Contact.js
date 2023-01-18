@@ -87,7 +87,7 @@ function ModalEditProfileContact(props) {
                   : ""
               }
             >
-              <option value={0}>Choissisez un type</option>
+              <option value={0}>Choisissez un type</option>
               <option value={1}>Morale</option>
               <option value={2}>Physique</option>
             </select>

@@ -86,7 +86,7 @@ function FilterRapportDetails(props) {
             className="uk-select"
             onChange={(e) => setTypeOfRepports(e.target.value)}
           >
-            <option>Choissisez le type de rapport</option>
+            <option>Choisissez le type de rapport</option>
             <option value={1}>Rapport de rencontre</option>
             <option value={4}>Appel entrant</option>
             <option value={2}>Appel sortant</option>

@@ -62,7 +62,7 @@ function InputTypeList(props) {
         onChange={(e) => onChangeType(e)}
         defaultValue={props?.defaultValue}
       >
-        <option>Choissisez le type</option>
+        <option>Choisissez le type</option>
         {props?.type?.data?.map((el, id) => (
           <>{el.value && <option value={el?.id}>{el?.value}</option>}</>
         ))}

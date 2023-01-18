@@ -214,7 +214,7 @@ function ModalEditInfos(props) {
                   size="lg"
                   className="uk-select"
                   onChange={(e) => {
-                    if (e.target.value !== "Choissisez une valeur") {
+                    if (e.target.value !== "Choisissez une valeur") {
                       setValueSelect(e.target.value);
                     } else {
                       setValueSelect(null);
@@ -222,7 +222,7 @@ function ModalEditInfos(props) {
                   }}
                   id="value-sugg"
                 >
-                  <option>Choissisez une valeur</option>
+                  <option>Choisissez une valeur</option>
                   {elementsOpt?.map((el, id) => (
                     <option key={el.id} value={el.id}>
                       {el?.requireCustomValue === true

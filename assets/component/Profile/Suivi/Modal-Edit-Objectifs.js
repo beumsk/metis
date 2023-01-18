@@ -169,7 +169,7 @@ function ModalEditObjectifs(props) {
               <option value={0}>Nouveau</option>
               <option value={1}>En cours</option>
               <option value={2}>Accompli</option>
-              <option value={3}>Annulée</option>
+              <option value={3}>Annulé</option>
             </Form.Select>
             <Form.Group className="my-3" controlId="formBasicCheckbox">
               <Form.Check>

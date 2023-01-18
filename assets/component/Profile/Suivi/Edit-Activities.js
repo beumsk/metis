@@ -137,7 +137,7 @@ function EditActivities(props) {
                 props.activity?.sugg?.id ? props.activity?.sugg?.id : typeForm
               }
             >
-              <option value={"defaultValue"}>Choissisez le type</option>
+              <option value={"defaultValue"}>Choisissez le type</option>
               {props?.select?.data?.map((el, id) => (
                 <>{el.value && <option value={el?.id}>{el?.value}</option>}</>
               ))}
