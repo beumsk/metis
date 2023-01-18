@@ -10,12 +10,13 @@ import {
   faPlusCircle,
   faCancel,
   faEdit,
-  faCheck,
+  faArrowLeft,
 } from "@fortawesome/free-solid-svg-icons";
 import { useParams } from "react-router-dom";
 import ModalEditContact from "./Modal-Edit-Contact";
 import ModalAddContact from "./Modal-Add-Contact";
 import ModalDeleteInfos from "./Modal-Delete-Contact";
+import ModalEditProfileContact from "./Modal-Edit-Profile-Contact";
 const ProfilContact = () => {
   const [auth, setAuth] = useState(useAuth());
   let id = useParams().idContact;
@@ -80,16 +81,51 @@ const ProfilContact = () => {
     }
   }
 
+  function onChangeContactProfile() {
+    axios({
+      method: "post",
+      url: "/api/getCallsAndOrganisationById",
+      data: formData,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    })
+      .then(function (response) {
+        setContactInformation(response.data);
+      })
+      .catch(function (response) {});
+  }
   return (
     <>
       <Menu></Menu>
       <section>
         <div className="container emp-profile">
           <div className="row profile-head">
-            <h5>
-              {contactInformation?.firstname} {contactInformation?.lastname}
-            </h5>
-            <p>{contactInformation?.description}</p>
+            <div className="col-sm-8">
+              <h5>
+                {contactInformation?.firstname} {contactInformation?.lastname} (
+                {contactInformation?.type === 1 ? "Morale" : "Physique"})
+              </h5>
+              <p>{contactInformation?.description}</p>
+              <p>
+                <a href={contactInformation?.url} target="_blank">
+                  {contactInformation?.url}
+                </a>
+              </p>
+            </div>
+
+            <div className="col-sm-4">
+              <div className="btn-groups">
+                <a className="prev-btn" href="/contactsorganisation">
+                  <FontAwesomeIcon icon={faArrowLeft} />
+                </a>
+                <ModalEditProfileContact
+                  onChange={onChangeContactProfile}
+                  contactInfo={contactInformation}
+                ></ModalEditProfileContact>
+              </div>
+            </div>
           </div>
 
           <div className="row coordonnes-body mb-4">

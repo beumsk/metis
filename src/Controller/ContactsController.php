@@ -502,7 +502,7 @@ class ContactsController extends AbstractController
 
 
 
-        $jsonObject = $serializer->serialize(["id" => $contact->getId(), "informations" => $blocksDecode, "patients" => $patients, "firstname" => $contact->getFirstName(), "lastname" => $contact->getLastName(), "description" => $contact->getDescription()], 'json', [
+        $jsonObject = $serializer->serialize(["id" => $contact->getId(), "informations" => $blocksDecode, "patients" => $patients, "firstname" => $contact->getFirstName(), "lastname" => $contact->getLastName(), "description" => $contact->getDescription(), "url" => $contact->getURL(), "type" => $contact->getType()], 'json', [
             'circular_reference_handler' => function ($object) {
                 return $object->getId();
             }
@@ -646,6 +646,58 @@ class ContactsController extends AbstractController
 
         return new Response($jsonObject, 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
     }
+
+    #[Route('/api/updateContactProfile', name: 'app_updateContactProfile')]
+    public function updateContactProfile(ManagerRegistry $doctrine, Request $request): JsonResponse
+    {
+        $request = Request::createFromGlobals();
+
+        $url = $request->request->get('url');
+        $name = $request->request->get('name');
+        $firstName = $request->request->get('firstName');
+        $type = $request->request->get('type');
+        $description = $request->request->get('description');
+        $idCont = $request->request->get('idCont');
+
+        $entityManager = $doctrine->getManager();
+
+        $contact = $doctrine->getRepository(Contacts::class)->find($idCont);
+
+
+        if ($url !== "null") {
+            $contact->setUrl($url);
+        }
+
+        if ($name !== "null") {
+            $contact->setLastname($name);
+        }
+
+        if ($firstName !== "null") {
+            $contact->setFirstName($firstName);
+        }
+
+        if ($type !== "null") {
+            $contact->setType($type);
+        }
+
+        if ($description !== "null") {
+            $contact->setDescription($description);
+        }
+
+
+
+
+
+
+
+
+        // $entityManager->persist($contact);
+        $entityManager->flush();
+
+
+        return $this->json(["id" => $contact->getId()]);
+    }
+
 
 
     #[Route('/api/setPatientPatient', name: 'app_setPatientPatient')]

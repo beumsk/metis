@@ -6,8 +6,17 @@ body,
 
 }
 
+.prev-btn{
+  color: black;
+  margin-right: 0.5rem;
+}
 .error-danger {
   color: rgb(170, 5, 5);
+}
+
+.btn-groups{
+  display: inline-block;
+  float: right;
 }
 
 h1 {

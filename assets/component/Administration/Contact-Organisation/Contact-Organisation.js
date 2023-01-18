@@ -149,11 +149,6 @@ function ContactOrganisations() {
             {(props) => (
               <div>
                 <div className="mb-2">
-                  {/* <SearchBar
-                    className="uk-input"
-                    {...props.searchProps}
-                    placeholder="Rechercher dans les appels"
-                  /> */}
                   <input
                     className="uk-input"
                     style={{ width: "186px" }}
