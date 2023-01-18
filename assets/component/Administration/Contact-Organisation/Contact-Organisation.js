@@ -17,6 +17,7 @@ import DataTable from "datatables.net-dt";
 import $ from "jquery";
 import Chip from "@mui/material/Chip";
 import Stack from "@mui/material/Stack";
+import ReactLoading from "react-loading";
 // var dt = require("datatables.net")(window, $);
 function ContactOrganisations() {
   const { SearchBar } = Search;
@@ -297,7 +298,7 @@ function ContactOrganisations() {
               </tr>
             </thead>
             <tbody>
-              {listContacts && listContacts.data !== null && (
+              {listContacts && listContacts.data !== null ? (
                 <>
                   {listContacts.data.map((e, idx) => (
                     <tr className="odd" key={idx}>
@@ -336,6 +337,13 @@ function ContactOrganisations() {
                     </tr>
                   ))}
                 </>
+              ) : (
+                <ReactLoading
+                  type={"spin"}
+                  color={"#B1B1B1"}
+                  height={"10%"}
+                  width={"10%"}
+                />
               )}
             </tbody>
           </table>
