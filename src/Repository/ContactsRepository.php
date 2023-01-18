@@ -268,21 +268,22 @@ class ContactsRepository extends ServiceEntityRepository
         return $resultSet->fetchAllAssociative();
     }
 
-    public function findAllContacts($tags = null)
+    public function findAllContacts($tags)
     {
 
         $conn = $this->getEntityManager()->getConnection();
-        // dd(json_decode($tags));
+        // dd(json_encode($tags));
         $query_tags = ' ';
         $join = ' ';
         if ($tags) {
+            // dd($tags);
             $query_tags = ' AND t.id IN (' . implode(",", json_decode($tags)) . ') ';
             $join = ' LEFT JOIN ( 
-                                    SELECT ci.cont_id, s.value, s.id
-                                    FROM suggestions s 
-                                    INNER JOIN contacts_information ci ON s.id = ci.sugg_id 
-                                    WHERE s.path_string LIKE "' . Contacts::TAGS_PATH . '%" AND ci.deleted_at is null
-                                ) t ON c.id = t.cont_id';
+                        SELECT ci.cont_id, s.value, s.id
+                        FROM suggestions s 
+                        INNER JOIN contacts_information ci ON s.id = ci.sugg_id 
+                        WHERE s.path_string LIKE "' . Contacts::TAGS_PATH . '%" AND ci.deleted_at is null
+                        ) t ON c.id = t.cont_id';
         }
 
         $query = 'SELECT 

@@ -80,7 +80,11 @@ function ModalAddContact(props) {
 
   return (
     <>
-      <button onClick={handleShow} className="ml-4 btn-metis">
+      <button
+        onClick={handleShow}
+        className="ml-4 btn-metis"
+        style={{ float: "right" }}
+      >
         Ajouter un contact
       </button>
 

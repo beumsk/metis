@@ -4,7 +4,7 @@ import useAuth from "../../../hooks/useAuth";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import Menu from "../../Menu";
-import { Link } from "react-router-dom";
+import { json, Link, useParams } from "react-router-dom";
 import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider, {
   Search,
@@ -18,6 +18,7 @@ import $ from "jquery";
 import Chip from "@mui/material/Chip";
 import Stack from "@mui/material/Stack";
 import ReactLoading from "react-loading";
+import InputTagsList from "./Input-Tags-List";
 // var dt = require("datatables.net")(window, $);
 function ContactOrganisations() {
   const { SearchBar } = Search;
@@ -25,6 +26,10 @@ function ContactOrganisations() {
   const [listContacts, setListContacts] = useState(null);
   const [listOrganisation, setListOrganisation] = useState(null);
   const [lengthList, setLengthList] = useState(10);
+  const [tags, setTags] = useState(null);
+  const [queryValue, setQueryValue] = useState(null);
+
+  console.log(useParams());
 
   var formData = new FormData();
   formData.append("page", lengthList.toString());
@@ -78,6 +83,23 @@ function ContactOrganisations() {
     },
   ];
   useEffect(() => {
+    // formData.append("query", queryValue);
+    if (window.location.search) {
+      const urlParams = new URLSearchParams(location.search);
+
+      console.log(urlParams.query);
+      for (const [key, value] of urlParams) {
+        console.log(`${key}:${value}`);
+        let valeurObj = JSON.parse(value);
+        setQueryValue(valeurObj);
+        console.log(valeurObj);
+        // if (tags && tags.length > 0) {
+        formData.append("tags", JSON.stringify(valeurObj?.map((e) => e.id)));
+        // }
+      }
+    }
+
+    console.log(queryValue);
     axios({
       method: "post",
       url: "/api/getContacts",
@@ -147,6 +169,10 @@ function ContactOrganisations() {
     setLengthList(lengthList + 10);
   };
 
+  function onClickFilter(e) {
+    console.log(e);
+  }
+
   function onChangeUpdateContact(e) {
     // props.onChangeUpdateContact(e);
 
@@ -169,154 +195,183 @@ function ContactOrganisations() {
   }
   function onColumnMatch({ searchText, value, column, row }) {}
 
-  console.log(listContacts);
+  console.log(queryValue);
 
   return (
-    <>
+    <div>
       <Menu></Menu>
       <div className="container container-patients mx-auto ">
-        <div style={{ float: "right" }}>
-          <ModalAddContact
-            listOrganisation={listOrganisation}
-            onChangeContacts={onChangeUpdateContact}
-          ></ModalAddContact>
+        <div className="row">
+          <div className="col-sm-6">
+            <div className="input-tags-search">
+              {queryValue !== null && (
+                <InputTagsList
+                  onChange={(e) => setTags(e)}
+                  defaultValue={queryValue}
+                ></InputTagsList>
+              )}
+
+              {queryValue === null && (
+                <InputTagsList onChange={(e) => setTags(e)}></InputTagsList>
+              )}
+
+              <form action="/contactsorganisation" method="get">
+                <input
+                  name="query"
+                  type={"hidden"}
+                  value={JSON.stringify(tags)}
+                ></input>
+                <button type="submit" className="btn-metis ml-2">
+                  Filtrer
+                </button>
+              </form>
+            </div>
+          </div>
+          <div className="col-sm-6">
+            <ModalAddContact
+              listOrganisation={listOrganisation}
+              onChangeContacts={onChangeUpdateContact}
+            ></ModalAddContact>
+          </div>
         </div>
 
         <h1 className="mb-3">Liste de contacts</h1>
         <div class="table-contact-container">
           {listContacts && listContacts.data !== null ? (
-            <table
-              id="table-contact"
-              class="display dataTable  display dataTable  mt-2 table table-striped table-bordered table-hover"
-              aria-describedby="example_info"
-            >
-              <thead>
-                <tr>
-                  <th
-                    className="sorting sorting_asc"
-                    tabindex="0"
-                    aria-controls="example"
-                    rowSpan="1"
-                    colSpan="1"
-                    aria-sort="ascending"
-                    aria-label="Name: activate to sort column descending"
-                  >
-                    Type
-                  </th>
-                  <th
-                    className="sorting sorting_asc"
-                    tabindex="0"
-                    aria-controls="example"
-                    rowSpan="1"
-                    colSpan="1"
-                    aria-sort="ascending"
-                    aria-label="Name: activate to sort column descending"
-                  >
-                    Nom
-                  </th>
-                  <th
-                    className="sorting sorting_asc"
-                    tabindex="0"
-                    aria-controls="example"
-                    rowSpan="1"
-                    colSpan="1"
-                    aria-sort="ascending"
-                    aria-label="Name: activate to sort column descending"
-                  >
-                    Organisation
-                  </th>
-                  <th
-                    className="sorting sorting_asc"
-                    tabindex="0"
-                    aria-controls="example"
-                    rowSpan="1"
-                    colSpan="1"
-                    aria-sort="ascending"
-                    aria-label="Name: activate to sort column descending"
-                  >
-                    Téléphone
-                  </th>
-                  <th
-                    className="sorting sorting_asc"
-                    tabindex="0"
-                    aria-controls="example"
-                    rowSpan="1"
-                    colSpan="1"
-                    aria-sort="ascending"
-                    aria-label="Name: activate to sort column descending"
-                  >
-                    Tags
-                  </th>
-                  <th
-                    className="sorting sorting_asc"
-                    tabindex="0"
-                    aria-controls="example"
-                    rowSpan="1"
-                    colSpan="1"
-                    aria-sort="ascending"
-                    aria-label="Name: activate to sort column descending"
-                  >
-                    Patient(s)
-                  </th>
-                  <th
-                    className="sorting sorting_asc"
-                    tabindex="0"
-                    aria-controls="example"
-                    rowSpan="1"
-                    colSpan="1"
-                    aria-sort="ascending"
-                    aria-label="Name: activate to sort column descending"
-                  >
-                    Appel(s)
-                  </th>
-                  <th
-                    className="sorting sorting_asc"
-                    tabindex="0"
-                    aria-controls="example"
-                    rowSpan="1"
-                    colSpan="1"
-                    aria-sort="ascending"
-                    aria-label="Name: activate to sort column descending"
-                  >
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {listContacts.data.map((e, idx) => (
-                  <tr className="odd" key={idx}>
-                    <td>{e.typeLabel}</td>
-                    <td className="sorting_1">
-                      {e.lastname} {e.firstname}
-                    </td>
-                    <td>{e.organisation}</td>
-                    <td>
-                      {e && e.phone !== null && (
-                        <>
-                          <span className="phone-contacts" key={idx}>
-                            {e.phone}
-                          </span>
-                        </>
-                      )}
-                    </td>
-                    <td>
-                      {e && e.tags !== null && (
-                        <>
-                          <span className="tags-contacts" key={idx}>
-                            {e.tags}
-                          </span>
-                        </>
-                      )}
-                    </td>
-                    <td>{e.nb_calls}</td>
-                    <td>{e.nb_patients}</td>
-                    <td>
-                      <Link to={"/profil-contact/" + e.id}>Détails</Link>
-                    </td>
+            <>
+              <table
+                id="table-contact"
+                class="display dataTable  display dataTable  mt-2 table table-striped table-bordered table-hover"
+                aria-describedby="example_info"
+              >
+                <thead>
+                  <tr>
+                    <th
+                      className="sorting sorting_asc"
+                      tabindex="0"
+                      aria-controls="example"
+                      rowSpan="1"
+                      colSpan="1"
+                      aria-sort="ascending"
+                      aria-label="Name: activate to sort column descending"
+                    >
+                      Type
+                    </th>
+                    <th
+                      className="sorting sorting_asc"
+                      tabindex="0"
+                      aria-controls="example"
+                      rowSpan="1"
+                      colSpan="1"
+                      aria-sort="ascending"
+                      aria-label="Name: activate to sort column descending"
+                    >
+                      Nom
+                    </th>
+                    <th
+                      className="sorting sorting_asc"
+                      tabindex="0"
+                      aria-controls="example"
+                      rowSpan="1"
+                      colSpan="1"
+                      aria-sort="ascending"
+                      aria-label="Name: activate to sort column descending"
+                    >
+                      Organisation
+                    </th>
+                    <th
+                      className="sorting sorting_asc"
+                      tabindex="0"
+                      aria-controls="example"
+                      rowSpan="1"
+                      colSpan="1"
+                      aria-sort="ascending"
+                      aria-label="Name: activate to sort column descending"
+                    >
+                      Téléphone
+                    </th>
+                    <th
+                      className="sorting sorting_asc"
+                      tabindex="0"
+                      aria-controls="example"
+                      rowSpan="1"
+                      colSpan="1"
+                      aria-sort="ascending"
+                      aria-label="Name: activate to sort column descending"
+                    >
+                      Tags
+                    </th>
+                    <th
+                      className="sorting sorting_asc"
+                      tabindex="0"
+                      aria-controls="example"
+                      rowSpan="1"
+                      colSpan="1"
+                      aria-sort="ascending"
+                      aria-label="Name: activate to sort column descending"
+                    >
+                      Patient(s)
+                    </th>
+                    <th
+                      className="sorting sorting_asc"
+                      tabindex="0"
+                      aria-controls="example"
+                      rowSpan="1"
+                      colSpan="1"
+                      aria-sort="ascending"
+                      aria-label="Name: activate to sort column descending"
+                    >
+                      Appel(s)
+                    </th>
+                    <th
+                      className="sorting sorting_asc"
+                      tabindex="0"
+                      aria-controls="example"
+                      rowSpan="1"
+                      colSpan="1"
+                      aria-sort="ascending"
+                      aria-label="Name: activate to sort column descending"
+                    >
+                      Actions
+                    </th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {listContacts.data.map((e, idx) => (
+                    <tr className="odd" key={idx}>
+                      <td>{e.typeLabel}</td>
+                      <td className="sorting_1">
+                        {e.lastname} {e.firstname}
+                      </td>
+                      <td>{e.organisation}</td>
+                      <td>
+                        {e && e.phone !== null && (
+                          <>
+                            <span className="phone-contacts" key={idx}>
+                              {e.phone}
+                            </span>
+                          </>
+                        )}
+                      </td>
+                      <td>
+                        {e && e.tags !== null && (
+                          <>
+                            <span className="tags-contacts" key={idx}>
+                              {e.tags}
+                            </span>
+                          </>
+                        )}
+                      </td>
+                      <td>{e.nb_calls}</td>
+                      <td>{e.nb_patients}</td>
+                      <td>
+                        <Link to={"/profil-contact/" + e.id}>Détails</Link>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </>
           ) : (
             <ReactLoading
               type={"spin"}
@@ -327,7 +382,7 @@ function ContactOrganisations() {
           )}
         </div>
       </div>
-    </>
+    </div>
   );
 }
 

@@ -9,6 +9,15 @@ body,
   background-color: white!important;
   width: 100%;
 }
+
+.input-tags-search{
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  label{
+    color: white;
+  }
+}
 .prev-btn{
   color: black;
   margin-right: 0.5rem;
