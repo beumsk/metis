@@ -250,36 +250,36 @@ class ContactsController extends AbstractController
 
         $contacts = $contactRepository->findAllContacts($tags);
 
-        foreach ($contacts as $contact) {
-            $contactId = $contact['id'];
-            $calls[] = [
-                // "phone" => (count($contactRepository->findContactInfos($contactId, Contacts::PHONE_PATH))) ? $contactRepository->findContactInfos($contactId, Contacts::PHONE_PATH)[0]->getValue() : null,
+        // foreach ($contacts as $contact) {
+        //     $contactId = $contact['id'];
+        //     $calls[] = [
+        //         // "phone" => (count($contactRepository->findContactInfos($contactId, Contacts::PHONE_PATH))) ? $contactRepository->findContactInfos($contactId, Contacts::PHONE_PATH)[0]->getValue() : null,
 
-                "phone" => ($contactRepository->findContactInfos($contactId, Contacts::PHONE_PATH)) ?
-                    array_map(function ($a) {
-                        return $a->getValue();
-                    },  [...$contactRepository->findContactInfos($contactId, Contacts::PHONE_PATH)])
-                    : null,
-
-
-                // "tags" => (count($contactRepository->findTags($contactId))) ?
-                //     array_map(function ($a) {
-                //         return $a->getValue();
-                //     },  [...$contactRepository->findTags($contactId)])
-                //     : null,
-                "typeLabel" => $contact["typeLabel"],
-                "organisation" => $contact["organisation"],
-                "firstname" => $contact["firstname"],
-                "lastname" => $contact["lastname"],
-                // "id" => $contact["id"],
-                // "orga_id" => $contact["orga_id"],
-                "nb_calls" => $contact["nb_calls"],
-                "nb_patients" => $contact["nb_patients"]
-            ];
-        }
+        //         // "phone" => ($contactRepository->findContactInfos($contactId, Contacts::PHONE_PATH)) ?
+        //         //     array_map(function ($a) {
+        //         //         return $a->getValue();
+        //         //     },  [...$contactRepository->findContactInfos($contactId, Contacts::PHONE_PATH)])
+        //         //     : "",
 
 
-        $response =  new JsonResponse($calls, 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
+        //         // "tags" => (count($contactRepository->findTags($contactId))) ?
+        //         //     array_map(function ($a) {
+        //         //         return $a->getValue();
+        //         //     },  [...$contactRepository->findTags($contactId)])
+        //         //     : "",
+        //         "typeLabel" => $contact["typeLabel"],
+        //         "organisation" => $contact["organisation"],
+        //         "firstname" => $contact["firstname"],
+        //         "lastname" => $contact["lastname"],
+        //         // "id" => $contact["id"],
+        //         // "orga_id" => $contact["orga_id"],
+        //         "nb_calls" => $contact["nb_calls"],
+        //         "nb_patients" => $contact["nb_patients"]
+        //     ];
+        // }
+
+
+        $response =  new JsonResponse($contacts, 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
         $response->setSharedMaxAge(3600);
         return $response;
     }

@@ -289,7 +289,8 @@ class ContactsRepository extends ServiceEntityRepository
             CASE c.type WHEN ' . Contacts::TYPE_PERSON . ' THEN "Physique" ELSE "Morale" END as typeLabel,
             (select o.lastname FROM contacts o WHERE o.id = c.orga_id ) as organisation,          
             c.firstname, c.lastname, c.id as id, c.orga_id, 
-            
+            (select GROUP_CONCAT(value) from contacts_information where cont_id = c.id and itel_id = 19 AND deleted_at is NULL group by cont_id) as phone,
+            (select GROUP_CONCAT(s.value) from contacts_information ci INNER JOIN suggestions s ON ci.sugg_id = s.id where ci.cont_id = c.id and ci.itel_id = 23 AND ci.deleted_at is NULL group by cont_id) as tags,
             (select count(r.id) from followup_reports r 
             inner join followup_report_contact rc on r.id = rc.fore_id 
             where r.activity_type in (' . implode(",", [FollowupReports::ACTIVITY_CALL_OUT, FollowupReports::ACTIVITY_CALL_IN]) . ') and r.deleted_at is null and rc.cont_id = c.id) as nb_calls ,

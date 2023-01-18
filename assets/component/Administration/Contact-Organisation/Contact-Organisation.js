@@ -236,17 +236,17 @@ function ContactOrganisations() {
                   >
                     Téléphone
                   </th>
-                  {/* <th
-               className="sorting sorting_asc"
-               tabindex="0"
-               aria-controls="example"
-               rowSpan="1"
-               colSpan="1"
-               aria-sort="ascending"
-               aria-label="Name: activate to sort column descending"
-             >
-               Tags
-             </th> */}
+                  <th
+                    className="sorting sorting_asc"
+                    tabindex="0"
+                    aria-controls="example"
+                    rowSpan="1"
+                    colSpan="1"
+                    aria-sort="ascending"
+                    aria-label="Name: activate to sort column descending"
+                  >
+                    Tags
+                  </th>
                   <th
                     className="sorting sorting_asc"
                     tabindex="0"
@@ -293,25 +293,21 @@ function ContactOrganisations() {
                     <td>
                       {e && e.phone !== null && (
                         <>
-                          {e.phone.map((number) => (
-                            <span className="phone-contacts" key={idx}>
-                              {number}
-                            </span>
-                          ))}
+                          <span className="phone-contacts" key={idx}>
+                            {e.phone}
+                          </span>
                         </>
                       )}
                     </td>
-                    {/* <td>
-                     {e && e.tags !== null && (
-                       <>
-                         {e.tags.map((tag, idx) => (
-                           <span className="tags-contacts" key={idx}>
-                             {tag}
-                           </span>
-                         ))}
-                       </>
-                     )}
-                   </td> */}
+                    <td>
+                      {e && e.tags !== null && (
+                        <>
+                          <span className="tags-contacts" key={idx}>
+                            {e.tags}
+                          </span>
+                        </>
+                      )}
+                    </td>
                     <td>{e.nb_calls}</td>
                     <td>{e.nb_patients}</td>
                     <td>
