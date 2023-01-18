@@ -61,6 +61,14 @@ class Suggestions
     #[ORM\Column(type: Types::SMALLINT, nullable: true)]
     private ?bool $is_deleted = null;
 
+    #[ORM\OneToMany(mappedBy: 'suggestion', targetEntity: ContactsInformation::class)]
+    private Collection $tags;
+
+    public function __construct()
+    {
+        $this->tags = new ArrayCollection();
+    }
+
 
     #[ORM\OneToMany(mappedBy: 'suge', targetEntity: PatientsInformationTemplateElement::class)]
 
@@ -173,6 +181,36 @@ class Suggestions
     public function setParentSugg(?Suggestions $parentSugg): self
     {
         $this->parentSugg = $parentSugg;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ContactsInformation>
+     */
+    public function getTags(): Collection
+    {
+        return $this->tags;
+    }
+
+    public function addTag(ContactsInformation $tag): self
+    {
+        if (!$this->tags->contains($tag)) {
+            $this->tags->add($tag);
+            $tag->setSuggestion($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTag(ContactsInformation $tag): self
+    {
+        if ($this->tags->removeElement($tag)) {
+            // set the owning side to null (unless already changed)
+            if ($tag->getSuggestion() === $this) {
+                $tag->setSuggestion(null);
+            }
+        }
 
         return $this;
     }

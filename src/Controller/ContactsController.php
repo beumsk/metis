@@ -207,7 +207,7 @@ class ContactsController extends AbstractController
 
         $tags = $request->request->get('tags');
         $query = $request->request->get('query');
-        $contacts = $doctrine->getRepository(Contacts::class)->findAllContacts($tags, $query);
+        $contacts = $doctrine->getRepository(Contacts::class)->findAllContacts($tags);
         $encoders = [new JsonEncoder()];
         $normalizers = [new DateTimeNormalizer(), new ObjectNormalizer()];
         $serializer = new Serializer($normalizers, $encoders);
@@ -243,29 +243,44 @@ class ContactsController extends AbstractController
 
         $tags = $request->request->get('tags');
         $querySearch = $request->request->get('query');
-        $contacts = $doctrine->getRepository(Contacts::class)->findAllContacts($tags, $querySearch);
-        $encoders = [new JsonEncoder()];
-        $normalizers = [new DateTimeNormalizer(), new ObjectNormalizer()];
-        $serializer = new Serializer($normalizers, $encoders);
+        $contactRepository = $doctrine->getRepository(Contacts::class);
 
         $calls = [];
 
 
+        $contacts = $contactRepository->findAllContacts($tags);
 
-        $jsonObject = $serializer->serialize($contacts, 'json', [
-            'circular_reference_handler' => function ($object) {
-                return $object->getId();
-            },
-            JsonEncoder::FORMAT,
-            [AbstractNormalizer::IGNORED_ATTRIBUTES => ["url", "description", "type", "pathString", "path", "calls", "informations"]]
-        ]);
+        foreach ($contacts as $contact) {
+            $contactId = $contact['id'];
+            $calls[] = [
+                // "phone" => (count($contactRepository->findContactInfos($contactId, Contacts::PHONE_PATH))) ? $contactRepository->findContactInfos($contactId, Contacts::PHONE_PATH)[0]->getValue() : null,
 
-        $response =  new Response($jsonObject, 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
+                "phone" => ($contactRepository->findContactInfos($contactId, Contacts::PHONE_PATH)) ?
+                    array_map(function ($a) {
+                        return $a->getValue();
+                    },  [...$contactRepository->findContactInfos($contactId, Contacts::PHONE_PATH)])
+                    : null,
 
+
+                "tags" => (count($contactRepository->findTags($contactId))) ?
+                    array_map(function ($a) {
+                        return $a->getValue();
+                    },  [...$contactRepository->findTags($contactId)])
+                    : null,
+                "typeLabel" => $contact["typeLabel"],
+                "organisation" => $contact["organisation"],
+                "firstname" => $contact["firstname"],
+                "lastname" => $contact["lastname"],
+                "id" => $contact["id"],
+                "orga_id" => $contact["orga_id"],
+                "nb_calls" => $contact["nb_calls"],
+                "nb_patients" => $contact["nb_patients"]
+            ];
+        }
+
+
+        $response =  new JsonResponse($calls, 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
         $response->setSharedMaxAge(3600);
-
-
-
         return $response;
     }
 

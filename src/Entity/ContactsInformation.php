@@ -43,6 +43,10 @@ class ContactsInformation
     #[ORM\JoinColumn(name: "cont_id", referencedColumnName: "id", nullable: true)]
     private ?Contacts $contact = null;
 
+    #[ORM\ManyToOne(targetEntity: 'Suggestions', inversedBy: 'tags')]
+    #[ORM\JoinColumn(name: "sugg_id", referencedColumnName: "id", nullable: true)]
+    private ?Suggestions $suggestion = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -127,6 +131,18 @@ class ContactsInformation
     public function setContact(?Contacts $contact): self
     {
         $this->contact = $contact;
+
+        return $this;
+    }
+
+    public function getSuggestion(): ?Suggestions
+    {
+        return $this->suggestion;
+    }
+
+    public function setSuggestion(?Suggestions $suggestion): self
+    {
+        $this->suggestion = $suggestion;
 
         return $this;
     }
