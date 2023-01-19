@@ -221,6 +221,7 @@ function RapportDetails(props) {
     })
       .then(function (response) {
         setInformations(response);
+        console.log(response);
       })
       .catch(function (response) {});
   }

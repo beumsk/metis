@@ -75,22 +75,8 @@ function DeleteIndicateurs(props) {
       var formGetInfos = new FormData();
       formGetInfos.append("id", id.toString());
       if (response) {
-        axios({
-          method: "post",
-          url: "/api/patientsInformationByPatients",
-          data: formGetInfos,
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${auth.auth.accessToken}`,
-          },
-        })
-          .then(function (response) {
-            props.onChangeIndicators(true);
-            setShow(false);
-          })
-          .catch(function (response) {});
-        // document.querySelectorAll(".btn-close")[0].click();
-        // location.replace(window.location.origin + "/" + idPatient);
+        props.onChangeIndicators(true);
+        setShow(false);
       }
     });
   };
