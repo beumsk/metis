@@ -23,24 +23,28 @@ function AddIndicateursByReport(props) {
   let id = useParams().id;
   const handleClose = () => setShow(false);
   const handleShow = () => {
-    const optionsItems = [
-      { id: 1, name: "CVC" },
-      { id: 2, name: "HESTIA - Risque perte logement" },
-      { id: 3, name: "HESTIA - Risque décès" },
-    ];
-    function diff(obj1, obj2) {
-      var temp = JSON.stringify(obj2?.map((x) => x.id));
-      return obj1.filter((y) => temp.indexOf(y.id) < 0 && y);
+    if (
+      optionsItems &&
+      optionsItems.length > 0 &&
+      props?.indicatorsGroups &&
+      props?.indicatorsGroups.length > 0
+    ) {
+      const optionsItems = [
+        { id: 1, name: "CVC" },
+        { id: 2, name: "HESTIA - Risque perte logement" },
+        { id: 3, name: "HESTIA - Risque décès" },
+      ];
+      function diff(obj1, obj2) {
+        var temp = JSON.stringify(obj2?.map((x) => x.id));
+        return obj1.filter((y) => temp.indexOf(y.id) < 0 && y);
+      }
+
+      var result = diff(optionsItems, props?.indicatorsGroups);
+
+      setOptionsItems(result);
+      setIndicateurs();
+      //
     }
-
-    var result = diff(optionsItems, props?.indicatorsGroups);
-
-    console.log(props?.indicatorsGroups);
-    console.log(optionsItems);
-    setOptionsItems(result);
-    setIndicateurs();
-    //
-
     setShow(true);
   };
   const [optionsItems, setOptionsItems] = useState([
@@ -83,28 +87,27 @@ function AddIndicateursByReport(props) {
     setIndicateursFormCVC(indicateursFormCVC);
 
     // console.log(props?.indicatorsGroups);
-    // if (
-    //   optionsItems &&
-    //   optionsItems.length > 0 &&
-    //   props?.indicatorsGroups &&
-    //   props?.indicatorsGroups.length > 0
-    // ) {
-    const optionsItems = [
-      { id: 1, name: "CVC" },
-      { id: 2, name: "HESTIA - Risque perte logement" },
-      { id: 3, name: "HESTIA - Risque décès" },
-    ];
-    function diff(obj1, obj2) {
-      var temp = JSON.stringify(obj2?.map((x) => x.id));
-      return obj1.filter((y) => temp.indexOf(y.id) < 0 && y);
+    if (
+      optionsItems &&
+      optionsItems.length > 0 &&
+      props?.indicatorsGroups &&
+      props?.indicatorsGroups.length > 0
+    ) {
+      const optionsItems = [
+        { id: 1, name: "CVC" },
+        { id: 2, name: "HESTIA - Risque perte logement" },
+        { id: 3, name: "HESTIA - Risque décès" },
+      ];
+      function diff(obj1, obj2) {
+        var temp = JSON.stringify(obj2?.map((x) => x.id));
+        return obj1.filter((y) => temp.indexOf(y.id) < 0 && y);
+      }
+
+      var result = diff(optionsItems, props?.indicatorsGroups);
+
+      console.log(props?.indicatorsGroups);
+      setOptionsItems(result);
     }
-
-    var result = diff(optionsItems, props?.indicatorsGroups);
-
-    console.log(props?.indicatorsGroups);
-    setOptionsItems(result);
-    //
-    // }
   }, []);
 
   function choiceTypeCVC(e) {}
