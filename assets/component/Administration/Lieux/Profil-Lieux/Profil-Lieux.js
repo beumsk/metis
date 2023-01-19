@@ -75,9 +75,19 @@ const ProfilLieux = () => {
   //   };
 
   function informationSaved(e) {
-    if (e) {
-      setContactInformation(e.response);
-    }
+    axios({
+      method: "post",
+      url: "/api/getPlacesListById",
+      data: formData,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    })
+      .then(function (response) {
+        setContactInformation(response.data);
+      })
+      .catch(function (response) {});
   }
 
   return (
@@ -92,10 +102,10 @@ const ProfilLieux = () => {
             <p>{contactInformation?.description}</p>
           </div>
 
-          {/* <div className="row coordonnes-body">
+          <div className="row coordonnes-body">
             <table class="uk-table uk-table-striped">
               <h6>Infos</h6>
-              {contactInformation?.informations.map((contInfo) => (
+              {contactInformation?.informations?.map((contInfo) => (
                 <tr>
                   <td>{contInfo.value}</td>
                   <td>
@@ -115,11 +125,11 @@ const ProfilLieux = () => {
                                 contInfo={contInfo}
                                 contact={contactInformation}
                                 idInfo={e.id}
-                                onChange={(e) => informationSaved(e)}
+                                onChange={informationSaved}
                               ></ModalEditLieux>
                               <ModalDeleteInfos
                                 infosPatient={e}
-                                onChange={(e) => informationSaved(e)}
+                                onChange={informationSaved}
                               ></ModalDeleteInfos>
                             </span>
                           </span>
@@ -145,7 +155,7 @@ const ProfilLieux = () => {
                 </tr>
               ))}
             </table>
-          </div> */}
+          </div>
 
           <div className="row coordonnes-body">
             <table class="uk-table uk-table-striped">
