@@ -7,9 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faFilePen,
   faPhone,
-  faPen,
   faHouseSignal,
-  faSave,
 } from "@fortawesome/free-solid-svg-icons";
 import { useParams } from "react-router-dom";
 import Table from "react-bootstrap/Table";
@@ -476,7 +474,7 @@ function RapportDetails(props) {
           ))}
 
           <button className="btn-metis" onClick={(e) => onChangeNumber()}>
-            READ MORE
+            Afficher plus
           </button>
         </>
       ) : informations ? (

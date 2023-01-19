@@ -1,19 +1,8 @@
 import React, { useState, useEffect } from "react";
-import Button from "react-bootstrap/Button";
-import Modal from "react-bootstrap/Modal";
 import useAuth from "../../../hooks/useAuth";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck, faCancel, faEdit } from "@fortawesome/free-solid-svg-icons";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import Form from "react-bootstrap/Form";
-import Editor from "./Editor-Reports";
-import AddActivitiesByReport from "./Add-ActivitiesByReports";
-import AddIndicateursByReport from "./Indicateurs-Form-AddReports/Add-IndicateursByReports";
-import AddSoinsByReport from "./Add-SoinsByReports";
-import InputPlaceList from "./Input-Place-List";
-import InputContactList from "./Input-Contact-List";
-import InputGoalsList from "./Input-Goals-List";
 
 function FilterRapportDetails(props) {
   const [show, setShow] = useState(false);
@@ -39,15 +28,16 @@ function FilterRapportDetails(props) {
   const [isSentRepport, setSentRepport] = useState(false);
   var formActivitiesDatas = new FormData();
   formActivitiesDatas.append("id", 106);
+
   const onChangeRapportFilter = (e) => {
+    e.preventDefault();
+
     if (filterTextContentRapport) {
       reportData.append("setTextRapport", filterTextContentRapport);
     }
-
     if (filterTypeOfReports) {
       reportData.append("setTypeRapport", filterTypeOfReports);
     }
-
     if (filterDateContentRapport) {
       reportData.append("setDateRapport", filterDateContentRapport);
     }
@@ -68,7 +58,7 @@ function FilterRapportDetails(props) {
       .catch(function (response) {});
   };
   return (
-    <>
+    <form>
       <div className="search-textRapport row">
         <div className="col-sm-4">
           <label className="uk-form-label">Description de rapport</label>
@@ -86,7 +76,7 @@ function FilterRapportDetails(props) {
             className="uk-select"
             onChange={(e) => setTypeOfRepports(e.target.value)}
           >
-            <option>Choisissez le type de rapport</option>
+            <option value="">Choisissez le type de rapport</option>
             <option value={1}>Rapport de rencontre</option>
             <option value={4}>Appel entrant</option>
             <option value={2}>Appel sortant</option>
@@ -106,13 +96,14 @@ function FilterRapportDetails(props) {
             <button
               onClick={(e) => onChangeRapportFilter(e)}
               className="uk-button uk-button-default mt-4"
+              type="submit"
             >
               Filtrer
             </button>
           </div>
         </div>
       </div>
-    </>
+    </form>
   );
 }
 

@@ -36,7 +36,7 @@ class PasswordController extends AbstractController
             $entityManager->flush();
 
             return new JsonResponse([
-                'response' => "Le mot de passe a été changée",
+                'response' => "Le mot de passe a été changé",
                 'idAppel' => $user->getId()
             ]);
         } else {

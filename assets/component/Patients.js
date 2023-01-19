@@ -28,7 +28,7 @@ function Patients() {
   // const anchor = document.getElementById("myAnchor");
 
   useEffect(() => {
-    if (window.location.search) {
+    if (window.location.search && window.location.search !== "?q=") {
       // const queryString = window.location.search;
       const params = new URLSearchParams(window.location.search);
       let query = params.get("q");
@@ -58,6 +58,16 @@ function Patients() {
         // document.getElementById("btn-search").click();
       }
     } else {
+      if (searchNamePatient) {
+        formData.append("searchNamePatient", searchNamePatient);
+      }
+      if (searchDateBirth) {
+        formData.append("searchDateBirthPatient", searchDateBirth);
+      }
+      if (typeSelectPatient && typeSelectPatient !== "0") {
+        formData.append("typeSelectPatient", typeSelectPatient);
+      }
+
       axios({
         method: "post",
         url: "/api/getPatients",
@@ -94,14 +104,14 @@ function Patients() {
   }, [lengthList, setLengthList]);
 
   const onSubmitFilter = (e) => {
+    e.preventDefault();
+
     if (searchNamePatient) {
       formData.append("searchNamePatient", searchNamePatient);
     }
-
     if (searchDateBirth) {
       formData.append("searchDateBirthPatient", searchDateBirth);
     }
-
     if (typeSelectPatient && typeSelectPatient !== "0") {
       formData.append("typeSelectPatient", typeSelectPatient);
     }
@@ -134,7 +144,7 @@ function Patients() {
         <h1 color="white" className="mb-3">
           Liste des patients
         </h1>
-        <div className="container-filter">
+        <form className="container-filter">
           <div className="row">
             <div className="col-sm-3">
               <input
@@ -174,12 +184,13 @@ function Patients() {
                 onClick={(e) => onSubmitFilter(e)}
                 id="btn-search"
                 className="btn-metis"
+                type="submit"
               >
                 Filtrer
               </Button>
             </div>
           </div>
-        </div>
+        </form>
 
         {patientsList && patientsList.data && patientsList.data.length > 0 && (
           <>
@@ -275,7 +286,7 @@ function Patients() {
               </Accordion>
             ))}
             <button className="btn-metis" onClick={readMore}>
-              Read More
+              Afficher plus
             </button>
           </>
         )}
