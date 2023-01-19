@@ -697,6 +697,7 @@ const Profile = () => {
             />
           )}
         </div>
+
         <div className="col-sm-8">
           <div className="d-flex row-btn mb-4 suivi-action-buttons">
             <div>

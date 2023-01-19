@@ -237,7 +237,7 @@ function AppelsOrganisation() {
             ))}
 
             <button className="btn-metis" onClick={readMore}>
-              Read More
+              Afficher plus
             </button>
           </>
         ) : (
