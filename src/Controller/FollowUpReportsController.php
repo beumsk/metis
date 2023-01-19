@@ -2330,7 +2330,7 @@ class FollowUpReportsController extends AbstractController
             if ($value->getDeletedAt() === null && $value->getType() === 1 && ($value->getStatus() === 0 || $value->getStatus() === 1)) {
                 $goalsArr[] = [
                     "value" => $value->getId(),
-                    "label" => $value->getCreationDate()->format('d/m/Y') . " " . (($value->getSugg() && $value->getSugg()->getValue()) ? $value->getSugg()->getValue() : null) . " " . (($value->getTitle()) ? $value->getTitle() : null),
+                    "label" => $value->getCreationDate()->format('d/m/Y') . " " . (($value->getSugg() && $value->getSugg()->getValue()) ? $value->getSugg()->getValue() : null) . " " . (($value->getDescription()) ? $value->getDescription() : null),
 
                 ];
             }
