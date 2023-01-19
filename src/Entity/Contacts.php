@@ -56,7 +56,7 @@ class Contacts
     #[ORM\OneToMany(mappedBy: 'contact', targetEntity: FollowupGoals::class)]
     private Collection $calls;
 
-
+    // private $lengthOccupants;
 
     #[ORM\OneToMany(mappedBy: 'contact', targetEntity: ContactsInformation::class)]
     private Collection $informations;
@@ -259,6 +259,17 @@ class Contacts
     {
         return $this->occupants;
     }
+
+
+    /**
+     * @return Collection<int, PatientsPlaces>
+     */
+    public function getLengthOccupants()
+    {
+        return count($this->occupants);
+    }
+
+
 
     public function addOccupant(PatientsPlaces $occupant): self
     {

@@ -118,7 +118,7 @@ class PlacesController extends AbstractController
             AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context) {
                 return $object->getId();
             },
-            AbstractNormalizer::IGNORED_ATTRIBUTES => ["pati", "sugg", "user", "orga", "calls", "patients", "cont", "goalsByBlock"]
+            AbstractNormalizer::IGNORED_ATTRIBUTES => ["pati", "sugg", "tags", "user", "orga", "calls", "patients", "cont", "goalsByBlock", "occupants", "informations", "goalsInformation", "followupInformation"]
         ]);
 
         $response = new Response($jsonObject, 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);

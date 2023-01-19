@@ -77,7 +77,7 @@ function Lieux() {
       dataField: "occupants",
       text: "Occupants",
       formatter: (cell, row, rowIndex, extraData) => (
-        <div>{row.occupants.length}</div>
+        <div>{row.lengthOccupants}</div>
       ),
       sort: true,
       sortCaret: sortCaret,
