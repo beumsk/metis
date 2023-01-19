@@ -87,16 +87,15 @@ function EditIndicateursByReport(props) {
   return (
     <>
       <Button onClick={handleShow}>
-        {" "}
         <FontAwesomeIcon icon={faEdit} />
       </Button>
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Ajouter un indicateur</Modal.Title>
+          <Modal.Title>Modifier un indicateur</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <div className="addSoins-form">
+          <div className="">
             <Form.Label htmlFor="inputValue" className="uk-form-label">
               {/* Type: {isIndicateurs} */}
             </Form.Label>

@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import useAuth from "../../../hooks/useAuth";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser } from "@fortawesome/free-solid-svg-icons";
 import Menu from "../../Menu";
 import { json, Link, useParams } from "react-router-dom";
 import BootstrapTable from "react-bootstrap-table-next";
@@ -15,8 +13,6 @@ import paginationFactory from "react-bootstrap-table2-paginator";
 import ModalAddContact from "./Modal-Add-Contacts";
 import DataTable from "datatables.net-dt";
 import $ from "jquery";
-import Chip from "@mui/material/Chip";
-import Stack from "@mui/material/Stack";
 import ReactLoading from "react-loading";
 import InputTagsList from "./Input-Tags-List";
 // var dt = require("datatables.net")(window, $);
@@ -28,8 +24,6 @@ function ContactOrganisations() {
   const [lengthList, setLengthList] = useState(10);
   const [tags, setTags] = useState(null);
   const [queryValue, setQueryValue] = useState(null);
-
-  console.log(useParams());
 
   var formData = new FormData();
   formData.append("page", lengthList.toString());
@@ -82,24 +76,20 @@ function ContactOrganisations() {
       ),
     },
   ];
+
   useEffect(() => {
     // formData.append("query", queryValue);
     if (window.location.search) {
       const urlParams = new URLSearchParams(location.search);
-
-      console.log(urlParams.query);
       for (const [key, value] of urlParams) {
-        console.log(`${key}:${value}`);
         let valeurObj = JSON.parse(value);
         setQueryValue(valeurObj);
-        console.log(valeurObj);
         // if (tags && tags.length > 0) {
         formData.append("tags", JSON.stringify(valeurObj?.map((e) => e.id)));
         // }
       }
     }
 
-    console.log(queryValue);
     axios({
       method: "post",
       url: "/api/getContacts",
@@ -114,7 +104,6 @@ function ContactOrganisations() {
         setListContacts(response);
 
         // setTimeout(() => {
-        console.log(document.getElementById("table-contact"));
         let table0 = new DataTable("#table-contact", {
           language: {
             sProcessing: "En cours...",
@@ -169,10 +158,6 @@ function ContactOrganisations() {
     setLengthList(lengthList + 10);
   };
 
-  function onClickFilter(e) {
-    console.log(e);
-  }
-
   function onChangeUpdateContact(e) {
     // props.onChangeUpdateContact(e);
 
@@ -193,20 +178,28 @@ function ContactOrganisations() {
 
     // setListContacts(e);
   }
-  function onColumnMatch({ searchText, value, column, row }) {}
-
-  console.log(queryValue);
 
   return (
     <div>
       <Menu></Menu>
+
       <div className="container container-patients mx-auto ">
+        <ModalAddContact
+          listOrganisation={listOrganisation}
+          onChangeContacts={onChangeUpdateContact}
+        ></ModalAddContact>
+
+        <h1 className="mb-3">Liste de contacts</h1>
+
         <div className="row">
           <div className="col-sm-6">
             <div className="input-tags-search">
               {queryValue !== null && (
                 <InputTagsList
-                  onChange={(e) => setTags(e)}
+                  onChange={(e) => {
+                    console.log("e", e);
+                    setTags(e);
+                  }}
                   defaultValue={queryValue}
                 ></InputTagsList>
               )}
@@ -227,18 +220,11 @@ function ContactOrganisations() {
               </form>
             </div>
           </div>
-          <div className="col-sm-6">
-            <ModalAddContact
-              listOrganisation={listOrganisation}
-              onChangeContacts={onChangeUpdateContact}
-            ></ModalAddContact>
-          </div>
         </div>
 
-        <h1 className="mb-3">Liste de contacts</h1>
         <div class="table-contact-container">
           {listContacts && listContacts.data !== null ? (
-            <>
+            <div className="react-bootstrap-table">
               <table
                 id="table-contact"
                 class="display dataTable  display dataTable  mt-2 table table-striped table-bordered table-hover"
@@ -337,41 +323,60 @@ function ContactOrganisations() {
                   </tr>
                 </thead>
                 <tbody>
-                  {listContacts.data.map((e, idx) => (
-                    <tr className="odd" key={idx}>
-                      <td>{e.typeLabel}</td>
-                      <td className="sorting_1">
-                        {e.lastname} {e.firstname}
-                      </td>
-                      <td>{e.organisation}</td>
-                      <td>
-                        {e && e.phone !== null && (
-                          <>
-                            <span className="phone-contacts" key={idx}>
-                              {e.phone}
-                            </span>
-                          </>
-                        )}
-                      </td>
-                      <td>
-                        {e && e.tags !== null && (
-                          <>
-                            <span className="tags-contacts" key={idx}>
-                              {e.tags}
-                            </span>
-                          </>
-                        )}
-                      </td>
-                      <td>{e.nb_calls}</td>
-                      <td>{e.nb_patients}</td>
-                      <td>
-                        <Link to={"/profil-contact/" + e.id}>Détails</Link>
-                      </td>
-                    </tr>
-                  ))}
+                  {listContacts.data.map((e, idx) => {
+                    let tagArr = e.tags?.split(",");
+                    return (
+                      <tr className="odd" key={idx}>
+                        <td>{e.typeLabel}</td>
+                        <td className="sorting_1">
+                          {e.lastname} {e.firstname}
+                        </td>
+                        <td>{e.organisation}</td>
+                        <td>
+                          {e && e.phone !== null && (
+                            <>
+                              <span className="phone-contacts" key={idx}>
+                                {e.phone}
+                              </span>
+                            </>
+                          )}
+                        </td>
+                        <td>
+                          {e &&
+                            e.tags !== null &&
+                            tagArr &&
+                            tagArr.map((x, idxx) => (
+                              <span className="tags-contacts" key={idxx}>
+                                {x}
+                              </span>
+                              // <form
+                              //   action="/contactsorganisation"
+                              //   method="get"
+                              //   key={idxx}
+                              // >
+                              //   <input
+                              //     name="query"
+                              //     type={"hidden"}
+                              //     // get actual ID OR remove ID from query
+                              //     value={JSON.stringify([{ id: 0, value: x }])}
+                              //   ></input>
+                              //   <button type="submit" className="tags-contacts">
+                              //     {x}
+                              //   </button>
+                              // </form>
+                            ))}
+                        </td>
+                        <td>{e.nb_calls}</td>
+                        <td>{e.nb_patients}</td>
+                        <td>
+                          <Link to={"/profil-contact/" + e.id}>Détails</Link>
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
-            </>
+            </div>
           ) : (
             <ReactLoading
               type={"spin"}
