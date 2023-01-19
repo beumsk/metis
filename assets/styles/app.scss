@@ -5,28 +5,33 @@ body,
   min-height: 100%;
 
 }
-#table-contact{
-  background-color: white!important;
+
+#table-contact {
+  background-color: white !important;
   width: 100%;
 }
 
-.input-tags-search{
+.input-tags-search {
   display: flex;
   justify-content: flex-end;
-  align-items: flex-end;
-  label{
+  align-items: center;
+  gap: 8px;
+
+  label {
     color: white;
   }
 }
-.prev-btn{
+
+.prev-btn {
   color: black;
   margin-right: 0.5rem;
 }
+
 .error-danger {
   color: rgb(170, 5, 5);
 }
 
-.btn-groups{
+.btn-groups {
   display: inline-block;
   float: right;
 }
@@ -149,15 +154,18 @@ table {
 .ck>* {
   color: black !important;
 }
-.dataTables_wrapper{
+
+.dataTables_wrapper {
   margin-bottom: 4rem;
 }
-.dataTables_filter{
+
+.dataTables_filter {
   display: flex;
   justify-content: end;
 }
 
-#table-anniversaire0_paginate0, #table-anniversaire2_paginate2{
+#table-anniversaire0_paginate0,
+#table-anniversaire2_paginate2 {
 
   margin-bottom: 4rem;
 }
@@ -172,9 +180,10 @@ table {
 
 
 
-.paginate_button.current{
+.paginate_button.current {
   font-weight: bold;
 }
+
 // a{
 //   color: rgb(255, 255, 255)!important;
 // }
@@ -267,6 +276,7 @@ canvas {
     margin-left: 0.5rem;
   }
 }
+
 // assets\images\0a63700fe1c93625f2d45e5571a989199eda46b3.png
 // public\build\images\0a70136ec52ecde32e8350ec74e7940c4739fc96.png
 table.dataTable thead .sorting_asc {
@@ -281,7 +291,7 @@ table.dataTable thead .sorting_desc {
   background: url("../images/sort_desc.png") no-repeat center right;
 }
 
-.table-anniversaire-container{
+.table-anniversaire-container {
   background-color: white;
   border-radius: 15px;
   padding: 1rem;
@@ -289,15 +299,15 @@ table.dataTable thead .sorting_desc {
   margin-bottom: 2rem;
 
   .paging_simple_numbers {
-    a{
+    a {
       color: rgb(34, 33, 33);
-     
+
     }
-  
-    a:hover{
+
+    a:hover {
       font-weight: bold;
       color: rgb(34, 33, 33);
-  
+
     }
   }
 }

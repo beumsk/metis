@@ -118,7 +118,7 @@ function Anniversaire() {
   return (
     <>
       <Menu></Menu>
-      <div className="container container-patients row mx-auto ">
+      <div className="container container-patients mx-auto ">
         <h1 className="mb-3">Anniversaires</h1>
         <div id="example_wrapper" className="dataTables_wrapper">
           {birthdayList && birthdayList !== null && (
@@ -132,75 +132,77 @@ function Anniversaire() {
                       })
                     )}
                   </h5>
-                  <table
-                    // id={"table-anniversaire" + i}
-                    className="table-anniversaire display dataTable  mt-2 table table-striped table-bordered table-hover"
-                    aria-describedby="example_info"
-                  >
-                    <thead>
-                      <tr>
-                        <th
-                          className="sorting sorting_asc"
-                          tabindex="0"
-                          aria-controls="example"
-                          rowSpan="1"
-                          colSpan="1"
-                          aria-sort="ascending"
-                          aria-label="Name: activate to sort column descending"
-                        >
-                          Nom
-                        </th>
-                        <th
-                          className="sorting sorting_asc"
-                          tabindex="0"
-                          aria-controls="example"
-                          rowSpan="1"
-                          colSpan="1"
-                          aria-sort="ascending"
-                          aria-label="Name: activate to sort column descending"
-                        >
-                          Date d'anniversaire
-                        </th>
-                        <th
-                          className="sorting sorting_asc"
-                          tabindex="0"
-                          aria-controls="example"
-                          rowSpan="1"
-                          colSpan="1"
-                          aria-sort="ascending"
-                          aria-label="Name: activate to sort column descending"
-                        >
-                          Age
-                        </th>
-                        <th
-                          className="sorting sorting_asc"
-                          tabindex="0"
-                          aria-controls="example"
-                          rowSpan="1"
-                          colSpan="1"
-                          aria-sort="ascending"
-                          aria-label="Name: activate to sort column descending"
-                        >
-                          Statut
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {birthdayList[keyName].map((e) => (
-                        <tr className="odd">
-                          <td>
-                            {e.firstname} {e.lastname}
-                          </td>
-                          <td className="sorting_1">{e.birthdate}</td>
-                          <td>
-                            {new Date().getFullYear() -
-                              new Date(e.birthdate).getFullYear()}
-                          </td>
-                          <td>{e.status}</td>
+                  <div className="react-bootstrap-table">
+                    <table
+                      // id={"table-anniversaire" + i}
+                      className="table-anniversaire display dataTable  mt-2 table table-striped table-bordered table-hover"
+                      aria-describedby="example_info"
+                    >
+                      <thead>
+                        <tr>
+                          <th
+                            className="sorting sorting_asc"
+                            tabindex="0"
+                            aria-controls="example"
+                            rowSpan="1"
+                            colSpan="1"
+                            aria-sort="ascending"
+                            aria-label="Name: activate to sort column descending"
+                          >
+                            Nom
+                          </th>
+                          <th
+                            className="sorting sorting_asc"
+                            tabindex="0"
+                            aria-controls="example"
+                            rowSpan="1"
+                            colSpan="1"
+                            aria-sort="ascending"
+                            aria-label="Name: activate to sort column descending"
+                          >
+                            Date d'anniversaire
+                          </th>
+                          <th
+                            className="sorting sorting_asc"
+                            tabindex="0"
+                            aria-controls="example"
+                            rowSpan="1"
+                            colSpan="1"
+                            aria-sort="ascending"
+                            aria-label="Name: activate to sort column descending"
+                          >
+                            Age
+                          </th>
+                          <th
+                            className="sorting sorting_asc"
+                            tabindex="0"
+                            aria-controls="example"
+                            rowSpan="1"
+                            colSpan="1"
+                            aria-sort="ascending"
+                            aria-label="Name: activate to sort column descending"
+                          >
+                            Statut
+                          </th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                      </thead>
+                      <tbody>
+                        {birthdayList[keyName].map((e) => (
+                          <tr className="odd">
+                            <td>
+                              {e.firstname} {e.lastname}
+                            </td>
+                            <td className="sorting_1">{e.birthdate}</td>
+                            <td>
+                              {new Date().getFullYear() -
+                                new Date(e.birthdate).getFullYear()}
+                            </td>
+                            <td>{e.status}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               ))}
             </>

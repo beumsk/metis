@@ -20,6 +20,7 @@ export default function InputTagsList(props) {
   const loading = open && options.length === 0;
   const [inputValue, setInputValue] = React.useState("");
   let arr = [];
+
   React.useEffect(() => {
     let active = true;
 
@@ -59,7 +60,7 @@ export default function InputTagsList(props) {
       setOptions([]);
     }
   }, [open]);
-  console.log(props?.defaultValue);
+
   return (
     <Autocomplete
       id="asynchronous-demo"
@@ -81,7 +82,6 @@ export default function InputTagsList(props) {
       }}
       onChange={(event, newValue) => {
         props.onChange(newValue);
-        console.log(newValue);
         setOpen(true);
       }}
       onBlur={(event, newValue) => {
@@ -94,12 +94,12 @@ export default function InputTagsList(props) {
       renderInput={(params) => (
         <>
           <Form.Label htmlFor="inputValue" className="uk-form-label">
-            Contacts
+            Chercher par tag
           </Form.Label>
           <TextField
             {...params}
             // label="Contacts"
-            className="input-autocomplete"
+            className="input-autocomplete mb-3"
             InputProps={{
               ...params.InputProps,
               endAdornment: (

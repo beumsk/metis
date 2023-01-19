@@ -383,9 +383,13 @@ function IndicateursFormCVC(props) {
           />
         </div>
         {props.isEdit ? (
-          <button onClick={(e) => onSendEdit(e)}>Envoyer</button>
+          <button onClick={(e) => onSendEdit(e)} className="btn-metis mt-3">
+            Envoyer
+          </button>
         ) : (
-          <button onClick={(e) => onSend(e)}>Envoyer</button>
+          <button onClick={(e) => onSend(e)} className="btn-metis mt-3">
+            Envoyer
+          </button>
         )}
 
         {/* const [isCorpsScore, setIsCorpsScore] = useState(false);
