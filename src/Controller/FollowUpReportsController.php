@@ -646,7 +646,7 @@ class FollowUpReportsController extends AbstractController
         if ($changeTypeMeet !== "null") {
             $report->setReportType($changeTypeMeet);
         }
-        
+
         $report->setIsHightlight(false);
         $report->setReportDate(new \DateTime($changeDate));
 
@@ -748,7 +748,7 @@ class FollowUpReportsController extends AbstractController
         $followupGoals = $doctrine->getRepository(FollowupReports::class)->find($idRapport);
 
         if ($dureevalue !== 'null') {
-          $followupGoals->setDuration(new \DateTime($dureevalue));
+            $followupGoals->setDuration(new \DateTime($dureevalue));
         }
 
         if ($goal_id !== "null") {
@@ -1646,7 +1646,7 @@ class FollowUpReportsController extends AbstractController
         ]);
     }
 
-    #[Route('/api/editIndicatorsHestiaLogement', name: 'app_addIndicatorsHestiaLogement')]
+    #[Route('/api/editIndicatorsHestiaLogement', name: 'app_editIndicatorsHestiaLogement')]
     public function editIndicatorsHestiaLogement(ManagerRegistry $doctrine, Request $request)
     {
 
