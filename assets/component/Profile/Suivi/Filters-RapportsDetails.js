@@ -78,6 +78,7 @@ function FilterRapportDetails(props) {
           >
             <option value="">Choisissez le type de rapport</option>
             <option value={1}>Rapport de rencontre</option>
+            <option value={3}>Rapport de réunion</option>
             <option value={4}>Appel entrant</option>
             <option value={2}>Appel sortant</option>
           </Form.Select>

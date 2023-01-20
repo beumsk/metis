@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCoffee, faRoad } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCoffee,
+  faPhone,
+  faRoad,
+  faTag,
+} from "@fortawesome/free-solid-svg-icons";
 import ReactLoading from "react-loading";
 import useAuth from "../../../hooks/useAuth";
 import axios from "axios";
@@ -357,7 +362,10 @@ const Profile = () => {
             </button>
           </div>
 
-          <h6 className="mt-4 mb-3">Objectifs</h6>
+          <h6 className="mt-4 mb-3">
+            Objectifs
+            <FontAwesomeIcon icon={faTag} style={{ marginLeft: "4px" }} />
+          </h6>
           {goals ? (
             <Accordion className="mb-4">
               <Accordion.Item eventKey="0">
@@ -521,7 +529,10 @@ const Profile = () => {
             />
           )}
 
-          <h6 className="mt-4 mb-3">Appels</h6>
+          <h6 className="mt-4 mb-3">
+            Appels
+            <FontAwesomeIcon icon={faPhone} style={{ marginLeft: "4px" }} />
+          </h6>
           {goals ? (
             <>
               <Accordion className="mb-4">

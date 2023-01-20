@@ -459,6 +459,12 @@ function EditReportMeet(props) {
       ) : (
         ""
       )}
+      <button
+        onClick={() => props.setToggle(false)}
+        style={{ marginLeft: "1rem" }}
+      >
+        Annuler
+      </button>
     </div>
   );
 }

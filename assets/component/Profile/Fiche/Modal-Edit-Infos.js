@@ -276,15 +276,23 @@ function ModalEditInfos(props) {
                   className="uk-select"
                 >
                   <option value={null}>Choisissez une valeur</option>
-                  {elementsOpt?.map((el, id) => (
-                    <option
-                      key={el.id}
-                      value={el.id}
-                      selected={props?.infosPatient?.sugg?.value === el?.value}
-                    >
-                      {el?.value}
-                    </option>
-                  ))}
+                  {elementsOpt
+                    ?.sort((a, b) =>
+                      a?.value !== b?.value ? (a?.value < b?.value ? -1 : 1) : 0
+                    )
+                    .map((el, id) => (
+                      <option
+                        key={el.id}
+                        value={el.id}
+                        selected={
+                          props?.infosPatient?.sugg?.value === el?.value
+                        }
+                      >
+                        {el?.requireCustomValue === true
+                          ? el?.value + "*"
+                          : el?.value}
+                      </option>
+                    ))}
                 </Form.Select>
               </>
             )}

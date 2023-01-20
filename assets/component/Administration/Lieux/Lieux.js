@@ -182,7 +182,7 @@ function Lieux() {
 
         <div class="table-contact-container">
           {listContacts && listContacts.data !== null ? (
-            <>
+            <div className="react-bootstrap-table">
               <table
                 id="table-contact"
                 class="display dataTable  display dataTable  mt-2 table table-striped table-bordered table-hover"
@@ -264,7 +264,7 @@ function Lieux() {
                   ))}
                 </tbody>
               </table>
-            </>
+            </div>
           ) : (
             <ReactLoading
               type={"spin"}

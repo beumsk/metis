@@ -228,7 +228,6 @@ h5 {
     background-color: #fff;
     box-shadow: 0 5px 15px rgb(0 0 0 / 8%);
     transition: box-shadow .1s ease-in-out;
-    padding: 20px;
     position: relative;
 
     &:hover {
@@ -238,9 +237,33 @@ h5 {
     .suivi-card-title {
       font-size: 1.5rem;
       line-height: 1.4;
-      margin-bottom: 1rem;
-      padding-bottom: 1rem;
-      border-bottom: solid 1px #ddd;
+      margin-bottom: 0;
+      padding: 12px 20px;
+      background: #666;
+      color: white;
+    }
+
+    .noEditRepports-container {
+      padding: 20px;
+
+      .data-row {
+        display: flex;
+        align-items: center;
+        padding: 8px 0;
+
+        &:not(:last-of-type) {
+          border-bottom: solid 1px #eee;
+        }
+
+        h6 {
+          margin: 0;
+          min-width: 160px;
+        }
+      }
+    }
+
+    .report-content {
+      padding: 20px;
     }
   }
 
