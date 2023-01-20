@@ -10,12 +10,14 @@ import {
   faPlusCircle,
   faCancel,
   faEdit,
+  faArrowLeft,
   faCheck,
 } from "@fortawesome/free-solid-svg-icons";
 import { useParams } from "react-router-dom";
 import ModalEditLieux from "./Modal-Edit-Lieux";
 import ModalAddLieux from "./Modal-Add-Lieux";
 import ModalDeleteInfos from "./Modal-Delete-Lieux";
+import ModalEditProfileContact from "./Modal-Edit-Profile-Lieux";
 const ProfilLieux = () => {
   const [auth, setAuth] = useState(useAuth());
   let id = useParams().id;
@@ -75,27 +77,64 @@ const ProfilLieux = () => {
   //   };
 
   function informationSaved(e) {
-    if (e) {
-      setContactInformation(e.response);
-    }
+    axios({
+      method: "post",
+      url: "/api/getPlacesListById",
+      data: formData,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    })
+      .then(function (response) {
+        setContactInformation(response.data);
+      })
+      .catch(function (response) {});
   }
-
+  function onChangePlaceProfile() {
+    axios({
+      method: "post",
+      url: "/api/getPlacesListById",
+      data: formData,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    })
+      .then(function (response) {
+        setContactInformation(response.data);
+      })
+      .catch(function (response) {});
+  }
   return (
     <>
       <Menu></Menu>
       <section>
         <div className="container emp-profile">
-          <div className="row profile-head">
-            <h5 style={{ padding: "0" }}>
-              {contactInformation?.firstname} {contactInformation?.lastname}
-            </h5>
-            <p>{contactInformation?.description}</p>
-          </div>
+          <div className="row">
+            <div className="profile-head col-sm-8">
+              <h5 style={{ padding: "0" }}>
+                {contactInformation?.firstname} {contactInformation?.lastname}
+              </h5>
+              <p>{contactInformation?.description}</p>
+            </div>
 
-          {/* <div className="row coordonnes-body">
+            <div className="col-sm-4">
+              <div className="btn-groups">
+                <Link className="prev-btn" to="/lieux">
+                  <FontAwesomeIcon icon={faArrowLeft} />
+                </Link>
+                <ModalEditProfileContact
+                  onChange={onChangePlaceProfile}
+                  contactInfo={contactInformation}
+                ></ModalEditProfileContact>
+              </div>
+            </div>
+          </div>
+          <div className="row coordonnes-body">
             <table class="uk-table uk-table-striped">
               <h6>Infos</h6>
-              {contactInformation?.informations.map((contInfo) => (
+              {contactInformation?.informations?.map((contInfo) => (
                 <tr>
                   <td>{contInfo.value}</td>
                   <td>
@@ -105,7 +144,7 @@ const ProfilLieux = () => {
                           <span>
                             {contInfo.value === "Tags" ||
                             contInfo.value === "Type de Collaborateur"
-                              ? e.sugge.value
+                              ? e.sugge[0].value
                               : e.valueInformations}
                             <span className="btn-group">
                               <ModalEditLieux
@@ -115,11 +154,11 @@ const ProfilLieux = () => {
                                 contInfo={contInfo}
                                 contact={contactInformation}
                                 idInfo={e.id}
-                                onChange={(e) => informationSaved(e)}
+                                onChange={informationSaved}
                               ></ModalEditLieux>
                               <ModalDeleteInfos
                                 infosPatient={e}
-                                onChange={(e) => informationSaved(e)}
+                                onChange={informationSaved}
                               ></ModalDeleteInfos>
                             </span>
                           </span>
@@ -137,7 +176,7 @@ const ProfilLieux = () => {
                         infosAppels={contInfo}
                         contact={contactInformation}
                         idInfo={contInfo.id}
-                        onChange={(e) => informationSaved(e)}
+                        onChange={informationSaved}
                       ></ModalAddLieux>
                     </div>
                   </td>
@@ -145,7 +184,7 @@ const ProfilLieux = () => {
                 </tr>
               ))}
             </table>
-          </div> */}
+          </div>
 
           <div className="row coordonnes-body">
             <table class="uk-table uk-table-striped">

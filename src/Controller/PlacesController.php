@@ -163,8 +163,26 @@ class PlacesController extends AbstractController
         // dd($blocksDecode);
         foreach ($blocksDecode as $value) {
             foreach ($contact->getInformations() as $infosCont) {
-                if ($infosCont->getItel()->getSuge()->getId() === $value->id) {
-                    array_push($value->obj, ["id" => $infosCont->getId(), "occupants" => (property_exists($infosCont, 'occupants') === true) ? $infosCont->getOccupants() : null, "valueInformations" => $infosCont->getValue(), "valueDescription" => $infosCont->getComment(), "sugge" => ($infosCont !== null) ? $infosCont->getSugg() : null]);
+                if ($infosCont->getItel()->getSuge()->getId() === $value->id && $infosCont->getDeletedAt() === null) {
+                    array_push($value->obj, [
+                        "id" => $infosCont->getId(),
+                        "occupants" => (property_exists($infosCont, 'occupants') === true) ? $infosCont->getOccupants() : null,
+                        "valueInformations" => $infosCont->getValue(),
+                        "valueDescription" => $infosCont->getComment(),
+                        "sugge" => array_map(function ($a) {
+                            // if (count($a)) {
+                            //     dd($a);
+                            // }
+                            return [
+
+                                "value" => ($a && $a->getValue() !== null) ? $a->getValue() : null,
+                                // "value" => $a->getValue(),
+                                // "firstName" => ($a->getPati() && $a->getPati() !== null) ? $a->getPati()->getFirstName() : null,
+                                // "lastName" => ($a->getPati() && $a->getPati() !== null) ? $a->getPati()->getLastName() : null,
+                            ];
+                        }, [$infosCont->getSugg()]),
+                        // "sugge" => ($infosCont !== null) ? $infosCont->getSugg()[0]->getValue() : null
+                    ]);
                 }
             }
         }
@@ -191,14 +209,29 @@ class PlacesController extends AbstractController
             array_map(function ($a) {
                 // dd($a);
                 return [
+
                     "id" => ($a->getPati()->getId() !== null) ? $a->getPati()->getId() : null,
                     // "value" => $a->getValue(),
                     "firstName" => ($a->getPati() && $a->getPati() !== null) ? $a->getPati()->getFirstName() : null,
                     "lastName" => ($a->getPati() && $a->getPati() !== null) ? $a->getPati()->getLastName() : null,
 
 
+
                 ];
             }, [...$contact->getOccupants()]),
+            "informations" => $blocksDecode,
+            // "sugge" => array_map(function ($a) {
+            //     // dd($a);
+            //     return [
+
+            //         "id" => ($a->getValue() !== null) ? $a->getValue() : null,
+            //         // "value" => $a->getValue(),
+            //         // "firstName" => ($a->getPati() && $a->getPati() !== null) ? $a->getPati()->getFirstName() : null,
+            //         // "lastName" => ($a->getPati() && $a->getPati() !== null) ? $a->getPati()->getLastName() : null,
+
+
+            //     ];
+            // }, [...$contact->getSugge()]),
             // "patients" => $contact->getOccupants()[0]->getId(),
             "firstname" => $contact->getFirstName(),
             "lastname" => $contact->getLastName(),

@@ -369,12 +369,12 @@ class ContactsController extends AbstractController
         $contactInformation->setContact($contact);
         if ($type !== "null") {
             $typeSugg = $doctrine->getRepository(Suggestions::class)->find($type);
-            $contactInformation->setSugg($typeSugg);
+            $contactInformation->setSuggestion($typeSugg);
         }
 
         if ($type === "null") {
             $suggestion = $doctrine->getRepository(Suggestions::class)->find($idSugg);
-            $contactInformation->setSugg($suggestion);
+            $contactInformation->setSuggestion($suggestion);
         }
 
 
@@ -511,9 +511,9 @@ class ContactsController extends AbstractController
                         "sugge" => ($infosCont !== null) ? [
                             array_map(function ($a) {
                                 return [
-                                    "value" => ($a && $a->getValue() !== null) ? $a->getValue() . " " . $a->getValue() : null
+                                    "value" => ($a && $a->getValue() !== null) ? $a->getValue() : null
                                 ];
-                            }, [$infosCont->getSugg()])
+                            }, [$infosCont->getSuggestion()])
                         ] : null
                     ]);
                 }
