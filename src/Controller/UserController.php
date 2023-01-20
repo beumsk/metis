@@ -45,4 +45,28 @@ class UserController extends AbstractController
             ]);
         }
     }
+
+    #[Route('/api/listUsers', name: 'app_listUsers')]
+    public function listUsers(ManagerRegistry $doctrine, UserPasswordHasherInterface $passwordHasher, Request $request): Response
+    {
+
+        $request = Request::createFromGlobals();
+        $user = $doctrine->getRepository(User::class)->findAll();
+
+        $listUsers = [];
+        foreach ($user as $value) {
+            $listUsers[] = [
+                "id" => $value->getId(),
+                "name" => $value->getFirstname(),
+                "lastName" => $value->getLastName(),
+                "username" => $value->getUserName(),
+                "email" => $value->getEmail(),
+                "enabled" => $value->getEnabled(),
+                "lastLogin" => ($value->getLastLogin()) ? $value->getLastLogin()->format(DATE_RFC3339_EXTENDED) : null,
+                "roles" => explode(',', $value->getRoles()[0])
+            ];
+        }
+
+        return new Response(json_encode($listUsers), 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
+    }
 }

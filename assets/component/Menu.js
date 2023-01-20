@@ -62,7 +62,7 @@ const Menu = () => {
               <Nav.Link href="/appels-organisation">Liste d'appels</Nav.Link>
 
               <Nav.Link href="/statistiques">Statistiques</Nav.Link>
-
+              {/* utilisateurs */}
               <Dropdown align={{ xxl: "end" }}>
                 <Dropdown.Toggle
                   style={{
@@ -77,6 +77,9 @@ const Menu = () => {
                     Liste de contacts
                   </Dropdown.Item>
                   <Dropdown.Item href="/lieux">Lieux</Dropdown.Item>
+                  <Dropdown.Item href="/utilisateurs">
+                    Utilisateurs
+                  </Dropdown.Item>
                   <Dropdown.Item href="/anniversaire">
                     Anniversaire
                   </Dropdown.Item>

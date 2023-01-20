@@ -2,21 +2,21 @@
   "entrypoints": {
     "app": {
       "js": [
-        "/build/runtime.dea08fc2.js",
-        "/build/819.faf024cc.js",
-        "/build/app.3df64050.js"
+        "/build/runtime.js",
+        "/build/vendors-node_modules_fortawesome_react-fontawesome_index_es_js-node_modules_mui_material_Auto-3a0301.js",
+        "/build/app.js"
       ],
       "css": [
-        "/build/819.647ccd6f.css",
-        "/build/9.fdf66bae.css"
+        "/build/vendors-node_modules_fortawesome_react-fontawesome_index_es_js-node_modules_mui_material_Auto-3a0301.css",
+        "/build/assets_styles_uikits_uikit_css-assets_styles_app_scss.css"
       ]
     },
     "global": {
       "js": [
-        "/build/runtime.dea08fc2.js"
+        "/build/runtime.js"
       ],
       "css": [
-        "/build/9.fdf66bae.css"
+        "/build/assets_styles_uikits_uikit_css-assets_styles_app_scss.css"
       ]
     }
   }
