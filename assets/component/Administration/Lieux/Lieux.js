@@ -16,6 +16,8 @@ import {
   faArrowDown,
   faArrowUp,
 } from "@fortawesome/free-solid-svg-icons";
+import DataTable from "datatables.net-dt";
+import $ from "jquery";
 
 function Lieux() {
   const { SearchBar } = Search;
@@ -109,10 +111,56 @@ function Lieux() {
         //handle success
 
         setListContacts(response);
+        let table0 = new DataTable("#table-contact", {
+          language: {
+            sProcessing: "En cours...",
+            sLengthMenu: "Afficher les enregistrements par:  _MENU_",
+            sZeroRecords: "Aucune données pour l'instant",
+            // sEmptyTable: "La table est vide",
+            sInfo:
+              "Affichage des enregistrements du _START_ au _END_ sur un total de _TOTAL_ enregistrements",
+            sInfoEmpty:
+              "Affichage des enregistrements de 0 à 0 sur un total de 0 enregistrements",
+            sInfoFiltered:
+              "(filtré à partir d'un total de _MAX_ enregistrements)",
+            sInfoPostFix: "",
+            sSearch: "Chercher: ",
+            sUrl: "",
+            sInfoThousands: ",",
+            sLoadingRecords: "Mise en charge...",
+            oPaginate: {
+              sFirst: "Premier",
+              sLast: "Dernière",
+              sNext: " Suivant",
+              sPrevious: "Précédent ",
+            },
+            oAria: {
+              sSortAscending:
+                ": Activer pour trier la colonne par ordre croissant",
+              sSortDescending:
+                ": Activer pour trier la colonne par ordre décroissant",
+            },
+          },
+        });
       })
       .catch(function (response) {});
   }, [lengthList, setLengthList]);
 
+  function setPlacesAdded() {
+    axios({
+      method: "post",
+      url: "/api/getPlacesList",
+      data: formData,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    })
+      .then(function (response) {
+        setListContacts(response);
+      })
+      .catch(function (response) {});
+  }
   const readMore = () => {
     setLengthList(lengthList + 10);
   };
@@ -126,44 +174,106 @@ function Lieux() {
           <ModalAddLieux
             listContacts={listContacts}
             setListContacts={(e) => setListContacts(e)}
+            onChange={setPlacesAdded}
           ></ModalAddLieux>
         </div>
 
         <h1 className="mb-3">Tous les Lieux</h1>
 
-        {listContacts && listContacts.data ? (
-          <ToolkitProvider
-            keyField="id"
-            data={[...listContacts.data]}
-            columns={columns}
-            search
-          >
-            {(props) => (
-              <div>
-                <div className="mb-2">
-                  <SearchBar
-                    {...props.searchProps}
-                    className="uk-input"
-                    style={{ width: "186px" }}
-                    placeholder="Rechercher le lieu"
-                  />
-                </div>
+        <div class="table-contact-container">
+          {listContacts && listContacts.data !== null ? (
+            <>
+              <table
+                id="table-contact"
+                class="display dataTable  display dataTable  mt-2 table table-striped table-bordered table-hover"
+                aria-describedby="example_info"
+              >
+                <thead>
+                  <tr>
+                    <th
+                      className="sorting sorting_asc"
+                      tabindex="0"
+                      aria-controls="example"
+                      rowSpan="1"
+                      colSpan="1"
+                      aria-sort="ascending"
+                      aria-label="Name: activate to sort column descending"
+                    >
+                      Type
+                    </th>
+                    <th
+                      className="sorting sorting_asc"
+                      tabindex="0"
+                      aria-controls="example"
+                      rowSpan="1"
+                      colSpan="1"
+                      aria-sort="ascending"
+                      aria-label="Name: activate to sort column descending"
+                    >
+                      Nom
+                    </th>
+                    <th
+                      className="sorting sorting_asc"
+                      tabindex="0"
+                      aria-controls="example"
+                      rowSpan="1"
+                      colSpan="1"
+                      aria-sort="ascending"
+                      aria-label="Name: activate to sort column descending"
+                    >
+                      Organisation
+                    </th>
+                    <th
+                      className="sorting sorting_asc"
+                      tabindex="0"
+                      aria-controls="example"
+                      rowSpan="1"
+                      colSpan="1"
+                      aria-sort="ascending"
+                      aria-label="Name: activate to sort column descending"
+                    >
+                      Téléphone
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {listContacts.data.map((e, idx) => (
+                    <tr className="odd" key={idx}>
+                      <td>
+                        {" "}
+                        {e.url ? (
+                          <a href={e.url} target="_blank">
+                            {e.lastname}
+                          </a>
+                        ) : (
+                          e.lastname
+                        )}
+                      </td>
+                      <td className="sorting_1">{e.description}</td>
+                      <td>{e.lengthOccupants}</td>
 
-                <BootstrapTable
-                  {...props.baseProps}
-                  pagination={paginationFactory()}
-                />
-              </div>
-            )}
-          </ToolkitProvider>
-        ) : (
-          <ReactLoading
-            type={"spin"}
-            color={"#b1b1b1"}
-            height={"10%"}
-            width={"10%"}
-          />
-        )}
+                      <td>
+                        <a
+                          href={"/profil-lieux/" + e.id}
+                          className="uk-link-muted"
+                        >
+                          Détails
+                        </a>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </>
+          ) : (
+            <ReactLoading
+              type={"spin"}
+              color={"#b1b1b1"}
+              height={"10%"}
+              width={"10%"}
+            />
+          )}
+        </div>
       </div>
     </>
   );
