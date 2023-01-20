@@ -248,314 +248,257 @@ const Contacts = () => {
       </div>
 
       <h5>Contacts</h5>
-
-      <table class="mt-2 table-contacts table table-striped table-bordered table-hover">
-        <thead>
-          <tr>
-            <th
-              className="sorting sorting_asc"
-              tabindex="0"
-              aria-controls="example"
-              rowSpan="1"
-              colSpan="1"
-              aria-sort="ascending"
-              aria-label="Name: activate to sort column descending"
-            >
-              Nom
-            </th>
-            <th
-              className="sorting sorting_asc"
-              tabindex="0"
-              aria-controls="example"
-              rowSpan="1"
-              colSpan="1"
-              aria-sort="ascending"
-              aria-label="Name: activate to sort column descending"
-            >
-              Organisation
-            </th>
-            <th
-              className="sorting sorting_asc"
-              tabindex="0"
-              aria-controls="example"
-              rowSpan="1"
-              colSpan="1"
-              aria-sort="ascending"
-              aria-label="Name: activate to sort column descending"
-            >
-              Type
-            </th>
-            <th
-              className="sorting sorting_asc"
-              tabindex="0"
-              aria-controls="example"
-              rowSpan="1"
-              colSpan="1"
-              aria-sort="ascending"
-              aria-label="Name: activate to sort column descending"
-            >
-              Description
-            </th>
-            <th
-              className="sorting sorting_asc"
-              tabindex="0"
-              aria-controls="example"
-              rowSpan="1"
-              colSpan="1"
-              aria-sort="ascending"
-              aria-label="Name: activate to sort column descending"
-            >
-              Début
-            </th>{" "}
-            <th
-              className="sorting sorting_asc"
-              tabindex="0"
-              aria-controls="example"
-              rowSpan="1"
-              colSpan="1"
-              aria-sort="ascending"
-              aria-label="Name: activate to sort column descending"
-            >
-              Fin
-            </th>{" "}
-            <th
-              className="sorting sorting_asc"
-              tabindex="0"
-              aria-controls="example"
-              rowSpan="1"
-              colSpan="1"
-              aria-sort="ascending"
-              aria-label="Name: activate to sort column descending"
-            >
-              Actions
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {listContacts && listContacts.length > 0 && (
-            <>
-              {listContacts.map((e) => (
-                <tr>
-                  <td>
-                    {e?.cont?.map((cont) => (
-                      <>
-                        {cont?.firstname} {cont?.lastname}
-                      </>
-                    ))}
-                  </td>
-                  <td>
-                    <>{e?.comment}</>
-                  </td>
-                  <td>
-                    {e?.sugg?.map((cont) => (
-                      <>{cont?.value}</>
-                    ))}
-                  </td>
-                  <td>{e?.description === "null" ? "" : e?.description}</td>
-                  <td>
-                    {e?.start
-                      ? new Date(e?.start)
-                          .toLocaleString("fr-BE", "short")
-                          .slice(0, 10)
-                      : ""}
-                  </td>
-                  <td>
-                    {e?.end
-                      ? new Date(e?.end)
-                          .toLocaleString("fr-BE", "short")
-                          .slice(0, 10)
-                      : ""}
-                  </td>
-                  <td className="d-flex">
-                    <ModalEditContacts
-                      infos={e}
-                      type={type}
-                      contacts={contacts}
-                      // onChangeContacts={(e) => contactLierResponse(e)}
-                      onChangeUpdateContact={onChangeUpdateContact}
-                      listContacts={listContacts}
-                      // listContactsSelect={props.listContacts}
-                    />
-                    <ModalDeleteContacts
-                      infos={e}
-                      onChangeUpdateContact={onChangeUpdateContact}
-                    />
-                  </td>
-                </tr>
-              ))}
-            </>
-          )}
-        </tbody>
-      </table>
+      <div className="react-bootstrap-table">
+        <table class="mt-2 table-contacts table table-striped table-bordered table-hover">
+          <thead>
+            <tr>
+              <th
+                className="sorting sorting_asc"
+                tabindex="0"
+                aria-controls="example"
+                rowSpan="1"
+                colSpan="1"
+                aria-sort="ascending"
+                aria-label="Name: activate to sort column descending"
+              >
+                Nom
+              </th>
+              <th
+                className="sorting sorting_asc"
+                tabindex="0"
+                aria-controls="example"
+                rowSpan="1"
+                colSpan="1"
+                aria-sort="ascending"
+                aria-label="Name: activate to sort column descending"
+              >
+                Organisation
+              </th>
+              <th
+                className="sorting sorting_asc"
+                tabindex="0"
+                aria-controls="example"
+                rowSpan="1"
+                colSpan="1"
+                aria-sort="ascending"
+                aria-label="Name: activate to sort column descending"
+              >
+                Type
+              </th>
+              <th
+                className="sorting sorting_asc"
+                tabindex="0"
+                aria-controls="example"
+                rowSpan="1"
+                colSpan="1"
+                aria-sort="ascending"
+                aria-label="Name: activate to sort column descending"
+              >
+                Description
+              </th>
+              <th
+                className="sorting sorting_asc"
+                tabindex="0"
+                aria-controls="example"
+                rowSpan="1"
+                colSpan="1"
+                aria-sort="ascending"
+                aria-label="Name: activate to sort column descending"
+              >
+                Début
+              </th>{" "}
+              <th
+                className="sorting sorting_asc"
+                tabindex="0"
+                aria-controls="example"
+                rowSpan="1"
+                colSpan="1"
+                aria-sort="ascending"
+                aria-label="Name: activate to sort column descending"
+              >
+                Fin
+              </th>{" "}
+              <th
+                className="sorting sorting_asc"
+                tabindex="0"
+                aria-controls="example"
+                rowSpan="1"
+                colSpan="1"
+                aria-sort="ascending"
+                aria-label="Name: activate to sort column descending"
+              >
+                Actions
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {listContacts && listContacts.length > 0 && (
+              <>
+                {listContacts.map((e) => (
+                  <tr>
+                    <td>
+                      {e?.cont?.map((cont) => (
+                        <>
+                          {cont?.firstname} {cont?.lastname}
+                        </>
+                      ))}
+                    </td>
+                    <td>
+                      <>{e?.comment}</>
+                    </td>
+                    <td>
+                      {e?.sugg?.map((cont) => (
+                        <>{cont?.value}</>
+                      ))}
+                    </td>
+                    <td>{e?.description === "null" ? "" : e?.description}</td>
+                    <td>
+                      {e?.start
+                        ? new Date(e?.start)
+                            .toLocaleString("fr-BE", "short")
+                            .slice(0, 10)
+                        : ""}
+                    </td>
+                    <td>
+                      {e?.end
+                        ? new Date(e?.end)
+                            .toLocaleString("fr-BE", "short")
+                            .slice(0, 10)
+                        : ""}
+                    </td>
+                    <td className="d-flex">
+                      <ModalEditContacts
+                        infos={e}
+                        type={type}
+                        contacts={contacts}
+                        // onChangeContacts={(e) => contactLierResponse(e)}
+                        onChangeUpdateContact={onChangeUpdateContact}
+                        listContacts={listContacts}
+                        // listContactsSelect={props.listContacts}
+                      />
+                      <ModalDeleteContacts
+                        infos={e}
+                        onChangeUpdateContact={onChangeUpdateContact}
+                      />
+                    </td>
+                  </tr>
+                ))}
+              </>
+            )}
+          </tbody>
+        </table>
+      </div>
 
       <h5>Patients</h5>
-      <table class="mt-2 table-contacts table table-striped table-bordered table-hover">
-        <thead>
-          <tr>
-            <th
-              className="sorting sorting_asc"
-              tabindex="0"
-              aria-controls="example"
-              rowSpan="1"
-              colSpan="1"
-              aria-sort="ascending"
-              aria-label="Name: activate to sort column descending"
-            >
-              Surnom
-            </th>
-            <th
-              className="sorting sorting_asc"
-              tabindex="0"
-              aria-controls="example"
-              rowSpan="1"
-              colSpan="1"
-              aria-sort="ascending"
-              aria-label="Name: activate to sort column descending"
-            >
-              Prénom
-            </th>
-            <th
-              className="sorting sorting_asc"
-              tabindex="0"
-              aria-controls="example"
-              rowSpan="1"
-              colSpan="1"
-              aria-sort="ascending"
-              aria-label="Name: activate to sort column descending"
-            >
-              Nom
-            </th>
-            <th
-              className="sorting sorting_asc"
-              tabindex="0"
-              aria-controls="example"
-              rowSpan="1"
-              colSpan="1"
-              aria-sort="ascending"
-              aria-label="Name: activate to sort column descending"
-            >
-              Type
-            </th>
-            <th
-              className="sorting sorting_asc"
-              tabindex="0"
-              aria-controls="example"
-              rowSpan="1"
-              colSpan="1"
-              aria-sort="ascending"
-              aria-label="Name: activate to sort column descending"
-            >
-              Description
-            </th>{" "}
-            <th
-              className="sorting sorting_asc"
-              tabindex="0"
-              aria-controls="example"
-              rowSpan="1"
-              colSpan="1"
-              aria-sort="ascending"
-              aria-label="Name: activate to sort column descending"
-            >
-              Début
-            </th>{" "}
-            <th
-              className="sorting sorting_asc"
-              tabindex="0"
-              aria-controls="example"
-              rowSpan="1"
-              colSpan="1"
-              aria-sort="ascending"
-              aria-label="Name: activate to sort column descending"
-            >
-              Fin
-            </th>
-            <th
-              className="sorting sorting_asc"
-              tabindex="0"
-              aria-controls="example"
-              rowSpan="1"
-              colSpan="1"
-              aria-sort="ascending"
-              aria-label="Name: activate to sort column descending"
-            >
-              Actions
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {patientsLists && patientsLists.targ.length > 0 && (
-            <>
-              {patientsLists.targ.map((e) => (
-                <>
-                  {e.deletedAt === null && (
-                    <tr>
-                      <td>
-                        <>{e?.orpa?.nicknames}</>
-                      </td>
-                      <td>
-                        <>{e?.orpa?.firstname}</>
-                      </td>
-                      <td>
-                        <>{e?.orpa?.lastname}</>
-                      </td>
-                      <td>
-                        <>{e?.sugg && <>{e?.sugg?.value}</>}</>
-                      </td>
-                      <td>
-                        {e?.linkDescription === "null"
-                          ? ""
-                          : e?.linkDescription}
-                      </td>
-                      <td>
-                        {e?.start
-                          ? new Date(e?.start)
-                              .toLocaleString("fr-BE", "short")
-                              .slice(0, 10)
-                          : ""}
-                      </td>
-                      <td>
-                        {e?.end
-                          ? new Date(e?.end)
-                              .toLocaleString("fr-BE", "short")
-                              .slice(0, 10)
-                          : ""}
-                      </td>
-                      <td className="d-flex">
-                        <ModalEditPatient
-                          infos={e}
-                          type={type}
-                          contacts={contacts}
-                          // onChangeContacts={(e) => contactLierResponse(e)}
-                          onChangeUpdateContact={onChangeUpdateContact}
-                          listContacts={listContacts}
-                          // listContactsSelect={props.listContacts}
-                        />
-                        <ModalDeletePatient
-                          infos={e}
-                          onChangeUpdateContact={onChangeUpdateContact}
-                        />
-                      </td>
-                    </tr>
-                  )}
-                </>
-              ))}
-            </>
-          )}
-          {patientsLists && patientsLists.orig.length > 0 && (
-            <>
-              {patientsLists.orig.map((e) => (
-                <>
-                  {e.deletedAt === null && (
-                    <>
+      <div className="react-bootstrap-table">
+        <table class="mt-2 table-contacts table table-striped table-bordered table-hover">
+          <thead>
+            <tr>
+              <th
+                className="sorting sorting_asc"
+                tabindex="0"
+                aria-controls="example"
+                rowSpan="1"
+                colSpan="1"
+                aria-sort="ascending"
+                aria-label="Name: activate to sort column descending"
+              >
+                Surnom
+              </th>
+              <th
+                className="sorting sorting_asc"
+                tabindex="0"
+                aria-controls="example"
+                rowSpan="1"
+                colSpan="1"
+                aria-sort="ascending"
+                aria-label="Name: activate to sort column descending"
+              >
+                Prénom
+              </th>
+              <th
+                className="sorting sorting_asc"
+                tabindex="0"
+                aria-controls="example"
+                rowSpan="1"
+                colSpan="1"
+                aria-sort="ascending"
+                aria-label="Name: activate to sort column descending"
+              >
+                Nom
+              </th>
+              <th
+                className="sorting sorting_asc"
+                tabindex="0"
+                aria-controls="example"
+                rowSpan="1"
+                colSpan="1"
+                aria-sort="ascending"
+                aria-label="Name: activate to sort column descending"
+              >
+                Type
+              </th>
+              <th
+                className="sorting sorting_asc"
+                tabindex="0"
+                aria-controls="example"
+                rowSpan="1"
+                colSpan="1"
+                aria-sort="ascending"
+                aria-label="Name: activate to sort column descending"
+              >
+                Description
+              </th>{" "}
+              <th
+                className="sorting sorting_asc"
+                tabindex="0"
+                aria-controls="example"
+                rowSpan="1"
+                colSpan="1"
+                aria-sort="ascending"
+                aria-label="Name: activate to sort column descending"
+              >
+                Début
+              </th>{" "}
+              <th
+                className="sorting sorting_asc"
+                tabindex="0"
+                aria-controls="example"
+                rowSpan="1"
+                colSpan="1"
+                aria-sort="ascending"
+                aria-label="Name: activate to sort column descending"
+              >
+                Fin
+              </th>
+              <th
+                className="sorting sorting_asc"
+                tabindex="0"
+                aria-controls="example"
+                rowSpan="1"
+                colSpan="1"
+                aria-sort="ascending"
+                aria-label="Name: activate to sort column descending"
+              >
+                Actions
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {patientsLists && patientsLists.targ.length > 0 && (
+              <>
+                {patientsLists.targ.map((e) => (
+                  <>
+                    {e.deletedAt === null && (
                       <tr>
                         <td>
-                          <>{e?.tapa?.nicknames}</>
+                          <>{e?.orpa?.nicknames}</>
                         </td>
                         <td>
-                          <>{e?.tapa?.firstname}</>
+                          <>{e?.orpa?.firstname}</>
                         </td>
                         <td>
-                          <>{e?.tapa?.lastname}</>
+                          <>{e?.orpa?.lastname}</>
                         </td>
                         <td>
                           <>{e?.sugg && <>{e?.sugg?.value}</>}</>
@@ -595,14 +538,74 @@ const Contacts = () => {
                           />
                         </td>
                       </tr>
-                    </>
-                  )}
-                </>
-              ))}
-            </>
-          )}
-        </tbody>
-      </table>
+                    )}
+                  </>
+                ))}
+              </>
+            )}
+            {patientsLists && patientsLists.orig.length > 0 && (
+              <>
+                {patientsLists.orig.map((e) => (
+                  <>
+                    {e.deletedAt === null && (
+                      <>
+                        <tr>
+                          <td>
+                            <>{e?.tapa?.nicknames}</>
+                          </td>
+                          <td>
+                            <>{e?.tapa?.firstname}</>
+                          </td>
+                          <td>
+                            <>{e?.tapa?.lastname}</>
+                          </td>
+                          <td>
+                            <>{e?.sugg && <>{e?.sugg?.value}</>}</>
+                          </td>
+                          <td>
+                            {e?.linkDescription === "null"
+                              ? ""
+                              : e?.linkDescription}
+                          </td>
+                          <td>
+                            {e?.start
+                              ? new Date(e?.start)
+                                  .toLocaleString("fr-BE", "short")
+                                  .slice(0, 10)
+                              : ""}
+                          </td>
+                          <td>
+                            {e?.end
+                              ? new Date(e?.end)
+                                  .toLocaleString("fr-BE", "short")
+                                  .slice(0, 10)
+                              : ""}
+                          </td>
+                          <td className="d-flex">
+                            <ModalEditPatient
+                              infos={e}
+                              type={type}
+                              contacts={contacts}
+                              // onChangeContacts={(e) => contactLierResponse(e)}
+                              onChangeUpdateContact={onChangeUpdateContact}
+                              listContacts={listContacts}
+                              // listContactsSelect={props.listContacts}
+                            />
+                            <ModalDeletePatient
+                              infos={e}
+                              onChangeUpdateContact={onChangeUpdateContact}
+                            />
+                          </td>
+                        </tr>
+                      </>
+                    )}
+                  </>
+                ))}
+              </>
+            )}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

@@ -107,7 +107,12 @@ const Medias = (props) => {
               {medias.deletedAt === null && (
                 <>
                   <div className="row mt-2">
-                    <div className="col-sm-3">{medias.originalFilename}</div>
+                    <div
+                      className="col-sm-3"
+                      style={{ overflowWrap: "break-word" }}
+                    >
+                      {medias.originalFilename}
+                    </div>
                     <div className="col-sm-2">
                       {medias.sugg.parentSugg.value}
                     </div>
@@ -129,8 +134,12 @@ const Medias = (props) => {
                       >
                         delete
                       </button> */}
-                      <a className="btn-metis ml-4" href={medias.absolutePath}>
-                        télécharger
+                      <a
+                        className="btn-metis"
+                        style={{ marginLeft: "1rem" }}
+                        href={medias.absolutePath}
+                      >
+                        Télécharger
                       </a>
                     </div>
                   </div>

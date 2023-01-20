@@ -5,9 +5,13 @@ import Modal from "react-bootstrap/Modal";
 import useAuth from "../../../hooks/useAuth";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faFilePen,
+  faEdit,
   faPhone,
   faHouseSignal,
+  faRoad,
+  faMugSaucer,
+  faLongArrowLeft,
+  faLongArrowRight,
 } from "@fortawesome/free-solid-svg-icons";
 import { useParams } from "react-router-dom";
 import Table from "react-bootstrap/Table";
@@ -266,11 +270,14 @@ function RapportDetails(props) {
     }
   }, [toggle]);
 
-  const ToggleEdit = ({ r }) =>
+  const ToggleEdit = ({ r, white }) =>
     toggle ? (
       <></>
     ) : (
-      <div className="row-btnRapport">
+      <div
+        className="row-btnRapport"
+        style={white ? { color: "#fff" } : { background: "#fff" }}
+      >
         <DeleteRapports
           idRapport={r.id}
           onChangeDelete={onChangeDelete}
@@ -285,6 +292,7 @@ function RapportDetails(props) {
               checked={toggle}
               defaultChecked={r.isShow}
               className="uk-checkbox"
+              style={{ display: "none" }}
               onChange={(e) => {
                 // setToggle(!toggle);
 
@@ -323,7 +331,10 @@ function RapportDetails(props) {
                 // }
               }}
             />
-            <Form.Check.Label>Activer le mode édition</Form.Check.Label>
+            <Form.Check.Label>
+              {/* Activer le mode édition */}
+              <FontAwesomeIcon icon={faEdit} />
+            </Form.Check.Label>
           </Form.Check>
         )}
       </div>
@@ -342,19 +353,24 @@ function RapportDetails(props) {
               key={id}
               className="suivi-card mt-4 mb-4"
               style={
-                r.activityType === 1 || r.activityType === 3
-                  ? { border: "2px solid #BACC8C" }
+                r.activityType === 1
+                  ? { border: "2px solid #8cb30c" }
+                  : r.activityType === 3
+                  ? { border: "2px solid #789c0d" }
                   : { border: "2px solid #9c5fb5" }
               }
             >
-              <ToggleEdit r={r} />
+              <ToggleEdit r={r} white />
 
               {r && r.deletedAt === null && (
                 <>
                   {r && r.activityType === 1 && (
-                    <h3 className="suivi-card-title">
+                    <h3
+                      className="suivi-card-title"
+                      style={{ background: "#8cb30c" }}
+                    >
                       <FontAwesomeIcon
-                        icon={faFilePen}
+                        icon={faRoad}
                         style={{ marginRight: "4px" }}
                       />
                       Rapport de rencontre
@@ -372,9 +388,12 @@ function RapportDetails(props) {
                   )}
 
                   {r && r.activityType === 2 && (
-                    <h3 className="suivi-card-title">
+                    <h3
+                      className="suivi-card-title"
+                      style={{ background: "#9c5fb5" }}
+                    >
                       <FontAwesomeIcon
-                        icon={faPhone}
+                        icon={faLongArrowRight}
                         style={{ marginRight: "4px" }}
                       />
                       Appel Sortant
@@ -382,9 +401,12 @@ function RapportDetails(props) {
                   )}
 
                   {r && r.activityType === 4 && (
-                    <h3 className="suivi-card-title">
+                    <h3
+                      className="suivi-card-title"
+                      style={{ background: "#9c5fb5" }}
+                    >
                       <FontAwesomeIcon
-                        icon={faPhone}
+                        icon={faLongArrowLeft}
                         style={{ marginRight: "4px" }}
                       />
                       Appel Entrant
@@ -392,9 +414,12 @@ function RapportDetails(props) {
                   )}
 
                   {r && r.activityType === 3 && (
-                    <h3 className="suivi-card-title">
+                    <h3
+                      className="suivi-card-title"
+                      style={{ background: "#789c0d" }}
+                    >
                       <FontAwesomeIcon
-                        icon={faFilePen}
+                        icon={faMugSaucer}
                         style={{ marginRight: "4px" }}
                       />
                       Rapport de réunion

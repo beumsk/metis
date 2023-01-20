@@ -158,7 +158,7 @@ function ModalEditAppels(props) {
                 <>{el.value && <option value={el?.id}>{el?.value}</option>}</>
               ))}
             </Form.Select>
-            <Form.Label htmlFor="inputValue">Value</Form.Label>
+            <Form.Label htmlFor="inputValue">Valeur</Form.Label>
             <Form.Select
               size="lg"
               onChange={(e) => onChangeWhatDoinFunction(e)}

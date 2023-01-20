@@ -223,13 +223,17 @@ function ModalEditInfos(props) {
                   id="value-sugg"
                 >
                   <option>Choisissez une valeur</option>
-                  {elementsOpt?.map((el, id) => (
-                    <option key={el.id} value={el.id}>
-                      {el?.requireCustomValue === true
-                        ? el?.value + "*"
-                        : el?.value}
-                    </option>
-                  ))}
+                  {elementsOpt
+                    ?.sort((a, b) =>
+                      a?.value !== b?.value ? (a?.value < b?.value ? -1 : 1) : 0
+                    )
+                    .map((el, id) => (
+                      <option key={el.id} value={el.id}>
+                        {el?.requireCustomValue === true
+                          ? el?.value + "*"
+                          : el?.value}
+                      </option>
+                    ))}
                 </Form.Select>
               </>
             )}
