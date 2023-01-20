@@ -115,7 +115,7 @@ const ProfilLieux = () => {
                           <span>
                             {contInfo.value === "Tags" ||
                             contInfo.value === "Type de Collaborateur"
-                              ? e.sugge.value
+                              ? e.sugge[0].value
                               : e.valueInformations}
                             <span className="btn-group">
                               <ModalEditLieux
@@ -147,7 +147,7 @@ const ProfilLieux = () => {
                         infosAppels={contInfo}
                         contact={contactInformation}
                         idInfo={contInfo.id}
-                        onChange={(e) => informationSaved(e)}
+                        onChange={informationSaved}
                       ></ModalAddLieux>
                     </div>
                   </td>

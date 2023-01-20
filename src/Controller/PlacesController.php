@@ -163,14 +163,16 @@ class PlacesController extends AbstractController
         // dd($blocksDecode);
         foreach ($blocksDecode as $value) {
             foreach ($contact->getInformations() as $infosCont) {
-                if ($infosCont->getItel()->getSuge()->getId() === $value->id) {
+                if ($infosCont->getItel()->getSuge()->getId() === $value->id && $infosCont->getDeletedAt() === null) {
                     array_push($value->obj, [
                         "id" => $infosCont->getId(),
                         "occupants" => (property_exists($infosCont, 'occupants') === true) ? $infosCont->getOccupants() : null,
                         "valueInformations" => $infosCont->getValue(),
                         "valueDescription" => $infosCont->getComment(),
                         "sugge" => array_map(function ($a) {
-                            dd($a);
+                            // if (count($a)) {
+                            //     dd($a);
+                            // }
                             return [
 
                                 "value" => ($a && $a->getValue() !== null) ? $a->getValue() : null,
