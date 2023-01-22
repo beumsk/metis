@@ -18,7 +18,8 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import DataTable from "datatables.net-dt";
 import $ from "jquery";
-
+import moment from "moment";
+import ModalEditUtilisateurs from "./edit-utilisateurs";
 function ListUtilisateurs() {
   const { SearchBar } = Search;
   const [auth, setAuth] = useState(useAuth());
@@ -197,26 +198,37 @@ function ListUtilisateurs() {
                     >
                       Dernier login
                     </th>
+                    <th
+                      className="sorting sorting_asc"
+                      tabindex="0"
+                      aria-controls="example"
+                      rowSpan="1"
+                      colSpan="1"
+                      aria-sort="ascending"
+                      aria-label="Name: activate to sort column descending"
+                    >
+                      Actions
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
                   {listUsers.data.map((e, idx) => (
                     <tr className="odd" key={idx}>
                       {console.log(e)}
-                      <td>{e.lastname}</td>
-                      <td>{e.firstname}</td>
+                      <td>{e.name}</td>
+                      <td>{e.lastName}</td>
                       <td>{e.username}</td>
                       <td>{e.email}</td>
-                      <td>{e.roles[0]}</td>
-                      <td>{e.lastLogin}</td>
+                      <td>{e.enabled}</td>
+                      <td>{e.roles}</td>
+                      <td>
+                        {moment(e.lastLogin)
+                          .utc("UTC+01:00")
+                          .format("YYYY-MM-DD")}
+                      </td>
 
                       <td>
-                        {/* <a
-                          href={"/profil-lieux/" + e.id}
-                          className="uk-link-muted"
-                        >
-                          Détails
-                        </a> */}
+                        <ModalEditUtilisateurs user={e} />
                       </td>
                     </tr>
                   ))}

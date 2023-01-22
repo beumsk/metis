@@ -46,6 +46,46 @@ class UserController extends AbstractController
         }
     }
 
+    #[Route('/api/editUserAdmin', name: 'app_editUserAdmin')]
+    public function editUserAdmin(ManagerRegistry $doctrine, UserPasswordHasherInterface $passwordHasher, Request $request): Response
+    {
+
+        // envoyer un mail pour le changement d'emails ?
+        $entityManager = $doctrine->getManager();
+        $request = Request::createFromGlobals();
+
+        $username = $request->request->get('username');
+        $email = $request->request->get('email');
+        $firstname = $request->request->get('firstname');
+        $lastName = $request->request->get('lastname');
+        $roles = $request->request->get('groups');
+        $enabled = $request->request->get('enabled');
+        $username = $request->request->get('username');
+        $id = $request->request->get('idUser');
+
+
+
+        $user = $doctrine->getRepository(User::class)->find($id);
+
+
+        $user->setUsername($username);
+        $user->setEmail($email);
+        $user->setFirstname($firstname);
+        $user->setLastname($lastName);
+        $user->setRoles(json_decode($roles));
+
+        if ($enabled === "true") {
+            $user->setEnabled(1);
+        } else {
+            $user->setEnabled(0);
+        }
+
+
+        $entityManager->flush();
+
+        return new Response(json_encode($user), 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
+    }
+
     #[Route('/api/listUsers', name: 'app_listUsers')]
     public function listUsers(ManagerRegistry $doctrine, UserPasswordHasherInterface $passwordHasher, Request $request): Response
     {
