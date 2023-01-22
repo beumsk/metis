@@ -20,16 +20,16 @@ function ModalEditUtilisateurs(props) {
 
   // formData.append("pathString", props.link);
   const [lastname, setLastName] = useState(
-    props.user.name !== null ? props.user.name : null
+    props.user.lastname !== null ? props.user.lastname : null
   );
   const [firstname, setFirstName] = useState(
-    props.user.lastName !== null ? props.user.lastName : null
+    props.user.firstname !== null ? props.user.firstname : null
   );
   const [email, setEmail] = useState(
     props.user.email !== null ? props.user.email : null
   );
   const [groups, setGroups] = useState(
-    props.user.roles !== null ? props.user.roles.map((s) => s.trim()) : null
+    props.user.roles !== null ? JSON.stringify(props.user.roles) : null
   );
   const [enabled, setEnabled] = useState(
     props.user.enabled !== null ? props.user.enabled : null
@@ -64,12 +64,12 @@ function ModalEditUtilisateurs(props) {
   const handleSave = (e) => {
     let formGetInfos = new FormData();
     // value-sugg
-
+    console.log(groups);
     formGetInfos.append("lastname", lastname);
     formGetInfos.append("firstname", firstname);
     formGetInfos.append("idUser", props.user.id);
     formGetInfos.append("email", email);
-    formGetInfos.append("groups", JSON.stringify(groups));
+    formGetInfos.append("groups", groups);
     formGetInfos.append("enabled", enabled);
     formGetInfos.append("username", username);
 
@@ -82,8 +82,8 @@ function ModalEditUtilisateurs(props) {
         Authorization: `Bearer ${auth.auth.accessToken}`,
       },
     }).then(function (response) {
-      var formData = new FormData();
-      formData.append("id", response.data.data.id);
+      //   var formData = new FormData();
+      //   formData.append("id", response.data.data.id);
 
       props.onChange(true);
       setShow(false);
@@ -110,7 +110,7 @@ function ModalEditUtilisateurs(props) {
             id="inputValueSpécifique"
             className="uk-input"
             onChange={(e) => setLastName(e.target.value)}
-            defaultValue={lastname}
+            defaultValue={firstname}
             aria-describedby="valueSpécifique"
           />
           <Form.Label htmlFor="inputValue">Prénom</Form.Label>
@@ -118,7 +118,7 @@ function ModalEditUtilisateurs(props) {
             type="text"
             id="inputValueSpécifique"
             className="uk-input"
-            defaultValue={firstname}
+            defaultValue={lastname}
             onChange={(e) => setFirstName(e.target.value)}
             aria-describedby="valueSpécifique"
           />
@@ -144,9 +144,9 @@ function ModalEditUtilisateurs(props) {
           <select
             onChange={(e) => setGroups(e.target.value)}
             className="uk-select"
-            defaultValue={JSON.stringify(groups)}
+            defaultValue={groups}
           >
-            {console.log(JSON.stringify(groups))}
+            {console.log(groups)}
             <option
               value={JSON.stringify(["ROLE_ADMIN", "ROLE_USER", "ROLE_BASIC"])}
             >

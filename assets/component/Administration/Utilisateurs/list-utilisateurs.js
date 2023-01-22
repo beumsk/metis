@@ -80,6 +80,22 @@ function ListUtilisateurs() {
       .catch(function (response) {});
   }, [lengthList, setLengthList]);
 
+  function onChangeUser() {
+    axios({
+      method: "get",
+      url: "/api/listUsers",
+      data: formData,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    }).then(function (response) {
+      //handle success
+
+      setListUsers(response);
+    });
+  }
+
   function setPlacesAdded() {
     axios({
       method: "post",
@@ -130,7 +146,7 @@ function ListUtilisateurs() {
                       aria-sort="ascending"
                       aria-label="Name: activate to sort column descending"
                     >
-                      Nom
+                      Prénom
                     </th>
                     <th
                       className="sorting sorting_asc"
@@ -141,7 +157,7 @@ function ListUtilisateurs() {
                       aria-sort="ascending"
                       aria-label="Name: activate to sort column descending"
                     >
-                      Prénom
+                      Nom
                     </th>
                     <th
                       className="sorting sorting_asc"
@@ -215,12 +231,13 @@ function ListUtilisateurs() {
                   {listUsers.data.map((e, idx) => (
                     <tr className="odd" key={idx}>
                       {console.log(e)}
-                      <td>{e.name}</td>
-                      <td>{e.lastName}</td>
+                      <td>{e.firstname}</td>
+                      <td>{e.lastname}</td>
+
                       <td>{e.username}</td>
                       <td>{e.email}</td>
                       <td>{e.enabled}</td>
-                      <td>{e.roles}</td>
+                      <td>{JSON.stringify(e.roles)}</td>
                       <td>
                         {moment(e.lastLogin)
                           .utc("UTC+01:00")
@@ -228,7 +245,10 @@ function ListUtilisateurs() {
                       </td>
 
                       <td>
-                        <ModalEditUtilisateurs user={e} />
+                        <ModalEditUtilisateurs
+                          user={e}
+                          onChange={onChangeUser}
+                        />
                       </td>
                     </tr>
                   ))}

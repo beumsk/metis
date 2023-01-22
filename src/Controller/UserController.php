@@ -66,13 +66,17 @@ class UserController extends AbstractController
 
 
         $user = $doctrine->getRepository(User::class)->find($id);
-
+        $rolesArray = json_decode($roles);
 
         $user->setUsername($username);
         $user->setEmail($email);
         $user->setFirstname($firstname);
         $user->setLastname($lastName);
-        $user->setRoles(json_decode($roles));
+        // dd($rolesArray);
+        $user->setRoles($rolesArray);
+
+
+
 
         if ($enabled === "true") {
             $user->setEnabled(1);
@@ -95,15 +99,20 @@ class UserController extends AbstractController
 
         $listUsers = [];
         foreach ($user as $value) {
+            $arrSpacesLess = [];
+            foreach ($value->getRoles() as $key => $trimValue) {
+                $arrSpacesLess[$key] = ($trimValue !== " ") ? trim($trimValue) : null;
+            }
+
             $listUsers[] = [
                 "id" => $value->getId(),
-                "name" => $value->getFirstname(),
-                "lastName" => $value->getLastName(),
+                "lastname" => $value->getLastName(),
+                "firstname" => $value->getFirstname(),
                 "username" => $value->getUserName(),
                 "email" => $value->getEmail(),
                 "enabled" => $value->getEnabled(),
                 "lastLogin" => ($value->getLastLogin()) ? $value->getLastLogin()->format(DATE_RFC3339_EXTENDED) : null,
-                "roles" => explode(',', $value->getRoles()[0])
+                "roles" => $value->getRoles()
             ];
         }
 
