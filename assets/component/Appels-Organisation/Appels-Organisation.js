@@ -20,6 +20,7 @@ import ModalActionsAppelSortant from "./Modal-Actions-Appels/Modal-Actions-Appel
 import ModalHistorique from "./Modal-Historique/ModalHistorique";
 import ModalCallCanceled from "./Modal-Actions-Appels/Modal-Call-Canceled";
 import ModalCallMissing from "./Modal-Actions-Appels/Modal-Call-Missing";
+import moment from "moment";
 function AppelsOrganisation() {
   const [auth, setAuth] = useState(useAuth());
   const [patientsList, setPatientsList] = useState(null);
@@ -167,62 +168,74 @@ function AppelsOrganisation() {
                       </div>
                       <div className="col-sm-4">
                         {patient.firstname} {patient.lastname}
-                        {/* <Link
-                            className="seeProfil"
-                            from={"/appels-organisation"}
-                            to={"/appels-organisation/" + patient.id}
-                          >
-                            Voir historique
-                          </Link> */}
                       </div>
                       <div className="col-sm-4">{patient.description}</div>
                     </Accordion.Header>
                     <Accordion.Body>
                       <div className=" body-accordeonitemPatient">
                         {patient.patients.map((e) => (
-                          <div className="row">
-                            <div className="col-sm-2 container-informationNames">
-                              {e.patientfirstName}
-                              {e.patientLastName}
-                            </div>
-                            <div className="col-sm-8 container-appelDescription">
-                              {e.description}
-                              {e && e.fore.length > 0 && (
-                                <ModalHistorique foreList={e}></ModalHistorique>
-                              )}
-                            </div>
-                            <div className="col-sm-2 container-appelActions">
-                              <ModalActionsAppelsEntrant
-                                listCalls={e.fore}
-                                defaultValueContact={patient}
-                                onChangeResponse={onChangeResponseDatas}
-                                typeCall={typeCallsSelect}
-                                listContacts={patientsList?.data}
-                                defaultValueGoalsValue={e}
-                              ></ModalActionsAppelsEntrant>
+                          <>
+                            <div
+                              className="row"
+                              style={{ backgroundColor: "#eaeaea" }}
+                            >
+                              <div className="col-sm-2 container-informationNames">
+                                {e.patientfirstName}
+                                {e.patientLastName}
+                              </div>
+                              <div className="col-sm-4 container-informationNames">
+                                {moment(e?.creationDate)
+                                  .utc("UTC+01:00")
+                                  .format("YYYY-MM-DD")}
+                                {"|"}
+                                {e.func.value} {e.description}
+                              </div>
+                              <div className="col-sm-4 container-appelDescription">
+                                {e.description}
+                              </div>
 
-                              <ModalActionsAppelSortant
-                                listCalls={e.fore}
-                                defaultValueContact={patient}
-                                typeCall={typeCallsSelect}
-                                listContacts={patientsList?.data}
-                                onChangeResponse={onChangeResponseDatas}
-                                defaultValueGoalsValue={e}
-                              ></ModalActionsAppelSortant>
+                              <div className="col-sm-2 container-appelActions">
+                                <ModalActionsAppelsEntrant
+                                  listCalls={e.fore}
+                                  defaultValueContact={patient}
+                                  onChangeResponse={onChangeResponseDatas}
+                                  typeCall={typeCallsSelect}
+                                  listContacts={patientsList?.data}
+                                  defaultValueGoalsValue={e}
+                                ></ModalActionsAppelsEntrant>
 
-                              <ModalCallCanceled
-                                goal={e}
-                                onChangeResponse={onChangeResponseDatas}
-                                contact={patient}
-                              ></ModalCallCanceled>
+                                <ModalActionsAppelSortant
+                                  listCalls={e.fore}
+                                  defaultValueContact={patient}
+                                  typeCall={typeCallsSelect}
+                                  listContacts={patientsList?.data}
+                                  onChangeResponse={onChangeResponseDatas}
+                                  defaultValueGoalsValue={e}
+                                ></ModalActionsAppelSortant>
 
-                              <ModalCallMissing
-                                goal={e}
-                                onChangeResponse={onChangeResponseDatas}
-                                contact={patient}
-                              ></ModalCallMissing>
+                                <ModalCallCanceled
+                                  goal={e}
+                                  onChangeResponse={onChangeResponseDatas}
+                                  contact={patient}
+                                ></ModalCallCanceled>
+
+                                <ModalCallMissing
+                                  goal={e}
+                                  onChangeResponse={onChangeResponseDatas}
+                                  contact={patient}
+                                ></ModalCallMissing>
+                              </div>
                             </div>
-                          </div>
+                            <div className="row">
+                              <div className="col-sm-2">
+                                {e && e.fore.length > 0 && (
+                                  <ModalHistorique
+                                    foreList={e}
+                                  ></ModalHistorique>
+                                )}
+                              </div>
+                            </div>
+                          </>
                         ))}
                       </div>
                     </Accordion.Body>

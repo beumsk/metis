@@ -694,7 +694,10 @@ class ContactsController extends AbstractController
                                 // "deleted_at" => $a->getDeletedAt(),
                                 "type" => $a->getType(),
                                 "status" => $a->getStatus(),
-                                "func" => ($a->getFunc() !== null && $a->getFunc()->getId() !== null) ? $a->getFunc()->getId() : null,
+                                "func" => [
+                                    "id" => ($a->getFunc() !== null && $a->getFunc()->getId() !== null) ? $a->getFunc()->getId() : null,
+                                    "value" => ($a->getFunc() !== null && $a->getFunc()->getValue() !== null) ? $a->getFunc()->getValue() : null
+                                ],
                                 "creationDate" => ($a && $a->getCreationDate() !== null) ? $a->getCreationDate()->format(DATE_RFC3339_EXTENDED) : null,
                                 "patientfirstName" => $a->getPati()->getFirstName(),
                                 "pati_id" => $a->getPati()->getId(),
