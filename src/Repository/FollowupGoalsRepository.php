@@ -147,7 +147,7 @@ class FollowupGoalsRepository extends ServiceEntityRepository
             $query .= ' LEFT JOIN p.cont pc ';
         }
 
-        $query .= 'WHERE g.status IN (:status) AND g.type = :type ';
+        $query .= 'WHERE g.status IN (:status) AND g.type = :type AND g.deleted_at IS NULL';
 
 
 

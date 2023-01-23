@@ -46,7 +46,7 @@ function AppelsOrganisation() {
       },
     })
       .then(function (response) {
-        //handle success
+        console.log(response);
         setPatientsList(response);
       })
       .catch(function (response) {});
@@ -129,6 +129,7 @@ function AppelsOrganisation() {
     })
       .then(function (response) {
         setPatientsList(response);
+        console.log(patientsList);
       })
       .catch(function (response) {});
   }
@@ -154,85 +155,79 @@ function AppelsOrganisation() {
           </button>
         </div>
 
-        {patientsList &&
-        patientsList?.data &&
-        patientsList?.data?.length > 0 ? (
+        {patientsList && patientsList?.data ? (
           <>
             {patientsList.data.map((patient) => (
               <>
-                {patient?.goalsInformation?.length > 0 && (
-                  <Accordion className="my-3">
-                    <Accordion.Item eventKey={patient.id} key={patient.id}>
-                      <Accordion.Header>
-                        <div className="col-sm-1">
-                          <FontAwesomeIcon icon={faUser} />
-                        </div>
-                        <div className="col-sm-4">
-                          {patient.firstname} {patient.lastname}
-                          {/* <Link
+                <Accordion className="my-3">
+                  <Accordion.Item eventKey={patient.id} key={patient.id}>
+                    <Accordion.Header>
+                      <div className="col-sm-1">
+                        <FontAwesomeIcon icon={faUser} />
+                      </div>
+                      <div className="col-sm-4">
+                        {patient.firstname} {patient.lastname}
+                        {/* <Link
                             className="seeProfil"
                             from={"/appels-organisation"}
                             to={"/appels-organisation/" + patient.id}
                           >
                             Voir historique
                           </Link> */}
-                        </div>
-                        <div className="col-sm-4">{patient.description}</div>
-                      </Accordion.Header>
-                      <Accordion.Body>
-                        <div className=" body-accordeonitemPatient">
-                          {patient.goalsInformation.map((e) => (
-                            <div className="row">
-                              <div className="col-sm-2 container-informationNames">
-                                {e.patientfirstName}
-                                {e.patientLastName}
-                              </div>
-                              <div className="col-sm-8 container-appelDescription">
-                                {e.description}
-                                {e && e.fore.length > 0 && (
-                                  <ModalHistorique
-                                    foreList={e}
-                                  ></ModalHistorique>
-                                )}
-                              </div>
-                              <div className="col-sm-2 container-appelActions">
-                                <ModalActionsAppelsEntrant
-                                  listCalls={patient.goalsInformation}
-                                  defaultValueContact={patient}
-                                  onChangeResponse={onChangeResponseDatas}
-                                  typeCall={typeCallsSelect}
-                                  listContacts={patientsList?.data}
-                                  defaultValueGoalsValue={e}
-                                ></ModalActionsAppelsEntrant>
-
-                                <ModalActionsAppelSortant
-                                  listCalls={patient.goalsInformation}
-                                  defaultValueContact={patient}
-                                  typeCall={typeCallsSelect}
-                                  listContacts={patientsList?.data}
-                                  onChangeResponse={onChangeResponseDatas}
-                                  defaultValueGoalsValue={e}
-                                ></ModalActionsAppelSortant>
-
-                                <ModalCallCanceled
-                                  goal={e}
-                                  onChangeResponse={onChangeResponseDatas}
-                                  contact={patient}
-                                ></ModalCallCanceled>
-
-                                <ModalCallMissing
-                                  goal={e}
-                                  onChangeResponse={onChangeResponseDatas}
-                                  contact={patient}
-                                ></ModalCallMissing>
-                              </div>
+                      </div>
+                      <div className="col-sm-4">{patient.description}</div>
+                    </Accordion.Header>
+                    <Accordion.Body>
+                      <div className=" body-accordeonitemPatient">
+                        {patient.patients.map((e) => (
+                          <div className="row">
+                            <div className="col-sm-2 container-informationNames">
+                              {e.patientfirstName}
+                              {e.patientLastName}
                             </div>
-                          ))}
-                        </div>
-                      </Accordion.Body>
-                    </Accordion.Item>
-                  </Accordion>
-                )}
+                            <div className="col-sm-8 container-appelDescription">
+                              {e.description}
+                              {e && e.fore.length > 0 && (
+                                <ModalHistorique foreList={e}></ModalHistorique>
+                              )}
+                            </div>
+                            <div className="col-sm-2 container-appelActions">
+                              <ModalActionsAppelsEntrant
+                                listCalls={e.fore}
+                                defaultValueContact={patient}
+                                onChangeResponse={onChangeResponseDatas}
+                                typeCall={typeCallsSelect}
+                                listContacts={patientsList?.data}
+                                defaultValueGoalsValue={e}
+                              ></ModalActionsAppelsEntrant>
+
+                              <ModalActionsAppelSortant
+                                listCalls={e.fore}
+                                defaultValueContact={patient}
+                                typeCall={typeCallsSelect}
+                                listContacts={patientsList?.data}
+                                onChangeResponse={onChangeResponseDatas}
+                                defaultValueGoalsValue={e}
+                              ></ModalActionsAppelSortant>
+
+                              <ModalCallCanceled
+                                goal={e}
+                                onChangeResponse={onChangeResponseDatas}
+                                contact={patient}
+                              ></ModalCallCanceled>
+
+                              <ModalCallMissing
+                                goal={e}
+                                onChangeResponse={onChangeResponseDatas}
+                                contact={patient}
+                              ></ModalCallMissing>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </Accordion.Body>
+                  </Accordion.Item>
+                </Accordion>
               </>
             ))}
 
