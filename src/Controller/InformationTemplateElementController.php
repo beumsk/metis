@@ -71,6 +71,24 @@ class InformationTemplateElementController extends AbstractController
         ]);
     }
 
+    #[Route('/api/deletePatient', name: 'app_deletePatient')]
+    public function deletePatient(ManagerRegistry $doctrine, Request $request): JsonResponse
+    {
+        $entityManager = $doctrine->getManager();
+        $request = Request::createFromGlobals();
+
+
+        $idPatient = $request->request->get('idPatient');
+        $patient = $doctrine->getRepository(Patients::class)->find($idPatient);
+
+        $patient->setDeletedAt(new \DateTime('now'));
+        $entityManager->flush();
+        return new JsonResponse([
+            'response' => "Delete !",
+            'idAppel' => $patient->getId()
+        ]);
+    }
+
     #[Route('/api/deletePatientInformation', name: 'app_deletePatientInformation')]
     public function deletePatientInformation(ManagerRegistry $doctrine, Request $request): JsonResponse
     {

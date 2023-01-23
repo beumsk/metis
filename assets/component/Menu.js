@@ -38,7 +38,7 @@ const Menu = () => {
     localStorage.setItem("antenna", e.target.value);
     location.reload();
   };
-
+  console.log(auth);
   return (
     <>
       <Navbar
@@ -77,9 +77,13 @@ const Menu = () => {
                     Liste de contacts
                   </Dropdown.Item>
                   <Dropdown.Item href="/lieux">Lieux</Dropdown.Item>
-                  <Dropdown.Item href="/utilisateurs">
-                    Utilisateurs
-                  </Dropdown.Item>
+                  {auth?.auth?.roles?.length > 0 &&
+                    auth?.auth?.roles?.includes("ROLE_ADMIN") && (
+                      <Dropdown.Item href="/utilisateurs">
+                        Utilisateurs
+                      </Dropdown.Item>
+                    )}
+
                   <Dropdown.Item href="/anniversaire">
                     Anniversaire
                   </Dropdown.Item>

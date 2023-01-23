@@ -168,7 +168,7 @@ class PatientsRepository extends ServiceEntityRepository
         $qb->select('p.id, p.lastname, p.firstname, p.nicknames')
             ->from('App:Patients', 'p')
             ->andWhere('CONCAT(p.lastname,\' \', p.firstname,\' \', COALESCE(p.nicknames, p.id)) LIKE :val')
-            ->andWhere('p.antenna = :antenna')
+            ->andWhere('p.antenna = :antenna AND p.deleted_at IS NULL')
             ->setParameters([
                 'val' => '%' . $search . '%',
                 'antenna' => $antenna

@@ -81,7 +81,7 @@ function ModalAddUtilisateurs(props) {
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>
-            <h6>Modifier une information</h6>
+            <h6>Ajouter un utilisateur</h6>
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>

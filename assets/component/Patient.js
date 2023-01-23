@@ -17,6 +17,7 @@ import Places from "./Profile/Lieux/Places";
 import Moment from "react-moment";
 import EditPatient from "./Edit-Patient";
 import "moment-timezone";
+import ModalDeletePatient from "./Modal-Delete-Patient";
 
 const Patient = () => {
   let id = useParams().id;
@@ -222,10 +223,19 @@ const Patient = () => {
                 </div>
               </div>
               <div className="col-sm-4">
-                <EditPatient
-                  patient={patient}
-                  onChangeEditPatient={onChangeEditPatient}
-                ></EditPatient>
+                <div className="btn-groups">
+                  <EditPatient
+                    patient={patient}
+                    onChangeEditPatient={onChangeEditPatient}
+                  ></EditPatient>
+
+                  {auth?.auth?.roles?.length > 0 &&
+                    auth?.auth?.roles?.includes("ROLE_ADMIN") && (
+                      <ModalDeletePatient
+                        patient={patient}
+                      ></ModalDeletePatient>
+                    )}
+                </div>
               </div>
             </div>
             <div className="row body-profile">

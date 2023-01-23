@@ -47,7 +47,10 @@
 }
 
 .editIconPatient {
+  display: block;
   float: right;
+  /* margin-right: 0.5rem; */
+  margin-left: 0.5rem;
 }
 
 .row-btnRapport {
