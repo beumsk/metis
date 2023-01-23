@@ -29,6 +29,7 @@ import ProfilLieux from "./component/Administration/Lieux/Profil-Lieux/Profil-Li
 import ProfilContact from "./component/Administration/Contact-Organisation/Profil-Contact/Profil-Contact";
 import EditPassword from "./component/User/User-Reset-Password";
 import EditProfile from "./component/User/User-Edit-Profile";
+import ListUtilisateurs from "./component/Administration/Utilisateurs/list-utilisateurs";
 
 const ROLES = {
   User: "ROLE_USER",
@@ -71,6 +72,7 @@ function App() {
               element={<ProfilContact />}
             />
             <Route path="lieux" element={<Lieux />} />
+            <Route path="utilisateurs" element={<ListUtilisateurs />} />
             <Route path="profil-lieux/:idLieux" element={<ProfilLieux />} />
             <Route path="patients" element={<Patients />} />
             <Route path="patients/:query" element={<Patients />} />

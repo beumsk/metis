@@ -42,6 +42,29 @@ const Login = () => {
         }
       );
 
+      // let formData = new FormData();
+      // formData.append("id", auth.id);
+      // const saveLoginTime = await axios({
+      //   method: "post",
+      //   url: "/api/saveTimeLogin",
+      //   data: formData,
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //     Authorization: `Bearer ${auth.auth.accessToken}`,
+      //   },
+      // }).then(function (response) {
+      //   console.log(response);
+      // });
+      // const saveLoginTime = await axios.post(
+      //   LOGIN_URL,
+      //   JSON.stringify({ email, password }),
+      //   {
+      //     headers: {
+      //       "Content-Type": "application/json",
+      //     },
+      //   }
+      // );
+
       const accessToken = response.data.token;
       const token = await axios.get("/api/token/refresh", {
         withCredentials: true,
@@ -60,18 +83,23 @@ const Login = () => {
         navigate(from, { replace: true });
       }
     } catch (err) {
+      console.log(err.response);
       if (!err?.response) {
         setErrMsg("Erreur de serveur.");
       } else if (err.response?.status === 400) {
         setErrMsg("E-mail et mot de passe manquant.");
-      } else if (err.response?.status === 401) {
+      } else if (err.response.data.message === "Invalid credentials.") {
         setErrMsg("Mauvais identifiants.");
+      } else if (err.response.data.message === "Account disabled.") {
+        setErrMsg("Compte désactivée.");
       } else {
         setErrMsg("Mauvais identifiants.");
       }
       errRef.current.focus();
     }
   };
+
+  // Account disabled.
 
   // const togglePersist = () => {
   //   setPersist((prev) => !prev);
