@@ -176,7 +176,7 @@ function ModalAddAppels(props) {
                 <>{el.value && <option value={el?.id}>{el?.value}</option>}</>
               ))}
             </Form.Select>
-            <Form.Label htmlFor="inputValue">Value</Form.Label>
+            <Form.Label htmlFor="inputValue">Valeur</Form.Label>
             <Form.Select
               size="lg"
               onChange={(e) => onChangeWhatDoinFunction(e)}
@@ -184,7 +184,7 @@ function ModalAddAppels(props) {
             >
               <option>Rajoutez sa valeur</option>
               {whatDoinFunction?.data?.map((el, id) => (
-                <>{el.value && <option value={el?.id}>{el?.value}</option>}</>
+                <>{el.value && <option value={el?.id}>{el?.value}{el?.value === "Autre" && "*"}</option>}</>
               ))}
             </Form.Select>
             {valueWhatDoinFunction === "609" && (

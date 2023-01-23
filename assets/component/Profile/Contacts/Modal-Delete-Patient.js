@@ -48,6 +48,7 @@ function ModalDeletePatient(props) {
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
   useEffect(() => {
     setStartDate(
       new Date(props?.infosPatient?.start?.timestamp * 1000).toJSON()
