@@ -60,18 +60,23 @@ const Login = () => {
         navigate(from, { replace: true });
       }
     } catch (err) {
+      console.log(err.response);
       if (!err?.response) {
         setErrMsg("Erreur de serveur.");
       } else if (err.response?.status === 400) {
         setErrMsg("E-mail et mot de passe manquant.");
-      } else if (err.response?.status === 401) {
+      } else if (err.response.data.message === "Invalid credentials.") {
         setErrMsg("Mauvais identifiants.");
+      } else if (err.response.data.message === "Account disabled.") {
+        setErrMsg("Compte désactivée.");
       } else {
         setErrMsg("Mauvais identifiants.");
       }
       errRef.current.focus();
     }
   };
+
+  // Account disabled.
 
   // const togglePersist = () => {
   //   setPersist((prev) => !prev);

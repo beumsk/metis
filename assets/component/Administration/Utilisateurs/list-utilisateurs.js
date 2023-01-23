@@ -20,6 +20,7 @@ import DataTable from "datatables.net-dt";
 import $ from "jquery";
 import moment from "moment";
 import ModalEditUtilisateurs from "./edit-utilisateurs";
+import ModalAddUtilisateurs from "./add-utilisateur";
 function ListUtilisateurs() {
   const { SearchBar } = Search;
   const [auth, setAuth] = useState(useAuth());
@@ -118,11 +119,11 @@ function ListUtilisateurs() {
 
       <div className="container container-patients mx-auto ">
         <div style={{ float: "right" }}>
-          {/* <ModalAddLieux
-            listUsers={listUsers}
-            setListUsers={(e) => setListUsers(e)}
-            onChange={setPlacesAdded}
-          ></ModalAddLieux> */}
+          <ModalAddUtilisateurs
+            // listUsers={listUsers}
+            // setListUsers={(e) => setListUsers(e)}
+            onChange={onChangeUser}
+          ></ModalAddUtilisateurs>
         </div>
 
         <h1 className="mb-3">Utilisateurs</h1>
