@@ -2,10 +2,10 @@ import * as React from "react";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import CircularProgress from "@mui/material/CircularProgress";
-import { array } from "prop-types";
 import axios from "axios";
 import Form from "react-bootstrap/Form";
 import useAuth from "../../../hooks/useAuth";
+
 function sleep(delay = 0) {
   return new Promise((resolve) => {
     setTimeout(resolve, delay);
@@ -21,6 +21,7 @@ export default function InputPlaceList(props) {
   const loading = open && options.length === 0;
   const [inputValue, setInputValue] = React.useState("");
   let arr = [];
+
   React.useEffect(() => {
     let active = true;
 
@@ -110,7 +111,7 @@ export default function InputPlaceList(props) {
       }}
       loading={loading}
       freeSolo={true}
-      defaultValue={arr}
+      defaultValue={props?.defaultValue || {}}
       renderInput={(params) => (
         <>
           <Form.Label htmlFor="inputValue" className="uk-form-label">

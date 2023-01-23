@@ -15,6 +15,8 @@ import EditActivities from "./Edit-Activities";
 import DeleteIndicateurs from "./Delete-Indicateurs";
 import DeleteActivities from "./Delete-Acitivities";
 import IndicateursActivitiesDescription from "./Indicateurs-Activities-Description";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faMapMarker, faUser } from "@fortawesome/free-solid-svg-icons";
 
 function IndicateursActiviteesComponent(props) {
   const [show, setShow] = useState(false);
@@ -95,7 +97,22 @@ function IndicateursActiviteesComponent(props) {
           {/* indicateursByDefault */}
           {props?.activitiesByDefault?.map((el, id) => (
             <div className="indicateur-line">
-              {el?.sugg.value} : {el?.description}
+              <div>
+                <span style={{ marginRight: "4px" }}>
+                  {el?.sugg.value}
+                  {el?.description !== "null" && ` : ${el?.description}`}
+                </span>
+                {el?.contacts?.map((x) => (
+                  <span className="tags-contacts">
+                    <FontAwesomeIcon icon={faUser} /> {x?.label}
+                  </span>
+                ))}
+                {el?.places?.map((x) => (
+                  <span className="tags-contacts">
+                    <FontAwesomeIcon icon={faMapMarker} /> {x?.lastname}
+                  </span>
+                ))}
+              </div>
               <div className="edit-delete">
                 <EditActivities
                   activity={el}
@@ -131,7 +148,22 @@ function IndicateursActiviteesComponent(props) {
               {/* indicateursByDefault */}
               {props?.soinsByDefault?.map((el, id) => (
                 <div className="indicateur-line">
-                  {el?.sugg.value} : {el?.description}{" "}
+                  <div>
+                    <span style={{ marginRight: "4px" }}>
+                      {el?.sugg.value}
+                      {el?.description !== "null" && ` : ${el?.description}`}
+                    </span>
+                    {el?.contacts?.map((x) => (
+                      <span className="tags-contacts">
+                        <FontAwesomeIcon icon={faUser} /> {x?.label}
+                      </span>
+                    ))}
+                    {el?.places?.map((x) => (
+                      <span className="tags-contacts">
+                        <FontAwesomeIcon icon={faMapMarker} /> {x?.lastname}
+                      </span>
+                    ))}
+                  </div>
                   <div className="edit-delete">
                     <EditActivities
                       activity={el}
