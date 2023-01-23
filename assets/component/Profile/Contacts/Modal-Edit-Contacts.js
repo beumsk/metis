@@ -87,7 +87,8 @@ function ModalEditContacts(props) {
           },
         })
           .then(function (response) {
-            setResponseDatas(response.data);
+            props.onChangeUpdateContact(true);
+            // setResponseDatas(response.data);
             setIsSentRepport(true);
           })
           .catch(function (response) {});
@@ -98,9 +99,9 @@ function ModalEditContacts(props) {
     });
   }
 
-  if (responseDatas !== null) {
-    props.onChangeUpdateContact(responseDatas);
-  }
+  // if (responseDatas !== null) {
+  //   props.onChangeUpdateContact(responseDatas);
+  // }
 
   return (
     <>
@@ -113,7 +114,6 @@ function ModalEditContacts(props) {
           <Modal.Title>Modifier un contact lié</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {" "}
           <>
             <Form.Label htmlFor="inputValue">Valeur</Form.Label>
             <Form.Select

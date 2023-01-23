@@ -2,18 +2,10 @@ import React, { useState, useEffect } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import useAuth from "../../../hooks/useAuth";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faPlusCircle,
-  faCancel,
-  faEdit,
-} from "@fortawesome/free-solid-svg-icons";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import Form from "react-bootstrap/Form";
 import Editor from "./Editor-Reports";
-import InputPlaceList from "./Input-Place-List";
-import InputContactList from "./Input-Contact-List";
 
 function InputTypeList(props) {
   const [show, setShow] = useState(false);
@@ -64,7 +56,7 @@ function InputTypeList(props) {
       >
         <option>Choisissez le type</option>
         {props?.type?.data?.map((el, id) => (
-          <>{el.value && <option value={el?.id}>{el?.value}</option>}</>
+          <>{el.value && <option value={el?.id}>{el?.value}{el?.value === "Autre" && "*"}</option>}</>
         ))}
       </Form.Select>
     </>

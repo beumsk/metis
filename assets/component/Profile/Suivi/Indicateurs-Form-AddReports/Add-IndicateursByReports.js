@@ -105,7 +105,7 @@ function AddIndicateursByReport(props) {
 
       var result = diff(optionsItems, props?.indicatorsGroups);
 
-      console.log(props?.indicatorsGroups);
+      // console.log(props?.indicatorsGroups);
       setOptionsItems(result);
     }
   }, []);

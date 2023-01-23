@@ -40,6 +40,7 @@ const Contacts = () => {
   useEffect(() => {
     let formDataSugg = new FormData();
     formDataSugg.append("id", 57);
+
     axios({
       method: "post",
       url: "/api/suggestionsById",
@@ -53,6 +54,7 @@ const Contacts = () => {
         setType(response);
       })
       .catch(function (response) {});
+
     axios({
       method: "post",
       url: "/api/getContacts",
@@ -66,6 +68,7 @@ const Contacts = () => {
         setContactsList(response);
       })
       .catch(function (response) {});
+
     axios({
       method: "post",
       url: "/api/getContactsByPatients",
@@ -136,6 +139,7 @@ const Contacts = () => {
         }, 4000);
       })
       .catch(function (response) {});
+
     axios({
       method: "post",
       url: "/api/getPatientsByPatients",
@@ -149,6 +153,7 @@ const Contacts = () => {
         setPatientsLists(response.data);
       })
       .catch(function (response) {});
+
     axios({
       method: "post",
       url: "/api/getContacts",
@@ -526,15 +531,15 @@ const Contacts = () => {
                           <ModalEditPatient
                             infos={e}
                             type={type}
-                            contacts={contacts}
+                            contacts={patients}
                             // onChangeContacts={(e) => contactLierResponse(e)}
-                            onChangeUpdateContact={onChangeUpdateContact}
-                            listContacts={listContacts}
+                            onChangeUpdatePatient={onChangeUpdatePatient}
+                            listContacts={patientsLists}
                             // listContactsSelect={props.listContacts}
                           />
                           <ModalDeletePatient
                             infos={e}
-                            onChangeUpdateContact={onChangeUpdateContact}
+                            onChangeUpdatePatient={onChangeUpdatePatient}
                           />
                         </td>
                       </tr>
@@ -585,15 +590,15 @@ const Contacts = () => {
                             <ModalEditPatient
                               infos={e}
                               type={type}
-                              contacts={contacts}
+                              contacts={patients}
                               // onChangeContacts={(e) => contactLierResponse(e)}
-                              onChangeUpdateContact={onChangeUpdateContact}
-                              listContacts={listContacts}
+                              onChangeUpdatePatient={onChangeUpdatePatient}
+                              listContacts={patientsLists}
                               // listContactsSelect={props.listContacts}
                             />
                             <ModalDeletePatient
                               infos={e}
-                              onChangeUpdateContact={onChangeUpdateContact}
+                              onChangeUpdatePatient={onChangeUpdatePatient}
                             />
                           </td>
                         </tr>

@@ -110,13 +110,17 @@ function ModalAddObjectifs(props) {
         <Modal.Body>
           <>
             <InputTypeList type={type} onChange={(e) => setTypeValue(e)} />
-
-            <Form.Control
-              type="text"
-              onChange={(e) => setValueType(e.target.value)}
-              id="inputText"
-              className="uk-input mt-3"
-            />
+            {typeValue === "609" && (
+              <>
+                <Form.Control
+                  type="text"
+                  placeholder="Valeur personnalisée"
+                  id="inputText"
+                  onChange={(e) => setValueType(e.target.value)}
+                  className="uk-input mt-3"
+                />
+              </>
+            )}
 
             <Form.Group className="my-3" controlId="formBasicCheckbox">
               <Form.Check>

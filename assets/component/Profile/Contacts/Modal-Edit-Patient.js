@@ -80,7 +80,8 @@ function ModalLierPatient(props) {
           },
         })
           .then(function (response) {
-            setResponseDatas(response.data);
+              props.onChangeUpdatePatient(true);
+            // setResponseDatas(response.data);
             setIsSentRepport(true);
           })
           .catch(function (response) {});
@@ -91,10 +92,10 @@ function ModalLierPatient(props) {
     });
   }
 
-  if (responseDatas !== null) {
-    props.onChangeUpdatePatient(responseDatas);
-  }
-  console.log(props);
+  // if (responseDatas !== null) {
+  //   props.onChangeUpdatePatient(responseDatas);
+  // }
+  
   return (
     <>
       <Button onClick={handleShow} className="btn-metis">
@@ -106,7 +107,6 @@ function ModalLierPatient(props) {
           <Modal.Title>Modifier un patient lié</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {" "}
           <>
             <Form.Label htmlFor="inputValue">Valeur</Form.Label>
             <Form.Select
