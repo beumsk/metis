@@ -17,7 +17,37 @@ class LoginController extends AbstractController
     #[Route('/api/getUser')]
     public function index(Request $request, ManagerRegistry $doctrine, EntityManagerInterface $entityManager, TokenStorageInterface $token): Response
     {
+
+
+
         $tokenget = $token->getToken();
+
+
+        $user = $doctrine->getRepository(User::class)->find($tokenget->getUser()->getId());
+
+
+
+        $user->setLastLogin(new \DateTime('now'));
+
+        $entityManager->flush();
+
+
+
+
+
         return $this->json($tokenget);
+    }
+
+    #[Route('/api/saveTimeLogin')]
+    public function saveTimeLogin(Request $request, ManagerRegistry $doctrine, EntityManagerInterface $entityManager, TokenStorageInterface $token): Response
+    {
+
+
+        $id = $request->request->get("id");
+        dd($id);
+        // $tokenget = $token->getToken();
+
+
+        return $this->json($id);
     }
 }

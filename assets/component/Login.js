@@ -42,6 +42,29 @@ const Login = () => {
         }
       );
 
+      // let formData = new FormData();
+      // formData.append("id", auth.id);
+      // const saveLoginTime = await axios({
+      //   method: "post",
+      //   url: "/api/saveTimeLogin",
+      //   data: formData,
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //     Authorization: `Bearer ${auth.auth.accessToken}`,
+      //   },
+      // }).then(function (response) {
+      //   console.log(response);
+      // });
+      // const saveLoginTime = await axios.post(
+      //   LOGIN_URL,
+      //   JSON.stringify({ email, password }),
+      //   {
+      //     headers: {
+      //       "Content-Type": "application/json",
+      //     },
+      //   }
+      // );
+
       const accessToken = response.data.token;
       const token = await axios.get("/api/token/refresh", {
         withCredentials: true,

@@ -16,7 +16,7 @@ security:
         app_user_provider:
             entity:
                 class: App\Entity\User
-                property: username
+                property: email
         # used to reload user from session & other features (e.g. switch_user)
 
     # https://symfony.com/doc/current/security.html#a-authentication-firewalls
@@ -30,7 +30,7 @@ security:
             stateless: true            
             provider: app_user_provider            
             json_login:
-                username_path: username
+                username_path: email
                 password_path: password
                 check_path: /login
                 success_handler: lexik_jwt_authentication.handler.authentication_success

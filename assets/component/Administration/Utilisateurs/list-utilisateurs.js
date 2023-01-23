@@ -76,6 +76,7 @@ function ListUtilisateurs() {
                 ": Activer pour trier la colonne par ordre décroissant",
             },
           },
+          responsive: true,
         });
       })
       .catch(function (response) {});
@@ -128,7 +129,7 @@ function ListUtilisateurs() {
 
         <h1 className="mb-3">Utilisateurs</h1>
 
-        <div class="table-contact-container">
+        <div class="table-contact-container table-responsive">
           {listUsers && listUsers.data !== null ? (
             <>
               <table
@@ -238,7 +239,9 @@ function ListUtilisateurs() {
                       <td>{e.username}</td>
                       <td>{e.email}</td>
                       <td>{e.enabled}</td>
-                      <td>{JSON.stringify(e.roles)}</td>
+                      <td>
+                        <p>{JSON.stringify(e.roles)}</p>
+                      </td>
                       <td>
                         {moment(e.lastLogin)
                           .utc("UTC+01:00")
