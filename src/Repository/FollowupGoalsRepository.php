@@ -65,7 +65,8 @@ class FollowupGoalsRepository extends ServiceEntityRepository
                 ->join('i.sugg', 's');
         }
         if ($referent) {
-            $qb->join('p.cont', 'pc');
+            $qb
+                ->join('p.contacts', 'pc');
         }
 
         $qb
@@ -82,8 +83,7 @@ class FollowupGoalsRepository extends ServiceEntityRepository
         ];
 
         if ($function) {
-            $qb->andWhere('g.func IN (:func)');
-            $parameters['function'] = $function;
+            $qb->andWhere('g.func IN (' . $function . ')');
         }
 
         if ($team) {
@@ -144,7 +144,7 @@ class FollowupGoalsRepository extends ServiceEntityRepository
             $query .= ' JOIN g.pati p ';
         }
         if ($referent) {
-            $query .= ' LEFT JOIN p.cont pc ';
+            $query .= ' LEFT JOIN p.contacts pc ';
         }
 
         $query .= 'WHERE g.status IN (:status) AND g.type = :type AND g.deleted_at IS NULL';
@@ -169,7 +169,7 @@ class FollowupGoalsRepository extends ServiceEntityRepository
             $query .= ' AND g.creation_date = :date ';
         }
         if ($referent) {
-            $query .= ' AND pc.cont in (:referent) and pc.end is null';
+            $query .= ' AND pc.contact in (:referent) and pc.end is null';
         }
 
         if ($contact !== null) {
@@ -213,6 +213,8 @@ class FollowupGoalsRepository extends ServiceEntityRepository
             ->createQuery($query)
             ->setParameters($parameters);
 
+
+        // dd($query->getResult());
 
         return $query->getResult();
     }
@@ -284,7 +286,7 @@ class FollowupGoalsRepository extends ServiceEntityRepository
             $parameters['antenna'] = $antenna;
         }
         if ($referent) {
-            $qb->andWhere("pc.cont in (:referent) and pc.end is null");
+            $qb->andWhere("pc.contact in (:referent) and pc.end is null");
             $parameters['referent'] = $referent;
         }
 

@@ -520,7 +520,7 @@ class ContactsController extends AbstractController
                 }
             }
         }
-
+        // (' . implode(",", [Contacts::TYPE_PERSON, Contacts::TYPE_ORGANISATION]) . ')
         // dd($blocksDecode);
         // dd($contact->getPatients()[0]->getCont());
         foreach ($contact->getPatients() as $patient) {
@@ -675,54 +675,109 @@ class ContactsController extends AbstractController
 
 
         $runningCallsArr = [];
-        foreach ($runningCalls as $key => $valueCall) {
 
-            array_push(
-                $runningCallsArr,
-                [
+        if ($typeCalls === "running") {
+            foreach ($runningCalls as $key => $valueCall) {
 
-                    "id" => ($valueCall[0]->getCont() !== null && $valueCall[0]->getCont()->getId() !== null) ? $valueCall[0]->getCont()->getId() : null,
-                    "firstname" => ($valueCall[0]->getCont() !== null && $valueCall[0]->getCont()->getLastname() !== null) ? $valueCall[0]->getCont()->getLastname() : null,
-                    "lastname" => ($valueCall[0]->getCont() !== null && $valueCall[0]->getCont()->getFirstname() !== null) ? $valueCall[0]->getCont()->getFirstname() : null,
-                    // "deleted_at" => $valueCall->getDeletedAt(),
-                    "patients" =>
-                    array_map(function ($a) {
-                        if ($a->getDeletedAt() === null) {
-                            return  [
-                                "id" => ($a->getId() !== null) ? $a->getId() : null,
-                                "description" => $a->getDescription(),
-                                // "deleted_at" => $a->getDeletedAt(),
-                                "type" => $a->getType(),
-                                "status" => $a->getStatus(),
-                                "func" => [
-                                    "id" => ($a->getFunc() !== null && $a->getFunc()->getId() !== null) ? $a->getFunc()->getId() : null,
-                                    "value" => ($a->getFunc() !== null && $a->getFunc()->getValue() !== null) ? $a->getFunc()->getValue() : null
-                                ],
-                                "creationDate" => ($a && $a->getCreationDate() !== null) ? $a->getCreationDate()->format(DATE_RFC3339_EXTENDED) : null,
-                                "patientfirstName" => $a->getPati()->getFirstName(),
-                                "pati_id" => $a->getPati()->getId(),
-                                //  "contacts" => $fg->getPati()->getContacts()[0]->getCont(), 
-                                "contact" =>  [
-                                    "id" => ($a->getCont() !== null && $a->getCont()->getId() !== null) ? $a->getCont()->getId() : null,
-                                    "firstname" => ($a->getCont() !== null && $a->getCont()->getLastname() !== null) ? $a->getCont()->getLastname() : null,
-                                    "lastname" => ($a->getCont() !== null && $a->getCont()->getFirstname() !== null) ? $a->getCont()->getFirstname() : null
-                                ],
-                                "patientLastName" => $a->getPati()->getLastName(),
-                                "team" => $a->getPati()->getTeam(),
-                                "fore" =>     array_map(function ($b) {
-                                    return [
-                                        "user" => ($b && $b->getUser() !== null) ? $b->getUser()->getFirstName() . " " . $b->getUser()->getLastName() : null,
-                                        "activityType" => $b->getActivityType(), "content" => $b->getContent(),
-                                        "date" => ($b && $b->getCreationDate() !== null) ? $b->getCreationDate()->format(DATE_RFC3339_EXTENDED) : null
-                                    ];
-                                }, [...$a->getFore()]),
-                            ];
-                        }
-                    }, [...$valueCall])
+                array_push(
+                    $runningCallsArr,
+                    [
 
-                ]
-            );
+                        "id" => ($valueCall[0]->getCont() !== null && $valueCall[0]->getCont()->getId() !== null) ? $valueCall[0]->getCont()->getId() : null,
+                        "firstname" => ($valueCall[0]->getCont() !== null && $valueCall[0]->getCont()->getLastname() !== null) ? $valueCall[0]->getCont()->getLastname() : null,
+                        "lastname" => ($valueCall[0]->getCont() !== null && $valueCall[0]->getCont()->getFirstname() !== null) ? $valueCall[0]->getCont()->getFirstname() : null,
+                        // "deleted_at" => $valueCall->getDeletedAt(),
+                        "patients" =>
+                        array_map(function ($a) {
+                            if ($a->getDeletedAt() === null) {
+                                return  [
+                                    "id" => ($a->getId() !== null) ? $a->getId() : null,
+                                    "description" => $a->getDescription(),
+                                    // "deleted_at" => $a->getDeletedAt(),
+                                    "type" => $a->getType(),
+                                    "status" => $a->getStatus(),
+                                    "func" => [
+                                        "id" => ($a->getFunc() !== null && $a->getFunc()->getId() !== null) ? $a->getFunc()->getId() : null,
+                                        "value" => ($a->getFunc() !== null && $a->getFunc()->getValue() !== null) ? $a->getFunc()->getValue() : null
+                                    ],
+                                    "creationDate" => ($a && $a->getCreationDate() !== null) ? $a->getCreationDate()->format(DATE_RFC3339_EXTENDED) : null,
+                                    "patientfirstName" => $a->getPati()->getFirstName(),
+                                    "pati_id" => $a->getPati()->getId(),
+                                    //  "contacts" => $fg->getPati()->getContacts()[0]->getCont(), 
+                                    "contact" =>  [
+                                        "id" => ($a->getCont() !== null && $a->getCont()->getId() !== null) ? $a->getCont()->getId() : null,
+                                        "firstname" => ($a->getCont() !== null && $a->getCont()->getLastname() !== null) ? $a->getCont()->getLastname() : null,
+                                        "lastname" => ($a->getCont() !== null && $a->getCont()->getFirstname() !== null) ? $a->getCont()->getFirstname() : null
+                                    ],
+                                    "patientLastName" => $a->getPati()->getLastName(),
+                                    "team" => $a->getPati()->getTeam(),
+                                    "fore" =>     array_map(function ($b) {
+                                        return [
+                                            "user" => ($b && $b->getUser() !== null) ? $b->getUser()->getFirstName() . " " . $b->getUser()->getLastName() : null,
+                                            "activityType" => $b->getActivityType(), "content" => $b->getContent(),
+                                            "date" => ($b && $b->getCreationDate() !== null) ? $b->getCreationDate()->format(DATE_RFC3339_EXTENDED) : null
+                                        ];
+                                    }, [...$a->getFore()]),
+                                ];
+                            }
+                        }, [...$valueCall])
+
+                    ]
+                );
+            }
         }
+
+        if ($typeCalls === "closed") {
+            foreach ($closedCalls as $key => $valueCall) {
+
+                array_push(
+                    $runningCallsArr,
+                    [
+
+                        "id" => ($valueCall[0]->getCont() !== null && $valueCall[0]->getCont()->getId() !== null) ? $valueCall[0]->getCont()->getId() : null,
+                        "firstname" => ($valueCall[0]->getCont() !== null && $valueCall[0]->getCont()->getLastname() !== null) ? $valueCall[0]->getCont()->getLastname() : null,
+                        "lastname" => ($valueCall[0]->getCont() !== null && $valueCall[0]->getCont()->getFirstname() !== null) ? $valueCall[0]->getCont()->getFirstname() : null,
+                        // "deleted_at" => $valueCall->getDeletedAt(),
+                        "patients" =>
+                        array_map(function ($a) {
+                            if ($a->getDeletedAt() === null) {
+                                return  [
+                                    "id" => ($a->getId() !== null) ? $a->getId() : null,
+                                    "description" => $a->getDescription(),
+                                    // "deleted_at" => $a->getDeletedAt(),
+                                    "type" => $a->getType(),
+                                    "status" => $a->getStatus(),
+                                    "func" => [
+                                        "id" => ($a->getFunc() !== null && $a->getFunc()->getId() !== null) ? $a->getFunc()->getId() : null,
+                                        "value" => ($a->getFunc() !== null && $a->getFunc()->getValue() !== null) ? $a->getFunc()->getValue() : null
+                                    ],
+                                    "creationDate" => ($a && $a->getCreationDate() !== null) ? $a->getCreationDate()->format(DATE_RFC3339_EXTENDED) : null,
+                                    "patientfirstName" => $a->getPati()->getFirstName(),
+                                    "pati_id" => $a->getPati()->getId(),
+                                    //  "contacts" => $fg->getPati()->getContacts()[0]->getCont(), 
+                                    "contact" =>  [
+                                        "id" => ($a->getCont() !== null && $a->getCont()->getId() !== null) ? $a->getCont()->getId() : null,
+                                        "firstname" => ($a->getCont() !== null && $a->getCont()->getLastname() !== null) ? $a->getCont()->getLastname() : null,
+                                        "lastname" => ($a->getCont() !== null && $a->getCont()->getFirstname() !== null) ? $a->getCont()->getFirstname() : null
+                                    ],
+                                    "patientLastName" => $a->getPati()->getLastName(),
+                                    "team" => $a->getPati()->getTeam(),
+                                    "fore" =>     array_map(function ($b) {
+                                        return [
+                                            "user" => ($b && $b->getUser() !== null) ? $b->getUser()->getFirstName() . " " . $b->getUser()->getLastName() : null,
+                                            "activityType" => $b->getActivityType(), "content" => $b->getContent(),
+                                            "date" => ($b && $b->getCreationDate() !== null) ? $b->getCreationDate()->format(DATE_RFC3339_EXTENDED) : null
+                                        ];
+                                    }, [...$a->getFore()]),
+                                ];
+                            }
+                        }, [...$valueCall])
+
+                    ]
+                );
+            }
+        }
+
         // ['calls' => $runningCalls, 'oldCalls' => $closedCalls, 'phones' => $phones, 'phonesPatient' => $phonesPatient]
 
 

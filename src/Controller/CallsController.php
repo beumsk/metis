@@ -20,7 +20,7 @@ class CallsController extends AbstractController
         $arrReferents = [];
 
         foreach ($findReferents as $value) {
-            $arrReferents[] = ["firstName" => $value->getFirstname(), "lastName" => $value->getLastname(), "id" => $value->getId()];
+            $arrReferents[] = ["id" => $value->getId(), "value" => $value->getFirstname() . " " . $value->getLastname()];
         }
 
         return $this->json($arrReferents);

@@ -81,12 +81,15 @@ function AppelsOrganisation() {
 
     formData.append("antenna", auth.antenna);
 
-    if (referentSelected !== null) {
-      formData.append("referent", referentSelected);
+    if (referentSelected !== null && JSON.stringify(referentSelected) !== []) {
+      formData.append("referent", JSON.stringify(referentSelected));
     }
 
-    if (typeCallsSelected !== null) {
-      formData.append("typeCalls", typeCallsSelected);
+    if (
+      typeCallsSelected !== null &&
+      JSON.stringify(typeCallsSelected) !== []
+    ) {
+      formData.append("typeCalls", JSON.stringify(typeCallsSelected));
     }
     if (limitHistoricSelected !== null) {
       formData.append(
@@ -95,12 +98,12 @@ function AppelsOrganisation() {
       );
     }
 
-    if (teamSelected !== null) {
-      formData.append("team", teamSelected);
+    if (teamSelected !== null && JSON.stringify(teamSelected) !== []) {
+      formData.append("team", JSON.stringify(teamSelected));
     }
 
-    if (functionSelected !== null) {
-      formData.append("function", functionSelected);
+    if (functionSelected !== null && JSON.stringify(functionSelected) !== []) {
+      formData.append("function", [JSON.stringify(functionSelected)]);
     }
 
     axios({
