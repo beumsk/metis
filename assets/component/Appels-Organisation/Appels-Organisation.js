@@ -35,7 +35,7 @@ function AppelsOrganisation() {
   var formData = new FormData();
   formData.append("page", lengthList.toString());
   formData.append("antenna", auth.antenna);
-  formData.append("typeCalls", "running");
+  formData.append("typeCalls", true);
   useEffect(() => {
     axios({
       method: "post",
@@ -81,14 +81,11 @@ function AppelsOrganisation() {
 
     formData.append("antenna", auth.antenna);
 
-    if (referentSelected !== null && JSON.stringify(referentSelected) !== []) {
+    if (referentSelected !== null && referentSelected.length !== 0) {
       formData.append("referent", JSON.stringify(referentSelected));
     }
 
-    if (
-      typeCallsSelected !== null &&
-      JSON.stringify(typeCallsSelected) !== []
-    ) {
+    if (typeCallsSelected !== null && typeCallsSelected.length !== 0) {
       formData.append("typeCalls", JSON.stringify(typeCallsSelected));
     }
     if (limitHistoricSelected !== null) {
@@ -98,11 +95,11 @@ function AppelsOrganisation() {
       );
     }
 
-    if (teamSelected !== null && JSON.stringify(teamSelected) !== []) {
+    if (teamSelected !== null && teamSelected.length !== 0) {
       formData.append("team", JSON.stringify(teamSelected));
     }
 
-    if (functionSelected !== null && JSON.stringify(functionSelected) !== []) {
+    if (functionSelected !== null && functionSelected.length !== 0) {
       formData.append("function", [JSON.stringify(functionSelected)]);
     }
 

@@ -12,7 +12,7 @@ const TypeCalls = (props) => {
   formData.append("id", 655);
 
   useEffect(() => {
-    onChangeType("running");
+    onChangeType(true);
     // axios({
     //   method: "post",
     //   url: "/api/suggestionsById",
@@ -43,7 +43,7 @@ const TypeCalls = (props) => {
             type={"radio"}
             name="flexRadioDefault"
             id="flexRadioDefault1"
-            onClick={(e) => onChangeType("running")}
+            onClick={(e) => onChangeType(true)}
           />
         </InputGroup>
         <InputGroup>
@@ -52,7 +52,7 @@ const TypeCalls = (props) => {
             type={"radio"}
             name="flexRadioDefault"
             id="flexRadioDefault2"
-            onClick={(e) => onChangeType("closed")}
+            onClick={(e) => onChangeType(false)}
           />
         </InputGroup>
       </div>

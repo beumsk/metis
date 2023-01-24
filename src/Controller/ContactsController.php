@@ -584,6 +584,26 @@ class ContactsController extends AbstractController
         } else {
             $since = \Datetime::createFromFormat('d/m/Y', $since);
         }
+
+
+        $functions = $doctrine->getRepository(Suggestions::class)->findById($function);
+        $teams = $doctrine->getRepository(Suggestions::class)->findById($team);
+        $referents = $doctrine->getRepository(Contacts::class)->findById($referent);
+
+        $tt = [];
+        foreach ($teams as $t) {
+            $tt[] = $t->getValue();
+        }
+        $team = implode("','", $tt);
+
+
+        // $rr = [];
+        // foreach ($referents as $r) {
+        //     $rr[] = $r->getId();
+        // }
+        // $referents = implode("','", $rr);
+
+
         $contactRepository = $doctrine->getRepository(Contacts::class);
         $patientInfosRepository = $doctrine->getRepository(PatientsInformation::class);
 
@@ -676,7 +696,7 @@ class ContactsController extends AbstractController
 
         $runningCallsArr = [];
 
-        if ($typeCalls === "running") {
+        if ($typeCalls === "true") {
             foreach ($runningCalls as $key => $valueCall) {
 
                 array_push(
@@ -727,7 +747,9 @@ class ContactsController extends AbstractController
             }
         }
 
-        if ($typeCalls === "closed") {
+
+        // dd($runningCallsArr);
+        if ($typeCalls === "false") {
             foreach ($closedCalls as $key => $valueCall) {
 
                 array_push(

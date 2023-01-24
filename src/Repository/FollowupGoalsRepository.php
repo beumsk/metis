@@ -83,11 +83,13 @@ class FollowupGoalsRepository extends ServiceEntityRepository
         ];
 
         if ($function) {
-            $qb->andWhere('g.func IN (' . $function . ')');
+
+
+            $qb->andWhere('g.func IN (' .  implode(",", json_decode($function))  . ')');
         }
 
         if ($team) {
-            $qb->andWhere('s.id IN (:team)');
+            $qb->andWhere('s.id IN (' .  implode(",", json_decode($team))  . ')');
             $parameters['team'] = $team;
         }
 
@@ -96,7 +98,7 @@ class FollowupGoalsRepository extends ServiceEntityRepository
             $parameters['antenna'] = $antenna;
         }
         if ($referent) {
-            $qb->andWhere("pc.contact in (:referent) and pc.end is null");
+            $qb->andWhere('pc.contact in (' .  implode(", ", json_decode($referent))  . ') and pc.end is null');
             $parameters['referent'] = $referent;
         }
 
@@ -152,10 +154,10 @@ class FollowupGoalsRepository extends ServiceEntityRepository
 
 
         if ($func) {
-            $query .= ' AND g.func IN (:func) ';
+            $query .= ' AND g.func IN (' .  implode(",", json_decode($func))  . ') ';
         }
         if ($team) {
-            $query .= " AND p.team IN ('" . $team . "') ";
+            $query .= ' AND p.team IN (' .  implode(",", json_decode($team))  . ') ';
         }
         if ($patient) {
             $query .= ' AND g.pati = :patient ';
@@ -168,8 +170,11 @@ class FollowupGoalsRepository extends ServiceEntityRepository
         if ($date) {
             $query .= ' AND g.creation_date = :date ';
         }
+
+
         if ($referent) {
-            $query .= ' AND pc.contact in (:referent) and pc.end is null';
+
+            $query .= ' AND pc.cont in (' .  implode(",", json_decode($referent))  . ') and pc.end is null';
         }
 
         if ($contact !== null) {
@@ -183,9 +188,9 @@ class FollowupGoalsRepository extends ServiceEntityRepository
             'type' => $type,
         ];
 
-        if ($func) {
-            $parameters['func'] = $func;
-        }
+        // if ($func) {
+        //     $parameters['func'] = $func;
+        // }
 
         if ($patient) {
             $parameters['patient'] = $patient;
@@ -201,9 +206,9 @@ class FollowupGoalsRepository extends ServiceEntityRepository
             $parameters['antenna'] = $antenna;
         }
 
-        if ($referent) {
-            $parameters['referent'] = $referent;
-        }
+        // if ($referent) {
+        //     $parameters['referent'] = $referent;
+        // }
 
         if ($date) {
             $parameters['date'] = $date;
