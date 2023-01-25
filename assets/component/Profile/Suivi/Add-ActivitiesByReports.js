@@ -34,11 +34,11 @@ function AddActivitiesByReport(props) {
   const [place, setValuePlaceForm] = useState(null);
   const [description, setValueDescription] = useState();
   const [isErrorType, setIsErrorType] = useState();
-  const [isErrorDescription, setIsErrorDescription] = useState();
+  // const [isErrorDescription, setIsErrorDescription] = useState();
 
   const handleShow = () => {
     setIsErrorType(false);
-    setIsErrorDescription(false);
+    // setIsErrorDescription(false);
     setShow(true);
   };
 
@@ -65,18 +65,19 @@ function AddActivitiesByReport(props) {
       setIsErrorType(false);
     }
 
-    if (descriptionForm === null || descriptionForm === "") {
-      setIsErrorDescription(true);
-    } else {
-      setIsErrorDescription(false);
-    }
+    // if (descriptionForm === null || descriptionForm === "") {
+    //   setIsErrorDescription(true);
+    // } else {
+    //   setIsErrorDescription(false);
+    // }
 
     let validationType =
       typeForm === null || typeForm === "defaultValue" ? true : false;
-    let validationDescription =
-      descriptionForm === null || descriptionForm === "" ? true : false;
+    // let validationDescription =
+    //   descriptionForm === null || descriptionForm === "" ? true : false;
 
-    if (validationType === false && validationDescription === false) {
+    // if (validationType === false && validationDescription === false) {
+    if (validationType === false) {
       axios({
         method: "post",
         url: "/api/addActivitiesToReport",
@@ -148,7 +149,7 @@ function AddActivitiesByReport(props) {
             ></InputPlaceList>
           </div>
           {isErrorType && <p>Type Obligatoire</p>}
-          {isErrorDescription && <p>Description Obligatoire</p>}
+          {/* {isErrorDescription && <p>Description Obligatoire</p>} */}
         </Modal.Body>
         <Modal.Footer>
           <button onClick={(e) => onSend(e)} className="btn-metis">

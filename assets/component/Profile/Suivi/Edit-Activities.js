@@ -28,14 +28,16 @@ function EditActivities(props) {
   const [places, setPlaces] = useState(null);
   const [elementsOpt, setElementsOpt] = useState(null);
   const [isErrorType, setIsErrorType] = useState();
-  const [isErrorDescription, setIsErrorDescription] = useState();
+  // const [isErrorDescription, setIsErrorDescription] = useState();
   const [idPatient, setIdPatient] = useState(id);
   const [typeForm, setTypeForm] = useState(
     props.activity?.sugg?.id ? props.activity?.sugg?.id : null
   );
   const [type, setType] = useState(null);
   const [descriptionForm, setDescriptionForm] = useState(
-    props.activity?.description ? props.activity?.description : null
+    props.activity?.description && props.activity?.description !== "null"
+      ? props.activity?.description
+      : null
   );
   const handleClose = () => setShow(false);
   const [editFormActivities, setEditFormActivities] = useState([
@@ -65,7 +67,7 @@ function EditActivities(props) {
     setValuePlaceForm(e);
   }
 
-  const onSend = (isErrorType, isErrorDescription) => {
+  const onSend = (isErrorType) => {
     let formData = new FormData();
     formData.append("contact", JSON.stringify(contact));
     formData.append("place", JSON.stringify(place));
@@ -81,18 +83,19 @@ function EditActivities(props) {
       setIsErrorType(false);
     }
 
-    if (descriptionForm === null || descriptionForm === "") {
-      setIsErrorDescription(true);
-    } else {
-      setIsErrorDescription(false);
-    }
+    // if (descriptionForm === null || descriptionForm === "") {
+    //   setIsErrorDescription(true);
+    // } else {
+    //   setIsErrorDescription(false);
+    // }
 
     let validationType =
       typeForm === null || typeForm === "defaultValue" ? true : false;
-    let validationDescription =
-      descriptionForm === null || descriptionForm === "" ? true : false;
+    // let validationDescription =
+    //   descriptionForm === null || descriptionForm === "" ? true : false;
 
-    if (validationType === false && validationDescription === false) {
+    // if (validationType === false && validationDescription === false) {
+    if (validationType === false) {
       axios({
         method: "post",
         url: "/api/editActivitiesToReport",
@@ -113,13 +116,12 @@ function EditActivities(props) {
   return (
     <>
       <Button onClick={handleShow}>
-        {" "}
         <FontAwesomeIcon icon={faEdit} />
       </Button>
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Ajouter une activité</Modal.Title>
+          <Modal.Title>Modifier une activité</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <div className="">
@@ -151,7 +153,11 @@ function EditActivities(props) {
               id="inputValueSpécifique"
               className="uk-input"
               aria-describedby="valueSpécifique"
-              defaultValue={props.activity?.description}
+              defaultValue={
+                props.activity?.description !== "null"
+                  ? props.activity?.description
+                  : ""
+              }
               onChange={(e) => setDescriptionForm(e.target.value)}
             />
 
@@ -168,16 +174,22 @@ function EditActivities(props) {
               places={props?.places}
               onChange={handleChangePlaces}
               defaultValue={
-                props.activity?.places ? props.activity?.places : null
+                props.activity?.places
+                  ? {
+                      label: props.activity?.places[0]?.lastname,
+                      value: props.activity?.places[0]?.id,
+                    }
+                  : null
+                // props.activity?.places ? props.activity?.places : null
               }
             ></InputPlaceList>
           </div>
           {isErrorType && <p>Type Obligatoire</p>}
-          {isErrorDescription && <p>Description Obligatoire</p>}
+          {/* {isErrorDescription && <p>Description Obligatoire</p>} */}
         </Modal.Body>
         <Modal.Footer>
           <button
-            onClick={(e) => onSend(isErrorType, isErrorDescription)}
+            onClick={(e) => onSend(isErrorType)}
             // disabled={isErrorType && isErrorDescription}
             className="btn-metis"
           >

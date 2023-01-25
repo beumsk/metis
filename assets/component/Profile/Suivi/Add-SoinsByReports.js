@@ -46,7 +46,7 @@ function AddSoinsByReport(props) {
   const [place, setValuePlaceForm] = useState(null);
   const [description, setValueDescription] = useState();
   const [isErrorType, setIsErrorType] = useState();
-  const [isErrorDescription, setIsErrorDescription] = useState();
+  // const [isErrorDescription, setIsErrorDescription] = useState();
 
   const handleShow = () => setShow(true);
 
@@ -76,12 +76,14 @@ function AddSoinsByReport(props) {
       setIsErrorType(false);
     }
 
-    if (descriptionForm === null) {
-      setIsErrorDescription(true);
-    } else {
-      setIsErrorDescription(false);
-    }
-    if (typeForm !== null && descriptionForm !== null) {
+    // if (descriptionForm === null) {
+    //   setIsErrorDescription(true);
+    // } else {
+    //   setIsErrorDescription(false);
+    // }
+
+    // if (typeForm !== null && descriptionForm !== null) {
+    if (typeForm !== null) {
       axios({
         method: "post",
         url: "/api/addActivitiesToReport",
@@ -101,7 +103,6 @@ function AddSoinsByReport(props) {
   return (
     <>
       <Button onClick={handleShow}>
-        {" "}
         <FontAwesomeIcon icon={faPlus} />
       </Button>
 
@@ -165,7 +166,7 @@ function AddSoinsByReport(props) {
             ></InputPlaceList>
           </div>
           {isErrorType && <p>Type Obligatoire</p>}
-          {isErrorDescription && <p>Description Obligatoire</p>}
+          {/* {isErrorDescription && <p>Description Obligatoire</p>} */}
         </Modal.Body>
 
         <Modal.Footer>
