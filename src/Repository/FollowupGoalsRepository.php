@@ -49,20 +49,19 @@ class FollowupGoalsRepository extends ServiceEntityRepository
      *        
      * @return array
      */
-    public function findClosedByPatient($patient, $type, $date, $function, $team, $isHighlight = null, $antenna = null, $referent = null)
+    public function findClosedByPatient($contact, $type, $date, $function, $team, $isHighlight = null, $antenna = null, $referent = null)
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
 
         $qb
             ->select('g')
             ->from('App:FollowupGoals', 'g')
-            ->join('g.pati', 'p')
+            ->join('g.contact', 'c')
             ->join('g.fore', 'r');
 
-        if ($team) {
+        if ($team || $antenna || $referent) {
             $qb
-                ->join('p.information', 'i')
-                ->join('i.sugg', 's');
+                ->join('g.pati', 'p');
         }
         if ($referent) {
             $qb
@@ -70,27 +69,23 @@ class FollowupGoalsRepository extends ServiceEntityRepository
         }
 
         $qb
-            ->where('p.id = :patientId AND g.status IN (:status) AND g.contact is NULL AND g.type=:type')
+            ->where('c.id = :contactId AND g.status IN (:status) AND g.type = :type')
             ->andWhere('r.id IN (' . $this->getLatestReport() . ')');
 
-
-        $followUpGoalsEntity = new EntityFollowupGoals();
         $parameters = [
             'date' => $date,
-            'patientId' => $patient,
+            'contactId' => $contact,
             'type' => $type,
-            'status' => $followUpGoalsEntity->getStatusForGroup(FollowupGoals::STATUS_GROUP_CLOSED)
+            'status' => FollowupGoals::getStatusForGroup(FollowupGoals::STATUS_GROUP_CLOSED)
         ];
 
         if ($function) {
-
-
-            $qb->andWhere('g.func IN (' .  implode(",", json_decode($function))  . ')');
+            $qb->andWhere('g.function IN (:function)');
+            $parameters['function'] = $function;
         }
 
         if ($team) {
-            $qb->andWhere('s.id IN (' .  implode(",", json_decode($team))  . ')');
-            $parameters['team'] = $team;
+            $qb->andWhere("p.team IN ('" . $team . "')");
         }
 
         if ($antenna) {
@@ -98,7 +93,7 @@ class FollowupGoalsRepository extends ServiceEntityRepository
             $parameters['antenna'] = $antenna;
         }
         if ($referent) {
-            $qb->andWhere('pc.contact in (' .  implode(", ", json_decode($referent))  . ') and pc.end is null');
+            $qb->andWhere("pc.contact in (:referent) and pc.end is null");
             $parameters['referent'] = $referent;
         }
 
@@ -235,15 +230,7 @@ class FollowupGoalsRepository extends ServiceEntityRepository
     public function findClosedByContact($contact, $type, $date = null, $function, $team, $antenna = null, $referent = null)
     {
 
-        // dd(
-        //     // $contact, 
-        //     // $type,
-        //     // $date, 
-        //     // $function, 
-        //     // $team, 
-        //     // $antenna = null, 
-        //     // $referent = null
-        // );
+
         $qb = $this->getEntityManager()->createQueryBuilder();
 
         $qb
@@ -262,11 +249,11 @@ class FollowupGoalsRepository extends ServiceEntityRepository
         }
 
         $qb
-            ->where('c.id = :contactId AND g.status IN (:status) AND g.type = :type AND g.deleted_at IS NULL');
-        // ->andWhere('r.id IN (' . $this->getLatestReport() . ')');
-        $followUpGoalsEntity = new EntityFollowupGoals();
+            ->where('c.id = :contactId AND g.status IN (:status) AND g.type = :type AND g.deleted_at IS NULL')
+            ->andWhere('r.id IN (' . $this->getLatestReport() . ')');
+
         $parameters = [
-            // 'date' => $date,
+            'date' => $date,
             'contactId' => $contact,
             'type' => $type,
             'status' => FollowupGoals::getStatusForGroup(FollowupGoals::STATUS_GROUP_CLOSED)

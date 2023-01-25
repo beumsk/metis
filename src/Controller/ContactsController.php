@@ -636,7 +636,7 @@ class ContactsController extends AbstractController
             $contactId = $contact->getId();
 
             $phones[$contactId] = $contactRepository->findContactInfos($contactId, Contacts::PHONE_PATH);
-            //            $reports[$contactId] = $followUpReportRepository->findBy(['followUpGoals' => $contact], ['reportDate' => 'asc']);
+            // $reports[$contactId] = $followUpReportRepository->findBy(['followUpGoals' => $contact], ['reportDate' => 'asc']);
         }
 
         foreach ($organisations as $organisation) {
@@ -663,7 +663,7 @@ class ContactsController extends AbstractController
             $contactId = $organisation->getId();
 
             $phones[$contactId] = $contactRepository->findContactInfos($contactId, Contacts::PHONE_PATH);
-            //            $reports[$contactId] = $followUpReportRepository->findBy(['followUpGoals' => $contact], ['reportDate' => 'asc']);
+            // $reports[$contactId] = $followUpReportRepository->findBy(['followUpGoals' => $contact], ['reportDate' => 'asc']);
         }
 
         foreach ($patients as $patient) {
@@ -710,6 +710,7 @@ class ContactsController extends AbstractController
                         "patients" =>
                         array_map(function ($a) {
                             if ($a->getDeletedAt() === null) {
+
                                 return  [
                                     "id" => ($a->getId() !== null) ? $a->getId() : null,
                                     "description" => $a->getDescription(),
@@ -763,6 +764,7 @@ class ContactsController extends AbstractController
                         "patients" =>
                         array_map(function ($a) {
                             if ($a->getDeletedAt() === null) {
+
                                 return  [
                                     "id" => ($a->getId() !== null) ? $a->getId() : null,
                                     "description" => $a->getDescription(),

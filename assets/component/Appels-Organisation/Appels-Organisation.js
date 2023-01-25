@@ -180,55 +180,59 @@ function AppelsOrganisation() {
                               style={{ backgroundColor: "#eaeaea" }}
                             >
                               <div className="col-sm-2 container-informationNames">
-                                {e.patientfirstName}
-                                {e.patientLastName}
+                                {e?.patientfirstName}
+                                {e?.patientLastName}
                               </div>
                               <div className="col-sm-4 container-informationNames">
                                 {moment(e?.creationDate)
                                   .utc("UTC+01:00")
                                   .format("YYYY-MM-DD")}
                                 {"|"}
-                                {e.func.value} {e.description}
+                                {e?.func?.value} {e?.description}
                               </div>
                               <div className="col-sm-4 container-appelDescription">
-                                {e.description}
+                                {e?.description}
                               </div>
 
                               <div className="col-sm-2 container-appelActions">
-                                <ModalActionsAppelsEntrant
-                                  listCalls={e.fore}
-                                  defaultValueContact={patient}
-                                  onChangeResponse={onChangeResponseDatas}
-                                  typeCall={typeCallsSelect}
-                                  listContacts={patientsList?.data}
-                                  defaultValueGoalsValue={e}
-                                ></ModalActionsAppelsEntrant>
+                                {typeCallsSelected && (
+                                  <>
+                                    <ModalActionsAppelsEntrant
+                                      listCalls={e?.fore}
+                                      defaultValueContact={patient}
+                                      onChangeResponse={onChangeResponseDatas}
+                                      typeCall={typeCallsSelect}
+                                      listContacts={patientsList?.data}
+                                      defaultValueGoalsValue={e}
+                                    ></ModalActionsAppelsEntrant>
 
-                                <ModalActionsAppelSortant
-                                  listCalls={e.fore}
-                                  defaultValueContact={patient}
-                                  typeCall={typeCallsSelect}
-                                  listContacts={patientsList?.data}
-                                  onChangeResponse={onChangeResponseDatas}
-                                  defaultValueGoalsValue={e}
-                                ></ModalActionsAppelSortant>
+                                    <ModalActionsAppelSortant
+                                      listCalls={e?.fore}
+                                      defaultValueContact={patient}
+                                      typeCall={typeCallsSelect}
+                                      listContacts={patientsList?.data}
+                                      onChangeResponse={onChangeResponseDatas}
+                                      defaultValueGoalsValue={e}
+                                    ></ModalActionsAppelSortant>
 
-                                <ModalCallCanceled
-                                  goal={e}
-                                  onChangeResponse={onChangeResponseDatas}
-                                  contact={patient}
-                                ></ModalCallCanceled>
+                                    <ModalCallCanceled
+                                      goal={e}
+                                      onChangeResponse={onChangeResponseDatas}
+                                      contact={patient}
+                                    ></ModalCallCanceled>
 
-                                <ModalCallMissing
-                                  goal={e}
-                                  onChangeResponse={onChangeResponseDatas}
-                                  contact={patient}
-                                ></ModalCallMissing>
+                                    <ModalCallMissing
+                                      goal={e}
+                                      onChangeResponse={onChangeResponseDatas}
+                                      contact={patient}
+                                    ></ModalCallMissing>
+                                  </>
+                                )}
                               </div>
                             </div>
                             <div className="row">
                               <div className="col-sm-2">
-                                {e && e.fore.length > 0 && (
+                                {e && e?.fore?.length > 0 && (
                                   <ModalHistorique
                                     foreList={e}
                                   ></ModalHistorique>
