@@ -36,6 +36,8 @@ function AppelsOrganisation() {
   formData.append("page", lengthList.toString());
   formData.append("antenna", auth.antenna);
   formData.append("typeCalls", true);
+  formData.append("limitHistoric", moment().format("YYYY-MM-DD"));
+
   useEffect(() => {
     axios({
       method: "post",

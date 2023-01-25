@@ -42,6 +42,7 @@ const TypeCalls = (props) => {
             label="En cours"
             type={"radio"}
             name="flexRadioDefault"
+            defaultChecked={true}
             id="flexRadioDefault1"
             onClick={(e) => onChangeType(true)}
           />
