@@ -3,13 +3,7 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import useAuth from "../../../hooks/useAuth";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import moment from "moment";
-import {
-  faPlusCircle,
-  faCancel,
-  faEdit,
-  faCheck,
-} from "@fortawesome/free-solid-svg-icons";
+import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import Form from "react-bootstrap/Form";
@@ -36,8 +30,13 @@ function ModalAddContact(props) {
   const [description, setDescription] = useState(null);
   const [typeValue, setTypeValue] = useState(null);
   const [typeValueOrganisation, setTypeValueOrganisation] = useState(null);
+  const [isErrorType, setIsErrorType] = useState(false);
+
   const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const handleShow = () => {
+    setIsErrorType(false);
+    setShow(true);
+  };
 
   const handleSave = (e) => {
     let formData = new FormData();
@@ -62,20 +61,28 @@ function ModalAddContact(props) {
     formData.append("description", description);
     // formData.append("description", description);
 
-    axios({
-      method: "post",
-      url: "/api/addContact",
-      data: formData,
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${auth.auth.accessToken}`,
-      },
-    })
-      .then(function (response) {
-        props.onChangeContacts(response);
-        setShow(false);
+    if (typeValue === null || typeValue === "defaultValue") {
+      setIsErrorType(true);
+    } else {
+      setIsErrorType(false);
+    }
+
+    if (typeValue && typeValue !== 0) {
+      axios({
+        method: "post",
+        url: "/api/addContact",
+        data: formData,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${auth.auth.accessToken}`,
+        },
       })
-      .catch(function (response) {});
+        .then(function (response) {
+          props.onChangeContacts(response);
+          setShow(false);
+        })
+        .catch(function (response) {});
+    }
   };
 
   return (
@@ -93,74 +100,72 @@ function ModalAddContact(props) {
           <Modal.Title>Ajouter un contact</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {" "}
-          <>
-            <Form.Label htmlFor="inputValue">Type</Form.Label>
-            <select
-              onChange={(e) => setTypeValue(e.target.value)}
-              className="uk-select"
-              required
-              value={typeValue}
-            >
-              <option value={0}>Choisissez un type</option>
-              <option value={1}>Morale</option>
-              <option value={2}>Physique</option>
-            </select>
+          <Form.Label htmlFor="inputValue">Type</Form.Label>
+          <select
+            onChange={(e) => setTypeValue(e.target.value)}
+            className="uk-select"
+            required
+            value={typeValue}
+          >
+            <option value={0}>Choisissez un type</option>
+            <option value={1}>Morale</option>
+            <option value={2}>Physique</option>
+          </select>
 
-            <Form.Label htmlFor="inputValue">Nom</Form.Label>
-            <input
-              type="text"
-              id="inputValueSpécifique"
-              onChange={(e) => setName(e.target.value)}
-              aria-describedby="valueSpécifique"
-              className="uk-input"
-            />
+          <Form.Label htmlFor="inputValue">Nom</Form.Label>
+          <input
+            type="text"
+            id="inputValueSpécifique"
+            onChange={(e) => setName(e.target.value)}
+            aria-describedby="valueSpécifique"
+            className="uk-input"
+          />
 
-            <Form.Label htmlFor="inputValue">Prénom</Form.Label>
-            <input
-              type="text"
-              id="inputValueSpécifique"
-              onChange={(e) => setLastName(e.target.value)}
-              aria-describedby="valueSpécifique"
-              className="uk-input"
-            />
-            <Form.Label htmlFor="inputValue">Organisation</Form.Label>
-            <select
-              size="lg"
-              value={typeValueOrganisation}
-              className="uk-select"
-              onChange={(e) => setTypeValueOrganisation(e.target.value)}
-            >
-              {/* <option>Choisissez le tags</option> */}
-              {props?.listOrganisation?.data?.map((el, id) => (
-                <>
-                  {el?.typeLabel === "Morale" && (
-                    <option value={el?.id}>
-                      {el?.lastname} {el?.firstname}
-                    </option>
-                  )}
-                </>
-              ))}
-            </select>
+          <Form.Label htmlFor="inputValue">Prénom</Form.Label>
+          <input
+            type="text"
+            id="inputValueSpécifique"
+            onChange={(e) => setLastName(e.target.value)}
+            aria-describedby="valueSpécifique"
+            className="uk-input"
+          />
+          <Form.Label htmlFor="inputValue">Organisation</Form.Label>
+          <select
+            size="lg"
+            value={typeValueOrganisation}
+            className="uk-select"
+            onChange={(e) => setTypeValueOrganisation(e.target.value)}
+          >
+            {/* <option>Choisissez le tags</option> */}
+            {props?.listOrganisation?.data?.map((el, id) => (
+              <>
+                {el?.typeLabel === "Morale" && (
+                  <option value={el?.id}>
+                    {el?.lastname} {el?.firstname}
+                  </option>
+                )}
+              </>
+            ))}
+          </select>
 
-            <Form.Label htmlFor="inputValue">URL</Form.Label>
-            <input
-              type="text"
-              id="inputValueSpécifique"
-              className="uk-input"
-              onChange={(e) => setUrl(e.target.value)}
-              aria-describedby="valueSpécifique"
-            />
+          <Form.Label htmlFor="inputValue">URL</Form.Label>
+          <input
+            type="text"
+            id="inputValueSpécifique"
+            className="uk-input"
+            onChange={(e) => setUrl(e.target.value)}
+            aria-describedby="valueSpécifique"
+          />
 
-            <Form.Label htmlFor="inputValue">Description</Form.Label>
-            <Form.Control
-              as="textarea"
-              onChange={(e) => setDescription(e.target.value)}
-              rows={3}
-              className="uk-input"
-              id="comment-value"
-            />
-          </>
+          <Form.Label htmlFor="inputValue">Description</Form.Label>
+          <Form.Control
+            as="textarea"
+            onChange={(e) => setDescription(e.target.value)}
+            rows={3}
+            className="uk-input"
+            id="comment-value"
+          />
+          {isErrorType && <p>Type Obligatoire</p>}
         </Modal.Body>
         <Modal.Footer>
           {isSentRepport && <FontAwesomeIcon icon={faCheck} />}

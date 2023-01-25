@@ -1079,6 +1079,7 @@ class FollowUpReportsController extends AbstractController
         $goals = $request->request->get('goals');
         $contacts = $request->request->get('contacts');
         $content = $request->request->get('content');
+        $changeDate = $request->request->get('changeDate');
         $dureevalue = $request->request->get('dureeValue');
         $patientId = $request->request->get('patientId');
         $user_id = $request->request->get('userId');
@@ -1101,6 +1102,10 @@ class FollowUpReportsController extends AbstractController
         $followupReports->setDuration(new \DateTime($dureevalue));
         $followupReports->setUser($user);
         $followupReports->setActivityType($activity_type);
+
+        if ($changeDate !== "null") {
+            $followupReports->setReportDate(new \DateTime($changeDate));
+        }
 
 
 
