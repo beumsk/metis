@@ -91,7 +91,7 @@ function AppelsOrganisation() {
     if (limitHistoricSelected !== null) {
       formData.append(
         "limitHistoric",
-        new Date(limitHistoricSelected).toISOString()
+        moment(limitHistoricSelected).utc("UTC+01:00").format("DD/MM/YYYY")
       );
     }
 
