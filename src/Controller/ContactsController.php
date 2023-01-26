@@ -769,7 +769,11 @@ class ContactsController extends AbstractController
                         "id" => ($valueCall[0]->getCont() !== null && $valueCall[0]->getCont()->getId() !== null) ? $valueCall[0]->getCont()->getId() : null,
                         "firstname" => ($valueCall[0]->getCont() !== null && $valueCall[0]->getCont()->getLastname() !== null) ? $valueCall[0]->getCont()->getLastname() : null,
                         "lastname" => ($valueCall[0]->getCont() !== null && $valueCall[0]->getCont()->getFirstname() !== null) ? $valueCall[0]->getCont()->getFirstname() : null,
-                        "phone" => $valueCall[0]->phone,
+                        "phone" => array_map(function ($b) {
+                            return [
+                                ($b && $b->getValue() !== null) ? $b->getValue() : null,
+                            ];
+                        }, [...$contactRepository->findContactInfos($valueCall[0]->getCont(), Contacts::PHONE_PATH)]),
                         "patients" =>
                         array_map(function ($a) {
                             if ($a->getDeletedAt() === null) {

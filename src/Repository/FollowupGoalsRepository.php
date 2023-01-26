@@ -85,7 +85,6 @@ class FollowupGoalsRepository extends ServiceEntityRepository
 
         if ($team) {
             $qb->andWhere('s.id IN (' .  implode(",", json_decode($team))  . ')');
-            $parameters['team'] = $team;
         }
 
         if ($antenna) {
@@ -94,7 +93,6 @@ class FollowupGoalsRepository extends ServiceEntityRepository
         }
         if ($referent) {
             $qb->andWhere('pc.contact in (' .  implode(", ", json_decode($referent))  . ') and pc.end is null');
-            $parameters['referent'] = $referent;
         }
 
         if ($isHighlight) {
