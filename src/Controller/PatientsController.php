@@ -365,19 +365,48 @@ class PatientsController extends AbstractController
         $page = $request->request->get('page');
         $antenna = $request->request->get('antenna');
         $patients = $doctrine->getRepository(Patients::class)->listPatientsByAntenna($antenna);
-        $encoder = new JsonEncoder();
-        $defaultContext = [
-            AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context) {
-                return $object->getId();
-            },
-        ];
 
-        $normalizer = new ObjectNormalizer(null, null, null, null, null, null, $defaultContext);
+        $listPatients = [];
 
-        $serializer = new Serializer([new DateTimeNormalizer(), $normalizer], [$encoder]);
-        $data = $serializer->serialize($patients, 'json', [AbstractNormalizer::IGNORED_ATTRIBUTES => ["fore", "nicknames", "birthLocation", "isAlive", "birthdate", "status", "team", "antenna", "contacts", "pati", "sugg", "orga", "calls", "user", "contact", "patient", "fogo", "cont", "plac", "user", "pati", "content", "hash", "firstContactDate", "deletedAt", "followUpType", "noCare", "noActivities", "noIndicators", "followupReportsCare", "followupReportsGoals", "followupReportsActivities", "followupReportsIndicators", "isHightlight", "duration", "description", "story", "unknownYear"]]);
+        foreach ($patients as $key => $value) {
+            $listPatients[] = [
+                "antenna" => $value->getAntenna(),
+                "birthLocation" => $value->getBirthLocation(),
+                "birthdate" => $value->getBirthDate(),
+                "deletedAt" =>  $value->getDeletedAt(),
+                "description" => $value->getDescription(),
+                "firstContactDate"  =>  $value->getFirstContactDate(),
+                "firstname" => $value->getFirstName(),
+                "followUpType" => $value->getFollowupType(),
+                "hash" => $value->getHash(),
+                "id" => $value->getId(),
+                "isAlive" => $value->isIsAlive(),
+                "lastname" => $value->getLastName(),
+                "nicknames" => $value->getNickNames(),
+                "status" =>  $value->getStatus(),
+                "story"  =>  $value->getStory(),
+                "team" => $value->getTeam(),
+                "unknownYear" => $value->getUnknownYear()
+
+            ];
+        }
+
+
+        // $encoder = new JsonEncoder();
+        // $defaultContext = [
+        //     AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context) {
+        //         return $object->getId();
+        //     },
+        // ];
+
+        // $normalizer = new ObjectNormalizer(null, null, null, null, null, null, $defaultContext);
+
+        // $serializer = new Serializer([new DateTimeNormalizer(), $normalizer], [$encoder]);
+        // $data = $serializer->serialize($patients, 'json', [AbstractNormalizer::IGNORED_ATTRIBUTES => ["fore", "nicknames", "birthLocation", "isAlive", "birthdate", "status", "team", "antenna", "contacts", "pati", "sugg", "orga", "calls", "user", "contact", "patient", "fogo", "cont", "plac", "user", "pati", "content", "hash", "firstContactDate", "deletedAt", "followUpType", "noCare", "noActivities", "noIndicators", "followupReportsCare", "followupReportsGoals", "followupReportsActivities", "followupReportsIndicators", "isHightlight", "duration", "description", "story", "unknownYear"]]);
         // dd($patients[0]);
-        return $this->json(json_decode($data));
+
+
+        return new Response(json_encode($listPatients), 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
     }
 
     #[Route('/api/getPatient', name: 'app_getPatient')]
