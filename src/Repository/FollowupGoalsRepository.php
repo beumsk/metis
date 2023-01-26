@@ -176,6 +176,8 @@ class FollowupGoalsRepository extends ServiceEntityRepository
             $query .= ' AND g.cont is NULL ';
         }
 
+
+
         $parameters = [
             'status' => $status,
             'type' => $type,
@@ -206,6 +208,8 @@ class FollowupGoalsRepository extends ServiceEntityRepository
         if ($date) {
             $parameters['date'] = $date;
         }
+
+
 
         $query = $this->getEntityManager()
             ->createQuery($query)

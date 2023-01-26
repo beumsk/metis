@@ -149,7 +149,7 @@ function ModalActionsAppelsEntrant(props) {
       setShow(false);
     });
   };
-  // console.log(props);
+  console.log(props);
   return (
     <>
       <a variant="primary" onClick={handleShow}>

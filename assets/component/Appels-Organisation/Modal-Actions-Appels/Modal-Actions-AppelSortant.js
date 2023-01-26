@@ -148,7 +148,7 @@ function ModalActionsAppelsSortant(props) {
       setShow(false);
     });
   };
-
+  console.log(props);
   return (
     <>
       <a variant="primary" onClick={handleShow}>
@@ -185,8 +185,11 @@ function ModalActionsAppelsSortant(props) {
                   components={animatedComponents}
                   onChange={(e) => onChangeTagsContacts(e)}
                   defaultValue={{
-                    value: props.defaultValueContact.id,
-                    label: props.defaultValueContact.description,
+                    value: props?.defaultValueContact?.id,
+                    label:
+                      props?.defaultValueContact?.firstname +
+                      " " +
+                      props?.defaultValueContact?.lastname,
                   }}
                   isMulti
                   styles={{ menu: (base) => ({ ...base, zIndex: 9999 }) }}

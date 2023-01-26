@@ -6,6 +6,41 @@ body,
 
 }
 
+
+.btn-history{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.container-appels {
+  padding: 2rem !important;
+  margin-top: 5rem !important;
+  background-color: #91bd10;
+  color: white;
+  border-radius: 8px;
+
+  button{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .btn-metis{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  h4 {
+    color: white;
+  }
+
+  
+  a {
+    color: #91bd10!important;
+    text-decoration: underline;
+  }
+}
+  
+
 #table-contact {
   background-color: white !important;
   width: 100%;

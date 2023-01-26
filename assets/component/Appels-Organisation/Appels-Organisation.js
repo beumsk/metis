@@ -30,20 +30,50 @@ function AppelsOrganisation() {
   const [teamSelected, setTeamSelected] = useState(null);
   const [limitHistoricSelected, setLimitHistoricSelected] = useState(null);
   const [referentSelected, setReferentSelected] = useState(null);
-  const [typeCallsSelected, setTypeCallsSelected] = useState(null);
+  const [typeCallsSelected, setTypeCallsSelected] = useState(true);
   const [typeCallsSelect, setTypeCallsSelect] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [loadingForLenght, setLoadingForLenght] = useState(false);
+  const [loadingForHistoric, setLoadingForHistoric] = useState(false);
 
   var formData = new FormData();
   formData.append("page", lengthList.toString());
   formData.append("antenna", auth.antenna);
-  formData.append("typeCalls", true);
-  formData.append(
-    "limitHistoric",
-    moment().subtract(1, "months").format("DD/MM/YYYY")
-  );
 
   useEffect(() => {
+    console.log("dans le useeffect");
+    var m = moment(limitHistoricSelected, "YYYY-MM-DD");
+
+    if (referentSelected !== null && referentSelected.length !== 0) {
+      formData.append("referent", JSON.stringify(referentSelected));
+    }
+
+    formData.append("typeCalls", JSON.stringify(typeCallsSelected));
+
+    if (limitHistoricSelected === null || m.isValid() === false) {
+      formData.append(
+        "limitHistoric",
+        moment().subtract(1, "months").format("DD/MM/YYYY")
+      );
+    }
+
+    if (limitHistoricSelected !== null && m.isValid() === true) {
+      formData.append(
+        "limitHistoric",
+        moment(limitHistoricSelected).utc("UTC+01:00").format("DD/MM/YYYY")
+      );
+    }
+
+    if (teamSelected !== null && teamSelected.length !== 0) {
+      formData.append("team", JSON.stringify(teamSelected));
+    }
+
+    if (functionSelected !== null && functionSelected.length !== 0) {
+      formData.append("function", [JSON.stringify(functionSelected)]);
+    }
+
+    setLoadingForLenght(true);
+
     axios({
       method: "post",
       url: "/api/getCallsAndOrganisationRunning",
@@ -55,6 +85,8 @@ function AppelsOrganisation() {
     })
       .then(function (response) {
         console.log(response);
+
+        setLoadingForLenght(false);
         setPatientsList(response);
       })
       .catch(function (response) {});
@@ -81,11 +113,12 @@ function AppelsOrganisation() {
   function onClickReferent(e) {
     setReferentSelected(e);
   }
-
-  const sentFilters = (e) => {
+  console.log(referentSelected);
+  const sentFilters = (e, page) => {
     var formData = new FormData();
     // formData.append("page", lengthList.toString());
     var m = moment(limitHistoricSelected, "YYYY-MM-DD");
+    formData.append("page", lengthList.toString());
     formData.append("antenna", auth.antenna);
 
     if (referentSelected !== null && referentSelected.length !== 0) {
@@ -117,6 +150,7 @@ function AppelsOrganisation() {
       formData.append("function", [JSON.stringify(functionSelected)]);
     }
     setLoading(true);
+    setLoadingForLenght(true);
     axios({
       method: "post",
       url: "/api/getCallsAndOrganisationRunning",
@@ -128,12 +162,48 @@ function AppelsOrganisation() {
     })
       .then(function (response) {
         setPatientsList(response);
+        setLoadingForLenght(false);
         setLoading(false);
       })
       .catch(function (response) {});
   };
 
   function onChangeResponseDatas(e) {
+    var formData = new FormData();
+    // formData.append("page", lengthList.toString());
+    var m = moment(limitHistoricSelected, "YYYY-MM-DD");
+    formData.append("page", lengthList.toString());
+    formData.append("antenna", auth.antenna);
+
+    if (referentSelected !== null && referentSelected.length !== 0) {
+      formData.append("referent", JSON.stringify(referentSelected));
+    }
+
+    if (typeCallsSelected !== null && typeCallsSelected.length !== 0) {
+      formData.append("typeCalls", JSON.stringify(typeCallsSelected));
+    }
+    if (limitHistoricSelected === null || m.isValid() === false) {
+      formData.append(
+        "limitHistoric",
+        moment().subtract(1, "months").format("DD/MM/YYYY")
+      );
+    }
+
+    if (limitHistoricSelected !== null && m.isValid() === true) {
+      formData.append(
+        "limitHistoric",
+        moment(limitHistoricSelected).utc("UTC+01:00").format("DD/MM/YYYY")
+      );
+    }
+
+    if (teamSelected !== null && teamSelected.length !== 0) {
+      formData.append("team", JSON.stringify(teamSelected));
+    }
+
+    if (functionSelected !== null && functionSelected.length !== 0) {
+      formData.append("function", [JSON.stringify(functionSelected)]);
+    }
+    setLoadingForHistoric(true);
     axios({
       method: "post",
       url: "/api/getCallsAndOrganisationRunning",
@@ -145,14 +215,14 @@ function AppelsOrganisation() {
     })
       .then(function (response) {
         setPatientsList(response);
-        console.log(patientsList);
+        setLoadingForHistoric(false);
       })
       .catch(function (response) {});
   }
   return (
     <>
       <Menu></Menu>
-      <div className="container container-patients row mx-auto ">
+      <div className="container container-appels row mx-auto ">
         <h1 className="mb-3">Tous les Appels</h1>
         <div className="container-filters">
           <TypeCalls onChangeTypeCalls={onChangeTypeCalls}></TypeCalls>
@@ -190,7 +260,9 @@ function AppelsOrganisation() {
                         <FontAwesomeIcon icon={faUser} />
                       </div>
                       <div className="col-sm-4">
-                        {patient.firstname} {patient.lastname}
+                        <Link to={"/profil-contact/" + patient.id}>
+                          {patient.firstname} {patient.lastname}
+                        </Link>
                         {patient.phone && patient.phone.length > 0 && (
                           <div className="item-phone">
                             {patient.phone.map((e) => (
@@ -210,7 +282,9 @@ function AppelsOrganisation() {
                               style={{ backgroundColor: "#eaeaea" }}
                             >
                               <div className="col-sm-2 container-informationNames">
-                                {e?.patientfirstName} {e?.patientLastName}
+                                <Link to={"/" + e.pati_id}>
+                                  {e?.patientfirstName} {e?.patientLastName}
+                                </Link>
                               </div>
                               <div className="col-sm-4 container-informationNames">
                                 {moment(e?.creationDate)
@@ -262,9 +336,20 @@ function AppelsOrganisation() {
                             <div className="row">
                               <div className="col-sm-2">
                                 {e && e?.fore?.length > 0 && (
-                                  <ModalHistorique
-                                    foreList={e}
-                                  ></ModalHistorique>
+                                  <div className="btn-history">
+                                    {loadingForHistoric && (
+                                      <ReactLoading
+                                        type={"spin"}
+                                        color={"#000"}
+                                        height={"10%"}
+                                        width={"10%"}
+                                      />
+                                    )}
+
+                                    <ModalHistorique
+                                      foreList={e}
+                                    ></ModalHistorique>
+                                  </div>
                                 )}
                               </div>
                             </div>
@@ -277,9 +362,24 @@ function AppelsOrganisation() {
               </>
             ))}
 
-            {/* <button className="btn-metis" onClick={readMore}>
+            {console.log(patientsList?.data[0]?.isReadMore)}
+            <button
+              className="btn-metis"
+              onClick={(e) => {
+                setLengthList(lengthList + 10);
+                sentFilters;
+              }}
+            >
               Afficher plus
-            </button> */}
+              {loadingForLenght && (
+                <ReactLoading
+                  type={"spin"}
+                  color={"#ffffff"}
+                  height={"100%"}
+                  width={"4%"}
+                />
+              )}
+            </button>
           </>
         ) : (
           <ReactLoading
