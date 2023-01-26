@@ -81,14 +81,14 @@ class Patients
     #[ORM\OneToMany(mappedBy: 'patient', targetEntity: Medias::class)]
     private Collection $medias;
 
-    // #[ORM\OneToMany(mappedBy: 'patients', targetEntity: PatientsInformation::class)]
-    // private Collection $informations;
+    #[ORM\OneToMany(mappedBy: 'patients', targetEntity: PatientsInformation::class)]
+    private Collection $informations;
 
     public function __construct()
     {
         $this->contacts = new ArrayCollection();
         $this->fore = new ArrayCollection();
-        // $this->informations = new ArrayCollection();
+        $this->informations = new ArrayCollection();
         $this->medias = new ArrayCollection();
     }
 
@@ -373,35 +373,35 @@ class Patients
         return $this;
     }
 
-    // /**
-    //  * @return Collection<int, PatientsInformation>
-    //  */
-    // public function getInformations(): Collection
-    // {
-    //     return $this->informations;
-    // }
+    /**
+     * @return Collection<int, PatientsInformation>
+     */
+    public function getInformations(): Collection
+    {
+        return $this->informations;
+    }
 
-    // public function addInformation(PatientsInformation $information): self
-    // {
-    //     if (!$this->informations->contains($information)) {
-    //         $this->informations->add($information);
-    //         $information->setPatients($this);
-    //     }
+    public function addInformation(PatientsInformation $information): self
+    {
+        if (!$this->informations->contains($information)) {
+            $this->informations->add($information);
+            $information->setPatients($this);
+        }
 
-    //     return $this;
-    // }
+        return $this;
+    }
 
-    // public function removeInformation(PatientsInformation $information): self
-    // {
-    //     if ($this->informations->removeElement($information)) {
-    //         // set the owning side to null (unless already changed)
-    //         if ($information->getPatients() === $this) {
-    //             $information->setPatients(null);
-    //         }
-    //     }
+    public function removeInformation(PatientsInformation $information): self
+    {
+        if ($this->informations->removeElement($information)) {
+            // set the owning side to null (unless already changed)
+            if ($information->getPatients() === $this) {
+                $information->setPatients(null);
+            }
+        }
 
-    //     return $this;
-    // }
+        return $this;
+    }
 
     /**
      * @return Collection<int, Medias>

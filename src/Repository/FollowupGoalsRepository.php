@@ -61,36 +61,30 @@ class FollowupGoalsRepository extends ServiceEntityRepository
 
         if ($team) {
             $qb
-                ->join('p.information', 'i')
-                ->join('i.sugg', 's');
+                ->join('p.informations', 'i')
+                ->join('i.suggestions', 's');
         }
         if ($referent) {
-            $qb
-                ->join('p.contacts', 'pc');
+            $qb->join('p.contacts', 'pc');
         }
 
         $qb
             ->where('p.id = :patientId AND g.status IN (:status) AND g.contact is NULL AND g.type=:type')
             ->andWhere('r.id IN (' . $this->getLatestReport() . ')');
 
-
-        $followUpGoalsEntity = new EntityFollowupGoals();
         $parameters = [
             'date' => $date,
             'patientId' => $patient,
             'type' => $type,
-            'status' => $followUpGoalsEntity->getStatusForGroup(FollowupGoals::STATUS_GROUP_CLOSED)
+            'status' => FollowupGoals::getStatusForGroup(FollowupGoals::STATUS_GROUP_CLOSED)
         ];
 
         if ($function) {
-
-
             $qb->andWhere('g.func IN (' .  implode(",", json_decode($function))  . ')');
         }
 
         if ($team) {
             $qb->andWhere('s.id IN (' .  implode(",", json_decode($team))  . ')');
-            $parameters['team'] = $team;
         }
 
         if ($antenna) {
@@ -99,7 +93,6 @@ class FollowupGoalsRepository extends ServiceEntityRepository
         }
         if ($referent) {
             $qb->andWhere('pc.contact in (' .  implode(", ", json_decode($referent))  . ') and pc.end is null');
-            $parameters['referent'] = $referent;
         }
 
         if ($isHighlight) {
@@ -232,24 +225,16 @@ class FollowupGoalsRepository extends ServiceEntityRepository
      *        
      * @return array
      */
-    public function findClosedByContact($contact, $type, $date = null, $function, $team, $antenna = null, $referent = null)
+    public function findClosedByContact($contact, $type, $date, $function, $team, $isHighlight = null, $antenna = null, $referent = null)
     {
 
-        // dd(
-        //     // $contact, 
-        //     // $type,
-        //     // $date, 
-        //     // $function, 
-        //     // $team, 
-        //     // $antenna = null, 
-        //     // $referent = null
-        // );
+
         $qb = $this->getEntityManager()->createQueryBuilder();
 
         $qb
             ->select('g')
             ->from('App:FollowupGoals', 'g')
-            ->join('g.cont', 'c')
+            ->join('g.contact', 'c')
             ->join('g.fore', 'r');
 
         if ($team || $antenna || $referent) {
@@ -262,24 +247,18 @@ class FollowupGoalsRepository extends ServiceEntityRepository
         }
 
         $qb
-            ->where('c.id = :contactId AND g.status IN (:status) AND g.type = :type AND g.deleted_at IS NULL');
-        // ->andWhere('r.id IN (' . $this->getLatestReport() . ')');
-        $followUpGoalsEntity = new EntityFollowupGoals();
+            ->where('c.id = :contactId AND g.status IN (:status) AND g.type = :type')
+            ->andWhere('r.id IN (' . $this->getLatestReport() . ')');
+
         $parameters = [
-            // 'date' => $date,
+            'date' => $date,
             'contactId' => $contact,
             'type' => $type,
             'status' => FollowupGoals::getStatusForGroup(FollowupGoals::STATUS_GROUP_CLOSED)
         ];
 
         if ($function) {
-            $qb->andWhere('g.func IN (:function)');
-            $parameters['function'] = $function;
-        }
-
-        if ($date !== null) {
-            $qb->andWhere('g.creation_date IN (:date)');
-            $parameters['date'] = $date;
+            $qb->andWhere('g.func IN (' .  implode(", ", json_decode($function))  . ')');
         }
 
         if ($team) {
@@ -291,19 +270,16 @@ class FollowupGoalsRepository extends ServiceEntityRepository
             $parameters['antenna'] = $antenna;
         }
         if ($referent) {
-            $qb->andWhere("pc.contact in (:referent) and pc.end is null");
-            $parameters['referent'] = $referent;
+            $qb->andWhere('pc.contact in (' .  implode(", ", json_decode($referent))  . ') and pc.end is null');
         }
 
-        // $qb->setMaxResults(10);
-
-        // if ($isHighlight) {
-        //     $qb->andWhere('g.isHighlight = :isHighlight');
-        //     $parameters['isHighlight'] = $isHighlight;
-        // }
+        if ($isHighlight) {
+            $qb->andWhere('g.isHighlight = :isHighlight');
+            $parameters['isHighlight'] = $isHighlight;
+        }
 
         $qb->setParameters($parameters);
-        // dd($qb->getQuery()->getResult());
+
         return $qb->getQuery()->getResult();
     }
 

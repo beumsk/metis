@@ -13,6 +13,7 @@ import ReactLoading from "react-loading";
 import SelectEquipe from "./Filtres/Select-Equipe";
 import SelectLimitHistoric from "./Filtres/Select-LimitHistoric";
 import SelectReferent from "./Filtres/Select-Referent";
+
 import TypeCalls from "./Filtres/Select-TypeCalls";
 import { FormSelect } from "react-bootstrap";
 import ModalActionsAppelsEntrant from "./Modal-Actions-Appels/Modal-Actions-AppelsEntrant";
@@ -31,11 +32,17 @@ function AppelsOrganisation() {
   const [referentSelected, setReferentSelected] = useState(null);
   const [typeCallsSelected, setTypeCallsSelected] = useState(null);
   const [typeCallsSelect, setTypeCallsSelect] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   var formData = new FormData();
   formData.append("page", lengthList.toString());
   formData.append("antenna", auth.antenna);
   formData.append("typeCalls", true);
+  formData.append(
+    "limitHistoric",
+    moment().subtract(1, "months").format("DD/MM/YYYY")
+  );
+
   useEffect(() => {
     axios({
       method: "post",
@@ -78,7 +85,7 @@ function AppelsOrganisation() {
   const sentFilters = (e) => {
     var formData = new FormData();
     // formData.append("page", lengthList.toString());
-
+    var m = moment(limitHistoricSelected, "YYYY-MM-DD");
     formData.append("antenna", auth.antenna);
 
     if (referentSelected !== null && referentSelected.length !== 0) {
@@ -88,10 +95,17 @@ function AppelsOrganisation() {
     if (typeCallsSelected !== null && typeCallsSelected.length !== 0) {
       formData.append("typeCalls", JSON.stringify(typeCallsSelected));
     }
-    if (limitHistoricSelected !== null) {
+    if (limitHistoricSelected === null || m.isValid() === false) {
       formData.append(
         "limitHistoric",
-        new Date(limitHistoricSelected).toISOString()
+        moment().subtract(1, "months").format("DD/MM/YYYY")
+      );
+    }
+
+    if (limitHistoricSelected !== null && m.isValid() === true) {
+      formData.append(
+        "limitHistoric",
+        moment(limitHistoricSelected).utc("UTC+01:00").format("DD/MM/YYYY")
       );
     }
 
@@ -102,7 +116,7 @@ function AppelsOrganisation() {
     if (functionSelected !== null && functionSelected.length !== 0) {
       formData.append("function", [JSON.stringify(functionSelected)]);
     }
-
+    setLoading(true);
     axios({
       method: "post",
       url: "/api/getCallsAndOrganisationRunning",
@@ -114,6 +128,7 @@ function AppelsOrganisation() {
     })
       .then(function (response) {
         setPatientsList(response);
+        setLoading(false);
       })
       .catch(function (response) {});
   };
@@ -152,6 +167,14 @@ function AppelsOrganisation() {
             onClickReferent={(e) => onClickReferent(e)}
           ></SelectReferent>
           <button className="btn-metis mt-2 mb-4" onClick={sentFilters}>
+            {loading && (
+              <ReactLoading
+                type={"spin"}
+                color={"#ffff"}
+                height={"10%"}
+                width={"10%"}
+              />
+            )}
             Appliquer les filtres
           </button>
         </div>
@@ -168,6 +191,13 @@ function AppelsOrganisation() {
                       </div>
                       <div className="col-sm-4">
                         {patient.firstname} {patient.lastname}
+                        {patient.phone && patient.phone.length > 0 && (
+                          <div className="item-phone">
+                            {patient.phone.map((e) => (
+                              <p>{e} </p>
+                            ))}
+                          </div>
+                        )}
                       </div>
                       <div className="col-sm-4">{patient.description}</div>
                     </Accordion.Header>
@@ -180,55 +210,58 @@ function AppelsOrganisation() {
                               style={{ backgroundColor: "#eaeaea" }}
                             >
                               <div className="col-sm-2 container-informationNames">
-                                {e.patientfirstName}
-                                {e.patientLastName}
+                                {e?.patientfirstName} {e?.patientLastName}
                               </div>
                               <div className="col-sm-4 container-informationNames">
                                 {moment(e?.creationDate)
                                   .utc("UTC+01:00")
                                   .format("YYYY-MM-DD")}
-                                {"|"}
-                                {e.func.value} {e.description}
+                                {" | "}
+                                {e?.func?.value} {e?.description}
                               </div>
                               <div className="col-sm-4 container-appelDescription">
-                                {e.description}
+                                {e?.description}
                               </div>
 
                               <div className="col-sm-2 container-appelActions">
-                                <ModalActionsAppelsEntrant
-                                  listCalls={e.fore}
-                                  defaultValueContact={patient}
-                                  onChangeResponse={onChangeResponseDatas}
-                                  typeCall={typeCallsSelect}
-                                  listContacts={patientsList?.data}
-                                  defaultValueGoalsValue={e}
-                                ></ModalActionsAppelsEntrant>
+                                {typeCallsSelected && (
+                                  <>
+                                    <ModalActionsAppelsEntrant
+                                      listCalls={e?.fore}
+                                      defaultValueContact={patient}
+                                      onChangeResponse={onChangeResponseDatas}
+                                      typeCall={typeCallsSelect}
+                                      listContacts={patientsList?.data}
+                                      defaultValueGoalsValue={e}
+                                    ></ModalActionsAppelsEntrant>
 
-                                <ModalActionsAppelSortant
-                                  listCalls={e.fore}
-                                  defaultValueContact={patient}
-                                  typeCall={typeCallsSelect}
-                                  listContacts={patientsList?.data}
-                                  onChangeResponse={onChangeResponseDatas}
-                                  defaultValueGoalsValue={e}
-                                ></ModalActionsAppelSortant>
+                                    <ModalActionsAppelSortant
+                                      listCalls={e?.fore}
+                                      defaultValueContact={patient}
+                                      typeCall={typeCallsSelect}
+                                      listContacts={patientsList?.data}
+                                      onChangeResponse={onChangeResponseDatas}
+                                      defaultValueGoalsValue={e}
+                                    ></ModalActionsAppelSortant>
 
-                                <ModalCallCanceled
-                                  goal={e}
-                                  onChangeResponse={onChangeResponseDatas}
-                                  contact={patient}
-                                ></ModalCallCanceled>
+                                    <ModalCallCanceled
+                                      goal={e}
+                                      onChangeResponse={onChangeResponseDatas}
+                                      contact={patient}
+                                    ></ModalCallCanceled>
 
-                                <ModalCallMissing
-                                  goal={e}
-                                  onChangeResponse={onChangeResponseDatas}
-                                  contact={patient}
-                                ></ModalCallMissing>
+                                    <ModalCallMissing
+                                      goal={e}
+                                      onChangeResponse={onChangeResponseDatas}
+                                      contact={patient}
+                                    ></ModalCallMissing>
+                                  </>
+                                )}
                               </div>
                             </div>
                             <div className="row">
                               <div className="col-sm-2">
-                                {e && e.fore.length > 0 && (
+                                {e && e?.fore?.length > 0 && (
                                   <ModalHistorique
                                     foreList={e}
                                   ></ModalHistorique>
@@ -244,9 +277,9 @@ function AppelsOrganisation() {
               </>
             ))}
 
-            <button className="btn-metis" onClick={readMore}>
+            {/* <button className="btn-metis" onClick={readMore}>
               Afficher plus
-            </button>
+            </button> */}
           </>
         ) : (
           <ReactLoading

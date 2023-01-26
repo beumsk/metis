@@ -636,7 +636,7 @@ class ContactsController extends AbstractController
             $contactId = $contact->getId();
 
             $phones[$contactId] = $contactRepository->findContactInfos($contactId, Contacts::PHONE_PATH);
-            //            $reports[$contactId] = $followUpReportRepository->findBy(['followUpGoals' => $contact], ['reportDate' => 'asc']);
+            // $reports[$contactId] = $followUpReportRepository->findBy(['followUpGoals' => $contact], ['reportDate' => 'asc']);
         }
 
         foreach ($organisations as $organisation) {
@@ -663,7 +663,7 @@ class ContactsController extends AbstractController
             $contactId = $organisation->getId();
 
             $phones[$contactId] = $contactRepository->findContactInfos($contactId, Contacts::PHONE_PATH);
-            //            $reports[$contactId] = $followUpReportRepository->findBy(['followUpGoals' => $contact], ['reportDate' => 'asc']);
+            // $reports[$contactId] = $followUpReportRepository->findBy(['followUpGoals' => $contact], ['reportDate' => 'asc']);
         }
 
         foreach ($patients as $patient) {
@@ -698,22 +698,32 @@ class ContactsController extends AbstractController
 
         if ($typeCalls === "true") {
             foreach ($runningCalls as $key => $valueCall) {
-
+                // dd($valueCall[0]);
                 array_push(
                     $runningCallsArr,
                     [
 
+
+
                         "id" => ($valueCall[0]->getCont() !== null && $valueCall[0]->getCont()->getId() !== null) ? $valueCall[0]->getCont()->getId() : null,
+                        // "phone" => $contactRepository->findContactInfos($valueCall[0]->getCont()->getId(), Contacts::PHONE_PATH),
                         "firstname" => ($valueCall[0]->getCont() !== null && $valueCall[0]->getCont()->getLastname() !== null) ? $valueCall[0]->getCont()->getLastname() : null,
                         "lastname" => ($valueCall[0]->getCont() !== null && $valueCall[0]->getCont()->getFirstname() !== null) ? $valueCall[0]->getCont()->getFirstname() : null,
-                        // "deleted_at" => $valueCall->getDeletedAt(),
+                        //   "phone" => ($valueCall[0] !== null && $valueCall[0]->getValue() !== null) ? $valueCall[0]->getValue() : null,
+                        "phone" => array_map(function ($b) {
+                            return [
+                                ($b && $b->getValue() !== null) ? $b->getValue() : null,
+                            ];
+                        }, [...$contactRepository->findContactInfos($valueCall[0]->getCont(), Contacts::PHONE_PATH)]),
                         "patients" =>
                         array_map(function ($a) {
+
                             if ($a->getDeletedAt() === null) {
+                                //  dd($a);
                                 return  [
                                     "id" => ($a->getId() !== null) ? $a->getId() : null,
                                     "description" => $a->getDescription(),
-                                    // "deleted_at" => $a->getDeletedAt(),
+                                    // "id" => ($a->getValue() !== null) ? $a->getValue() : null,
                                     "type" => $a->getType(),
                                     "status" => $a->getStatus(),
                                     "func" => [
@@ -740,7 +750,7 @@ class ContactsController extends AbstractController
                                     }, [...$a->getFore()]),
                                 ];
                             }
-                        }, [...$valueCall])
+                        }, $valueCall)
 
                     ]
                 );
@@ -759,10 +769,15 @@ class ContactsController extends AbstractController
                         "id" => ($valueCall[0]->getCont() !== null && $valueCall[0]->getCont()->getId() !== null) ? $valueCall[0]->getCont()->getId() : null,
                         "firstname" => ($valueCall[0]->getCont() !== null && $valueCall[0]->getCont()->getLastname() !== null) ? $valueCall[0]->getCont()->getLastname() : null,
                         "lastname" => ($valueCall[0]->getCont() !== null && $valueCall[0]->getCont()->getFirstname() !== null) ? $valueCall[0]->getCont()->getFirstname() : null,
-                        // "deleted_at" => $valueCall->getDeletedAt(),
+                        "phone" => array_map(function ($b) {
+                            return [
+                                ($b && $b->getValue() !== null) ? $b->getValue() : null,
+                            ];
+                        }, [...$contactRepository->findContactInfos($valueCall[0]->getCont(), Contacts::PHONE_PATH)]),
                         "patients" =>
                         array_map(function ($a) {
                             if ($a->getDeletedAt() === null) {
+
                                 return  [
                                     "id" => ($a->getId() !== null) ? $a->getId() : null,
                                     "description" => $a->getDescription(),
