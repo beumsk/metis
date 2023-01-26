@@ -80,7 +80,7 @@ class FollowupGoalsRepository extends ServiceEntityRepository
         ];
 
         if ($function) {
-            $qb->andWhere('g.function IN (' .  implode(",", json_decode($function))  . ')');
+            $qb->andWhere('g.func IN (' .  implode(",", json_decode($function))  . ')');
         }
 
         if ($team) {
@@ -258,8 +258,7 @@ class FollowupGoalsRepository extends ServiceEntityRepository
         ];
 
         if ($function) {
-            $qb->andWhere('g.function IN (:function)');
-            $parameters['function'] = $function;
+            $qb->andWhere('g.func IN (' .  implode(", ", json_decode($function))  . ')');
         }
 
         if ($team) {
@@ -271,8 +270,7 @@ class FollowupGoalsRepository extends ServiceEntityRepository
             $parameters['antenna'] = $antenna;
         }
         if ($referent) {
-            $qb->andWhere("pc.contact in (:referent) and pc.end is null");
-            $parameters['referent'] = $referent;
+            $qb->andWhere('pc.contact in (' .  implode(", ", json_decode($referent))  . ') and pc.end is null');
         }
 
         if ($isHighlight) {

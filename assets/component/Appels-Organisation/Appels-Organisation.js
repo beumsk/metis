@@ -191,6 +191,13 @@ function AppelsOrganisation() {
                       </div>
                       <div className="col-sm-4">
                         {patient.firstname} {patient.lastname}
+                        {patient.phone && patient.phone.length > 0 && (
+                          <div className="item-phone">
+                            {patient.phone.map((e) => (
+                              <p>{e} </p>
+                            ))}
+                          </div>
+                        )}
                       </div>
                       <div className="col-sm-4">{patient.description}</div>
                     </Accordion.Header>
@@ -203,14 +210,13 @@ function AppelsOrganisation() {
                               style={{ backgroundColor: "#eaeaea" }}
                             >
                               <div className="col-sm-2 container-informationNames">
-                                {e?.patientfirstName}
-                                {e?.patientLastName}
+                                {e?.patientfirstName} {e?.patientLastName}
                               </div>
                               <div className="col-sm-4 container-informationNames">
                                 {moment(e?.creationDate)
                                   .utc("UTC+01:00")
                                   .format("YYYY-MM-DD")}
-                                {"|"}
+                                {" | "}
                                 {e?.func?.value} {e?.description}
                               </div>
                               <div className="col-sm-4 container-appelDescription">
