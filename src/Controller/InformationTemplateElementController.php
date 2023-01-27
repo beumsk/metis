@@ -54,6 +54,15 @@ class InformationTemplateElementController extends AbstractController
         if ($specificValueInput && $specificValueInput !== "null") {
             $patientInfo->setValue($specificValueInput);
         }
+
+        if ($start && $start === "null") {
+            $patientInfo->setStart(null);
+        }
+        if ($end && $end === "null") {
+            $patientInfo->setEnd(null);
+        }
+
+
         if ($start && $start !== "null") {
             $patientInfo->setStart(new \DateTime($start));
         }
@@ -141,8 +150,17 @@ class InformationTemplateElementController extends AbstractController
         if ($start && $start !== "null") {
             $patientInfo->setStart(new \DateTime($start));
         }
+
+        if ($start && $start === "null") {
+            $patientInfo->setStart(null);
+        }
+
         if ($end && $end !== "null") {
             $patientInfo->setEnd(new \DateTime($end));
+        }
+
+        if ($end && $end === "null") {
+            $patientInfo->setEnd(null);
         }
 
         if ($commentaireInput && $commentaireInput !== "null") {
