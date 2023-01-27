@@ -81,10 +81,11 @@ class FollowupReportsContactController extends AbstractController
         $serializer = new Serializer($normalizers, $encoders);
 
         $arrContactByPatients = [];
-
+        // dd($cont);
         foreach ($cont as $value) {
-            // dd($value->getCont()->getFirstname());
+            // dd($value->getCont()->getOrga());
             if ($value && $value->getDeletedAt() === null) {
+
                 $arrContactByPatients[] = [
                     "id" => $value->getId(),
                     "start" => $value->getStart(),
@@ -92,7 +93,8 @@ class FollowupReportsContactController extends AbstractController
                     "comment" => $value->getLinkDescription(),
                     "cont" => [$value->getCont()],
                     "pati" => [$value->getPati()],
-                    "sugg" => [$value->getSugg()]
+                    "sugg" => [$value->getSugg()],
+                    "orga" => ($value->getCont() && $value->getCont()->getOrga()) ? $value->getCont()->getOrga()->getLastName() : null,
                     // "firstname" => ($value->getCont()->getFirstname() !== null) ? $value->getCont()->getFirstname() : null,
                 ];
             }

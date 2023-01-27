@@ -352,14 +352,14 @@ const Contacts = () => {
                       ))}
                     </td>
                     <td>
-                      <>{e?.comment}</>
+                      <>{e?.orga}</>
                     </td>
                     <td>
                       {e?.sugg?.map((cont) => (
                         <>{cont?.value}</>
                       ))}
                     </td>
-                    <td>{e?.description === "null" ? "" : e?.description}</td>
+                    <td>{e?.comment === "null" ? "" : e?.comment}</td>
                     <td>
                       {e?.start
                         ? new Date(e?.start)
