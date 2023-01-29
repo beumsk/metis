@@ -21,12 +21,13 @@ function ModalLierLieux(props) {
   const [elementsOpt, setElementsOpt] = useState(null);
   const [idPatient, setIdPatient] = useState(id);
   const [responseDatas, setResponseDatas] = useState(null);
+  const [checkMiseEnAvant, setCheckMiseEnAvant] = useState(null);
   const [valueLieux, setValueLieux] = useState(
-    props?.lieu?.cont[0]?.id ? props?.lieu?.cont[0]?.id : null
+    props?.lieu?.cont?.id ? props?.lieu?.cont?.id : null
   );
   const [type, setType] = useState(null);
   const [valueType, setValueType] = useState(
-    props?.lieu?.sugg[0]?.id ? props?.lieu?.sugg[0]?.id : null
+    props?.lieu?.sugg?.id ? props?.lieu?.sugg?.id : null
   );
   const [start, setStartDate] = useState(
     props?.lieu?.start ? props?.lieu?.start : null
@@ -39,7 +40,11 @@ function ModalLierLieux(props) {
   );
   const handleClose = () => setShow(false);
   const [errorValue, setErrorValue] = useState(null);
-  const handleShow = () => setShow(true);
+  const [errorType, setErrorType] = useState(null);
+  const handleShow = () => {
+    setShow(true);
+    setErrorValue(false);
+  };
 
   useEffect(() => {
     //   axios({
@@ -75,6 +80,7 @@ function ModalLierLieux(props) {
 
     formData.append("valueType", valueType);
     formData.append("idPatient", idPatient);
+    formData.append("isHightLight", checkMiseEnAvant);
 
     if (valueLieux === null || valueLieux === "defaultValue") {
       setErrorValue(true);
@@ -82,7 +88,21 @@ function ModalLierLieux(props) {
       setErrorValue(false);
     }
 
-    if (valueLieux !== null && valueLieux !== "defaultValue") {
+    if (valueType === null || valueType === "defaultValue") {
+      setErrorType(true);
+    } else {
+      setErrorType(false);
+    }
+    console.log(
+      valueLieux === null || valueLieux === "defaultValue",
+      valueType === null || valueType === "defaultValue"
+    );
+    if (
+      valueLieux !== null &&
+      valueLieux !== "defaultValue" &&
+      valueType !== null &&
+      valueType !== "defaultValue"
+    ) {
       axios({
         method: "post",
         url: "/api/updateLierPlaces",
@@ -120,7 +140,7 @@ function ModalLierLieux(props) {
   if (responseDatas !== null) {
     props.onChangeEditPlaces(responseDatas);
   }
-
+  // console.log(props);
   //   /api/getContacts
   return (
     <>
@@ -140,7 +160,7 @@ function ModalLierLieux(props) {
               size="lg"
               style={{ width: "100%" }}
               className="uk-select"
-              defaultValue={props?.lieu?.cont[0]?.id}
+              defaultValue={props?.lieu?.cont?.id}
               onChange={(e) => setValueLieux(e.target.value)}
             >
               <option value={"defaultValue"}>Sélectionnez le lieu</option>
@@ -158,9 +178,12 @@ function ModalLierLieux(props) {
               size="lg"
               style={{ width: "100%" }}
               className="uk-select"
-              defaultValue={props?.lieu?.sugg[0]?.id}
+              defaultValue={props?.lieu?.sugg?.id}
               onChange={(e) => setValueType(e.target.value)}
             >
+              <option value={"defaultValue"}>
+                Sélectionnez le détail du lieu
+              </option>
               {props?.type?.data?.map((el, id) => (
                 <React.Fragment key={el.id}>
                   {el?.value && <option value={el.id}>{el?.value}</option>}
@@ -198,9 +221,19 @@ function ModalLierLieux(props) {
               defaultValue={props?.lieu?.comment}
               onChange={(e) => setValueCommentary(e.target.value)}
             />
+
+            <Form.Group className="mb-3">
+              <Form.Check
+                type="checkbox"
+                label="Mise en avant"
+                defaultChecked={props?.lieu?.isHightlight}
+                onChange={(e) => setCheckMiseEnAvant(e.target.checked)}
+              />
+            </Form.Group>
           </>
         </Modal.Body>
-        {errorValue && <p>Lieux obligatoire</p>}
+        {errorValue && <p className="error-danger">Lieux obligatoire</p>}
+        {errorType && <p className="error-danger">Type de lieu obligatoire</p>}
         <Modal.Footer>
           <Button onClick={handleClose}>Fermer</Button>
           <Button onClick={handleSave} className="btn-metis">

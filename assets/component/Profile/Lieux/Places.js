@@ -6,6 +6,7 @@ import axios from "axios";
 import ModalLierLieux from "./Modal-Lier-Lieux";
 import EditLierLieux from "./Edit-Lieux";
 import ModalDeletePlaces from "./Delete-Lieux";
+import ReactLoading from "react-loading";
 import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider, {
   Search,
@@ -13,6 +14,8 @@ import ToolkitProvider, {
 import paginationFactory from "react-bootstrap-table2-paginator";
 import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
 import Table from "react-bootstrap/Table";
+import DataTable from "datatables.net-dt";
+import $ from "jquery";
 const Places = () => {
   let id = useParams().id;
   var formType = new FormData();
@@ -38,6 +41,38 @@ const Places = () => {
     })
       .then(function (response) {
         setPlaces(response);
+
+        let table0 = new DataTable("#table-contact", {
+          language: {
+            sProcessing: "En cours...",
+            sLengthMenu: "Afficher les enregistrements par:  _MENU_",
+            sZeroRecords: "Aucune données pour l'instant",
+            // sEmptyTable: "La table est vide",
+            sInfo:
+              "Affichage des enregistrements du _START_ au _END_ sur un total de _TOTAL_ enregistrements",
+            sInfoEmpty:
+              "Affichage des enregistrements de 0 à 0 sur un total de 0 enregistrements",
+            sInfoFiltered:
+              "(filtré à partir d'un total de _MAX_ enregistrements)",
+            sInfoPostFix: "",
+            sSearch: "Chercher: ",
+            sUrl: "",
+            sInfoThousands: ",",
+            sLoadingRecords: "Mise en charge...",
+            oPaginate: {
+              sFirst: "Premier",
+              sLast: "Dernière",
+              sNext: " Suivant",
+              sPrevious: "Précédent ",
+            },
+            oAria: {
+              sSortAscending:
+                ": Activer pour trier la colonne par ordre croissant",
+              sSortDescending:
+                ": Activer pour trier la colonne par ordre décroissant",
+            },
+          },
+        });
       })
       .catch(function (response) {});
     axios({
@@ -152,6 +187,13 @@ const Places = () => {
     },
   ];
 
+  // const styles = {
+  //   popup: {
+  //     fontWeight: e?.sugg?.id === 747 ? "bold" : "normal",
+  //     backgroundColor: e?.isHightlight === 1 ? "#8cb30c21" : "white",
+  //   },
+  // };
+
   return (
     <>
       <div className="d-flex mb-4 row-btn">
@@ -164,7 +206,7 @@ const Places = () => {
           condensed
         ></ModalLierLieux>
       </div>
-      {listPlaces &&
+      {/* {listPlaces &&
       listPlaces.data.length > 0 &&
       alllistPlaces?.data?.length > 0 &&
       type ? (
@@ -189,61 +231,155 @@ const Places = () => {
         </ToolkitProvider>
       ) : (
         <p>{listPlaces ? "Pas de lieu pour ce contact." : "Loading"}</p>
-      )}
-      {/* {listPlaces && listPlaces.data.length > 0 && (
-        <>
-          <h6>Lieux</h6>
-
-          <Table striped>
-            <thead>
-              <tr>
-                <th>Lieu</th>
-                <th>Type de lieu</th>
-                <th>Début</th>
-                <th>Fin</th>
-                <th>Comment</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-
-            {listPlaces?.data?.map((places, id) => (
-              <>
-                <tbody>
-                  <tr>
-                    <td>
-                      {places.cont.firstname}
-                      {places.cont.lastname}
-                    </td>
-                    <td>
-                      {/* {new Date(patient.creationDate).toLocaleDateString()}
-                    </td>
-                    <td></td>
-                    <td></td>
-                    <td> </td>
-                    <td>
-                      {" "}
-                      <EditLierLieux
-                        lieu={places}
-                        type={type}
-                        onChangeEditPlaces={(e) => editPlacesResponse(e)}
-                        lieuxList={alllistPlaces}
-                        // typeDefault={places.type.lastname}
-                        places={places}
-                      ></EditLierLieux>
-                      <ModalDeletePlaces
-                        lieu={places}
-                        type={type}
-                        onChangeDeletePlace={(e) => onChangeDeletePlace(e)}
-                        places={places}
-                      ></ModalDeletePlaces>
-                    </td>
-                  </tr>
-                </tbody>
-              </>
-            ))}
-          </Table>
-        </>
       )} */}
+
+      <div class="table-contact-container">
+        {listPlaces && listPlaces.data !== null ? (
+          <div className="react-bootstrap-table">
+            <table
+              id="table-contact"
+              class="display dataTable  display dataTable  mt-2 table table-striped table-bordered table-hover"
+              aria-describedby="example_info"
+            >
+              <thead>
+                <tr>
+                  <th
+                    className="sorting sorting_asc"
+                    tabindex="0"
+                    aria-controls="example"
+                    rowSpan="1"
+                    colSpan="1"
+                    aria-sort="ascending"
+                    aria-label="Name: activate to sort column descending"
+                  >
+                    Lieu
+                  </th>
+                  <th
+                    className="sorting sorting_asc"
+                    tabindex="0"
+                    aria-controls="example"
+                    rowSpan="1"
+                    colSpan="1"
+                    aria-sort="ascending"
+                    aria-label="Name: activate to sort column descending"
+                  >
+                    Type de lieu
+                  </th>
+                  <th
+                    className="sorting sorting_asc"
+                    tabindex="0"
+                    aria-controls="example"
+                    rowSpan="1"
+                    colSpan="1"
+                    aria-sort="ascending"
+                    aria-label="Name: activate to sort column descending"
+                  >
+                    Début
+                  </th>
+                  <th
+                    className="sorting sorting_asc"
+                    tabindex="0"
+                    aria-controls="example"
+                    rowSpan="1"
+                    colSpan="1"
+                    aria-sort="ascending"
+                    aria-label="Name: activate to sort column descending"
+                  >
+                    Fin
+                  </th>
+                  <th
+                    className="sorting sorting_asc"
+                    tabindex="0"
+                    aria-controls="example"
+                    rowSpan="1"
+                    colSpan="1"
+                    aria-sort="ascending"
+                    aria-label="Name: activate to sort column descending"
+                  >
+                    Commentaire
+                  </th>
+                  <th
+                    className="sorting sorting_asc"
+                    tabindex="0"
+                    aria-controls="example"
+                    rowSpan="1"
+                    colSpan="1"
+                    aria-sort="ascending"
+                    aria-label="Name: activate to sort column descending"
+                  >
+                    Actions
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {listPlaces.data.map((e, idx) => {
+                  let tagArr = e.tags?.split(",");
+                  return (
+                    <tr
+                      className="odd"
+                      key={idx}
+                      style={{
+                        fontWeight: e?.sugg?.id === 747 ? "bold" : "normal",
+                        backgroundColor:
+                          e?.isHightlight === 1 ? "#8cb30c21" : "white",
+                      }}
+                    >
+                      <td>{e.cont?.lastname}</td>
+                      <td className="sorting_1">{e?.sugg?.value}</td>
+                      <td>
+                        <div>
+                          {e?.start
+                            ? new Date(e?.start)
+                                .toLocaleString("fr-BE", "short")
+                                .slice(0, 10)
+                            : ""}
+                        </div>
+                      </td>
+                      <td>
+                        <div>
+                          {e?.end
+                            ? new Date(e?.end)
+                                .toLocaleString("fr-BE", "short")
+                                .slice(0, 10)
+                            : ""}
+                        </div>
+                      </td>
+                      <td>
+                        <div>{e.comment === "null" ? "" : e.comment}</div>
+                      </td>
+                      <td>
+                        <div className="d-flex">
+                          <EditLierLieux
+                            lieu={e}
+                            type={type}
+                            onChangeEditPlaces={(e) => editPlacesResponse(e)}
+                            lieuxList={alllistPlaces}
+                            // typeDefault={places.type.lastname}
+                            places={e}
+                          ></EditLierLieux>
+                          <ModalDeletePlaces
+                            lieu={e}
+                            type={type}
+                            onChangeDeletePlace={(e) => onChangeDeletePlace(e)}
+                            places={e}
+                          ></ModalDeletePlaces>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <ReactLoading
+            type={"spin"}
+            color={"#b1b1b1"}
+            height={"10%"}
+            width={"10%"}
+          />
+        )}
+      </div>
     </>
   );
 };
