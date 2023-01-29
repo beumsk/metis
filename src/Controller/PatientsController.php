@@ -191,7 +191,7 @@ class PatientsController extends AbstractController
         $suggestionElement = $doctrine->getRepository(Suggestions::class)->findAll();
 
         $patient = $doctrine->getRepository(Patients::class)->find($val);
-        $patientInfo = $doctrine->getRepository(PatientsInformation::class)->findBy(["pati" => $patient->getId()]);
+        $patientInfo = $doctrine->getRepository(PatientsInformation::class)->findBy(["pati" => $patient->getId()], ['start' => 'DESC']);
         $test = [];
         // dd($val);
         foreach ($templateElement as $key) {
