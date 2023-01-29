@@ -127,7 +127,7 @@ function EditNoReportMeet(props) {
         </div>
       )}
 
-      {props.activityType !== 1 &&
+      {/* {props.activityType !== 1 &&
         props.rapport &&
         props.rapport.creationDate && (
           <div className="data-row">
@@ -138,7 +138,7 @@ function EditNoReportMeet(props) {
                 .slice(0, 10)}
             </span>
           </div>
-        )}
+        )} */}
 
       {props.rapport && props.rapport.reportDate && (
         <div className="data-row">

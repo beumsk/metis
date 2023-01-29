@@ -429,10 +429,10 @@ function EditReportMeet(props) {
           <Form.Label htmlFor="inputValue">Description</Form.Label>
           <Editor
             onChange={editorChange}
-            content={
-              props.informationPatient.content ||
-              props.informationPatient.description
-            }
+            // content={
+            //   props.informationPatient.content ||
+            //   props.informationPatient.description
+            // }
           ></Editor>
 
           <button onClick={(e) => sentCalls(e)} className="mt-4 btn-metis">
