@@ -81,7 +81,8 @@ class FollowupReports
     #[ORM\Column(type: Types::TIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $duration = null;
 
-    #[ORM\ManyToOne]
+    #[ORM\ManyToOne(targetEntity: 'Patients', cascade: ["all"], fetch: "EAGER")]
+    #[ORM\JoinColumn(name: "pati_id", referencedColumnName: "id", nullable: true)]
     private ?Patients $pati = null;
 
     #[ORM\ManyToOne(targetEntity: 'User', cascade: ["all"], fetch: "EAGER")]

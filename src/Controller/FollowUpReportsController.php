@@ -1014,17 +1014,23 @@ class FollowUpReportsController extends AbstractController
         $followupReports = new FollowupReports();
 
         $followupReports->setContent(FollowupReports::DEFAULT_COMMENT_MISSING_ACTION);
-        $followupReports->setPati($pati);
+
+        $followupReports->setPatient($pati);
         $followupReports->setCreationDate(new \DateTime('now'));
         $followupReports->setLastUpdate(new \DateTime('now'));
         $followupReports->setUser($user);
         $followupReports->addCont($cont);
+        $followupReports->setActivityType(2);
+
+        //  dd($followupReports);
 
         $entityManager->persist($followupReports);
         $entityManager->flush();
 
 
         $fogo->addFollowupReport($followupReports);
+
+
         $entityManager->persist($fogo);
         $entityManager->flush();
         return new JsonResponse([
