@@ -637,7 +637,7 @@ class FollowUpReportsController extends AbstractController
         $report->setDeletedAt(null);
         $report->setPati($patient);
         $report->setDuration(new \DateTime($dureevalue));
-        $report->setCreationDate($reportDate);
+        $report->setCreationDate(new \DateTime('now'));
 
         $report->setNoCare($no_care);
         $report->setNoActivities($no_activities);
@@ -747,6 +747,7 @@ class FollowUpReportsController extends AbstractController
 
         $followupGoals = $doctrine->getRepository(FollowupReports::class)->find($idRapport);
 
+        $followupGoals->setCreationDate(new \DateTime('now'));
         if ($dureevalue !== 'null') {
             $followupGoals->setDuration(new \DateTime($dureevalue));
         }
