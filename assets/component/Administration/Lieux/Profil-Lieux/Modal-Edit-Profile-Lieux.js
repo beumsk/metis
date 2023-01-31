@@ -62,8 +62,6 @@ function ModalEditProfileContact(props) {
     });
   };
 
-  console.log(props);
-
   return (
     <>
       <button onClick={handleShow} className="editCont">

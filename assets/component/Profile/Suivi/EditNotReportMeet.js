@@ -36,6 +36,8 @@ function EditNoReportMeet(props) {
     props.onChangeIndicators(true);
   }
 
+  // console.log(props?.rapport);
+
   return (
     <div className="noEditRepports-container">
       <IndicateursActiviteesComponent
@@ -86,7 +88,7 @@ function EditNoReportMeet(props) {
           {!(props.rapport.cont.length > 0) ? (
             <>
               <span style={{ fontWeight: "normal" }}>
-                {props?.rapport.cont.lastname} {props?.rapport.cont.firstname}
+                {props?.rapport.cont.lastname} {props?.rapport.cont.firstname}{" "}
               </span>
             </>
           ) : (
@@ -127,7 +129,7 @@ function EditNoReportMeet(props) {
         </div>
       )}
 
-      {props.activityType !== 1 &&
+      {/* {props.activityType !== 1 &&
         props.rapport &&
         props.rapport.creationDate && (
           <div className="data-row">
@@ -138,7 +140,7 @@ function EditNoReportMeet(props) {
                 .slice(0, 10)}
             </span>
           </div>
-        )}
+        )} */}
 
       {props.rapport && props.rapport.reportDate && (
         <div className="data-row">

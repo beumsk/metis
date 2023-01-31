@@ -637,7 +637,7 @@ class FollowUpReportsController extends AbstractController
         $report->setDeletedAt(null);
         $report->setPati($patient);
         $report->setDuration(new \DateTime($dureevalue));
-        $report->setCreationDate($reportDate);
+        $report->setCreationDate(new \DateTime('now'));
 
         $report->setNoCare($no_care);
         $report->setNoActivities($no_activities);
@@ -747,6 +747,7 @@ class FollowUpReportsController extends AbstractController
 
         $followupGoals = $doctrine->getRepository(FollowupReports::class)->find($idRapport);
 
+        $followupGoals->setCreationDate(new \DateTime('now'));
         if ($dureevalue !== 'null') {
             $followupGoals->setDuration(new \DateTime($dureevalue));
         }
@@ -1014,17 +1015,23 @@ class FollowUpReportsController extends AbstractController
         $followupReports = new FollowupReports();
 
         $followupReports->setContent(FollowupReports::DEFAULT_COMMENT_MISSING_ACTION);
-        $followupReports->setPati($pati);
+
+        $followupReports->setPatient($pati);
         $followupReports->setCreationDate(new \DateTime('now'));
         $followupReports->setLastUpdate(new \DateTime('now'));
         $followupReports->setUser($user);
         $followupReports->addCont($cont);
+        $followupReports->setActivityType(2);
+
+        //  dd($followupReports);
 
         $entityManager->persist($followupReports);
         $entityManager->flush();
 
 
         $fogo->addFollowupReport($followupReports);
+
+
         $entityManager->persist($fogo);
         $entityManager->flush();
         return new JsonResponse([
@@ -1079,6 +1086,7 @@ class FollowUpReportsController extends AbstractController
         $goals = $request->request->get('goals');
         $contacts = $request->request->get('contacts');
         $content = $request->request->get('content');
+        $changeDate = $request->request->get('changeDate');
         $dureevalue = $request->request->get('dureeValue');
         $patientId = $request->request->get('patientId');
         $user_id = $request->request->get('userId');
@@ -1101,6 +1109,10 @@ class FollowUpReportsController extends AbstractController
         $followupReports->setDuration(new \DateTime($dureevalue));
         $followupReports->setUser($user);
         $followupReports->setActivityType($activity_type);
+
+        if ($changeDate !== "null") {
+            $followupReports->setReportDate(new \DateTime($changeDate));
+        }
 
 
 
@@ -2190,7 +2202,7 @@ class FollowUpReportsController extends AbstractController
 
         $id = $request->request->get('id');
 
-        $places = $doctrine->getRepository(PatientsPlaces::class)->findBy(["pati" => $id, "deleted_at" => null]);
+        $places = $doctrine->getRepository(PatientsPlaces::class)->findBy(["pati" => $id, "deleted_at" => null], ['start' => 'DESC']);
         // $places = $doctrine->getRepository(FollowupGoals::class)->findAll();
 
 
@@ -2201,16 +2213,23 @@ class FollowUpReportsController extends AbstractController
         $arrPatientsByContacts = [];
 
         foreach ($places as $value) {
-            // dd($value);
-            if ($value) {
+            // dd($value->getSugg());
+            if ($value && $value->getDeletedAt() === null) {
                 $arrPatientsByContacts[] = [
                     "id" => $value->getId(),
-                    "start" => $value->getStart(),
-                    "end" => $value->getEnd(),
+                    "start" => ($value->getStart()) ? $value->getStart()->format(DATE_RFC3339_EXTENDED) : null,
+                    "end" => ($value->getEnd()) ? $value->getEnd()->format(DATE_RFC3339_EXTENDED) : null,
                     "comment" => ($value->getComment() !== "null") ? $value->getComment() : null,
-                    "cont" => [($value->getCont()) ? $value->getCont() : null],
-                    "pati" => [$value->getPati()],
-                    "sugg" => [$value->getSugg()],
+                    "cont" => [
+                        "lastname" => ($value->getCont()) ? $value->getCont()->getLastname() : null,
+                        "id" => ($value->getCont()) ? $value->getCont()->getId() : null
+                    ],
+                    // "pati" => [$value->getPati()],
+                    "sugg" => [
+                        "value" => ($value->getSugg() && $value->getSugg()->getValue()) ? $value->getSugg()->getValue() : null,
+                        "id" => ($value->getSugg() && $value->getSugg()->getId()) ? $value->getSugg()->getId() : null,
+                    ],
+                    "isHightlight" => $value->getIsHightlight(),
                     // "firstname" => ($value->getCont()->getFirstname() !== null) ? $value->getCont()->getFirstname() : null,
                 ];
             }
@@ -2218,22 +2237,21 @@ class FollowUpReportsController extends AbstractController
 
 
         // $serializer = SerializerBuilder::create()->build();
-        $jsonObject = $serializer->serialize($arrPatientsByContacts, 'json', [
-            AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context) {
-                return $object->getId();
-            },
-            AbstractNormalizer::IGNORED_ATTRIBUTES => ["cont", "pati", "sugg", "orga", "calls", "user", "informations", "fore", "contact"]
-        ]);
-
-
-        $response = new Response($jsonObject, 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
+        // $jsonObject = $serializer->serialize($arrPatientsByContacts, 'json', [
+        //     AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context) {
+        //         return $object->getId();
+        //     },
+        //     AbstractNormalizer::IGNORED_ATTRIBUTES => ["cont", "pati", "sugg", "orga", "calls", "user", "informations", "fore", "contact", "occupants"]
+        // ]);
 
 
 
-        $response->setSharedMaxAge(3600);
+
+
+        // $response->setSharedMaxAge(3600);
         // return new Response($jsonObject, 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
 
-        return $response;
+        return new Response(json_encode($arrPatientsByContacts), 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
     }
 
     #[Route('/api/getFollowUpReportsCallsForSelect', name: 'app_getFollowUpReportsCallsForSelect')]

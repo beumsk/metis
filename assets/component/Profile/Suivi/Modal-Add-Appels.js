@@ -184,7 +184,14 @@ function ModalAddAppels(props) {
             >
               <option>Rajoutez sa valeur</option>
               {whatDoinFunction?.data?.map((el, id) => (
-                <>{el.value && <option value={el?.id}>{el?.value}{el?.value === "Autre" && "*"}</option>}</>
+                <>
+                  {el.value && (
+                    <option value={el?.id}>
+                      {el?.value}
+                      {el?.value === "Autre" && "*"}
+                    </option>
+                  )}
+                </>
               ))}
             </Form.Select>
             {valueWhatDoinFunction === "609" && (
@@ -240,13 +247,13 @@ function ModalAddAppels(props) {
             />
 
             {/* dateCall */}
-            <Form.Label htmlFor="inputValue">Date d'appel</Form.Label>
+            {/* <Form.Label htmlFor="inputValue">Date d'appel</Form.Label>
             <input
               type="date"
               size="lg"
               onChange={(e) => setDateCall(e.target.value)}
               className="uk-select"
-            />
+            /> */}
 
             {/* <Form.Label htmlFor="inputValue">
               Appel sortant (Création d'un rapport d'appel pour chaque contact)

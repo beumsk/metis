@@ -23,17 +23,17 @@ class FollowupReports
     const REPORT_TYPE_REPOS = 3;
     const REPORT_TYPE_SEARCH = 4;
 
-    const DEFAULT_REPORT_CONTENT = "<b><u>Nom(s) du travailleur :</u></b>
+    const DEFAULT_REPORT_CONTENT = "<b><u>Nom(s) du travailleur :</u></b><br><br>
 
-<b><u>Résumé :</u></b>
+<b><u>Résumé :</u></b><br><br>
 
-<b><u>Bien-être :</u></b>
+<b><u>Bien-être :</u></b><br><br>
 
-<b><u>Logement :</u></b>
+<b><u>Logement :</u></b><br><br>
 
-<b><u>Médical :</u></b>
+<b><u>Médical :</u></b><br><br>
 
-<b><u>Social :</u></b>
+<b><u>Social :</u></b><br><br>
 ";
     const DEFAULT_COMMENT_MISSING_ACTION = "[AUTO] - Pas de réponse ou absent";
     const DEFAULT_COMMENT_CANCEL_ACTION = "[AUTO] - Appel annulé";
@@ -81,7 +81,8 @@ class FollowupReports
     #[ORM\Column(type: Types::TIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $duration = null;
 
-    #[ORM\ManyToOne]
+    #[ORM\ManyToOne(targetEntity: 'Patients', cascade: ["all"], fetch: "EAGER")]
+    #[ORM\JoinColumn(name: "pati_id", referencedColumnName: "id", nullable: true)]
     private ?Patients $pati = null;
 
     #[ORM\ManyToOne(targetEntity: 'User', cascade: ["all"], fetch: "EAGER")]

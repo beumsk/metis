@@ -290,7 +290,12 @@ const Form_MeetRapports = () => {
           defaultValue={null}
         />
 
-        <InputPlaceList places={places} onChange={onChangePlaces} />
+        <InputPlaceList
+          onChange={onChangePlaces}
+          data={places}
+          id="single"
+          placeholder="Lieux"
+        />
 
         <div className="my-3">
           <Editor onChange={editorChange} content={editorChange}></Editor>

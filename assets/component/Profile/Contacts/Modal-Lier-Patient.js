@@ -107,15 +107,15 @@ function ModalEditPatient(props) {
               onChange={(e) => setPatientItemList(e.target.value)}
             >
               <option value="">Choisir patient</option>
-              {props?.contacts?.data?.map((el, id) => (
+              {props?.contacts && (
                 <>
-                  {el?.firstname && el?.lastname && (
+                  {props?.contacts?.data?.map((el, id) => (
                     <option value={el.id}>
                       {el?.firstname} {el?.lastname}
                     </option>
-                  )}
+                  ))}
                 </>
-              ))}
+              )}
             </Form.Select>
             <Form.Label htmlFor="inputValue">Type</Form.Label>
             <Form.Select

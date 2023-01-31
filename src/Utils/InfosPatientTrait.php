@@ -16,6 +16,7 @@ trait InfosPatientTrait
     /**
      * @var PatientsInformation|null
      */
+    #[ORM\OrderBy(["start" => "DESC"])]
     protected $patientsInformation;
 
     /**

@@ -191,7 +191,7 @@ class PatientsController extends AbstractController
         $suggestionElement = $doctrine->getRepository(Suggestions::class)->findAll();
 
         $patient = $doctrine->getRepository(Patients::class)->find($val);
-        $patientInfo = $doctrine->getRepository(PatientsInformation::class)->findBy(["pati" => $patient->getId()]);
+        $patientInfo = $doctrine->getRepository(PatientsInformation::class)->findBy(["pati" => $patient->getId()], ['start' => 'DESC']);
         $test = [];
         // dd($val);
         foreach ($templateElement as $key) {
@@ -239,6 +239,137 @@ class PatientsController extends AbstractController
         }
 
 
+        // $templateElement = [];
+
+        // Must to have
+        // foreach ($templateElement as $value) {
+        //     $templateElement[] = [
+
+        //             "id" => $value->getId(),
+        //             "itbk"=> [
+        //                 "id"=> $value->getI,
+        //                 "sugb"=> [
+        //                     "id"=> 100,
+        //                     "value"=> "Statut du suivi",
+        //                     "path"=> "/1/43/100",
+        //                     "pathString"=> "/patient/fiche/statut-du-suivi",
+        //                     "parentSugg"=> [
+        //                         "id"=> 43,
+        //                         "value"=> "Fiche",
+        //                         "path"=> "/1/43",
+        //                         "pathString"=> "/patient/fiche",
+        //                         "parentSugg"=> [
+        //                             "id"=> 1,
+        //                             "value"=> "Patient",
+        //                             "path"=> "/1",
+        //                             "pathString"=> "/patient",
+        //                         ],
+        //                     ],
+        //                 ],
+        //             "suge"=> [
+        //                 "id"=> 855,
+        //                 "value"=> "Programme",
+        //                 "path"=> "/1/105/855",
+        //                 "pathString"=> "/patient/suivi/programme",
+        //                 "parentSugg"=> [
+        //                     "id"=> 105,
+        //                     "value"=> "Suivi",
+        //                     "path"=> "/1/105",
+        //                     "pathString"=> "/patient/suivi",
+        //                     "parentSugg"=> [
+        //                         "id"=> 1,
+        //                         "value"=> "Patient",
+        //                         "path"=> "/1",
+        //                         "pathString"=> "/patient",
+        //                     ],
+        //                 ],
+        //             ],
+        //             "sugv"=> null,
+        //             "required"=> 0,
+        //             "elementOrder"=> 4,
+        //             "editType"=> 1,
+        //             "type"=> 3,
+        //             "suggestionsByBlock"=> [
+        //                 [
+        //                     [
+        //                         "id"=> 856,
+        //                         "value"=> "Housing Fast",
+        //                         "pathString"=> "/patient/suivi/programme/housing-fast",
+        //                         "parentSugg"=> [
+        //                             "id"=> 855,
+        //                             "value"=> "Programme",
+        //                             "pathString"=> "/patient/suivi/programme",
+        //                             "parentSugg"=> [
+        //                                 "id"=> 105,
+        //                                 "value"=> "Suivi",
+        //                                 "pathString"=> "/patient/suivi",
+        //                                 "parentSugg"=> [
+        //                                     "id"=> 1,
+        //                                     "value"=> "Patient",
+        //                                     "pathString"=> "/patient",
+        //                                 ],
+        //                             ],
+        //                         ],
+        //                     ],
+        //                     [
+        //                         "id"=> 857,
+        //                         "value"=> "Housing First",
+        //                         "pathString"=> "/patient/suivi/programme/housing-first",
+        //                         "parentSugg"=> [
+        //                             "id"=> 855,
+        //                             "value"=> "Programme",
+        //                             "pathString"=> "/patient/suivi/programme",
+        //                             "parentSugg"=> [
+        //                                 "id"=> 105,
+        //                                 "value"=> "Suivi",
+        //                                 "pathString"=> "/patient/suivi",
+        //                                 "parentSugg"=> [
+        //                                     "id"=> 1,
+        //                                     "value"=> "Patient",
+        //                                     "pathString"=> "/patient",
+        //                                 ],
+        //                             ],
+        //                         ],
+        //                     ]
+        //                 ]
+        //             ],
+        //             "patientInformation"=> [
+        //                 [
+        //                     "id"=> 34759,
+        //                     "value"=> "test",
+        //                     "comment"=> null,
+        //                     "isConfidential"=> null,
+        //                     "isHighlight"=> null,
+        //                     "start"=> "2023-01-20T00=>00=>00+01=>00",
+        //                     "end"=> "2023-01-20T00=>00=>00+01=>00",
+        //                     "sugg"=> [
+        //                         "id"=> 856,
+        //                         "value"=> "Housing Fast",
+        //                         "pathString"=> "/patient/suivi/programme/housing-fast",
+        //                         "parentSugg"=> [
+        //                             "id"=> 855,
+        //                             "value"=> "Programme",
+        //                             "pathString"=> "/patient/suivi/programme",
+        //                             "parentSugg"=> [
+        //                                 "id"=> 105,
+        //                                 "value"=> "Suivi",
+        //                                 "pathString"=> "/patient/suivi",
+        //                                 "parentSugg"=> [
+        //                                     "id"=> 1,
+        //                                     "value"=> "Patient",
+        //                                     "pathString"=> "/patient",
+        //                                 ],
+        //                             ],
+        //                         ],
+        //                     ],
+        //                     "itel"=> 39,
+
+        //                 ]
+        //             ]
+
+        //     ]
+        // }
+
         $encoders = [new JsonEncoder()];
         $normalizers = [new DateTimeNormalizer(), new ObjectNormalizer()];
         $serializer = new Serializer($normalizers, $encoders);
@@ -248,7 +379,7 @@ class PatientsController extends AbstractController
             'circular_reference_handler' => function ($object) {
                 return $object->getId();
             },
-            AbstractNormalizer::IGNORED_ATTRIBUTES => ["contacts", "pati", "orga", "calls", "user", "fore", "contact"]
+            AbstractNormalizer::IGNORED_ATTRIBUTES => ["contacts", "patients", "pati", "orga", "calls", "user", "fore", "contact"]
         ]);
 
 
@@ -365,19 +496,48 @@ class PatientsController extends AbstractController
         $page = $request->request->get('page');
         $antenna = $request->request->get('antenna');
         $patients = $doctrine->getRepository(Patients::class)->listPatientsByAntenna($antenna);
-        $encoder = new JsonEncoder();
-        $defaultContext = [
-            AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context) {
-                return $object->getId();
-            },
-        ];
 
-        $normalizer = new ObjectNormalizer(null, null, null, null, null, null, $defaultContext);
+        $listPatients = [];
 
-        $serializer = new Serializer([new DateTimeNormalizer(), $normalizer], [$encoder]);
-        $data = $serializer->serialize($patients, 'json', [AbstractNormalizer::IGNORED_ATTRIBUTES => ["fore", "nicknames", "birthLocation", "isAlive", "birthdate", "status", "team", "antenna", "contacts", "pati", "sugg", "orga", "calls", "user", "contact", "patient", "fogo", "cont", "plac", "user", "pati", "content", "hash", "firstContactDate", "deletedAt", "followUpType", "noCare", "noActivities", "noIndicators", "followupReportsCare", "followupReportsGoals", "followupReportsActivities", "followupReportsIndicators", "isHightlight", "duration", "description", "story", "unknownYear"]]);
+        foreach ($patients as $key => $value) {
+            $listPatients[] = [
+                "antenna" => $value->getAntenna(),
+                "birthLocation" => $value->getBirthLocation(),
+                "birthdate" => $value->getBirthDate(),
+                "deletedAt" =>  $value->getDeletedAt(),
+                "description" => $value->getDescription(),
+                "firstContactDate"  =>  $value->getFirstContactDate(),
+                "firstname" => $value->getFirstName(),
+                "followUpType" => $value->getFollowupType(),
+                "hash" => $value->getHash(),
+                "id" => $value->getId(),
+                "isAlive" => $value->isIsAlive(),
+                "lastname" => $value->getLastName(),
+                "nicknames" => $value->getNickNames(),
+                "status" =>  $value->getStatus(),
+                "story"  =>  $value->getStory(),
+                "team" => $value->getTeam(),
+                "unknownYear" => $value->getUnknownYear()
+
+            ];
+        }
+
+
+        // $encoder = new JsonEncoder();
+        // $defaultContext = [
+        //     AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context) {
+        //         return $object->getId();
+        //     },
+        // ];
+
+        // $normalizer = new ObjectNormalizer(null, null, null, null, null, null, $defaultContext);
+
+        // $serializer = new Serializer([new DateTimeNormalizer(), $normalizer], [$encoder]);
+        // $data = $serializer->serialize($patients, 'json', [AbstractNormalizer::IGNORED_ATTRIBUTES => ["fore", "nicknames", "birthLocation", "isAlive", "birthdate", "status", "team", "antenna", "contacts", "pati", "sugg", "orga", "calls", "user", "contact", "patient", "fogo", "cont", "plac", "user", "pati", "content", "hash", "firstContactDate", "deletedAt", "followUpType", "noCare", "noActivities", "noIndicators", "followupReportsCare", "followupReportsGoals", "followupReportsActivities", "followupReportsIndicators", "isHightlight", "duration", "description", "story", "unknownYear"]]);
         // dd($patients[0]);
-        return $this->json(json_decode($data));
+
+
+        return new Response(json_encode($listPatients), 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
     }
 
     #[Route('/api/getPatient', name: 'app_getPatient')]

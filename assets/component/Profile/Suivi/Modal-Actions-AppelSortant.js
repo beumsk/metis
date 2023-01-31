@@ -18,37 +18,38 @@ function ModalActionsAppelsSortant(props) {
   const [contactsSelected, setContactsSelected] = useState(null);
   const [goalsSelected, setGoalsSelected] = useState(null);
   const [content, setContent] = useState(null);
-  const [dureeValue, setDureeValue] = useState(null);
+  const [changeDate, setChangeDate] = useState(new Date());
+  const [dureeValue, setDureeValue] = useState("00:00");
   const animatedComponents = makeAnimated();
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-  let optionsAppel = [];
-  let optionsContacts = [];
+  // let optionsAppel = [];
+  // let optionsContacts = [];
 
-  useEffect(() => {
-    // axios({
-    //   method: "post",
-    //   url: "/api/suggestionsById",
-    //   data: formData,
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //     Authorization: `Bearer ${auth.auth.accessToken}`,
-    //   },
-    // })
-    //   .then(function (response) {
-    //
-    //     setFunction(response.data);
-    //   })
-    //   .catch(function (response) {});
-    // for (let index = 0; index < props?.listCalls?.length; index++) {
-    //   const element = props.listCalls[index];
-    //   optionsAppel.push({ value: element.id, label: element.description });
-    // }
-    // for (let index = 0; index < props?.listContacts?.length; index++) {
-    //   const element = props.listContacts[index];
-    //   optionsContacts.push({ value: element.id, label: element.description });
-    // }
-  }, []);
+  // useEffect(() => {
+  // axios({
+  //   method: "post",
+  //   url: "/api/suggestionsById",
+  //   data: formData,
+  //   headers: {
+  //     "Content-Type": "application/json",
+  //     Authorization: `Bearer ${auth.auth.accessToken}`,
+  //   },
+  // })
+  //   .then(function (response) {
+  //
+  //     setFunction(response.data);
+  //   })
+  //   .catch(function (response) {});
+  // for (let index = 0; index < props?.listCalls?.length; index++) {
+  //   const element = props.listCalls[index];
+  //   optionsAppel.push({ value: element.id, label: element.description });
+  // }
+  // for (let index = 0; index < props?.listContacts?.length; index++) {
+  //   const element = props.listContacts[index];
+  //   optionsContacts.push({ value: element.id, label: element.description });
+  // }
+  // }, []);
 
   const onChangeTagsAppels = (e) => {
     // options.filter(e => e.value);
@@ -90,15 +91,18 @@ function ModalActionsAppelsSortant(props) {
     date.setMinutes((dureeValue || "00:00").substring(3, 5)); // "30" of "01:30"
     let timeString = date.toLocaleString("fr-BE").substring(11, 19);
 
+    let dateString = new Date(changeDate).toJSON().slice(0, 10);
+
     formGetInfos.append("content", content);
     formGetInfos.append("goals", JSON.stringify(goalsSelected));
     formGetInfos.append("contacts", JSON.stringify(contactsSelected));
+    formGetInfos.append("changeDate", dateString);
     formGetInfos.append("dureeValue", timeString);
     formGetInfos.append("patientId", id);
     formGetInfos.append("activity_type", 2);
     formGetInfos.append("is_completed", 3);
-
     formGetInfos.append("userId", auth.auth.idUser);
+
     axios({
       method: "post",
       url: "/api/setCallsByContactsForFollowUpReports",
@@ -129,25 +133,33 @@ function ModalActionsAppelsSortant(props) {
   };
 
   // props.isResponse("sended");
-  //
+
   return (
     <>
-      <button variant="primary" onClick={handleShow} className="btn-metis">
+      <button onClick={handleShow} className="btn-metis">
         <FontAwesomeIcon icon={faLongArrowRight} /> Appel sortant
       </button>
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Ajouter appel sortant</Modal.Title>
+          <Modal.Title>Ajouter un appel sortant</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>
             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-              <Form.Label>Description</Form.Label>
-
-              <div className="editor">
-                <EditorReport onChange={onChangeEditor}></EditorReport>
-              </div>
+              <Form.Label
+                htmlFor="inputValueSpécifique"
+                className="uk-form-label"
+              >
+                Date de la rencontre
+              </Form.Label>
+              <Form.Control
+                type="date"
+                defaultValue={new Date().toJSON().slice(0, 10)}
+                onChange={(e) => setChangeDate(e.target.value)}
+                className="uk-select"
+                id="inputValueSpécifique"
+              />
 
               <Form.Label>Durée</Form.Label>
               <select
@@ -228,6 +240,11 @@ function ModalActionsAppelsSortant(props) {
                   styles={{ menu: (base) => ({ ...base, zIndex: 9999 }) }}
                   options={props?.listCalls?.data}
                 />
+              </div>
+
+              <Form.Label>Description</Form.Label>
+              <div className="editor">
+                <EditorReport onChange={onChangeEditor}></EditorReport>
               </div>
             </Form.Group>
           </Form>

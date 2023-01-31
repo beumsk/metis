@@ -171,17 +171,10 @@ function EditActivities(props) {
             ></InputContactList>
 
             <InputPlaceList
-              places={props?.places}
               onChange={handleChangePlaces}
-              defaultValue={
-                props.activity?.places
-                  ? {
-                      label: props.activity?.places[0]?.lastname,
-                      value: props.activity?.places[0]?.id,
-                    }
-                  : null
-                // props.activity?.places ? props.activity?.places : null
-              }
+              data={props?.places}
+              id="single"
+              placeholder="Lieux"
             ></InputPlaceList>
           </div>
           {isErrorType && <p>Type Obligatoire</p>}

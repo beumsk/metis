@@ -143,9 +143,10 @@ function AddActivitiesByReport(props) {
             ></InputContactList>
 
             <InputPlaceList
-              places={props?.places}
               onChange={handleChangePlaces}
-              defaultValue={null}
+              data={props?.places}
+              id="single"
+              placeholder="Lieux"
             ></InputPlaceList>
           </div>
           {isErrorType && <p>Type Obligatoire</p>}

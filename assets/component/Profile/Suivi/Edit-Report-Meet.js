@@ -123,7 +123,7 @@ function EditReportMeet(props) {
   };
 
   const onChangePlaces = (e) => {
-    //
+    console.log(e);
     setChangePlaces(e);
   };
 
@@ -138,11 +138,8 @@ function EditReportMeet(props) {
     }
   };
 
+  console.log(props);
   const sentCalls = (e) => {
-    // if (props.informationPatient.type === 2){
-    //   formData.append("activityType", 1);
-    // }
-
     var formData = new FormData();
     formData.append("idRapport", props?.informationPatient?.id);
 
@@ -212,7 +209,7 @@ function EditReportMeet(props) {
     formData.append("contId", JSON.stringify(changeContacts));
     formData.append(
       "changePlaces",
-      changePlaces && changePlaces.value ? changePlaces.value : null
+      changePlaces && changePlaces ? changePlaces : null
     );
     formData.append("changeEditor", changeEditor);
     formData.append("goalsInput", JSON.stringify(goalsInput));
@@ -241,6 +238,8 @@ function EditReportMeet(props) {
   function onChangeIndicators() {
     props.onChangeIndicators(true);
   }
+
+  console.log(props);
   return (
     <div className="report-content">
       <IndicateursActiviteesComponent
@@ -264,7 +263,7 @@ function EditReportMeet(props) {
       ></IndicateursActiviteesComponent>
       {props?.informationPatient?.activityType === 1 && (
         <>
-          <h5 className="mt-4 mb-4">Ajouter un rapport</h5>
+          {/* <h5 className="mt-4 mb-4">Ajouter un rapport</h5> */}
           {/* <Form.Control type="text" id="inputText" className="mt-4" /> */}
 
           <Form.Label htmlFor="inputValue" className="uk-form-label">
@@ -408,14 +407,16 @@ function EditReportMeet(props) {
         props?.informationPatient?.activityType === 3) && (
         <>
           <InputPlaceList
-            places={props.places}
-            defaultValue={props?.informationPatient?.plac?.id}
             onChange={onChangePlaces}
+            data={props?.places?.data}
+            id="single"
+            placeholder="Lieux"
           />
 
           <Form.Label htmlFor="inputValue">Description</Form.Label>
           <Editor
             onChange={editorChange}
+            isEditorCalls={false}
             content={
               props.informationPatient.content ||
               props.informationPatient.description
@@ -429,10 +430,11 @@ function EditReportMeet(props) {
           <Form.Label htmlFor="inputValue">Description</Form.Label>
           <Editor
             onChange={editorChange}
-            content={
-              props.informationPatient.content ||
-              props.informationPatient.description
-            }
+            isEditorCalls={true}
+            // content={
+            //   props.informationPatient.content ||
+            //   props.informationPatient.description
+            // }
           ></Editor>
 
           <button onClick={(e) => sentCalls(e)} className="mt-4 btn-metis">

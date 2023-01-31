@@ -319,6 +319,7 @@ class PlacesController extends AbstractController
         $valueType = $request->request->get('valueType');
         $idPatient = $request->request->get('idPatient');
         $idLieu = $request->request->get('idLieu');
+        $isHightLight = $request->request->get('isHightLight');
 
         $entityManager = $doctrine->getManager();
 
@@ -341,6 +342,13 @@ class PlacesController extends AbstractController
         }
         $place->setSugg($suggType);
         $place->setPati($patient);
+
+        if ($isHightLight === "true") {
+            $place->setIsHightlight(1);
+        } else {
+            $place->setIsHightlight(0);
+        }
+
 
         // $entityManager->persist($place);
         $entityManager->flush();

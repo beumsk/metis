@@ -30,10 +30,15 @@ function ModalEditInfos(props) {
   const [idPatient, setIdPatient] = useState(id);
   const [errorWithStar, setErrorWithStar] = useState(null);
   const [start, setStartDate] = useState(
-    props?.infosPatient?.start !== null ? props?.infosPatient?.start : null
+    props?.infosPatient?.start !== null
+      ? moment(props?.infosPatient?.start).utc("UTC+01:00").format("YYYY-MM-DD")
+      : null
   );
+
   const [end, setEndDate] = useState(
-    props?.infosPatient?.end !== null ? props?.infosPatient?.end : null
+    props?.infosPatient?.end !== null
+      ? moment(props?.infosPatient?.end).utc("UTC+01:00").format("YYYY-MM-DD")
+      : null
   );
 
   const [valueSelect, setValueSelect] = useState(
@@ -58,11 +63,6 @@ function ModalEditInfos(props) {
   };
   useEffect(() => {
     setElementsOpt(...props?.infos?.suggestionsByBlock);
-    setStartDate(
-      new Date(props?.infosPatient?.start?.timestamp * 1000).toJSON()
-    );
-
-    setEndDate(new Date(props?.infosPatient?.end?.timestamp * 1000).toJSON());
   }, []);
 
   const handleSaveWithoutValue = (e) => {
@@ -85,8 +85,8 @@ function ModalEditInfos(props) {
       formData.append("commentaireInput", commentaireInput);
     }
 
-    formData.append("start", start);
-    formData.append("end", end);
+    formData.append("start", !start ? null : start);
+    formData.append("end", !end ? null : end);
     formData.append("idInfo", props?.infosPatient?.id);
     formData.append("idPatient", idPatient);
     formData.append("infosPatient", JSON.stringify(props?.infosPatient));
@@ -204,12 +204,12 @@ function ModalEditInfos(props) {
     }
 
     // value-sugg
-
+    console.log(start);
     formData.append("valueSelect", valueSelect);
     formData.append("specificValueInput", specificValueInput);
     formData.append("commentaireInput", commentaireInput);
-    formData.append("start", start);
-    formData.append("end", end);
+    formData.append("start", !start ? null : start);
+    formData.append("end", !end ? null : end);
     formData.append("idInfo", props?.infosPatient?.id);
     formData.append("valueSelect", valueSelect);
     formData.append("specificValueInput", specificValueInput);
@@ -247,6 +247,7 @@ function ModalEditInfos(props) {
     });
   }
 
+  console.log(props);
   return (
     <>
       <button onClick={handleShow}>

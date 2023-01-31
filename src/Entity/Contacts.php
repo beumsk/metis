@@ -115,6 +115,7 @@ class Contacts
         return $this->id;
     }
 
+
     public function getFirstname(): ?string
     {
         return $this->firstname;

@@ -13,10 +13,14 @@ function ModalActionsAppelsSortant(props) {
   const [auth, setAuth] = useState(useAuth());
   let id = useParams().idContact;
   const [contactsSelected, setContactsSelected] = useState(
-    props.defaultValueContact.id
+    props?.defaultValueContact && props?.defaultValueContact?.id
+      ? props?.defaultValueContact?.id
+      : null
   );
   const [goalsSelected, setGoalsSelected] = useState(
-    props.defaultValueGoalsValue.id
+    props?.defaultValueGoalsValue && props?.defaultValueGoalsValue?.id
+      ? props?.defaultValueGoalsValue?.id
+      : null
   );
   const [content, setContent] = useState(null);
   const [dureeValue, setDureeValue] = useState(null);
@@ -43,12 +47,12 @@ function ModalActionsAppelsSortant(props) {
     //   .catch(function (response) {});
   }, []);
 
-  for (let index = 0; index < props.listCalls.length; index++) {
+  for (let index = 0; index < props?.listCalls?.length; index++) {
     const element = props.listCalls[index];
     optionsAppel.push({ value: element.id, label: element.description });
   }
 
-  for (let index = 0; index < props.listContacts.length; index++) {
+  for (let index = 0; index < props?.listContacts?.length; index++) {
     const element = props.listContacts[index];
     optionsContacts.push({ value: element.id, label: element.description });
   }
@@ -165,8 +169,8 @@ function ModalActionsAppelsSortant(props) {
                   components={animatedComponents}
                   onChange={(e) => onChangeTagsAppels(e)}
                   defaultValue={{
-                    value: props.defaultValueGoalsValue.id,
-                    label: props.defaultValueGoalsValue.description,
+                    value: props?.defaultValueGoalsValue?.id,
+                    label: props?.defaultValueGoalsValue?.description,
                   }}
                   isMulti
                   styles={{ menu: (base) => ({ ...base, zIndex: 9999 }) }}
@@ -181,8 +185,11 @@ function ModalActionsAppelsSortant(props) {
                   components={animatedComponents}
                   onChange={(e) => onChangeTagsContacts(e)}
                   defaultValue={{
-                    value: props.defaultValueContact.id,
-                    label: props.defaultValueContact.description,
+                    value: props?.defaultValueContact?.id,
+                    label:
+                      props?.defaultValueContact?.firstname +
+                      " " +
+                      props?.defaultValueContact?.lastname,
                   }}
                   isMulti
                   styles={{ menu: (base) => ({ ...base, zIndex: 9999 }) }}

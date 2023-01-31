@@ -1,6 +1,6 @@
 import React, { useContext, useDebugValue, useState, useEffect } from "react";
 import useAuth from "../../../hooks/useAuth";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import axios from "axios";
 import ModalLierPatient from "./Modal-Lier-Patient";
 import ModalLierContacts from "./Modal-Lier-Contacts";
@@ -343,20 +343,23 @@ const Contacts = () => {
                   <tr>
                     <td>
                       {e?.cont?.map((cont) => (
-                        <>
+                        <Link
+                          to={"/profil-contact/" + cont?.id}
+                          target="_blank"
+                        >
                           {cont?.firstname} {cont?.lastname}
-                        </>
+                        </Link>
                       ))}
                     </td>
                     <td>
-                      <>{e?.comment}</>
+                      <>{e?.orga}</>
                     </td>
                     <td>
                       {e?.sugg?.map((cont) => (
                         <>{cont?.value}</>
                       ))}
                     </td>
-                    <td>{e?.description === "null" ? "" : e?.description}</td>
+                    <td>{e?.comment === "null" ? "" : e?.comment}</td>
                     <td>
                       {e?.start
                         ? new Date(e?.start)

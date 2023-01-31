@@ -155,14 +155,10 @@ function AddSoinsByReport(props) {
             ></InputContactList>
 
             <InputPlaceList
-              places={props?.places}
               onChange={handleChangePlaces}
-              // defaultValue={
-              //   props.formActivitiesEdit?.place &&
-              //   props.formActivitiesEdit?.place
-              //     ? props.formActivitiesEdit?.place
-              //     : null
-              // }
+              data={props?.places}
+              id="single"
+              placeholder="Lieux"
             ></InputPlaceList>
           </div>
           {isErrorType && <p>Type Obligatoire</p>}

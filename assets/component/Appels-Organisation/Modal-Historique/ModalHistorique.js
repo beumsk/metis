@@ -11,11 +11,7 @@ function ModalHistorique(props) {
 
   return (
     <>
-      <button
-        className="uk-button uk-button-default"
-        style={{ display: "block", marginTop: "1rem" }}
-        onClick={handleShow}
-      >
+      <button className="uk-button uk-button-default" onClick={handleShow}>
         Historique
       </button>
 
