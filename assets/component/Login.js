@@ -91,7 +91,7 @@ const Login = () => {
       } else if (err.response.data.message === "Invalid credentials.") {
         setErrMsg("Mauvais identifiants.");
       } else if (err.response.data.message === "Account disabled.") {
-        setErrMsg("Compte désactivée.");
+        setErrMsg("Compte désactivé.");
       } else {
         setErrMsg("Mauvais identifiants.");
       }

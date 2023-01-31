@@ -241,8 +241,8 @@ function ModalAddAppels(props) {
             </Form.Label>
             <Form.Control
               as="textarea"
-              rows={3}
-              className="uk-input"
+              rows={2}
+              className="uk-textarea"
               onChange={(e) => setDescriptionCallSortant(e.target.value)}
             />
 
@@ -258,12 +258,12 @@ function ModalAddAppels(props) {
             {/* <Form.Label htmlFor="inputValue">
               Appel sortant (Création d'un rapport d'appel pour chaque contact)
             </Form.Label>
-            <Form.Control as="textarea" rows={3} /> */}
+            <Form.Control as="textarea" rows={2} /> */}
             <Form.Label htmlFor="inputValue">Description</Form.Label>
             <Form.Control
               as="textarea"
-              rows={3}
-              className="uk-input"
+              rows={2}
+              className="uk-textarea"
               onChange={(e) => onChangeDescription(e)}
             />
           </>

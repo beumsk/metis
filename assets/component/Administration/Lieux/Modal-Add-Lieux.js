@@ -97,9 +97,9 @@ function ModalAddLieux(props) {
               as="textarea"
               onChange={(e) => setDescription(e.target.value)}
               style={{ width: "100%" }}
-              rows={3}
+              rows={2}
               id="comment-value"
-              className="uk-input"
+              className="uk-textarea"
             />
           </>
         </Modal.Body>

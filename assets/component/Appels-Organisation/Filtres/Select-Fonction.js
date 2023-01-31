@@ -67,7 +67,7 @@ const SelectFunction = (props) => {
         onChange={(e) => setSelectedFunction(e.target.value)}
         value={selectedFunction}
       >
-        <option>Séléctionnez la fonction</option>
+        <option>Sélectionnez la fonction</option>
 
         {/* referentList 
         {selectFunction?.map((func) => (

@@ -46,8 +46,7 @@ const SelectReferent = (props) => {
   };
   return (
     <>
-      {" "}
-      <Form.Label>Referent</Form.Label>
+      <Form.Label>Référent</Form.Label>
       <Select
         closeMenuOnSelect={false}
         components={animatedComponents}
@@ -64,7 +63,7 @@ const SelectReferent = (props) => {
         value={refSelected}
         className="uk-select"
       >
-        <option>Séléctionnez le référent</option>
+        <option>Sélectionnez le référent</option>
 
       
         {referentList?.map((referent) => (

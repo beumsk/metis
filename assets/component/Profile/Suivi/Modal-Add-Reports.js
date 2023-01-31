@@ -80,7 +80,7 @@ function ModalAddReports(props) {
               aria-describedby="valueSpécifique"
             />
             <Form.Label htmlFor="inputValue">Commentaire</Form.Label>
-            <Form.Control className="uk-input" as="textarea" rows={3} />
+            <Form.Control className="uk-textarea" as="textarea" rows={2} />
           </>
         </Modal.Body>
         <Modal.Footer>

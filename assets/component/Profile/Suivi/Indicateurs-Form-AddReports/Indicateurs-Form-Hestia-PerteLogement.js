@@ -258,7 +258,7 @@ function IndicateursFormHestiaPerteLogement(props) {
                 : ""
             }
             className="uk-textarea"
-            rows={3}
+            rows={2}
             onChange={(e) => onChangeDescriptionVoisinage(e)}
           />
         </div>
@@ -316,7 +316,7 @@ function IndicateursFormHestiaPerteLogement(props) {
           <textarea
             as="textarea"
             className="uk-textarea"
-            rows={3}
+            rows={2}
             defaultValue={
               props?.editForm && props?.editForm[1]?.comment
                 ? props?.editForm[1]?.comment
@@ -383,7 +383,7 @@ function IndicateursFormHestiaPerteLogement(props) {
           <textarea
             as="textarea"
             className="uk-textarea"
-            rows={3}
+            rows={2}
             defaultValue={
               props?.editForm && props?.editForm[2]?.comment
                 ? props?.editForm[2]?.comment

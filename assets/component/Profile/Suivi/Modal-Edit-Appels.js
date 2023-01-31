@@ -239,9 +239,9 @@ function ModalEditAppels(props) {
             <Form.Label htmlFor="inputValue">Description</Form.Label>
             <Form.Control
               as="textarea"
-              rows={3}
+              rows={2}
               defaultValue={props?.calls?.description}
-              className="uk-input"
+              className="uk-textarea"
               onChange={(e) => onChangeDescription(e)}
             />
           </>

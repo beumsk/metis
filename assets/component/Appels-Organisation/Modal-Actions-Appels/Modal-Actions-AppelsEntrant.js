@@ -269,7 +269,7 @@ function ModalActionsAppelsEntrant(props) {
             Sauver et garder
           </Button>
           <Button onClick={handleSaveComplete} className="btn-metis">
-            Sauver et compléter
+            Sauver et clôturer
           </Button>
         </Modal.Footer>
       </Modal>

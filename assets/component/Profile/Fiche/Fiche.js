@@ -137,7 +137,7 @@ const Fiche = () => {
       </Accordion>
       <Accordion className="accordion-fiche" flush={true}>
         <Accordion.Item eventKey="1">
-          <Accordion.Header>Information générale</Accordion.Header>
+          <Accordion.Header>Informations générales</Accordion.Header>
           <Accordion.Body>
             <BlockInfos
               infos={informationPatient}

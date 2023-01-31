@@ -50,7 +50,7 @@ const SelectTeam = (props) => {
 
   return (
     <>
-      <Form.Label>Equipe</Form.Label>
+      <Form.Label>Équipe</Form.Label>
       <Select
         closeMenuOnSelect={false}
         components={animatedComponents}
@@ -63,13 +63,13 @@ const SelectTeam = (props) => {
         options={options}
       />
 
-      {/* <Form.Label>Equipe</Form.Label>
+      {/* <Form.Label>Équipe</Form.Label>
       <Form.Select
         onChange={(e) => setSelectedTeam(e.target.value)}
         value={selectedTeam}
         className="uk-select"
       >
-        <option value={null}>Séléctionnez l'équipe</option>
+        <option value={null}>Sélectionnez l'équipe</option>
 
       
         {selectTeam?.map((team) => (

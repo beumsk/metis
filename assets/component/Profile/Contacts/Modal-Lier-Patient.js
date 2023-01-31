@@ -158,7 +158,7 @@ function ModalEditPatient(props) {
               aria-describedby="valueSpécifique"
             />
             <Form.Label htmlFor="inputValue">Commentaire</Form.Label>
-            <Form.Control as="textarea" rows={3} className="uk-input" />
+            <Form.Control as="textarea" rows={2} className="uk-textarea" />
           </>
         </Modal.Body>
         <Modal.Footer>
