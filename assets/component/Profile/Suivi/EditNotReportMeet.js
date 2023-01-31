@@ -36,7 +36,7 @@ function EditNoReportMeet(props) {
     props.onChangeIndicators(true);
   }
 
-  console.log(props?.rapport);
+  // console.log(props?.rapport);
 
   return (
     <div className="noEditRepports-container">

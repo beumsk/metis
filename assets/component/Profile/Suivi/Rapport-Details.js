@@ -130,6 +130,15 @@ function RapportDetails(props) {
     reportData.append("id", id.toString());
     setNumberReports(numberReports + 10);
     reportData.append("number", numberReports);
+    if (filterTextContentRapport) {
+      reportData.append("setTextRapport", filterTextContentRapport);
+    }
+    if (filterTypeOfReports) {
+      reportData.append("setTypeRapport", filterTypeOfReports);
+    }
+    if (filterDateContentRapport) {
+      reportData.append("setDateRapport", filterDateContentRapport);
+    }
 
     axios({
       method: "post",
@@ -167,29 +176,18 @@ function RapportDetails(props) {
   function onChangeFilter(e) {
     setInformations(e);
   }
-  // const editContent = (e, r) => {
-  //   if (e.target.checked === true) {
-  //     r.isHightlight = true;
-  //     setInformations(informations);
-  //   }
 
-  //   if (e.target.checked === false) {
-  //     r.isHightlight = false;
-  //     axios({
-  //       method: "post",
-  //       url: "/api/getFollowUpReportsById",
-  //       data: reportData,
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         Authorization: `Bearer ${auth.auth.accessToken}`,
-  //       },
-  //     })
-  //       .then(function (response) {
-  //         setInformations(response);
-  //       })
-  //       .catch(function (response) {});
-  //   }
-  // };
+  function onChangeFilterTextContentRapport(e) {
+    setFilterTextContentRapport(e);
+  }
+
+  function onChangeFilterTypeOfReports(e) {
+    setTypeOfRepports(e);
+  }
+
+  function onChangeFilterDateContentRapport(e) {
+    setFilterDateContentRapport(e);
+  }
 
   useEffect(() => {
     if (props.search !== null) {
@@ -344,6 +342,9 @@ function RapportDetails(props) {
     <>
       <FilterRapportDetails
         onChangeFilter={onChangeFilter}
+        onChangeFilterTextContentRapport={onChangeFilterTextContentRapport}
+        onChangeFilterTypeOfReports={onChangeFilterTypeOfReports}
+        onChangeFilterDateContentRapport={onChangeFilterDateContentRapport}
       ></FilterRapportDetails>
 
       {informations && informations?.data && informations?.data?.length > 0 ? (

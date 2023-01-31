@@ -416,6 +416,7 @@ function EditReportMeet(props) {
           <Form.Label htmlFor="inputValue">Description</Form.Label>
           <Editor
             onChange={editorChange}
+            isEditorCalls={false}
             content={
               props.informationPatient.content ||
               props.informationPatient.description
@@ -429,6 +430,7 @@ function EditReportMeet(props) {
           <Form.Label htmlFor="inputValue">Description</Form.Label>
           <Editor
             onChange={editorChange}
+            isEditorCalls={true}
             // content={
             //   props.informationPatient.content ||
             //   props.informationPatient.description

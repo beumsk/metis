@@ -53,6 +53,9 @@ function FilterRapportDetails(props) {
     })
       .then(function (response) {
         props.onChangeFilter(response);
+        props.onChangeFilterTextContentRapport(filterTextContentRapport);
+        props.onChangeFilterTypeOfReports(filterTypeOfReports);
+        props.onChangeFilterDateContentRapport(filterDateContentRapport);
         setInformations(response);
       })
       .catch(function (response) {});
