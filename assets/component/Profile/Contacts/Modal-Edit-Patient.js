@@ -80,7 +80,7 @@ function ModalLierPatient(props) {
           },
         })
           .then(function (response) {
-              props.onChangeUpdatePatient(true);
+            props.onChangeUpdatePatient(true);
             // setResponseDatas(response.data);
             setIsSentRepport(true);
           })
@@ -95,7 +95,7 @@ function ModalLierPatient(props) {
   // if (responseDatas !== null) {
   //   props.onChangeUpdatePatient(responseDatas);
   // }
-  
+
   return (
     <>
       <Button onClick={handleShow} className="btn-metis">
@@ -141,8 +141,8 @@ function ModalLierPatient(props) {
             <Form.Label htmlFor="inputValue">Description</Form.Label>
             <Form.Control
               as="textarea"
-              rows={3}
-              className="uk-input"
+              rows={2}
+              className="uk-textarea"
               defaultValue={props?.infos?.linkDescription}
               id="inputValueSpécifique"
               onChange={(e) => setDescription(e.target.value)}

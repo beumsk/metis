@@ -50,7 +50,7 @@ function Anniversaire() {
             '<span class="title-column" >' +
               $(this).text() +
               "</span>" +
-              ' </br><input type="text" placeholder="Rechercher part ' +
+              ' </br><input type="text" placeholder="Rechercher par ' +
               title +
               '" />'
           );

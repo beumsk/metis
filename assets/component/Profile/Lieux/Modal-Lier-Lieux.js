@@ -173,8 +173,8 @@ function ModalLierLieux(props) {
             <Form.Label htmlFor="inputValue">Commentaire</Form.Label>
             <Form.Control
               as="textarea"
-              rows={3}
-              className="uk-input"
+              rows={2}
+              className="uk-textarea"
               onChange={(e) => setValueCommentary(e.target.value)}
             />
           </>

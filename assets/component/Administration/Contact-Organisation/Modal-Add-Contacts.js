@@ -161,8 +161,8 @@ function ModalAddContact(props) {
           <Form.Control
             as="textarea"
             onChange={(e) => setDescription(e.target.value)}
-            rows={3}
-            className="uk-input"
+            rows={2}
+            className="uk-textarea"
             id="comment-value"
           />
           {isErrorType && <p>Type Obligatoire</p>}

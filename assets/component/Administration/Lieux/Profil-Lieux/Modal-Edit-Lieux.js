@@ -142,8 +142,8 @@ function ModalEditLieux(props) {
             <Form.Control
               as="textarea"
               onChange={(e) => setCommentaire(e.target.value)}
-              rows={3}
-              className="uk-input"
+              rows={2}
+              className="uk-textarea"
               id="comment-value"
               defaultValue={
                 props?.infosAppels?.valueDescription !== null

@@ -148,8 +148,8 @@ function ModalEditContacts(props) {
             <Form.Label htmlFor="inputValue">Description</Form.Label>
             <Form.Control
               as="textarea"
-              rows={3}
-              className="uk-input"
+              rows={2}
+              className="uk-textarea"
               id="inputValueSpécifique"
               defaultValue={props?.infos?.comment}
               aria-describedby="valueSpécifique"

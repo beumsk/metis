@@ -162,9 +162,9 @@ function ModalEditContact(props) {
             <Form.Control
               as="textarea"
               onChange={(e) => setCommentaire(e.target.value)}
-              rows={3}
+              rows={2}
               id="comment-value"
-              className="uk-input"
+              className="uk-textarea"
               defaultValue={
                 props?.infosAppels?.valueDescription !== null
                   ? props?.infosAppels?.valueDescription

@@ -250,7 +250,7 @@ function IndicateursFormCVC(props) {
           <Form.Label htmlFor="inputValue">Commentaire</Form.Label>
           <textarea
             as="textarea"
-            rows={3}
+            rows={2}
             className="uk-textarea"
             defaultValue={
               props?.editForm && props?.editForm[0]?.comment
@@ -317,7 +317,7 @@ function IndicateursFormCVC(props) {
                 ? props.editForm[1]?.comment
                 : ""
             }
-            rows={3}
+            rows={2}
             onChange={(e) => onChangeDescriptionVetements(e)}
           />
         </div>
@@ -373,7 +373,7 @@ function IndicateursFormCVC(props) {
           <textarea
             as="textarea"
             className="uk-textarea"
-            rows={3}
+            rows={2}
             defaultValue={
               props?.editForm && props?.editForm?.length > 0
                 ? props?.editForm[2]?.comment

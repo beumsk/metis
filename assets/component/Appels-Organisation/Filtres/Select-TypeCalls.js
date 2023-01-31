@@ -49,7 +49,7 @@ const TypeCalls = (props) => {
         </InputGroup>
         <InputGroup>
           <Form.Check
-            label="Fermées"
+            label="Fermés"
             type={"radio"}
             name="flexRadioDefault"
             id="flexRadioDefault2"

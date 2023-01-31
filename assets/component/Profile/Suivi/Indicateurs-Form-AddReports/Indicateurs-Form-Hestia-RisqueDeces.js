@@ -258,7 +258,7 @@ function IndicateursFormHestiaRisqueDeces(props) {
                 ? props?.editForm[0]?.comment
                 : ""
             }
-            rows={3}
+            rows={2}
             onChange={(e) => onChangeDescriptionSecuritee(e)}
           />
         </div>
@@ -319,7 +319,7 @@ function IndicateursFormHestiaRisqueDeces(props) {
                 ? props?.editForm[1]?.comment
                 : ""
             }
-            rows={3}
+            rows={2}
             onChange={(e) => onChangeDescriptionSantee(e)}
           />
         </div>
@@ -380,7 +380,7 @@ function IndicateursFormHestiaRisqueDeces(props) {
                 ? props?.editForm[2]?.comment
                 : ""
             }
-            rows={3}
+            rows={2}
             onChange={(e) => onChangeDescriptionConsommation(e)}
           />
           {props.isEdit ? (

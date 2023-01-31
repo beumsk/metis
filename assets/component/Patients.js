@@ -168,7 +168,7 @@ function Patients() {
                 value={typeSelectPatient}
                 className="uk-select"
               >
-                <option value={0}>Séléctionnez le type de patient</option>
+                <option value={0}>Sélectionnez le type de patient</option>
 
                 {/* referentList */}
                 {typePatient?.map((type) => (

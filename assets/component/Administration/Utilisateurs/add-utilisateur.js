@@ -186,7 +186,7 @@ function ModalAddUtilisateurs(props) {
             <Form.Check
               type="switch"
               id="custom-switch"
-              label="Activée"
+              label="Activé"
               onChange={(e) => setEnabled(e.target.checked)}
             />
           </Form>

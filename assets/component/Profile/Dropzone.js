@@ -35,7 +35,7 @@ const Basic = (props) => {
       <div className="col-sm-6">
         {files && files.length > 0 && (
           <>
-            <h6>Fichiers uploadés</h6>
+            <h6>Fichiers téléchargés</h6>
             <p>{files}</p>
           </>
         )}
