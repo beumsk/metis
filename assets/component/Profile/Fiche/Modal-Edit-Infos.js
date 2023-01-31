@@ -65,7 +65,6 @@ function ModalEditInfos(props) {
     setElementsOpt(...props?.infos?.suggestionsByBlock);
   }, []);
 
-  // console.log(props);
   const handleSaveWithoutValue = (e) => {
     let formData = new FormData();
 

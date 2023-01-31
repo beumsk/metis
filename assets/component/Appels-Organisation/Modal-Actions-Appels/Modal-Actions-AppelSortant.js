@@ -148,7 +148,7 @@ function ModalActionsAppelsSortant(props) {
       setShow(false);
     });
   };
-  console.log(props);
+
   return (
     <>
       <a variant="primary" onClick={handleShow}>

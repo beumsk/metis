@@ -25,7 +25,7 @@ function ModalEditContacts(props) {
   const [isSentRepport, setIsSentRepport] = useState(false);
   const [responseDatas, setResponseDatas] = useState(null);
   const [idPatient, setIdPatient] = useState(id);
-  // console.log(props);
+
   const [description, setDescription] = useState(
     props?.infos?.comment ? props?.infos?.comment : null
   );

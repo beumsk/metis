@@ -1,140 +1,110 @@
-import * as React from "react";
-import TextField from "@mui/material/TextField";
-import Autocomplete from "@mui/material/Autocomplete";
-import CircularProgress from "@mui/material/CircularProgress";
-import axios from "axios";
-import Form from "react-bootstrap/Form";
-import useAuth from "../../../hooks/useAuth";
+import React, { useState } from "react";
+export default function Autocomplete({
+  data,
+  id,
+  label,
+  placeholder,
+  multiple,
+  ...props
+}) {
+  const [input, setInput] = useState("");
+  const [open, setOpen] = useState(false);
+  const [filteredData, setFilteredData] = useState(data);
+  const [selectedData, setSelectedData] = useState([]);
 
-function sleep(delay = 0) {
-  return new Promise((resolve) => {
-    setTimeout(resolve, delay);
-  });
-}
+  const inputChange = (e) => {
+    let str = e.target.value.toLowerCase();
+    setInput(str);
+    console.log(props);
+    if (e.target.value?.length >= 3) {
+      setFilteredData(
+        [...data].filter((x) => x.lastname.toLowerCase().includes(str))
+      );
+    } else {
+      setFilteredData(data);
+    }
+  };
 
-export default function InputPlaceList(props) {
-  const [auth, setAuth] = React.useState(useAuth());
-  const [open, setOpen] = React.useState(false);
-  const [value, setValue] = React.useState([]);
-  const [options, setOptions] = React.useState([]);
-  const [defaultValueFormatted, setDefaultValueFormatted] = React.useState([]);
-  const loading = open && options.length === 0;
-  const [inputValue, setInputValue] = React.useState("");
-  let arr = [];
+  const inputBlur = (e) => {
+    setTimeout(() => {
+      setOpen(false);
+    }, 250);
+  };
 
-  React.useEffect(() => {
-    let active = true;
-
-    if (!loading) {
-      return undefined;
+  const addSelected = (e, data) => {
+    // console.log(id);
+    if (multiple) {
+      setInput("");
+      if (selectedData.indexOf(e.target.innerText) === -1) {
+        setSelectedData([...selectedData, data.id]);
+        console.log(selectedData);
+        props.onChange(selectedData);
+      }
+    } else {
+      setInput(e.target.innerText);
+      setSelectedData([data.id]);
     }
 
-    (async () => {
-      await sleep(1e3); // For demo purposes.
-      if (active) {
-        let formData = new FormData();
-        formData.append("query", inputValue);
-        axios({
-          method: "post",
-          url: "/api/getPlacesSelect",
-          data: formData,
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${auth.auth.accessToken}`,
-          },
-        })
-          .then(function (response) {
-            setOptions([...response.data]);
-          })
-          .catch(function (response) {});
-        // setOptions([...props.contacts.data]);
-      }
-    })();
+    setFilteredData(data);
+    setOpen(false);
+  };
 
-    return () => {
-      active = false;
-    };
-  }, [loading]);
+  const removeSelected = (x) => {
+    setSelectedData([...selectedData].filter((s) => s !== x));
+  };
 
-  React.useEffect(() => {
-    if (!open) {
-      setOptions([]);
+  const removeSelectedAll = (e) => {
+    if (multiple) {
+      setSelectedData([]);
+    } else {
+      setInput("");
+      setSelectedData([]);
     }
+  };
 
-    if (props.defaultValue !== null && props.defaultValue !== undefined) {
-      for (let index = 0; index < props.defaultValue.length; index++) {
-        const element = props.defaultValue[index];
-        arr.push({ value: element.id, label: element.lastname });
-      }
-      if (arr && arr.length > 0) {
-        setDefaultValueFormatted([...arr]);
-      }
-    }
-  }, [open]);
+  if (selectedData && selectedData.length > 0) {
+    console.log(selectedData);
+    props.onChange(selectedData);
+  }
 
   return (
-    <Autocomplete
-      id="asynchronous-demo"
-      sx={{ width: "100%" }}
-      size="small"
-      open={open}
-      // style={{ margin: "1rem 0 1rem 0" }}
-      onOpen={() => {
-        setOpen(true);
-      }}
-      onClose={() => {
-        setOpen(false);
-      }}
-      isOptionEqualToValue={(option, value) => option.label === value.title}
-      getOptionLabel={(option) => option.label || ""}
-      options={options}
-      onInputChange={(event, newInputValue) => {
-        setInputValue(newInputValue);
-        let formData = new FormData();
-        formData.append("query", newInputValue);
-        axios({
-          method: "post",
-          url: "/api/getContactsForSelect",
-          data: formData,
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${auth.auth.accessToken}`,
-          },
-        })
-          .then(function (response) {
-            setOptions([...response.data]);
-          })
-          .catch(function (response) {});
-      }}
-      onChange={(event, newValue) => {
-        props.onChange(newValue);
-      }}
-      loading={loading}
-      freeSolo={true}
-      defaultValue={props?.defaultValue || {}}
-      renderInput={(params) => (
-        <>
-          <Form.Label htmlFor="inputValue" className="uk-form-label">
-            Lieux
-          </Form.Label>
-          <TextField
-            {...params}
-            // label="Contacts"
-            className="input-autocomplete"
-            InputProps={{
-              ...params.InputProps,
-              endAdornment: (
-                <React.Fragment>
-                  {loading ? (
-                    <CircularProgress color="inherit" size={20} />
-                  ) : null}
-                  {params.InputProps.endAdornment}
-                </React.Fragment>
-              ),
-            }}
+    <div className="App-AutoComplete autocomplete">
+      <label htmlFor={id} className="uk-form-label form-label">
+        {label || placeholder}
+      </label>
+      <div className="input-dropdown-wrap">
+        <div className="input-wrap">
+          {multiple && selectedData && (
+            <div className="selected-wrap">
+              {selectedData.map((x) => (
+                <span key={x}>
+                  {x} <i onClick={() => removeSelected(x)}>x</i>
+                </span>
+              ))}
+            </div>
+          )}
+          <input
+            type="text"
+            id={id}
+            // placeholder={placeholder}
+            value={input}
+            className="uk-text"
+            onChange={inputChange}
+            onFocus={() => setOpen(true)}
+            onBlur={inputBlur}
           />
-        </>
-      )}
-    />
+          {selectedData.length > 0 && <i onClick={removeSelectedAll}>x</i>}
+        </div>
+        {open && (
+          <ul>
+            {filteredData?.map((x) => (
+              <li key={x.id} onClick={(e) => addSelected(e, x)}>
+                {x.lastname}
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+    </div>
   );
 }

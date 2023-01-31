@@ -87,7 +87,7 @@ function ModalEditPatient(props) {
       }
     });
   };
-  console.log(props);
+
   return (
     <>
       <Button onClick={handleShow} className="btn-metis">
