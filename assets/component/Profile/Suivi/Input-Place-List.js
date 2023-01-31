@@ -94,7 +94,7 @@ export default function InputPlaceList(props) {
         formData.append("query", newInputValue);
         axios({
           method: "post",
-          url: "/api/getContactsForSelect",
+          url: "/api/getPlacesSelect",
           data: formData,
           headers: {
             "Content-Type": "application/json",
