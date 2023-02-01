@@ -27,6 +27,8 @@ function ModalAddObjectifs(props) {
   const [idPatient, setIdPatient] = useState(id);
   const [type, setType] = useState(null);
   const [typeValue, setTypeValue] = useState(null);
+  const [errorType, setErrorType] = useState(null);
+  const [errorValue, setErrorValue] = useState(null);
   const [fonction, setFonction] = useState(null);
   const [callsFunctionValue, setCallsFunction] = useState(null);
   const [isCallsPatients, setIsCallsPatients] = useState(false);
@@ -36,7 +38,11 @@ function ModalAddObjectifs(props) {
   const [whatDoinFunction, setWhatDoinFunction] = useState(null);
   const [valueType, setValueType] = useState(null);
   const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const handleShow = () => {
+    setShow(true);
+    setTypeValue(null);
+    setValueType(null);
+  };
   useEffect(() => {
     axios({
       method: "post",
@@ -68,35 +74,54 @@ function ModalAddObjectifs(props) {
     formData.append("patientId", idPatient);
     formData.append("userId", userId);
 
-    axios({
-      method: "post",
-      url: "/api/setGoals",
-      data: formData,
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${auth.auth.accessToken}`,
-      },
-    }).then(function (response) {
-      var formDataGetGoals = new FormData();
-      formDataGetGoals.append("id", id.toString());
+    if (typeValue === "609" && valueType === null) {
+      setErrorType(true);
+    } else {
+      setErrorType(false);
+    }
+
+    if (typeValue !== "609" && typeValue === null && valueType === null) {
+      setErrorValue(true);
+    } else {
+      setErrorValue(false);
+    }
+
+    let isOtherValue = typeValue === "609" && valueType === null ? false : true;
+    let isValue =
+      typeValue !== "609" && typeValue === null && valueType === null
+        ? false
+        : true;
+
+    console.log(isOtherValue, isValue, typeValue, valueType);
+    if (isOtherValue === true && isValue === true) {
       axios({
         method: "post",
-        url: "/api/getFollowUpReportsGoals",
-        data: formDataGetGoals,
+        url: "/api/setGoals",
+        data: formData,
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${auth.auth.accessToken}`,
         },
-      })
-        .then(function (response) {
-          props.onChange(response);
+      }).then(function (response) {
+        var formDataGetGoals = new FormData();
+        formDataGetGoals.append("id", id.toString());
+        axios({
+          method: "post",
+          url: "/api/getFollowUpReportsGoals",
+          data: formDataGetGoals,
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${auth.auth.accessToken}`,
+          },
         })
-        .catch(function (response) {});
-      document.querySelectorAll(".btn-close")[0].click();
-    });
+          .then(function (response) {
+            props.onChange(response);
+            setShow(false);
+          })
+          .catch(function (response) {});
+      });
+    }
   }
-  //
-  //   /api/getContacts
   return (
     <>
       <Button onClick={handleShow} className="btn-metis">
@@ -105,11 +130,27 @@ function ModalAddObjectifs(props) {
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Ajouter un objectif</Modal.Title>
+          <Modal.Title>
+            <h6>Ajouter un objectif</h6>
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <>
-            <InputTypeList type={type} onChange={(e) => setTypeValue(e)} />
+            <InputTypeList
+              type={type}
+              onChange={(e) => {
+                setTypeValue(e);
+                if (
+                  valueType !== null &&
+                  typeValue !== null &&
+                  typeValue === "609"
+                ) {
+                  setValueType(valueType);
+                } else {
+                  setValueType(null);
+                }
+              }}
+            />
             {typeValue === "609" && (
               <>
                 <Form.Control
@@ -142,6 +183,14 @@ function ModalAddObjectifs(props) {
             />
           </>
         </Modal.Body>
+        {errorType && (
+          <p className="error-danger">
+            Veuillez choisir une valeur personnalisée.
+          </p>
+        )}
+        {errorValue && (
+          <p className="error-danger">Veuillez choisir le type d'objectif.</p>
+        )}
         <Modal.Footer>
           <Button onClick={handleClose}>Fermer</Button>
           <Button onClick={onSent} className="btn-metis">
