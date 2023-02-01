@@ -38,7 +38,11 @@ function ModalAddObjectifs(props) {
   const [whatDoinFunction, setWhatDoinFunction] = useState(null);
   const [valueType, setValueType] = useState(null);
   const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const handleShow = () => {
+    setShow(true);
+    setTypeValue(null);
+    setValueType(null);
+  };
   useEffect(() => {
     axios({
       method: "post",
@@ -88,6 +92,7 @@ function ModalAddObjectifs(props) {
         ? false
         : true;
 
+    console.log(isOtherValue, isValue, typeValue, valueType);
     if (isOtherValue === true && isValue === true) {
       axios({
         method: "post",
@@ -178,8 +183,14 @@ function ModalAddObjectifs(props) {
             />
           </>
         </Modal.Body>
-        {errorType && <p>Veuillez choisir une valeur personnalisée.</p>}
-        {errorValue && <p>Veuillez choisir le type d'objectif.</p>}
+        {errorType && (
+          <p className="error-danger">
+            Veuillez choisir une valeur personnalisée.
+          </p>
+        )}
+        {errorValue && (
+          <p className="error-danger">Veuillez choisir le type d'objectif.</p>
+        )}
         <Modal.Footer>
           <Button onClick={handleClose}>Fermer</Button>
           <Button onClick={onSent} className="btn-metis">
