@@ -5,6 +5,7 @@ function IndicateursActivitiesDescription({
   name,
   value,
   description,
+  commentary,
   ...props
 }) {
   let comment;
@@ -133,6 +134,11 @@ function IndicateursActivitiesDescription({
   return (
     <>
       <u>{name}</u> : {comment}
+      {commentary && (
+        <p>
+          <u>Description</u>: {commentary}
+        </p>
+      )}
     </>
   );
 }

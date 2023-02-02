@@ -251,6 +251,7 @@ function IndicateursActiviteesComponent(props) {
                     <IndicateursActivitiesDescription
                       group={el.indi.groups.id}
                       name={el?.indi.name}
+                      commentary={el?.comment}
                       value={el?.value}
                       description={el?.indi.description}
                     />
@@ -299,6 +300,7 @@ function IndicateursActiviteesComponent(props) {
                       name={el?.indi.name}
                       value={el?.value}
                       description={el?.indi.description}
+                      commentary={el?.comment}
                     />
                   </div>
                 )}
@@ -343,6 +345,7 @@ function IndicateursActiviteesComponent(props) {
                       name={el?.indi.name}
                       value={el?.value}
                       description={el?.indi.description}
+                      commentary={el?.comment}
                     />
                   </div>
                 )}

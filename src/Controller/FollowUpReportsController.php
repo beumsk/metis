@@ -1349,7 +1349,7 @@ class FollowUpReportsController extends AbstractController
             $indicators->setFore($fore);
             $indicators->setIndi($indi);
             $indicators->setValue($corpsScore);
-            if ($corpsDescription !== "undefined") {
+            if ($corpsDescription !== "null") {
                 $indicators->setComment($corpsDescription);
             }
 
@@ -1369,7 +1369,7 @@ class FollowUpReportsController extends AbstractController
             $indicators->setIndi($indi);
             $indicators->setValue($vetementsScore);
 
-            if ($vetementsDescription !== "undefined") {
+            if ($vetementsDescription !== "null") {
                 $indicators->setComment($vetementsDescription);
             }
 
@@ -1388,7 +1388,7 @@ class FollowUpReportsController extends AbstractController
             $indicators->setIndi($indi);
             $indicators->setValue($comportementScore);
 
-            if ($comportementDescription !== "undefined") {
+            if ($comportementDescription !== "null") {
                 $indicators->setComment($comportementDescription);
                 // $entityManager->persist($indicators);
             }
@@ -1528,8 +1528,12 @@ class FollowUpReportsController extends AbstractController
             $indicators->setFore($fore);
             $indicators->setIndi($indi);
             $indicators->setValue($valueSecuritee);
-            $indicators->setComment($descriptionSecuritee);
-            // $entityManager->persist($indicators);
+
+            if ($descriptionSecuritee !== "null") {
+                $indicators->setComment($descriptionSecuritee);
+                // $entityManager->persist($indicators);
+            }
+
 
 
             $report->addIndicator($indicators);
@@ -1545,8 +1549,12 @@ class FollowUpReportsController extends AbstractController
             $indicators->setFore($fore);
             $indicators->setIndi($indi);
             $indicators->setValue($valueSantee);
-            $indicators->setComment($descriptionSantee);
-            // $entityManager->persist($indicators);
+
+            if ($descriptionSantee !== "null") {
+                $indicators->setComment($descriptionSantee);
+                // $entityManager->persist($indicators);
+            }
+
 
             $report->addIndicator($indicators);
             $entityManager->persist($indicators);
@@ -1561,8 +1569,12 @@ class FollowUpReportsController extends AbstractController
             $indicators->setFore($fore);
             $indicators->setIndi($indi);
             $indicators->setValue($valueConsommation);
-            $indicators->setComment($descriptionConsommation);
-            // $entityManager->persist($indicators);
+
+            if ($descriptionConsommation !== "null") {
+                $indicators->setComment($descriptionConsommation);
+                // $entityManager->persist($indicators);
+            }
+
 
             $report->addIndicator($indicators);
             $entityManager->persist($indicators);
@@ -1608,7 +1620,10 @@ class FollowUpReportsController extends AbstractController
             $indicators->setFore($fore);
             $indicators->setIndi($indi);
             $indicators->setValue($bailleurSelected);
-            $indicators->setComment($descriptionBailleur);
+            if ($descriptionBailleur !== "null") {
+                $indicators->setComment($descriptionBailleur);
+            }
+
 
             $report->addIndicator($indicators);
             $entityManager->persist($indicators);
@@ -1626,7 +1641,11 @@ class FollowUpReportsController extends AbstractController
             $indicators->setFore($fore);
             $indicators->setIndi($indi);
             $indicators->setValue($hygieneSelected);
-            $indicators->setComment($descriptionHygiene);
+
+            if ($descriptionHygiene !== "null") {
+                $indicators->setComment($descriptionHygiene);
+            }
+
 
             $report->addIndicator($indicators);
             $entityManager->persist($indicators);
@@ -1641,7 +1660,11 @@ class FollowUpReportsController extends AbstractController
             $indicators->setFore($fore);
             $indicators->setIndi($indi);
             $indicators->setValue($voisinageSelected);
-            $indicators->setComment($descriptionVoisinage);
+
+            if ($descriptionVoisinage !== "null") {
+                $indicators->setComment($descriptionVoisinage);
+            }
+
 
             $report->addIndicator($indicators);
             $entityManager->persist($indicators);
