@@ -432,6 +432,12 @@ class FollowUpReportsController extends AbstractController
                             return [
                                 "id" => ($a->getId() !== null) ? $a->getId() : null,
                                 "name" => ($a->getName() && $a->getName() !== null) ? $a->getName() : null,
+                                // "total" => array_map(function ($b) {
+                                //     return [                                       
+                                //         "total" => ($b->getIndi()->getGroups()->getId() === $a->getId())? ++$b->getValue(): null
+                                //     ];
+                                // }, [...$value->getIndicators()]),
+
                             ];
                         }, [...$value->getIndicatorsGroups()])
                         : null,

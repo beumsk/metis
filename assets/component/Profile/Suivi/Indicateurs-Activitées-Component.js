@@ -47,21 +47,17 @@ function IndicateursActiviteesComponent(props) {
   const [contacts, setContacts] = useState(null);
 
   const [idPatient, setIdPatient] = useState(id);
-  const [type, setType] = useState(null);
-  const [typeFormActivities, setTypeFormActivities] = useState(null);
-  const [meetType, setMeetType] = useState(null);
-  const [goalsInput, setGoalsInput] = useState(null);
-  const [changeTypeMeet, setChangeTypeMeet] = useState(null);
-  const [changeDate, setChangeDate] = useState(null);
-  const [changeGoals, setChangeGoals] = useState(null);
-  const [changeContacts, setChangeContacts] = useState(null);
+  const [indicateursByDefault, setIndicateursByDefault] = useState(
+    props?.indicateursByDefault
+  );
 
-  const [changePlaces, setChangePlaces] = useState(null);
-
-  const [changeOptions, setChangeOptions] = useState(null);
-  const [reportDate, setReportDate] = useState(null);
-
+  const [totalCVC, setTotalCVC] = useState(null);
+  const [totalPerteLogement, setTotalPerteLogement] = useState(null);
+  const [totalDeces, setTotalDeces] = useState(null);
+  const [startTime, setStartTime] = useState(props?.indicateursByDefault);
   useEffect(() => {
+    console.log(props?.indicateursByDefault);
+
     if (props?.indicateursByDefault !== null) {
       var result = props?.indicateursByDefault.reduce((x, y) => {
         (x[y.indi.groups.id] = x[y.indi.groups.name] || []).push(y);
@@ -69,7 +65,36 @@ function IndicateursActiviteesComponent(props) {
         return x;
       }, {});
     }
-  }, []);
+
+    if (
+      props?.indicateursByDefault !== null &&
+      props?.indicateursByDefault !== startTime
+    ) {
+      let x = 0;
+      let y = 0;
+      let z = 0;
+      props?.indicateursByDefault.map((e) => {
+        if (e && e.indi.groups.id === 1) {
+          const numAscending = [e].sort((a, b) => a.value + b.value);
+          console.log(numAscending[0].value);
+          x = x + e.value;
+          setTotalCVC(x);
+        }
+        if (e && e.indi.groups.id === 2) {
+          const numAscending = [e].sort((a, b) => a.value + b.value);
+          console.log(numAscending[0].value);
+          y = y + e.value;
+          setTotalPerteLogement(y);
+        }
+        if (e && e.indi.groups.id === 3) {
+          const numAscending = [e].sort((a, b) => a.value + b.value);
+          console.log(numAscending[0].value);
+          z = z + e.value;
+          setTotalDeces(z);
+        }
+      });
+    }
+  }, [props?.indicateursByDefault]);
 
   function onChangeIndicators() {
     props.onChangeIndicators(true);
@@ -193,7 +218,7 @@ function IndicateursActiviteesComponent(props) {
               <>
                 {el.id === 3 && (
                   <div className="indicateur-line">
-                    {el.name}{" "}
+                    {el.name} ({totalDeces})
                     <div className="edit-delete">
                       <EditIndicateursByReport
                         rapportIndicators={el}
@@ -236,8 +261,10 @@ function IndicateursActiviteesComponent(props) {
             {props?.report?.indicatorsGroups?.map((el, id) => (
               <>
                 {el.id === 2 && (
+                  // const [totalPerteLogement, setTotalPerteLogement] = useState(null);
+                  // const [totalDeces, setTotalDeces] = useState(null);
                   <div className="indicateur-line">
-                    {el.name}{" "}
+                    {el.name} ({totalPerteLogement})
                     <div className="edit-delete">
                       <EditIndicateursByReport
                         rapportIndicators={el}
@@ -281,7 +308,7 @@ function IndicateursActiviteesComponent(props) {
               <>
                 {el.id === 1 && (
                   <div className="indicateur-line">
-                    {el.name}{" "}
+                    {el.name} ({totalCVC})
                     <div className="edit-delete">
                       <EditIndicateursByReport
                         rapportIndicators={el}
