@@ -77,6 +77,10 @@ const Search = () => {
     });
   }
 
+  document.body.addEventListener("click", function (e) {
+    setOpenResult(false);
+  });
+
   const redirectionToPatient = (id) => {
     if (id) {
       return (window.location.href = "/" + id);
