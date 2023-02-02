@@ -71,7 +71,7 @@ class PatientsController extends AbstractController
     #[Route('/api/getSearch', name: 'app_patientsSearch')]
     public function getSearchPatients(ManagerRegistry $doctrine, Request $request): Response
     {
-        $request = Request::createFromGlobals();
+
         $val = $request->query->get('val');
         $antenna = $request->query->get('antenna');
 

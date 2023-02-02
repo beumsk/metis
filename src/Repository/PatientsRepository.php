@@ -112,9 +112,9 @@ class PatientsRepository extends ServiceEntityRepository
         // dd($searchPatient);
         if ($searchPatient) {
             // dd($searchPatient);
-            $q->andWhere('CONCAT(p.lastname,\' \', p.firstname,\' \', COALESCE(p.nicknames, p.id)) LIKE :searchPatient');
-            $q->andWhere('CONCAT(p.firstname,\' \', p.lastname,\' \', COALESCE(p.nicknames, p.id)) LIKE :searchPatient');
-            $q->andWhere('CONCAT(COALESCE(p.nicknames, p.id), p.firstname,\' \', p.lastname,\' \') LIKE :searchPatient');
+            $q->andWhere('CONCAT(p.lastname,\' \', p.firstname,\' \', COALESCE(p.nicknames, p.id)) LIKE :searchPatient OR 
+                        CONCAT(p.firstname,\' \', p.lastname,\' \', COALESCE(p.nicknames, p.id)) LIKE :searchPatient OR
+                        CONCAT(COALESCE(p.nicknames, p.id), p.firstname,\' \', p.lastname,\' \') LIKE :searchPatient');
 
             $parameters["searchPatient"] = '%' . $searchPatient . '%';
         }
@@ -167,7 +167,9 @@ class PatientsRepository extends ServiceEntityRepository
 
         $qb->select('p.id, p.lastname, p.firstname, p.nicknames')
             ->from('App:Patients', 'p')
-            ->andWhere('CONCAT(p.lastname,\' \', p.firstname,\' \', COALESCE(p.nicknames, p.id)) LIKE :val')
+            ->andWhere('CONCAT(p.lastname,\' \', p.firstname,\' \', COALESCE(p.nicknames, p.id)) LIKE :val OR 
+                        CONCAT(p.firstname,\' \', p.lastname,\' \', COALESCE(p.nicknames, p.id)) LIKE :val OR
+                        CONCAT(COALESCE(p.nicknames, p.id), p.firstname,\' \', p.lastname,\' \') LIKE :val')
             ->andWhere('p.antenna = :antenna AND p.deleted_at IS NULL')
             ->setParameters([
                 'val' => '%' . $search . '%',
