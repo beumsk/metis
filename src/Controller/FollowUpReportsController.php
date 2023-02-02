@@ -2160,68 +2160,126 @@ class FollowUpReportsController extends AbstractController
             'response' => "Sent !"
         ]);
     }
+    #[Route('/api/getIndicatorsByPatientsGroupsByYear', name: 'app_getIndicatorsByPatientsGroupsByYear')]
+    public function getIndicatorsByPatientsGroupsByYear(ManagerRegistry $doctrine): Response
+    {
 
+        $request = Request::createFromGlobals();
+
+        $id = $request->request->get('id');
+        $patient = $doctrine->getRepository(Patients::class)->find($id);
+        $followUpReportIndicatorRepository = $doctrine->getRepository(FollowupReportsIndicators::class);
+
+        $groups = [];
+        $scores = [];
+
+        foreach ($patient->getFore() as $report) {
+            if ($report->getDeletedAt() === null && count($report->getIndicatorsGroups()) > 0) {
+
+                //   dd($report->getIndicatorsGroups());
+                $indicators = [];
+                foreach ($report->getIndicatorsGroups() as $indGroup) {
+
+                    $reportDate = $report->getReportDate()->format('Y-m-d');
+                    if (!in_array($indGroup->getName(), $groups)) {
+                        $groups[] = $indGroup->getName();
+                    }
+                    $indicators = $followUpReportIndicatorRepository->findIndicatorsByFollowUpReportAndGroup($report, $indGroup);
+
+                    $curScore = 0;
+                    foreach ($indicators as $indicator) {
+                        foreach ($indicator->getIndi()->getChoices() as $choice) {
+                            if ($choice->getScore() == $indicator->getValue()) {
+                                $curScore += $indicator->getValue();
+                            }
+                        }
+                    }
+                    $scores[] =
+                        [
+                            "date" => $reportDate,
+                            "isCVC" => ($indGroup->getName() === "CVC") ? true : false,
+                            "isHestiaLogement" => ($indGroup->getName() === "HESTIA - Risque perte logement") ? true : false,
+                            "isHestiaDeces" => ($indGroup->getName() === "HESTIA - Risque décès") ? true : false,
+                            "scoreTotal" => $curScore
+                        ];
+                }
+            }
+        }
+
+        // $nb_groups = sizeof($groups);
+        // foreach ($scores as $key => $score) {
+        //     if (sizeof($score) != $nb_groups) {
+        //         foreach ($groups as $group) {
+        //             if (!in_array($group, array_keys($score))) {
+        //                 $scores[$key][$group] = 'null';
+        //                 ksort($scores[$key]);
+        //             }
+        //         }
+        //     }
+        // }
+
+        // ksort($scores);
+
+        // $fore = [];
+        // foreach ($scores as $value) {
+        //     // dd($value);
+        //     // foreach ($value->getFore() as $indi) {
+
+        //     array_push($fore, ["indi" => [
+        //         "id" => $value->getIndi()->getId(),
+        //         "name" => $value->getIndi()->getName(),
+        //         "description" => $value->getIndi()->getDescription()
+        //     ], 
+        // "value" => $value->getValue(), 
+        // "comment" => $value->getComment(), 
+        // "fore" => ["reportDate" => date('c', strtotime($value->getFore()->getReportDate()->format('Y-m-d')))]]);
+        //     // }
+        // }
+
+        $arr =  $scores;
+        // dd($scores, $groups, $patient);
+
+        return new Response(json_encode($arr), 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
+    }
 
 
     #[Route('/api/getFollowUpReportsIndicators', name: 'app_indicatorsByPatients')]
     public function getIndicatorsByPatients(ManagerRegistry $doctrine): Response
     {
+
+
         $request = Request::createFromGlobals();
 
         $id = $request->request->get('id');
 
-        $report = $doctrine->getRepository(FollowupReports::class)->findBy(["pati" => $id]);
+        $report = $doctrine->getRepository(FollowupReports::class)->findBy(["pati" => $id], ["last_update" => "DESC"]);
 
-        // dd($report);
         $test = [];
+
         foreach ($report as $key) {
             $test[] = $key->getId();
         }
-        // array('id' => $idList)
 
-        // dd($test);
         $indicators = $doctrine->getRepository(FollowupReportsIndicators::class)->findBy(array('fore' => $test));
-        // dd($indicators);
-        $fore = [];
-        // dd($indicators);
-        // $timeend = strtotime($end);
-        // $dateend = new \DateTime('@' . strtotime($end));
-        foreach ($indicators as $value) {
-            // dd($value);
-            // foreach ($value->getFore() as $indi) {
 
-            array_push($fore, ["indi" => [
-                "id" => $value->getIndi()->getId(),
-                "name" => $value->getIndi()->getName(),
-                "description" => $value->getIndi()->getDescription()
-            ], "value" => $value->getValue(), "comment" => $value->getComment(), "fore" => ["reportDate" => date('c', strtotime($value->getFore()->getReportDate()->format('Y-m-d')))]]);
-            // }
+        $fore = [];
+        foreach ($indicators as $key => $value) {
+            array_push($fore, [
+                "indi" => [
+                    "id" => $value->getIndi()->getId(),
+                    "name" => $value->getIndi()->getName(),
+                    "description" => $value->getIndi()->getDescription()
+                ], "value" => $value->getValue(),
+                "comment" => $value->getComment(),
+                "fore" => [
+                    "reportDate" => date('c', strtotime($value->getFore()->getReportDate()->format('Y-m-d'))),
+                    "lastUpdate" => date('c', strtotime($value->getFore()->getLastUpdate()->format('Y-m-d')))
+                ]
+            ]);
         }
 
-        // dd($fore);
 
-        // $encoders = [new JsonEncoder()];
-        // $normalizers = [new DateTimeNormalizer(), new ObjectNormalizer()];
-        // $serializer = new Serializer($normalizers, $encoders);
-
-        // // $serializer = SerializerBuilder::create()->build();
-        // $jsonObject = $serializer->serialize($fore, 'json', [
-        //     AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context) {
-        //         return $object->getId();
-        //     },
-        //     AbstractNormalizer::IGNORED_ATTRIBUTES => ["pati", "sugg", "user", "informations", "fore"]
-        // ]);
-
-
-        // $response = new Response($jsonObject, 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
-
-
-
-        // $response->setSharedMaxAge(3600);
         return new Response(json_encode($fore), 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
-
-
-        // return $this->json($fore);
     }
 
     #[Route('/api/getPlacesPatients', name: 'app_PlacesPatients')]

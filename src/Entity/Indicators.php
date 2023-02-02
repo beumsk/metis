@@ -29,9 +29,14 @@ class Indicators
     #[ORM\InverseJoinColumn(name: "igrp_id", referencedColumnName: "id")]
     private Collection $groups;
 
+    #[ORM\OneToMany(mappedBy: 'indicator', targetEntity: IndicatorsChoices::class)]
+    #[ORM\OrderBy(["id" => "ASC"])]
+    private Collection $choices;
+
     public function __construct()
     {
         $this->groups = new ArrayCollection();
+        $this->choices = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -83,6 +88,36 @@ class Indicators
     public function removeGroup(IndicatorsGroups $group): self
     {
         $this->groups->removeElement($group);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, IndicatorsChoices>
+     */
+    public function getChoices(): Collection
+    {
+        return $this->choices;
+    }
+
+    public function addChoice(IndicatorsChoices $choice): self
+    {
+        if (!$this->choices->contains($choice)) {
+            $this->choices->add($choice);
+            $choice->setIndicator($this);
+        }
+
+        return $this;
+    }
+
+    public function removeChoice(IndicatorsChoices $choice): self
+    {
+        if ($this->choices->removeElement($choice)) {
+            // set the owning side to null (unless already changed)
+            if ($choice->getIndicator() === $this) {
+                $choice->setIndicator(null);
+            }
+        }
 
         return $this;
     }

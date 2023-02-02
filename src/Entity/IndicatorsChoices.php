@@ -23,6 +23,13 @@ class IndicatorsChoices
     #[ORM\Column(nullable: true)]
     private ?int $score = null;
 
+    #[ORM\ManyToOne(targetEntity: 'Indicators', inversedBy: 'choices')]
+    #[ORM\JoinColumn(name: "indi_id", referencedColumnName: "id", nullable: true)]
+    private ?Indicators $indicator = null;
+
+
+    // #[ORM\ManyToOne(targetEntity: 'Indicators', inversedBy: 'choices', cascade: ["all"], fetch: "EAGER", inversedBy: "cont")]
+    // #[ORM\JoinColumn(name: "indi_id", referencedColumnName: "id", nullable: true)]
     public function getId(): ?int
     {
         return $this->id;
@@ -60,6 +67,18 @@ class IndicatorsChoices
     public function setScore(?int $score): self
     {
         $this->score = $score;
+
+        return $this;
+    }
+
+    public function getIndicator(): ?Indicators
+    {
+        return $this->indicator;
+    }
+
+    public function setIndicator(?Indicators $indicator): self
+    {
+        $this->indicator = $indicator;
 
         return $this;
     }

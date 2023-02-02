@@ -2,7 +2,9 @@
 
 namespace App\Repository;
 
+use App\Entity\FollowupReports;
 use App\Entity\FollowupReportsIndicators;
+use App\Entity\IndicatorsGroups;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -39,28 +41,46 @@ class FollowupReportsIndicatorsRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return FollowupReportsIndicators[] Returns an array of FollowupReportsIndicators objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('f')
-//            ->andWhere('f.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('f.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    public function findIndicatorsByFollowUpReportAndGroup(FollowupReports $report, IndicatorsGroups $group)
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
 
-//    public function findOneBySomeField($value): ?FollowupReportsIndicators
-//    {
-//        return $this->createQueryBuilder('f')
-//            ->andWhere('f.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+        $qb
+            ->select('fi')
+            ->from('App:FollowupReportsIndicators', 'fi')
+            ->leftJoin('fi.indi', 'i')
+            ->leftJoin('i.groups', 'fg')
+            ->where('fi.fore = :fReport AND fg.id = :group')
+            ->setParameters([
+                'fReport' => $report,
+                'group' => $group->getId()
+            ]);
+
+        return $qb->getQuery()->getResult();
+    }
+
+    //    /**
+    //     * @return FollowupReportsIndicators[] Returns an array of FollowupReportsIndicators objects
+    //     */
+    //    public function findByExampleField($value): array
+    //    {
+    //        return $this->createQueryBuilder('f')
+    //            ->andWhere('f.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->orderBy('f.id', 'ASC')
+    //            ->setMaxResults(10)
+    //            ->getQuery()
+    //            ->getResult()
+    //        ;
+    //    }
+
+    //    public function findOneBySomeField($value): ?FollowupReportsIndicators
+    //    {
+    //        return $this->createQueryBuilder('f')
+    //            ->andWhere('f.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->getQuery()
+    //            ->getOneOrNullResult()
+    //        ;
+    //    }
 }

@@ -270,6 +270,7 @@ const Profile = () => {
     setGoalsList(e);
     var reportSearch = new FormData();
     reportSearch.append("id", idPatient);
+    reportSearch.append("number", 10);
     axios({
       method: "post",
       url: "/api/getFollowUpReportsById",
@@ -312,6 +313,7 @@ const Profile = () => {
       .then(function (response) {
         var reportSearch = new FormData();
         reportSearch.append("id", idPatient);
+        reportSearch.append("number", 10);
         axios({
           method: "post",
           url: "/api/getFollowUpReportsById",
