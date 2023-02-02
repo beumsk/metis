@@ -11,6 +11,7 @@ import Menu from "./Menu";
 import Accordion from "react-bootstrap/Accordion";
 import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
+import moment from "moment";
 function Patients() {
   const [auth, setAuth] = useState(useAuth());
   const [patientsList, setPatientsList] = useState(null);
@@ -215,12 +216,16 @@ function Patients() {
                     </div>
                     <div className="col-sm-2">
                       {patient.birthdate &&
-                        new Date(patient.birthdate).toLocaleDateString()}
+                        moment(patient?.birthdate)
+                          .utc("UTC+01:00")
+                          .format("DD-MM-YYYY")}
                     </div>
 
                     <div className="col-sm-3">{patient.birthLocation}</div>
                     <div className="col-sm-3">
-                      <span className="status">{patient.status}</span>
+                      <span className="status">
+                        {patient.status && patient.status}
+                      </span>
                     </div>
                     {/* <div className="col-sm-3">{Date.now()}</div> */}
                   </Accordion.Header>
