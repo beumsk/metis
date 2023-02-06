@@ -98,7 +98,7 @@ class FollowupReportsRepository extends ServiceEntityRepository
 
         $qb->select('f')
             ->from('App:FollowupReports', 'f')
-            ->andWhere('f.pati = :idPati ')
+            ->andWhere('f.pati = :idPati AND f.deleted_at IS NULL')
             ->addOrderBy('f.creation_date', 'DESC')
             ->setMaxResults($number);
         $parameters["idPati"] = $id;

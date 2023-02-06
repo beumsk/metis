@@ -251,6 +251,7 @@ const Profile = () => {
   const choiceRepport = (e) => {
     var reportSearch = new FormData();
     reportSearch.append("id", e);
+    // reportSearch.append("number", 10);
     axios({
       method: "post",
       url: "/api/getFollowUpGoalsById",

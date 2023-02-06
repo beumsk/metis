@@ -29,6 +29,7 @@ function RapportDetails(props) {
   const [show, setShow] = useState(false);
   const [auth, setAuth] = useState(useAuth());
   const [numberReports, setNumberReports] = useState(10);
+  const [numberReportsFront, setNumberReportsFront] = useState(9);
   let id = useParams().id;
   var formData = new FormData();
   formData.append("id", 57);
@@ -128,8 +129,14 @@ function RapportDetails(props) {
   function onChangeNumber(e) {
     var reportData = new FormData();
     reportData.append("id", id.toString());
-    setNumberReports(numberReports + 10);
-    reportData.append("number", numberReports);
+    let numberRapports = numberReports + 10;
+    setNumberReports(numberRapports);
+
+    // const [numberReportsFront, setNumberReportsFront] = useState(9);
+    let numberRaportsFront = numberReportsFront + 10;
+    setNumberReportsFront(numberRaportsFront);
+    console.log(numberRapports);
+    reportData.append("number", numberRapports);
     if (filterTextContentRapport) {
       reportData.append("setTextRapport", filterTextContentRapport);
     }
@@ -175,18 +182,22 @@ function RapportDetails(props) {
 
   function onChangeFilter(e) {
     setInformations(e);
+    setNumberReports(10);
   }
 
   function onChangeFilterTextContentRapport(e) {
     setFilterTextContentRapport(e);
+    setNumberReports(10);
   }
 
   function onChangeFilterTypeOfReports(e) {
     setTypeOfRepports(e);
+    setNumberReports(10);
   }
 
   function onChangeFilterDateContentRapport(e) {
     setFilterDateContentRapport(e);
+    setNumberReports(10);
   }
 
   useEffect(() => {
@@ -499,10 +510,12 @@ function RapportDetails(props) {
               <ToggleEdit r={r} />
             </div>
           ))}
-
-          <button className="btn-metis" onClick={(e) => onChangeNumber()}>
-            Afficher plus
-          </button>
+          {informations?.data.length} {numberReports}
+          {informations?.data.length === numberReports && (
+            <button className="btn-metis" onClick={(e) => onChangeNumber()}>
+              Afficher plus
+            </button>
+          )}
         </>
       ) : informations ? (
         <p>Pas de rapport pour ce contact</p>
