@@ -510,7 +510,7 @@ function RapportDetails(props) {
               <ToggleEdit r={r} />
             </div>
           ))}
-          {informations?.data.length} {numberReports}
+          {/* {informations?.data.length} {numberReports} */}
           {informations?.data.length === numberReports && (
             <button className="btn-metis" onClick={(e) => onChangeNumber()}>
               Afficher plus
