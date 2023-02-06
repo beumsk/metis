@@ -156,6 +156,8 @@ function Patients() {
                 defaultValue={query}
               />
             </div>
+
+            {/* MUST TO HAVE : surnom */}
             <div className="col-sm-3">
               <input
                 type="date"
