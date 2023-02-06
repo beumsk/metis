@@ -111,7 +111,10 @@ function Patients() {
       formData.append("searchNamePatient", searchNamePatient);
     }
     if (searchDateBirth) {
-      formData.append("searchDateBirthPatient", searchDateBirth);
+      formData.append(
+        "searchDateBirthPatient",
+        moment(searchDateBirth).utc("UTC+01:00").format("YYYY-MM-DD")
+      );
     }
     if (typeSelectPatient && typeSelectPatient !== "0") {
       formData.append("typeSelectPatient", typeSelectPatient);
@@ -211,7 +214,7 @@ function Patients() {
                       )}
                     </div>
                     <div className="col-sm-2">
-                      {patient.firstname} {patient.lastname}
+                      {patient.firstname} {patient.lastname} {patient.nicknames}
                       <Link className="seeProfil" to={"/" + patient.id}>
                         Voir profil
                       </Link>
@@ -225,9 +228,13 @@ function Patients() {
 
                     <div className="col-sm-3">{patient.birthLocation}</div>
                     <div className="col-sm-3">
-                      <span className="status">
-                        {patient.status && patient.status}
-                      </span>
+                      {patient.status ? (
+                        <span className="status">
+                          <>{patient.status}</>
+                        </span>
+                      ) : (
+                        <span>Pas de status</span>
+                      )}
                     </div>
                     {/* <div className="col-sm-3">{Date.now()}</div> */}
                   </Accordion.Header>
@@ -292,9 +299,11 @@ function Patients() {
                 </Accordion.Item>
               </Accordion>
             ))}
-            <button className="btn-metis" onClick={readMore}>
-              Afficher plus
-            </button>
+            {patientsList.data && patientsList.data.length === 10 && (
+              <button className="btn-metis" onClick={readMore}>
+                Afficher plus
+              </button>
+            )}
           </>
         )}
       </div>

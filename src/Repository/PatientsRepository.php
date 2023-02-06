@@ -114,24 +114,23 @@ class PatientsRepository extends ServiceEntityRepository
 
 
         if ($searchPatient) {
-            $q .= "AND (CONCAT(p.firstname, p.lastname, COALESCE(p.nicknames, p.id)) REGEXP $string OR 
-                    CONCAT(p.lastname, p.firstname, COALESCE(p.nicknames, p.id)) REGEXP $string OR
-                    CONCAT(COALESCE(p.nicknames, p.id), p.lastname, p.firstname) REGEXP $string OR
-                    CONCAT(p.lastname, COALESCE(p.nicknames, p.id), p.firstname) REGEXP $string OR
-                    CONCAT(COALESCE(p.nicknames, p.id), p.lastname, p.firstname) REGEXP $string OR
-                    p.nicknames REGEXP $string OR
-                    p.lastname REGEXP $string OR
-                    p.firstname REGEXP $string OR
-                    p.nicknames LIKE '%$searchPatient%' OR
-                    p.lastname LIKE '%$searchPatient%' OR
-                    p.firstname LIKE '%$searchPatient%' OR
-                    CONCAT(COALESCE(p.nicknames, p.id), p.firstname, p.lastname) REGEXP $string) OR
-                    (CONCAT(p.firstname, p.lastname, COALESCE(p.nicknames, p.id)) LIKE '$searchPatient' OR 
-                    CONCAT(p.lastname, p.firstname, COALESCE(p.nicknames, p.id)) LIKE '$searchPatient' OR
-                    CONCAT(COALESCE(p.nicknames, p.id), p.lastname, p.firstname) LIKE '$searchPatient' OR
-                    CONCAT(p.lastname, COALESCE(p.nicknames, p.id), p.firstname) LIKE '$searchPatient' OR
-                    CONCAT(COALESCE(p.nicknames, p.id), p.lastname, p.firstname) LIKE '$searchPatient' OR
-                    CONCAT(COALESCE(p.nicknames, p.id), p.firstname, p.lastname) LIKE '$searchPatient')";
+            $q .= "AND (CONCAT(p.lastname, p.firstname, COALESCE(p.nicknames, p.id)) REGEXP $string OR
+            CONCAT(COALESCE(p.nicknames, p.id), p.lastname, p.firstname) REGEXP $string OR
+            CONCAT(p.lastname, COALESCE(p.nicknames, p.id), p.firstname) REGEXP $string OR
+            CONCAT(COALESCE(p.nicknames, p.id), p.lastname, p.firstname) REGEXP $string OR
+            p.nicknames REGEXP $string OR
+            p.lastname REGEXP $string OR
+            p.firstname REGEXP $string OR
+            p.nicknames LIKE '%$searchPatient%' OR
+            p.lastname LIKE '%$searchPatient%' OR
+            p.firstname LIKE '%$searchPatient%' OR
+            (CONCAT(COALESCE(p.nicknames, p.id), p.firstname, p.lastname) REGEXP $string OR 
+            CONCAT(p.firstname, p.lastname, COALESCE(p.nicknames, p.id)) LIKE '%$searchPatient%' OR 
+            CONCAT(p.lastname, p.firstname, COALESCE(p.nicknames, p.id)) LIKE '%$searchPatient%' OR
+            CONCAT(COALESCE(p.nicknames, p.id), p.lastname, p.firstname) LIKE '%$searchPatient%' OR
+            CONCAT(p.lastname, COALESCE(p.nicknames, p.id), p.firstname) LIKE '%$searchPatient%' OR
+            CONCAT(COALESCE(p.nicknames, p.id), p.lastname, p.firstname) LIKE '%$searchPatient%' OR
+            CONCAT(COALESCE(p.nicknames, p.id), p.firstname, p.lastname) LIKE '%$searchPatient%'))";
 
 
 
