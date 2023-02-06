@@ -96,48 +96,47 @@ class PatientsRepository extends ServiceEntityRepository
 
         // $id = $patient["id"];
 
+        $arrSearch = explode(' ', $searchPatient);
+
+        $arr = [];
+        foreach ($arrSearch as $value) {
+            $arr[] = $value;
+        }
+
+        $implodeArr = implode(" ", $arr);
+
+        $string = "'^(" . str_replace(" ", "|", $implodeArr) . ")'";
+
+        $antennaString = strval($antenna);
+        $conn = $this->getEntityManager()->getConnection();
+
+        $q = "SELECT * FROM metisapp.patients as p where p.antenna = '$antenna' AND p.deleted_at IS NULL ";
 
 
-        $q = $this->getEntityManager()->createQueryBuilder();
-
-        $q->select('p')
-            ->from('App:Patients', 'p')
-            ->andWhere('p.antenna = :antenna')
-            ->orderBy('p.lastname', 'ASC')
-            ->andWhere('p.deleted_at is NULL');
-        // ->setMaxResults($numberPage);
-
-
-
-        // dd($searchPatient);
         if ($searchPatient) {
-            // dd($searchPatient);
-            $q->andWhere('CONCAT(p.lastname,\' \', p.firstname,\' \', COALESCE(p.nicknames, p.id)) LIKE :searchPatient OR 
-                        CONCAT(p.firstname,\' \', p.lastname,\' \', COALESCE(p.nicknames, p.id)) LIKE :searchPatient OR
-                        CONCAT(COALESCE(p.nicknames, p.id), p.firstname,\' \', p.lastname,\' \') LIKE :searchPatient');
-
-            $parameters["searchPatient"] = '%' . $searchPatient . '%';
+            $q .= "AND (CONCAT(p.firstname, p.lastname, COALESCE(p.nicknames, p.id)) REGEXP $string OR 
+                    CONCAT(p.lastname, p.firstname, COALESCE(p.nicknames, p.id)) REGEXP $string OR
+                    CONCAT(COALESCE(p.nicknames, p.id), p.lastname, p.firstname) REGEXP $string OR
+                    CONCAT(p.lastname, COALESCE(p.nicknames, p.id), p.firstname) REGEXP $string OR
+                    CONCAT(COALESCE(p.nicknames, p.id), p.lastname, p.firstname) REGEXP $string OR
+                    CONCAT(COALESCE(p.nicknames, p.id), p.firstname, p.lastname) REGEXP $string)";
         }
 
         if ($searchDatePatient) {
-            $q->andWhere('p.birthdate = :searchDatePatient');
-            $parameters["searchDatePatient"] = $searchDatePatient;
+            $q .= " AND p.birthdate = '$searchDatePatient'";
         }
 
         if ($searchTypeForPatient) {
-            $q->andWhere('p.status = :searchTypeForPatient');
-            $parameters["searchTypeForPatient"] = $searchTypeForPatient;
+            $q .= " AND p.status = '$searchTypeForPatient'";
         }
 
-        $q->setParameters($parameters);
-
-
-        // ->setMaxResults($numberPage);
+        $q .= " ORDER BY p.lastname";
 
         // dd($q);
+        $stmt = $conn->prepare($q);
+        $resultSet = $stmt->executeQuery();
 
-
-        return $q->getQuery()->getResult();
+        return $resultSet->fetchAllAssociative();
     }
 
 
@@ -164,21 +163,40 @@ class PatientsRepository extends ServiceEntityRepository
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
 
+        $arrSearch = explode(' ', $search);
 
-        $qb->select('p.id, p.lastname, p.firstname, p.nicknames')
-            ->from('App:Patients', 'p')
-            ->andWhere('CONCAT(p.lastname,\' \', p.firstname,\' \', COALESCE(p.nicknames, p.id)) LIKE :val OR 
-                        CONCAT(p.firstname,\' \', p.lastname,\' \', COALESCE(p.nicknames, p.id)) LIKE :val OR
-                        CONCAT(COALESCE(p.nicknames, p.id), p.firstname,\' \', p.lastname,\' \') LIKE :val')
-            ->andWhere('p.antenna = :antenna AND p.deleted_at IS NULL')
-            ->setParameters([
-                'val' => '%' . $search . '%',
-                'antenna' => $antenna
-            ])
-            ->orderBy('p.id', 'ASC');
+        $arr = [];
+        foreach ($arrSearch as $value) {
+            $arr[] = $value;
+        }
 
-        $query = $qb->getQuery();
-        return $query->getResult();
+        $implodeArr = implode(" ", $arr);
+
+        $string = "'^(" . str_replace(" ", "|", $implodeArr) . ")'";
+
+        $antennaString = strval($antenna);
+        $conn = $this->getEntityManager()->getConnection();
+
+        // dd($antennaString);
+
+
+        $query = " SELECT * FROM metisapp.patients as p WHERE 
+                                                                (CONCAT(p.firstname, p.lastname, COALESCE(p.nicknames, p.id)) REGEXP $string OR 
+                                                                CONCAT(p.lastname, p.firstname, COALESCE(p.nicknames, p.id)) REGEXP $string OR
+                                                                CONCAT(COALESCE(p.nicknames, p.id), p.lastname, p.firstname) REGEXP $string OR
+                                                                CONCAT(p.lastname, COALESCE(p.nicknames, p.id), p.firstname) REGEXP $string OR
+                                                                CONCAT(COALESCE(p.nicknames, p.id), p.lastname, p.firstname) REGEXP $string OR
+                                                                CONCAT(COALESCE(p.nicknames, p.id), p.firstname, p.lastname) REGEXP $string) AND p.deleted_at IS NULL";
+
+
+        $query .= " AND p.antenna = '$antennaString'";
+
+        // dd($query);
+        $stmt = $conn->prepare($query);
+        $resultSet = $stmt->executeQuery();
+
+        // dd($stmt);
+        return $resultSet->fetchAllAssociative();
     }
 
     public function findLatestSuggestion($patient, $status = "/patient/fiche/statut-du-suivi")

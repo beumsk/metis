@@ -20,6 +20,9 @@ doctrine:
 when@prod:
     doctrine:
         orm:
+            dql:
+            string_functions:
+                regexp: DoctrineExtensions\Query\Mysql\Regexp
             auto_generate_proxy_classes: false
             query_cache_driver:
                 type: pool

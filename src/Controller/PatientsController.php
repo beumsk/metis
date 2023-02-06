@@ -68,13 +68,14 @@ class PatientsController extends AbstractController
 
 
 
-    #[Route('/api/getSearch', name: 'app_patientsSearch')]
-    public function getSearchPatients(ManagerRegistry $doctrine, Request $request): Response
+    #[Route('/api/getSearch', name: 'app_getSearch')]
+    public function getSearch(ManagerRegistry $doctrine, Request $request)
     {
 
-        $val = $request->query->get('val');
-        $antenna = $request->query->get('antenna');
 
+        $val = $request->get('val');
+        $antenna = $request->get('antenna');
+        // dd($request->get('val'));
         $reports = $doctrine->getRepository(Patients::class)->findByNameByFirstNameByName($val, $antenna);
         return $this->json($reports);
     }
@@ -183,25 +184,19 @@ class PatientsController extends AbstractController
     {
         $request = Request::createFromGlobals();
 
-
         $val = $request->request->get('id');
-        // dd($val);
-
         $templateElement = $doctrine->getRepository(InformationTemplateElement::class)->findElement();
         $suggestionElement = $doctrine->getRepository(Suggestions::class)->findAll();
 
         $patient = $doctrine->getRepository(Patients::class)->find($val);
         $patientInfo = $doctrine->getRepository(PatientsInformation::class)->findBy(["pati" => $patient->getId()], ['start' => 'DESC']);
         $test = [];
-        // dd($val);
         foreach ($templateElement as $key) {
             $te = $key->getId();
-            // dd(count($patientInfo));
             if (count($patientInfo) > 0) {
                 foreach ($patientInfo as $pati) {
                     if ($pati->getItel()->getId() === $key->getId()) {
                         $test[] = $pati;
-                        // dd($pati);
                         if ($pati->getDeletedAt() === null) {
                             $key->setPatientInformation($pati);
                         }
@@ -214,161 +209,19 @@ class PatientsController extends AbstractController
         foreach ($templateElement as $key) {
             $te = $key->getId();
 
-
             foreach ($suggestionElement as $sugg) {
 
-                // $test[] = $pati;
                 if ($sugg->getParentSugg() !== null && $sugg->getId() === $key->getSuge()->getId()) {
                     $s = $doctrine->getRepository(Suggestions::class)->findBy(["parentSugg" => $sugg->getId()]);
-
-                    // dd($s);
-
-
-
-
                     $key->setSuggestionsByBlock([...$s]);
                 }
 
                 if ($key->getSugv() !== null && $sugg->getId() === $key->getSugv()->getId()) {
                     $s = $doctrine->getRepository(Suggestions::class)->findBy(["parentSugg" => $sugg->getId()]);
-
-                    // dd($s);
                     $key->setSuggestionsByBlock([...$s]);
                 }
             }
         }
-
-
-        // $templateElement = [];
-
-        // Must to have
-        // foreach ($templateElement as $value) {
-        //     $templateElement[] = [
-
-        //             "id" => $value->getId(),
-        //             "itbk"=> [
-        //                 "id"=> $value->getI,
-        //                 "sugb"=> [
-        //                     "id"=> 100,
-        //                     "value"=> "Statut du suivi",
-        //                     "path"=> "/1/43/100",
-        //                     "pathString"=> "/patient/fiche/statut-du-suivi",
-        //                     "parentSugg"=> [
-        //                         "id"=> 43,
-        //                         "value"=> "Fiche",
-        //                         "path"=> "/1/43",
-        //                         "pathString"=> "/patient/fiche",
-        //                         "parentSugg"=> [
-        //                             "id"=> 1,
-        //                             "value"=> "Patient",
-        //                             "path"=> "/1",
-        //                             "pathString"=> "/patient",
-        //                         ],
-        //                     ],
-        //                 ],
-        //             "suge"=> [
-        //                 "id"=> 855,
-        //                 "value"=> "Programme",
-        //                 "path"=> "/1/105/855",
-        //                 "pathString"=> "/patient/suivi/programme",
-        //                 "parentSugg"=> [
-        //                     "id"=> 105,
-        //                     "value"=> "Suivi",
-        //                     "path"=> "/1/105",
-        //                     "pathString"=> "/patient/suivi",
-        //                     "parentSugg"=> [
-        //                         "id"=> 1,
-        //                         "value"=> "Patient",
-        //                         "path"=> "/1",
-        //                         "pathString"=> "/patient",
-        //                     ],
-        //                 ],
-        //             ],
-        //             "sugv"=> null,
-        //             "required"=> 0,
-        //             "elementOrder"=> 4,
-        //             "editType"=> 1,
-        //             "type"=> 3,
-        //             "suggestionsByBlock"=> [
-        //                 [
-        //                     [
-        //                         "id"=> 856,
-        //                         "value"=> "Housing Fast",
-        //                         "pathString"=> "/patient/suivi/programme/housing-fast",
-        //                         "parentSugg"=> [
-        //                             "id"=> 855,
-        //                             "value"=> "Programme",
-        //                             "pathString"=> "/patient/suivi/programme",
-        //                             "parentSugg"=> [
-        //                                 "id"=> 105,
-        //                                 "value"=> "Suivi",
-        //                                 "pathString"=> "/patient/suivi",
-        //                                 "parentSugg"=> [
-        //                                     "id"=> 1,
-        //                                     "value"=> "Patient",
-        //                                     "pathString"=> "/patient",
-        //                                 ],
-        //                             ],
-        //                         ],
-        //                     ],
-        //                     [
-        //                         "id"=> 857,
-        //                         "value"=> "Housing First",
-        //                         "pathString"=> "/patient/suivi/programme/housing-first",
-        //                         "parentSugg"=> [
-        //                             "id"=> 855,
-        //                             "value"=> "Programme",
-        //                             "pathString"=> "/patient/suivi/programme",
-        //                             "parentSugg"=> [
-        //                                 "id"=> 105,
-        //                                 "value"=> "Suivi",
-        //                                 "pathString"=> "/patient/suivi",
-        //                                 "parentSugg"=> [
-        //                                     "id"=> 1,
-        //                                     "value"=> "Patient",
-        //                                     "pathString"=> "/patient",
-        //                                 ],
-        //                             ],
-        //                         ],
-        //                     ]
-        //                 ]
-        //             ],
-        //             "patientInformation"=> [
-        //                 [
-        //                     "id"=> 34759,
-        //                     "value"=> "test",
-        //                     "comment"=> null,
-        //                     "isConfidential"=> null,
-        //                     "isHighlight"=> null,
-        //                     "start"=> "2023-01-20T00=>00=>00+01=>00",
-        //                     "end"=> "2023-01-20T00=>00=>00+01=>00",
-        //                     "sugg"=> [
-        //                         "id"=> 856,
-        //                         "value"=> "Housing Fast",
-        //                         "pathString"=> "/patient/suivi/programme/housing-fast",
-        //                         "parentSugg"=> [
-        //                             "id"=> 855,
-        //                             "value"=> "Programme",
-        //                             "pathString"=> "/patient/suivi/programme",
-        //                             "parentSugg"=> [
-        //                                 "id"=> 105,
-        //                                 "value"=> "Suivi",
-        //                                 "pathString"=> "/patient/suivi",
-        //                                 "parentSugg"=> [
-        //                                     "id"=> 1,
-        //                                     "value"=> "Patient",
-        //                                     "pathString"=> "/patient",
-        //                                 ],
-        //                             ],
-        //                         ],
-        //                     ],
-        //                     "itel"=> 39,
-
-        //                 ]
-        //             ]
-
-        //     ]
-        // }
 
         $encoders = [new JsonEncoder()];
         $normalizers = [new DateTimeNormalizer(), new ObjectNormalizer()];
@@ -415,22 +268,25 @@ class PatientsController extends AbstractController
         $searchTypeForPatient = $request->request->get('typeSelectPatient');
         $patients = $doctrine->getRepository(Patients::class)->findPatients($page, $antenna, $searchNamePatient, $searchDatePatient, $searchTypeForPatient);
 
+        // dd($patients);
 
         $arr = [];
         foreach ($patients as  $key => $value) {
             if ($key < $page) {
-                $goals = $doctrine->getRepository(Patients::class)->findPatientReportsByGoal($value->getId(), null, null, 3);
-                // dd($value);
+
+                $goals = $doctrine->getRepository(Patients::class)->findPatientReportsByGoal($value["id"], null, null, 3);
+                $medias = $doctrine->getRepository(Medias::class)->findBy(["pati" => $value["id"]]);
+                // dd($medias);
                 $arr[] = [
-                    "id" => $value->getId(),
-                    "firstname" => $value->getFirstName(),
-                    "lastname" => $value->getLastName(),
-                    "nicknames" => $value->getNickNames(),
-                    "status" => $value->getStatus(),
-                    "birthdate" => ($value->getBirthdate() !== null) ? $value->getBirthdate()->format(DATE_RFC3339_EXTENDED) : null,
-                    "first_contact_date" => ($value->getFirstContactDate() !== null) ? $value->getFirstContactDate()->format(DATE_RFC3339_EXTENDED) : null,
-                    "deleted_at" => ($value->getDeletedAt() !== null) ? $value->getDeletedAt()->format(DATE_RFC3339_EXTENDED) : null,
-                    "medias" => (count($value->getMedias()) > 0) ?
+                    "id" => $value["id"],
+                    "firstname" => $value["firstname"],
+                    "lastname" => $value["lastname"],
+                    "nicknames" => $value["nicknames"],
+                    "status" => $value["status"],
+                    "birthdate" => ($value["birthdate"] !== null) ? $value["birthdate"] : null,
+                    "first_contact_date" => ($value["first_contact_date"] !== null) ? $value["first_contact_date"] : null,
+                    "deleted_at" => ($value["deleted_at"] !== null) ? $value["deleted_at"] : null,
+                    "medias" => (count($medias) > 0) ?
                         array_map(function ($a) {
                             if ($a->getSugg()->getValue() === "current") {
                                 return [
@@ -442,7 +298,7 @@ class PatientsController extends AbstractController
 
                                 ];
                             }
-                        }, [...$value->getMedias()])
+                        }, [...$medias])
                         : null,
                     "fore" => (count($goals) > 0) ?
                         array_map(function ($a) {
