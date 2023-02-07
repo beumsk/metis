@@ -386,7 +386,7 @@ class FollowUpReportsController extends AbstractController
                     array_map(function ($a) {
                         return [
 
-                            "label" => ($a->getCreationDate() && $a->getCreationDate()->format('d/m/Y')) ? $a->getCreationDate()->format('d/m/Y') : null . " " . (($a->getSugg() && $a->getSugg()->getValue()) ? $a->getSugg()->getValue() : null) . " " . (($a->getDescription()) ? $a->getDescription() : null),
+                            "label" => $a->getCreationDate()->format('d/m/Y') . " " . $a->getSugg()->getValue() . " " . $a->getDescription(),
                             "value" => $a->getId(),
                             // "id" => ($a->getId() !== null) ? $a->getId() : null,
                             // "description" => ($a->getDescription() !== null) ? $a->getDescription() : null,

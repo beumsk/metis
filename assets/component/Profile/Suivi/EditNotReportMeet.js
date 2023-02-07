@@ -61,11 +61,15 @@ function EditNoReportMeet(props) {
       {props.rapport && props.rapport.fogo && props.rapport.fogo.length > 0 && (
         <div className="data-row">
           <h6>Objectifs : </h6>
-          <span style={{ fontWeight: "normal" }}>
+          <div>
             {props?.rapport.fogo?.map((fo) => (
-              <>{fo.label}</>
+              <span className="tags-contacts">
+                {fo.label}
+                {fo.type}
+                {fo.description}
+              </span>
             ))}
-          </span>
+          </div>
         </div>
       )}
 
@@ -87,13 +91,13 @@ function EditNoReportMeet(props) {
           <h6>Contact : </h6>
           {!(props.rapport.cont.length > 0) ? (
             <>
-              <span style={{ fontWeight: "normal" }}>
+              <span className="tags-contacts">
                 {props?.rapport.cont.lastname} {props?.rapport.cont.firstname}{" "}
               </span>
             </>
           ) : (
             <>
-              <span style={{ fontWeight: "normal" }}>
+              <span className="tags-contacts">
                 {props?.rapport.cont?.map((cont) => (
                   <>
                     {cont.label}
