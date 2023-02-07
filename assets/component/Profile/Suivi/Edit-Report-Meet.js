@@ -118,7 +118,8 @@ function EditReportMeet(props) {
   };
 
   const onChangeContacts = (e) => {
-    //
+    // let arrId = e.map((e) => e.id);
+    console.log(e);
     setChangeContacts(e);
   };
 
@@ -138,7 +139,7 @@ function EditReportMeet(props) {
     }
   };
 
-  console.log(props);
+  // console.log(props);
   const sentCalls = (e) => {
     var formData = new FormData();
     formData.append("idRapport", props?.informationPatient?.id);
@@ -233,13 +234,15 @@ function EditReportMeet(props) {
 
   function onChangeActivities() {
     props.onChangeActivities(true);
+    props.setToggle(false);
   }
 
   function onChangeIndicators() {
     props.onChangeIndicators(true);
+    props.setToggle(false);
   }
 
-  console.log(props);
+  // console.log(props?.contacts?.data);
   return (
     <div className="report-content">
       <IndicateursActiviteesComponent
@@ -369,9 +372,14 @@ function EditReportMeet(props) {
       {props?.informationPatient?.hasOwnProperty("type") === false && (
         <>
           <InputContactList
-            contacts={props.contacts}
+            // contacts={props.contacts}
             defaultValue={props?.informationPatient?.cont}
             onChange={onChangeContacts}
+            data={props?.contacts?.data}
+            multiple
+            id="multiple"
+            label="Contacts"
+            // placeholder="Search multiple places"
           />
         </>
       )}

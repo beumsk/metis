@@ -187,7 +187,7 @@ const Form_MeetRapports = () => {
     formData.append("changeTypeMeet", changeTypeMeet);
     formData.append("changeDate", changeDate);
     formData.append("changeGoals", changeGoals);
-    formData.append("contId", changeContacts);
+    formData.append("contId", JSON.stringify(changeContacts));
     formData.append("changePlaces", changePlaces);
     formData.append("changeEditor", changeEditor);
     formData.append("goalsInput", goalsInput);
@@ -217,6 +217,8 @@ const Form_MeetRapports = () => {
     await logout();
     navigate("/connect");
   };
+
+  console.log(contacts);
 
   return (
     <>
@@ -285,9 +287,15 @@ const Form_MeetRapports = () => {
         /> */}
 
         <InputContactList
-          contacts={contacts}
+          // contacts={contacts}
+          // onChange={onChangeContacts}
+          // defaultValue={null}
+
           onChange={onChangeContacts}
-          defaultValue={null}
+          data={contacts?.data}
+          multiple
+          id="multiple"
+          label="Contacts"
         />
 
         <InputPlaceList

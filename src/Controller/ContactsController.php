@@ -167,7 +167,7 @@ class ContactsController extends AbstractController
             // dd($value);
             if ($value->getDeletedAt() === null) {
                 $calls[] = [
-                    "value" => $value->getId(),
+                    "id" => $value->getId(),
                     "label" => $value->getFirstName() . " " . $value->getLastName() . " " . $value->getDescription(),
 
                 ];

@@ -136,10 +136,13 @@ function AddActivitiesByReport(props) {
             />
 
             <InputContactList
-              contacts={props?.contacts}
+              data={props?.contacts?.data}
               // contacts={props?.contacts}
               onChange={handleChangeContacts}
               defaultValue={null}
+              multiple
+              id="multiple"
+              label="Contacts"
             ></InputContactList>
 
             <InputPlaceList

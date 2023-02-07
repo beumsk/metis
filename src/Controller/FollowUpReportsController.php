@@ -377,7 +377,7 @@ class FollowUpReportsController extends AbstractController
                 "cont" => (count($value->getCont()) > 0) ?
                     array_map(function ($a) {
                         return [
-                            "value" => $a->getId(),
+                            "id" => $a->getId(),
                             "label" => $a->getFirstName() . " " . $a->getLastName() . " " . $a->getDescription(),
                         ];
                     }, [...$value->getCont()])
@@ -666,7 +666,7 @@ class FollowUpReportsController extends AbstractController
             $arrCont_id = [];
 
             foreach (json_decode($contId) as $value) {
-                array_push($arrCont_id, $value->value);
+                array_push($arrCont_id, $value->id);
             }
             $contact = $doctrine->getRepository(Contacts::class)->findBy(array("id" => $arrCont_id));
 
@@ -1863,38 +1863,23 @@ class FollowUpReportsController extends AbstractController
         if ($contact !== "null") {
             $arrCont_id = [];
             foreach (json_decode($contact) as $value) {
-                array_push($arrCont_id, $value->value);
+                array_push($arrCont_id, $value->id);
             }
 
             $contact = $doctrine->getRepository(Contacts::class)->findBy(array("id" => $arrCont_id));
 
-            // foreach ($report->getCont() as $value) {
-            //     $report->removeCont($value);
-            //     // dd($followupGoals->getfogo());
-            // }
-            // $arrayCollectionDiff = new FollowupGoals($changeGoals);
             foreach ($contact as $value) {
-                // $arrayCollectionDiff = new FollowupGoals($value);
                 $followUpReportActivities->addContact($value);
             }
         }
 
         if ($place !== "null") {
             $arrCont_id = [];
-            // foreach (json_decode($place) as $value) {
-            //     array_push($arrCont_id, $value->value);
-            // }
             array_push($arrCont_id, json_decode($place)->value);
 
             $contact = $doctrine->getRepository(Contacts::class)->findBy(array("id" => $arrCont_id));
-            // dd($contact);
-            // foreach ($report->getCont() as $value) {
-            //     $report->removePlac($value);
-            //     // dd($followupGoals->getfogo());
-            // }
-            // $arrayCollectionDiff = new FollowupGoals($changeGoals);
+
             foreach ($contact as $value) {
-                // $arrayCollectionDiff = new FollowupGoals($value);
                 $followUpReportActivities->addPlace($value);
             }
         }
@@ -2100,7 +2085,7 @@ class FollowUpReportsController extends AbstractController
         if ($changeContacts !== "null") {
             $arrCont_id = [];
             foreach (json_decode($changeContacts) as $value) {
-                array_push($arrCont_id, $value->value);
+                array_push($arrCont_id, $value->id);
             }
 
             $contact = $doctrine->getRepository(Contacts::class)->findBy(array("id" => $arrCont_id));
