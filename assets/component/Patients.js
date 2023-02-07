@@ -207,8 +207,15 @@ function Patients() {
                     <div className="col-sm-1">
                       {patient?.medias &&
                       patient?.medias.length > 0 &&
-                      patient?.medias[0]?.absolutePath ? (
-                        <img src={patient.medias[0].absolutePath} width="50" />
+                      patient?.medias[patient?.medias?.length - 1]
+                        ?.absolutePath ? (
+                        <img
+                          src={
+                            patient.medias[patient?.medias?.length - 1]
+                              .absolutePath
+                          }
+                          width="50"
+                        />
                       ) : (
                         <FontAwesomeIcon icon={faUser} />
                       )}

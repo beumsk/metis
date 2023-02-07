@@ -176,7 +176,7 @@ export default function App() {
       </Form.Select> */}
 
       <>
-        <h6>évolution</h6>
+        <h6>Indicateurs</h6>
 
         {informations !== null && (
           <Line options={optionsCVC} data={informations} />
