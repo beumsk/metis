@@ -37,6 +37,7 @@ export default function InputContactList({
   };
 
   const addSelected = (e) => {
+    console.log(multiple);
     if (multiple) {
       setInput("");
       if (!selectedData.some((x) => x.id === +e.target.id)) {
@@ -78,11 +79,16 @@ export default function InputContactList({
         >
           {/* {multiple && selectedData && ( */}
           <div className="selected-wrap">
-            {selectedData.map((x) => (
-              <span key={x.id}>
-                {x.label} <i onClick={() => removeSelected(x.id)}>x</i>
-              </span>
-            ))}
+            {multiple && (
+              <>
+                {selectedData.map((x) => (
+                  <span key={x.id}>
+                    {x.label} <i onClick={() => removeSelected(x.id)}>x</i>
+                  </span>
+                ))}
+              </>
+            )}
+
             <input
               type="text"
               id={nextId()}

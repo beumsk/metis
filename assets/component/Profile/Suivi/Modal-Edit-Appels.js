@@ -127,7 +127,9 @@ function ModalEditAppels(props) {
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Ajouter un appel</Modal.Title>
+          <Modal.Title>
+            <h6>Modifier un appel</h6>
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {" "}
@@ -219,7 +221,12 @@ function ModalEditAppels(props) {
             {isCallsPatients === false && (
               <>
                 <Form.Label htmlFor="inputValue">Contact</Form.Label>
-                <Form.Select
+                <InputContactList
+                  defaultValue={props?.calls?.cont}
+                  onChange={(e) => onChangeContacts(e.target.value)}
+                  data={props?.contacts?.data}
+                ></InputContactList>
+                {/* <Form.Select
                   size="lg"
                   // value={contactValue}
                   className="uk-select"
@@ -232,7 +239,7 @@ function ModalEditAppels(props) {
                       <option value={el?.value}>{el?.label}</option>
                     </>
                   ))}
-                </Form.Select>
+                </Form.Select> */}
               </>
             )}
 

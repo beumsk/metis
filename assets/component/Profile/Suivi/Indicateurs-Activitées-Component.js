@@ -56,7 +56,7 @@ function IndicateursActiviteesComponent(props) {
   const [totalDeces, setTotalDeces] = useState(null);
   const [startTime, setStartTime] = useState(props?.indicateursByDefault);
   useEffect(() => {
-    console.log(props?.indicateursByDefault);
+    console.log(props);
 
     if (props?.indicateursByDefault !== null) {
       var result = props?.indicateursByDefault.reduce((x, y) => {
@@ -65,10 +65,12 @@ function IndicateursActiviteesComponent(props) {
         return x;
       }, {});
     }
-
+    console.log(props.indicateursByDefault);
     if (
-      props?.indicateursByDefault !== null &&
-      props?.indicateursByDefault !== startTime
+      (props?.indicateursByDefault !== null &&
+        props?.indicateursByDefault !== startTime) ||
+      (props?.indicateursByDefault !== null &&
+        props?.indicateursByDefault === startTime)
     ) {
       let x = 0;
       let y = 0;
@@ -79,6 +81,7 @@ function IndicateursActiviteesComponent(props) {
           console.log(numAscending[0].value);
           x = x + e.value;
           setTotalCVC(x);
+          console.log(x);
         }
         if (e && e.indi.groups.id === 2) {
           const numAscending = [e].sort((a, b) => a.value + b.value);

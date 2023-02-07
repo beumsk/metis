@@ -184,6 +184,7 @@ class FollowUpReportsController extends AbstractController
 
         if ($reportFollowUp && $reportFollowUp->getFore()) {
             foreach ($reportFollowUp->getFore() as $value) {
+
                 $arrForeByFogo[] =   [
                     "id" => $value->getId(),
                     "activityType" => $value->getActivityType(),

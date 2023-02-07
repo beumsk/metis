@@ -1,17 +1,6 @@
 import React, { useState, useEffect } from "react";
-import Button from "react-bootstrap/Button";
-import Modal from "react-bootstrap/Modal";
 import useAuth from "../../../hooks/useAuth";
-import { useParams } from "react-router-dom";
-import axios from "axios";
-import Form from "react-bootstrap/Form";
-import Editor from "./Editor-Reports";
-import AddActivitiesByReport from "./Add-ActivitiesByReports";
-import AddIndicateursByReport from "./Indicateurs-Form-AddReports/Add-IndicateursByReports";
-import AddSoinsByReport from "./Add-SoinsByReports";
-import InputPlaceList from "./Input-Place-List";
-import InputContactList from "./Input-Contact-List";
-import InputGoalsList from "./Input-Goals-List";
+import { useParams, Link } from "react-router-dom";
 import IndicateursActiviteesComponent from "./Indicateurs-Activitées-Component";
 
 function EditNoReportMeet(props) {
@@ -21,10 +10,6 @@ function EditNoReportMeet(props) {
   var formData = new FormData();
   formData.append("id", 57);
 
-  const [userId, setUserId] = useState(null);
-  const [patiId, setPatiId] = useState(null);
-  const [isSentGoals, setSentGoals] = useState(false);
-  const [isSentRepport, setSentRepport] = useState(false);
   var formActivitiesDatas = new FormData();
   formActivitiesDatas.append("id", 106);
 
@@ -91,20 +76,23 @@ function EditNoReportMeet(props) {
           <h6>Contact : </h6>
           {!(props.rapport.cont.length > 0) ? (
             <>
-              <span className="tags-contacts">
+              <Link className="tags-contacts" to={"/profil-contact/" + cont.id}>
                 {props?.rapport.cont.lastname} {props?.rapport.cont.firstname}{" "}
-              </span>
+              </Link>
             </>
           ) : (
             <>
-              <span className="tags-contacts">
+              <div>
                 {props?.rapport.cont?.map((cont) => (
-                  <>
+                  <Link
+                    className="tags-contacts"
+                    to={"/profil-contact/" + cont.id}
+                  >
                     {cont.label}
                     {/* {cont.firstname} */}
-                  </>
+                  </Link>
                 ))}
-              </span>
+              </div>
             </>
           )}
         </div>

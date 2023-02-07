@@ -143,15 +143,12 @@ function AddSoinsByReport(props) {
             />
 
             <InputContactList
-              contacts={props?.contacts}
-              // contacts={props?.contacts}
               onChange={handleChangeContacts}
-              // defaultValue={
-              //   props.formActivitiesEdit?.contact &&
-              //   props.formActivitiesEdit?.contact
-              //     ? props.formActivitiesEdit?.contact
-              //     : null
-              // }
+              data={props?.contacts?.data}
+              defaultValue={null}
+              multiple
+              id="multiple"
+              label="Contacts"
             ></InputContactList>
 
             <InputPlaceList

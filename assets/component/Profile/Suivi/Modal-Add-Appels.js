@@ -161,7 +161,9 @@ function ModalAddAppels(props) {
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Ajouter un appel</Modal.Title>
+          <Modal.Title>
+            <h6>Ajouter un appel</h6>
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <>
@@ -230,8 +232,11 @@ function ModalAddAppels(props) {
 
             {isCallsPatients === false && (
               <InputContactList
-                contacts={props.contacts}
+                data={props?.contacts?.data}
                 defaultValue={null}
+                id="single"
+                multiple={false}
+                label="Contacts"
                 onChange={(e) => onChangeContacts(e)}
               />
             )}
