@@ -12,6 +12,7 @@ import {
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import Form from "react-bootstrap/Form";
+import InputContactList from "../../Input-Contact-List";
 
 function ModalEditContacts(props) {
   const [show, setShow] = useState(false);
@@ -56,9 +57,16 @@ function ModalEditContacts(props) {
     let formData = new FormData();
     // value-sugg
 
+    console.log(contactItemList);
+
     formData.append("description", description);
     formData.append("commentaire", commentaire);
-    formData.append("contactItemList", contactItemList);
+    formData.append(
+      "contactItemList",
+      contactItemList && contactItemList.length > 0
+        ? contactItemList[0].id
+        : null
+    );
     formData.append("start", start);
     formData.append("end", end);
     formData.append("typeItemList", typeItemList);
@@ -99,6 +107,9 @@ function ModalEditContacts(props) {
     });
   }
 
+  function onChangeContacts(e) {
+    setContactItemList(e);
+  }
   // if (responseDatas !== null) {
   //   props.onChangeUpdateContact(responseDatas);
   // }
@@ -115,7 +126,7 @@ function ModalEditContacts(props) {
         </Modal.Header>
         <Modal.Body>
           <>
-            <Form.Label htmlFor="inputValue">Valeur</Form.Label>
+            {/* <Form.Label htmlFor="inputValue">Valeur</Form.Label>
             <Form.Select
               size="lg"
               onChange={(e) => setContactItemList(e.target.value)}
@@ -132,7 +143,27 @@ function ModalEditContacts(props) {
                   )}
                 </>
               ))}
-            </Form.Select>
+            </Form.Select> */}
+            <InputContactList
+              defaultValue={
+                props?.infos?.cont[0]
+                  ? [
+                      {
+                        id: props?.infos?.cont[0]?.id,
+                        label:
+                          props?.infos?.cont[0]?.lastname +
+                          " " +
+                          props?.infos?.cont[0]?.description,
+                      },
+                    ]
+                  : null
+              }
+              onChange={onChangeContacts}
+              data={props?.contacts?.data}
+              multiple={false}
+              id="single"
+              label="Contacts"
+            ></InputContactList>
             <Form.Label htmlFor="inputValue">Type</Form.Label>
             <Form.Select
               size="lg"
