@@ -53,7 +53,7 @@ const Login = () => {
       //     Authorization: `Bearer ${auth.auth.accessToken}`,
       //   },
       // }).then(function (response) {
-      //   console.log(response);
+      //
       // });
       // const saveLoginTime = await axios.post(
       //   LOGIN_URL,
@@ -83,7 +83,6 @@ const Login = () => {
         navigate(from, { replace: true });
       }
     } catch (err) {
-      console.log(err.response);
       if (!err?.response) {
         setErrMsg("Erreur de serveur.");
       } else if (err.response?.status === 400) {

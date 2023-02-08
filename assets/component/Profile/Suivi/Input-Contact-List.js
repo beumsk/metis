@@ -20,16 +20,15 @@ export default function InputContactList({
   const [filteredData, setFilteredData] = useState(data);
   const [idInput, setidInput] = useState(nextId());
   const [selectedData, setSelectedData] = useState([]);
-  // console.log(selectedData);
+  //
 
   useEffect(() => {
     if (defaultValueOutput !== null && multiple) {
       setInput("");
       setSelectedData(defaultValueOutput !== null ? defaultValueOutput : []);
     }
-    console.log(multiple, defaultValueOutput);
+
     if (defaultValueOutput !== null && multiple === false) {
-      console.log(defaultValueOutput);
       setInput(defaultValueOutput[0].label);
 
       setSelectedData(defaultValueOutput !== null ? defaultValueOutput : []);
@@ -55,7 +54,6 @@ export default function InputContactList({
   };
 
   const addSelected = (e) => {
-    console.log(multiple);
     if (multiple) {
       setInput("");
       if (!selectedData.some((x) => x.id === +e.target.id)) {
@@ -68,7 +66,7 @@ export default function InputContactList({
       setInput(e.target.innerText);
       setSelectedData(filteredData.filter((x) => x.id === +e.target.id));
     }
-    console.log(selectedData);
+
     setFilteredData(data);
     setOpen(false);
   };

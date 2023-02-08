@@ -6,6 +6,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import Form from "react-bootstrap/Form";
 import moment from "moment";
+import InputPlaceList from "../Suivi/Input-Place-List";
 // import InputTypeList from "./Input-Type-List";
 
 function ModalLierLieux(props) {
@@ -58,7 +59,12 @@ function ModalLierLieux(props) {
     // value-sugg
 
     formData.append("valueCommentary", valueCommentary);
-    formData.append("valueLieux", valueLieux);
+    formData.append(
+      "valueLieux",
+      valueLieux && valueLieux.length > 0
+        ? JSON.stringify(valueLieux[0].id)
+        : null
+    );
     formData.append("start", start);
     formData.append("end", end);
     formData.append("valueType", valueType);
@@ -108,6 +114,10 @@ function ModalLierLieux(props) {
   if (responseDatas !== null) {
     props.onChangeLierPlaces(responseDatas);
   }
+
+  function onChangePlaces(e) {
+    setValueLieux(e);
+  }
   //   /api/getContacts
 
   return (
@@ -122,24 +132,23 @@ function ModalLierLieux(props) {
         </Modal.Header>
         <Modal.Body>
           <>
-            {/* <InputContactList contacts={props?.contacts} /> */}
-            <Form.Label htmlFor="inputValue">Lieu</Form.Label>
-            <Form.Select
-              size="lg"
-              style={{ width: "100%" }}
-              className="uk-select"
-              onChange={(e) => setValueLieux(e.target.value)}
-            >
-              <option value={"defaultValue"}>Sélectionnez le lieu</option>
-              {props?.lieuxList?.data?.map((el, id) => (
-                <React.Fragment key={el.id}>
-                  {el?.lastname && (
-                    <option value={el.id}>{el?.lastname}</option>
-                  )}
-                </React.Fragment>
-              ))}
-            </Form.Select>
-
+            <InputPlaceList
+              onChange={onChangePlaces}
+              // defaultValue={
+              //   props?.informationPatient?.plac
+              //     ? [
+              //         {
+              //           id: props?.informationPatient?.plac?.id,
+              //           label: props?.informationPatient?.plac?.lastname,
+              //         },
+              //       ]
+              //     : null
+              // }
+              data={props?.lieuxList?.data}
+              id="single"
+              multiple={false}
+              label="Lieux"
+            />
             <Form.Label htmlFor="inputValue">Type</Form.Label>
             <Form.Select
               size="lg"

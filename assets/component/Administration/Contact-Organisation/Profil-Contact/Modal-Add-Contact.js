@@ -18,7 +18,7 @@ function ModalAddContact(props) {
   const [show, setShow] = useState(false);
   const [auth, setAuth] = useState(useAuth());
   let id = useParams().idContact;
-  // console.log(useParams());
+  //
   // formData.append("pathString", props.link);
   const [infos, setInfos] = useState(null);
   const [isSentRepport, setIsSentRepport] = useState(false);
@@ -38,7 +38,6 @@ function ModalAddContact(props) {
   };
 
   const handleSave = (e) => {
-    console.log(e);
     let formGetInfos = new FormData();
     // value-sugg
     // $idCont = $request->request->get('idCont');

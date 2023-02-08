@@ -233,7 +233,7 @@ const Contacts = () => {
     setPatients(e.data);
   }
 
-  // console.log(patientsLists);
+  //
 
   return (
     <div className="onglet-contact">

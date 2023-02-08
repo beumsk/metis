@@ -197,7 +197,6 @@ function ContactOrganisations() {
               {queryValue !== null && (
                 <InputTagsList
                   onChange={(e) => {
-                    console.log("e", e);
                     setTags(e);
                   }}
                   defaultValue={queryValue}

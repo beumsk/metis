@@ -68,7 +68,6 @@ const Fiche = () => {
   }, [idPatient]);
   //
   const onChangeEditPatientInformation = (e) => {
-    console.log("edit !");
     axios({
       method: "post",
       url: "/api/patientsInformationByPatients",

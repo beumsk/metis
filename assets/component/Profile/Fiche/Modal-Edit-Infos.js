@@ -204,7 +204,7 @@ function ModalEditInfos(props) {
     }
 
     // value-sugg
-    console.log(start);
+
     formData.append("valueSelect", valueSelect);
     formData.append("specificValueInput", specificValueInput);
     formData.append("commentaireInput", commentaireInput);
@@ -217,7 +217,7 @@ function ModalEditInfos(props) {
     var formGetInfos = new FormData();
     formGetInfos.append("id", id.toString());
 
-    // console.log(
+    //
     //   isValueStarAndValueSpécific,
     //   isValueStarValue,
     //   valueSelect,
@@ -247,7 +247,6 @@ function ModalEditInfos(props) {
     });
   }
 
-  console.log(props);
   return (
     <>
       <button onClick={handleShow}>

@@ -26,7 +26,7 @@ function Anniversaire() {
   const { SearchBar } = Search;
   const [birthdayList, setBirthDaysList] = useState(null);
 
-  // console.log(table);
+  //
   var formData = new FormData();
   formData.append("antenna", auth.antenna);
 

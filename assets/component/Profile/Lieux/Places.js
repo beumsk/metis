@@ -77,7 +77,7 @@ const Places = () => {
       .catch(function (response) {});
     axios({
       method: "post",
-      url: "/api/getPlaces",
+      url: "/api/getPlacesSelect",
       data: formData,
       headers: {
         "Content-Type": "application/json",

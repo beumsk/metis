@@ -1876,11 +1876,13 @@ class FollowUpReportsController extends AbstractController
 
         if ($place !== "null") {
             $arrCont_id = [];
-            array_push($arrCont_id, json_decode($place)->value);
+            foreach (json_decode($place) as $value) {
+                array_push($arrCont_id, $value->id);
+            }
 
-            $contact = $doctrine->getRepository(Contacts::class)->findBy(array("id" => $arrCont_id));
+            $place = $doctrine->getRepository(Contacts::class)->findBy(array("id" => $arrCont_id));
 
-            foreach ($contact as $value) {
+            foreach ($place as $value) {
                 $followUpReportActivities->addPlace($value);
             }
         }

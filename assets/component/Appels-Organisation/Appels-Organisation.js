@@ -363,7 +363,6 @@ function AppelsOrganisation() {
               </>
             ))}
 
-            {console.log(patientsList?.data[0]?.isReadMore)}
             <button
               className="btn-metis"
               onClick={(e) => {

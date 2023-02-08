@@ -5,7 +5,7 @@ const SelectLimitHistoric = (props) => {
   const [dateHistoric, setDateHistoric] = useState(null);
 
   moment().subtract(1, "months");
-  console.log(moment().subtract(1, "months").format("DD/MM/YYYY"));
+
   props.onChangeLimitHistoric(dateHistoric);
   // 2023-01-26
   return (

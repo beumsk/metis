@@ -56,8 +56,6 @@ function IndicateursActiviteesComponent(props) {
   const [totalDeces, setTotalDeces] = useState(null);
   const [startTime, setStartTime] = useState(props?.indicateursByDefault);
   useEffect(() => {
-    console.log(props);
-
     if (props?.indicateursByDefault !== null) {
       var result = props?.indicateursByDefault.reduce((x, y) => {
         (x[y.indi.groups.id] = x[y.indi.groups.name] || []).push(y);
@@ -65,7 +63,7 @@ function IndicateursActiviteesComponent(props) {
         return x;
       }, {});
     }
-    console.log(props.indicateursByDefault);
+
     if (
       (props?.indicateursByDefault !== null &&
         props?.indicateursByDefault !== startTime) ||
@@ -78,20 +76,19 @@ function IndicateursActiviteesComponent(props) {
       props?.indicateursByDefault.map((e) => {
         if (e && e.indi.groups.id === 1) {
           const numAscending = [e].sort((a, b) => a.value + b.value);
-          console.log(numAscending[0].value);
+
           x = x + e.value;
           setTotalCVC(x);
-          console.log(x);
         }
         if (e && e.indi.groups.id === 2) {
           const numAscending = [e].sort((a, b) => a.value + b.value);
-          console.log(numAscending[0].value);
+
           y = y + e.value;
           setTotalPerteLogement(y);
         }
         if (e && e.indi.groups.id === 3) {
           const numAscending = [e].sort((a, b) => a.value + b.value);
-          console.log(numAscending[0].value);
+
           z = z + e.value;
           setTotalDeces(z);
         }

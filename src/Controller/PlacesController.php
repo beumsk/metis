@@ -34,8 +34,8 @@ use Symfony\Component\Serializer\Context\Normalizer\ObjectNormalizerContextBuild
 
 class PlacesController extends AbstractController
 {
-    #[Route('/api/getPlacesSelect', name: 'app_getPlacesForSelect')]
-    public function getPlacesForSelect(ManagerRegistry $doctrine, SerializerInterface $serializer): Response
+    #[Route('/api/getPlacesSelect', name: 'app_getPlacesSelect')]
+    public function getPlacesSelect(ManagerRegistry $doctrine, SerializerInterface $serializer): Response
     {
 
         $entityManager = $doctrine->getManager();
@@ -57,7 +57,7 @@ class PlacesController extends AbstractController
             // dd($value);
             if ($value->getDeletedAt() === null) {
                 $calls[] = [
-                    "value" => $value->getId(),
+                    "id" => $value->getId(),
                     "label" => $value->getFirstName() . " " . $value->getLastName(),
 
                 ];

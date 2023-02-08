@@ -69,9 +69,9 @@ export default function App() {
         );
 
         let arrDates = [];
-        console.log(response);
+
         response.data.forEach((element) => {
-          // console.log(element);
+          //
           // let dateformated = new Date(element.date).toLocaleString("fr-BE", {
           //   dateStyle: "short",
           // });
@@ -88,7 +88,6 @@ export default function App() {
           return Number(new Date(Number(a))) - Number(new Date(Number(b)));
         });
 
-        console.log(arr.length);
         setOptionsCVC({
           responsive: true,
           scales: {
@@ -161,7 +160,7 @@ export default function App() {
       })
       .catch(function (response) {});
   }, [idPatient]);
-  console.log(informations);
+
   return (
     <>
       {/* <Form.Select

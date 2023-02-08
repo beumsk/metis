@@ -232,7 +232,6 @@ function ListUtilisateurs() {
                 <tbody>
                   {listUsers.data.map((e, idx) => (
                     <tr className="odd" key={idx}>
-                      {console.log(e)}
                       <td>{e.firstname}</td>
                       <td>{e.lastname}</td>
 

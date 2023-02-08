@@ -39,7 +39,7 @@ const SelectReferent = (props) => {
       optionsValues.push(element.value);
     }
     // e.filter((f) => [f.value]);
-    console.log(optionsValues);
+
     props.onClickReferent(optionsValues);
     //
     //

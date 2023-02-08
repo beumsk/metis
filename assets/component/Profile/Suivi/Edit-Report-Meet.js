@@ -119,12 +119,11 @@ function EditReportMeet(props) {
 
   const onChangeContacts = (e) => {
     // let arrId = e.map((e) => e.id);
-    console.log(e);
+
     setChangeContacts(e);
   };
 
   const onChangePlaces = (e) => {
-    console.log(e);
     setChangePlaces(e);
   };
 
@@ -139,7 +138,7 @@ function EditReportMeet(props) {
     }
   };
 
-  // console.log(props);
+  //
   const sentCalls = (e) => {
     var formData = new FormData();
     formData.append("idRapport", props?.informationPatient?.id);
@@ -210,7 +209,9 @@ function EditReportMeet(props) {
     formData.append("contId", JSON.stringify(changeContacts));
     formData.append(
       "changePlaces",
-      changePlaces && changePlaces ? changePlaces : null
+      changePlaces && changePlaces.length > 0
+        ? JSON.stringify(changePlaces[0].id)
+        : null
     );
     formData.append("changeEditor", changeEditor);
     formData.append("goalsInput", JSON.stringify(goalsInput));
@@ -242,7 +243,7 @@ function EditReportMeet(props) {
     props.setToggle(false);
   }
 
-  // console.log(props?.contacts?.data);
+  //
   return (
     <div className="report-content">
       <IndicateursActiviteesComponent
@@ -416,9 +417,20 @@ function EditReportMeet(props) {
         <>
           <InputPlaceList
             onChange={onChangePlaces}
+            defaultValue={
+              props?.informationPatient?.plac
+                ? [
+                    {
+                      id: props?.informationPatient?.plac?.id,
+                      label: props?.informationPatient?.plac?.lastname,
+                    },
+                  ]
+                : null
+            }
             data={props?.places?.data}
             id="single"
-            placeholder="Lieux"
+            multiple={false}
+            label="Lieux"
           />
 
           <Form.Label htmlFor="inputValue">Description</Form.Label>

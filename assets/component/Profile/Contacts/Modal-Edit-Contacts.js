@@ -57,8 +57,6 @@ function ModalEditContacts(props) {
     let formData = new FormData();
     // value-sugg
 
-    console.log(contactItemList);
-
     formData.append("description", description);
     formData.append("commentaire", commentaire);
     formData.append(

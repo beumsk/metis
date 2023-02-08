@@ -38,7 +38,7 @@ const Menu = () => {
     localStorage.setItem("antenna", e.target.value);
     location.reload();
   };
-  console.log(auth);
+
   return (
     <>
       <Navbar

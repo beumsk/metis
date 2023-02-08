@@ -218,8 +218,6 @@ const Form_MeetRapports = () => {
     navigate("/connect");
   };
 
-  console.log(contacts);
-
   return (
     <>
       {/* <h5 style={{ color: "white" }}>Rapport de rencontre</h5> */}

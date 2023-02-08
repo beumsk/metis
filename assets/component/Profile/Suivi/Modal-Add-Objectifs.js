@@ -92,7 +92,6 @@ function ModalAddObjectifs(props) {
         ? false
         : true;
 
-    console.log(isOtherValue, isValue, typeValue, valueType);
     if (isOtherValue === true && isValue === true) {
       axios({
         method: "post",

@@ -135,7 +135,7 @@ function RapportDetails(props) {
     // const [numberReportsFront, setNumberReportsFront] = useState(9);
     let numberRaportsFront = numberReportsFront + 10;
     setNumberReportsFront(numberRaportsFront);
-    console.log(numberRapports);
+
     reportData.append("number", numberRapports);
     if (filterTextContentRapport) {
       reportData.append("setTextRapport", filterTextContentRapport);
@@ -234,7 +234,6 @@ function RapportDetails(props) {
     })
       .then(function (response) {
         setInformations(response);
-        console.log(response);
       })
       .catch(function (response) {});
   }

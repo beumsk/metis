@@ -146,7 +146,6 @@ function ModalEditUtilisateurs(props) {
             className="uk-select"
             defaultValue={groups}
           >
-            {console.log(groups)}
             <option
               value={JSON.stringify(["ROLE_ADMIN", "ROLE_USER", "ROLE_BASIC"])}
             >
