@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import nextId from "react-id-generator";
 // custom data matching??
 
@@ -12,12 +12,30 @@ export default function InputContactList({
   ...props
 }) {
   const [input, setInput] = useState("");
+  const [defaultValueOutput, setDefaultValueOutput] = useState(
+    defaultValue && defaultValue.length > 0 ? defaultValue : null
+  );
+  // const [defaultValueState, setDefaultValueState] = useState(defaultValue);
   const [open, setOpen] = useState(false);
   const [filteredData, setFilteredData] = useState(data);
-  const [selectedData, setSelectedData] = useState(
-    defaultValue ? [...defaultValue] : []
-  );
-  console.log(defaultValue);
+  const [idInput, setidInput] = useState(nextId());
+  const [selectedData, setSelectedData] = useState([]);
+  // console.log(selectedData);
+
+  useEffect(() => {
+    if (defaultValueOutput !== null && multiple) {
+      setInput("");
+      setSelectedData(defaultValueOutput !== null ? defaultValueOutput : []);
+    }
+    console.log(multiple, defaultValueOutput);
+    if (defaultValueOutput !== null && multiple === false) {
+      console.log(defaultValueOutput);
+      setInput(defaultValueOutput[0].label);
+
+      setSelectedData(defaultValueOutput !== null ? defaultValueOutput : []);
+    }
+  }, []);
+
   const inputChange = (e) => {
     let str = e.target.value.toLowerCase();
     setInput(str);
@@ -50,6 +68,7 @@ export default function InputContactList({
       setInput(e.target.innerText);
       setSelectedData(filteredData.filter((x) => x.id === +e.target.id));
     }
+    console.log(selectedData);
     setFilteredData(data);
     setOpen(false);
   };
@@ -75,7 +94,7 @@ export default function InputContactList({
       <div className="input-dropdown-wrap">
         <div
           className="input-wrap"
-          onClick={(e) => document.getElementById(nextId()).focus()}
+          onClick={(e) => document.getElementById(idInput).focus()}
         >
           {/* {multiple && selectedData && ( */}
           <div className="selected-wrap">
@@ -91,7 +110,7 @@ export default function InputContactList({
 
             <input
               type="text"
-              id={nextId()}
+              id={idInput}
               placeholder={placeholder}
               value={input}
               autoComplete={"off"}

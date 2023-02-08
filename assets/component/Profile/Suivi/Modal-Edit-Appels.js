@@ -81,7 +81,10 @@ function ModalEditAppels(props) {
     formData.append("callsFunctionValue", callsFunctionValue);
     formData.append("isCallsPatients", isCallsPatients);
     formData.append("isPriority", isPriority);
-    formData.append("contact", contact ? contact : null);
+    formData.append(
+      "contact",
+      contact && contact.length > 0 ? JSON.stringify(contact[0].id) : null
+    );
     formData.append("description", description);
     formData.append("valueWhatDoinFunction", valueWhatDoinFunction);
     formData.append("patientId", idPatient);
@@ -220,11 +223,25 @@ function ModalEditAppels(props) {
             </Form.Select>
             {isCallsPatients === false && (
               <>
-                <Form.Label htmlFor="inputValue">Contact</Form.Label>
                 <InputContactList
-                  defaultValue={props?.calls?.cont}
-                  onChange={(e) => onChangeContacts(e.target.value)}
+                  defaultValue={
+                    props?.calls?.cont
+                      ? [
+                          {
+                            id: props?.calls?.cont?.id,
+                            label:
+                              props?.calls?.cont?.lastname +
+                              " " +
+                              props?.calls?.cont?.description,
+                          },
+                        ]
+                      : null
+                  }
+                  onChange={onChangeContacts}
                   data={props?.contacts?.data}
+                  multiple={false}
+                  id="single"
+                  label="Contacts"
                 ></InputContactList>
                 {/* <Form.Select
                   size="lg"

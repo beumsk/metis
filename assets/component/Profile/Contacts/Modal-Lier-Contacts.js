@@ -5,6 +5,7 @@ import useAuth from "../../../hooks/useAuth";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import Form from "react-bootstrap/Form";
+import InputContactList from "../../Input-Contact-List";
 
 function ModalLierContacts(props) {
   const [show, setShow] = useState(false);
@@ -50,7 +51,12 @@ function ModalLierContacts(props) {
 
     formData.append("description", description);
     formData.append("commentaire", commentaire);
-    formData.append("contactItemList", contactItemList);
+    formData.append(
+      "contactItemList",
+      contactItemList && contactItemList.length > 0
+        ? contactItemList[0].id
+        : null
+    );
     formData.append("start", start);
     formData.append("end", end);
     formData.append("typeItemList", typeItemList);
@@ -72,6 +78,10 @@ function ModalLierContacts(props) {
     });
   }
 
+  function onChangeContacts(e) {
+    setContactItemList(e);
+  }
+
   return (
     <>
       <Button onClick={handleShow} className="btn-metis">
@@ -84,7 +94,15 @@ function ModalLierContacts(props) {
         </Modal.Header>
         <Modal.Body>
           <>
-            <Form.Label htmlFor="inputValue">Valeur</Form.Label>
+            <InputContactList
+              defaultValue={null}
+              onChange={onChangeContacts}
+              data={props?.contacts?.data}
+              multiple={false}
+              id="single"
+              label="Contacts"
+            ></InputContactList>
+            {/* <Form.Label htmlFor="inputValue">Valeur</Form.Label>
             <Form.Select
               size="lg"
               className="uk-select"
@@ -101,7 +119,7 @@ function ModalLierContacts(props) {
                   )}
                 </>
               ))}
-            </Form.Select>
+            </Form.Select> */}
             <Form.Label htmlFor="inputValue">Type</Form.Label>
             <Form.Select
               className="uk-select"
