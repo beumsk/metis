@@ -200,6 +200,59 @@ class ContactsController extends AbstractController
         return $response;
     }
 
+    #[Route('/api/getOrganisationForSelect', name: 'app_getOrganisationForSelect')]
+    public function getOrganisationForSelect(ManagerRegistry $doctrine, SerializerInterface $serializer): Response
+    {
+
+        $entityManager = $doctrine->getManager();
+        $request = Request::createFromGlobals();
+
+
+        $tags = $request->request->get('tags');
+        $query = $request->request->get('query');
+        // $contacts = $doctrine->getRepository(Contacts::class)->findAllContacts($tags);
+        $contacts = $doctrine->getRepository(Contacts::class)->findAll();
+
+        $orgaArr = [];
+
+        foreach ($contacts as $value) {
+            // dd($value);
+            if ($value->getDeletedAt() === null) {
+                $orgaArr[] = [
+                    "id" => $value->getId(),
+                    "label" => $value->getFirstName() . (($value->getFirstName()) ? " " : "") . $value->getLastName() . (($value->getDescription()) ? " " : "") . $value->getDescription(),
+
+                ];
+            }
+        }
+
+
+
+        // $encoders = [new JsonEncoder()];
+        // $normalizers = [new DateTimeNormalizer(), new ObjectNormalizer()];
+        // $serializer = new Serializer($normalizers, $encoders);
+
+        // $calls = [];
+
+
+
+        // $jsonObject = $serializer->serialize($contacts, 'json', [
+        //     'circular_reference_handler' => function ($object) {
+        //         return $object->getId();
+        //     },
+        //     JsonEncoder::FORMAT,
+        //     [AbstractNormalizer::IGNORED_ATTRIBUTES => ["url", "description", "type", "pathString", "path", "calls", "informations"]]
+        // ]);
+
+        // $response =  new Response($jsonObject, 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
+
+        // $response->setSharedMaxAge(3600);
+
+
+
+        return new Response(json_encode($orgaArr), 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
+    }
+
     #[Route('/api/getOrganisation', name: 'app_listOrganisation')]
     public function getOrganisation(ManagerRegistry $doctrine, SerializerInterface $serializer): Response
     {

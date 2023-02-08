@@ -21,61 +21,13 @@ function ContactOrganisations() {
   const [auth, setAuth] = useState(useAuth());
   const [listContacts, setListContacts] = useState(null);
   const [listOrganisation, setListOrganisation] = useState(null);
+  const [listOrganisationSelect, setListOrganisationSelect] = useState(null);
   const [lengthList, setLengthList] = useState(10);
   const [tags, setTags] = useState(null);
   const [queryValue, setQueryValue] = useState(null);
 
   var formData = new FormData();
   formData.append("page", lengthList.toString());
-  const columns = [
-    {
-      dataField: "typeLabel",
-      text: "Type",
-      sort: true,
-      formatter: (cell, row, rowIndex, extraData) => <div>{row.typeLabel}</div>,
-    },
-    {
-      dataField: "lastname + firstname",
-      text: "Nom",
-      sort: true,
-      formatter: (cell, row, rowIndex, extraData) => (
-        <div>
-          {row.lastname} {row.firstname}
-        </div>
-      ),
-    },
-    {
-      dataField: "organisation",
-      text: "Organisation",
-      sort: true,
-      formatter: (cell, row, rowIndex, extraData) => (
-        <div>{row.organisation}</div>
-      ),
-    },
-    {
-      dataField: "nb_calls",
-      text: "Nombre d'appels",
-      sort: true,
-      formatter: (cell, row, rowIndex, extraData) => <div>{row.nb_calls}</div>,
-    },
-    {
-      dataField: "nb_patients",
-      text: "Nombre de patients",
-      sort: true,
-      formatter: (cell, row, rowIndex, extraData) => (
-        <div>{row.nb_patients}</div>
-      ),
-    },
-    {
-      dataField: "Détails",
-      text: "Détails",
-      formatter: (cell, row, rowIndex, extraData) => (
-        <div>
-          <a href={"/profil-contact/" + row.id}>Détails</a>
-        </div>
-      ),
-    },
-  ];
 
   useEffect(() => {
     // formData.append("query", queryValue);
@@ -100,10 +52,8 @@ function ContactOrganisations() {
       },
     })
       .then(function (response) {
-        //handle success
         setListContacts(response);
 
-        // setTimeout(() => {
         let table0 = new DataTable("#table-contact", {
           language: {
             sProcessing: "En cours...",
@@ -135,7 +85,6 @@ function ContactOrganisations() {
             },
           },
         });
-        // }, 2000);
       })
       .catch(function (response) {});
 
@@ -152,19 +101,10 @@ function ContactOrganisations() {
         setListOrganisation(response);
       })
       .catch(function (response) {});
-  }, []);
-
-  const readMore = () => {
-    setLengthList(lengthList + 10);
-  };
-
-  function onChangeUpdateContact(e) {
-    // props.onChangeUpdateContact(e);
 
     axios({
-      method: "post",
-      url: "/api/getContacts",
-      data: formData,
+      method: "get",
+      url: "/api/getOrganisationForSelect",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${auth.auth.accessToken}`,
@@ -172,9 +112,33 @@ function ContactOrganisations() {
     })
       .then(function (response) {
         //handle success
-        setListContacts(response);
+        setListOrganisationSelect(response);
       })
       .catch(function (response) {});
+  }, []);
+
+  const readMore = () => {
+    setLengthList(lengthList + 10);
+  };
+
+  function onChangeContacts(e) {
+    // props.onChangeUpdateContact(e);
+
+    //handle success
+    location.reload();
+    // axios({
+    //   method: "post",
+    //   url: "/api/getContacts",
+    //   data: formData,
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //     Authorization: `Bearer ${auth.auth.accessToken}`,
+    //   },
+    // })
+    //   .then(function (response) {
+    //     setListContacts(response);
+    //   })
+    //   .catch(function (response) {});
 
     // setListContacts(e);
   }
@@ -185,8 +149,8 @@ function ContactOrganisations() {
 
       <div className="container container-patients mx-auto ">
         <ModalAddContact
-          listOrganisation={listOrganisation}
-          onChangeContacts={onChangeUpdateContact}
+          listOrganisation={listOrganisationSelect}
+          onChange={onChangeContacts}
         ></ModalAddContact>
 
         <h1 className="mb-3">Liste de contacts</h1>

@@ -8,6 +8,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import Form from "react-bootstrap/Form";
 import InputTypeList from "../../Input-Type-List";
+import InputOrganisationList from "./Input-Organisation-List";
 
 function ModalAddContact(props) {
   const [show, setShow] = useState(false);
@@ -40,23 +41,16 @@ function ModalAddContact(props) {
 
   const handleSave = (e) => {
     let formData = new FormData();
-    // value-sugg
-    // if (type) {
-    //   formData.append("type", typeValue);
-    // } else {
-    //   setValidationType(true);
-    // }
-
-    // if (name) {
-    //   formData.append("name", name);
-    // } else {
-    //   setValidationName(true);
-    // }
 
     formData.append("type", typeValue);
     formData.append("name", name);
     formData.append("firstname", lastName);
-    formData.append("organisation", typeValueOrganisation);
+    formData.append(
+      "organisation",
+      typeValueOrganisation && typeValueOrganisation.length > 0
+        ? JSON.stringify(typeValueOrganisation[0].id)
+        : null
+    );
     formData.append("url", url);
     formData.append("description", description);
     // formData.append("description", description);
@@ -78,12 +72,16 @@ function ModalAddContact(props) {
         },
       })
         .then(function (response) {
-          props.onChangeContacts(response);
+          props.onChange(true);
           setShow(false);
         })
         .catch(function (response) {});
     }
   };
+
+  function onChangeOrganisation(e) {
+    setTypeValueOrganisation(e);
+  }
 
   return (
     <>
@@ -97,7 +95,9 @@ function ModalAddContact(props) {
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Ajouter un contact</Modal.Title>
+          <Modal.Title>
+            <h6>Ajouter un contact</h6>
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form.Label htmlFor="inputValue">Type</Form.Label>
@@ -108,8 +108,8 @@ function ModalAddContact(props) {
             value={typeValue}
           >
             <option value={0}>Choisissez un type</option>
-            <option value={1}>Morale</option>
             <option value={2}>Physique</option>
+            <option value={1}>Morale</option>
           </select>
 
           <Form.Label htmlFor="inputValue">Nom</Form.Label>
@@ -121,32 +121,26 @@ function ModalAddContact(props) {
             className="uk-input"
           />
 
-          <Form.Label htmlFor="inputValue">Prénom</Form.Label>
-          <input
-            type="text"
-            id="inputValueSpécifique"
-            onChange={(e) => setLastName(e.target.value)}
-            aria-describedby="valueSpécifique"
-            className="uk-input"
-          />
-          <Form.Label htmlFor="inputValue">Organisation</Form.Label>
-          <select
-            size="lg"
-            value={typeValueOrganisation}
-            className="uk-select"
-            onChange={(e) => setTypeValueOrganisation(e.target.value)}
-          >
-            {/* <option>Choisissez le tags</option> */}
-            {props?.listOrganisation?.data?.map((el, id) => (
-              <>
-                {el?.typeLabel === "Morale" && (
-                  <option value={el?.id}>
-                    {el?.lastname} {el?.firstname}
-                  </option>
-                )}
-              </>
-            ))}
-          </select>
+          {typeValue && typeValue === "2" && (
+            <>
+              <Form.Label htmlFor="inputValue">Prénom</Form.Label>
+              <input
+                type="text"
+                id="inputValueSpécifique"
+                onChange={(e) => setLastName(e.target.value)}
+                aria-describedby="valueSpécifique"
+                className="uk-input"
+              />
+
+              <InputOrganisationList
+                onChange={onChangeOrganisation}
+                data={props?.listOrganisation?.data}
+                id="single"
+                multiple={false}
+                label="Lieux"
+              />
+            </>
+          )}
 
           <Form.Label htmlFor="inputValue">URL</Form.Label>
           <input
