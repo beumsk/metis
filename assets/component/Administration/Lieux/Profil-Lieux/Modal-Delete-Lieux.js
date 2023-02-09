@@ -14,7 +14,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import Form from "react-bootstrap/Form";
 
-function ModalDeleteInfos(props) {
+function ModalDeleteLieux(props) {
   const [show, setShow] = useState(false);
   const [auth, setAuth] = useState(useAuth());
   let id = useParams().idLieux;
@@ -57,26 +57,48 @@ function ModalDeleteInfos(props) {
     setEndDate(new Date(props?.infosPatient?.end?.timestamp * 1000).toJSON());
   }, []);
 
+  console.log(props.contacts);
+
   const handleSave = (e) => {
     let formData = new FormData();
 
-    formData.append("id", props?.infosPatient?.id);
+    formData.append("id", props?.contacts?.id);
     var formGetInfos = new FormData();
     formGetInfos.append("id", id.toString());
     axios({
       method: "post",
-      url: "/api/deleteItem",
+      url: "/api/deleteContact",
       data: formData,
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${auth.auth.accessToken}`,
       },
     }).then(function (response) {
-      props.onChange(true);
-      setShow(false);
+      // location.replace(window.location.origin + "/" + idPatient);
+      // document.querySelectorAll(".btn-close")[0].click();
+      if (response) {
+        var formData = new FormData();
+        formData.append("id", response.data.data.id);
+        if (response) {
+          axios({
+            method: "post",
+            url: "/api/getCallsAndOrganisationById",
+            data: formData,
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${auth.auth.accessToken}`,
+            },
+          }).then(function (response) {
+            if (response) {
+              setResponseDatas(response.data);
+              handleShow(false);
+              window.location.replace(window.origin + "/lieux");
+            }
+          });
+        }
+      }
     });
   };
-  //   new Date(1254088800 *1000)
 
   return (
     <>
@@ -89,9 +111,7 @@ function ModalDeleteInfos(props) {
           <Modal.Title>Effacer une information</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <>
-            <p>Êtes-vous sur ?</p>
-          </>
+          <p>Êtes-vous sur ?</p>
         </Modal.Body>
         <Modal.Footer>
           {isSentRepport && <FontAwesomeIcon icon={faCheck} />}
@@ -107,4 +127,4 @@ function ModalDeleteInfos(props) {
 
 // render(<Modal />);
 
-export default ModalDeleteInfos;
+export default ModalDeleteLieux;

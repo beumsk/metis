@@ -232,7 +232,7 @@ class PlacesController extends AbstractController
 
             //     ];
             // }, [...$contact->getSugge()]),
-            // "patients" => $contact->getOccupants()[0]->getId(),
+            "id" => $contact->getId(),
             "firstname" => $contact->getFirstName(),
             "lastname" => $contact->getLastName(),
             "description" => $contact->getDescription()

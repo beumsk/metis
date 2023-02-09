@@ -17,6 +17,7 @@ import ModalEditContact from "./Modal-Edit-Contact";
 import ModalAddContact from "./Modal-Add-Contact";
 import ModalDeleteInfos from "./Modal-Delete-Contact";
 import ModalEditProfileContact from "./Modal-Edit-Profile-Contact";
+import ModalDeleteContact from "./Modal-Delete-Contact";
 const ProfilContact = () => {
   const [auth, setAuth] = useState(useAuth());
   let id = useParams().idContact;
@@ -124,6 +125,9 @@ const ProfilContact = () => {
                   onChange={onChangeContactProfile}
                   contactInfo={contactInformation}
                 ></ModalEditProfileContact>
+                <ModalDeleteContact
+                  contacts={contactInformation}
+                ></ModalDeleteContact>
               </div>
             </div>
           </div>

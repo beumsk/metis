@@ -389,6 +389,24 @@ class ContactsController extends AbstractController
         ]);
     }
 
+    #[Route('/api/deleteContact', name: 'app_deleteContact')]
+    public function deleteContact(ManagerRegistry $doctrine, SerializerInterface $serializer)
+    {
+        $entityManager = $doctrine->getManager();
+        $request = Request::createFromGlobals();
+
+
+        $id = $request->request->get('id');
+        $contInfo = $doctrine->getRepository(Contacts::class)->find($id);
+
+        $contInfo->setDeletedAt(new \DateTime('now'));
+        $entityManager->flush();
+        return new JsonResponse([
+            'response' => "Delete !",
+            'data' => ["id" => $contInfo->getId()],
+        ]);
+    }
+
     #[Route('/api/saveItem', name: 'app_saveItem')]
     public function saveItem(ManagerRegistry $doctrine, SerializerInterface $serializer)
     {

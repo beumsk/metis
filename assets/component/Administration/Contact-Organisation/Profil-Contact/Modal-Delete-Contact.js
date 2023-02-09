@@ -60,12 +60,12 @@ function ModalDeleteInfos(props) {
   const handleSave = (e) => {
     let formData = new FormData();
 
-    formData.append("id", props?.infosPatient?.id);
+    formData.append("id", props?.contacts?.id);
     var formGetInfos = new FormData();
     formGetInfos.append("id", id.toString());
     axios({
       method: "post",
-      url: "/api/deleteItem",
+      url: "/api/deleteContact",
       data: formData,
       headers: {
         "Content-Type": "application/json",
@@ -89,20 +89,14 @@ function ModalDeleteInfos(props) {
           }).then(function (response) {
             if (response) {
               setResponseDatas(response.data);
-              setIsSentRepport(true);
-              document.querySelectorAll(".btn-close")[0].click();
+              handleShow(false);
+              window.location.replace(window.origin + "/contactsorganisation");
             }
           });
         }
       }
     });
   };
-
-  if (responseDatas !== null) {
-    props.onChange({
-      response: responseDatas,
-    });
-  }
 
   return (
     <>

@@ -16,7 +16,7 @@ import {
 import { useParams } from "react-router-dom";
 import ModalEditLieux from "./Modal-Edit-Lieux";
 import ModalAddLieux from "./Modal-Add-Lieux";
-import ModalDeleteInfos from "./Modal-Delete-Lieux";
+import ModalDeleteLieux from "./Modal-Delete-Lieux";
 import ModalEditProfileContact from "./Modal-Edit-Profile-Lieux";
 const ProfilLieux = () => {
   const [auth, setAuth] = useState(useAuth());
@@ -128,6 +128,9 @@ const ProfilLieux = () => {
                   onChange={onChangePlaceProfile}
                   contactInfo={contactInformation}
                 ></ModalEditProfileContact>
+                <ModalDeleteLieux
+                  contacts={contactInformation}
+                ></ModalDeleteLieux>
               </div>
             </div>
           </div>
