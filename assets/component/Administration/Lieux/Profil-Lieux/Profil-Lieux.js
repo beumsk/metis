@@ -117,6 +117,11 @@ const ProfilLieux = () => {
                 {contactInformation?.firstname} {contactInformation?.lastname}
               </h5>
               <p>{contactInformation?.description}</p>
+              <p style={{ wordWrap: "break-word" }}>
+                <a href={"http://" + contactInformation?.url} target="_blank">
+                  {contactInformation?.url}
+                </a>
+              </p>
             </div>
 
             <div className="col-sm-4">

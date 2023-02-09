@@ -228,25 +228,6 @@ class ContactsController extends AbstractController
 
 
 
-        // $encoders = [new JsonEncoder()];
-        // $normalizers = [new DateTimeNormalizer(), new ObjectNormalizer()];
-        // $serializer = new Serializer($normalizers, $encoders);
-
-        // $calls = [];
-
-
-
-        // $jsonObject = $serializer->serialize($contacts, 'json', [
-        //     'circular_reference_handler' => function ($object) {
-        //         return $object->getId();
-        //     },
-        //     JsonEncoder::FORMAT,
-        //     [AbstractNormalizer::IGNORED_ATTRIBUTES => ["url", "description", "type", "pathString", "path", "calls", "informations"]]
-        // ]);
-
-        // $response =  new Response($jsonObject, 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
-
-        // $response->setSharedMaxAge(3600);
 
 
 
@@ -306,33 +287,7 @@ class ContactsController extends AbstractController
 
         $contacts = $contactRepository->findAllContacts($tags);
 
-        // foreach ($contacts as $contact) {
-        //     $contactId = $contact['id'];
-        //     $calls[] = [
-        //         // "phone" => (count($contactRepository->findContactInfos($contactId, Contacts::PHONE_PATH))) ? $contactRepository->findContactInfos($contactId, Contacts::PHONE_PATH)[0]->getValue() : null,
 
-        //         // "phone" => ($contactRepository->findContactInfos($contactId, Contacts::PHONE_PATH)) ?
-        //         //     array_map(function ($a) {
-        //         //         return $a->getValue();
-        //         //     },  [...$contactRepository->findContactInfos($contactId, Contacts::PHONE_PATH)])
-        //         //     : "",
-
-
-        //         // "tags" => (count($contactRepository->findTags($contactId))) ?
-        //         //     array_map(function ($a) {
-        //         //         return $a->getValue();
-        //         //     },  [...$contactRepository->findTags($contactId)])
-        //         //     : "",
-        //         "typeLabel" => $contact["typeLabel"],
-        //         "organisation" => $contact["organisation"],
-        //         "firstname" => $contact["firstname"],
-        //         "lastname" => $contact["lastname"],
-        //         // "id" => $contact["id"],
-        //         // "orga_id" => $contact["orga_id"],
-        //         "nb_calls" => $contact["nb_calls"],
-        //         "nb_patients" => $contact["nb_patients"]
-        //     ];
-        // }
 
 
         $response =  new JsonResponse($contacts, 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
@@ -555,9 +510,6 @@ class ContactsController extends AbstractController
 
         $suggestions = $doctrine->getRepository(Suggestions::class)->findBy(array('id' => $arritbk));
 
-        $encoders = [new JsonEncoder()];
-        $normalizers = [new DateTimeNormalizer(), new ObjectNormalizer()];
-        $serializer = new Serializer($normalizers, $encoders);
 
         $nameOfBlocks = [];
 
@@ -607,27 +559,23 @@ class ContactsController extends AbstractController
 
 
 
-        $jsonObject = $serializer->serialize(
-            [
-                "id" => $contact->getId(),
-                "informations" => $blocksDecode,
-                "patients" => $patients,
-                "firstname" => $contact->getFirstName(),
-                "lastname" => $contact->getLastName(),
-                "description" => $contact->getDescription(),
-                "url" => $contact->getURL(),
-                "type" => $contact->getType()
-            ],
-            'json',
-            [
-                'circular_reference_handler' => function ($object) {
-                    return $object->getId();
-                }
-            ],
-            [AbstractNormalizer::IGNORED_ATTRIBUTES => ['parentSugg', "tags", "requireCustomValue", "isLocked", "attributes", "pathString", "path", 'defaultComment', "isDeleted"]]
-
-        );
-        return new Response($jsonObject, 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
+        $arr = [
+            "id" => $contact->getId(),
+            "informations" => $blocksDecode,
+            "patients" => $patients,
+            "firstname" => $contact->getFirstName(),
+            "lastname" => $contact->getLastName(),
+            "description" => $contact->getDescription(),
+            "url" => $contact->getURL(),
+            "type" => $contact->getType(),
+            "organisation" => ($contact->getOrga() && $contact->getOrga()->getId()) ?
+                [
+                    "id" => $contact->getOrga()->getId(),
+                    "label" => $contact->getOrga()->getFirstName() . (($contact->getOrga()->getFirstName()) ? " " : "") . $contact->getOrga()->getLastName() . (($contact->getOrga()->getDescription()) ? " " : "") . $contact->getOrga()->getDescription(),
+                ]
+                : null,
+        ];
+        return new Response(json_encode($arr), 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
     }
     #[Route('/api/getCallsAndOrganisationRunning', name: 'app_getCallsAndOrganisationRunning')]
     public function getCallsAndOrganisationRunning(ManagerRegistry $doctrine, CacheInterface $cache)
@@ -954,6 +902,7 @@ class ContactsController extends AbstractController
         $name = $request->request->get('name');
         $firstName = $request->request->get('firstName');
         $type = $request->request->get('type');
+        $place = $request->request->get('place');
         $description = $request->request->get('description');
         $idCont = $request->request->get('idCont');
 
@@ -981,6 +930,11 @@ class ContactsController extends AbstractController
         if ($description !== "null") {
             $contact->setDescription($description);
         }
+
+        // if ($place !== "null") {
+        $orga = ($place !== "null") ? $doctrine->getRepository(Contacts::class)->find($place) : null;
+        $contact->setOrga($orga);
+        // }
 
 
 

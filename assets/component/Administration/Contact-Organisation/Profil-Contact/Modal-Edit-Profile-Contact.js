@@ -14,6 +14,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import Form from "react-bootstrap/Form";
 import InputTypeList from "../../../Input-Type-List";
+import InputOrganisationList from "../Input-Organisation-List";
 function ModalEditProfileContact(props) {
   const [show, setShow] = useState(false);
   const [auth, setAuth] = useState(useAuth());
@@ -25,6 +26,7 @@ function ModalEditProfileContact(props) {
   const [responseDatas, setResponseDatas] = useState(null);
 
   const [type, setType] = useState(null);
+
   const [description, setDescription] = useState(null);
   const [url, setURL] = useState(null);
   const [name, setName] = useState(null);
@@ -32,10 +34,57 @@ function ModalEditProfileContact(props) {
 
   const [elementsOpt, setElementsOpt] = useState(null);
   const [idPatient, setIdPatient] = useState(id);
-
+  const [place, setPlaces] = useState(
+    props?.contactInfo &&
+      props?.contactInfo?.organisation &&
+      props?.contactInfo?.organisation?.id
+      ? props?.contactInfo?.organisation?.id
+      : null
+  );
+  const [listOrganisationSelect, setListOrganisationSelect] = useState(null);
+  const [contactInformation, setContactInformation] = useState(null);
   const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const handleShow = () => {
+    setShow(true);
+    setIsSentRepport(false);
+  };
+  var formData = new FormData();
+  formData.append("id", id);
+  useEffect(() => {
+    axios({
+      method: "post",
+      url: "/api/getCallsAndOrganisationById",
+      data: formData,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    })
+      .then(function (response) {
+        setContactInformation(response.data);
+        if (response.data.type === 2) {
+          setType("2");
+        }
 
+        if (response.data.type === 1) {
+          setType("1");
+        }
+      })
+      .catch(function (response) {});
+    axios({
+      method: "get",
+      url: "/api/getOrganisationForSelect",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    })
+      .then(function (response) {
+        //handle success
+        setListOrganisationSelect(response);
+      })
+      .catch(function (response) {});
+  }, []);
   const handleSave = (e) => {
     let formGetInfos = new FormData();
     // value-sugg
@@ -45,6 +94,10 @@ function ModalEditProfileContact(props) {
     formGetInfos.append("name", name);
     formGetInfos.append("type", type);
     formGetInfos.append("description", description);
+    formGetInfos.append(
+      "place",
+      place && place.length > 0 ? place[0].id : null
+    );
     formGetInfos.append("idCont", id.toString());
 
     axios({
@@ -61,6 +114,10 @@ function ModalEditProfileContact(props) {
       setShow(false);
     });
   };
+
+  function onChangePlaces(e) {
+    setPlaces(e);
+  }
 
   return (
     <>
@@ -79,31 +136,16 @@ function ModalEditProfileContact(props) {
             <select
               onChange={(e) => setType(e.target.value)}
               className="uk-select"
-              value={
+              defaultValue={
                 props.contactInfo && props.contactInfo.type !== null
                   ? props.contactInfo.type
                   : ""
               }
             >
-              <option value={0}>Choisissez un type</option>
+              {/* <option value={0}>Choisissez un type</option> */}
               <option value={1}>Morale</option>
               <option value={2}>Physique</option>
             </select>
-
-            <Form.Label htmlFor="inputValue">Prénom</Form.Label>
-
-            <input
-              type="text"
-              className="uk-input"
-              id="inputValueSpécifique"
-              onChange={(e) => setFirstName(e.target.value)}
-              aria-describedby="valueSpécifique"
-              defaultValue={
-                props.contactInfo && props.contactInfo.firstname !== null
-                  ? props.contactInfo.firstname
-                  : ""
-              }
-            />
 
             <Form.Label htmlFor="inputValue">Nom</Form.Label>
 
@@ -119,6 +161,45 @@ function ModalEditProfileContact(props) {
                   : ""
               }
             />
+
+            {props?.contactInfo?.type &&
+              props?.contactInfo?.type === 2 &&
+              type === "2" && (
+                <>
+                  <Form.Label htmlFor="inputValue">Prénom</Form.Label>
+
+                  <input
+                    type="text"
+                    className="uk-input"
+                    id="inputValueSpécifique"
+                    onChange={(e) => setFirstName(e.target.value)}
+                    aria-describedby="valueSpécifique"
+                    defaultValue={
+                      props.contactInfo && props.contactInfo.firstname !== null
+                        ? props.contactInfo.firstname
+                        : ""
+                    }
+                  />
+
+                  <InputOrganisationList
+                    onChange={onChangePlaces}
+                    data={listOrganisationSelect?.data}
+                    id="single"
+                    defaultValue={
+                      props.contactInfo.organisation
+                        ? [
+                            {
+                              id: props.contactInfo.organisation.id,
+                              label: props.contactInfo.organisation.label,
+                            },
+                          ]
+                        : null
+                    }
+                    multiple={false}
+                    label="Organisation"
+                  />
+                </>
+              )}
 
             <Form.Label htmlFor="inputValue">URL</Form.Label>
 

@@ -14,7 +14,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import Form from "react-bootstrap/Form";
 import InputTypeList from "../../../Input-Type-List";
-function ModalEditProfileContact(props) {
+function ModalEditProfileLieux(props) {
   const [show, setShow] = useState(false);
   const [auth, setAuth] = useState(useAuth());
   let id = useParams().idLieux;
@@ -43,7 +43,7 @@ function ModalEditProfileContact(props) {
     formGetInfos.append("firstName", firstName);
     formGetInfos.append("url", url);
     formGetInfos.append("name", name);
-    formGetInfos.append("type", type);
+    formGetInfos.append("type", 3);
     formGetInfos.append("description", description);
     formGetInfos.append("idCont", id.toString());
 
@@ -81,11 +81,11 @@ function ModalEditProfileContact(props) {
               type="text"
               className="uk-input"
               id="inputValueSpécifique"
-              onChange={(e) => setFirstName(e.target.value)}
+              onChange={(e) => setName(e.target.value)}
               aria-describedby="valueSpécifique"
               defaultValue={
-                props.contactInfo && props.contactInfo.firstname !== null
-                  ? props.contactInfo.firstname
+                props.contactInfo && props.contactInfo.lastname !== null
+                  ? props.contactInfo.lastname
                   : ""
               }
             />
@@ -95,12 +95,12 @@ function ModalEditProfileContact(props) {
             <input
               type="text"
               className="uk-input"
-              id="inputValueSpécifique"
-              onChange={(e) => setFirstName(e.target.value)}
+              id="url"
+              onChange={(e) => setURL(e.target.value)}
               aria-describedby="valueSpécifique"
               defaultValue={
-                props.contactInfo && props.contactInfo.firstname !== null
-                  ? props.contactInfo.firstname
+                props.contactInfo && props.contactInfo.url !== null
+                  ? props.contactInfo.url
                   : ""
               }
             />
@@ -134,4 +134,4 @@ function ModalEditProfileContact(props) {
 
 // render(<Modal />);
 
-export default ModalEditProfileContact;
+export default ModalEditProfileLieux;

@@ -57,8 +57,6 @@ function ModalDeleteLieux(props) {
     setEndDate(new Date(props?.infosPatient?.end?.timestamp * 1000).toJSON());
   }, []);
 
-  console.log(props.contacts);
-
   const handleSave = (e) => {
     let formData = new FormData();
 

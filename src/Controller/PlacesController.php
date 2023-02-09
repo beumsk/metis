@@ -220,22 +220,11 @@ class PlacesController extends AbstractController
                 ];
             }, [...$contact->getOccupants()]),
             "informations" => $blocksDecode,
-            // "sugge" => array_map(function ($a) {
-            //     // dd($a);
-            //     return [
-
-            //         "id" => ($a->getValue() !== null) ? $a->getValue() : null,
-            //         // "value" => $a->getValue(),
-            //         // "firstName" => ($a->getPati() && $a->getPati() !== null) ? $a->getPati()->getFirstName() : null,
-            //         // "lastName" => ($a->getPati() && $a->getPati() !== null) ? $a->getPati()->getLastName() : null,
-
-
-            //     ];
-            // }, [...$contact->getSugge()]),
             "id" => $contact->getId(),
             "firstname" => $contact->getFirstName(),
             "lastname" => $contact->getLastName(),
-            "description" => $contact->getDescription()
+            "description" => $contact->getDescription(),
+            "url" => $contact->getUrl(),
         ]), 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
     }
 

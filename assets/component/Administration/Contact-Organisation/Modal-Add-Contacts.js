@@ -137,7 +137,7 @@ function ModalAddContact(props) {
                 data={props?.listOrganisation?.data}
                 id="single"
                 multiple={false}
-                label="Lieux"
+                label="Organisation"
               />
             </>
           )}

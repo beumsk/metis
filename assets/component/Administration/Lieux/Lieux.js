@@ -199,17 +199,6 @@ function Lieux() {
                       aria-sort="ascending"
                       aria-label="Name: activate to sort column descending"
                     >
-                      Type
-                    </th>
-                    <th
-                      className="sorting sorting_asc"
-                      tabindex="0"
-                      aria-controls="example"
-                      rowSpan="1"
-                      colSpan="1"
-                      aria-sort="ascending"
-                      aria-label="Name: activate to sort column descending"
-                    >
                       Nom
                     </th>
                     <th
@@ -221,7 +210,7 @@ function Lieux() {
                       aria-sort="ascending"
                       aria-label="Name: activate to sort column descending"
                     >
-                      Organisation
+                      Description
                     </th>
                     <th
                       className="sorting sorting_asc"
@@ -232,7 +221,18 @@ function Lieux() {
                       aria-sort="ascending"
                       aria-label="Name: activate to sort column descending"
                     >
-                      Téléphone
+                      # Occupants
+                    </th>
+                    <th
+                      className="sorting sorting_asc"
+                      tabindex="0"
+                      aria-controls="example"
+                      rowSpan="1"
+                      colSpan="1"
+                      aria-sort="ascending"
+                      aria-label="Name: activate to sort column descending"
+                    >
+                      Actions
                     </th>
                   </tr>
                 </thead>
