@@ -11,7 +11,7 @@ import {
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import Form from "react-bootstrap/Form";
-
+import InputPatientsList from "../Suivi/Input-Patients-List";
 function ModalLierPatient(props) {
   const [show, setShow] = useState(false);
   const [auth, setAuth] = useState(useAuth());
@@ -92,9 +92,9 @@ function ModalLierPatient(props) {
     });
   }
 
-  // if (responseDatas !== null) {
-  //   props.onChangeUpdatePatient(responseDatas);
-  // }
+  function onChangePatients(e) {
+    setPatientItemList(e);
+  }
 
   return (
     <>
@@ -108,7 +108,7 @@ function ModalLierPatient(props) {
         </Modal.Header>
         <Modal.Body>
           <>
-            <Form.Label htmlFor="inputValue">Valeur</Form.Label>
+            {/* <Form.Label htmlFor="inputValue">Valeur</Form.Label>
             <Form.Select
               className="uk-select"
               size="lg"
@@ -125,7 +125,27 @@ function ModalLierPatient(props) {
                   )}
                 </>
               ))}
-            </Form.Select>
+            </Form.Select> */}
+            <InputPatientsList
+              onChange={onChangePatients}
+              data={props?.patients?.data}
+              defaultValue={
+                props?.infos?.orpa
+                  ? [
+                      {
+                        id: props?.infos?.orpa?.id,
+                        label:
+                          props?.infos?.orpa?.firstname +
+                          " " +
+                          props?.infos?.orpa?.lastname,
+                      },
+                    ]
+                  : null
+              }
+              multiple={false}
+              id="single"
+              label="Patients"
+            />
             <Form.Label htmlFor="inputValue">Type</Form.Label>
             <Form.Select
               size="lg"

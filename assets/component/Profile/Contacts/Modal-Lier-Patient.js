@@ -5,6 +5,7 @@ import useAuth from "../../../hooks/useAuth";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import Form from "react-bootstrap/Form";
+import InputPatientsList from "../Suivi/Input-Patients-List";
 
 function ModalEditPatient(props) {
   const [show, setShow] = useState(false);
@@ -49,7 +50,12 @@ function ModalEditPatient(props) {
 
     formData.append("description", description);
     formData.append("commentaire", commentaire);
-    formData.append("patientItemList", patientItemList);
+    formData.append(
+      "patientItemList",
+      patientItemList && patientItemList.length > 0
+        ? JSON.stringify(patientItemList[0].id)
+        : null
+    );
     formData.append("start", start);
     formData.append("end", end);
     formData.append("typeItemList", typeItemList);
@@ -88,6 +94,10 @@ function ModalEditPatient(props) {
     });
   };
 
+  function onChangePatients(e) {
+    setPatientItemList(e);
+  }
+
   return (
     <>
       <Button onClick={handleShow} className="btn-metis">
@@ -100,7 +110,14 @@ function ModalEditPatient(props) {
         </Modal.Header>
         <Modal.Body>
           <>
-            <Form.Label htmlFor="inputValue">Valeur</Form.Label>
+            <InputPatientsList
+              onChange={onChangePatients}
+              data={props?.patients?.data}
+              multiple={false}
+              id="single"
+              label="Patients"
+            />
+            {/* <Form.Label htmlFor="inputValue">Valeur</Form.Label>
             <Form.Select
               size="lg"
               className="uk-select"
@@ -116,7 +133,7 @@ function ModalEditPatient(props) {
                   ))}
                 </>
               )}
-            </Form.Select>
+            </Form.Select> */}
             <Form.Label htmlFor="inputValue">Type</Form.Label>
             <Form.Select
               size="lg"

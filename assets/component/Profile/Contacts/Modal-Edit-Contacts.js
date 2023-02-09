@@ -111,7 +111,7 @@ function ModalEditContacts(props) {
   // if (responseDatas !== null) {
   //   props.onChangeUpdateContact(responseDatas);
   // }
-
+  console.log(props?.infos?.cont);
   return (
     <>
       <Button onClick={handleShow} className="btn-metis">
@@ -150,7 +150,7 @@ function ModalEditContacts(props) {
                         id: props?.infos?.cont[0]?.id,
                         label:
                           props?.infos?.cont[0]?.lastname +
-                          " " +
+                          "|" +
                           props?.infos?.cont[0]?.description,
                       },
                     ]

@@ -328,19 +328,17 @@ class PatientsController extends AbstractController
         $page = $request->request->get('page');
         $antenna = $request->request->get('antenna');
         $patients = $doctrine->getRepository(Patients::class)->listPatientsByAntenna($antenna);
-        $encoder = new JsonEncoder();
-        $defaultContext = [
-            AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context) {
-                return $object->getId();
-            },
-        ];
 
-        $normalizer = new ObjectNormalizer(null, null, null, null, null, null, $defaultContext);
+        $arrListPatients = [];
 
-        $serializer = new Serializer([new DateTimeNormalizer(), $normalizer], [$encoder]);
-        $data = $serializer->serialize($patients, 'json', [AbstractNormalizer::IGNORED_ATTRIBUTES => ["fore", "nicknames", "birthLocation", "isAlive", "birthdate", "status", "team", "antenna", "contacts", "pati", "sugg", "orga", "calls", "user", "contact", "patient", "fogo", "cont", "plac", "user", "pati", "content", "hash", "firstContactDate", "deletedAt", "followUpType", "noCare", "noActivities", "noIndicators", "followupReportsCare", "followupReportsGoals", "followupReportsActivities", "followupReportsIndicators", "isHightlight", "duration", "description", "story", "unknownYear"]]);
-        // dd($patients[0]);
-        return $this->json(json_decode($data));
+        foreach ($patients as $value) {
+            $arrListPatients[] = [
+                "id" => $value->getId(),
+                "label" => $value->getFirstName() . " " . $value->getLastName()
+            ];
+        }
+
+        return new Response(json_encode($arrListPatients), 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
     }
 
 

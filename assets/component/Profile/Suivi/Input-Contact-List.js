@@ -21,7 +21,7 @@ export default function InputContactList({
   const [idInput, setidInput] = useState(nextId());
   const [selectedData, setSelectedData] = useState([]);
   //
-
+  console.log(defaultValueOutput);
   useEffect(() => {
     if (defaultValueOutput !== null && multiple) {
       setInput("");

@@ -15,6 +15,7 @@ import Nav from "react-bootstrap/Nav";
 import Editor from "./Editor-Reports";
 import InputPlaceList from "../component/Profile/Suivi/Input-Place-List";
 import InputContactList from "../component/Profile/Suivi/Input-Contact-List";
+import InputPatientsList from "../component/Profile/Suivi/Input-Patients-List";
 import InputGoalsList from "../component/Profile/Suivi/Input-Goals-List";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
@@ -32,13 +33,10 @@ const Form_MeetRapports = () => {
   const [patiId, setPatiId] = useState(null);
   const [isSent, setIsSent] = useState(false);
   const [places, setPlaces] = useState(null);
+  const [errorPatients, setErrorPatients] = useState(false);
   var formActivitiesDatas = new FormData();
   formActivitiesDatas.append("id", 106);
-  const [formSoins, setFormSoins] = useState([{ id: 0 }]);
-  const [formActivities, setFormActivities] = useState([{ id: 0 }]);
-  const [formIndicateurs, setFormIndicateurs] = useState([{ id: 0 }]);
-  const [selectedTypeCVC, setSelectedTypeCVC] = useState(null);
-  //   formData.append("pathString", props.link);
+
   const [options, setOptions] = useState([
     "HESTIA - Risque perte logement",
     "CVC",
@@ -73,7 +71,7 @@ const Form_MeetRapports = () => {
   useEffect(() => {
     axios({
       method: "post",
-      url: "/api/getAllPatients",
+      url: "/api/getAllPatientsSelect",
       data: formData,
       headers: {
         "Content-Type": "application/json",
@@ -100,7 +98,7 @@ const Form_MeetRapports = () => {
       .catch(function (response) {});
     axios({
       method: "post",
-      url: "/api/getPlaces",
+      url: "/api/getPlacesSelect",
       data: formData,
       headers: {
         "Content-Type": "application/json",
@@ -188,7 +186,12 @@ const Form_MeetRapports = () => {
     formData.append("changeDate", changeDate);
     formData.append("changeGoals", changeGoals);
     formData.append("contId", JSON.stringify(changeContacts));
-    formData.append("changePlaces", changePlaces);
+    formData.append(
+      "changePlaces",
+      changePlaces && changePlaces.length > 0
+        ? JSON.stringify(changePlaces[0].id)
+        : null
+    );
     formData.append("changeEditor", changeEditor);
     formData.append("goalsInput", goalsInput);
     formData.append("meetType", changeTypeMeet);
@@ -196,7 +199,10 @@ const Form_MeetRapports = () => {
     formData.append("formActivities", null);
     formData.append("formIndicateurs", null);
     formData.append("userId", userId);
-    formData.append("patiId", idPatient);
+    formData.append(
+      "patiId",
+      idPatient && idPatient.length > 0 ? JSON.stringify(idPatient[0].id) : null
+    );
 
     axios({
       method: "post",
@@ -218,29 +224,21 @@ const Form_MeetRapports = () => {
     navigate("/connect");
   };
 
+  function onChangePatients(e) {
+    setIdPatient(e);
+  }
+
   return (
     <>
       {/* <h5 style={{ color: "white" }}>Rapport de rencontre</h5> */}
       <Form className="formMeet-home d-flex flex-column uk-form">
-        <Form.Label htmlFor="inputValue" className="uk-form-label">
-          Patient
-        </Form.Label>
-        <Form.Select
-          size="lg"
-          className="uk-select"
-          onChange={(e) => setIdPatient(e.target.value)}
-        >
-          {patientsLists?.data?.map((el, id) => (
-            <>
-              {el?.firstname && el?.lastname && (
-                <option value={el.id}>
-                  {el?.firstname} {el?.lastname}
-                </option>
-              )}
-            </>
-          ))}
-        </Form.Select>
-
+        <InputPatientsList
+          onChange={onChangePatients}
+          data={patientsLists?.data}
+          multiple={false}
+          id="single"
+          label="Patients"
+        />
         <Form.Label
           htmlFor="inputValue"
           className="uk-form-label"
@@ -298,14 +296,16 @@ const Form_MeetRapports = () => {
 
         <InputPlaceList
           onChange={onChangePlaces}
-          data={places}
+          data={places?.data}
           id="single"
-          placeholder="Lieux"
+          label="Lieux"
         />
 
         <div className="my-3">
           <Editor onChange={editorChange} content={editorChange}></Editor>
         </div>
+        {/* Ask first what is must be do the repport */}
+        {/* {errorPatients && <p>Veuillez séléctionner un patient</p>} */}
 
         <a className={"send-btn"} onClick={sentRapport}>
           Envoyer

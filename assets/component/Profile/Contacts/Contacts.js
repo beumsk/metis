@@ -172,7 +172,7 @@ const Contacts = () => {
 
     axios({
       method: "post",
-      url: "/api/getAllPatients",
+      url: "/api/getAllPatientsSelect",
       data: formDataPati,
       headers: {
         "Content-Type": "application/json",
@@ -248,7 +248,7 @@ const Contacts = () => {
           listPatients={patients}
           onChangeUpdatePatient={onChangeUpdatePatient}
           type={type}
-          contacts={patients}
+          patients={patients}
         ></ModalLierPatient>
       </div>
 
@@ -347,7 +347,7 @@ const Contacts = () => {
                           to={"/profil-contact/" + cont?.id}
                           target="_blank"
                         >
-                          {cont?.firstname} {cont?.lastname}
+                          {cont?.firstname} {cont?.lastname} {cont?.description}
                         </Link>
                       ))}
                     </td>
@@ -534,7 +534,7 @@ const Contacts = () => {
                           <ModalEditPatient
                             infos={e}
                             type={type}
-                            contacts={patients}
+                            patients={patients}
                             // onChangeContacts={(e) => contactLierResponse(e)}
                             onChangeUpdatePatient={onChangeUpdatePatient}
                             listContacts={patientsLists}
