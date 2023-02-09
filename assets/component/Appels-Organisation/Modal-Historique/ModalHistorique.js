@@ -56,7 +56,7 @@ function ModalHistorique(props) {
           </div>
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={handleClose}>Fermer</Button>
+          <Button onClick={handleClose}>Fermer sans enregistrer</Button>
         </Modal.Footer>
       </Modal>
     </>

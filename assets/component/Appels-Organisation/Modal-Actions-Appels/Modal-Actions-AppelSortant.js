@@ -263,7 +263,7 @@ function ModalActionsAppelsSortant(props) {
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={handleClose}>Fermer</Button>
+          <Button onClick={handleClose}>Fermer sans enregistrer</Button>
           <Button onClick={handleSaveKeep} className="btn-metis">
             Sauver et garder
           </Button>

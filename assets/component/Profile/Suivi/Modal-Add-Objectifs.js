@@ -191,7 +191,7 @@ function ModalAddObjectifs(props) {
           <p className="error-danger">Veuillez choisir le type d'objectif.</p>
         )}
         <Modal.Footer>
-          <Button onClick={handleClose}>Fermer</Button>
+          <Button onClick={handleClose}>Fermer sans enregistrer</Button>
           <Button onClick={onSent} className="btn-metis">
             Sauver
           </Button>

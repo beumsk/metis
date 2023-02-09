@@ -163,7 +163,7 @@ function ModalAddContact(props) {
         </Modal.Body>
         <Modal.Footer>
           {isSentRepport && <FontAwesomeIcon icon={faCheck} />}
-          <Button onClick={handleClose}>Fermer</Button>
+          <Button onClick={handleClose}>Fermer sans enregistrer</Button>
           <Button onClick={handleSave} type="submit" className="btn-metis">
             Sauver
           </Button>

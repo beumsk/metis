@@ -255,7 +255,7 @@ function ModalLierLieux(props) {
         {errorValue && <p className="error-danger">Lieux obligatoire</p>}
         {errorType && <p className="error-danger">Type de lieu obligatoire</p>}
         <Modal.Footer>
-          <Button onClick={handleClose}>Fermer</Button>
+          <Button onClick={handleClose}>Fermer sans enregistrer</Button>
           <Button onClick={handleSave} className="btn-metis">
             Sauver
           </Button>

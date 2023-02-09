@@ -45,7 +45,7 @@ function ModalCallCanceled(props) {
           Êtes-vous certain de vouloir annuler cette action ?
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={handleClose}>Fermer</Button>
+          <Button onClick={handleClose}>Fermer sans enregistrer</Button>
           <Button onClick={handleSave} className="btn-metis-red">
             Signaler
           </Button>

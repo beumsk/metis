@@ -190,7 +190,7 @@ function ModalLierLieux(props) {
         </Modal.Body>
         {errorValue && <p>Lieux obligatoire</p>}
         <Modal.Footer>
-          <Button onClick={handleClose}>Fermer</Button>
+          <Button onClick={handleClose}>Fermer sans enregistrer</Button>
           <Button onClick={handleSave} className="btn-metis">
             Sauver
           </Button>

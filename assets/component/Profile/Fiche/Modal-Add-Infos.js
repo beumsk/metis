@@ -290,7 +290,7 @@ function ModalEditInfos(props) {
         </Modal.Body>
         <Modal.Footer>
           {error && <p className="error-danger">{error}</p>}
-          <Button onClick={handleClose}>Fermer</Button>
+          <Button onClick={handleClose}>Fermer sans enregistrer</Button>
 
           {elementsOpt && elementsOpt?.length > 0 && (
             <Button onClick={handleSave} className="btn-metis">

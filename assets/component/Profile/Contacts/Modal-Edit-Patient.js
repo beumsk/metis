@@ -202,7 +202,7 @@ function ModalLierPatient(props) {
           </>
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={handleClose}>Fermer</Button>
+          <Button onClick={handleClose}>Fermer sans enregistrer</Button>
           <Button onClick={handleSave} className="btn-metis">
             Sauver
           </Button>
