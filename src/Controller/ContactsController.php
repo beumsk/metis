@@ -932,7 +932,7 @@ class ContactsController extends AbstractController
         }
 
         // if ($place !== "null") {
-        $orga = ($place !== "null") ? $doctrine->getRepository(Contacts::class)->find($place) : null;
+        $orga = ($place && $place !== "null") ? $doctrine->getRepository(Contacts::class)->find($place) : null;
         $contact->setOrga($orga);
         // }
 
