@@ -73,20 +73,19 @@ function ModalAddContact(props) {
           },
         }).then(function (response) {
           if (response) {
-            setResponseDatas(response.data);
-            setIsSentRepport(true);
-            document.querySelectorAll(".btn-close")[0].click();
+            props.onChange(true);
+            setShow(false);
           }
         });
       }
     });
   };
 
-  if (responseDatas !== null) {
-    props.onChange({
-      response: responseDatas,
-    });
-  }
+  // if (responseDatas !== null) {
+  //   props.onChange({
+  //     response: responseDatas,
+  //   });
+  // }
 
   return (
     <>

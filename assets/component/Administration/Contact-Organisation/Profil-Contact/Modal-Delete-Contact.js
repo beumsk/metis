@@ -97,7 +97,7 @@ function ModalDeleteInfos(props) {
       }
     });
   };
-  console.log(props);
+
   return (
     <>
       <button onClick={handleShow} className="ml-4">

@@ -165,11 +165,11 @@ const ProfilContact = () => {
                                 contInfo={contInfo}
                                 contact={contactInformation}
                                 idInfo={e.id}
-                                onChange={(e) => informationSaved(e)}
+                                onChange={informationSaved}
                               ></ModalEditContact>
                               <ModalDeleteInfos
                                 infosPatient={e}
-                                onChange={(e) => informationSaved(e)}
+                                onChange={informationSaved}
                               ></ModalDeleteInfos>
                             </div>
                           </div>
@@ -187,7 +187,7 @@ const ProfilContact = () => {
                         infosAppels={contInfo}
                         contact={contactInformation}
                         idInfo={contInfo.id}
-                        onChange={(e) => informationSaved(e)}
+                        onChange={informationSaved}
                       ></ModalAddContact>
                     </div>
                   </td>

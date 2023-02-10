@@ -95,7 +95,6 @@ function ModalDeleteInfos(props) {
           }).then(function (response) {
             if (response) {
               props.onChange(true);
-              setIsSentRepport(true);
               setShow(false);
             }
           });
@@ -103,16 +102,7 @@ function ModalDeleteInfos(props) {
       }
     });
   };
-  //   new Date(1254088800 *1000)
-  // handleInputChange;
 
-  //   if (responseDatas !== null) {
-  //     props.onChange({
-  //       response: responseDatas,
-  //     });
-
-  //     // document.querySelectorAll(".btn-close")[0].click();
-  //   }
   return (
     <>
       <button onClick={handleShow} className="ml-4">

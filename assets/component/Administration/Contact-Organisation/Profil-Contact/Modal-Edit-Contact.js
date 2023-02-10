@@ -66,33 +66,12 @@ function ModalEditContact(props) {
         Authorization: `Bearer ${auth.auth.accessToken}`,
       },
     }).then(function (response) {
-      var formData = new FormData();
-      formData.append("id", response.data.data.id);
       if (response) {
-        axios({
-          method: "post",
-          url: "/api/getCallsAndOrganisationById",
-          data: formData,
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${auth.auth.accessToken}`,
-          },
-        }).then(function (response) {
-          if (response) {
-            setResponseDatas(response.data);
-            setIsSentRepport(true);
-            document.querySelectorAll(".btn-close")[0].click();
-          }
-        });
+        props.onChange(true);
+        setShow(false);
       }
     });
   };
-
-  if (responseDatas !== null) {
-    props.onChange({
-      response: responseDatas,
-    });
-  }
 
   return (
     <>
