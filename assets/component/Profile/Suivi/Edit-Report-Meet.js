@@ -10,7 +10,7 @@ import InputPlaceList from "./Input-Place-List";
 import InputContactList from "./Input-Contact-List";
 import InputGoalsList from "./Input-Goals-List";
 import IndicateursActiviteesComponent from "./Indicateurs-Activitées-Component";
-
+import TimePicker from "react-time-picker";
 function EditReportMeet(props) {
   const [show, setShow] = useState(false);
   const [auth, setAuth] = useState(useAuth());
@@ -311,7 +311,18 @@ function EditReportMeet(props) {
       <Form.Label htmlFor="inputValueSpécifique" className="uk-form-label">
         Durée de la rencontre
       </Form.Label>
-      <select
+      <div>
+        <TimePicker
+          className="input-duration"
+          onChange={(e) => setDureeValue(e)}
+          clockIcon={false}
+          value={dureeValue}
+          disableClock={false}
+          locale={"fr-FR"}
+        />
+      </div>
+
+      {/* <select
         className="uk-select"
         value={dureeValue}
         onChange={(e) => setDureeValue(e.target.value)}
@@ -366,7 +377,7 @@ function EditReportMeet(props) {
         <option value="03:50">03:50</option>
         <option value="03:55">03:55</option>
         <option value="04:00">04:00</option>
-      </select>
+      </select> */}
 
       {/* goalsList */}
 

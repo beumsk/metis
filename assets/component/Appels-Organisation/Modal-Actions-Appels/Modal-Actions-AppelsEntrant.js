@@ -8,6 +8,7 @@ import EditorReport from "./Editor-Reports";
 import axios from "axios";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
+import TimePicker from "react-time-picker";
 function ModalActionsAppelsEntrant(props) {
   const [show, setShow] = useState(false);
   const [auth, setAuth] = useState(useAuth());
@@ -205,61 +206,13 @@ function ModalActionsAppelsEntrant(props) {
               </div>
 
               <Form.Label>Durée</Form.Label>
-              <Form.Select
-                className="uk-select"
-                onChange={(e) => setDureeValue(e.target.value)}
-              >
-                <option value="00:00">00:00</option>
-                <option value="00:01">00:01</option>
-                <option value="00:05">00:05</option>
-                <option value="00:10">00:10</option>
-                <option value="00:15">00:15</option>
-                <option value="00:20">00:20</option>
-                <option value="00:25">00:25</option>
-                <option value="00:30">00:30</option>
-                <option value="00:35">00:35</option>
-                <option value="00:40">00:40</option>
-                <option value="00:45">00:45</option>
-                <option value="00:50">00:50</option>
-                <option value="00:55">00:55</option>
-                <option value="01:00">01:00</option>
-                <option value="01:05">01:05</option>
-                <option value="01:10">01:10</option>
-                <option value="01:15">01:15</option>
-                <option value="01:20">01:20</option>
-                <option value="01:25">01:25</option>
-                <option value="01:30">01:30</option>
-                <option value="01:35">01:35</option>
-                <option value="01:40">01:40</option>
-                <option value="01:45">01:45</option>
-                <option value="01:50">01:50</option>
-                <option value="01:55">01:55</option>
-                <option value="02:00">02:00</option>
-                <option value="02:05">02:05</option>
-                <option value="02:10">02:10</option>
-                <option value="02:15">02:15</option>
-                <option value="02:20">02:20</option>
-                <option value="02:25">02:25</option>
-                <option value="02:30">02:30</option>
-                <option value="02:35">02:35</option>
-                <option value="02:40">02:40</option>
-                <option value="02:45">02:45</option>
-                <option value="02:50">02:50</option>
-                <option value="02:55">02:55</option>
-                <option value="03:00">03:00</option>
-                <option value="03:05">03:05</option>
-                <option value="03:10">03:10</option>
-                <option value="03:15">03:15</option>
-                <option value="03:20">03:20</option>
-                <option value="03:25">03:25</option>
-                <option value="03:30">03:30</option>
-                <option value="03:35">03:35</option>
-                <option value="03:40">03:40</option>
-                <option value="03:45">03:45</option>
-                <option value="03:50">03:50</option>
-                <option value="03:55">03:55</option>
-                <option value="04:00">04:00</option>
-              </Form.Select>
+              <TimePicker
+                className="input-duration"
+                onChange={(e) => setDureeValue(e)}
+                clockIcon={false}
+                disableClock={false}
+                locale={"fr-FR"}
+              />
             </Form.Group>
           </Form>
         </Modal.Body>
