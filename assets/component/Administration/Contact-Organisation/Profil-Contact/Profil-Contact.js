@@ -140,14 +140,14 @@ const ProfilContact = () => {
                   <td>{contInfo.value}</td>
                   <td>
                     {contInfo?.obj && contInfo?.obj?.length > 0 && (
-                      <>
+                      <div className="row-items">
                         {contInfo?.obj.map((e) => (
-                          <span>
+                          <div className="item">
                             {contInfo.value === "Tags" ||
                             contInfo.value === "Type de Collaborateur"
-                              ? e.sugge.value
+                              ? e.sugge[0].value
                               : e.valueInformations}
-                            <span className="btn-group">
+                            <div className="btn-group">
                               <ModalEditContact
                                 selectListCollab={typeCollabList}
                                 selectListTags={tagsList}
@@ -161,10 +161,10 @@ const ProfilContact = () => {
                                 infosPatient={e}
                                 onChange={(e) => informationSaved(e)}
                               ></ModalDeleteInfos>
-                            </span>
-                          </span>
+                            </div>
+                          </div>
                         ))}
-                      </>
+                      </div>
                     )}
 
                     {contInfo?.obj && contInfo?.obj.length === 0 && (

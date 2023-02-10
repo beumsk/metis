@@ -256,6 +256,7 @@ a {
     /* background-color: #91bd10; */
     /* padding: 0.5rem; */
     font-size: 0.8rem;
+    background-color: transparent;
     /* border-radius: 43px;*/
   }
 }
@@ -349,7 +350,7 @@ body {
 // }
 
 button {
-  background-color: white;
+  background-color: transparent;
   border: 0;
   padding: 0;
 }
@@ -463,6 +464,7 @@ table.dataTable thead .sorting_desc {
 @import "./scss/login";
 @import "./scss/menu";
 @import "./scss/form";
+@import "./scss/lieux";
 @import "./scss/home";
 @import "./scss/patients";
 @import "./scss/profil";

@@ -173,10 +173,11 @@ class PlacesController extends AbstractController
                             // if (count($a)) {
                             //     dd($a);
                             // }
+                            // dd($a);
                             return [
 
                                 "value" => ($a && $a->getValue() !== null) ? $a->getValue() : null,
-                                // "value" => $a->getValue(),
+                                "parentSugg" => ($a && $a->getParentSugg() && $a->getParentSugg()->getValue() !== null) ? $a->getParentSugg()->getValue() : null,
                                 // "firstName" => ($a->getPati() && $a->getPati() !== null) ? $a->getPati()->getFirstName() : null,
                                 // "lastName" => ($a->getPati() && $a->getPati() !== null) ? $a->getPati()->getLastName() : null,
                             ];
@@ -186,7 +187,7 @@ class PlacesController extends AbstractController
                 }
             }
         }
-        // dd($infosCont->getItel());
+
         $patients = [];
 
         foreach ($contact->getPatients() as $patient) {
@@ -194,14 +195,6 @@ class PlacesController extends AbstractController
         }
 
 
-
-        // $jsonObject = $serializer->serialize(["informations" => $blocksDecode, "patients" => $contact->getOccupants(), "firstname" => $contact->getFirstName(), "lastname" => $contact->getLastName(), "description" => $contact->getDescription()], 'json', [
-        //     'circular_reference_handler' => function ($object) {
-        //         return $object->getId();
-        //     }
-        // ]);
-
-        // dd($contact);
 
 
         return new Response(json_encode([

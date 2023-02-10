@@ -498,84 +498,99 @@ class ContactsController extends AbstractController
 
         $id = $request->request->get('id');
 
-        if ($id) {
-            $contact = $doctrine->getRepository(Contacts::class)->find($id);
-        }
+        $contact = $doctrine->getRepository(Contacts::class)->find($id);
         $itbk = $doctrine->getRepository(InformationTemplateElement::class)->findBy(['itbk' => 12]);
+
 
         $arritbk = [];
         foreach ($itbk as $value) {
             $arritbk[] = $value->getSuge()->getId();
         }
 
+
         $suggestions = $doctrine->getRepository(Suggestions::class)->findBy(array('id' => $arritbk));
 
-
+        $encoders = [new JsonEncoder()];
+        $normalizers = [new DateTimeNormalizer(), new ObjectNormalizer()];
+        $serializer = new Serializer($normalizers, $encoders);
         $nameOfBlocks = [];
-
         foreach ($suggestions as $value) {
             $nameOfBlocks[] = ["id" => $value->getId(), "value" => $value->getValue(), "obj" => []];
         }
 
 
 
+
         $blocksEncode = json_encode($nameOfBlocks);
         $blocksDecode = json_decode($blocksEncode);
 
-        $patients = [];
-
-
-
+        // dd($blocksDecode);
         foreach ($blocksDecode as $value) {
             foreach ($contact->getInformations() as $infosCont) {
                 if ($infosCont->getItel()->getSuge()->getId() === $value->id && $infosCont->getDeletedAt() === null) {
                     array_push($value->obj, [
                         "id" => $infosCont->getId(),
-                        "deletedAt" => $infosCont->getDeletedAt(),
+                        "occupants" => (property_exists($infosCont, 'occupants') === true) ? $infosCont->getOccupants() : null,
                         "valueInformations" => $infosCont->getValue(),
                         "valueDescription" => $infosCont->getComment(),
-                        "sugge" => ($infosCont !== null) ? [
-                            array_map(function ($a) {
-                                return [
-                                    "value" => ($a && $a->getValue() !== null) ? $a->getValue() : null
-                                ];
-                            }, [$infosCont->getSuggestion()])
-                        ] : null
+                        "sugge" => array_map(function ($a) {
+                            // if (count($a)) {
+                            //     dd($a);
+                            // }
+                            return [
+
+                                "value" => ($a && $a->getValue() !== null) ? $a->getValue() : null,
+                                "parentSugg" => ($a && $a->getParentSugg() && $a->getParentSugg()->getValue() !== null) ? $a->getParentSugg()->getValue() : null,
+                                // "value" => $a->getValue(),
+                                // "firstName" => ($a->getPati() && $a->getPati() !== null) ? $a->getPati()->getFirstName() : null,
+                                // "lastName" => ($a->getPati() && $a->getPati() !== null) ? $a->getPati()->getLastName() : null,
+                            ];
+                        }, [$infosCont->getSugg()]),
+                        // "sugge" => ($infosCont !== null) ? $infosCont->getSugg()[0]->getValue() : null
                     ]);
                 }
             }
         }
-        // (' . implode(",", [Contacts::TYPE_PERSON, Contacts::TYPE_ORGANISATION]) . ')
-        // dd($blocksDecode);
-        // dd($contact->getPatients()[0]->getCont());
-        foreach ($contact->getPatients() as $patient) {
+        // dd($infosCont->getItel());
+        $patients = [];
 
-            $patients[] = [
-                "id" => $patient->getPati()->getId(),
-                "firstName" => $patient->getPati()->getFirstName(),
-                "lastName" => $patient->getPati()->getLastName()
-            ];
+        foreach ($contact->getPatients() as $patient) {
+            $patients[] = ["id" => $patient->getPati()->getId(), "firstName" => $patient->getPati()->getFirstName(), "lastName" => $patient->getPati()->getLastName()];
         }
 
 
 
-        $arr = [
-            "id" => $contact->getId(),
+        // $jsonObject = $serializer->serialize(["informations" => $blocksDecode, "patients" => $contact->getOccupants(), "firstname" => $contact->getFirstName(), "lastname" => $contact->getLastName(), "description" => $contact->getDescription()], 'json', [
+        //     'circular_reference_handler' => function ($object) {
+        //         return $object->getId();
+        //     }
+        // ]);
+
+        // dd($contact);
+
+
+        return new Response(json_encode([
+            "patients" =>
+            array_map(function ($a) {
+                // dd($a);
+                return [
+
+                    "id" => ($a->getPati()->getId() !== null) ? $a->getPati()->getId() : null,
+                    // "value" => $a->getValue(),
+                    "firstName" => ($a->getPati() && $a->getPati() !== null) ? $a->getPati()->getFirstName() : null,
+                    "lastName" => ($a->getPati() && $a->getPati() !== null) ? $a->getPati()->getLastName() : null,
+
+
+
+                ];
+            }, [...$contact->getOccupants()]),
             "informations" => $blocksDecode,
-            "patients" => $patients,
+            "id" => $contact->getId(),
             "firstname" => $contact->getFirstName(),
             "lastname" => $contact->getLastName(),
             "description" => $contact->getDescription(),
-            "url" => $contact->getURL(),
-            "type" => $contact->getType(),
-            "organisation" => ($contact->getOrga() && $contact->getOrga()->getId()) ?
-                [
-                    "id" => $contact->getOrga()->getId(),
-                    "label" => $contact->getOrga()->getFirstName() . (($contact->getOrga()->getFirstName()) ? " " : "") . $contact->getOrga()->getLastName() . (($contact->getOrga()->getDescription()) ? " " : "") . $contact->getOrga()->getDescription(),
-                ]
-                : null,
-        ];
-        return new Response(json_encode($arr), 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
+            "url" => $contact->getUrl(),
+        ]), 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
     }
     #[Route('/api/getCallsAndOrganisationRunning', name: 'app_getCallsAndOrganisationRunning')]
     public function getCallsAndOrganisationRunning(ManagerRegistry $doctrine, CacheInterface $cache)

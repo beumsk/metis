@@ -18,6 +18,7 @@ import ModalEditLieux from "./Modal-Edit-Lieux";
 import ModalAddLieux from "./Modal-Add-Lieux";
 import ModalDeleteLieux from "./Modal-Delete-Lieux";
 import ModalEditProfileContact from "./Modal-Edit-Profile-Lieux";
+import ModalDeleteInfos from "./Modal-Delete-Infos";
 const ProfilLieux = () => {
   const [auth, setAuth] = useState(useAuth());
   let id = useParams().id;
@@ -145,16 +146,16 @@ const ProfilLieux = () => {
               {contactInformation?.informations?.map((contInfo) => (
                 <tr>
                   <td>{contInfo.value}</td>
-                  <td>
+                  <td className="column-btnContent">
                     {contInfo?.obj && contInfo?.obj?.length > 0 && (
-                      <>
+                      <div className="row-items">
                         {contInfo?.obj.map((e) => (
-                          <span>
+                          <div className="item">
                             {contInfo.value === "Tags" ||
                             contInfo.value === "Type de Collaborateur"
                               ? e.sugge[0].value
                               : e.valueInformations}
-                            <span className="btn-group">
+                            <div className="btn-group">
                               <ModalEditLieux
                                 selectListCollab={typeCollabList}
                                 selectListTags={tagsList}
@@ -168,10 +169,10 @@ const ProfilLieux = () => {
                                 infosPatient={e}
                                 onChange={informationSaved}
                               ></ModalDeleteInfos>
-                            </span>
-                          </span>
+                            </div>
+                          </div>
                         ))}
-                      </>
+                      </div>
                     )}
 
                     {contInfo?.obj && contInfo?.obj.length === 0 && (

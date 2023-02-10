@@ -69,7 +69,7 @@ function ModalEditLieux(props) {
       setShow(false);
     });
   };
-
+  console.log(props?.infosAppels?.sugge);
   return (
     <>
       <button onClick={handleShow} className="ml-4">
@@ -85,7 +85,7 @@ function ModalEditLieux(props) {
         <Modal.Body>
           {" "}
           <>
-            {props?.infosAppels?.sugge?.parentSugg?.value === "Tags" && (
+            {props?.infosAppels?.sugge[0].parentSugg === "Tags" && (
               <InputTypeList
                 onChangeType={(e) => setType(e)}
                 type={props.selectListTags}
@@ -97,7 +97,7 @@ function ModalEditLieux(props) {
               ></InputTypeList>
             )}
 
-            {props?.infosAppels?.sugge?.parentSugg?.value ===
+            {props?.infosAppels?.sugge[0].parentSugg ===
               "Type de Collaborateur" && (
               <InputTypeList
                 onChangeType={(e) => setType(e)}
