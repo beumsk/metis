@@ -23,7 +23,11 @@ function ModalEditLieux(props) {
   const [infos, setInfos] = useState(null);
   const [isSentRepport, setIsSentRepport] = useState(false);
   const [responseDatas, setResponseDatas] = useState(null);
-  const [type, setType] = useState(props?.infosAppels?.sugge?.id);
+  const [type, setType] = useState(
+    props.infosAppels.sugge[0].id !== null
+      ? props.infosAppels.sugge[0].id
+      : null
+  );
   const [elementsOpt, setElementsOpt] = useState(null);
   const [idPatient, setIdPatient] = useState(id);
 
@@ -90,8 +94,8 @@ function ModalEditLieux(props) {
                 onChangeType={(e) => setType(e)}
                 type={props.selectListTags}
                 defaultValue={
-                  props.infosAppels.sugge.id !== null
-                    ? props.infosAppels.sugge.id
+                  props.infosAppels.sugge[0].id !== null
+                    ? props.infosAppels.sugge[0].id
                     : null
                 }
               ></InputTypeList>
@@ -103,8 +107,8 @@ function ModalEditLieux(props) {
                 onChangeType={(e) => setType(e)}
                 type={props.selectListCollab}
                 defaultValue={
-                  props.infosAppels.sugge.id !== null
-                    ? props.infosAppels.sugge.id
+                  props.infosAppels.sugge[0].id !== null
+                    ? props.infosAppels.sugge[0].id
                     : null
                 }
               ></InputTypeList>

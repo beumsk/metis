@@ -15,7 +15,7 @@ import {
 import { useParams } from "react-router-dom";
 import ModalEditContact from "./Modal-Edit-Contact";
 import ModalAddContact from "./Modal-Add-Contact";
-import ModalDeleteInfos from "./Modal-Delete-Contact";
+import ModalDeleteInfos from "./Modal-Delete-Infos";
 import ModalEditProfileContact from "./Modal-Edit-Profile-Contact";
 import ModalDeleteContact from "./Modal-Delete-Contact";
 const ProfilContact = () => {
@@ -77,9 +77,19 @@ const ProfilContact = () => {
   //   };
 
   function informationSaved(e) {
-    if (e) {
-      setContactInformation(e.response);
-    }
+    axios({
+      method: "post",
+      url: "/api/getCallsAndOrganisationById",
+      data: formData,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.auth.accessToken}`,
+      },
+    })
+      .then(function (response) {
+        setContactInformation(response.data);
+      })
+      .catch(function (response) {});
   }
 
   function onChangeContactProfile() {
@@ -138,7 +148,7 @@ const ProfilContact = () => {
               {contactInformation?.informations.map((contInfo) => (
                 <tr>
                   <td>{contInfo.value}</td>
-                  <td>
+                  <td className="column-btnContent">
                     {contInfo?.obj && contInfo?.obj?.length > 0 && (
                       <div className="row-items">
                         {contInfo?.obj.map((e) => (

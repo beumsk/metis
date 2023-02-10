@@ -48,7 +48,6 @@ function ModalDeleteInfos(props) {
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-
   useEffect(() => {
     setStartDate(
       new Date(props?.infosPatient?.start?.timestamp * 1000).toJSON()
@@ -56,16 +55,23 @@ function ModalDeleteInfos(props) {
 
     setEndDate(new Date(props?.infosPatient?.end?.timestamp * 1000).toJSON());
   }, []);
+  //
+
+  const handleInputChange = (e) => {
+    //new Date(start).toJSON().slice(0, 10)
+    setStartDate(new Date(e.target.value).toJSON().slice(0, 10));
+    setEndDate(new Date(e.target.value).toJSON().slice(0, 10));
+  };
 
   const handleSave = (e) => {
     let formData = new FormData();
 
-    formData.append("id", props?.contacts?.id);
+    formData.append("id", props?.infosPatient?.id);
     var formGetInfos = new FormData();
     formGetInfos.append("id", id.toString());
     axios({
       method: "post",
-      url: "/api/deleteContact",
+      url: "/api/deleteItem",
       data: formData,
       headers: {
         "Content-Type": "application/json",
@@ -88,16 +94,25 @@ function ModalDeleteInfos(props) {
             },
           }).then(function (response) {
             if (response) {
-              setResponseDatas(response.data);
-              handleShow(false);
-              window.location.replace(window.origin + "/contactsorganisation");
+              props.onChange(true);
+              setIsSentRepport(true);
+              setShow(false);
             }
           });
         }
       }
     });
   };
-  console.log(props);
+  //   new Date(1254088800 *1000)
+  // handleInputChange;
+
+  //   if (responseDatas !== null) {
+  //     props.onChange({
+  //       response: responseDatas,
+  //     });
+
+  //     // document.querySelectorAll(".btn-close")[0].click();
+  //   }
   return (
     <>
       <button onClick={handleShow} className="ml-4">
@@ -109,14 +124,15 @@ function ModalDeleteInfos(props) {
           <Modal.Title>Effacer une information</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <p>Êtes-vous sur ?</p>
+          {" "}
+          <>
+            <p>êtes-vous sur ?</p>
+          </>
         </Modal.Body>
         <Modal.Footer>
           {isSentRepport && <FontAwesomeIcon icon={faCheck} />}
-          <Button onClick={handleClose}>Fermer sans enregistrer</Button>
-          <Button onClick={handleSave} className="btn-metis-red">
-            Effacer
-          </Button>
+          <Button onClick={handleClose}>Fermer</Button>
+          <Button onClick={handleSave}>Delete Changes</Button>
         </Modal.Footer>
       </Modal>
     </>

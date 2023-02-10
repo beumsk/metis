@@ -23,7 +23,11 @@ function ModalEditContact(props) {
   const [infos, setInfos] = useState(null);
   const [isSentRepport, setIsSentRepport] = useState(false);
   const [responseDatas, setResponseDatas] = useState(null);
-  const [type, setType] = useState(props?.infosAppels?.sugge?.id);
+  const [type, setType] = useState(
+    props.infosAppels.sugge[0].id !== null
+      ? props.infosAppels.sugge[0].id
+      : null
+  );
   const [elementsOpt, setElementsOpt] = useState(null);
   const [idPatient, setIdPatient] = useState(id);
 
@@ -103,26 +107,26 @@ function ModalEditContact(props) {
         <Modal.Body>
           {" "}
           <>
-            {props?.infosAppels?.sugge?.parentSugg?.value === "Tags" && (
+            {props?.infosAppels?.sugge[0]?.parentSugg?.value === "Tags" && (
               <InputTypeList
                 onChangeType={(e) => setType(e)}
                 type={props.selectListTags}
                 defaultValue={
-                  props.infosAppels.sugge.id !== null
-                    ? props.infosAppels.sugge.id
+                  props.infosAppels.sugge[0].id !== null
+                    ? props.infosAppels.sugge[0].id
                     : null
                 }
               ></InputTypeList>
             )}
 
-            {props?.infosAppels?.sugge?.parentSugg?.value ===
+            {props?.infosAppels?.sugge[0]?.parentSugg?.value ===
               "Type de Collaborateur" && (
               <InputTypeList
                 onChangeType={(e) => setType(e)}
                 type={props.selectListCollab}
                 defaultValue={
-                  props.infosAppels.sugge.id !== null
-                    ? props.infosAppels.sugge.id
+                  props.infosAppels.sugge[0].id !== null
+                    ? props.infosAppels.sugge[0].id
                     : null
                 }
               ></InputTypeList>

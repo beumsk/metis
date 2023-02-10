@@ -175,7 +175,7 @@ class PlacesController extends AbstractController
                             // }
                             // dd($a);
                             return [
-
+                                "id" => ($a && $a->getId() !== null) ? $a->getId() : null,
                                 "value" => ($a && $a->getValue() !== null) ? $a->getValue() : null,
                                 "parentSugg" => ($a && $a->getParentSugg() && $a->getParentSugg()->getValue() !== null) ? $a->getParentSugg()->getValue() : null,
                                 // "firstName" => ($a->getPati() && $a->getPati() !== null) ? $a->getPati()->getFirstName() : null,

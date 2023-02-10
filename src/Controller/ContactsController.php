@@ -539,6 +539,7 @@ class ContactsController extends AbstractController
                             // }
                             return [
 
+                                "id" => ($a && $a->getId() !== null) ? $a->getId() : null,
                                 "value" => ($a && $a->getValue() !== null) ? $a->getValue() : null,
                                 "parentSugg" => ($a && $a->getParentSugg() && $a->getParentSugg()->getValue() !== null) ? $a->getParentSugg()->getValue() : null,
                                 // "value" => $a->getValue(),
