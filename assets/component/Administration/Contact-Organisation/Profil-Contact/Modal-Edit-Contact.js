@@ -72,7 +72,7 @@ function ModalEditContact(props) {
       }
     });
   };
-
+  console.log(props?.infosAppels?.sugge);
   return (
     <>
       <button onClick={handleShow} className="editCont">
@@ -86,7 +86,7 @@ function ModalEditContact(props) {
         <Modal.Body>
           {" "}
           <>
-            {props?.infosAppels?.sugge[0]?.parentSugg?.value === "Tags" && (
+            {props?.infosAppels?.sugge[0]?.parentSugg === "Tags" && (
               <InputTypeList
                 onChangeType={(e) => setType(e)}
                 type={props.selectListTags}
@@ -98,7 +98,7 @@ function ModalEditContact(props) {
               ></InputTypeList>
             )}
 
-            {props?.infosAppels?.sugge[0]?.parentSugg?.value ===
+            {props?.infosAppels?.sugge[0]?.parentSugg ===
               "Type de Collaborateur" && (
               <InputTypeList
                 onChangeType={(e) => setType(e)}
