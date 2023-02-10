@@ -72,7 +72,7 @@ function ModalEditContact(props) {
       }
     });
   };
-  console.log(props?.infosAppels?.sugge);
+
   return (
     <>
       <button onClick={handleShow} className="editCont">

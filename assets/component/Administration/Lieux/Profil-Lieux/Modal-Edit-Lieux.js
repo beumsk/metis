@@ -73,7 +73,7 @@ function ModalEditLieux(props) {
       setShow(false);
     });
   };
-  console.log(props?.infosAppels?.sugge);
+
   return (
     <>
       <button onClick={handleShow} className="ml-4">
