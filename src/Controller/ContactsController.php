@@ -589,8 +589,15 @@ class ContactsController extends AbstractController
             "id" => $contact->getId(),
             "firstname" => $contact->getFirstName(),
             "lastname" => $contact->getLastName(),
+            "type" => $contact->getType(),
             "description" => $contact->getDescription(),
             "url" => $contact->getUrl(),
+            "organisation" => ($contact->getOrga() && $contact->getOrga()->getId()) ?
+                [
+                    "id" => $contact->getOrga()->getId(),
+                    "label" => $contact->getOrga()->getFirstName() . (($contact->getOrga()->getFirstName()) ? " " : "") . $contact->getOrga()->getLastName() . (($contact->getOrga()->getDescription()) ? " " : "") . $contact->getOrga()->getDescription(),
+                ]
+                : null,
         ]), 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
     }
     #[Route('/api/getCallsAndOrganisationRunning', name: 'app_getCallsAndOrganisationRunning')]

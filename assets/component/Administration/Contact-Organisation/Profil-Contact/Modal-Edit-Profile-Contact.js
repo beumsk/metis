@@ -162,44 +162,42 @@ function ModalEditProfileContact(props) {
               }
             />
 
-            {props?.contactInfo?.type &&
-              props?.contactInfo?.type === 2 &&
-              type === "2" && (
-                <>
-                  <Form.Label htmlFor="inputValue">Prénom</Form.Label>
+            {type === "2" && (
+              <>
+                <Form.Label htmlFor="inputValue">Prénom</Form.Label>
 
-                  <input
-                    type="text"
-                    className="uk-input"
-                    id="inputValueSpécifique"
-                    onChange={(e) => setFirstName(e.target.value)}
-                    aria-describedby="valueSpécifique"
-                    defaultValue={
-                      props.contactInfo && props.contactInfo.firstname !== null
-                        ? props.contactInfo.firstname
-                        : ""
-                    }
-                  />
+                <input
+                  type="text"
+                  className="uk-input"
+                  id="inputValueSpécifique"
+                  onChange={(e) => setFirstName(e.target.value)}
+                  aria-describedby="valueSpécifique"
+                  defaultValue={
+                    props.contactInfo && props.contactInfo.firstname !== null
+                      ? props.contactInfo.firstname
+                      : ""
+                  }
+                />
 
-                  <InputOrganisationList
-                    onChange={onChangePlaces}
-                    data={listOrganisationSelect?.data}
-                    id="single"
-                    defaultValue={
-                      props.contactInfo.organisation
-                        ? [
-                            {
-                              id: props.contactInfo.organisation.id,
-                              label: props.contactInfo.organisation.label,
-                            },
-                          ]
-                        : null
-                    }
-                    multiple={false}
-                    label="Organisation"
-                  />
-                </>
-              )}
+                <InputOrganisationList
+                  onChange={onChangePlaces}
+                  data={listOrganisationSelect?.data}
+                  id="single"
+                  defaultValue={
+                    props.contactInfo && props.contactInfo.organisation
+                      ? [
+                          {
+                            id: props.contactInfo.organisation.id,
+                            label: props.contactInfo.organisation.label,
+                          },
+                        ]
+                      : null
+                  }
+                  multiple={false}
+                  label="Organisation"
+                />
+              </>
+            )}
 
             <Form.Label htmlFor="inputValue">URL</Form.Label>
 
