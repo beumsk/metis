@@ -120,7 +120,11 @@ const ProfilContact = () => {
               </h5>
               <p>{contactInformation?.description}</p>
               <p>
-                <a href={"http://" + contactInformation?.url} target="_blank">
+                <a
+                  style={{ wordWrap: "break-word" }}
+                  href={"http://" + contactInformation?.url}
+                  target="_blank"
+                >
                   {contactInformation?.url}
                 </a>
               </p>
