@@ -72,29 +72,29 @@ function EditActivities(props) {
     formData.append("contact", JSON.stringify(contact));
     formData.append("place", JSON.stringify(place));
     formData.append("description", descriptionForm);
-    formData.append("type", typeForm);
-
+    formData.append(
+      "type",
+      typeForm && typeForm.length > 0 && typeForm[0].id ? typeForm[0].id : null
+    );
+    console.log(typeForm);
     formData.append("idRepport", props.report.id);
     formData.append("idActivity", props.activity.id);
 
-    if (typeForm === null || typeForm === "defaultValue") {
+    if (
+      typeForm.length === 0 ||
+      typeForm === null ||
+      typeForm === "defaultValue"
+    ) {
       setIsErrorType(true);
     } else {
       setIsErrorType(false);
     }
 
-    // if (descriptionForm === null || descriptionForm === "") {
-    //   setIsErrorDescription(true);
-    // } else {
-    //   setIsErrorDescription(false);
-    // }
-
     let validationType =
-      typeForm === null || typeForm === "defaultValue" ? true : false;
-    // let validationDescription =
-    //   descriptionForm === null || descriptionForm === "" ? true : false;
+      typeForm.length === 0 || typeForm === null || typeForm === "defaultValue"
+        ? true
+        : false;
 
-    // if (validationType === false && validationDescription === false) {
     if (validationType === false) {
       axios({
         method: "post",
@@ -113,6 +113,10 @@ function EditActivities(props) {
     }
   };
 
+  function handleChangeType(e) {
+    setTypeForm(e);
+  }
+
   return (
     <>
       <Button onClick={handleShow}>
@@ -125,11 +129,10 @@ function EditActivities(props) {
         </Modal.Header>
         <Modal.Body>
           <div className="">
-            <Form.Label htmlFor="inputValue" className="uk-form-label">
+            {/* <Form.Label htmlFor="inputValue" className="uk-form-label">
               Type
             </Form.Label>
-            {/* selectActivities={selectActivities}
-                        selectSoins={selectSoins} */}
+        
             <select
               size="lg"
               className="uk-select"
@@ -143,7 +146,27 @@ function EditActivities(props) {
               {props?.select?.data?.map((el, id) => (
                 <>{el.value && <option value={el?.id}>{el?.value}</option>}</>
               ))}
-            </select>
+            </select> */}
+
+            <InputTypeList
+              data={props?.select?.data}
+              // contacts={props?.contacts}
+              defaultValue={
+                props.activity?.sugg
+                  ? [
+                      {
+                        id: props.activity?.sugg?.id,
+                        label: props.activity?.sugg?.value,
+                      },
+                    ]
+                  : null
+              }
+              onChange={handleChangeType}
+              // defaultValue={null}
+              multiple={false}
+              id="single"
+              label="Type"
+            ></InputTypeList>
 
             <Form.Label htmlFor="inputValue" className="uk-form-label">
               Description
@@ -162,19 +185,26 @@ function EditActivities(props) {
             />
 
             <InputContactList
-              contacts={props?.contacts}
+              data={props?.contacts?.data}
               // contacts={props?.contacts}
               onChange={handleChangeContacts}
               defaultValue={
                 props.activity?.contacts ? props.activity?.contacts : null
               }
+              multiple
+              id="multiple"
+              label="Contacts"
             ></InputContactList>
 
             <InputPlaceList
               onChange={handleChangePlaces}
-              data={props?.places}
-              id="single"
-              placeholder="Lieux"
+              data={props?.places?.data}
+              defaultValue={
+                props.activity?.places ? props.activity?.places : null
+              }
+              multiple
+              id="multiple"
+              label="Lieux"
             ></InputPlaceList>
           </div>
           {isErrorType && <p>Type Obligatoire</p>}

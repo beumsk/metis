@@ -134,13 +134,15 @@ function IndicateursActiviteesComponent(props) {
                 ))}
                 {el?.places?.map((x) => (
                   <span className="tags-contacts">
-                    <FontAwesomeIcon icon={faMapMarker} /> {x?.lastname}
+                    <FontAwesomeIcon icon={faMapMarker} /> {x?.label}
                   </span>
                 ))}
               </div>
               <div className="edit-delete">
                 <EditActivities
                   activity={el}
+                  contacts={props.contacts}
+                  places={props.places}
                   select={props.selectActivities}
                   onChangeActivities={onChangeActivities}
                   report={props.report}
@@ -185,7 +187,7 @@ function IndicateursActiviteesComponent(props) {
                     ))}
                     {el?.places?.map((x) => (
                       <span className="tags-contacts">
-                        <FontAwesomeIcon icon={faMapMarker} /> {x?.lastname}
+                        <FontAwesomeIcon icon={faMapMarker} /> {x?.label}
                       </span>
                     ))}
                   </div>
@@ -193,6 +195,8 @@ function IndicateursActiviteesComponent(props) {
                     <EditActivities
                       activity={el}
                       select={props.selectSoins}
+                      contacts={props.contacts}
+                      places={props.places}
                       onChangeActivities={onChangeActivities}
                       report={props.report}
                     ></EditActivities>{" "}

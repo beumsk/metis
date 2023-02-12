@@ -63,14 +63,21 @@ function AddSoinsByReport(props) {
     formData.append("contact", JSON.stringify(contact));
     formData.append("place", JSON.stringify(place));
     formData.append("description", descriptionForm);
-    formData.append("type", typeForm);
+    formData.append(
+      "type",
+      typeForm && typeForm.length > 0 && typeForm[0].id ? typeForm[0].id : null
+    );
 
     formData.append("idRepport", props.report.id);
     // formData.append("descriptionSantee", descriptionSantee);
     // formData.append("valueConsommation", valueConsommation);
     // formData.append("descriptionConsommation", descriptionConsommation);
 
-    if (typeForm === null) {
+    if (
+      typeForm.length === 0 ||
+      typeForm === null ||
+      typeForm === "defaultValue"
+    ) {
       setIsErrorType(true);
     } else {
       setIsErrorType(false);
@@ -82,8 +89,13 @@ function AddSoinsByReport(props) {
     //   setIsErrorDescription(false);
     // }
 
+    let validationType =
+      typeForm.length === 0 || typeForm === null || typeForm === "defaultValue"
+        ? true
+        : false;
+
     // if (typeForm !== null && descriptionForm !== null) {
-    if (typeForm !== null) {
+    if (validationType === false) {
       axios({
         method: "post",
         url: "/api/addActivitiesToReport",
@@ -100,6 +112,11 @@ function AddSoinsByReport(props) {
         .catch(function (response) {});
     }
   };
+
+  function handleChangeType(e) {
+    setTypeForm(e);
+  }
+
   return (
     <>
       <Button onClick={handleShow}>
@@ -112,11 +129,10 @@ function AddSoinsByReport(props) {
         </Modal.Header>
         <Modal.Body>
           <div className="">
-            <Form.Label htmlFor="inputValue" className="uk-form-label">
+            {/* <Form.Label htmlFor="inputValue" className="uk-form-label">
               Type
             </Form.Label>
-            {/* selectActivities={selectActivities}
-                        selectSoins={selectSoins} */}
+         
             <select
               size="lg"
               className="uk-select"
@@ -128,8 +144,16 @@ function AddSoinsByReport(props) {
               {props?.selectSoins?.data?.map((el, id) => (
                 <>{el.value && <option value={el?.id}>{el?.value}</option>}</>
               ))}
-            </select>
-
+            </select> */}
+            <InputTypeList
+              data={props?.selectSoins?.data}
+              // contacts={props?.contacts}
+              onChange={handleChangeType}
+              defaultValue={null}
+              multiple={false}
+              id="single"
+              label="Type"
+            ></InputTypeList>
             <Form.Label htmlFor="inputValue" className="uk-form-label">
               Description
             </Form.Label>
@@ -153,9 +177,11 @@ function AddSoinsByReport(props) {
 
             <InputPlaceList
               onChange={handleChangePlaces}
-              data={props?.places}
-              id="single"
-              placeholder="Lieux"
+              data={props?.places?.data}
+              defaultValue={null}
+              multiple
+              id="multiple"
+              label="Lieux"
             ></InputPlaceList>
           </div>
           {isErrorType && <p>Type Obligatoire</p>}

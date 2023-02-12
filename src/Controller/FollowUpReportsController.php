@@ -462,7 +462,7 @@ class FollowUpReportsController extends AbstractController
                                 array_map(function ($b) {
                                     return [
                                         "id" => $b->getId(),
-                                        "lastname" => $b->getLastName()
+                                        "label" => $b->getLastName()
                                     ];
                                 }, [...$a->getPlaces()]) : null,
 
@@ -470,7 +470,7 @@ class FollowUpReportsController extends AbstractController
 
                                 array_map(function ($b) {
                                     return [
-                                        "value" => $b->getId(),
+                                        "id" => $b->getId(),
                                         "label" => $b->getFirstName() . " " . $b->getLastName(),
                                     ];
                                 }, [...$a->getContacts()]) : null,
@@ -1932,45 +1932,51 @@ class FollowUpReportsController extends AbstractController
 
 
 
-        if ($contact !== "null") {
+        if ($contact !== "null" && $contact !== "[]") {
             $arrCont_id = [];
             foreach (json_decode($contact) as $value) {
-                array_push($arrCont_id, $value->value);
+                array_push($arrCont_id, $value->id);
             }
 
             $contact = $doctrine->getRepository(Contacts::class)->findBy(array("id" => $arrCont_id));
+            foreach ($followUpReportActivities->getContacts() as $value) {
+                $followUpReportActivities->removeContact($value);
+            }
 
-            // foreach ($report->getCont() as $value) {
-            //     $report->removeCont($value);
-            //     // dd($followupGoals->getfogo());
-            // }
-            // $arrayCollectionDiff = new FollowupGoals($changeGoals);
             foreach ($contact as $value) {
-                // $arrayCollectionDiff = new FollowupGoals($value);
                 $followUpReportActivities->addContact($value);
             }
         }
 
-        if ($place !== "null") {
-            $arrCont_id = [];
-            // foreach (json_decode($place) as $value) {
-            //     array_push($arrCont_id, $value->id);
-            // }
-            array_push($arrCont_id, json_decode($place)->value);
-
-            $contact = $doctrine->getRepository(Contacts::class)->findBy(array("id" => $arrCont_id));
-            // dd($contact);
-            foreach ($followUpReportActivities->getPlaces() as $value) {
-                $followUpReportActivities->removePlace($value);
-                // dd($followupGoals->getfogo());
-            }
-            // $arrayCollectionDiff = new FollowupGoals($changeGoals);
-            foreach ($contact as $value) {
-                // $arrayCollectionDiff = new FollowupGoals($value);
-                $followUpReportActivities->addPlace($value);
+        if ($contact === "[]") {
+            foreach ($followUpReportActivities->getContacts() as $value) {
+                $followUpReportActivities->removeContact($value);
             }
         }
 
+        if ($place !== "null" && $place !== "[]") {
+
+
+            $arrCont_id = [];
+            foreach (json_decode($place) as $value) {
+                array_push($arrCont_id, $value->id);
+            }
+            // array_push($arrCont_id, json_decode($place)->id);
+
+            $contact = $doctrine->getRepository(Contacts::class)->findBy(array("id" => $arrCont_id));
+            foreach ($followUpReportActivities->getPlaces() as $value) {
+                $followUpReportActivities->removePlace($value);
+            }
+
+            foreach ($contact as $value) {
+                $followUpReportActivities->addPlace($value);
+            }
+        }
+        if ($place === "[]") {
+            foreach ($followUpReportActivities->getPlaces() as $value) {
+                $followUpReportActivities->removePlace($value);
+            }
+        }
 
         $report->addActivity($followUpReportActivities);
         // $entityManager->persist($followUpReportActivities);

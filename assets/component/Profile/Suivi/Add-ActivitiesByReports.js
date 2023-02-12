@@ -56,10 +56,19 @@ function AddActivitiesByReport(props) {
     formData.append("contact", JSON.stringify(contact));
     formData.append("place", JSON.stringify(place));
     formData.append("description", descriptionForm);
-    formData.append("type", typeForm);
+    formData.append(
+      "type",
+      typeForm && typeForm.length > 0 && typeForm[0].id ? typeForm[0].id : null
+    );
+
+    console.log(typeForm);
     formData.append("idRepport", props.report.id);
 
-    if (typeForm === null || typeForm === "defaultValue") {
+    if (
+      typeForm.length === 0 ||
+      typeForm === null ||
+      typeForm === "defaultValue"
+    ) {
       setIsErrorType(true);
     } else {
       setIsErrorType(false);
@@ -72,7 +81,9 @@ function AddActivitiesByReport(props) {
     // }
 
     let validationType =
-      typeForm === null || typeForm === "defaultValue" ? true : false;
+      typeForm.length === 0 || typeForm === null || typeForm === "defaultValue"
+        ? true
+        : false;
     // let validationDescription =
     //   descriptionForm === null || descriptionForm === "" ? true : false;
 
@@ -95,6 +106,10 @@ function AddActivitiesByReport(props) {
     }
   };
 
+  function handleChangeType(e) {
+    setTypeForm(e);
+  }
+  // console.log(props?.activitiesByDefault);
   return (
     <>
       <Button onClick={handleShow}>
@@ -107,10 +122,16 @@ function AddActivitiesByReport(props) {
         </Modal.Header>
         <Modal.Body>
           <div className="">
-            <Form.Label htmlFor="inputValue" className="uk-form-label">
-              Type
-            </Form.Label>
-            <select
+            <InputTypeList
+              data={props?.selectActivities?.data}
+              // contacts={props?.contacts}
+              onChange={handleChangeType}
+              defaultValue={null}
+              multiple={false}
+              id="single"
+              label="Type"
+            ></InputTypeList>
+            {/* <select
               size="lg"
               className="uk-select"
               required={true}
@@ -121,7 +142,7 @@ function AddActivitiesByReport(props) {
               {props?.selectActivities?.data?.map((el, id) => (
                 <>{el.value && <option value={el?.id}>{el?.value}</option>}</>
               ))}
-            </select>
+            </select> */}
 
             <Form.Label htmlFor="inputValue" className="uk-form-label">
               Description

@@ -30,18 +30,19 @@ class SuggestionsController extends AbstractController
 
 
 
-        $encoders = [new JsonEncoder()];
-        $normalizers = [new DateTimeNormalizer(), new ObjectNormalizer()];
-        $serializer = new Serializer($normalizers, $encoders);
+        $sugge = [];
+        foreach ($suggestion as $value) {
+            // dd($value);
+            if ($value->getIsDeleted() === null) {
+                $sugge[] = [
+                    "id" => $value->getId(),
+                    "label" => $value->getValue(),
 
+                ];
+            }
+        }
 
-        $jsonObject = $serializer->serialize(
-            $suggestion,
-            JsonEncoder::FORMAT,
-            [AbstractNormalizer::IGNORED_ATTRIBUTES => ['parentSugg', "tags", "requireCustomValue", "isLocked", "attributes", "pathString", "path", 'defaultComment', "isDeleted"]]
-        );
-
-        $response =  new Response($jsonObject, 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
+        $response =  new Response(json_encode($sugge), 200, ['Content-Type' => 'application/json', 'datetime_format' => 'Y-m-d']);
         // dd($jsonObject);
 
         $response->setSharedMaxAge(3600);
