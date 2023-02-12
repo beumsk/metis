@@ -87,6 +87,10 @@ function ModalAddContact(props) {
   //   });
   // }
 
+  function handleTags(e) {
+    setType(e[0]?.id);
+  }
+
   return (
     <>
       <button onClick={handleShow} className="ml-4">
@@ -102,15 +106,45 @@ function ModalAddContact(props) {
           <>
             {props?.infosAppels?.value === "Tags" && (
               <InputTypeList
-                type={props.selectListTags}
-                onChangeType={(e) => setType(e)}
+                // type={props.selectListTags}
+
+                data={props?.selectListTags?.data}
+                // defaultValue={
+                //   props?.lieu && props?.lieu?.sugg
+                //     ? [
+                //         {
+                //           id: props?.lieu?.sugg?.id,
+                //           label: props?.lieu?.sugg?.value,
+                //         },
+                //       ]
+                //     : null
+                // }
+                onChange={handleTags}
+                multiple={false}
+                id="single"
+                label="Type"
               ></InputTypeList>
             )}
 
             {props?.infosAppels?.value === "Type de Collaborateur" && (
               <InputTypeList
-                type={props.selectListCollab}
-                onChangeType={(e) => setType(e)}
+                // type={props.selectListTags}
+
+                data={props?.selectListTags?.data}
+                // defaultValue={
+                //   props?.lieu && props?.lieu?.sugg
+                //     ? [
+                //         {
+                //           id: props?.lieu?.sugg?.id,
+                //           label: props?.lieu?.sugg?.value,
+                //         },
+                //       ]
+                //     : null
+                // }
+                onChange={handleTags}
+                multiple={false}
+                id="single"
+                label="Type"
               ></InputTypeList>
             )}
 

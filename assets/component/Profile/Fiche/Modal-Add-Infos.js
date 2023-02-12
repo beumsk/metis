@@ -26,7 +26,7 @@ function ModalEditInfos(props) {
     props?.infos?.suggestionsByBlock &&
       props?.infos?.suggestionsByBlock.length > 0
       ? props?.infos?.suggestionsByBlock
-      : null
+      : []
   );
   const [idPatient, setIdPatient] = useState(id);
   const [error, setError] = useState(null);
@@ -198,7 +198,7 @@ function ModalEditInfos(props) {
       setValueSelect(null);
     }
   }
-
+  console.log(elementsOpt);
   return (
     <>
       <button onClick={handleShow} className="ml-4">
@@ -211,10 +211,10 @@ function ModalEditInfos(props) {
         </Modal.Header>
         <Modal.Body>
           <>
-            {elementsOpt && elementsOpt?.length > 0 && (
+            {elementsOpt && elementsOpt[0]?.length > 0 && (
               <>
                 <SuggestionAutocomplete
-                  data={elementsOpt}
+                  data={elementsOpt[0]}
                   onChange={onChangeSuggestion}
                   multiple={false}
                   id="single"
@@ -233,7 +233,7 @@ function ModalEditInfos(props) {
             />
 
             {errorWithStar && <p className="error-danger">{errorWithStar}</p>}
-            {elementsOpt?.length > 0 && (
+            {elementsOpt[0]?.length > 0 && (
               <>
                 <p>
                   Les suggestions marquées d'une étoile (*) dans la liste
@@ -277,13 +277,13 @@ function ModalEditInfos(props) {
           {error && <p className="error-danger">{error}</p>}
           <Button onClick={handleClose}>Fermer sans enregistrer</Button>
 
-          {elementsOpt && elementsOpt?.length > 0 && (
+          {elementsOpt && elementsOpt[0]?.length > 0 && (
             <Button onClick={handleSave} className="btn-metis">
               Sauver
             </Button>
           )}
-
-          {elementsOpt && elementsOpt.length === 0 && (
+          {/* {console.log(elementsOpt === null)} */}
+          {elementsOpt && elementsOpt[0]?.length === 0 && (
             <Button onClick={handleSaveWithoutValue} className="btn-metis">
               Sauver
             </Button>

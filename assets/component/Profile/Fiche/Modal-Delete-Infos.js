@@ -21,51 +21,16 @@ function ModalDeleteInfos(props) {
   var formData = new FormData();
   formData.append("id", id.toString());
   formData.append("pathString", props.link);
-  const [infos, setInfos] = useState(null);
   const [isSentRepport, setIsSentRepport] = useState(false);
-  const [responseDatas, setResponseDatas] = useState(null);
-  const [elementsOpt, setElementsOpt] = useState(null);
   const [idPatient, setIdPatient] = useState(id);
-  const [start, setStartDate] = useState(
-    props?.infosPatient?.start !== null ? props?.infosPatient?.start : null
-  );
-  const [end, setEndDate] = useState(
-    props?.infosPatient?.end !== null ? props?.infosPatient?.end : null
-  );
-
-  const [valueSelect, setValueSelect] = useState(
-    props?.infosPatient?.sugg?.id !== null
-      ? props?.infosPatient?.sugg?.id
-      : null
-  );
-  const [specificValueInput, setSpecificValueInput] = useState(
-    props?.infosPatient?.value !== null ? props?.infosPatient?.value : null
-  );
-
-  const [commentaireInput, setCommentaire] = useState(
-    props?.infosPatient?.comment !== null ? props?.infosPatient?.comment : null
-  );
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-  useEffect(() => {
-    setElementsOpt(...props?.infos?.suggestionsByBlock);
-    setStartDate(
-      new Date(props?.infosPatient?.start?.timestamp * 1000).toJSON()
-    );
-
-    setEndDate(new Date(props?.infosPatient?.end?.timestamp * 1000).toJSON());
-  }, []);
 
   const handleSave = (e) => {
     let formData = new FormData();
     // value-sugg
 
-    formData.append("valueSelect", valueSelect);
-    formData.append("specificValueInput", specificValueInput);
-    formData.append("commentaireInput", commentaireInput);
-    formData.append("start", start);
-    formData.append("end", end);
     formData.append("idInfo", props?.infosPatient?.id);
     var formGetInfos = new FormData();
     formGetInfos.append("id", id.toString());
@@ -78,8 +43,6 @@ function ModalDeleteInfos(props) {
         Authorization: `Bearer ${auth.auth.accessToken}`,
       },
     }).then(function (response) {
-      // location.replace(window.location.origin + "/" + idPatient);
-      // document.querySelectorAll(".btn-close")[0].click();
       if (response) {
         axios({
           method: "post",
@@ -96,18 +59,9 @@ function ModalDeleteInfos(props) {
             setShow(false);
           })
           .catch(function (response) {});
-        // document.querySelectorAll(".btn-close")[0].click();
-        // location.replace(window.location.origin + "/" + idPatient);
       }
     });
   };
-  //   new Date(1254088800 *1000)
-
-  // if (responseDatas !== null) {
-  //   props.onChange({
-  //     response: responseDatas,
-  //   });
-  // }
 
   return (
     <>

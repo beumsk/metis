@@ -96,7 +96,7 @@ function ModalEditInfos(props) {
 
     var formGetInfos = new FormData();
     formGetInfos.append("id", id.toString());
-
+    console.log(specificValueInput);
     if (specificValueInput !== null) {
       axios({
         method: "post",
@@ -137,7 +137,7 @@ function ModalEditInfos(props) {
 
   const handleSave = (e) => {
     let formData = new FormData();
-
+    console.log(valueSelect);
     let isValueStarAndValueSpécific =
       valueSelect &&
       valueSelect.length > 0 &&
@@ -212,7 +212,7 @@ function ModalEditInfos(props) {
 
     var formGetInfos = new FormData();
     formGetInfos.append("id", id.toString());
-
+    console.log(isValueStarAndValueSpécific, isValueStarValue, valueSelect);
     if (isValueStarAndValueSpécific === true || isValueStarValue === true) {
       axios({
         method: "post",
@@ -251,10 +251,10 @@ function ModalEditInfos(props) {
         <Modal.Body>
           {" "}
           <>
-            {elementsOpt?.length > 0 && (
+            {elementsOpt[0]?.length > 0 && (
               <>
                 <SuggestionAutocomplete
-                  data={elementsOpt}
+                  data={elementsOpt[0]}
                   onChange={onChangeSuggestion}
                   multiple={false}
                   defaultValue={
@@ -282,7 +282,7 @@ function ModalEditInfos(props) {
 
             {errorWithStar && <p className="error-danger">{errorWithStar}</p>}
 
-            {elementsOpt?.length > 0 && (
+            {elementsOpt[0]?.length > 0 && (
               <>
                 <p>
                   Les suggestions marquées d'une étoile (*) dans la liste
@@ -337,15 +337,15 @@ function ModalEditInfos(props) {
           {error && <p className="error-danger"> {error}</p>}
           {isSentRepport && <FontAwesomeIcon icon={faCheck} />}
           <Button onClick={handleClose}>Fermer sans enregistrer</Button>
-          {elementsOpt && elementsOpt?.length > 0 && (
+          {elementsOpt && elementsOpt[0]?.length > 0 && (
             <Button onClick={handleSave} className="btn-metis">
-              Sauver
+              SauverhandleSave
             </Button>
           )}
 
-          {elementsOpt && elementsOpt.length === 0 && (
+          {elementsOpt && elementsOpt[0]?.length === 0 && (
             <Button onClick={handleSaveWithoutValue} className="btn-metis">
-              Sauver
+              SauverhandleSaveWithoutValue
             </Button>
           )}
         </Modal.Footer>

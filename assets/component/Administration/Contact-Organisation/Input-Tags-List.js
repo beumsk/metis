@@ -74,8 +74,8 @@ export default function InputTagsList(props) {
       onClose={() => {
         setOpen(false);
       }}
-      isOptionEqualToValue={(option, value) => option.value === value.title}
-      getOptionLabel={(option) => option.value}
+      isOptionEqualToValue={(option, value) => option.label === value.title}
+      getOptionLabel={(option) => option.label}
       options={options}
       onInputChange={(event, newInputValue) => {
         setInputValue(newInputValue);

@@ -1,56 +1,135 @@
 import React, { useState, useEffect } from "react";
-import Button from "react-bootstrap/Button";
-import Modal from "react-bootstrap/Modal";
-import useAuth from "../hooks/useAuth";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faPlusCircle,
-  faCancel,
-  faEdit,
-} from "@fortawesome/free-solid-svg-icons";
-import { useParams } from "react-router-dom";
-import axios from "axios";
-import Form from "react-bootstrap/Form";
+import nextId from "react-id-generator";
+// custom data matching??
 
-function InputTypeList(props) {
-  const [show, setShow] = useState(false);
-  const [auth, setAuth] = useState(useAuth());
-  let id = useParams().id;
-  var formData = new FormData();
-  formData.append("id", 159);
-  //   formData.append("pathString", props.link);
-  const [contacts, setContacts] = useState(null);
-  const [places, setPlaces] = useState(null);
-  const [elementsOpt, setElementsOpt] = useState(null);
-  const [idPatient, setIdPatient] = useState(id);
-  const [type, setType] = useState(null);
-  const [typeValue, setTypeValue] = useState(null);
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+export default function InputTypeList({
+  data,
+  id,
+  label,
+  placeholder,
+  multiple,
+  defaultValue,
+  ...props
+}) {
+  const [input, setInput] = useState("");
+  const [defaultValueOutput, setDefaultValueOutput] = useState(
+    defaultValue && defaultValue.length > 0 ? defaultValue : null
+  );
+  // const [defaultValueState, setDefaultValueState] = useState(defaultValue);
+  const [open, setOpen] = useState(false);
+  const [filteredData, setFilteredData] = useState(data);
+  const [idInput, setidInput] = useState(nextId());
+  const [selectedData, setSelectedData] = useState([]);
 
-  useEffect(() => {}, [idPatient]);
-  //
-  //   /api/getContacts
-  const onChangeType = (e) => {
-    props.onChangeType(e.target.value);
+  useEffect(() => {
+    if (defaultValueOutput !== null && multiple) {
+      setInput("");
+      setSelectedData(defaultValueOutput !== null ? defaultValueOutput : []);
+    }
+
+    if (defaultValueOutput !== null && multiple === false) {
+      setInput(defaultValueOutput[0].label);
+
+      setSelectedData(defaultValueOutput !== null ? defaultValueOutput : []);
+    }
+  }, []);
+
+  const inputChange = (e) => {
+    let str = e.target.value.toLowerCase();
+    setInput(str);
+    if (e.target.value?.length >= 3) {
+      setFilteredData(
+        [...data].filter((x) => x.label.toLowerCase().includes(str))
+      );
+    } else {
+      setFilteredData(data);
+    }
   };
 
+  const inputBlur = (e) => {
+    setTimeout(() => {
+      setOpen(false);
+    }, 250);
+  };
+
+  const addSelected = (e) => {
+    if (multiple) {
+      setInput("");
+      if (!selectedData.some((x) => x.id === +e.target.id)) {
+        setSelectedData([
+          ...selectedData,
+          filteredData.find((x) => x.id === +e.target.id),
+        ]);
+      }
+    } else {
+      setInput(e.target.innerText);
+      setSelectedData(filteredData.filter((x) => x.id === +e.target.id));
+    }
+
+    setFilteredData(data);
+    setOpen(false);
+  };
+
+  const removeSelected = (id) => {
+    setSelectedData([...selectedData].filter((s) => s.id !== id));
+  };
+
+  const removeSelectedAll = (e) => {
+    if (multiple) {
+      setSelectedData([]);
+    } else {
+      setInput("");
+      setSelectedData([]);
+    }
+  };
+
+  props.onChange(selectedData);
+
   return (
-    <>
-      <select
-        size="lg"
-        value={typeValue}
-        className="uk-select"
-        defaultValue={props.defaultValue}
-        onChange={(e) => onChangeType(e)}
-      >
-        <option>Choisissez une valeur</option>
-        {props?.type?.data?.map((el, id) => (
-          <>{el.value && <option value={el?.id}>{el?.value}</option>}</>
-        ))}
-      </select>
-    </>
+    <div className="autocomplete">
+      <label htmlFor={id}>{label || placeholder}</label>
+      <div className="input-dropdown-wrap">
+        <div
+          className="input-wrap"
+          onClick={(e) => document.getElementById(idInput).focus()}
+        >
+          {/* {multiple && selectedData && ( */}
+          <div className="selected-wrap">
+            {multiple && (
+              <>
+                {selectedData.map((x) => (
+                  <span key={x.id}>
+                    {x.label} <i onClick={() => removeSelected(x.id)}>x</i>
+                  </span>
+                ))}
+              </>
+            )}
+
+            <input
+              type="text"
+              id={idInput}
+              placeholder={placeholder}
+              value={input}
+              autoComplete={"off"}
+              onChange={inputChange}
+              onFocus={() => setOpen(true)}
+              onBlur={inputBlur}
+            />
+          </div>
+          {/* )} */}
+
+          {selectedData.length > 0 && <i onClick={removeSelectedAll}>x</i>}
+        </div>
+        {open && (
+          <ul>
+            {filteredData?.map((x) => (
+              <li key={x.id} id={x.id} onClick={addSelected}>
+                {x.label}
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+    </div>
   );
 }
-
-export default InputTypeList;

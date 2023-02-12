@@ -61,7 +61,9 @@ function ModalAddLieux(props) {
       setShow(false);
     });
   };
-
+  function handleTags(e) {
+    setType(e[0]?.id);
+  }
   return (
     <>
       <button onClick={handleShow} className="ml-4">
@@ -77,15 +79,21 @@ function ModalAddLieux(props) {
           <>
             {props?.infosAppels?.value === "Tags" && (
               <InputTypeList
-                type={props.selectListTags}
-                onChangeType={(e) => setType(e)}
+                data={props?.selectListTags?.data}
+                onChange={handleTags}
+                multiple={false}
+                id="single"
+                label="Type"
               ></InputTypeList>
             )}
 
             {props?.infosAppels?.value === "Type de Collaborateur" && (
               <InputTypeList
-                type={props.selectListCollab}
-                onChangeType={(e) => setType(e)}
+                data={props?.selectListTags?.data}
+                onChange={handleTags}
+                multiple={false}
+                id="single"
+                label="Type"
               ></InputTypeList>
             )}
 

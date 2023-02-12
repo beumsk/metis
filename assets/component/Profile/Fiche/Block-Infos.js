@@ -70,7 +70,7 @@ const BlockInfos = (props) => {
                           >
                             {pi.sugg?.value &&
                             patient.suggestionsByBlock &&
-                            patient.suggestionsByBlock.length > 0 ? (
+                            patient.suggestionsByBlock[0].length > 0 ? (
                               <>{pi.sugg?.value}</>
                             ) : (
                               <>

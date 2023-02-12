@@ -72,6 +72,9 @@ function ModalEditContact(props) {
       }
     });
   };
+  function handleTags(e) {
+    setType(e[0]?.id);
+  }
 
   return (
     <>
@@ -88,26 +91,42 @@ function ModalEditContact(props) {
           <>
             {props?.infosAppels?.sugge[0]?.parentSugg === "Tags" && (
               <InputTypeList
-                onChangeType={(e) => setType(e)}
-                type={props.selectListTags}
+                data={props?.selectListTags?.data}
                 defaultValue={
-                  props.infosAppels.sugge[0].id !== null
-                    ? props.infosAppels.sugge[0].id
+                  props.infosAppels && props.infosAppels.sugge[0]
+                    ? [
+                        {
+                          id: props.infosAppels.sugge[0]?.id,
+                          label: props.infosAppels.sugge[0]?.value,
+                        },
+                      ]
                     : null
                 }
+                onChange={handleTags}
+                multiple={false}
+                id="single"
+                label="Type"
               ></InputTypeList>
             )}
 
             {props?.infosAppels?.sugge[0]?.parentSugg ===
               "Type de Collaborateur" && (
               <InputTypeList
-                onChangeType={(e) => setType(e)}
-                type={props.selectListCollab}
+                data={props?.selectListTags?.data}
                 defaultValue={
-                  props.infosAppels.sugge[0].id !== null
-                    ? props.infosAppels.sugge[0].id
+                  props.infosAppels && props.infosAppels.sugge[0]
+                    ? [
+                        {
+                          id: props.infosAppels.sugge[0]?.id,
+                          label: props.infosAppels.sugge[0]?.value,
+                        },
+                      ]
                     : null
                 }
+                onChange={handleTags}
+                multiple={false}
+                id="single"
+                label="Type"
               ></InputTypeList>
             )}
 
