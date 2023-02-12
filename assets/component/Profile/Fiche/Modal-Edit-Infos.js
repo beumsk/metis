@@ -28,7 +28,7 @@ function ModalEditInfos(props) {
     props?.infos?.suggestionsByBlock &&
       props?.infos?.suggestionsByBlock.length > 0
       ? props?.infos?.suggestionsByBlock
-      : null
+      : []
   );
 
   const [error, setError] = useState(null);
@@ -134,6 +134,7 @@ function ModalEditInfos(props) {
 
     let isNotValueStarAndValueSpécific =
       (valueSelect &&
+        valueSelect.value &&
         valueSelect.value.indexOf("*") > -1 &&
         specificValueInput === null) ||
       specificValueInput === ""
@@ -220,6 +221,8 @@ function ModalEditInfos(props) {
     }
   }
 
+  console.log(elementsOpt);
+
   return (
     <>
       <button onClick={handleShow}>
@@ -233,10 +236,10 @@ function ModalEditInfos(props) {
         <Modal.Body>
           {" "}
           <>
-            {elementsOpt[0]?.length > 0 && (
+            {elementsOpt?.length > 0 && (
               <>
                 <SuggestionAutocomplete
-                  data={elementsOpt[0]}
+                  data={elementsOpt}
                   onChange={onChangeSuggestion}
                   multiple={false}
                   defaultValue={
@@ -264,7 +267,7 @@ function ModalEditInfos(props) {
 
             {errorWithStar && <p className="error-danger">{errorWithStar}</p>}
 
-            {elementsOpt[0]?.length > 0 && (
+            {elementsOpt?.length > 0 && (
               <>
                 <p>
                   Les suggestions marquées d'une étoile (*) dans la liste
@@ -319,15 +322,15 @@ function ModalEditInfos(props) {
           {error && <p className="error-danger"> {error}</p>}
           {isSentRepport && <FontAwesomeIcon icon={faCheck} />}
           <Button onClick={handleClose}>Fermer sans enregistrer</Button>
-          {elementsOpt && elementsOpt[0]?.length > 0 && (
+          {elementsOpt && elementsOpt?.length > 0 && (
             <Button onClick={handleSave} className="btn-metis">
-              SauverhandleSave
+              Sauver
             </Button>
           )}
-
-          {elementsOpt && elementsOpt[0]?.length === 0 && (
+          {/* {console.log(elementsOpt === null)} */}
+          {elementsOpt && elementsOpt?.length === 0 && (
             <Button onClick={handleSaveWithoutValue} className="btn-metis">
-              SauverhandleSaveWithoutValue
+              Sauver
             </Button>
           )}
         </Modal.Footer>

@@ -68,15 +68,13 @@ const BlockInfos = (props) => {
                               justifyContent: "space-between",
                             }}
                           >
-                            {pi.sugg?.value &&
-                            patient.suggestionsByBlock &&
-                            patient.suggestionsByBlock[0].length > 0 ? (
+                            {pi.sugg?.value && patient.suggestionsByBlock ? (
                               <>{pi.sugg?.value}</>
                             ) : (
                               <>
                                 {pi?.value &&
                                 patient.suggestionsByBlock &&
-                                patient.suggestionsByBlock[0].length === 0 ? (
+                                patient.suggestionsByBlock.length === 0 ? (
                                   <>{pi.value}</>
                                 ) : (
                                   <> Pas d'informations </>
@@ -117,7 +115,7 @@ const BlockInfos = (props) => {
                               </p>
                               <p>
                                 {" "}
-                                {patient.suggestionsByBlock[0].length === 0
+                                {patient.suggestionsByBlock.length === 0
                                   ? ""
                                   : pi?.value}
                               </p>

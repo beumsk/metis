@@ -55,7 +55,7 @@ trait InfosPatientTrait
         }
 
 
-        $this->suggestionByBlock[] = $suggestionByBlock;
+        $this->suggestionByBlock = $suggestionByBlock;
 
         return $this;
     }

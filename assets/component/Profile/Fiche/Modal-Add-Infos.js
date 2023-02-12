@@ -95,12 +95,11 @@ function ModalEditInfos(props) {
 
   const handleSave = (e) => {
     let formData = new FormData();
-
+    console.log(valueSelect);
     let isValueStarAndValueSpécific =
       valueSelect &&
-      valueSelect.length > 0 &&
-      valueSelect[0].value &&
-      valueSelect[0].value.indexOf("*") > -1 &&
+      valueSelect.value &&
+      valueSelect.value.indexOf("*") > -1 &&
       specificValueInput !== null &&
       specificValueInput !== ""
         ? true
@@ -108,8 +107,8 @@ function ModalEditInfos(props) {
 
     let isNotValueStarAndValueSpécific =
       (valueSelect &&
-        valueSelect.length > 0 &&
-        valueSelect[0].value.indexOf("*") > -1 &&
+        valueSelect.value &&
+        valueSelect.value.indexOf("*") > -1 &&
         specificValueInput === null) ||
       specificValueInput === ""
         ? true
@@ -123,10 +122,7 @@ function ModalEditInfos(props) {
         : false;
 
     let isValueStarValue =
-      valueSelect &&
-      valueSelect.length > 0 &&
-      valueSelect[0].value &&
-      valueSelect[0].value.indexOf("*") === -1
+      valueSelect && valueSelect.value && valueSelect.value.indexOf("*") === -1
         ? true
         : false;
 
@@ -165,7 +161,7 @@ function ModalEditInfos(props) {
     formData.append("itel", props?.infos?.id);
     formData.append(
       "valueSelect",
-      valueSelect && valueSelect.length > 0 ? valueSelect[0].id : null
+      valueSelect && valueSelect.id ? valueSelect.id : null
     );
     formData.append("specificValueInput", specificValueInput);
 
@@ -192,11 +188,8 @@ function ModalEditInfos(props) {
   };
 
   function onChangeSuggestion(e) {
-    if (e !== null) {
-      setValueSelect(e);
-    } else {
-      setValueSelect(null);
-    }
+    setValueSelect(e);
+    console.log(e);
   }
   console.log(elementsOpt);
   return (
@@ -211,10 +204,10 @@ function ModalEditInfos(props) {
         </Modal.Header>
         <Modal.Body>
           <>
-            {elementsOpt && elementsOpt[0]?.length > 0 && (
+            {elementsOpt && elementsOpt?.length > 0 && (
               <>
                 <SuggestionAutocomplete
-                  data={elementsOpt[0]}
+                  data={elementsOpt}
                   onChange={onChangeSuggestion}
                   multiple={false}
                   id="single"
@@ -233,7 +226,7 @@ function ModalEditInfos(props) {
             />
 
             {errorWithStar && <p className="error-danger">{errorWithStar}</p>}
-            {elementsOpt[0]?.length > 0 && (
+            {elementsOpt?.length > 0 && (
               <>
                 <p>
                   Les suggestions marquées d'une étoile (*) dans la liste
@@ -277,13 +270,13 @@ function ModalEditInfos(props) {
           {error && <p className="error-danger">{error}</p>}
           <Button onClick={handleClose}>Fermer sans enregistrer</Button>
 
-          {elementsOpt && elementsOpt[0]?.length > 0 && (
+          {elementsOpt && elementsOpt?.length > 0 && (
             <Button onClick={handleSave} className="btn-metis">
               Sauver
             </Button>
           )}
           {/* {console.log(elementsOpt === null)} */}
-          {elementsOpt && elementsOpt[0]?.length === 0 && (
+          {elementsOpt && elementsOpt?.length === 0 && (
             <Button onClick={handleSaveWithoutValue} className="btn-metis">
               Sauver
             </Button>
