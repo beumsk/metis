@@ -80,7 +80,10 @@ function ModalEditObjectifs(props) {
     formData.append("isPriority", isPriority);
 
     formData.append("description", description);
-    formData.append("valueType", valueType);
+    formData.append(
+      "valueType",
+      valueType && valueType.length > 0 ? JSON.stringify(valueType[0].id) : null
+    );
     formData.append("patientId", idPatient);
     formData.append("dateCreation", dateValue);
     formData.append("userId", userId);
@@ -115,7 +118,15 @@ function ModalEditObjectifs(props) {
     });
   }
 
-  //   /api/getContacts
+  function onChangeType(e) {
+    setTypeValue(e[0]?.id);
+    console.log(typeValue);
+    if (valueType !== null && typeValue !== null && typeValue === "609") {
+      setValueType(valueType);
+    } else {
+      setValueType(null);
+    }
+  }
   return (
     <>
       <Button onClick={handleShow}>
@@ -144,13 +155,29 @@ function ModalEditObjectifs(props) {
               className="uk-input"
             />
 
-            <Form.Label htmlFor="inputValue">Type</Form.Label>
-            <InputTypeList
+            {/* <Form.Label htmlFor="inputValue">Type</Form.Label> */}
+            {/* <InputTypeList
               type={props.type}
               onChange={(e) => setTypeValue(e)}
               defaultValue={props?.goalsItem?.sugg?.id}
+            /> */}
+            <InputTypeList
+              data={props?.type?.data}
+              onChange={onChangeType}
+              multiple={false}
+              id="single"
+              defaultValue={
+                props?.goalsItem?.sugg
+                  ? [
+                      {
+                        id: props?.goalsItem?.sugg?.id,
+                        label: props?.goalsItem?.sugg?.value,
+                      },
+                    ]
+                  : null
+              }
+              label={"Type"}
             />
-
             <Form.Label htmlFor="inputValue">Valeur</Form.Label>
             <Form.Control
               type="text"

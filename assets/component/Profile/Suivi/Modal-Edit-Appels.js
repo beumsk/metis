@@ -13,7 +13,7 @@ import axios from "axios";
 import Form from "react-bootstrap/Form";
 import InputContactList from "./Input-Contact-List";
 import moment from "moment";
-
+import InputTypeList from "./Input-Type-List";
 function ModalEditAppels(props) {
   const [show, setShow] = useState(false);
   const [auth, setAuth] = useState(useAuth());
@@ -59,7 +59,7 @@ function ModalEditAppels(props) {
   //
 
   const onChangeFunction = (e) => {
-    setCallsFunction(e.target.value);
+    setCallsFunction(e[0]?.id);
   };
 
   const onChangeContacts = (e) => {
@@ -71,7 +71,7 @@ function ModalEditAppels(props) {
   };
 
   const onChangeWhatDoinFunction = (e) => {
-    setValueWhatDoinFunction(e.target.value);
+    setValueWhatDoinFunction(e[0]?.id);
   };
   function onSentCalls() {
     // isCall is true appel entrant
@@ -151,8 +151,25 @@ function ModalEditAppels(props) {
               }
               className="uk-input"
             />
-            <Form.Label htmlFor="inputValue">Fonction du référent</Form.Label>
-            <Form.Select
+
+            <InputTypeList
+              data={props?.fonction?.data}
+              onChange={onChangeFunction}
+              multiple={false}
+              id="single"
+              defaultValue={
+                props?.calls?.func
+                  ? [
+                      {
+                        id: props?.calls?.func?.id,
+                        label: props?.calls?.func?.value,
+                      },
+                    ]
+                  : null
+              }
+              label={"Fonction du référent"}
+            />
+            {/* <Form.Select
               size="lg"
               onChange={(e) => onChangeFunction(e)}
               className="uk-select"
@@ -162,8 +179,8 @@ function ModalEditAppels(props) {
               {props?.fonction?.data?.map((el, id) => (
                 <>{el.value && <option value={el?.id}>{el?.value}</option>}</>
               ))}
-            </Form.Select>
-            <Form.Label htmlFor="inputValue">Valeur</Form.Label>
+            </Form.Select> */}
+            {/* <Form.Label htmlFor="inputValue">Valeur</Form.Label>
             <Form.Select
               size="lg"
               onChange={(e) => onChangeWhatDoinFunction(e)}
@@ -174,8 +191,24 @@ function ModalEditAppels(props) {
               {props?.whatDoinFunction?.data?.map((el, id) => (
                 <>{el.value && <option value={el?.id}>{el?.value}</option>}</>
               ))}
-            </Form.Select>
-
+            </Form.Select> */}
+            <InputTypeList
+              data={props?.whatDoinFunction?.data}
+              onChange={onChangeWhatDoinFunction}
+              multiple={false}
+              id="single"
+              defaultValue={
+                props?.calls?.sugg
+                  ? [
+                      {
+                        id: props?.calls?.sugg?.id,
+                        label: props?.calls?.sugg?.value,
+                      },
+                    ]
+                  : null
+              }
+              label={"Valeur"}
+            />
             <Form.Label htmlFor="inputValue">Titre</Form.Label>
             <Form.Control
               type="text"

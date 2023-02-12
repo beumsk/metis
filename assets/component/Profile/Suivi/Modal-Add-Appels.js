@@ -8,7 +8,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import Form from "react-bootstrap/Form";
 import InputContactList from "./Input-Contact-List";
-
+import InputTypeList from "./Input-Type-List";
 function ModalAddAppels(props) {
   const [show, setShow] = useState(false);
   const [auth, setAuth] = useState(useAuth());
@@ -90,7 +90,7 @@ function ModalAddAppels(props) {
   //
 
   const onChangeFunction = (e) => {
-    setCallsFunction(e.target.value);
+    setCallsFunction(e[0]?.id);
   };
 
   const onChangeContacts = (e) => {
@@ -102,7 +102,7 @@ function ModalAddAppels(props) {
   };
 
   const onChangeWhatDoinFunction = (e) => {
-    setValueWhatDoinFunction(e.target.value);
+    setValueWhatDoinFunction(e[0]?.id);
   };
   function onSent() {
     // isCall is true appel entrant
@@ -167,18 +167,14 @@ function ModalAddAppels(props) {
         </Modal.Header>
         <Modal.Body>
           <>
-            <Form.Label htmlFor="inputValue">Fonction du référent</Form.Label>
-            <Form.Select
-              size="lg"
-              onChange={(e) => onChangeFunction(e)}
-              className="uk-select"
-            >
-              <option>Rajoutez la fonction du référent</option>
-              {fonction?.data?.map((el, id) => (
-                <>{el.value && <option value={el?.id}>{el?.value}</option>}</>
-              ))}
-            </Form.Select>
-            <Form.Label htmlFor="inputValue">Valeur</Form.Label>
+            <InputTypeList
+              data={fonction?.data}
+              onChange={onChangeFunction}
+              multiple={false}
+              id="single"
+              label={"Fonction du référent"}
+            />
+            {/* <Form.Label htmlFor="inputValue">Valeur</Form.Label>
             <Form.Select
               size="lg"
               onChange={(e) => onChangeWhatDoinFunction(e)}
@@ -195,7 +191,16 @@ function ModalAddAppels(props) {
                   )}
                 </>
               ))}
-            </Form.Select>
+            </Form.Select> */}
+
+            <InputTypeList
+              data={whatDoinFunction?.data}
+              onChange={onChangeWhatDoinFunction}
+              multiple={false}
+              id="single"
+              label={"Valeur"}
+            />
+
             {valueWhatDoinFunction === "609" && (
               <>
                 <Form.Label htmlFor="inputValue">

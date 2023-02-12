@@ -36,8 +36,7 @@ class SuggestionsController extends AbstractController
             if ($value->getIsDeleted() === null) {
                 $sugge[] = [
                     "id" => $value->getId(),
-                    "label" => $value->getValue(),
-
+                    "label" => ($value->getValue() === "Autre") ? $value->getValue() . "*" : $value->getValue(),
                 ];
             }
         }

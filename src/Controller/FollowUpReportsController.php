@@ -851,8 +851,6 @@ class FollowUpReportsController extends AbstractController
         $patients = $doctrine->getRepository(Patients::class)->find($patientId);
         $user = $doctrine->getRepository(Patients::class)->find($userId);
         if ($valueType && $valueType !== "null") {
-
-            // $suggestions = $doctrine->getRepository(Suggestions::class)->find($valueWhatDoinFunction);
             $followupGoals->setTitle($valueType);
         }
 
@@ -942,7 +940,10 @@ class FollowUpReportsController extends AbstractController
         $function = $doctrine->getRepository(Suggestions::class)->find($callsFunctionValue);
 
         $followupGoals->setPati($patients);
-        $followupGoals->setTitle($valueType);
+        if ($valueType !== "null") {
+            $followupGoals->setTitle($valueType);
+        }
+
         if ($isCallsPatients === "true") {
 
             $followupGoals->setType(2);

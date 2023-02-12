@@ -121,6 +121,16 @@ function ModalAddObjectifs(props) {
       });
     }
   }
+
+  function onChangeType(e) {
+    setTypeValue(e[0]?.id);
+    console.log(typeValue);
+    if (valueType !== null && typeValue !== null && typeValue === "609") {
+      setValueType(valueType);
+    } else {
+      setValueType(null);
+    }
+  }
   return (
     <>
       <Button onClick={handleShow} className="btn-metis">
@@ -136,21 +146,14 @@ function ModalAddObjectifs(props) {
         <Modal.Body>
           <>
             <InputTypeList
-              type={type}
-              onChange={(e) => {
-                setTypeValue(e);
-                if (
-                  valueType !== null &&
-                  typeValue !== null &&
-                  typeValue === "609"
-                ) {
-                  setValueType(valueType);
-                } else {
-                  setValueType(null);
-                }
-              }}
+              data={type?.data}
+              onChange={onChangeType}
+              multiple={false}
+              id="single"
+              label={"Type"}
             />
-            {typeValue === "609" && (
+
+            {typeValue === 609 && (
               <>
                 <Form.Control
                   type="text"
