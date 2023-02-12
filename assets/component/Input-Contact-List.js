@@ -23,7 +23,6 @@ export default function InputContactList({
   //
   //
   useEffect(() => {
-    console.log(defaultValueOutput);
     if (defaultValueOutput !== null && multiple) {
       setInput("");
       setSelectedData(defaultValueOutput !== null ? defaultValueOutput : []);

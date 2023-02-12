@@ -76,7 +76,7 @@ function EditActivities(props) {
       "type",
       typeForm && typeForm.length > 0 && typeForm[0].id ? typeForm[0].id : null
     );
-    console.log(typeForm);
+
     formData.append("idRepport", props.report.id);
     formData.append("idActivity", props.activity.id);
 

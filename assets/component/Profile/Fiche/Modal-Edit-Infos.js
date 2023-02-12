@@ -13,7 +13,7 @@ import {
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import Form from "react-bootstrap/Form";
-
+import SuggestionAutocomplete from "./Suggestion-Autocomplete";
 function ModalEditInfos(props) {
   const [show, setShow] = useState(false);
   const [auth, setAuth] = useState(useAuth());
@@ -24,7 +24,12 @@ function ModalEditInfos(props) {
   const [infos, setInfos] = useState(null);
   const [isSentRepport, setIsSentRepport] = useState(false);
   const [responseDatas, setResponseDatas] = useState(null);
-  const [elementsOpt, setElementsOpt] = useState(null);
+  const [elementsOpt, setElementsOpt] = useState(
+    props?.infos?.suggestionsByBlock &&
+      props?.infos?.suggestionsByBlock.length > 0
+      ? props?.infos?.suggestionsByBlock
+      : null
+  );
 
   const [error, setError] = useState(null);
   const [idPatient, setIdPatient] = useState(id);
@@ -61,9 +66,6 @@ function ModalEditInfos(props) {
     setIsSentRepport(false);
     setShow(true);
   };
-  useEffect(() => {
-    setElementsOpt(...props?.infos?.suggestionsByBlock);
-  }, []);
 
   const handleSaveWithoutValue = (e) => {
     let formData = new FormData();
@@ -135,47 +137,39 @@ function ModalEditInfos(props) {
 
   const handleSave = (e) => {
     let formData = new FormData();
+
     let isValueStarAndValueSpécific =
-      valueSelect !== null &&
-      document
-        .getElementById("value-sugg")
-        .options[
-          document.getElementById("value-sugg").options.selectedIndex
-        ].innerHTML.indexOf("*") > -1 &&
+      valueSelect &&
+      valueSelect.length > 0 &&
+      valueSelect[0].value &&
+      valueSelect[0].value.indexOf("*") > -1 &&
       specificValueInput !== null &&
       specificValueInput !== ""
         ? true
         : false;
 
     let isNotValueStarAndValueSpécific =
-      (valueSelect !== null &&
-        document
-          .getElementById("value-sugg")
-          .options[
-            document.getElementById("value-sugg").options.selectedIndex
-          ].innerHTML.indexOf("*") > -1 &&
+      (valueSelect &&
+        valueSelect.length > 0 &&
+        valueSelect[0].value.indexOf("*") > -1 &&
         specificValueInput === null) ||
       specificValueInput === ""
         ? true
         : false;
 
     let isValueNotStarAndNotValue =
-      valueSelect === null &&
-      document
-        .getElementById("value-sugg")
-        .options[
-          document.getElementById("value-sugg").options.selectedIndex
-        ].innerHTML.indexOf("*") === -1
+      valueSelect.length === 0 ||
+      (valueSelect &&
+        valueSelect.length === 0 &&
+        (specificValueInput === null || specificValueInput === ""))
         ? true
         : false;
 
     let isValueStarValue =
-      valueSelect !== null &&
-      document
-        .getElementById("value-sugg")
-        .options[
-          document.getElementById("value-sugg").options.selectedIndex
-        ].innerHTML.indexOf("*") === -1
+      valueSelect &&
+      valueSelect.length > 0 &&
+      valueSelect[0].value &&
+      valueSelect[0].value.indexOf("*") === -1
         ? true
         : false;
 
@@ -205,24 +199,20 @@ function ModalEditInfos(props) {
 
     // value-sugg
 
-    formData.append("valueSelect", valueSelect);
     formData.append("specificValueInput", specificValueInput);
     formData.append("commentaireInput", commentaireInput);
     formData.append("start", !start ? null : start);
     formData.append("end", !end ? null : end);
     formData.append("idInfo", props?.infosPatient?.id);
-    formData.append("valueSelect", valueSelect);
+    formData.append(
+      "valueSelect",
+      valueSelect && valueSelect.length > 0 ? valueSelect[0].id : null
+    );
     formData.append("specificValueInput", specificValueInput);
 
     var formGetInfos = new FormData();
     formGetInfos.append("id", id.toString());
 
-    //
-    //   isValueStarAndValueSpécific,
-    //   isValueStarValue,
-    //   valueSelect,
-    //   specificValueInput
-    // );
     if (isValueStarAndValueSpécific === true || isValueStarValue === true) {
       axios({
         method: "post",
@@ -239,12 +229,13 @@ function ModalEditInfos(props) {
       });
     }
   };
-  //   new Date(1254088800 *1000)
 
-  if (responseDatas !== null) {
-    props.onChange({
-      response: responseDatas,
-    });
+  function onChangeSuggestion(e) {
+    if (e !== null) {
+      setValueSelect(e);
+    } else {
+      setValueSelect(null);
+    }
   }
 
   return (
@@ -262,38 +253,21 @@ function ModalEditInfos(props) {
           <>
             {elementsOpt?.length > 0 && (
               <>
-                <Form.Label htmlFor="inputValue">Valeur</Form.Label>
-                <Form.Select
-                  size="lg"
-                  onChange={(e) => {
-                    if (e.target.value !== "Choisissez une valeur") {
-                      setValueSelect(e.target.value);
-                    } else {
-                      setValueSelect(null);
-                    }
-                  }}
-                  id="value-sugg"
-                  className="uk-select"
-                >
-                  <option value={null}>Choisissez une valeur</option>
-                  {elementsOpt
-                    ?.sort((a, b) =>
-                      a?.value !== b?.value ? (a?.value < b?.value ? -1 : 1) : 0
-                    )
-                    .map((el, id) => (
-                      <option
-                        key={el.id}
-                        value={el.id}
-                        selected={
-                          props?.infosPatient?.sugg?.value === el?.value
+                <SuggestionAutocomplete
+                  data={elementsOpt}
+                  onChange={onChangeSuggestion}
+                  multiple={false}
+                  defaultValue={
+                    props?.infosPatient?.sugg
+                      ? {
+                          id: props?.infosPatient?.sugg?.id,
+                          value: props?.infosPatient?.sugg?.value,
                         }
-                      >
-                        {el?.requireCustomValue === true
-                          ? el?.value + "*"
-                          : el?.value}
-                      </option>
-                    ))}
-                </Form.Select>
+                      : null
+                  }
+                  id="single"
+                  label={"Type"}
+                />
               </>
             )}
             <Form.Label htmlFor="inputValue">Valeur Spécifique</Form.Label>

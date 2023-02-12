@@ -124,7 +124,7 @@ function ModalAddObjectifs(props) {
 
   function onChangeType(e) {
     setTypeValue(e[0]?.id);
-    console.log(typeValue);
+
     if (valueType !== null && typeValue !== null && typeValue === "609") {
       setValueType(valueType);
     } else {

@@ -61,7 +61,6 @@ function AddActivitiesByReport(props) {
       typeForm && typeForm.length > 0 && typeForm[0].id ? typeForm[0].id : null
     );
 
-    console.log(typeForm);
     formData.append("idRepport", props.report.id);
 
     if (
@@ -109,7 +108,7 @@ function AddActivitiesByReport(props) {
   function handleChangeType(e) {
     setTypeForm(e);
   }
-  // console.log(props?.activitiesByDefault);
+  //
   return (
     <>
       <Button onClick={handleShow}>

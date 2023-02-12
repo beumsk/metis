@@ -64,7 +64,7 @@ function ModalEditUtilisateurs(props) {
   const handleSave = (e) => {
     let formGetInfos = new FormData();
     // value-sugg
-    console.log(groups);
+
     formGetInfos.append("lastname", lastname);
     formGetInfos.append("firstname", firstname);
     formGetInfos.append("idUser", props.user.id);

@@ -9,7 +9,7 @@ import axios from "axios";
 import moment from "moment";
 import Form from "react-bootstrap/Form";
 import InputPlaceList from "../Suivi/Input-Place-List";
-
+import InputTypeList from "../Suivi/Input-Type-List";
 function ModalLierLieux(props) {
   const [show, setShow] = useState(false);
   const [auth, setAuth] = useState(useAuth());
@@ -25,7 +25,9 @@ function ModalLierLieux(props) {
   const [valueLieux, setValueLieux] = useState(
     props?.lieu?.cont?.id ? props?.lieu?.cont?.id : null
   );
-  const [type, setType] = useState(null);
+  const [typeItemList, setTypeItemList] = useState(
+    props?.lieu?.sugg?.id ? props?.lieu?.sugg?.id : null
+  );
   const [valueType, setValueType] = useState(
     props?.lieu?.sugg?.id ? props?.lieu?.sugg?.id : null
   );
@@ -145,6 +147,11 @@ function ModalLierLieux(props) {
   function onChangePlaces(e) {
     setValueLieux(e);
   }
+
+  function handleChangeType(e) {
+    setValueType(e[0]?.id);
+  }
+
   return (
     <>
       <Button onClick={handleShow} className="btn-metis">
@@ -192,7 +199,7 @@ function ModalLierLieux(props) {
                 </React.Fragment>
               ))}
             </Form.Select> */}
-
+            {/* 
             <Form.Label htmlFor="inputValue">Type</Form.Label>
             <Form.Select
               size="lg"
@@ -209,8 +216,25 @@ function ModalLierLieux(props) {
                   {el?.value && <option value={el.id}>{el?.value}</option>}
                 </React.Fragment>
               ))}
-            </Form.Select>
-
+            </Form.Select> */}
+            <InputTypeList
+              data={props?.type?.data}
+              contacts={props?.contacts}
+              defaultValue={
+                props?.lieu && props?.lieu?.sugg
+                  ? [
+                      {
+                        id: props?.lieu?.sugg?.id,
+                        label: props?.lieu?.sugg?.value,
+                      },
+                    ]
+                  : null
+              }
+              onChange={handleChangeType}
+              multiple={false}
+              id="single"
+              label="Type"
+            ></InputTypeList>
             <Form.Label htmlFor="inputValue">Début</Form.Label>
             <Form.Control
               type="date"

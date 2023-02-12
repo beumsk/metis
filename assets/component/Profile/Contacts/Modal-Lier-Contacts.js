@@ -6,7 +6,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import Form from "react-bootstrap/Form";
 import InputContactList from "../../Input-Contact-List";
-
+import InputTypeList from "../Suivi/Input-Type-List";
 function ModalLierContacts(props) {
   const [show, setShow] = useState(false);
   const [auth, setAuth] = useState(useAuth());
@@ -82,6 +82,10 @@ function ModalLierContacts(props) {
     setContactItemList(e);
   }
 
+  function handleChangeType(e) {
+    setTypeItemList(e[0]?.id);
+  }
+
   return (
     <>
       <Button onClick={handleShow} className="btn-metis">
@@ -102,35 +106,16 @@ function ModalLierContacts(props) {
               id="single"
               label="Contacts"
             ></InputContactList>
-            {/* <Form.Label htmlFor="inputValue">Valeur</Form.Label>
-            <Form.Select
-              size="lg"
-              className="uk-select"
-              onChange={(e) => setContactItemList(e.target.value)}
-              defaultValue={props?.infos?.cont?.id}
-            >
-              <option value="">Choisir contact</option>
-              {props?.contacts?.data?.map((el, id) => (
-                <>
-                  {el?.firstname && el?.lastname && (
-                    <option value={el.id}>
-                      {el?.firstname} {el?.lastname}
-                    </option>
-                  )}
-                </>
-              ))}
-            </Form.Select> */}
-            <Form.Label htmlFor="inputValue">Type</Form.Label>
-            <Form.Select
-              className="uk-select"
-              size="lg"
-              onChange={(e) => setTypeItemList(e.target.value)}
-            >
-              <option value="">Choisir type</option>
-              {props?.type?.data?.map((el, id) => (
-                <>{el.value && <option value={el.id}>{el?.value}</option>}</>
-              ))}
-            </Form.Select>
+
+            <InputTypeList
+              data={props?.type?.data}
+              // contacts={props?.contacts}
+              onChange={handleChangeType}
+              defaultValue={null}
+              multiple={false}
+              id="single"
+              label="Type"
+            ></InputTypeList>
             <Form.Label htmlFor="inputValue">Description</Form.Label>
             <Form.Control
               as="textarea"

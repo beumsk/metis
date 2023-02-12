@@ -6,7 +6,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import Form from "react-bootstrap/Form";
 import InputPatientsList from "../Suivi/Input-Patients-List";
-
+import InputTypeList from "../Suivi/Input-Type-List";
 function ModalEditPatient(props) {
   const [show, setShow] = useState(false);
   const [auth, setAuth] = useState(useAuth());
@@ -97,6 +97,9 @@ function ModalEditPatient(props) {
   function onChangePatients(e) {
     setPatientItemList(e);
   }
+  function handleChangeType(e) {
+    setTypeItemList(e[0]?.id);
+  }
 
   return (
     <>
@@ -117,24 +120,8 @@ function ModalEditPatient(props) {
               id="single"
               label="Patients"
             />
-            {/* <Form.Label htmlFor="inputValue">Valeur</Form.Label>
-            <Form.Select
-              size="lg"
-              className="uk-select"
-              onChange={(e) => setPatientItemList(e.target.value)}
-            >
-              <option value="">Choisir patient</option>
-              {props?.contacts && (
-                <>
-                  {props?.contacts?.data?.map((el, id) => (
-                    <option value={el.id}>
-                      {el?.firstname} {el?.lastname}
-                    </option>
-                  ))}
-                </>
-              )}
-            </Form.Select> */}
-            <Form.Label htmlFor="inputValue">Type</Form.Label>
+
+            {/* <Form.Label htmlFor="inputValue">Type</Form.Label>
             <Form.Select
               size="lg"
               className="uk-select"
@@ -144,7 +131,16 @@ function ModalEditPatient(props) {
               {props?.type?.data?.map((el, id) => (
                 <>{el.value && <option value={el.id}>{el?.value}</option>}</>
               ))}
-            </Form.Select>
+            </Form.Select> */}
+            <InputTypeList
+              data={props?.type?.data}
+              // contacts={props?.contacts}
+              onChange={handleChangeType}
+              defaultValue={null}
+              multiple={false}
+              id="single"
+              label="Type"
+            ></InputTypeList>
             <Form.Label htmlFor="inputValue">Description</Form.Label>
             <Form.Control
               type="textarea"

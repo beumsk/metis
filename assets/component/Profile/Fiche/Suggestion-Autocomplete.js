@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import nextId from "react-id-generator";
 // custom data matching??
 
-export default function InputTypeList({
+export default function SuggestionAutocomplete({
   data,
   id,
   label,
@@ -13,7 +13,7 @@ export default function InputTypeList({
 }) {
   const [input, setInput] = useState("");
   const [defaultValueOutput, setDefaultValueOutput] = useState(
-    defaultValue && defaultValue.length > 0 ? defaultValue : null
+    defaultValue ? defaultValue : null
   );
   // const [defaultValueState, setDefaultValueState] = useState(defaultValue);
   const [open, setOpen] = useState(false);
@@ -28,7 +28,7 @@ export default function InputTypeList({
     }
 
     if (defaultValueOutput !== null && multiple === false) {
-      setInput(defaultValueOutput[0].label);
+      setInput(defaultValueOutput.value);
 
       setSelectedData(defaultValueOutput !== null ? defaultValueOutput : []);
     }
@@ -43,6 +43,15 @@ export default function InputTypeList({
       );
     } else {
       setFilteredData(data);
+    }
+
+    if (e.target.value?.length === 0) {
+      if (multiple) {
+        setSelectedData([]);
+      } else {
+        setInput("");
+        setSelectedData([]);
+      }
     }
   };
 
@@ -99,7 +108,7 @@ export default function InputTypeList({
               <>
                 {selectedData.map((x) => (
                   <span key={x.id}>
-                    {x.label} <i onClick={() => removeSelected(x.id)}>x</i>
+                    {x.value} <i onClick={() => removeSelected(x.id)}>x</i>
                   </span>
                 ))}
               </>
@@ -124,10 +133,22 @@ export default function InputTypeList({
           <ul>
             {filteredData?.map((x) => (
               <li key={x.id} id={x.id} onClick={addSelected}>
-                {x.label}
+                {x.value}
               </li>
             ))}
           </ul>
+
+          // {elementsOpt
+          //   ?.sort((a, b) =>
+          //     a?.value !== b?.value ? (a?.value < b?.value ? -1 : 1) : 0
+          //   )
+          //   .map((el, id) => (
+          //     <option key={el.id} value={el.id}>
+          //       {el?.requireCustomValue === true
+          //         ? el?.value + "*"
+          //         : el?.value}
+          //     </option>
+          //   ))}
         )}
       </div>
     </div>

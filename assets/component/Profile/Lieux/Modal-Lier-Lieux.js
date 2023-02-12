@@ -7,8 +7,7 @@ import axios from "axios";
 import Form from "react-bootstrap/Form";
 import moment from "moment";
 import InputPlaceList from "../Suivi/Input-Place-List";
-// import InputTypeList from "./Input-Type-List";
-
+import InputTypeList from "../Suivi/Input-Type-List";
 function ModalLierLieux(props) {
   const [show, setShow] = useState(false);
   const [auth, setAuth] = useState(useAuth());
@@ -119,7 +118,9 @@ function ModalLierLieux(props) {
     setValueLieux(e);
   }
   //   /api/getContacts
-
+  function handleChangeType(e) {
+    setValueType(e[0]?.id);
+  }
   return (
     <>
       <Button onClick={handleShow} className="btn-metis">
@@ -149,7 +150,26 @@ function ModalLierLieux(props) {
               multiple={false}
               label="Lieux"
             />
-            <Form.Label htmlFor="inputValue">Type</Form.Label>
+
+            <InputTypeList
+              data={props?.type?.data}
+              // contacts={props?.contacts}
+              // defaultValue={
+              //   props?.infos && props?.infos?.sugg
+              //     ? [
+              //         {
+              //           id: props?.infos?.sugg?.id,
+              //           label: props?.infos?.sugg?.value,
+              //         },
+              //       ]
+              //     : null
+              // }
+              onChange={handleChangeType}
+              multiple={false}
+              id="single"
+              label="Type"
+            ></InputTypeList>
+            {/* <Form.Label htmlFor="inputValue">Type</Form.Label>
             <Form.Select
               size="lg"
               style={{ width: "100%" }}
@@ -161,7 +181,7 @@ function ModalLierLieux(props) {
                   {el?.value && <option value={el.id}>{el?.value}</option>}
                 </React.Fragment>
               ))}
-            </Form.Select>
+            </Form.Select> */}
 
             <Form.Label htmlFor="inputValue">Début</Form.Label>
             <Form.Control

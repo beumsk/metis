@@ -12,6 +12,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import Form from "react-bootstrap/Form";
 import InputPatientsList from "../Suivi/Input-Patients-List";
+import InputTypeList from "../Suivi/Input-Type-List";
 function ModalLierPatient(props) {
   const [show, setShow] = useState(false);
   const [auth, setAuth] = useState(useAuth());
@@ -96,6 +97,10 @@ function ModalLierPatient(props) {
     setPatientItemList(e);
   }
 
+  function handleChangeType(e) {
+    setTypeItemList(e[0]?.id);
+  }
+
   return (
     <>
       <Button onClick={handleShow} className="btn-metis">
@@ -108,24 +113,6 @@ function ModalLierPatient(props) {
         </Modal.Header>
         <Modal.Body>
           <>
-            {/* <Form.Label htmlFor="inputValue">Valeur</Form.Label>
-            <Form.Select
-              className="uk-select"
-              size="lg"
-              defaultValue={props?.infos?.orpa?.id}
-              onChange={(e) => setPatientItemList(e.target.value)}
-            >
-              <option value="">Choisir patient</option>
-              {props?.contacts?.data?.map((el, id) => (
-                <>
-                  {el?.firstname && el?.lastname && (
-                    <option value={el.id}>
-                      {el?.firstname} {el?.lastname}
-                    </option>
-                  )}
-                </>
-              ))}
-            </Form.Select> */}
             <InputPatientsList
               onChange={onChangePatients}
               data={props?.patients?.data}
@@ -146,7 +133,7 @@ function ModalLierPatient(props) {
               id="single"
               label="Patients"
             />
-            <Form.Label htmlFor="inputValue">Type</Form.Label>
+            {/* <Form.Label htmlFor="inputValue">Type</Form.Label>
             <Form.Select
               size="lg"
               className="uk-select"
@@ -157,7 +144,25 @@ function ModalLierPatient(props) {
               {props?.type?.data?.map((el, id) => (
                 <option value={el.id}>{el?.value}</option>
               ))}
-            </Form.Select>
+            </Form.Select> */}
+            <InputTypeList
+              data={props?.type?.data}
+              // contacts={props?.contacts}
+              defaultValue={
+                props?.infos && props?.infos?.sugg
+                  ? [
+                      {
+                        id: props?.infos?.sugg?.id,
+                        label: props?.infos?.sugg?.value,
+                      },
+                    ]
+                  : null
+              }
+              onChange={handleChangeType}
+              multiple={false}
+              id="single"
+              label="Type"
+            ></InputTypeList>
             <Form.Label htmlFor="inputValue">Description</Form.Label>
             <Form.Control
               as="textarea"

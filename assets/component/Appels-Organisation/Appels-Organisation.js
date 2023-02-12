@@ -41,7 +41,6 @@ function AppelsOrganisation() {
   formData.append("antenna", auth.antenna);
 
   useEffect(() => {
-    console.log("dans le useeffect");
     var m = moment(limitHistoricSelected, "YYYY-MM-DD");
 
     if (referentSelected !== null && referentSelected.length !== 0) {
@@ -84,8 +83,6 @@ function AppelsOrganisation() {
       },
     })
       .then(function (response) {
-        console.log(response);
-
         setLoadingForLenght(false);
         setPatientsList(response);
       })
@@ -113,7 +110,7 @@ function AppelsOrganisation() {
   function onClickReferent(e) {
     setReferentSelected(e);
   }
-  console.log(referentSelected);
+
   const sentFilters = (e, page) => {
     var formData = new FormData();
     // formData.append("page", lengthList.toString());

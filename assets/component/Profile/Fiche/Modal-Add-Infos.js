@@ -12,7 +12,7 @@ import {
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import Form from "react-bootstrap/Form";
-
+import SuggestionAutocomplete from "./Suggestion-Autocomplete";
 function ModalEditInfos(props) {
   const [show, setShow] = useState(false);
   const [auth, setAuth] = useState(useAuth());
@@ -21,7 +21,13 @@ function ModalEditInfos(props) {
   formData.append("id", id.toString());
   formData.append("pathString", props.link);
   const [infos, setInfos] = useState(null);
-  const [elementsOpt, setElementsOpt] = useState(null);
+  //
+  const [elementsOpt, setElementsOpt] = useState(
+    props?.infos?.suggestionsByBlock &&
+      props?.infos?.suggestionsByBlock.length > 0
+      ? props?.infos?.suggestionsByBlock
+      : null
+  );
   const [idPatient, setIdPatient] = useState(id);
   const [error, setError] = useState(null);
   const [responseDatas, setResponseDatas] = useState(null);
@@ -36,10 +42,6 @@ function ModalEditInfos(props) {
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-
-  useEffect(() => {
-    setElementsOpt(...props?.infos?.suggestionsByBlock);
-  }, []);
 
   const handleSaveWithoutValue = (e) => {
     let formData = new FormData();
@@ -93,47 +95,38 @@ function ModalEditInfos(props) {
 
   const handleSave = (e) => {
     let formData = new FormData();
+
     let isValueStarAndValueSpécific =
-      valueSelect !== null &&
-      document
-        .getElementById("value-sugg")
-        .options[
-          document.getElementById("value-sugg").options.selectedIndex
-        ].innerHTML.indexOf("*") > -1 &&
+      valueSelect &&
+      valueSelect.length > 0 &&
+      valueSelect[0].value &&
+      valueSelect[0].value.indexOf("*") > -1 &&
       specificValueInput !== null &&
       specificValueInput !== ""
         ? true
         : false;
 
     let isNotValueStarAndValueSpécific =
-      (valueSelect !== null &&
-        document
-          .getElementById("value-sugg")
-          .options[
-            document.getElementById("value-sugg").options.selectedIndex
-          ].innerHTML.indexOf("*") > -1 &&
+      (valueSelect &&
+        valueSelect.length > 0 &&
+        valueSelect[0].value.indexOf("*") > -1 &&
         specificValueInput === null) ||
       specificValueInput === ""
         ? true
         : false;
 
     let isValueNotStarAndNotValue =
-      valueSelect === null &&
-      document
-        .getElementById("value-sugg")
-        .options[
-          document.getElementById("value-sugg").options.selectedIndex
-        ].innerHTML.indexOf("*") === -1
+      valueSelect &&
+      valueSelect.length === 0 &&
+      (specificValueInput === null || specificValueInput === "")
         ? true
         : false;
 
     let isValueStarValue =
-      valueSelect !== null &&
-      document
-        .getElementById("value-sugg")
-        .options[
-          document.getElementById("value-sugg").options.selectedIndex
-        ].innerHTML.indexOf("*") === -1
+      valueSelect &&
+      valueSelect.length > 0 &&
+      valueSelect[0].value &&
+      valueSelect[0].value.indexOf("*") === -1
         ? true
         : false;
 
@@ -170,7 +163,10 @@ function ModalEditInfos(props) {
     formData.append("idPatient", idPatient);
     formData.append("infosPatient", props?.infosPatient);
     formData.append("itel", props?.infos?.id);
-    formData.append("valueSelect", valueSelect);
+    formData.append(
+      "valueSelect",
+      valueSelect && valueSelect.length > 0 ? valueSelect[0].id : null
+    );
     formData.append("specificValueInput", specificValueInput);
 
     if (isValueStarAndValueSpécific === true || isValueStarValue === true) {
@@ -195,6 +191,14 @@ function ModalEditInfos(props) {
     }
   };
 
+  function onChangeSuggestion(e) {
+    if (e !== null) {
+      setValueSelect(e);
+    } else {
+      setValueSelect(null);
+    }
+  }
+
   return (
     <>
       <button onClick={handleShow} className="ml-4">
@@ -207,34 +211,15 @@ function ModalEditInfos(props) {
         </Modal.Header>
         <Modal.Body>
           <>
-            {elementsOpt?.length > 0 && (
+            {elementsOpt && elementsOpt?.length > 0 && (
               <>
-                <Form.Label htmlFor="inputValue">Valeur</Form.Label>
-                <Form.Select
-                  size="lg"
-                  className="uk-select"
-                  onChange={(e) => {
-                    if (e.target.value !== "Choisissez une valeur") {
-                      setValueSelect(e.target.value);
-                    } else {
-                      setValueSelect(null);
-                    }
-                  }}
-                  id="value-sugg"
-                >
-                  <option>Choisissez une valeur</option>
-                  {elementsOpt
-                    ?.sort((a, b) =>
-                      a?.value !== b?.value ? (a?.value < b?.value ? -1 : 1) : 0
-                    )
-                    .map((el, id) => (
-                      <option key={el.id} value={el.id}>
-                        {el?.requireCustomValue === true
-                          ? el?.value + "*"
-                          : el?.value}
-                      </option>
-                    ))}
-                </Form.Select>
+                <SuggestionAutocomplete
+                  data={elementsOpt}
+                  onChange={onChangeSuggestion}
+                  multiple={false}
+                  id="single"
+                  label={"Type"}
+                />
               </>
             )}
 

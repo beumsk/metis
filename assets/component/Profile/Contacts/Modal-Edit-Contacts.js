@@ -13,7 +13,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import Form from "react-bootstrap/Form";
 import InputContactList from "../../Input-Contact-List";
-
+import InputTypeList from "../Suivi/Input-Type-List";
 function ModalEditContacts(props) {
   const [show, setShow] = useState(false);
   const [auth, setAuth] = useState(useAuth());
@@ -111,7 +111,11 @@ function ModalEditContacts(props) {
   // if (responseDatas !== null) {
   //   props.onChangeUpdateContact(responseDatas);
   // }
-  console.log(props?.infos?.cont);
+
+  function handleChangeType(e) {
+    setTypeItemList(e[0]?.id);
+  }
+
   return (
     <>
       <Button onClick={handleShow} className="btn-metis">
@@ -124,24 +128,6 @@ function ModalEditContacts(props) {
         </Modal.Header>
         <Modal.Body>
           <>
-            {/* <Form.Label htmlFor="inputValue">Valeur</Form.Label>
-            <Form.Select
-              size="lg"
-              onChange={(e) => setContactItemList(e.target.value)}
-              defaultValue={contactItemList}
-              className="uk-select"
-            >
-              <option value="">Choisir contact</option>
-              {props?.contacts?.data?.map((el, id) => (
-                <>
-                  {el?.firstname && el?.lastname && (
-                    <option value={el.id}>
-                      {el?.firstname} {el?.lastname}
-                    </option>
-                  )}
-                </>
-              ))}
-            </Form.Select> */}
             <InputContactList
               defaultValue={
                 props?.infos?.cont[0]
@@ -150,7 +136,7 @@ function ModalEditContacts(props) {
                         id: props?.infos?.cont[0]?.id,
                         label:
                           props?.infos?.cont[0]?.lastname +
-                          "|" +
+                          " | " +
                           props?.infos?.cont[0]?.description,
                       },
                     ]
@@ -162,7 +148,7 @@ function ModalEditContacts(props) {
               id="single"
               label="Contacts"
             ></InputContactList>
-            <Form.Label htmlFor="inputValue">Type</Form.Label>
+            {/* <Form.Label htmlFor="inputValue">Type</Form.Label>
             <Form.Select
               size="lg"
               defaultValue={props?.infos?.sugg[0]?.id}
@@ -173,7 +159,25 @@ function ModalEditContacts(props) {
               {props?.type?.data?.map((el, id) => (
                 <>{el.value && <option value={el.id}>{el?.value}</option>}</>
               ))}
-            </Form.Select>
+            </Form.Select> */}
+            <InputTypeList
+              data={props?.type?.data}
+              // contacts={props?.contacts}
+              defaultValue={
+                props?.infos && props?.infos?.sugg && props?.infos?.sugg[0]
+                  ? [
+                      {
+                        id: props?.infos?.sugg[0]?.id,
+                        label: props?.infos?.sugg[0]?.value,
+                      },
+                    ]
+                  : null
+              }
+              onChange={handleChangeType}
+              multiple={false}
+              id="single"
+              label="Type"
+            ></InputTypeList>
             <Form.Label htmlFor="inputValue">Description</Form.Label>
             <Form.Control
               as="textarea"
