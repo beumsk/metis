@@ -107,30 +107,15 @@ function ModalEditInfos(props) {
           Authorization: `Bearer ${auth.auth.accessToken}`,
         },
       }).then(function (response) {
-        if (response) {
-          axios({
-            method: "post",
-            url: "/api/patientsInformationByPatients",
-            data: formGetInfos,
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${auth.auth.accessToken}`,
-            },
-          })
-            .then(function (response) {
-              setValueSelect(null);
-              setSpecificValueInput(null);
-              setCommentaire(null);
-              setStartDate(null);
-              setEndDate(null);
-              setResponseDatas(response.data);
-              setIsSentRepport(true);
-              document.querySelectorAll(".btn-close")[0].click();
-            })
-            .catch(function (response) {});
-          // document.querySelectorAll(".btn-close")[0].click();
-          // location.replace(window.location.origin + "/" + idPatient);
-        }
+        setValueSelect(null);
+        setSpecificValueInput(null);
+        setCommentaire(null);
+        setStartDate(null);
+        setEndDate(null);
+        setErrorWithStar(null);
+        setError(null);
+        props.onChange(response);
+        setShow(false);
       });
     }
   };
@@ -140,9 +125,8 @@ function ModalEditInfos(props) {
     console.log(valueSelect);
     let isValueStarAndValueSpécific =
       valueSelect &&
-      valueSelect.length > 0 &&
-      valueSelect[0].value &&
-      valueSelect[0].value.indexOf("*") > -1 &&
+      valueSelect.value &&
+      valueSelect.value.indexOf("*") > -1 &&
       specificValueInput !== null &&
       specificValueInput !== ""
         ? true
@@ -150,8 +134,7 @@ function ModalEditInfos(props) {
 
     let isNotValueStarAndValueSpécific =
       (valueSelect &&
-        valueSelect.length > 0 &&
-        valueSelect[0].value.indexOf("*") > -1 &&
+        valueSelect.value.indexOf("*") > -1 &&
         specificValueInput === null) ||
       specificValueInput === ""
         ? true
@@ -166,10 +149,7 @@ function ModalEditInfos(props) {
         : false;
 
     let isValueStarValue =
-      valueSelect &&
-      valueSelect.length > 0 &&
-      valueSelect[0].value &&
-      valueSelect[0].value.indexOf("*") === -1
+      valueSelect && valueSelect.value && valueSelect.value.indexOf("*") === -1
         ? true
         : false;
 
@@ -204,10 +184,7 @@ function ModalEditInfos(props) {
     formData.append("start", !start ? null : start);
     formData.append("end", !end ? null : end);
     formData.append("idInfo", props?.infosPatient?.id);
-    formData.append(
-      "valueSelect",
-      valueSelect && valueSelect.length > 0 ? valueSelect[0].id : null
-    );
+    formData.append("valueSelect", valueSelect ? valueSelect.id : null);
     formData.append("specificValueInput", specificValueInput);
 
     var formGetInfos = new FormData();
@@ -223,9 +200,14 @@ function ModalEditInfos(props) {
           Authorization: `Bearer ${auth.auth.accessToken}`,
         },
       }).then(function (response) {
-        if (response) {
-          props.onChange(response);
-        }
+        setValueSelect(null);
+        setSpecificValueInput(null);
+        setCommentaire(null);
+        setStartDate(null);
+        setEndDate(null);
+        setErrorWithStar(null);
+        setError(null);
+        props.onChange(response);
       });
     }
   };

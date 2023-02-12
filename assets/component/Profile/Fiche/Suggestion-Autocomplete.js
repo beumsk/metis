@@ -72,7 +72,7 @@ export default function SuggestionAutocomplete({
       }
     } else {
       setInput(e.target.innerText);
-      setSelectedData(filteredData.filter((x) => x.id === +e.target.id));
+      setSelectedData(filteredData.filter((x) => x.id === +e.target.id)[0]);
     }
 
     setFilteredData(data);
