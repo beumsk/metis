@@ -227,12 +227,13 @@ function AppelsOrganisation() {
             onChangeFunction={(e) => onChangeFunction(e)}
           ></SelectFunction>
           <SelectEquipe onChangeTeam={(e) => onChangeTeam(e)}></SelectEquipe>
-          <SelectLimitHistoric
-            onChangeLimitHistoric={(e) => onChangeLimitHistoric(e)}
-          ></SelectLimitHistoric>
           <SelectReferent
             onClickReferent={(e) => onClickReferent(e)}
           ></SelectReferent>
+          <SelectLimitHistoric
+            onChangeLimitHistoric={(e) => onChangeLimitHistoric(e)}
+          ></SelectLimitHistoric>
+
           {/* <SelectContact></SelectContact> */}
           <button className="btn-metis mt-2 mb-4" onClick={sentFilters}>
             {loading && (

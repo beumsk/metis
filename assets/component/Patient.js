@@ -168,7 +168,7 @@ const Patient = () => {
                   )}
 
                   <div className="file btn btn-lg btn-primary">
-                    Change Photo
+                    Changer la Photo
                     <input
                       type="file"
                       name="file"
