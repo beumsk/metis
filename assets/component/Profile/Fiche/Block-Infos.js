@@ -69,7 +69,11 @@ const BlockInfos = (props) => {
                             }}
                           >
                             {pi.sugg?.value && patient.suggestionsByBlock ? (
-                              <>{pi.sugg?.value}</>
+                              <>
+                                {pi.sugg?.value === "Post-suivi"
+                                  ? "My-way"
+                                  : pi.sugg?.value}
+                              </>
                             ) : (
                               <>
                                 {pi?.value &&
