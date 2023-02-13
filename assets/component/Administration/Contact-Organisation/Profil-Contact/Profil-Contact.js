@@ -203,14 +203,14 @@ const ProfilContact = () => {
 
           <div className="row coordonnes-body">
             <table class="uk-table uk-table-striped">
-              <h6>Patients liés</h6>
+              <h6>Patients liées</h6>
               {contactInformation?.patients.map((e) => (
                 <tr>
                   <td>
                     {e.firstName} {e.lastName}
                   </td>
                   <td>
-                    <Link to={"/" + e.id} className="uk-link-muted">
+                    <Link to={"/" + e.id} className="uk-link-muted go-profil">
                       Aller au Profil
                     </Link>
                   </td>

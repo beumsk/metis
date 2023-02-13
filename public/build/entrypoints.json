@@ -4,11 +4,11 @@
       "js": [
         "/build/runtime.dea08fc2.js",
         "/build/878.8fd3df18.js",
-        "/build/app.0d420cb3.js"
+        "/build/app.a2fa1560.js"
       ],
       "css": [
         "/build/878.5be474a8.css",
-        "/build/9.093e5d2f.css"
+        "/build/9.b73ea6c2.css"
       ]
     },
     "global": {
@@ -16,7 +16,7 @@
         "/build/runtime.dea08fc2.js"
       ],
       "css": [
-        "/build/9.093e5d2f.css"
+        "/build/9.b73ea6c2.css"
       ]
     }
   }
