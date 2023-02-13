@@ -184,6 +184,7 @@ function ModalEditInfos(props) {
     formData.append("commentaireInput", commentaireInput);
     formData.append("start", !start ? null : start);
     formData.append("end", !end ? null : end);
+    formData.append("idPatient", idPatient);
     formData.append("idInfo", props?.infosPatient?.id);
     formData.append("valueSelect", valueSelect ? valueSelect.id : null);
     formData.append("specificValueInput", specificValueInput);

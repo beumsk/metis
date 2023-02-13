@@ -40,6 +40,8 @@ class PatientsRepository extends ServiceEntityRepository
         }
     }
 
+
+
     public function findPatientReportsByGoal($patient, $followUpGoalId = null, $keyword = null, $limit = null, $offset = 0)
     {
 

@@ -34,6 +34,7 @@ class InformationTemplateElementController extends AbstractController
 
 
         $idInfo = $request->request->get('idInfo');
+        $idPatient = $request->request->get('idPatient');
 
 
         $valueSelect = ($request->request->get('valueSelect') !== "null") ? $request->request->get('valueSelect') : null;
@@ -73,7 +74,18 @@ class InformationTemplateElementController extends AbstractController
 
 
 
+
+
         $entityManager->flush();
+
+        if ($idPatient) {
+            $patient = $doctrine->getRepository(Patients::class)->find($idPatient);
+            $status = $doctrine->getRepository(Patients::class)->findLatestSuggestion($patient, "/patient/fiche/statut-du-suivi");
+
+            $patient->setStatus($status[0]["value"]);
+
+            $entityManager->flush($patient);
+        }
         return new JsonResponse([
             'response' => "Sent !",
             'idAppel' => $patientInfo->getId()
@@ -172,6 +184,16 @@ class InformationTemplateElementController extends AbstractController
         $entityManager->persist($patientInfo);
 
         $entityManager->flush();
+
+        if ($idPatient) {
+            $patient = $doctrine->getRepository(Patients::class)->find($idPatient);
+            $status = $doctrine->getRepository(Patients::class)->findLatestSuggestion($patient, "/patient/fiche/statut-du-suivi");
+
+            $patient->setStatus($status[0]["value"]);
+
+            $entityManager->flush($patient);
+        }
+
 
 
         $encoders = [new JsonEncoder()];
