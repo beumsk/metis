@@ -60,12 +60,12 @@ function ModalDeleteMedias(props) {
         </Modal.Header>
         <Modal.Body>
           <>
-            <p>Êtes-vous sur ?</p>
+            <p>Êtes-vous sûr.e de vouloir effacer cette information ? ?</p>
           </>
         </Modal.Body>
         <Modal.Footer>
           {isSentRepport && <FontAwesomeIcon icon={faCheck} />}
-          <Button onClick={handleClose}>Fermer sans enregistrer</Button>
+          <Button onClick={handleClose}>Non</Button>
           <Button onClick={deleteMedias} className="btn-metis-red">
             Effacer
           </Button>

@@ -57,7 +57,7 @@ const Menu = () => {
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="justify-content-end flex-grow-1 pe-3">
               <Form_AddPatients></Form_AddPatients>
-              <Nav.Link href="/patients">Profil patients</Nav.Link>
+              <Nav.Link href="/patients">Liste de patients</Nav.Link>
 
               <Nav.Link href="/appels-organisation">Liste d'appels</Nav.Link>
 

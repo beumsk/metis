@@ -112,7 +112,7 @@ const Form_AddPatients = () => {
             onClick={(e) => setFormCreation(e)}
             className="btn-metis"
           >
-            Ajouter
+            Ajouter le patient
           </Button>
         </Modal.Footer>
       </Modal>

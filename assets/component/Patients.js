@@ -161,13 +161,13 @@ function Patients() {
             </div>
 
             {/* MUST TO HAVE : surnom */}
-            <div className="col-sm-3">
+            {/* <div className="col-sm-3">
               <input
                 type="date"
                 className="uk-select"
                 onChange={(e) => setDateBirth(e.target.value)}
               />
-            </div>
+            </div> */}
             <div className="col-sm-3">
               <Form.Select
                 onChange={(e) => setTypeSelectPatient(e.target.value)}
