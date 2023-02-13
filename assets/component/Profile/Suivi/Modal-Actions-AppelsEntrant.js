@@ -179,7 +179,9 @@ function ModalActionsAppelsEntrant(props) {
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Ajouter un appel entrant</Modal.Title>
+          <Modal.Title>
+            <h6>Ajouter un appel entrant</h6>
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>
@@ -188,7 +190,7 @@ function ModalActionsAppelsEntrant(props) {
                 htmlFor="inputValueSpécifique"
                 className="uk-form-label"
               >
-                Date de la rencontre
+                Date de l'appel
               </Form.Label>
               <Form.Control
                 type="date"

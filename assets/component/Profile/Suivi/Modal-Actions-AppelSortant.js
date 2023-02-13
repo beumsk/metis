@@ -142,7 +142,9 @@ function ModalActionsAppelsSortant(props) {
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Ajouter un appel sortant</Modal.Title>
+          <Modal.Title>
+            <h6>Ajouter un appel sortant</h6>
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>
@@ -151,7 +153,7 @@ function ModalActionsAppelsSortant(props) {
                 htmlFor="inputValueSpécifique"
                 className="uk-form-label"
               >
-                Date de la rencontre
+                Date de l'appel'
               </Form.Label>
               <Form.Control
                 type="date"
