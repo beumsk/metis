@@ -178,8 +178,8 @@ function Patients() {
 
                 {/* referentList */}
                 {typePatient?.map((type) => (
-                  <option value={type.idvalue} key={type.idvalue}>
-                    {type.value}
+                  <option value={type.value} key={type.id}>
+                    {type.label}
                   </option>
                 ))}
               </Form.Select>
@@ -306,7 +306,8 @@ function Patients() {
                 </Accordion.Item>
               </Accordion>
             ))}
-            {patientsList.data && patientsList.data.length === 10 && (
+
+            {patientsList.data && patientsList.data.length === lengthList && (
               <button className="btn-metis" onClick={readMore}>
                 Afficher plus
               </button>

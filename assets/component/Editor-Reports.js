@@ -18,7 +18,7 @@ const Editor = (props) => {
     <div>
       <SunEditor
         code="fr"
-        defaultValue={props.content}
+        defaultValue={defaultValueRapport}
         lang="fr"
         onChange={onChangeEditor}
         setOptions={{
