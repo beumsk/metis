@@ -38,29 +38,58 @@ class PatientsInformationTemplateElementRepository extends ServiceEntityReposito
             $this->getEntityManager()->flush();
         }
     }
+    public function findElement()
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
 
-//    /**
-//     * @return PatientsInformationTemplateElement[] Returns an array of PatientsInformationTemplateElement objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('p')
-//            ->andWhere('p.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('p.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+        $stringPath = '/patient/fiche/information-generale';
 
-//    public function findOneBySomeField($value): ?PatientsInformationTemplateElement
-//    {
-//        return $this->createQueryBuilder('p')
-//            ->andWhere('p.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+        // $id = $patient["id"];
+
+
+
+        $qb->select('ite')
+            ->from('App:InformationTemplateElement', 'ite')
+
+            ->innerJoin(
+                'App:InformationTemplateBlock',
+                'itbk',
+                'WITH',
+                'ite.itbk = itbk.id'
+            )
+            ->andWhere('itbk.block_type = :type')
+            // ->setMaxResults(1)
+            ->setParameters(['type' => 'patient'])
+
+            ->orderBy('itbk.block_order', 'ASC');
+
+
+        $query = $qb->getQuery();
+
+        return $query->getResult();
+    }
+    //    /**
+    //     * @return PatientsInformationTemplateElement[] Returns an array of PatientsInformationTemplateElement objects
+    //     */
+    //    public function findByExampleField($value): array
+    //    {
+    //        return $this->createQueryBuilder('p')
+    //            ->andWhere('p.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->orderBy('p.id', 'ASC')
+    //            ->setMaxResults(10)
+    //            ->getQuery()
+    //            ->getResult()
+    //        ;
+    //    }
+
+    //    public function findOneBySomeField($value): ?PatientsInformationTemplateElement
+    //    {
+    //        return $this->createQueryBuilder('p')
+    //            ->andWhere('p.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->getQuery()
+    //            ->getOneOrNullResult()
+    //        ;
+    //    }
 }

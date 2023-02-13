@@ -34,7 +34,7 @@ trait InfosPatientTrait
     }
 
     /**
-     * @return Collection|Suggestions[]
+     * @return Collection|Suggestions
      */
     public function getSuggestionsByBlock()
     {
@@ -55,7 +55,7 @@ trait InfosPatientTrait
         }
 
 
-        $this->suggestionByBlock = $suggestionByBlock;
+        $this->suggestionByBlock[] = $suggestionByBlock;
 
         return $this;
     }
