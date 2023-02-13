@@ -220,17 +220,22 @@ class PatientsController extends AbstractController
 
                 if ($key->getSugv() !== null && $sugg->getId() === $key->getSugv()->getId()) {
 
-
-
                     $s = $doctrine->getRepository(Suggestions::class)->findBy(["parentSugg" => $sugg->getId()]);
-
-                    // dd(json_decode($s));
-
-
 
                     foreach ($s as $value) {
                         $key->setSuggestionsByBlock($value);
                     }
+                }
+            }
+        }
+
+        foreach ($templateElement as $key) {
+            $te = $key->getId();
+
+            foreach ($suggestionElement as $sugg) {
+
+                if ($key->getSuggestionsByBlock() === null) {
+                    $key->setSuggestionsByBlock([]);
                 }
             }
         }

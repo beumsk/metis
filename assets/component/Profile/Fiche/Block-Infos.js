@@ -77,8 +77,8 @@ const BlockInfos = (props) => {
                             ) : (
                               <>
                                 {pi?.value &&
-                                patient.suggestionsByBlock &&
-                                patient.suggestionsByBlock.length === 0 ? (
+                                patient?.suggestionsByBlock &&
+                                patient?.suggestionsByBlock?.length === 0 ? (
                                   <>{pi.value}</>
                                 ) : (
                                   <> Pas d'informations </>
