@@ -6,6 +6,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import Form from "react-bootstrap/Form";
 import Editor from "./Editor-Reports";
+import EditorReportCalls from "./Editor-Reports-Calls";
 import InputPlaceList from "./Input-Place-List";
 import InputContactList from "./Input-Contact-List";
 import InputGoalsList from "./Input-Goals-List";
@@ -402,14 +403,14 @@ function EditReportMeet(props) {
       props?.informationPatient?.activityType === 4 ? (
         <>
           <Form.Label htmlFor="inputValue">Description</Form.Label>
-          <Editor
+          <EditorReportCalls
             onChange={editorChange}
             isEditorCalls={true}
             // content={
             //   props.informationPatient.content ||
             //   props.informationPatient.description
             // }
-          ></Editor>
+          ></EditorReportCalls>
 
           <button onClick={(e) => sentCalls(e)} className="mt-4 btn-metis">
             Sauver

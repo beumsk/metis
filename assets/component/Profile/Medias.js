@@ -138,6 +138,7 @@ const Medias = (props) => {
                         className="btn-metis"
                         style={{ marginLeft: "1rem" }}
                         href={medias.absolutePath}
+                        target="_blank"
                       >
                         Télécharger
                       </a>

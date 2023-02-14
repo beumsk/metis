@@ -42,22 +42,20 @@ function EditNoReportMeet(props) {
           (e) => e?.sugg && e?.sugg?.parentValue === "Activités"
         )}
       ></IndicateursActiviteesComponent>
-
-      {props.rapport && props.rapport.fogo && props.rapport.fogo.length > 0 && (
-        <div className="data-row">
-          <h6>Objectifs : </h6>
-          <div>
-            {props?.rapport.fogo?.map((fo) => (
-              <span className="tags-contacts">
-                {fo.label}
-                {fo.type}
-                {fo.description}
-              </span>
-            ))}
-          </div>
+      {/* {props.rapport && props.rapport.fogo && props.rapport.fogo.length > 0 && ( */}
+      <div className="data-row">
+        <h6>Objectifs : </h6>
+        <div>
+          {props?.rapport.fogo?.map((fo) => (
+            <span className="tags-contacts">
+              {fo.label}
+              {fo.type}
+              {fo.description}
+            </span>
+          ))}
         </div>
-      )}
-
+      </div>
+      {/* )} */}
       {/* {props.rapport &&
           props.rapport.fore &&
           props.rapport.fore.length > 0 && (
@@ -70,57 +68,59 @@ function EditNoReportMeet(props) {
               </span>
             </div>
           )} */}
-
-      {props.rapport && props.rapport.cont && (
-        <div className="data-row">
-          <h6>Contact : </h6>
-          {!(props.rapport.cont.length > 0) ? (
-            <>
+      {/* {props.rapport && props.rapport.cont && ( */}
+      <div className="data-row">
+        <h6>Contact : </h6>
+        {!(
+          props.rapport &&
+          props.rapport.cont &&
+          props.rapport.cont.length > 0
+        ) ? (
+          <>
+            {props?.rapport?.cont?.map((cont) => (
               <Link className="tags-contacts" to={"/profil-contact/" + cont.id}>
-                {props?.rapport.cont.lastname} {props?.rapport.cont.firstname}{" "}
+                {cont.lastname} {cont.firstname}{" "}
               </Link>
-            </>
-          ) : (
-            <>
-              <div>
-                {props?.rapport.cont?.map((cont) => (
-                  <Link
-                    className="tags-contacts"
-                    to={"/profil-contact/" + cont.id}
-                  >
-                    {cont.label}
-                    {/* {cont.firstname} */}
-                  </Link>
-                ))}
-              </div>
-            </>
-          )}
-        </div>
-      )}
-
-      {props.rapport &&
-        props.rapport.plac &&
-        props.rapport.plac.lastname !== null && (
-          <div className="data-row">
-            <h6>Lieu : </h6>
-            <span style={{ fontWeight: "normal" }}>
-              {props.rapport.plac.lastname}
-            </span>
-          </div>
+            ))}
+          </>
+        ) : (
+          <>
+            <div>
+              {props?.rapport?.cont?.map((cont) => (
+                <Link
+                  className="tags-contacts"
+                  to={"/profil-contact/" + cont.id}
+                >
+                  {cont.label}
+                  {/* {cont.firstname} */}
+                </Link>
+              ))}
+            </div>
+          </>
         )}
+      </div>
 
-      {props?.activityType === 1 && props?.rapport?.reportType && (
-        <div className="data-row">
-          <h6>Type de rencontre : </h6>
-          <span style={{ fontWeight: "normal" }}>
-            {props.rapport.reportType === 1 && "Vu"}
-            {props.rapport.reportType === 2 && "Rencontre"}
-            {props.rapport.reportType === 3 && "Repos"}
-            {props.rapport.reportType === 4 && "Recherche"}
-          </span>
-        </div>
-      )}
-
+      {/* {props.rapport &&
+        props.rapport.plac &&
+        props.rapport.plac.lastname !== null && ( */}
+      <div className="data-row">
+        <h6>Lieu : </h6>
+        <span style={{ fontWeight: "normal" }}>
+          {props?.rapport?.plac?.lastname}
+        </span>
+      </div>
+      {/* )} */}
+      {/* {props?.activityType === 1 && props?.rapport?.reportType && ( */}
+      <div className="data-row">
+        <h6>Type de rencontre : </h6>
+        <span style={{ fontWeight: "normal" }}>
+          {props?.rapport?.reportType === 1 && "Vu"}
+          {props?.rapport?.reportType === 2 && "Rencontre"}
+          {props?.rapport?.reportType === 3 && "Repos"}
+          {props?.rapport?.reportType === 4 && "Recherche"}
+        </span>
+      </div>
+      {/* )} */}
       {/* {props.activityType !== 1 &&
         props.rapport &&
         props.rapport.creationDate && (
@@ -133,7 +133,6 @@ function EditNoReportMeet(props) {
             </span>
           </div>
         )} */}
-
       {props.rapport && props.rapport.reportDate && (
         <div className="data-row">
           <h6>Date de rencontre : </h6>
@@ -144,22 +143,20 @@ function EditNoReportMeet(props) {
           </span>
         </div>
       )}
-
-      {props.rapport &&
-        props.rapport.duration &&
-        props.rapport.duration !== "1970-01-01T00:00:00.000+00:00" && (
-          <div className="data-row">
-            <h6>Durée : </h6>
-            <span style={{ fontWeight: "normal" }}>
-              {props.rapport.duration?.slice(11, 16)}
-            </span>
-          </div>
-        )}
-
+      <div className="data-row">
+        <h6>Durée : </h6>
+        <span style={{ fontWeight: "normal" }}>
+          {props.rapport &&
+          props.rapport.duration &&
+          props.rapport.duration !== "1970-01-01T00:00:00.000+00:00"
+            ? props.rapport.duration?.slice(11, 16)
+            : ""}
+        </span>
+      </div>
       <div className="data-row">
         <h6>Description : </h6>
-        {props.rapport.description === "null" ||
-        props.rapport.content === "null" ? (
+        {props?.rapport?.description === "null" ||
+        props?.rapport?.content === "null" ? (
           <p>Aucune description donnée pour l'instant</p>
         ) : (
           <div

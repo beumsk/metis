@@ -5,6 +5,12 @@ body,
   min-height: 100%;
 
 }
+.table-contacts{
+  a:hover{
+    color: #506904!important;
+  }
+}
+
 #table-contact{
   a:hover{
     color: #506904!important;
@@ -14,9 +20,15 @@ body,
 .go-profil{
   float: right;
 }
+
+.table-contacts{
+  a{
+    color: #3b461c!important;
+  }
+}
 #table-contact{
   a{
-    color: #91bd10!important;
+    color: #3b461c!important;
   }
 }
 .react-time-picker__wrapper {
