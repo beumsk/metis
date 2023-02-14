@@ -59,6 +59,8 @@ function ModalEditInfos(props) {
     props?.infosPatient?.comment !== null ? props?.infosPatient?.comment : null
   );
 
+  const [errorWithDateStart, setErrorDateStart] = useState(null);
+
   const handleClose = () => setShow(false);
   const handleShow = () => {
     setErrorWithStar(null);
@@ -123,6 +125,8 @@ function ModalEditInfos(props) {
   const handleSave = (e) => {
     let formData = new FormData();
     console.log(valueSelect);
+
+    let isNotStartDate = start === null ? false : true;
     let isValueStarAndValueSpécific =
       valueSelect &&
       valueSelect.value &&
@@ -169,6 +173,12 @@ function ModalEditInfos(props) {
       setError(null);
     }
 
+    if (isNotStartDate === false) {
+      setErrorDateStart(true);
+    } else {
+      setErrorDateStart(false);
+    }
+
     if (isValueStarValue === true) {
       setError(null);
       setErrorWithStar(null);
@@ -192,7 +202,10 @@ function ModalEditInfos(props) {
     var formGetInfos = new FormData();
     formGetInfos.append("id", id.toString());
     console.log(isValueStarAndValueSpécific, isValueStarValue, valueSelect);
-    if (isValueStarAndValueSpécific === true || isValueStarValue === true) {
+    if (
+      (isValueStarAndValueSpécific === true || isValueStarValue === true) &&
+      isNotStartDate === true
+    ) {
       axios({
         method: "post",
         url: "/api/editPatientInformation",
@@ -321,6 +334,9 @@ function ModalEditInfos(props) {
         </Modal.Body>
         <Modal.Footer>
           {error && <p className="error-danger"> {error}</p>}
+          {errorWithDateStart && (
+            <p className="error-danger">Date de début obligatoire</p>
+          )}
           {isSentRepport && <FontAwesomeIcon icon={faCheck} />}
           <Button onClick={handleClose}>Fermer sans enregistrer</Button>
           {elementsOpt && elementsOpt?.length > 0 && (

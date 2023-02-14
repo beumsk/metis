@@ -37,6 +37,7 @@ function ModalEditInfos(props) {
   const [valueSelect, setValueSelect] = useState(null);
   const [specificValueInput, setSpecificValueInput] = useState(null);
   const [errorWithStar, setErrorWithStar] = useState(null);
+  const [errorWithDateStart, setErrorDateStart] = useState(null);
 
   const [commentaireInput, setCommentaire] = useState(null);
 
@@ -125,10 +126,18 @@ function ModalEditInfos(props) {
       valueSelect && valueSelect.value && valueSelect.value.indexOf("*") === -1
         ? true
         : false;
+    // errorWithDateStart
+    let isNotStartDate = start === null ? false : true;
 
     if (isNotValueStarAndValueSpécific === true) {
       setError(null);
       setErrorWithStar("Veuillez rajouter cette valeur !");
+    }
+
+    if (isNotStartDate === false) {
+      setErrorDateStart(true);
+    } else {
+      setErrorDateStart(false);
     }
 
     if (isValueNotStarAndNotValue === true) {
@@ -165,7 +174,10 @@ function ModalEditInfos(props) {
     );
     formData.append("specificValueInput", specificValueInput);
 
-    if (isValueStarAndValueSpécific === true || isValueStarValue === true) {
+    if (
+      (isValueStarAndValueSpécific === true || isValueStarValue === true) &&
+      isNotStartDate === true
+    ) {
       axios({
         method: "post",
         url: "/api/setPatientInformation",
@@ -268,6 +280,9 @@ function ModalEditInfos(props) {
         </Modal.Body>
         <Modal.Footer>
           {error && <p className="error-danger">{error}</p>}
+          {errorWithDateStart && (
+            <p className="error-danger">Date de début obligatoire</p>
+          )}
           <Button onClick={handleClose}>Fermer sans enregistrer</Button>
 
           {elementsOpt && elementsOpt?.length > 0 && (

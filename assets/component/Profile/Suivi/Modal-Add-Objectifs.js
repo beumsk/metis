@@ -80,7 +80,11 @@ function ModalAddObjectifs(props) {
       setErrorType(false);
     }
 
-    if (typeValue !== "609" && typeValue === null && valueType === null) {
+    if (
+      typeValue !== "609" &&
+      (typeValue === null || typeValue === undefined) &&
+      valueType === null
+    ) {
       setErrorValue(true);
     } else {
       setErrorValue(false);
@@ -88,7 +92,9 @@ function ModalAddObjectifs(props) {
 
     let isOtherValue = typeValue === "609" && valueType === null ? false : true;
     let isValue =
-      typeValue !== "609" && typeValue === null && valueType === null
+      typeValue !== "609" &&
+      (typeValue === null || typeValue === undefined) &&
+      valueType === null
         ? false
         : true;
 
@@ -124,13 +130,13 @@ function ModalAddObjectifs(props) {
 
   function onChangeType(e) {
     setTypeValue(e[0]?.id);
-
     if (valueType !== null && typeValue !== null && typeValue === "609") {
       setValueType(valueType);
     } else {
       setValueType(null);
     }
   }
+
   return (
     <>
       <Button onClick={handleShow} className="btn-metis">
