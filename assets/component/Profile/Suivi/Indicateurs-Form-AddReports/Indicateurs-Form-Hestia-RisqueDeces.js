@@ -202,9 +202,7 @@ function IndicateursFormHestiaRisqueDeces(props) {
     <>
       <div className="addSoins-form">
         <div key={`inline-radio`} className="mb-3">
-          <Form.Label htmlFor="inputValue" style={{ display: "block" }}>
-            Sécurité
-          </Form.Label>
+          <h5>Sécurité</h5>
           <Form.Check
             inline
             label="Le logement est insalubre ET mal utilisé par la personne (0)"
@@ -249,7 +247,9 @@ function IndicateursFormHestiaRisqueDeces(props) {
             }
             id={`inline-radio-28`}
           />
-          <Form.Label htmlFor="inputValue">Commentaire</Form.Label>
+          <Form.Label htmlFor="inputValue" className="uk-form-label mt-2">
+            Commentaire
+          </Form.Label>
           <textarea
             as="textarea"
             className="uk-textarea"
@@ -262,10 +262,9 @@ function IndicateursFormHestiaRisqueDeces(props) {
             onChange={(e) => onChangeDescriptionSecuritee(e)}
           />
         </div>
+
         <div key={`inline-radio`} className="mb-3">
-          <Form.Label htmlFor="inputValue" style={{ display: "block" }}>
-            Santé
-          </Form.Label>
+          <h5>Santé</h5>
           <Form.Check
             inline
             label="La personne refuse les soins, ne prend pas son traitement et n’a aucun contact extérieur (porte fermée) (0)"
@@ -310,7 +309,9 @@ function IndicateursFormHestiaRisqueDeces(props) {
             type={"radio"}
             id={`inline-radio-32`}
           />
-          <Form.Label htmlFor="inputValue">Commentaire</Form.Label>
+          <Form.Label htmlFor="inputValue" className="uk-form-label mt-2">
+            Commentaire
+          </Form.Label>
           <textarea
             as="textarea"
             className="uk-textarea"
@@ -323,10 +324,9 @@ function IndicateursFormHestiaRisqueDeces(props) {
             onChange={(e) => onChangeDescriptionSantee(e)}
           />
         </div>
+
         <div key={`inline-radio`} className="mb-3">
-          <Form.Label htmlFor="inputValue" style={{ display: "block" }}>
-            Consommation
-          </Form.Label>
+          <h5>Consommation</h5>
           <Form.Check
             inline
             label="La personne a une ou plusieurs dépendances et ne gère pas du tout : elle consomme massivement et se met en danger (ne se rend pas compte du problème) (0)"
@@ -371,7 +371,9 @@ function IndicateursFormHestiaRisqueDeces(props) {
             type={"radio"}
             id={`inline-radio-36`}
           />
-          <Form.Label htmlFor="inputValue">Commentaire</Form.Label>
+          <Form.Label htmlFor="inputValue" className="uk-form-label mt-2">
+            Commentaire
+          </Form.Label>
           <textarea
             as="textarea"
             className="uk-textarea"

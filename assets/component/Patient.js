@@ -179,11 +179,23 @@ const Patient = () => {
                   </div>
                 </div>
               </div>
-              <div className="col-sm-6">
+              <div className="col-sm-10">
                 <div className="profile-head">
-                  <h1 style={{ color: "#212529" }}>
-                    {patient.firstname} {patient.lastname}
-                  </h1>
+                  <div className="profile-head-title">
+                    <h1 style={{ color: "#212529" }}>
+                      {patient.firstname} {patient.lastname}
+                    </h1>
+                    <EditPatient
+                      patient={patient}
+                      onChangeEditPatient={onChangeEditPatient}
+                    ></EditPatient>
+                    {auth?.auth?.roles?.length > 0 &&
+                      auth?.auth?.roles?.includes("ROLE_ADMIN") && (
+                        <ModalDeletePatient
+                          patient={patient}
+                        ></ModalDeletePatient>
+                      )}
+                  </div>
                   {patient.nicknames && <h5>{patient.nicknames}</h5>}
                   <p>
                     {patient && patient.birthdate !== null ? (
@@ -220,21 +232,6 @@ const Patient = () => {
                       )}
                     </span>
                   </p>
-                </div>
-              </div>
-              <div className="col-sm-4">
-                <div className="btn-groups">
-                  <EditPatient
-                    patient={patient}
-                    onChangeEditPatient={onChangeEditPatient}
-                  ></EditPatient>
-
-                  {auth?.auth?.roles?.length > 0 &&
-                    auth?.auth?.roles?.includes("ROLE_ADMIN") && (
-                      <ModalDeletePatient
-                        patient={patient}
-                      ></ModalDeletePatient>
-                    )}
                 </div>
               </div>
             </div>

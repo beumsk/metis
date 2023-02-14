@@ -25,9 +25,12 @@ const Editor = (props) => {
         setOptions={{
           height: 200,
           plugins: plugins,
+          imageResizing: false,
+          imageHeightShow: false,
+          imageAlignShow: false,
+          imageUrlInput: false,
           buttonList: [
             ["undo", "redo"],
-
             // ["font", "fontSize", "formatBlock"],
             // ["paragraphStyle", "blockquote"],
             [
@@ -41,9 +44,7 @@ const Editor = (props) => {
             ["fontColor", "hiliteColor"],
             ["removeFormat"],
             // "/", // Line break
-
             ["outdent", "indent"],
-
             [
               // "table",
               "link",

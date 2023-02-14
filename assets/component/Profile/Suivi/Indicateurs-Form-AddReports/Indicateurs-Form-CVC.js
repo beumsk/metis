@@ -200,9 +200,7 @@ function IndicateursFormCVC(props) {
     <>
       <div className="addSoins-form">
         <div key={`inline-radio`} className="mb-3">
-          <Form.Label htmlFor="inputValue" style={{ display: "block" }}>
-            Corps
-          </Form.Label>
+          <h5>Corps</h5>
           <Form.Check
             inline
             label="Saleté apparente avec parasites OU saleté apparente avec odeurs (0)"
@@ -247,7 +245,10 @@ function IndicateursFormCVC(props) {
             type={"radio"}
             id={`inline-radio-4`}
           />
-          <Form.Label htmlFor="inputValue">Commentaire</Form.Label>
+
+          <Form.Label htmlFor="inputValue" className="uk-form-label mt-2">
+            Commentaire
+          </Form.Label>
           <textarea
             as="textarea"
             rows={2}
@@ -260,10 +261,9 @@ function IndicateursFormCVC(props) {
             onChange={(e) => onChangeDescriptionCorps(e)}
           />
         </div>
+
         <div key={`inline-radio`} className="mb-3">
-          <Form.Label htmlFor="inputValue" style={{ display: "block" }}>
-            Vêtements
-          </Form.Label>
+          <h5>Vêtements</h5>
           <Form.Check
             inline
             label="Sales, abîmés et malodorants (0)"
@@ -308,7 +308,10 @@ function IndicateursFormCVC(props) {
             type={"radio"}
             id={`inline-radio-8`}
           />
-          <Form.Label htmlFor="inputValue">Commentaire</Form.Label>
+
+          <Form.Label htmlFor="inputValue" className="uk-form-label mt-2">
+            Commentaire
+          </Form.Label>
           <textarea
             as="textarea"
             className="uk-textarea"
@@ -321,10 +324,9 @@ function IndicateursFormCVC(props) {
             onChange={(e) => onChangeDescriptionVetements(e)}
           />
         </div>
+
         <div key={`inline-radio`} className="mb-3">
-          <Form.Label htmlFor="inputValue" style={{ display: "block" }}>
-            Comportement
-          </Form.Label>
+          <h5>Comportement</h5>
           <Form.Check
             inline
             label="Anormal et dangereux (0)"
@@ -369,7 +371,10 @@ function IndicateursFormCVC(props) {
             type={"radio"}
             id={`inline-radio-12`}
           />
-          <Form.Label htmlFor="inputValue">Commentaire</Form.Label>
+
+          <Form.Label htmlFor="inputValue" className="uk-form-label mt-2">
+            Commentaire
+          </Form.Label>
           <textarea
             as="textarea"
             className="uk-textarea"

@@ -169,6 +169,7 @@ function ModalActionsAppelsSortant(props) {
                   closeMenuOnSelect={false}
                   components={animatedComponents}
                   onChange={(e) => onChangeTagsAppels(e)}
+                  placeholder="Sélectionner..."
                   defaultValue={{
                     value: props?.defaultValueGoalsValue?.id,
                     label: props?.defaultValueGoalsValue?.description,
@@ -185,6 +186,7 @@ function ModalActionsAppelsSortant(props) {
                   closeMenuOnSelect={false}
                   components={animatedComponents}
                   onChange={(e) => onChangeTagsContacts(e)}
+                  placeholder="Sélectionner..."
                   defaultValue={{
                     value: props?.defaultValueContact?.id,
                     label:

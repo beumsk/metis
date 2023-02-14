@@ -215,6 +215,7 @@ function ModalActionsAppelsEntrant(props) {
                   closeMenuOnSelect={false}
                   components={animatedComponents}
                   onChange={(e) => onChangeTagsContacts(e)}
+                  placeholder="Sélectionner..."
                   isMulti
                   styles={{ menu: (base) => ({ ...base, zIndex: 9999 }) }}
                   options={props?.contacts?.data}
@@ -227,6 +228,7 @@ function ModalActionsAppelsEntrant(props) {
                   closeMenuOnSelect={false}
                   components={animatedComponents}
                   onChange={(e) => onChangeTagsAppels(e)}
+                  placeholder="Sélectionner..."
                   isMulti
                   styles={{ menu: (base) => ({ ...base, zIndex: 9999 }) }}
                   options={props?.listCalls?.data}

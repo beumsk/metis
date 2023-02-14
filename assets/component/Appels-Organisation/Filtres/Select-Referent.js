@@ -51,6 +51,7 @@ const SelectReferent = (props) => {
         closeMenuOnSelect={false}
         components={animatedComponents}
         onChange={(e) => onChangeTags(e)}
+        placeholder="Sélectionner..."
         // defaultValue={[colourOptions[4], colourOptions[5]]}
         isMulti
         styles={{

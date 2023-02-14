@@ -79,7 +79,7 @@ function EditPatient(props) {
   const handleShow = () => setShow(true);
   return (
     <>
-      <Button onClick={handleShow} className={"editIconPatient"}>
+      <Button onClick={handleShow}>
         <FontAwesomeIcon icon={faEdit} />
       </Button>
 

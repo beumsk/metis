@@ -63,8 +63,9 @@ function FilterRapportDetails(props) {
   return (
     <form>
       <div className="search-textRapport row">
-        <div className="col-sm-4">
-          <label className="uk-form-label">Description de rapport</label>
+        <p>Rechercher par :</p>
+        <div className="col-md-6 col-lg-3">
+          <label className="uk-form-label">Mot clé</label>
           <input
             type="text"
             className="uk-input"
@@ -72,22 +73,22 @@ function FilterRapportDetails(props) {
             onChange={(e) => setFilterTextContentRapport(e.target.value)}
           />
         </div>
-        <div className="search-textRapport col-sm-4">
+        <div className="search-textRapport col-md-6 col-lg-3">
           <label className="uk-form-label">Type de rapport</label>
           <Form.Select
             defaultValue={filterTypeOfReports}
             className="uk-select"
             onChange={(e) => setTypeOfRepports(e.target.value)}
           >
-            <option value="">Choisissez le type de rapport</option>
+            <option value="">Choisir le type de rapport</option>
             <option value={1}>Rapport de rencontre</option>
             <option value={3}>Rapport de réunion</option>
             <option value={4}>Appel entrant</option>
             <option value={2}>Appel sortant</option>
           </Form.Select>
         </div>
-        <div className="search-textRapport col-sm-4">
-          <label className="uk-form-label">Rechercher par date</label>
+        <div className="search-textRapport col-md-6 col-lg-3">
+          <label className="uk-form-label">Date</label>
           <input
             type="date"
             className="uk-select"
@@ -95,16 +96,14 @@ function FilterRapportDetails(props) {
             onChange={(e) => setFilterDateContentRapport(e.target.value)}
           />
         </div>
-        <div className="row">
-          <div className="col-sm-6">
-            <button
-              onClick={(e) => onChangeRapportFilter(e)}
-              className="uk-button uk-button-default mt-4"
-              type="submit"
-            >
-              Filtrer
-            </button>
-          </div>
+        <div className="col-md-6 col-lg-3">
+          <button
+            onClick={(e) => onChangeRapportFilter(e)}
+            className="uk-button uk-button-default mt-4"
+            type="submit"
+          >
+            Filtrer
+          </button>
         </div>
       </div>
     </form>

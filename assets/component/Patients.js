@@ -150,7 +150,7 @@ function Patients() {
         </h1>
         <form className="container-filter">
           <div className="row">
-            <div className="col-sm-3">
+            <div className="col-md-3">
               <input
                 type="text"
                 className="uk-input"
@@ -168,7 +168,7 @@ function Patients() {
                 onChange={(e) => setDateBirth(e.target.value)}
               />
             </div> */}
-            <div className="col-sm-3">
+            <div className="col-md-3">
               <Form.Select
                 onChange={(e) => setTypeSelectPatient(e.target.value)}
                 value={typeSelectPatient}
@@ -185,7 +185,7 @@ function Patients() {
               </Form.Select>
             </div>
 
-            <div className="col-sm-3">
+            <div className="col-md-3">
               <Button
                 onClick={(e) => onSubmitFilter(e)}
                 id="btn-search"
@@ -220,21 +220,22 @@ function Patients() {
                         <FontAwesomeIcon icon={faUser} />
                       )}
                     </div>
-                    <div className="col-sm-2">
+                    <div className="col-sm-3">
                       {patient.firstname} {patient.lastname} {patient.nicknames}
                       <Link className="seeProfil" to={"/" + patient.id}>
                         Voir profil
                       </Link>
                     </div>
-                    <div className="col-sm-2">
-                      {patient.birthdate &&
-                        moment(patient?.birthdate)
-                          .utc("UTC+01:00")
-                          .format("DD-MM-YYYY")}
-                    </div>
-
-                    <div className="col-sm-3">{patient.birthLocation}</div>
                     <div className="col-sm-3">
+                      <span>
+                        {patient.birthdate &&
+                          moment(patient?.birthdate)
+                            .utc("UTC+01:00")
+                            .format("DD-MM-YYYY")}
+                      </span>
+                      <span>{patient.birthLocation || ""}</span>
+                    </div>
+                    <div className="col-sm-4">
                       {patient.status ? (
                         <span className="status">
                           <>{patient.status}</>

@@ -146,7 +146,7 @@ function IndicateursActiviteesComponent(props) {
                   select={props.selectActivities}
                   onChangeActivities={onChangeActivities}
                   report={props.report}
-                ></EditActivities>{" "}
+                ></EditActivities>
                 <DeleteActivities
                   activity={el}
                   onChangeActivities={onChangeActivities}
@@ -199,7 +199,7 @@ function IndicateursActiviteesComponent(props) {
                       places={props.places}
                       onChangeActivities={onChangeActivities}
                       report={props.report}
-                    ></EditActivities>{" "}
+                    ></EditActivities>
                     <DeleteActivities
                       activity={el}
                       onChangeActivities={onChangeActivities}

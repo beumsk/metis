@@ -74,7 +74,7 @@ function ModalAddUtilisateurs(props) {
 
   return (
     <>
-      <button onClick={handleShow} className="ml-4">
+      <button onClick={handleShow} className="ml-4 btn-metis">
         Ajouter un utilisateur
       </button>
 

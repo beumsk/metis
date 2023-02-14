@@ -117,12 +117,9 @@ function Lieux() {
             sLengthMenu: "Afficher les enregistrements par:  _MENU_",
             sZeroRecords: "Aucune données pour l'instant",
             // sEmptyTable: "La table est vide",
-            sInfo:
-              "Affichage des enregistrements du _START_ au _END_ sur un total de _TOTAL_ enregistrements",
-            sInfoEmpty:
-              "Affichage des enregistrements de 0 à 0 sur un total de 0 enregistrements",
-            sInfoFiltered:
-              "(filtré à partir d'un total de _MAX_ enregistrements)",
+            sInfo: "Enregistrements _START_ à _END_ sur _TOTAL_",
+            sInfoEmpty: "Enregistrements 0 à 0 sur 0",
+            sInfoFiltered: "(filtré de _MAX_ enregistrements)",
             sInfoPostFix: "",
             sSearch: "Chercher: ",
             sUrl: "",

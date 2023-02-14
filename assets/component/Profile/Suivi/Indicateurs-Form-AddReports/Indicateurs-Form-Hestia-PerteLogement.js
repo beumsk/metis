@@ -200,9 +200,7 @@ function IndicateursFormHestiaPerteLogement(props) {
     <>
       <div className="addSoins-form">
         <div key={`inline-radio`} className="mb-3">
-          <Form.Label htmlFor="inputValue" className="uk-form-label">
-            Voisinage
-          </Form.Label>
+          <h5>Voisinage</h5>
           <Form.Check
             inline
             label="Conflits de voisinage (0)"
@@ -247,7 +245,7 @@ function IndicateursFormHestiaPerteLogement(props) {
             type={"radio"}
             id={`inline-radio-16`}
           />
-          <Form.Label htmlFor="inputValue" className="uk-form-label">
+          <Form.Label htmlFor="inputValue" className="uk-form-label mt-2">
             Commentaire
           </Form.Label>
           <textarea
@@ -262,10 +260,9 @@ function IndicateursFormHestiaPerteLogement(props) {
             onChange={(e) => onChangeDescriptionVoisinage(e)}
           />
         </div>
+
         <div key={`inline-radio`} className="mb-3">
-          <Form.Label htmlFor="inputValue" className="uk-form-label">
-            Hygiène logement
-          </Form.Label>
+          <h5>Hygiène logement</h5>
           <Form.Check
             inline
             label="Si cumule au moins 2 éléments : Présence d’odeurs nauséabondes, nuisibles, altération du matériel, accumulation (0)"
@@ -310,7 +307,7 @@ function IndicateursFormHestiaPerteLogement(props) {
             type={"radio"}
             id={`inline-radio-20`}
           />
-          <Form.Label htmlFor="inputValue" className="uk-form-label">
+          <Form.Label htmlFor="inputValue" className="uk-form-label mt-2">
             Commentaire
           </Form.Label>
           <textarea
@@ -325,10 +322,9 @@ function IndicateursFormHestiaPerteLogement(props) {
             onChange={(e) => onChangeDescriptionHygiene(e)}
           />
         </div>
+
         <div key={`inline-radio`} className="mb-3">
-          <Form.Label htmlFor="inputValue" className="uk-form-label">
-            Bailleur
-          </Form.Label>
+          <h5>Bailleur</h5>
           <Form.Check
             inline
             label="Absence de paiement du loyer (0)"
@@ -375,7 +371,7 @@ function IndicateursFormHestiaPerteLogement(props) {
           />
           <Form.Label
             htmlFor="inputValue"
-            className="uk-form-label"
+            className="uk-form-label mt-2"
             onChange={(e) => onChangeDescriptionBailleur(e)}
           >
             Commentaire

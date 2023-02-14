@@ -36,6 +36,10 @@
     align-items: center;
   }
 
+  .edit-delete button {
+    margin-left: 0.5rem;
+  }
+
   .indicateur-subline {
     font-size: 14px;
     padding-left: 12px;
@@ -45,13 +49,6 @@
   .indicateurs {
     margin-top: 0.5rem;
   }
-}
-
-.editIconPatient {
-  display: block;
-  float: right;
-  /* margin-right: 0.5rem; */
-  margin-left: 0.5rem;
 }
 
 .row-btnRapport {

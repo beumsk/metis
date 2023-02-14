@@ -151,8 +151,15 @@ h5 {
 }
 
 .profile-head {
-
   margin-bottom: 3rem;
+
+  .profile-head-title {
+    display: flex;
+
+    button {
+      margin-left: 0.5rem;
+    }
+  }
 }
 
 
