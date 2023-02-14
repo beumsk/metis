@@ -254,8 +254,6 @@ function RapportDetails(props) {
       .catch(function (response) {});
   }
 
-  function switchEditMode(e) {}
-
   useEffect(() => {
     if (!toggle) {
       informations?.data.forEach((element) => {
@@ -310,33 +308,6 @@ function RapportDetails(props) {
 
                   setInformations(informations);
                 }
-
-                // if (e.target.checked === false) {
-                //   setToggle(false);
-                //   r.isShow = false;
-
-                //   setInformations(informations);
-                //   axios({
-                //     method: "post",
-                //     url: "/api/getFollowUpReportsById",
-                //     data: reportData,
-                //     headers: {
-                //       "Content-Type": "application/json",
-                //       Authorization: `Bearer ${auth.auth.accessToken}`,
-                //     },
-                //   })
-                //     .then(function (response) {
-                //       setInformations(response);
-                //     })
-                //     .catch(function (response) {});
-                // }
-
-                // if (r.isHightlight === false) {
-                //   setToggle(!toggle);
-                //   r.isShow = toggle;
-
-                //   setInformations(informations);
-                // }
               }}
             />
             <Form.Check.Label>

@@ -14,6 +14,7 @@ import Form from "react-bootstrap/Form";
 import InputContactList from "./Input-Contact-List";
 import moment from "moment";
 import InputTypeList from "./Input-Type-List";
+import DeleteAppels from "./Input-Type-List";
 function ModalEditAppels(props) {
   const [show, setShow] = useState(false);
   const [auth, setAuth] = useState(useAuth());
@@ -125,7 +126,7 @@ function ModalEditAppels(props) {
   return (
     <>
       <Button onClick={handleShow}>
-        <FontAwesomeIcon icon={faEdit} style={{ marginRight: "1rem" }} />
+        <FontAwesomeIcon icon={faEdit} />
       </Button>
 
       <Modal show={show} onHide={handleClose}>
@@ -304,10 +305,12 @@ function ModalEditAppels(props) {
           </>
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={handleClose}>Fermer sans enregistrer</Button>
-          <Button onClick={onSentCalls} className="btn-metis">
-            Sauver
-          </Button>
+          <div className="btn-group">
+            <Button onClick={handleClose}>Fermer sans enregistrer</Button>
+            <Button onClick={onSentCalls} className="btn-metis">
+              Sauver
+            </Button>
+          </div>
         </Modal.Footer>
       </Modal>
     </>

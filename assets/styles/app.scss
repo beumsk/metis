@@ -5,6 +5,18 @@ body,
   min-height: 100%;
 
 }
+
+.modal-footer{
+  display: flex;
+  justify-content: space-between;
+
+}
+.btn-metis-delete{
+  background-color: #ee5e5e;
+    padding: 0.7rem;
+    float: left;
+    color: white;
+}
 .table-contacts{
   a:hover{
     color: #506904!important;

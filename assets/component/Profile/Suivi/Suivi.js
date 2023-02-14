@@ -21,6 +21,8 @@ import ModalEditObjectifs from "./Modal-Edit-Objectifs";
 import ModalEditAppels from "./Modal-Edit-Appels";
 import ModalActionsAppelsEntrant from "./Modal-Actions-AppelsEntrant";
 import ModalActionsAppelSortant from "./Modal-Actions-AppelSortant";
+import DeleteAppels from "./Delete-Appels";
+import DeleteObjectifs from "./Delete-Objectifs";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 
 const Profile = () => {
@@ -116,6 +118,7 @@ const Profile = () => {
         setGoalsListForSelect(response);
       })
       .catch(function (response) {});
+
     axios({
       method: "post",
       url: "/api/getFollowUpReportsGoals",
@@ -268,21 +271,19 @@ const Profile = () => {
   };
 
   function onChangeGoals(e) {
-    setGoalsList(e);
-    var reportSearch = new FormData();
-    reportSearch.append("id", idPatient);
-    reportSearch.append("number", 10);
+    var formData = new FormData();
+    formData.append("id", id.toString());
     axios({
       method: "post",
-      url: "/api/getFollowUpReportsById",
-      data: reportSearch,
+      url: "/api/getFollowUpReportsGoals",
+      data: formData,
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${auth.auth.accessToken}`,
       },
     })
       .then(function (response) {
-        return setSearch(response);
+        setGoalsList(response);
       })
       .catch(function (response) {});
   }
@@ -384,6 +385,10 @@ const Profile = () => {
                               type={type}
                               onChange={onChangeGoals}
                             ></ModalEditObjectifs>
+                            <DeleteObjectifs
+                              goalsItem={g.id}
+                              onChange={onChangeGoals}
+                            ></DeleteObjectifs>
                             <OverlayTrigger
                               overlay={
                                 <Tooltip id="button-tooltip">
@@ -434,6 +439,10 @@ const Profile = () => {
                             type={type}
                             onChange={onChangeGoals}
                           ></ModalEditObjectifs>
+                          <DeleteObjectifs
+                            goalsItem={g.id}
+                            onChange={onChangeGoals}
+                          ></DeleteObjectifs>
                           <OverlayTrigger
                             overlay={
                               <Tooltip id="button-tooltip">
@@ -476,15 +485,17 @@ const Profile = () => {
                 <Accordion.Body>
                   {goalsList?.data.map((g, id) => (
                     <>
-                      {g &&
-                      g.type === 1 &&
-                      (g.status === 2 || g.status === 3) ? (
+                      {g && g.type === 1 && g.status === 2 ? (
                         <div className="item-goals" key={id}>
                           <ModalEditObjectifs
                             goalsItem={g}
                             onChange={onChangeGoals}
                             type={type}
                           ></ModalEditObjectifs>
+                          <DeleteObjectifs
+                            goalsItem={g.id}
+                            onChange={onChangeGoals}
+                          ></DeleteObjectifs>
                           <OverlayTrigger
                             overlay={
                               <Tooltip id="button-tooltip">
@@ -503,6 +514,50 @@ const Profile = () => {
                                 g?.isHightlight
                                   ? { fontWeight: "bold", color: "#4f5053" }
                                   : { fontWeight: "normal", color: "#4f5053" }
+                              }
+                              onClick={(e) => choiceRepport(g.id)}
+                            >
+                              (
+                              {new Date(g.creationDate)
+                                .toLocaleString("fr-BE")
+                                .substring(0, 10)}
+                              ){g?.func?.value} {g?.value} {g?.description} (
+                              {g?.forelength})
+                            </Link>
+                          </OverlayTrigger>
+                        </div>
+                      ) : (
+                        ""
+                      )}
+                      {g && g.type === 1 && g.status === 3 ? (
+                        <div className="item-goals" key={id}>
+                          <ModalEditObjectifs
+                            goalsItem={g}
+                            onChange={onChangeGoals}
+                            type={type}
+                          ></ModalEditObjectifs>
+                          <DeleteObjectifs
+                            goalsItem={g.id}
+                            onChange={onChangeGoals}
+                          ></DeleteObjectifs>
+                          <OverlayTrigger
+                            overlay={
+                              <Tooltip id="button-tooltip">
+                                (
+                                {new Date(g.creationDate)
+                                  .toLocaleString("fr-BE")
+                                  .substring(0, 10)}
+                                ) {g?.func?.value} {g?.value} {g?.description} (
+                                {g?.forelength})
+                              </Tooltip>
+                            }
+                          >
+                            <Link
+                              // from={window.location.origin}
+                              style={
+                                g?.isHightlight
+                                  ? { fontWeight: "bold", color: "#c70303" }
+                                  : { fontWeight: "normal", color: "#c70303" }
                               }
                               onClick={(e) => choiceRepport(g.id)}
                             >
@@ -554,6 +609,10 @@ const Profile = () => {
                                 whatDoinFunction={whatDoinFunction}
                                 onChange={onChangeGoals}
                               ></ModalEditAppels>
+                              <DeleteAppels
+                                goalsItem={g.id}
+                                onChange={onChangeGoals}
+                              ></DeleteAppels>
                               <OverlayTrigger
                                 overlay={
                                   <Tooltip id="button-tooltip">
@@ -609,6 +668,10 @@ const Profile = () => {
                               whatDoinFunction={whatDoinFunction}
                               onChange={onChangeGoals}
                             ></ModalEditAppels>
+                            <DeleteAppels
+                              goalsItem={g.id}
+                              onChange={onChangeGoals}
+                            ></DeleteAppels>
                             <OverlayTrigger
                               overlay={
                                 <Tooltip id="button-tooltip">
@@ -652,9 +715,7 @@ const Profile = () => {
                   <Accordion.Body>
                     {goalsList?.data.map((g, id) => (
                       <>
-                        {g &&
-                        g?.type === 2 &&
-                        (g.status === 2 || g.status === 3) ? (
+                        {g && g?.type === 2 && g.status === 2 ? (
                           <div className="item-goals" key={id}>
                             <ModalEditAppels
                               calls={g}
@@ -663,6 +724,10 @@ const Profile = () => {
                               whatDoinFunction={whatDoinFunction}
                               onChange={onChangeGoals}
                             ></ModalEditAppels>
+                            <DeleteAppels
+                              goalsItem={g.id}
+                              onChange={onChangeGoals}
+                            ></DeleteAppels>
                             <OverlayTrigger
                               overlay={
                                 <Tooltip id="button-tooltip">
@@ -681,6 +746,52 @@ const Profile = () => {
                                   g?.isHightlight
                                     ? { fontWeight: "bold", color: "#4f5053" }
                                     : { fontWeight: "normal", color: "#4f5053" }
+                                }
+                                onClick={(e) => choiceRepport(g.id)}
+                              >
+                                (
+                                {new Date(g.creationDate)
+                                  .toLocaleString("fr-BE")
+                                  .substring(0, 10)}
+                                ) {g?.func?.value} {g?.value} {g?.description} (
+                                {g?.forelength})
+                              </Link>
+                            </OverlayTrigger>
+                          </div>
+                        ) : (
+                          ""
+                        )}
+                        {g && g?.type === 2 && g.status === 3 ? (
+                          <div className="item-goals" key={id}>
+                            <ModalEditAppels
+                              calls={g}
+                              contacts={contacts}
+                              fonction={fonction}
+                              whatDoinFunction={whatDoinFunction}
+                              onChange={onChangeGoals}
+                            ></ModalEditAppels>
+                            <DeleteAppels
+                              goalsItem={g.id}
+                              onChange={onChangeGoals}
+                            ></DeleteAppels>
+                            <OverlayTrigger
+                              overlay={
+                                <Tooltip id="button-tooltip">
+                                  (
+                                  {new Date(g.creationDate)
+                                    .toLocaleString("fr-BE")
+                                    .substring(0, 10)}
+                                  ) {g?.func?.value} {g?.value} {g?.description}{" "}
+                                  ({g?.forelength})
+                                </Tooltip>
+                              }
+                            >
+                              <Link
+                                // from={window.location.origin}
+                                style={
+                                  g?.isHightlight
+                                    ? { fontWeight: "bold", color: "#c70303" }
+                                    : { fontWeight: "normal", color: "#c70303" }
                                 }
                                 onClick={(e) => choiceRepport(g.id)}
                               >

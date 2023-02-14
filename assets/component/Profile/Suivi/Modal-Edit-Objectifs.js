@@ -12,6 +12,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import Form from "react-bootstrap/Form";
 import InputTypeList from "./Input-Type-List";
+import DeleteObjectifs from "./Delete-Objectifs";
 
 function ModalEditObjectifs(props) {
   const [show, setShow] = useState(false);
@@ -131,7 +132,7 @@ function ModalEditObjectifs(props) {
     <>
       <Button onClick={handleShow}>
         {" "}
-        <FontAwesomeIcon icon={faEdit} style={{ marginRight: "1rem" }} />
+        <FontAwesomeIcon icon={faEdit} />
       </Button>
 
       <Modal show={show} onHide={handleClose}>
@@ -221,10 +222,12 @@ function ModalEditObjectifs(props) {
           </>
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={handleClose}>Fermer sans enregistrer</Button>
-          <Button onClick={onSent} className="btn-metis">
-            Sauver
-          </Button>
+          <div className="btn-group">
+            <Button onClick={handleClose}>Fermer sans enregistrer</Button>
+            <Button onClick={onSent} className="btn-metis">
+              Sauver
+            </Button>
+          </div>
         </Modal.Footer>
       </Modal>
     </>
