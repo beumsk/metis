@@ -98,7 +98,7 @@ const Search = () => {
         onClick={(e) => onClickIfValue()}
         aria-label="Search"
         onChange={setValue}
-        autocomplete="off"
+        autoComplete="off"
       />
       {isOpen}
       {resultSearch && isOpen && (

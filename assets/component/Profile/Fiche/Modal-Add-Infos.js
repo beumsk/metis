@@ -96,7 +96,7 @@ function ModalEditInfos(props) {
 
   const handleSave = (e) => {
     let formData = new FormData();
-    console.log(valueSelect);
+
     let isValueStarAndValueSpécific =
       valueSelect &&
       valueSelect.value &&
@@ -127,7 +127,7 @@ function ModalEditInfos(props) {
         ? true
         : false;
     // errorWithDateStart
-    let isNotStartDate = start === null ? false : true;
+    let isNotStartDate = start === null || start === "" ? false : true;
 
     if (isNotValueStarAndValueSpécific === true) {
       setError(null);
@@ -203,7 +203,7 @@ function ModalEditInfos(props) {
     setValueSelect(e);
     console.log(e);
   }
-  console.log(elementsOpt);
+
   return (
     <>
       <button onClick={handleShow} className="ml-4">
@@ -252,7 +252,9 @@ function ModalEditInfos(props) {
               type="date"
               className="uk-select"
               onChange={(e) => {
-                setStartDate(new Date(e.target.value).toJSON().slice(0, 10));
+                e !== null
+                  ? moment(e.target.value).utc("UTC+01:00").format("YYYY-MM-DD")
+                  : "";
               }}
               id="inputValueSpécifique"
             />

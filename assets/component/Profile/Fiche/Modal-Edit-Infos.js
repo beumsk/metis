@@ -124,9 +124,9 @@ function ModalEditInfos(props) {
 
   const handleSave = (e) => {
     let formData = new FormData();
-    console.log(valueSelect);
 
-    let isNotStartDate = start === null ? false : true;
+    let isNotStartDate = start === null || start === "" ? false : true;
+    // console.log(start);
     let isValueStarAndValueSpécific =
       valueSelect &&
       valueSelect.value &&
@@ -234,8 +234,6 @@ function ModalEditInfos(props) {
       setValueSelect(null);
     }
   }
-
-  console.log(elementsOpt);
 
   return (
     <>
